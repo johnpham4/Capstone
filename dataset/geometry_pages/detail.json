@@ -1,0 +1,846 @@
+[
+  {
+    "page": 4,
+    "image_path": "geometry_pages\\page_4.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "lgi noi dau\n\ncac em hoc sinh, quy thay, cé giao va phy huynh than mén!\n\nsach toan 8 thudc bé sach giao khoa chan trai sang tao dugc bién soan\ntheo chuang trinh gido duc phé thong nam 2018 clia b6 gido duc va dao tao.\ncau trtic sach toan 8 dugc chia t",
+    "matched_keywords": [
+      "pythagore"
+    ]
+  },
+  {
+    "page": 5,
+    "image_path": "geometry_pages\\page_5.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "muc luc\n\nhung dan st dung sach 2\n\nloi néj dau 3\n\nphan so va dai so\n\nchuong 1:  bieu thuc dai so voiicississstnsuiiisuiniiniutonnnaneniaininsaaaneee 5\nbai 1. bon thuc va da thtic nhiéu bién 6\nbai 2. cac phép todn véi da thie nhiéu bién 12\nbai 3. hang ",
+    "matched_keywords": [
+      "pythagore",
+      "xung quanh"
+    ]
+  },
+  {
+    "page": 7,
+    "image_path": "geometry_pages\\page_7.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "don thuc va da thuc nhieu bien\n\nhinh bén la ban vé so luge nén cua mét\nngdi nha (cac kich thudc tinh theo m).\n\nc6 thé biéu thi dién tich cla nén nha bang\nmot biéu thtic chita bién x va y khéng?\nnéu cd, trong biéu thuc dé chufa cac phép\ntinh nao?\n\n1. ",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 8,
+    "image_path": "geometry_pages\\page_8.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "vi du 1. cho cac biéu thite sau:\n—3x; 2xy+x-—l; 586 xy + ra —/2: vx; sny(—t ys x\ntrong sé cdc biéu thie trén, hay chi ra: ”\na) cac don thire; ;\nb) cac da thire va s6 hang tir cua ching.\ngidi\na) cac don thire la: -3x; — 5% z3-v2; 3 ao(-4]y.\nb) cac da ",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 9,
+    "image_path": "geometry_pages\\page_9.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "2. don thuc thu gon\n\nchit 3\na) tong so mii ciia tat ca cdc bién c6 trong don thirc (c6 hé s6 khac 0) goi 1a bade cra\ndon thirc do.\nb) ta coi mét sé khac 0 1a don thire thu gon, c6 hé sé bang chinh sé do va co bac bang 0.\nc) don thire khong (sé 0) khé",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 10,
+    "image_path": "geometry_pages\\page_10.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "bad\n\nchit y:\na) dé thu gon mét don thite, ta nhém cac thira 86 1a cdc so roi tinh tich cua ching;\nnhom cac thira s6 cling mét bién réi viet tich cla ching thanh luy thira cua bien do.\nb) tir nay, khi ndi dén don thie, néu khéng ndi gi thém, ta hiéu 6",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 11,
+    "image_path": "geometry_pages\\page_11.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "4,\n\né.\n\nthu hanh 3. méi cap don thire sau cé déng dang khéng? néu cé, hay tim tong va hiéu\ncua chung.\na) xy va oxy? b) 2xy va xy\": c) 4yzx? va 4x?yz.\n\nda thuc thu gon\n\ncho hai da thire a = 5x* —4xy + 2x —4x? + xy; b =x? —3xy + 2x.\ntinh gid tr cia a v",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 12,
+    "image_path": "geometry_pages\\page_12.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "van dung 2. cho hinh hép chi nhat co cdc kich thudée nhu\nhinh 4 (tinh theo cm).\n\na) viét cac biéu thire tinh thé tich va dién tich xung quanh cia\nhinh hép chit nhat do.\n\nb) tinh gia tri cua cac dai lugng trén khi a = 2 cm; h=5 cm.\n\nhinh 4\nbai tap\n. c",
+    "matched_keywords": [
+      "xung quanh"
+    ]
+  },
+  {
+    "page": 13,
+    "image_path": "geometry_pages\\page_13.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "cac phep toan voi da thuc nhieu bien\n\norxen mét doan sang thang, xuat phat cting luc tly mot bén thuyén,\nthuyén di xudi dong vai téc dé (v + 3) km/h, ca nd di ngudc dong voi\ntdc dé (2v— 3) km/h.\n\nlam thé nao dé tim dude quang dudng ctia méi phuong ti",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 14,
+    "image_path": "geometry_pages\\page_14.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "vi du 1. cho hai da thite p=a + 3b + ab? va q =a?b—ab?— 2b. tinh p+ q va p—q.\ngiai\np+q=a+3b+ab’+ab—ab’—2b\n=a+(3b—2b)+a°b + (ab’—ab*)=at+bta’b.\np—q=a+3b+ ab’ —(a’b —ab’— 2b) =a+ 3b+ ab’—a’b + ab’ + 2b\n=a+t (3b + 2b)—a’b + (ab’ + ab’) =a + s5b—a’b + 2a",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 15,
+    "image_path": "geometry_pages\\page_15.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "vi du 2. thuc hién cac phép nhan don thire sau:\n\na) (3x'y’). c4x°); b) (xy). [-40\").\ngiai\n\na) c3x\"y?) . 4x2) = [c3). c4). (8 22) 8 = 12x.\n\nboyy [ 3x j= oly) .| pay 5) oof) ny\n\nthue hanh 2. thuc hién cac phép nhan don thire sau:\na) (4x°) . (-6x\"y); b)",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 16,
+    "image_path": "geometry_pages\\page_16.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "vidu 3. thue hién cae phép tinh nhan:\n\na) ixy(x’ — 3y’); b) (x—y)(x’ —x’y).\ngiai\na) 2xy(x* —3y*) = 2xy.. x°—2xy .. sy’ =2. (x. x). y—-6.x.(y.y)\n= 2x*y— oxy\".\n\nb) (x—y)(x? —x*y) = x(x —x*y)— yx? -—xyj=x xix xt yoy. xity xy\n=x! xy ay tx2y?\n=xt—(xby t x",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 17,
+    "image_path": "geometry_pages\\page_17.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "thue hanh 4. thue hién phép chia 8x*y°z* cho 2x*y*z.\n\nvan dung 3. tinh dién tich day cia hinh hép chit nhat c6 thé tich v = 12x?y va\nchiéu cao bang 3y.\n\nchia da thire cho don thire\n\nxét da thitc a va don thirc b bat ki.\n\nnéu cé da thire c sao cho a=b",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 18,
+    "image_path": "geometry_pages\\page_18.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "8.\n\nbai tap\n\n. tinh:\n\na)x + 2y + (x—y);\n\nb) 2x-y— (gx —sy);\n\nc) 3x? —4y* + oxy +7 + (-x? + y°— 8xy + 9x + 1);\nd) 4x*y — 2xy* + 8 —(3x’y + 9xy*— 12xy + 6).\n\ntim d9 dai canh con thiéu cia tam giae 6 hinh 7, amy x + 2y\nbiét rang tam giac co chu vi bang ",
+    "matched_keywords": [
+      "chu vi",
+      "°"
+    ]
+  },
+  {
+    "page": 20,
+    "image_path": "geometry_pages\\page_20.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "vi du i. viet cdc biéu thire sau thanh da thie:\na) (x +3); b) (2x—3y)'s c) (x' —4y/’.\ngidi\na)(x+3p=x°4+2.x.34+¥=x7+ 6x49;\nb) (2x —3y) = (2x) -2.. 2x. 3y + gy =4x° — 12xy + sy:\n¢) 0? —4yf = ocp —2.x°. 4y + (4yp =x! 8x? + loy’,\nvi du 2. viet cdc biéu t",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 21,
+    "image_path": "geometry_pages\\page_21.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "2. hieu cua hai binh phuong\n\n2 a) tir hinh 3a, ngudi ta cat ghép\n\ntao thanh hinh 3b. viét hai biéu\nthire khdc nhau, mdi biéu thire\nbiéu thi dién tich (phan té mau)\ncua mot trong hai hinh bén.\nb) thye hién phép nhan va rit\ngon da thire, bién déi biéu ",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 22,
+    "image_path": "geometry_pages\\page_22.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "vi du 6. viet cac biéu thite sau thanh da thire:\na) (x +1); b) (2x- yy’.\n\ngidi\na) (x+1ph=4+3.x0.143.x. p+ p=x°4+3x°4+ 3x41;\nb) (2x— y)' = (2x) — 3. (2x). y +3. (2x). y° ~y? = 8x? — 12x\"y + oxy?’\nthu hanh 6. viét cdc biéu thire sau thanh da thite:\na) ",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 23,
+    "image_path": "geometry_pages\\page_23.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "van dung 4. tir mét khéi lap phuong cé canh\nbing 2x + 1, ta cit bo mét khdi lap phuong cé canh\nbing x + 1 (xem hinh 5). tinh thé tich phan con lai,\nviét két qua dudi dang da thire.\n\n2x+]\n\nbaitap\n. viet cdc biéu thite sau thanh da thie: ,\na) (3x +4); ",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 24,
+    "image_path": "geometry_pages\\page_24.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "bung rdi. vin®—n chia hét\nchon,n-1van+1ma.\n(nla s6 tunhién, n > 1).\n\n99°- 99 chia hét cho ca\nba sé 98, 99 va 100.\n\nphat biéu cia hai ban cé ding khéng? vi sao?\n\n1. phuong phap dat nhan tu chung\n\nv phan tich da thie thanh nhdn tie (hay thira s6) 1a bi",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 25,
+    "image_path": "geometry_pages\\page_25.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "2.\n\n3.\n\nthue hanh 1. phan tich cac da thire sau thanh nhan tt:\na) p= 6x — 2x’; b) q = 5x*— 15x’; c) r= 3x3y' — 6xy°z + xy.\n\nphuong phap su dung hang dang thuc\n\ng é. ta da sir dung hang dang thite a’ — b? = (a + b)(a—b) dé phan tich da thite thanh\nnha",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 26,
+    "image_path": "geometry_pages\\page_26.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "gidi\na) x°— 3x + xy —3y = (x? —3x) + (xy —3y) = x(x— 3) + y(x—3) = (x— 3) + y);\nb) x +2x°-2x— 1 =(x°- 1) + (23° —2x) = (x— doc +x + 1) + 2x(k—- 1) =(x- doe + 3x + 1).\nthu'c hanh 3. phan tich cac da thie sau thanh nhan tr:\na)a’—ab+a-—b; b) x? + 2x? —x",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 28,
+    "image_path": "geometry_pages\\page_28.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "x? -l\n\nvi du 2. cho phan thie p =\n\nx41\na) tinh gia tri cua phan thire tai x = 0; x = 1; x =2.\nb) taix=-5 thi phan thire c6 xac dinh khéng? tai sao?\ngidi\no-1 _\n2.0+1\n2\ntaix=1,p= vel _9\n2.141\n?-1 _3\n2.241 5\nb) voix = -> thi gid tri ca mau thire 1a 2,( ",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 29,
+    "image_path": "geometry_pages\\page_29.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "2. haiphan thuc bang nhau\n\né. xx’ —x\n\nxét hai phan thirc a=~ va b=\ny xy-y\n\na) tinh gia tri cla cac phan thir trén khi x = 3, y = 2 va khi x =—l, y=5.\n\nnéu nhan xét vé gia trj clia a va b khi cho x va y nhn nhing gia trj ndo dé (y 4 0 va\nxy—y #0).\n\nb)",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 30,
+    "image_path": "geometry_pages\\page_30.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "tuong ty nhw déi v6i phan sé, ta cé cde tinh chat co ban ctia phan thite sau day:\n\nvi du 5. bién di phan thire bén trai thanh phan thire bén phai cia mdi dng thite sau:\n\nx-y -l 2x —2x -i2a*be  —4ac\n) ox x+y ew x-4 °) jab? 3b\"\ngiai\nx-y ay-x) rl\nyo-x” ",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 31,
+    "image_path": "geometry_pages\\page_31.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "thu hanh 5. rut gon cac phan thite sau:\n\n3x° + oxy 2x? -x* x+1\n—_—; b) ——_-;; .\na) 6x\" ) x’ -4 x4]\nbai tap\n\n1. trong cac biéu thtre sau, biéu thtre nao 1a phan thre?\n\n3x41\n2x-1 3x+2\n2. viét diéu kién xdc dinh cua cde phan thite sau:\n4x-l -1 :\na) x ; ",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 32,
+    "image_path": "geometry_pages\\page_32.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "cong, tru phan thuc\n\n©., mét cudc dua thuyén dién ra trén\nmét khuic séng tir a dén b dai 3 km.\nmi déi thuc hién mét vong dua, xuat\nphat ttr a dén b, rdéi quay vé a la dich.\nmét déi dua dat tac d6 (x + 1) km/h\nkhi xudi dong tu’ a dén b va dat\ntéc dé (",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 33,
+    "image_path": "geometry_pages\\page_33.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "2.\n\ngiai\na) x+¥ x+y) x7y _x+y+tx—-y_ 2x _2,\n\nxy xy xy xy oy’\nb) x’ +5x x-4  x°+5x-(x-4) x? +5x—x+4\nxx+2 x42 x+2 x+2\nx’ +4x4+4 (x42) (x+2)(x+2)\n=> ————— = q—|— = uu — = +2;\nx+2 x4+2 x+2\nc) 3x4+2y x ~ 3x+?y- x 2x+2y _ 2(x+y) _ 2\n\nxy? ay x?-y? ~ (x+y\\x—",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 34,
+    "image_path": "geometry_pages\\page_34.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "¢ néu b va d cé nhan tir chung la e(b =e.m, d=e. n voi m va n la nhiing da thite)\nthi ldy mau thire chung la e. m .n. khi dé, ta quy déng mau thire:\na_a.n__a.n .c_c.m__c.m c.m\nb b.n e.m.n-d d.m e.n.m e.m.n’\n\nvi du 2. quy déng mau thre ca cdc chp phan",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 35,
+    "image_path": "geometry_pages\\page_35.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "9\n\nx y __ xxx yo. x y\nxy-y>  xx°=xy y(x—y) x(x-y) —-xy(x-y)  xy(x-y)\n_ xv-y _(x+yx-y) _ x+y\n\nxy(x—y) —xy(x-y) xy |\nchit: a) phép cong cac phan thire cing cé cae tinh chat giao hoan, két hop:\nwa,c_c a (2. c)+e-44(e48)\nb dd b’ b d) f b \\d fj\n\nnhé tinh ",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 36,
+    "image_path": "geometry_pages\\page_36.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "bai tap\n\n. thue hién cac phép cong, trir phan thire sau:\n\n_ _ 2 _ 2\na) a 13 a. b) b , 4 ; c) (a+by  (a-by\na+l a+l a-b b-a ab ab\nthye hién cac phép cong, triy phan thire sau:\na) +2, by rot _xtl. c) ay_ yz,\n2a 3b x+1 x-l xy yz\n2 12 1 2\nd - : e) ——+———_",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 38,
+    "image_path": "geometry_pages\\page_38.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "vidu 1. thuc hién cac phép nhan phan thire sau:\na) 286, 6b? yal 2k\n3b barc x'¢+4x x-l\ngiai\na) 28€ , 6b! _ 2ac . 6b\") _ 2. (6).a.c.b’ _—b?\n3b sac =. 3b. bae 3.8.b.a.c 2a’\n\n2\n\nb) xl 2x (k+ 1)(x—1). 2x a(x +1)\nx+4x xl x(x+4).(x-l) x44\n\nvi du 2. tinh:\n2\n",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 39,
+    "image_path": "geometry_pages\\page_39.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "tuong ty phép chia phan sé, phép chia phan thire duge thue hién theo quy tac sau:\n\nnhdn xeét: phan thirc z duge goi la phan thire aghich dao ca phan thire <.\n\nvi du 3. thue hién cdc phép tinh sau:\n\nx°-4 x+2 kx” xz xx\"\na) ——_: ; b —->=:—.\nx +5x 2x yoy",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 40,
+    "image_path": "geometry_pages\\page_40.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "bai tap\n\n. thy hién cac phép nhan phan thire sau:\n\nay sx° b) x°-2x+1 x 4x, ° 2x+x* _3x' +3\n3x? 2y*? x? x-1’ x°-x4+1 3x+6>\n. thue hién cac phép chia phan thire sau:\n4 2 _ a\na) 2x x . by x 16 | 2x 8. °) 2x+6 | (x+3)\n4y 20y x+4 xx x°-8 2x-4\ntinh:\n4x°+2 ",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 41,
+    "image_path": "geometry_pages\\page_41.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "bai tap cuoi chuong 1\ncau hoi trac nghiem\nchon phwong an ding.\n\n. biéu thire nao sau day khéng phai la da thire?\n\n3 lo,\na. v2x’y. b.-=xy’ +1. c. jay. d. 0.\n2 2z\n. don thir nao sau day déng dang v6i don thite -2x*y?\na. sx b. 2x*yz. c, -2x*z, d, 3xy*.\n",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 42,
+    "image_path": "geometry_pages\\page_42.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "bai tap tu luan\n11. tinh gid tri cla da thire p= xy\"z— 2x’yz* + 3yz + 1 khix = 1, y=—1,z=2.\n\n12. cho da thire p = 3x*y — 2xy* — 4xy + 2.\n\na) tim da thitc q sao cho q—p =—2x*y + 7x*y + 3xy.\n\nb) tim da thite m sao cho p + m = 3x*y* — 5x*y + 8xy.\n\n13. t",
+    "matched_keywords": [
+      "°"
+    ]
+  },
+  {
+    "page": 43,
+    "image_path": "geometry_pages\\page_43.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "phan hinh hoc va do luong\nhinh hoc truc quan\n\ncac hinh khoi\ntrong thuc tien\n\ntrong chuong nay, cac em sé tim hiéu mét sé\nhinh khéng gian quen thudc, d6 la hinh chop\ntam giac déu, hinh chdp tu giac déu va biét cach\nmo ta, tao lap cac hinh do. cac em c",
+    "matched_keywords": [
+      "xung quanh"
+    ]
+  },
+  {
+    "page": 44,
+    "image_path": "geometry_pages\\page_44.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "hinh chop tam giac deu — hinh chop tu giac deu\n\n©. cho biét cdc mat bén cua kim tu thap va khdi rubik & bén dudi la\ncac hinh gi.\n\n|\n\n1. hinh chop tam giac beu - hinh chop tu giac deu\n\nhinh chép tam gidc déu\n\nhinh $.abc (hinh 2) la mot hinh chép tam g",
+    "matched_keywords": [
+      "abc"
+    ]
+  },
+  {
+    "page": 45,
+    "image_path": "geometry_pages\\page_45.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "2.\n\nhinh chép tir gide déu\n\nhinh s.abcd (hinh 4) la mét hinh chép nb gide déu,\ntrong hinh nay:\n\n—§ goi la dinh.\n\n— mat abcd la mot hinh vuéng va duge goi la\nmeat day (goi tat la dey).\n\n— cae doan thing sa, sb, sc, sd bang nhau va\nduge goi la cac canh",
+    "matched_keywords": [
+      "abc",
+      "abcd"
+    ]
+  },
+  {
+    "page": 50,
+    "image_path": "geometry_pages\\page_50.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "dien tich kung quanh va the tich cua\nhinh chop tam giac deu, hinh chop tu giac be\n\n©, ban mai can dan giay bong kinh\nmau xung quanh mat chiéc léng\ndén hinh chép tam gidc déu voi\nkich thudée nhu hinh bén. hdi dién\ntich giay ma mai can la bao nhiéu?\n\nb",
+    "matched_keywords": [
+      "xung quanh"
+    ]
+  },
+  {
+    "page": 51,
+    "image_path": "geometry_pages\\page_51.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "chi: 3: dién tich toan phan cia hinh chép tam gidc déu (hinh chdp tr gic déu) bang\ntong ca dién tich xung quanh va dién tich day:\n8, =s,,+8\n\ndaky\n\n(s,, la digén tich toan phan, s,, la dign tich xung quanh, §,,. la dign tich day).\n\nvi du i. tinh dién ",
+    "matched_keywords": [
+      "xung quanh"
+    ]
+  },
+  {
+    "page": 52,
+    "image_path": "geometry_pages\\page_52.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "vi du 3. tinh thé tich cua hinh chop tr gide déu ¢6 chiéu\ncao 3 cm, d6 dai canh cua tir giac day la 5 em (hinh 4).\ngiai\nthé tich ciia hinh chp tér gide du (hinh 4) la:\n1 1\n\nv=5-say-h= 3 .5°.3=25 (cm)\n\nvi du 4. tinh thé tich cia hinh chép tam gidc déu",
+    "matched_keywords": [
+      "xung quanh",
+      "°"
+    ]
+  },
+  {
+    "page": 53,
+    "image_path": "geometry_pages\\page_53.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "thuc hanh 2. tinh thé tich cia mét chiéc hop banh it cé\ndang hinh chop tir giac déu, co d6 dai canh day 1a 3 cm va\nchiéu cao 1a 2,5 em.\n\nthuc hanh 3. hay giai bai toan & phan @ (trang 49).\n\nvan dung 1. mot chiéc léu cé dang hinh chop tr giac déu\n@ tr",
+    "matched_keywords": [
+      "xung quanh"
+    ]
+  },
+  {
+    "page": 54,
+    "image_path": "geometry_pages\\page_54.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "2.\n\nnhan dip tét trung thu, nam dy dinh lam mét chiéc long dén hinh chép tam gidc déu\nva mét chiéc hinh chép tir gidic déu. moi chiéc léng dén c6 d6 dai canh day va dung cao\ncua mat bén tuong img voi canh day lan hut la 30 cm va 40 cm, em hay giup na",
+    "matched_keywords": [
+      "xung quanh"
+    ]
+  },
+  {
+    "page": 56,
+    "image_path": "geometry_pages\\page_56.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "baitap tu luan\n\n6. trong cdc tam bia & hinh 1, tam bia nao gap dugc hinh chép tam giac déu, tam bia nao\ngap duoc hinh chép ttr giac déu?\n\na)\nainh i\n\n7. quan sat hinh chép tam gidc déu 6 hinh 2 va\ncho biét:\na) dinh, mat day va cac mat bén cua hinh do.",
+    "matched_keywords": [
+      "xung quanh"
+    ]
+  },
+  {
+    "page": 58,
+    "image_path": "geometry_pages\\page_58.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "trong chudng nay, cac em sé tim hiéu vé dinh ii\npythagore, thé hién mdi lién hé gitia dé dai ba canh\nclla tam gidc vudng. chung ta cling sé hoc vé tinh\nchat clla cac tu gidc idi thudng gap nhu: hinh thang,\nhinh binh hanh, hinh thoi, hinh cht nhat, hi",
+    "matched_keywords": [
+      "pythagore"
+    ]
+  },
+  {
+    "page": 59,
+    "image_path": "geometry_pages\\page_59.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "dinh li pythagore\n\nhay so sanh dién tich hinh vu6ng mau xanh\nvéi téng dién tich cla hai hinh vudng\nmau dé va mau vang.\n\n1. dinh li pythagore\n\né cho mét tam gide vudng cé hai canh géc vudng la a, b va canh huyén la c.\n— lay mét té bia én, cat tam hinh",
+    "matched_keywords": [
+      "pythagore",
+      "abc",
+      "°"
+    ]
+  },
+  {
+    "page": 60,
+    "image_path": "geometry_pages\\page_60.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "2.\n\nvi du 1.\na) cho tam giac abc vuodng tai c co hai canh goc vudng la a = 4 cm, b = 3 cm.\ntinh do dai canh huyén cua tam gide vudng do.\nb) cho tam gidc vuéng mnp co canh huyén np = 10 dm va canh mn = 6 dm,\ntinh d6 dai canh mp.\ngiai\n\na) goi c 1a d6 d",
+    "matched_keywords": [
+      "pythagore",
+      "abc",
+      "°"
+    ]
+  },
+  {
+    "page": 61,
+    "image_path": "geometry_pages\\page_61.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "vidu 2. tim tam giae vudng trong cac tam giae sau:\na) tam giae abc co ab=3 ecm, bc = 5 cm, ac = 4 em.\nb) tam giac mnp co mn = 20 m, np= 12 m, pm= 16m.\nc) tam giac ohk c6 oh = 6 dm, ok = 8 dm, kh = 12 dm.\ngiai\na) ta c6 $°= 3°+ 4°, suy ra bc’ = ab? + a",
+    "matched_keywords": [
+      "pythagore",
+      "abc",
+      "abcd",
+      "°"
+    ]
+  },
+  {
+    "page": 62,
+    "image_path": "geometry_pages\\page_62.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "giai\nvé tam giac vudng abc nhv trong hinh 8, ta co:\nac = 12 m; bc = 41-32 =9(m).\nap dung dinh li pythagore vao tam gidc\nabc vuong tai c, ta co:\nab?=ac*? + bc? = 12? + 9 =225= 15°,\n\nvay khoang cach ab = 15 m.\n\nthu hanh 3. tinh cac d6 dai pn va bc tron",
+    "matched_keywords": [
+      "pythagore",
+      "abc",
+      "°"
+    ]
+  },
+  {
+    "page": 63,
+    "image_path": "geometry_pages\\page_63.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "2. tinh dé cao cia con diéu so véi mat dat (hinh 11).\n\nink i\n\n3, lan lot tinh do dai cae canh huyén a, b, c, d cua cac tam gide vudng trong hinh 12.\nhay dy doan két qua cua cac canh huyén con lai.\n\n4. chimg minh ring tam giac abc vuéng trong cac trué",
+    "matched_keywords": [
+      "pythagore",
+      "abc"
+    ]
+  },
+  {
+    "page": 64,
+    "image_path": "geometry_pages\\page_64.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "1. tu giac\n\ndaron mau xanh bén dugc\n\nc (chau déc)\n\ntrich ra tif ban dé duge\ngoila tu giac long xuyén.\n\nem hay cho biét: h l\n— hinh nay duge tao bai (ha tién) (long xuyén)\nmay doan thang?\n\n— cac doan thang nay néi\ncac dia diém nao? r (rach gia)\n\nvv ti",
+    "matched_keywords": [
+      "abc",
+      "abcd"
+    ]
+  },
+  {
+    "page": 65,
+    "image_path": "geometry_pages\\page_65.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "tir gidc léi\n\nvi du 2. tim tir giac 16i trong cdc hinh sau.\n\na e\ng\nf\nd b\nfe h\nue hinh 3 »\ngidi\n\nké cde duéng thang chita cde canh cia tt gide nhu trong hinh 4, ta thay abcd la\nttt gide 1di con efgh khong phai la tir gide 1di,\n\n~ -*\n“as\n\na) b)\nlink 4\n",
+    "matched_keywords": [
+      "abc",
+      "abcd"
+    ]
+  },
+  {
+    "page": 66,
+    "image_path": "geometry_pages\\page_66.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "b) hai canh ké nhau tao thanh mat gée cia tr gide.\n\nvi dy: trong hinh 5, ttt gide abcd c6 ede géc la dab, abc, bcd, cda . céc cap géc\ndab va bcd: abc va cda duoc goi la cap gée dai.\n\n¢) hai canh déi nhau la hai canh khéng cé chung dinh nao.\n\nvi du: t",
+    "matched_keywords": [
+      "abc",
+      "abcd",
+      "°"
+    ]
+  },
+  {
+    "page": 67,
+    "image_path": "geometry_pages\\page_67.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "giai\ndo téng sé do bén géc cla mét tir gide bang 360° nén ta cd:\ntrong tir giac mnpq: x = 360°—(120°+ 110°+ 80°), suy ra x = 50\",\ntrong tir gia¢ efgh: x = 360° —(90°+ 90°+ 90°), suy ra x = 90°,\ntrong tir giac abcd: x = 360° — (90° + 65°+ 90°), suy ra",
+    "matched_keywords": [
+      "abc",
+      "abcd",
+      "°"
+    ]
+  },
+  {
+    "page": 68,
+    "image_path": "geometry_pages\\page_68.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "3. titgidc abcd co a =100°, g6c ngoai tai dinh b bang 110°, c= 75°. tinh sé do géc d.\n4. ti giac abcd cé géc ngoai tai dinh a bang 65\", g6c ngoai tai dinh b bang 100°,\ngoc ngoai tai dinh c bang 60°. tinh s6 do géc ngoai tai dinh d.\n\n5. tigidc abcd cé",
+    "matched_keywords": [
+      "abc",
+      "abcd",
+      "°"
+    ]
+  },
+  {
+    "page": 69,
+    "image_path": "geometry_pages\\page_69.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "1.\n\nhinh thang — hinh thang can\n\n©) mai ngdi cua tru sé uy ban\nnhan dan thanh phé h6 chi minh\nco hinh dang mot tu giac abcd.\nnéu nhan xét clia em vé hai\ncanh ab va cd cua tui gidc nay.\n\nhinh thang - hinh thang can\n\nvo hinh thang la tt giac c6 hai can",
+    "matched_keywords": [
+      "song song",
+      "abc",
+      "abcd",
+      "//"
+    ]
+  },
+  {
+    "page": 70,
+    "image_path": "geometry_pages\\page_70.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "ad\n\nvi du 1. tim cac goc chwa biét cia hinh thang abcd cé hai day 1a ab va cd trong cdc\ntruong hop sau:\na) a =90° va b= 40\";\nb) c =d =80\".\n_ gidi _\na) hinh thang abcd (ab // cd) co a = 90° nén ia hinh thang vu6ng. suyra d = a = 90\"\nva c = 180° —b =18",
+    "matched_keywords": [
+      "song song",
+      "abc",
+      "abcd",
+      "//",
+      "°"
+    ]
+  },
+  {
+    "page": 71,
+    "image_path": "geometry_pages\\page_71.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "vi du 2. tim cae doan thing bang nhau cé trén hinh e f\nthang can efgh (ef // hg) trong hinh 7.\n\ngiai\nhinh thang can efgh co hai day la ef va hg nén co:\n—hai canh bén bang nhau: eh = fg. h g\n—hai dudng chéo bing nhau: eg = hf. hinh 7\nchit}: néu mét hi",
+    "matched_keywords": [
+      "abc",
+      "abcd",
+      "//",
+      "°"
+    ]
+  },
+  {
+    "page": 72,
+    "image_path": "geometry_pages\\page_72.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "giai\nhinh thang mnpq (pq // mn) trong hinh | 1a cé hai géc ké mét day bang nhau nén\nla hinh thang can.\nhinh thang efgh (ef // hg) trong hinh 11b c6 hai duéng chéo eg va fh bang nhau\nnén la hinh thang can.\nhinh thang abcd trong hinh | le ¢6 hai dudng ",
+    "matched_keywords": [
+      "abc",
+      "abcd",
+      "//",
+      "°"
+    ]
+  },
+  {
+    "page": 73,
+    "image_path": "geometry_pages\\page_73.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "3. cho tam giac nhon abc co ah la duong cao. tia phan gide cua goe b cit ac tai m.\ntu m ké duéng thing vuéng géc voi ah va cat ab tai n. chimg minh rang:\na) tir gide bcmn 1a hinh thang;\nb) bn=mn.\n\n4. cho tam gidc abc vuéng tai a (ab < ac). tia phan g",
+    "matched_keywords": [
+      "song song",
+      "abc",
+      "abcd",
+      "//",
+      "°"
+    ]
+  },
+  {
+    "page": 74,
+    "image_path": "geometry_pages\\page_74.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "1.\n\né.\n\nhinh binh hanh — hinh thoi\n\n©... sat hinh chup cac mai nha\n& phé cd héi an, em thay cdc —\ncanh déi cua tf giac abcd cé gi\ndc biét?\n\nhinh binh hanh\ndinh nghia\n\nhinh la 1a hinh anh ctia mét thude\nvé truyén ding dé phéng to hay\nthu nhé mét hinh ",
+    "matched_keywords": [
+      "song song",
+      "abc",
+      "abcd",
+      "//"
+    ]
+  },
+  {
+    "page": 75,
+    "image_path": "geometry_pages\\page_75.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "tinh chat\n\ndinh li\n\nvo trong hinh binh hanh:\n—cae canh di bang nhau.\n—cae gdc ddi bang nhau.\n—hai duéng chéo cat nhau tai trung diém cla moi dudng.\n\nvi du 2. tim cac doan thing va cac goc bang nhau co trong hinh cua &: .\ngiai\n\ntrong hinh binh hanh ab",
+    "matched_keywords": [
+      "song song",
+      "abc",
+      "abcd"
+    ]
+  },
+  {
+    "page": 76,
+    "image_path": "geometry_pages\\page_76.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "é. cho tir giaec abcd co p la giao diém cua hai duong chéo. giai thich tai sao ab /'/ cd va\nad // bc trong méi truéng hop sau:\ntrung hop 1: ab=cd va ad = bc (hinh 7a).\ntrudng hop 2: ab // cd va ab = cd (hinh 7b).\ntruong hop 3: ad // bc va ad = bc (hi",
+    "matched_keywords": [
+      "abc",
+      "abcd",
+      "//"
+    ]
+  },
+  {
+    "page": 77,
+    "image_path": "geometry_pages\\page_77.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": ".\n\ngiai\n—tutr giaec abcd co cac canh déi song song nén la hinh binh hanh.\n—ttr giac efgh co cac canh déi bing nhau nén la hinh binh hanh.\n—tir gidc pors c6 hai g6c d6i khéng bang nhau nén khéng 1a hinh binh hanh,\n— tir giac mnij c6 hai duéng chéo cat",
+    "matched_keywords": [
+      "song song",
+      "abc",
+      "abcd",
+      "°"
+    ]
+  },
+  {
+    "page": 78,
+    "image_path": "geometry_pages\\page_78.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "vi du 4. trong cac tt gidc & hinh 12, tir gide nao 14 hinh thor?\n\nm n a b\n\na) b)\nhinks i2\ngidi\n— tir giac mnpq cé bon canh bang nhau nén ia hinh thoi.\n—tir giac abcd chi 6 cac canh déi bang nhau nén chi 1a hinh binh hanh va khéng phai\nla hinh thoi.\n\n",
+    "matched_keywords": [
+      "abc",
+      "abcd"
+    ]
+  },
+  {
+    "page": 79,
+    "image_path": "geometry_pages\\page_79.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "vi du 5. cho hinh thoi abcd co o 1a giao diém b\n\ncua hai duong chéo.\n\na) tinh ab khi biét oa = 4 cm va ob = 3 em.\n\nb) tinh bad khi biét bao =32°, a\ngidi\n\na) do hai duong chéo cua hinh thoi vudng goc d\n\nhinh [4\n\nvoi nhau nén ap dung dinh li pythagore ",
+    "matched_keywords": [
+      "pythagore",
+      "abc",
+      "abcd",
+      "°"
+    ]
+  },
+  {
+    "page": 80,
+    "image_path": "geometry_pages\\page_80.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "ta c6 cdc dau hiéu nhan biét mot tir giac la hinh thoi nhu sau:\nve 1. hin binh hanh cé hai canh ké bang nhau [a hinh thoi.\n2. hinh binh hanh e6 hai dudng chéo vudng goc voi nhau 14 hinh thoi.\n3. hinh binh hanh e6 mot duong chéo la phan giac cua mot g",
+    "matched_keywords": [
+      "chu vi"
+    ]
+  },
+  {
+    "page": 81,
+    "image_path": "geometry_pages\\page_81.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "baitap\n\n1. c&n thém mét diéu kién gi dé mdi ti gide trong hinh 19 tré thanh hinh binh hanh?\n\nf\na b\ni e\nie) >\ni g\nd cc\na) b) h\nu\nq m\nv\nt\np c} ny ss d)\n\nhinh 19\n\n2. cho hinh binh hanh abcd, ké ah vuéng géc véi bd a\n\ntai h va ck vuéng géc véi bd tai k (",
+    "matched_keywords": [
+      "abc",
+      "abcd",
+      "//"
+    ]
+  },
+  {
+    "page": 82,
+    "image_path": "geometry_pages\\page_82.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "6. quan sat hinh 21. chimg minh ring tir giéc efgh ia hinh thoi.\n\n. cho hinh thoi abcd, hai duéng chéo ac va bd cit nhau\ntai o. biet ac = 6 cm, bd = 8 em. tinh do dai canh cua\nhinh thoi abcd.\n\n. cho tam giac abc can tai a, ggi m la trung diém cia bc.",
+    "matched_keywords": [
+      "abc",
+      "abcd"
+    ]
+  },
+  {
+    "page": 83,
+    "image_path": "geometry_pages\\page_83.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "1.\n\nows vién gach trong hinh btic\ntudng cé bé mat hinh chit nhat\ndugc minh hoa bdi hinh bén.\nhay vé hinh tu giac abcd mé\nphdng bé mat médt vién gach\nvao vd cua em,\n\nhinh chu nhat\ndinh nghia\n\n82\n\nhinh chit nhdt la ti giac e6 bén goc vuong,\nvi du i. ch",
+    "matched_keywords": [
+      "abc",
+      "abcd",
+      "°"
+    ]
+  },
+  {
+    "page": 84,
+    "image_path": "geometry_pages\\page_84.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "vidu 2. a) cho tam giac abc vuéng tai a, a\no la trung diém cia bc. lay diém d ddi .\n\nxtmg voi a qua o (hinh 3a). ching minh\n\nrang tir gidec abdc 1a hinh chit nhat, b cb\n\nb) cho tam giac abc cé diém o thudc bc\nsao cho oa = ob = oc, lay diém d déi\nxtmg",
+    "matched_keywords": [
+      "abc",
+      "abcd",
+      "//",
+      "°"
+    ]
+  },
+  {
+    "page": 85,
+    "image_path": "geometry_pages\\page_85.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "rd\n\nta co dau hiéu nhan biét mat tir gidc 1a hinh chit nhat nhw sau:\n\n1. hinh binh hanh cé mét géc vudng 1a hinh chit nhat.\n2. hinh binh hanh co hai duéng chéo bang nhau 1 hinh chit nhat.\n\nchit y:\n\n— tt giac co ba goe vudng 1a hinh cher nhat.\n\n— hinh",
+    "matched_keywords": [
+      "abc",
+      "abcd",
+      "//",
+      "°"
+    ]
+  },
+  {
+    "page": 86,
+    "image_path": "geometry_pages\\page_86.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "tinh chat\n\nhinh vudéng cé tat ca cdc tinh chat eta hinh chit nhat va hinh thoi.\nvi du 4. tim hinh vu6ng trong hai hinh sau:\n\nhinh 9\ngiai\n\nxét tir gidc abcd (hinh 9a), ta c6 bd va ac cat nhau tai trung diém cia mgi dong,\nsuy ra abcd la hinh binh hanh,",
+    "matched_keywords": [
+      "abc",
+      "abcd",
+      "°"
+    ]
+  },
+  {
+    "page": 87,
+    "image_path": "geometry_pages\\page_87.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "e: cho hinh thoi abcd. hay chimg to:\na) néu bad 1a géc vudng thi ba géc cén lai cua hinh thoi citing 1a goc vudng.\nb) néu ac = bd thi bad 1a g6c vuéng.\n\nta cé cdc dau hiéu nhan biét mot tir giac la hinh vuéng nhw sau:\n\nv 1. hinh chit nhat c6 hai canh",
+    "matched_keywords": [
+      "abc",
+      "abcd",
+      "°"
+    ]
+  },
+  {
+    "page": 88,
+    "image_path": "geometry_pages\\page_88.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "bai tap\n. cho hinh 1/4. tim x.\n\nhinh 14 ain 15\n\n2. cho hinh 15, vé thém diém p dé tir gidc mnpq 1a hinh chit nhat.\n\n3. cho tam gide abc 6 duéng cao ah. goi i 14 trung diém cia ac, e 1a diém déi xtmg\nvoi h qua i. goi m, n lan lvot la trung diém cla hc",
+    "matched_keywords": [
+      "abc",
+      "//"
+    ]
+  },
+  {
+    "page": 89,
+    "image_path": "geometry_pages\\page_89.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "bai tap cuoi chuong 3\n\ncau hoi trac nghiem\nchon phwong an ding,\n» ban nam ding 6 doan tre vot thang dé lam khung diéu hinh thoi. trong dé c6 2 doan tre\ndai 60 cm va 80 cm dé lam hai duéng chéo ctia cai diéu, 4 doan tre con lai 14 4 canh cha\ncai diéu,",
+    "matched_keywords": [
+      "abc",
+      "abcd",
+      "//",
+      "°"
+    ]
+  },
+  {
+    "page": 90,
+    "image_path": "geometry_pages\\page_90.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "bai tap ty luan\n\n8. cho hinh binh hanh abcd. cac di ém e, f thudc duong chéo ac sao cho\nae=ef=fc. goi m la giao diém cla bf va cd, n la giao diém cia de va ab. chimg\nminh rang:\na) m, n theo tht ty 1a trung diém ctia cd, ab;\nb) emfn ia hinh binh hanh.",
+    "matched_keywords": [
+      "song song",
+      "abc",
+      "abcd"
+    ]
+  },
+  {
+    "page": 92,
+    "image_path": "geometry_pages\\page_92.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "thu thap wa phan loai du lieu\n\n©.. da biét nhiing cach nao dé thu thap ditliéu?\n\n1. thu thap du lieu\n\né:\n\nban tui da tim hiéu vé nam quéc gia c6 sé huy chuong vang cao nhat 6 sea games 31\ntir bang thong ké sau:\n\nviét nam 205 125 116 446\nthai lan 92 1",
+    "matched_keywords": [
+      "//"
+    ]
+  },
+  {
+    "page": 116,
+    "image_path": "geometry_pages\\page_116.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "bai tap cuoi chuong 4\n\ncau hoi trac nghiem\nchon phuong an dung.\n\n1. phuong phap nado 1a phi hgp dé théng ké dit ligu vé sé huy chuong cia mét doan\n\nthé thao trong mét ki olympic?\n\na. lam thi nghiém.\n\nb. thu thap tir nguén cé sin nhu sach bao, interne",
+    "matched_keywords": [
+      "//"
+    ]
+  },
+  {
+    "page": 119,
+    "image_path": "geometry_pages\\page_119.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "13. biéu dé sau day biéu dién dit ligu vé hoat d6ng trong gid ra choi cua hoe sinh lép 8c.\n\n(56 hoc hoat déng trong gid ra choi cla hoc sinh lop 8c\nsinh) 4\n12\n\n10,\n\nba\n6\n4\n2 villi\n0\n\nbocsach on bai banh oa cau ga nhay day (hoat dang)\ncau long\n\na) hay",
+    "matched_keywords": [
+      "//"
+    ]
+  },
+  {
+    "page": 122,
+    "image_path": "geometry_pages\\page_122.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "vi du: duoi day 1a san pham cla mét hoc sinh:\n\ntén dinh nghia\n\nhinh | tur gide co hai canh déi song song\nthang can | va cé hai g6e ké mot day bang nhau.\n\nhinh ee ke\nbinh hanh tir giac cé cac canh doi song song.\n\nhinh thoi | tir gidc cé bon canh bang ",
+    "matched_keywords": [
+      "song song"
+    ]
+  },
+  {
+    "page": 126,
+    "image_path": "geometry_pages\\page_126.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "bang giai thich thuat ngu\n\nbac cua da thie\nla bac ctia hang tir cé bac cao nhat\ntrong dang thu gon cua da thire do.\n\nbac cua don thic\nla tng sé mii ctia tat ca cdc bién cd\ntrong don thire do.\n\nbinh phuong cia mét tong, mot hiéu\n(a+b) =a?+2ab+b?\n(a-—b",
+    "matched_keywords": [
+      "song song",
+      "pythagore",
+      "abc"
+    ]
+  },
+  {
+    "page": 127,
+    "image_path": "geometry_pages\\page_127.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "hinh chop tw gidc déu\nhinh chop ttr giac déu s.abcd co:\n8 goi la dinh.\nabcd 1a hinh vuéng va goi la mat day.\n\nsa, sb, sc, sd bang nhau va goi la cae\n\neanh bén.\n\nsab, sbc, scd, sda ila cae tam gide can\n\nbang nhau va duoc goi la bén mat bén.\nab, bc, cd",
+    "matched_keywords": [
+      "song song",
+      "abc",
+      "abcd",
+      "°"
+    ]
+  },
+  {
+    "page": 128,
+    "image_path": "geometry_pages\\page_128.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "thuat ng\nbac cua da thuc\nbac cula don thuic\n\nbinh phuong cua mét tong,\nmot hiéu\n\nba thtic\n\nda thuc thu gon\n\ndinh li pythagore\n\ndinh li pythagore dao\nbon thtic\n\ndon thie thu gon\n\ndéng nhat theic\n\nhai canh déi nhau\n\nhai dinh déi nhau\n\nhai don thre déng",
+    "matched_keywords": [
+      "pythagore"
+    ]
+  },
+  {
+    "page": 130,
+    "image_path": "geometry_pages\\page_130.png",
+    "detected_text_pdf": "",
+    "detected_text_ocr": "bo sach giao khoa lop 8 - chan tro! sang tao\n\n1.ngu van 8 —tap mot 10. cong nghe 8\n2.ngu van 8 - tap hai 11. giao duc the chat 8\n3. toan 8 -tap mot 12. am nhac 8\n4. toan 8 - tap hai 13. mi thuat 8 (1)\n5. tieng anh & 14. mi thuat 8 (2)\n\nfriends plus -",
+    "matched_keywords": [
+      "//"
+    ]
+  }
+]
