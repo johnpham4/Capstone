@@ -1,1 +1,68 @@
+# Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
 .venv
+venv/
+ENV/
+env/
+.virtualenv
+
+# Environment variables
+.env
+.env.local
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# Dataset and outputs (large files)
+dataset/
+outputs/
+models/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# ZenML
+.zen/
+*.db
+
+# Docker
+*.log
+docker-compose.override.yml
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~

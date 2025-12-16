@@ -2,9 +2,9 @@ from typing import ClassVar
 from threading import Lock
 
 class SingletonMeta(type):
-    _instance: ClassVar = {}
+    _instances: ClassVar = {}
     _lock: Lock = Lock()
-    
+
     def __call__(cls, *args, **kwargs):
         with cls._lock:
             if cls not in cls._instances:

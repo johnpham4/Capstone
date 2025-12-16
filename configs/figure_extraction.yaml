@@ -1,0 +1,11 @@
+parameters:
+  pdf_sources:
+    - name: "Sach-bai-tap"
+      type: "pdf"
+      url: "https://drive.google.com/uc?export=download&id=18X-Yp--rEf7IvnmDASz7VRviK0rIiRAr"
+      has_dot: "false"
+
+  # - name: "sbt-toan8-tap1-ketnoi"
+  #   type: "pdf"
+  #   url: "https://84864e12bc.vws.vegacdn.vn//data/doc/2025/thcslienninh/2025_2/26/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515.pdf"
+  #   has_dot: "true"
