@@ -106,7 +106,7 @@ class PDFCrawler(BaseCrawler):
                     # Two-pass OCR: Quick scan for geometry keywords, then high-quality OCR
                     # Only OCR pages with "Hình" or "Giác" (geometry-related)
                     if has_geometry_keywords(page_path):
-                        page_text = ocr_page_text(page_path, lang="vi")
+                        page_text = ocr_page_text(page_path)
                         page_text_mapping[page_num] = page_text
                         full_text += f"\n===PAGE_{page_num}===\n{page_text}\n"
                         logger.info(f"OCR page {page_num} (geometry keywords detected)")
