@@ -12,7 +12,7 @@ class OCREngine(metaclass=SingletonMeta):
     def __init__(self):
         self.model = PaddleOCR(
             use_angle_cls=False,  # Disable angle detection for 2x speed boost
-            lang="latin",            # Vietnamese
+            lang="vi",            # Vietnamese
             use_gpu=True,         # Ensure GPU is used on Colab
             det_db_box_thresh=0.5, # Higher threshold = faster detection
             rec_batch_num=5,
