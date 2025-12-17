@@ -14,9 +14,6 @@ zenml_server:
 zenml_status:
 	uv run zenml status
 
-etl:
-	uv run python -m tools.run --run-legal-etl --no-cache
-
 extract:
 	uv run python -m tools.run --run-extract --no-cache
 
@@ -26,8 +23,5 @@ upload:
 fe:
 	uv run python -m tools.run --run-feature-engineering --no-cache
 
-test:
-	uv run pytest tests/
-
-test_unit:
-	uv run pytest tests/integration/
+ngrok_up:
+	- curl -s http://localhost:4040/api/tunnels | grep -o 'https://[^"]*'

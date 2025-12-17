@@ -19,15 +19,19 @@ class OCREngine:
         pass
 
     @classmethod
-    def get_paddle_instance(cls, lang: str = "vi") -> PaddleOCR:
+    def get_paddle_instance(cls, lang: str = "latin") -> PaddleOCR:
         """Get or create PaddleOCR singleton instance."""
         if cls._paddle_instance is None:
-            logger.info("Initializing PaddleOCR for Vietnamese...")
+            logger.info("Initializing PaddleOCR for Vietnamese with speed optimization...")
             cls._paddle_instance = PaddleOCR(
-                use_angle_cls=True,  # Enable text angle detection
-                lang=lang,           # Vietnamese
+                use_angle_cls=False,  # Disable angle detection for 2x speed boost
+                lang=lang,            # Vietnamese
+                use_gpu=True,         # Ensure GPU is used on Colab
+                det_db_box_thresh=0.5, # Higher threshold = faster detection
+                rec_batch_num=5,
+                show_log=False,       # Reduce logging overhead
             )
-            logger.info("PaddleOCR initialized successfully")
+            logger.info("PaddleOCR initialized successfully (GPU + Speed Mode)")
         return cls._paddle_instance
 
     def quick_scan_keywords(self, image_path: str | Path, keywords: list[str]) -> bool:

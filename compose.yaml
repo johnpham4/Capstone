@@ -48,6 +48,19 @@ services:
     networks:
       - geo
 
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: zenml_ngrok
+    depends_on:
+      - zenml-server
+    env_file:
+      - .env
+    command: http zenml-server:8080
+    ports:
+      - "4040:4040"
+    networks:
+      - geo
+
   # Qdrant Vector Database
   # qdrant:
   #   image: qdrant/qdrant:latest
