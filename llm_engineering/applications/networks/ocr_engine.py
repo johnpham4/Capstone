@@ -4,12 +4,16 @@ import pytesseract
 from pathlib import Path
 from paddleocr import PaddleOCR
 from loguru import logger
+import paddle
 
 from llm_engineering.applications.networks.base import SingletonMeta
 
 
 class OCREngine(metaclass=SingletonMeta):
     def __init__(self):
+
+        paddle.set_device("gpu" if paddle.is_compiled_with_cuda() else "cpu")
+
         self.model = PaddleOCR(
             use_angle_cls=False,  # Disable angle detection for 2x speed boost
             lang="vi",            # Vietnamese
