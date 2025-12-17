@@ -17,9 +17,9 @@ def has_geometry_keywords(image_path: str | Path) -> bool:
     )
 
 
-def ocr_page_text(image_path: str | Path, lang: str = "vi") -> str:
+def ocr_page_text(image_path: str | Path) -> str:
     """Extract text using high-quality PaddleOCR."""
-    return _ocr_engine.ocr_high_quality(image_path, lang)
+    return _ocr_engine.ocr_high_quality(image_path)
 
 
 def extract_problems_with_figures(text: str) -> List[Dict]:
