@@ -22,12 +22,24 @@ class UniversalPrompting():
         self.sptids_dict['<｜begin▁of▁sentence｜>'] = torch.tensor([bos_id])
         self.sptids_dict['<｜end▁of▁sentence｜>'] = torch.tensor([eos_id])
         self.sptids_dict['<|pad|>'] = torch.tensor([pad_id])
-        self.sptids_dict['<｜User｜>'] = torch.tensor([self.text_tokenizer.convert_tokens_to_ids('<｜User｜>')])
-        self.sptids_dict['<｜Assistant｜>'] = torch.tensor([self.text_tokenizer.convert_tokens_to_ids('<｜Assistant｜>')])
+
+        # Add User/Assistant tokens if they exist, otherwise use fallback
+        user_id = self.text_tokenizer.convert_tokens_to_ids('<｜User｜>')
+        assistant_id = self.text_tokenizer.convert_tokens_to_ids('<｜Assistant｜>')
+
+        # If token doesn't exist, use a special token ID or create new ones
+        if user_id == self.text_tokenizer.unk_token_id or user_id is None:
+            # Add the token first
+            self.text_tokenizer.add_tokens(['<｜User｜>', '<｜Assistant｜>'])
+            user_id = self.text_tokenizer.convert_tokens_to_ids('<｜User｜>')
+            assistant_id = self.text_tokenizer.convert_tokens_to_ids('<｜Assistant｜>')
+
+        self.sptids_dict['<｜User｜>'] = torch.tensor([user_id])
+        self.sptids_dict['<｜Assistant｜>'] = torch.tensor([assistant_id])
         self.max_len = max_len
         self.pad_id = self.text_tokenizer.convert_tokens_to_ids('[PAD]')
         self.ignore_id = ignore_id
-        self.assistant_id = self.text_tokenizer.convert_tokens_to_ids('<｜Assistant｜>')
+        self.assistant_id = assistant_id
         system_message = "A conversation between User and Assistant. The user asks a question, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think> <answer> answer here </answer>."
         self.system_ids = self.text_tokenizer(system_message, add_special_tokens=False)['input_ids']
 
