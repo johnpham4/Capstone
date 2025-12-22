@@ -18,12 +18,12 @@ from pipelines.training import training_pipeline
     default=False,
     help="Disable caching for the pipeline run.",
 )
-@click.option(
-    "--run-extract",
-    is_flag=True,
-    default=False,
-    help="Run extraction pipeline (figures + text)"
-)
+# @click.option(
+#     "--run-extract",
+#     is_flag=True,
+#     default=False,
+#     help="Run extraction pipeline (figures + text)"
+# )
 @click.option(
     "--run-upload-dataset",
     is_flag=True,
@@ -38,22 +38,22 @@ from pipelines.training import training_pipeline
 )
 def main(
     no_cache: bool = False,
-    run_extract: bool = False,
+    # run_extract: bool = False,
     run_upload_dataset: bool = False,
     run_train: bool = False,
 ) -> None:
-    assert run_extract or run_upload_dataset or run_train, "Please use one of the options"
+    assert run_upload_dataset or run_train, "Please use one of the options"
 
     pipeline_args = {"enable_cache": not no_cache}
     root_dir = Path(__file__).resolve().parent.parent
 
-    if run_extract:
-        pipeline_args["config_path"] = root_dir / "configs" / "figure_extraction.yaml"
-        assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
-        pipeline_args["run_name"] = f"extract_pipeline_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
+    # if run_extract:
+    #     pipeline_args["config_path"] = root_dir / "configs" / "figure_extraction.yaml"
+    #     assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
+    #     pipeline_args["run_name"] = f"extract_pipeline_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
 
-        logger.info("Starting extraction pipeline (figures + text)")
-        figure_extraction_pipeline.with_options(**pipeline_args)()
+    #     logger.info("Starting extraction pipeline (figures + text)")
+    #     figure_extraction_pipeline.with_options(**pipeline_args)()
 
     if run_upload_dataset:
         pipeline_args["config_path"] = root_dir / "configs" / "dataset_upload.yaml"
