@@ -1,7 +1,7 @@
 from pathlib import Path
 from zenml import step
-from datasets import Dataset
 from loguru import logger
+from typing import Optional
 
 from llm_engineering.applications.training.model_trainer import ModelTrainer
 
@@ -9,13 +9,16 @@ from llm_engineering.applications.training.model_trainer import ModelTrainer
 @step
 def train_step(
     trainer: ModelTrainer,
-    train_dataset: Dataset,
-    eval_dataset: Dataset = None
+    train_data: str,
+    images_dir: str,
+    eval_data: Optional[str] = None
 ) -> str:
-    """Execute training"""
+    """Load datasets and execute training"""
+
+    logger.info("Loading datasets")
+    train_dataset, eval_dataset = trainer.load_dataset(train_data, images_dir, eval_data)
 
     logger.info("Starting training")
-
     hf_trainer = trainer.train(train_dataset, eval_dataset)
 
     output_path = Path(trainer.config.output_dir) / "final"

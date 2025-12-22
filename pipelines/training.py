@@ -4,7 +4,6 @@ from typing import Optional
 
 from llm_engineering.domains.training_config import TrainingConfig
 from steps.train.load_model import load_model_step
-from steps.train.load_dataset import load_dataset_step
 from steps.train.train_model import train_step
 from steps.train.merge_model import merge_lora_step
 from steps.train.push_model import push_to_hub_step
@@ -28,8 +27,7 @@ def training_pipeline(
     logger.info("Starting training pipeline")
 
     trainer = load_model_step(config)
-    train_dataset, eval_dataset = load_dataset_step(train_data, images_dir, eval_data)
-    checkpoint_path = train_step(trainer, train_dataset, eval_dataset)
+    checkpoint_path = train_step(trainer, train_data, images_dir, eval_data)
 
     if merge_model:
         logger.info("Merging LoRA adapter")
