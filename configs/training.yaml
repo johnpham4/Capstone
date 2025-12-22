@@ -6,7 +6,7 @@ dataset_path: "./datasett/line_segments/dataset.json"
 images_dir: "./datasett/line_segments/images"
 
 batch_size: 1
-epochs: 3
+epochs: 1
 learning_rate: 2.0e-4
 lora_r: 8
 lora_alpha: 16
