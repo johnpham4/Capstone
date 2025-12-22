@@ -72,6 +72,7 @@ def main(
         with open(config_path) as f:
             config_data = yaml.safe_load(f)
 
+        # Create TrainingConfig object
         config = TrainingConfig(
             vq_model_path=config_data["vq_model_path"],
             base_llm_path=config_data["base_llm_path"],
@@ -79,9 +80,9 @@ def main(
             batch_size=config_data.get("batch_size", 1),
             epochs=config_data.get("epochs", 3),
             learning_rate=config_data.get("learning_rate", 2e-4),
-            lora_r=config_data.get("lora_r", 8),
-            lora_alpha=config_data.get("lora_alpha", 16),
-            gradient_accumulation_steps=config_data.get("gradient_accumulation_steps", 4),
+            lora_r=config_data.get("lora_r", 32),
+            lora_alpha=config_data.get("lora_alpha", 64),
+            gradient_accumulation_steps=config_data.get("gradient_accumulation_steps", 8),
             use_8bit=config_data.get("use_8bit", True),
             gradient_checkpointing=config_data.get("gradient_checkpointing", True),
             fp16=config_data.get("fp16", True),
@@ -127,7 +128,6 @@ def main(
             hf_token=hf_token,
             test_image=test_image
         )
-
 
 if __name__ == "__main__":
     main()

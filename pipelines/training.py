@@ -1,5 +1,6 @@
 from zenml import pipeline
 from loguru import logger
+from typing import Optional
 
 from llm_engineering.domains.training_config import TrainingConfig
 from steps.train.load_model import load_model_step
@@ -15,12 +16,12 @@ def training_pipeline(
     config: TrainingConfig,
     train_data: str,
     images_dir: str,
-    eval_data: str = None,
+    eval_data: Optional[str] = None,
     merge_model: bool = True,
     push_to_hub: bool = False,
-    hf_repo_name: str = None,
-    hf_token: str = None,
-    test_image: str = None
+    hf_repo_name: Optional[str] = None,
+    hf_token: Optional[str] = None,
+    test_image: Optional[str] = None
 ):
     """Complete training pipeline with merge, push, and test"""
 
