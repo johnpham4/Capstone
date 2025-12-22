@@ -17,19 +17,21 @@ dependencies = [
     "pydantic>=2.0.0",
     "pydantic-settings>=2.0.0",
     "loguru>=0.7.0",
-    "ultralytics>=8.0.0",
     "python-doctr[torch]>=0.8.0",
-    "PyMuPDF>=1.23.0",
     "zenml[server]==0.91.2",
     "click>=8.0.1",
-    "doclayout-yolo>=0.0.3",
-    "pytesseract>=0.3.10",
-    "opencv-python>=4.9.0",
-    "pyyaml>=6.0",
     "dill>=0.3.8",
     "datasets>=4.4.1",
-    "paddleocr>=3.3.2",
     "matplotlib>=3.7.0",
+]
+
+uv.group.ocr = [
+    "pytesseract>=0.3.10",
+    "paddleocr>=3.3.2",
+    "ultralytics>=8.0.0",
+    "PyMuPDF>=1.23.0",
+    "doclayout-yolo>=0.0.3",
+    "opencv-python>=4.9.0",
 ]
 
 [build-system]
