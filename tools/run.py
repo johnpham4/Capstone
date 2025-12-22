@@ -6,7 +6,7 @@ import yaml
 
 from llm_engineering.domains.training_config import TrainingConfig
 from llm_engineering.settings import settings
-from pipelines.figure_extraction import figure_extraction_pipeline
+# from pipelines.figure_extraction import figure_extraction_pipeline
 from pipelines.dataset_upload import dataset_upload_pipeline
 from pipelines.training import training_pipeline
 
