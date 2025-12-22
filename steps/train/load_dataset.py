@@ -8,7 +8,7 @@ from loguru import logger
 def load_dataset_step(
     train_path: str,
     images_dir: str,
-    eval_path: str = None
+    eval_path: str | None = None
 ) -> tuple[Dataset, Dataset]:
     """Load training and evaluation datasets"""
 
