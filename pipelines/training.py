@@ -1,29 +1,27 @@
-# """ZenML training pipeline for GeoUni finetuning"""
+from zenml import pipeline
+from loguru import logger
 
-# from zenml import pipeline
-# from loguru import logger
-
-# from llm_engineering.domains.training_config import TrainingConfig
-# from steps.train.load_model import load_model_step
-# from steps.train.load_dataset import load_dataset_step
-# from steps.train.train_model import train_step
+from llm_engineering.domains.training_config import TrainingConfig
+from steps.train.load_model import load_model_step
+from steps.train.load_dataset import load_dataset_step
+from steps.train.train_model import train_step
 
 
-# @pipeline
-# def training_pipeline(
-#     config: TrainingConfig,
-#     train_data: str,
-#     eval_data: str = None
-# ):
-#     """ZenML training pipeline"""
+@pipeline
+def training_pipeline(
+    config: TrainingConfig,
+    train_data: str,
+    images_dir: str,
+    eval_data: str = None
+):
+    """Training pipeline for GeoUni line segment generation"""
 
-#     logger.info("Starting ZenML training pipeline")
+    logger.info("Starting training pipeline")
 
-#     # Steps
-#     trainer = load_model_step(config)
-#     train_dataset, eval_dataset = load_dataset_step(train_data, eval_data)
-#     model_path = train_step(trainer, train_dataset, eval_dataset)
+    trainer = load_model_step(config)
+    train_dataset, eval_dataset = load_dataset_step(train_data, images_dir, eval_data)
+    model_path = train_step(trainer, train_dataset, eval_dataset)
 
-#     logger.success("Pipeline completed!")
+    logger.success("Pipeline completed")
 
-#     return model_path
+    return model_path

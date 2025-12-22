@@ -1,0 +1,17 @@
+vq_model_path: "JO-KU/Geo-MAGVIT"
+base_llm_path: "Qwen/Qwen2.5-3B-Instruct"
+output_dir: "./checkpoints/line_segments"
+
+dataset_path: "./datasett/line_segments/dataset.json"
+images_dir: "./datasett/line_segments/images"
+
+batch_size: 1
+epochs: 3
+learning_rate: 2.0e-4
+lora_r: 8
+lora_alpha: 16
+gradient_accumulation_steps: 4
+
+use_8bit: true
+gradient_checkpointing: true
+fp16: true

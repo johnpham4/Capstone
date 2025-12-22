@@ -13,6 +13,8 @@ ENV/
 env/
 .virtualenv
 
+dataset/
+
 # Environment variables
 .env
 .env.local

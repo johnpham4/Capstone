@@ -29,6 +29,7 @@ dependencies = [
     "dill>=0.3.8",
     "datasets>=4.4.1",
     "paddleocr>=3.3.2",
+    "matplotlib>=3.7.0",
 ]
 
 [build-system]

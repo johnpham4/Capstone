@@ -1,72 +1,59 @@
-# """Data collator for GeoUni Text-to-Diagram training"""
+import torch
+from PIL import Image
+from pathlib import Path
+from torchvision import transforms
+from loguru import logger
 
-# import torch
-# from PIL import Image
-# from torchvision import transforms
-# from loguru import logger
 
+class T2DDataCollator:
+    """Collator để encode image và format prompt"""
 
-# class T2DDataCollator:
-#     """Collator để encode image và format prompt theo paper GeoUni"""
+    def __init__(self, vq_model, prompter, image_transform=None):
+        self.vq_model = vq_model
+        self.prompter = prompter
 
-#     def __init__(self, vq_model, prompter, image_transform=None):
-#         """
-#         Args:
-#             vq_model: Geo-MAGVIT model (frozen) để encode image → tokens
-#             prompter: UniversalPrompting instance
-#             image_transform: Transform cho image
-#         """
-#         self.vq_model = vq_model
-#         self.prompter = prompter
+        if image_transform is None:
+            self.image_transform = transforms.Compose([
+                transforms.Resize((512, 512)),
+                transforms.ToTensor(),
+                transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+            ])
+        else:
+            self.image_transform = image_transform
 
-#         if image_transform is None:
-#             self.image_transform = transforms.Compose([
-#                 transforms.Resize((256, 256)),
-#                 transforms.ToTensor(),
-#                 transforms.Normalize([0.5], [0.5])
-#             ])
-#         else:
-#             self.image_transform = image_transform
+    def __call__(self, batch):
+        """Process batch: problem + image → tokens for training"""
 
-#     def __call__(self, batch):
-#         """
-#         Process batch: text + image → input_ids + labels
+        prompts = []
+        image_tokens_list = []
 
-#         Input batch: List[{"text": str, "image": str}]
-#         Output: {"input_ids": tensor, "attention_mask": tensor, "labels": tensor}
-#         """
+        for sample in batch:
+            problem = sample["problem"]
+            image_file = sample["images"][0]
+            images_dir = sample["images_dir"]
 
-#         text_ids = []
-#         image_ids = []
+            image_path = Path(images_dir) / image_file
 
-#         for sample in batch:
-#             # 1. Tokenize text
-#             text_tokens = self.prompter.text_tokenizer(
-#                 sample["text"],
-#                 add_special_tokens=False
-#             )["input_ids"]
-#             text_ids.append(text_tokens)
+            image = Image.open(image_path).convert("RGB")
+            image_tensor = self.image_transform(image).unsqueeze(0)
 
-#             # 2. Encode image → tokens (256 tokens)
-#             image = Image.open(sample["image"]).convert("RGB")
-#             image_tensor = self.image_transform(image).unsqueeze(0)
+            with torch.no_grad():
+                image_tokens = self.vq_model.get_code(image_tensor.to(self.vq_model.device))
+                image_tokens = image_tokens.squeeze(0)
 
-#             with torch.no_grad():
-#                 # VQ-VAE encode: image → discrete tokens
-#                 image_tokens = self.vq_model.encode(image_tensor.to(self.vq_model.device))
-#                 image_tokens = image_tokens.flatten()  # [16, 16] → [256]
+            image_tokens_list.append(image_tokens)
+            prompts.append(problem)
 
-#             image_ids.append(image_tokens)
+        image_tokens_batch = torch.stack(image_tokens_list)
 
-#         # 3. Stack image tokens
-#         image_ids = torch.stack(image_ids)
+        input_ids, attention_masks = self.prompter(prompts, "t2i_gen")
 
-#         # 4. Format prompt theo paper
-#         # Format: <bos> [system] <User> <t2i> [text] <Assistant> <soi> [image_tokens] <eoi> <eos>
-#         input_ids, attention_mask, labels = self.prompter.t2i_prompt(text_ids, image_ids)
+        labels = input_ids.clone()
+        labels[labels == self.prompter.text_tokenizer.pad_token_id] = -100
 
-#         return {
-#             "input_ids": input_ids,
-#             "attention_mask": attention_mask,
-#             "labels": labels
-#         }
+        return {
+            "input_ids": input_ids,
+            "attention_mask": attention_masks,
+            "labels": labels,
+            "image_tokens": image_tokens_batch
+        }

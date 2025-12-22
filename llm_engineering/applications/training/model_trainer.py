@@ -1,116 +1,125 @@
-# from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments, Trainer
-# from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
-# from datasets import Dataset
-# import json
-# import torch
-# from loguru import logger
+from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments, Trainer
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+from datasets import Dataset
+import json
+import torch
+from loguru import logger
 
-# from models.modeling_geomagvit import GeoMAGVIT
-# from llm_engineering.domains.training_config import TrainingConfig
-# from llm_engineering.applications.training.data_collator import T2DDataCollator
-
-
-# class ModelTrainer:
-
-#     def __init__(self, config: TrainingConfig):
-#         self.config = config
-#         self.model = None
-#         self.tokenizer = None
-#         self.vq_model = None
-#         self.prompter = None
-
-#     def load_model(self):
-
-#         self.model = AutoModelForCausalLM.from_pretrained(
-#             self.config.base_llm_path,
-#             load_in_8bit=self.config.use_8bit,
-#             device_map="auto",
-#             trust_remote_code=True,
-#         )
-
-#         self.tokenizer = AutoTokenizer.from_pretrained(
-#             self.config.base_llm_path,
-#             trust_remote_code=True,
-#         )
-
-#         logger.info(f"Loading VQ-VAE: {self.config.vq_model_path}")
+from models.modeling_geomagvit import GeoMAGVIT
+from llm_engineering.domains.training_config import TrainingConfig
+from llm_engineering.applications.training.data_collator import T2DDataCollator
 
 
-#         self.vq_model = GeoMAGVIT.from_pretrained(self.config.vq_model_path)
-#         self.vq_model.eval()
-#         for param in self.vq_model.parameters():
-#             param.requires_grad = False
+class ModelTrainer:
 
-#         # 3. Setup prompter
-#         from models.prompting_utils import UniversalPrompting
-#         self.prompter = UniversalPrompting(self.tokenizer)
+    def __init__(self, config: TrainingConfig):
+        self.config = config
+        self.model = None
+        self.tokenizer = None
+        self.vq_model = None
+        self.prompter = None
 
-#         # 4. Apply LoRA to LLM only
-#         self.model = prepare_model_for_kbit_training(self.model)
+    def load_model(self):
+        logger.info(f"Loading LLM: {self.config.base_llm_path}")
 
-#         lora_config = LoraConfig(
-#             r=self.config.lora_r,
-#             lora_alpha=self.config.lora_alpha,
-#             lora_dropout=0.1,
-#             target_modules=["q_proj", "v_proj", "k_proj", "o_proj"],
-#             bias="none",
-#             task_type="CAUSAL_LM",
-#         )
+        self.model = AutoModelForCausalLM.from_pretrained(
+            self.config.base_llm_path,
+            load_in_8bit=self.config.use_8bit,
+            device_map="auto",
+            trust_remote_code=True,
+        )
 
-#         self.model = get_peft_model(self.model, lora_config)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            self.config.base_llm_path,
+            trust_remote_code=True,
+        )
 
-#         logger.info(f"Loaded {self.config.base_llm_path}")
-#         self.model.print_trainable_parameters()
+        logger.info(f"Loading VQ-VAE: {self.config.vq_model_path}")
+        self.vq_model = GeoMAGVIT.from_pretrained(self.config.vq_model_path)
+        self.vq_model.eval()
+        for param in self.vq_model.parameters():
+            param.requires_grad = False
 
-#     def load_dataset(self, train_path: str, eval_path: str = None):
-#         """Load dataset từ JSON"""
+        from models.prompting_utils import UniversalPrompting
+        self.prompter = UniversalPrompting(
+            self.tokenizer,
+            max_len=4096,
+            special_tokens=("<|soi|>", "<|eoi|>", "<|t2i|>", "<|mmu|>", "<|mix|>",
+                          "<formalization>", "</formalization>", "<answer>", "</answer>"),
+            ignore_id=-100
+        )
 
-#         with open(train_path) as f:
-#             train_data = json.load(f)
+        self.model = prepare_model_for_kbit_training(self.model)
 
-#         train_dataset = Dataset.from_list(train_data)
+        lora_config = LoraConfig(
+            r=self.config.lora_r,
+            lora_alpha=self.config.lora_alpha,
+            lora_dropout=0.1,
+            target_modules=["q_proj", "v_proj", "k_proj", "o_proj"],
+            bias="none",
+            task_type="CAUSAL_LM",
+        )
 
-#         eval_dataset = None
-#         if eval_path:
-#             with open(eval_path) as f:
-#                 eval_data = json.load(f)
-#             eval_dataset = Dataset.from_list(eval_data)
+        self.model = get_peft_model(self.model, lora_config)
+        logger.success("Model loaded successfully")
+        self.model.print_trainable_parameters()
 
-#         return train_dataset, eval_dataset
+    def load_dataset(self, train_path: str, images_dir: str, eval_path: str = None):
+        logger.info(f"Loading dataset from {train_path}")
 
-#     def train(self, train_dataset, eval_dataset=None):
-#         """Start training với T2D collator"""
+        with open(train_path, encoding='utf-8') as f:
+            train_data = json.load(f)
 
-#         # Data collator với VQ-VAE encoding
-#         data_collator = T2DDataCollator(
-#             vq_model=self.vq_model,
-#             prompter=self.prompter
-#         )
+        for sample in train_data:
+            sample['images_dir'] = images_dir
 
-#         training_args = TrainingArguments(
-#             output_dir=self.config.output_dir,
-#             per_device_train_batch_size=self.config.batch_size,
-#             gradient_accumulation_steps=self.config.gradient_accumulation_steps,
-#             num_train_epochs=self.config.epochs,
-#             learning_rate=self.config.learning_rate,
-#             gradient_checkpointing=self.config.gradient_checkpointing,
-#             fp16=self.config.fp16,
-#             logging_steps=10,
-#             save_steps=500,
-#             save_total_limit=2,
-#             remove_unused_columns=False,
-#             report_to="none",
-#         )
+        train_dataset = Dataset.from_list(train_data)
+        logger.success(f"Loaded {len(train_dataset)} training samples")
 
-#         trainer = Trainer(
-#             model=self.model,
-#             args=training_args,
-#             train_dataset=train_dataset,
-#             eval_dataset=eval_dataset,
-#             tokenizer=self.tokenizer,
-#             data_collator=data_collator,
-#         )
+        eval_dataset = None
+        if eval_path:
+            with open(eval_path, encoding='utf-8') as f:
+                eval_data = json.load(f)
+            for sample in eval_data:
+                sample['images_dir'] = images_dir
+            eval_dataset = Dataset.from_list(eval_data)
+            logger.info(f"Loaded {len(eval_dataset)} eval samples")
 
-#         trainer.train()
+        return train_dataset, eval_dataset
 
-#         return trainer
+    def train(self, train_dataset, eval_dataset=None):
+        logger.info("Starting training")
+
+        data_collator = T2DDataCollator(
+            vq_model=self.vq_model,
+            prompter=self.prompter
+        )
+
+        training_args = TrainingArguments(
+            output_dir=self.config.output_dir,
+            per_device_train_batch_size=self.config.batch_size,
+            gradient_accumulation_steps=self.config.gradient_accumulation_steps,
+            num_train_epochs=self.config.epochs,
+            learning_rate=self.config.learning_rate,
+            gradient_checkpointing=self.config.gradient_checkpointing,
+            fp16=self.config.fp16,
+            logging_steps=10,
+            save_steps=500,
+            save_total_limit=2,
+            remove_unused_columns=False,
+            report_to="none",
+        )
+
+        trainer = Trainer(
+            model=self.model,
+            args=training_args,
+            train_dataset=train_dataset,
+            eval_dataset=eval_dataset,
+            tokenizer=self.tokenizer,
+            data_collator=data_collator,
+        )
+
+        trainer.train()
+        logger.success("Training completed")
+
+        return trainer
