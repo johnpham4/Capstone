@@ -8,7 +8,7 @@ uv:
 zenml_up:
 	docker compose -f compose.zenml.yml up -d
 
-zenml_server:
+zenml:
 	uv run zenml connect --url http://localhost:8080 --username admin --password Admin@123
 
 zenml_status:

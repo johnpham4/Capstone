@@ -93,14 +93,39 @@ def main(
         assert Path(dataset_path).exists(), f"Dataset not found: {dataset_path}"
         assert Path(images_dir).exists(), f"Images directory not found: {images_dir}"
 
+        merge_model = config_data.get("merge_model", True)
+        push_to_hub = config_data.get("push_to_hub", False)
+        hf_repo_name = config_data.get("hf_repo_name")
+        test_image = config_data.get("test_image")
+
+        if test_image:
+            test_image = str(root_dir / test_image)
+            if not Path(test_image).exists():
+                logger.warning(f"Test image not found: {test_image}")
+                test_image = None
+
+        hf_token = settings.HF_TOKEN if push_to_hub else None
+        if push_to_hub and not hf_token:
+            logger.warning("HF_TOKEN not set, skipping push to hub")
+            push_to_hub = False
+
         pipeline_args["run_name"] = f"training_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
 
         logger.info("Starting training pipeline")
+        logger.info(f"Merge model: {merge_model}")
+        logger.info(f"Push to hub: {push_to_hub}")
+        logger.info(f"Test inference: {test_image is not None}")
+
         training_pipeline.with_options(**pipeline_args)(
             config=config,
             train_data=dataset_path,
             images_dir=images_dir,
-            eval_data=None
+            eval_data=None,
+            merge_model=merge_model,
+            push_to_hub=push_to_hub,
+            hf_repo_name=hf_repo_name,
+            hf_token=hf_token,
+            test_image=test_image
         )
 
 

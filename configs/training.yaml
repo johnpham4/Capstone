@@ -15,3 +15,10 @@ gradient_accumulation_steps: 4
 use_8bit: true
 gradient_checkpointing: true
 fp16: true
+
+# Post-training options
+merge_model: true
+push_to_hub: false
+hf_repo_name: "your-username/geouni-line-segments"
+test_image: "./datasett/line_segments/images/0000_AB.png"
+
