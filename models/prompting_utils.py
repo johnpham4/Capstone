@@ -19,11 +19,10 @@ class UniversalPrompting():
         eos_id = self.text_tokenizer.eos_token_id
         pad_id = self.text_tokenizer.pad_token_id
 
-        self.sptids_dict['<｜begin▁of▁sentence｜>'] = torch.tensor([bos_id])
-        self.sptids_dict['<｜end▁of▁sentence｜>'] = torch.tensor([eos_id])
-        self.sptids_dict['<|pad|>'] = torch.tensor([pad_id])
+        # Store for later use
+        self.bos_id = bos_id
+        self.eos_id = eos_id
 
-        # Add User/Assistant tokens if they exist, otherwise use fallback
         user_id = self.text_tokenizer.convert_tokens_to_ids('<｜User｜>')
         assistant_id = self.text_tokenizer.convert_tokens_to_ids('<｜Assistant｜>')
 
@@ -105,7 +104,7 @@ class UniversalPrompting():
         assert len(text_ids) == 1
         for i in range(len(text_ids)):
             # prompting -- <｜begin▁of▁sentence｜> [system tokens] [User] [task token] [text tokens] [Assistant] [soi]
-            temp_text_ids =  [self.text_tokenizer.bos_token_id] + self.system_ids + [int(self.sptids_dict['<｜User｜>'])] + [int(self.sptids_dict['<|t2i|>'])] + \
+            temp_text_ids =  [self.bos_id] + self.system_ids + [int(self.sptids_dict['<｜User｜>'])] + [int(self.sptids_dict['<|t2i|>'])] + \
                  text_ids[i]
             temp_ids = torch.cat([
                 torch.tensor(temp_text_ids),
