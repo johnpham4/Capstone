@@ -2,14 +2,15 @@ from zenml import step
 from datasets import Dataset
 import json
 from loguru import logger
+from typing import Optional
 
 
 @step
 def load_dataset_step(
     train_path: str,
     images_dir: str,
-    eval_path: str | None = None
-) -> tuple[Dataset, Dataset]:
+    eval_path: Optional[str] = None
+) -> tuple[Dataset, Optional[Dataset]]:
     """Load training and evaluation datasets"""
 
     logger.info(f"Loading dataset from {train_path}")
