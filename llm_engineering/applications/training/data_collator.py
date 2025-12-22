@@ -46,7 +46,17 @@ class T2DDataCollator:
 
         image_tokens_batch = torch.stack(image_tokens_list)
 
-        input_ids, attention_masks = self.prompter(prompts, "t2i_gen")
+        # Process each prompt individually
+        input_ids_list = []
+        attention_masks_list = []
+
+        for prompt in prompts:
+            prompt_input_ids, prompt_attention_mask = self.prompter(prompt, "t2i_gen")
+            input_ids_list.append(prompt_input_ids)
+            attention_masks_list.append(prompt_attention_mask)
+
+        input_ids = torch.cat(input_ids_list, dim=0)
+        attention_masks = torch.cat(attention_masks_list, dim=0)
 
         labels = input_ids.clone()
         labels[labels == self.prompter.text_tokenizer.pad_token_id] = -100
