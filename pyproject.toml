@@ -23,6 +23,7 @@ dependencies = [
     "dill>=0.3.8",
     "datasets>=4.4.1",
     "matplotlib>=3.7.0",
+    "bitsandbytes>=0.49.0",
 ]
 
 uv.group.ocr = [
