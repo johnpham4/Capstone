@@ -7,7 +7,7 @@ from loguru import logger
 
 from models.modeling_geomagvit import GeoMAGVIT
 from llm_engineering.domains.training_config import TrainingConfig
-from llm_engineering.applications.training.data_collator import T2DDataCollator
+from llm_engineering.applications.training.data_collator import T2DDataCollatorCached
 
 
 class ModelTrainer:
@@ -35,10 +35,6 @@ class ModelTrainer:
         )
 
         logger.info(f"Loading VQ-VAE: {self.config.vq_model_path}")
-        self.vq_model = GeoMAGVIT.from_pretrained(self.config.vq_model_path)
-        self.vq_model.eval()
-        for param in self.vq_model.parameters():
-            param.requires_grad = False
 
         from models.prompting_utils import UniversalPrompting
         self.prompter = UniversalPrompting(
@@ -88,12 +84,9 @@ class ModelTrainer:
         return train_dataset, eval_dataset
 
     def train(self, train_dataset, eval_dataset=None):
-        logger.info("Starting training")
+        logger.info("Starting training with cached tokens")
 
-        data_collator = T2DDataCollator(
-            vq_model=self.vq_model,
-            prompter=self.prompter
-        )
+        data_collator = T2DDataCollatorCached(prompter=self.prompter)
 
         training_args = TrainingArguments(
             output_dir=self.config.output_dir,

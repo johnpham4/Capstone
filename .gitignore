@@ -31,8 +31,6 @@ dataset/
 .ipynb_checkpoints/
 **/.ipynb_checkpoints/
 
-# Dataset and outputs (large files)
-dataset/
 outputs/
 models/
 *.pt

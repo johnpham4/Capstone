@@ -2,8 +2,8 @@ vq_model_path: "JO-KU/Geo-MAGVIT"
 base_llm_path: "Qwen/Qwen2.5-3B-Instruct"
 output_dir: "./checkpoints/line_segments"
 
-dataset_path: "./datasett/line_segments/dataset.json"
-images_dir: "./datasett/line_segments/images"
+dataset_path: "./data/line_segments/dataset.json"
+images_dir: "./data/line_segments/images"
 
 batch_size: 8
 epochs: 3
@@ -20,5 +20,5 @@ fp16: true
 merge_model: true
 push_to_hub: false
 hf_repo_name: "your-username/geouni-line-segments"
-test_image: "./datasett/line_segments/images/0000_AB.png"
+test_image: "./data/line_segments/images/0000_AB.png"
 

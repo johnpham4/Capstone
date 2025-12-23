@@ -62,7 +62,7 @@ def draw_line_segment(save_path, label1, label2, show_length=False, length_value
     }
 
 
-def generate_line_segments(num_samples=100, output_dir='./datasett/line_segments'):
+def generate_line_segments(num_samples=100, output_dir='./data/line_segments'):
     """Generate dataset chỉ có line segments"""
 
     output_dir = Path(output_dir)
@@ -125,7 +125,7 @@ def main():
     parser = argparse.ArgumentParser(description='Generate line segment diagrams')
     parser.add_argument('--samples', type=int, default=100,
                        help='Number of line segments (default: 100)')
-    parser.add_argument('--output', type=str, default='./datasett/line_segments',
+    parser.add_argument('--output', type=str, default='./data/line_segments',
                        help='Output directory')
 
     args = parser.parse_args()

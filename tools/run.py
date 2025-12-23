@@ -3,6 +3,7 @@ from pathlib import Path
 from loguru import logger
 from datetime import datetime as dt
 import yaml
+import json
 
 from llm_engineering.domains.training_config import TrainingConfig
 from llm_engineering.settings import settings
@@ -38,6 +39,12 @@ from pipelines.inference import inference_pipeline
     help="Run training pipeline"
 )
 @click.option(
+    "--encode-images",
+    is_flag=True,
+    default=False,
+    help="Encode images to tokens (run once)"
+)
+@click.option(
     "--run-inference",
     is_flag=True,
     default=False,
@@ -45,12 +52,12 @@ from pipelines.inference import inference_pipeline
 )
 def main(
     no_cache: bool = False,
-    # run_extract: bool = False,
     run_upload_dataset: bool = False,
     run_train: bool = False,
+    encode_images: bool = False,
     run_inference: bool = False,
 ) -> None:
-    assert run_upload_dataset or run_train or run_inference, "Please use one of the options"
+    assert run_upload_dataset or run_train or encode_images or run_inference, "Please use one of the options"
 
     pipeline_args = {"enable_cache": not no_cache}
     root_dir = Path(__file__).resolve().parent.parent
@@ -72,35 +79,31 @@ def main(
         logger.info("Starting dataset upload pipeline")
         dataset_upload_pipeline.with_options(**pipeline_args)()
 
-    if run_train:
+    if encode_images:
         config_path = root_dir / "configs" / "training.yaml"
-        assert config_path.exists(), f"Config file not found: {config_path}"
-
-        logger.info(f"Loading config from {config_path}")
         with open(config_path) as f:
             config_data = yaml.safe_load(f)
 
-        # Create TrainingConfig object
-        config = TrainingConfig(
-            vq_model_path=config_data["vq_model_path"],
-            base_llm_path=config_data["base_llm_path"],
-            output_dir=config_data["output_dir"],
-            batch_size=config_data.get("batch_size", 1),
-            epochs=config_data.get("epochs", 3),
-            learning_rate=config_data.get("learning_rate", 2e-4),
-            lora_r=config_data.get("lora_r", 32),
-            lora_alpha=config_data.get("lora_alpha", 64),
-            gradient_accumulation_steps=config_data.get("gradient_accumulation_steps", 8),
-            use_8bit=config_data.get("use_8bit", True),
-            gradient_checkpointing=config_data.get("gradient_checkpointing", True),
-            fp16=config_data.get("fp16", True),
-        )
+        input_json = str(root_dir / config_data["dataset_path"])
+        images_dir = str(root_dir / config_data["images_dir"])
+        output_json = input_json.replace(".json", "_cached.json")
+
+        logger.info(f"Encoding: {input_json} -> {output_json}")
+
+        from llm_engineering.applications.training.images_encoder import encode_dataset_images
+        encode_dataset_images(input_json, output_json, images_dir, config_data["vq_model_path"])
+
+        logger.success(f"Done! Update dataset_path: {Path(output_json).relative_to(root_dir)}")
+
+    if run_train:
+        config_path = root_dir / "configs" / "training.yaml"
+        with open(config_path) as f:
+            config_data = yaml.safe_load(f)
+
+        config = TrainingConfig(**config_data)
 
         dataset_path = str(root_dir / config_data["dataset_path"])
-        images_dir = str(root_dir / config_data["images_dir"])
-
-        assert Path(dataset_path).exists(), f"Dataset not found: {dataset_path}"
-        assert Path(images_dir).exists(), f"Images directory not found: {images_dir}"
+        images_dir = str(root_dir / config_data.get("images_dir", ""))
 
         merge_model = config_data.get("merge_model", True)
         push_to_hub = config_data.get("push_to_hub", False)
@@ -110,20 +113,13 @@ def main(
         if test_image:
             test_image = str(root_dir / test_image)
             if not Path(test_image).exists():
-                logger.warning(f"Test image not found: {test_image}")
                 test_image = None
 
         hf_token = settings.HF_TOKEN if push_to_hub else None
         if push_to_hub and not hf_token:
-            logger.warning("HF_TOKEN not set, skipping push to hub")
             push_to_hub = False
 
         pipeline_args["run_name"] = f"training_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
-
-        logger.info("Starting training pipeline")
-        logger.info(f"Merge model: {merge_model}")
-        logger.info(f"Push to hub: {push_to_hub}")
-        logger.info(f"Test inference: {test_image is not None}")
 
         training_pipeline.with_options(**pipeline_args)(
             config=config,
