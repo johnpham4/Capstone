@@ -1,5 +1,4 @@
 model_path: ""  # Path to trained model (empty = use base Qwen2.5-3B-Instruct)
 vq_model_path: "JO-KU/Geo-MAGVIT"
-test_image_path: "./datasett/line_segments/images/0000_AB.png"
 output_dir: "./outputs/inference_test"
 test_prompt: "Vẽ đoạn thẳng CD có độ dài 8"

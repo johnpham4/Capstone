@@ -136,15 +136,15 @@ def main(
             hf_token=hf_token,
             test_image=test_image
         )
-    
+
     if run_inference:
         config_path = root_dir / "configs" / "inference.yaml"
         assert config_path.exists(), f"Config file not found: {config_path}"
-        
+
         logger.info(f"Loading inference config from {config_path}")
         with open(config_path) as f:
             config_data = yaml.safe_load(f)
-        
+
         # Empty model_path means use base Qwen model
         model_path = config_data.get("model_path", "")
         if model_path:
@@ -152,25 +152,20 @@ def main(
             if not Path(model_path).exists():
                 logger.warning(f"Trained model not found at {model_path}, will use base Qwen model")
                 model_path = ""
-        
-        test_image_path = config_data.get("test_image_path")
-        if test_image_path:
-            test_image_path = str(root_dir / test_image_path)
-        
+
+        test_prompt = config_data.get("test_prompt", "Vẽ đoạn thẳng AB có độ dài 5")
         output_dir = str(root_dir / config_data.get("output_dir", "./outputs/inference_test"))
-        if test_image_path:
-            assert Path(test_image_path).exists(), f"Test image not found: {test_image_path}"
-        
+
         pipeline_args["run_name"] = f"inference_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
-        
+
         logger.info("Starting inference pipeline")
-        logger.info(f"Model: {model_path}")
-        logger.info(f"Test image: {test_image_path}")
-        
+        logger.info(f"Model: {model_path or 'Base Qwen2.5-3B-Instruct'}")
+        logger.info(f"Prompt: {test_prompt}")
+
         inference_pipeline.with_options(**pipeline_args)(
             model_path=model_path,
             vq_model_path=config_data["vq_model_path"],
-            test_image_path=test_image_path,
+            test_prompt=test_prompt,
             output_dir=output_dir
         )
 

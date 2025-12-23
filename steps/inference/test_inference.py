@@ -15,9 +15,10 @@ from models.prompting_utils import UniversalPrompting
 def test_inference_step(
     model_path: str,
     vq_model_path: str,
-    test_image_path: str,
+    test_prompt: str,
     output_dir: str
 ) -> str:
+    """Test inference: generate image from text prompt"""
 
     logger.info("Loading models for inference test")
 
@@ -50,24 +51,9 @@ def test_inference_step(
         ignore_id=-100
     )
 
-    logger.info(f"Loading test image: {test_image_path}")
-    image = Image.open(test_image_path).convert("RGB")
+    logger.info(f"Test prompt: {test_prompt}")
 
-    transform = transforms.Compose([
-        transforms.Resize((512, 512)),
-        transforms.ToTensor(),
-        transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
-    ])
-
-    image_tensor = transform(image).unsqueeze(0).to(device)
-
-    with torch.no_grad():
-        input_tokens = vq_model.get_code(image_tensor)
-
-    prompt = "Vẽ đoạn thẳng CD có độ dài 8"
-    logger.info(f"Test prompt: {prompt}")
-
-    input_ids, attention_mask = prompter(prompt, "t2i_gen")
+    input_ids, attention_mask = prompter(test_prompt, "t2i_gen")
     input_ids = input_ids.to(device)
     attention_mask = attention_mask.to(device)
 
@@ -86,7 +72,6 @@ def test_inference_step(
         )
 
     # Extract image tokens (after <soi>, before <eoi>)
-    # Assuming tokens between soi_id and eoi_id are image tokens
     soi_id = int(prompter.sptids_dict['<|soi|>'])
     eoi_id = int(prompter.sptids_dict['<|eoi|>'])
 
@@ -96,17 +81,33 @@ def test_inference_step(
         eoi_idx = output_tokens.index(eoi_id, soi_idx)
         image_token_ids = output_tokens[soi_idx+1:eoi_idx]
 
-        # Reshape to 32x32 grid
-        image_tokens = torch.tensor(image_token_ids).reshape(1, 32, 32).to(device)
+        logger.info(f"Extracted {len(image_token_ids)} image tokens")
+
+        # Need exactly 1024 tokens (32x32)
+        if len(image_token_ids) != 1024:
+            logger.warning(f"Expected 1024 tokens, got {len(image_token_ids)}, padding/truncating")
+            if len(image_token_ids) < 1024:
+                image_token_ids += [0] * (1024 - len(image_token_ids))
+            else:
+                image_token_ids = image_token_ids[:1024]
+
+        # Convert to tensor and reshape to 32x32 grid
+        image_tokens = torch.tensor(image_token_ids, dtype=torch.long).reshape(1, 32, 32).to(device)
+
     except (ValueError, RuntimeError) as e:
-        logger.error(f"Failed to extract image tokens: {e}")
-        # Fallback: use first 1024 generated tokens
-        generated_part = output[0][input_ids.shape[1]:]
+        logger.warning(f"Could not extract image tokens with markers: {e}")
+        logger.info("Using fallback: first 1024 generated tokens")
+        # Fallback: use first 1024 generated tokens after input
+        generated_part = output[0][input_ids.shape[1]:].cpu()
+        if len(generated_part) < 1024:
+            # Pad if not enough tokens
+            padding = torch.zeros(1024 - len(generated_part), dtype=torch.long)
+            generated_part = torch.cat([generated_part, padding])
         image_tokens = generated_part[:1024].reshape(1, 32, 32).to(device)
 
     logger.info("Decoding tokens to image")
     with torch.no_grad():
-        generated_image = vq_model.decode_code(output_tokens)
+        generated_image = vq_model.decode_code(image_tokens)
 
     generated_image = torch.clamp((generated_image + 1.0) / 2.0, 0.0, 1.0) * 255.0
     generated_image = generated_image[0].permute(1, 2, 0).cpu().numpy().astype(np.uint8)
