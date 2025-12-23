@@ -5,12 +5,12 @@ output_dir: "./checkpoints/line_segments"
 dataset_path: "./data/line_segments/dataset_cached.json"
 images_dir: "./data/line_segments/images"
 
-batch_size: 8
-epochs: 15
-learning_rate: 2.0e-4
-lora_r: 8
-lora_alpha: 16
-gradient_accumulation_steps: 4
+batch_size: 4
+epochs: 30
+learning_rate: 5.0e-4
+lora_r: 16
+lora_alpha: 32
+gradient_accumulation_steps: 8
 
 use_8bit: true
 gradient_checkpointing: true
