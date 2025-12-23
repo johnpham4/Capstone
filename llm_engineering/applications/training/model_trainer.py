@@ -99,12 +99,12 @@ class ModelTrainer:
             learning_rate=self.config.learning_rate,
             gradient_checkpointing=self.config.gradient_checkpointing,
             fp16=self.config.fp16,
-            logging_steps=10,
+            logging_steps=1,
+            logging_strategy="steps",
             save_steps=500,
             save_total_limit=2,
             remove_unused_columns=False,
             report_to="none",
-
         )
 
         trainer = Trainer(
