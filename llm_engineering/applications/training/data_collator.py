@@ -55,8 +55,28 @@ class T2DDataCollator:
             input_ids_list.append(prompt_input_ids)
             attention_masks_list.append(prompt_attention_mask)
 
-        input_ids = torch.cat(input_ids_list, dim=0)
-        attention_masks = torch.cat(attention_masks_list, dim=0)
+        # Pad all sequences to max length in batch
+        max_length = max(ids.shape[1] for ids in input_ids_list)
+        pad_token_id = self.prompter.text_tokenizer.pad_token_id
+
+        padded_input_ids = []
+        padded_attention_masks = []
+
+        for input_ids, attention_mask in zip(input_ids_list, attention_masks_list):
+            seq_len = input_ids.shape[1]
+            if seq_len < max_length:
+                # Pad to max_length
+                padding = torch.full((1, max_length - seq_len), pad_token_id, dtype=input_ids.dtype)
+                input_ids = torch.cat([input_ids, padding], dim=1)
+
+                attention_padding = torch.zeros((1, max_length - seq_len), dtype=attention_mask.dtype)
+                attention_mask = torch.cat([attention_mask, attention_padding], dim=1)
+
+            padded_input_ids.append(input_ids)
+            padded_attention_masks.append(attention_mask)
+
+        input_ids = torch.cat(padded_input_ids, dim=0)
+        attention_masks = torch.cat(padded_attention_masks, dim=0)
 
         labels = input_ids.clone()
         labels[labels == self.prompter.text_tokenizer.pad_token_id] = -100
