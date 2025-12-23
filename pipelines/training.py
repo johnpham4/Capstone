@@ -7,7 +7,7 @@ from steps.train.load_model import load_model_step
 from steps.train.train_model import train_step
 from steps.train.merge_model import merge_lora_step
 from steps.train.push_model import push_to_hub_step
-from steps.train.test_inference import test_inference_step
+from steps.inference.test_inference import test_inference_step
 
 
 @pipeline
@@ -22,8 +22,6 @@ def training_pipeline(
     hf_token: Optional[str] = None,
     test_image: Optional[str] = None
 ):
-    """Complete training pipeline with merge, push, and test"""
-
     logger.info("Starting training pipeline")
 
     trainer = load_model_step(config)

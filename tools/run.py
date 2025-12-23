@@ -9,6 +9,7 @@ from llm_engineering.settings import settings
 # from pipelines.figure_extraction import figure_extraction_pipeline
 from pipelines.dataset_upload import dataset_upload_pipeline
 from pipelines.training import training_pipeline
+from pipelines.inference import inference_pipeline
 
 
 @click.command()
@@ -36,13 +37,20 @@ from pipelines.training import training_pipeline
     default=False,
     help="Run training pipeline"
 )
+@click.option(
+    "--run-inference",
+    is_flag=True,
+    default=False,
+    help="Run inference pipeline to test trained model"
+)
 def main(
     no_cache: bool = False,
     # run_extract: bool = False,
     run_upload_dataset: bool = False,
     run_train: bool = False,
+    run_inference: bool = False,
 ) -> None:
-    assert run_upload_dataset or run_train, "Please use one of the options"
+    assert run_upload_dataset or run_train or run_inference, "Please use one of the options"
 
     pipeline_args = {"enable_cache": not no_cache}
     root_dir = Path(__file__).resolve().parent.parent
@@ -127,6 +135,43 @@ def main(
             hf_repo_name=hf_repo_name,
             hf_token=hf_token,
             test_image=test_image
+        )
+    
+    if run_inference:
+        config_path = root_dir / "configs" / "inference.yaml"
+        assert config_path.exists(), f"Config file not found: {config_path}"
+        
+        logger.info(f"Loading inference config from {config_path}")
+        with open(config_path) as f:
+            config_data = yaml.safe_load(f)
+        
+        # Empty model_path means use base Qwen model
+        model_path = config_data.get("model_path", "")
+        if model_path:
+            model_path = str(root_dir / model_path)
+            if not Path(model_path).exists():
+                logger.warning(f"Trained model not found at {model_path}, will use base Qwen model")
+                model_path = ""
+        
+        test_image_path = config_data.get("test_image_path")
+        if test_image_path:
+            test_image_path = str(root_dir / test_image_path)
+        
+        output_dir = str(root_dir / config_data.get("output_dir", "./outputs/inference_test"))
+        if test_image_path:
+            assert Path(test_image_path).exists(), f"Test image not found: {test_image_path}"
+        
+        pipeline_args["run_name"] = f"inference_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
+        
+        logger.info("Starting inference pipeline")
+        logger.info(f"Model: {model_path}")
+        logger.info(f"Test image: {test_image_path}")
+        
+        inference_pipeline.with_options(**pipeline_args)(
+            model_path=model_path,
+            vq_model_path=config_data["vq_model_path"],
+            test_image_path=test_image_path,
+            output_dir=output_dir
         )
 
 if __name__ == "__main__":

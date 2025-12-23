@@ -18,20 +18,27 @@ def test_inference_step(
     test_image_path: str,
     output_dir: str
 ) -> str:
-    """Test model inference: image -> LLM -> generate new image"""
 
     logger.info("Loading models for inference test")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+    # Use base Qwen model if no trained model path provided
+    base_model = "Qwen/Qwen2.5-3B-Instruct"
+    actual_model_path = model_path if model_path and Path(model_path).exists() else base_model
+
+    logger.info(f"Loading model from: {actual_model_path}")
+    if actual_model_path == base_model:
+        logger.warning("No trained model found, using base Qwen model (not fine-tuned)")
+
     model = AutoModelForCausalLM.from_pretrained(
-        model_path,
+        actual_model_path,
         torch_dtype=torch.bfloat16,
         device_map="auto",
         trust_remote_code=True
     ).eval()
 
-    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(actual_model_path, trust_remote_code=True)
 
     vq_model = GeoMAGVIT.from_pretrained(vq_model_path).to(device).eval()
 
@@ -60,17 +67,42 @@ def test_inference_step(
     prompt = "Vẽ đoạn thẳng CD có độ dài 8"
     logger.info(f"Test prompt: {prompt}")
 
-    input_ids, _ = prompter(prompt, "t2i_gen")
+    input_ids, attention_mask = prompter(prompt, "t2i_gen")
     input_ids = input_ids.to(device)
+    attention_mask = attention_mask.to(device)
 
     logger.info("Generating image tokens")
     with torch.no_grad():
-        output_tokens = model.t2i_generate(
+        # Use standard generate, model will output tokens including image part
+        output = model.generate(
             input_ids=input_ids,
-            max_new_tokens=1024,
+            attention_mask=attention_mask,
+            max_new_tokens=1024,  # 32x32 = 1024 tokens for image
             pad_token_id=tokenizer.pad_token_id,
-            temperature=1.0
+            eos_token_id=int(prompter.sptids_dict['<|eoi|>']),
+            temperature=1.0,
+            do_sample=True,
+            top_p=0.9
         )
+
+    # Extract image tokens (after <soi>, before <eoi>)
+    # Assuming tokens between soi_id and eoi_id are image tokens
+    soi_id = int(prompter.sptids_dict['<|soi|>'])
+    eoi_id = int(prompter.sptids_dict['<|eoi|>'])
+
+    output_tokens = output[0].cpu().tolist()
+    try:
+        soi_idx = output_tokens.index(soi_id)
+        eoi_idx = output_tokens.index(eoi_id, soi_idx)
+        image_token_ids = output_tokens[soi_idx+1:eoi_idx]
+
+        # Reshape to 32x32 grid
+        image_tokens = torch.tensor(image_token_ids).reshape(1, 32, 32).to(device)
+    except (ValueError, RuntimeError) as e:
+        logger.error(f"Failed to extract image tokens: {e}")
+        # Fallback: use first 1024 generated tokens
+        generated_part = output[0][input_ids.shape[1]:]
+        image_tokens = generated_part[:1024].reshape(1, 32, 32).to(device)
 
     logger.info("Decoding tokens to image")
     with torch.no_grad():
