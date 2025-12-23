@@ -91,8 +91,8 @@ def test_inference_step(
             else:
                 image_token_ids = image_token_ids[:1024]
 
-        # Convert to tensor and reshape to 32x32 grid
-        image_tokens = torch.tensor(image_token_ids, dtype=torch.long).reshape(1, 32, 32).to(device)
+        # Convert to tensor - keep as (1, 1024) for decode_code
+        image_tokens = torch.tensor(image_token_ids, dtype=torch.long).unsqueeze(0).to(device)
 
     except (ValueError, RuntimeError) as e:
         logger.warning(f"Could not extract image tokens with markers: {e}")
@@ -103,9 +103,9 @@ def test_inference_step(
             # Pad if not enough tokens
             padding = torch.zeros(1024 - len(generated_part), dtype=torch.long)
             generated_part = torch.cat([generated_part, padding])
-        image_tokens = generated_part[:1024].reshape(1, 32, 32).to(device)
+        image_tokens = generated_part[:1024].unsqueeze(0).to(device)
 
-    logger.info("Decoding tokens to image")
+    logger.info(f"Decoding tokens to image, shape: {image_tokens.shape}")
     with torch.no_grad():
         generated_image = vq_model.decode_code(image_tokens)
 
