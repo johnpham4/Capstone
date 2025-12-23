@@ -1,4 +1,5 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments, Trainer
+from llm_engineering.applications.training.callbacks.logger import LossLoggingCallback
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from datasets import Dataset
 import json
@@ -88,6 +89,8 @@ class ModelTrainer:
 
         data_collator = T2DDataCollatorCached(prompter=self.prompter)
 
+        log_callback = LossLoggingCallback()
+
         training_args = TrainingArguments(
             output_dir=self.config.output_dir,
             per_device_train_batch_size=self.config.batch_size,
@@ -101,6 +104,7 @@ class ModelTrainer:
             save_total_limit=2,
             remove_unused_columns=False,
             report_to="none",
+            callbacks=[log_callback]
         )
 
         trainer = Trainer(

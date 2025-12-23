@@ -2,7 +2,7 @@ vq_model_path: "JO-KU/Geo-MAGVIT"
 base_llm_path: "Qwen/Qwen2.5-3B-Instruct"
 output_dir: "./checkpoints/line_segments"
 
-dataset_path: "./data/line_segments/dataset.json"
+dataset_path: "./data/line_segments/dataset_cached.json"
 images_dir: "./data/line_segments/images"
 
 batch_size: 8

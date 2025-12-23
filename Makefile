@@ -25,3 +25,7 @@ fe:
 
 ngrok_up:
 	- curl -s http://localhost:4040/api/tunnels | grep -o 'https://[^"]*'
+
+encode:
+	uv run python -m tools.run --encode-images
+
