@@ -104,7 +104,7 @@ class ModelTrainer:
             save_total_limit=2,
             remove_unused_columns=False,
             report_to="none",
-            callbacks=[log_callback]
+
         )
 
         trainer = Trainer(
@@ -114,6 +114,7 @@ class ModelTrainer:
             eval_dataset=eval_dataset,
             tokenizer=self.tokenizer,
             data_collator=data_collator,
+            callbacks=[log_callback],
         )
 
         trainer.train()
