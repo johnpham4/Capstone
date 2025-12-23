@@ -84,16 +84,18 @@ def main(
         with open(config_path) as f:
             config_data = yaml.safe_load(f)
 
-        input_json = str(root_dir / config_data["dataset_path"])
         images_dir = str(root_dir / config_data["images_dir"])
-        output_json = input_json.replace(".json", "_cached.json")
+
+        # Luôn encode từ dataset.json -> dataset_cached.json
+        input_json = str(root_dir / "data" / "line_segments" / "dataset.json")
+        output_json = str(root_dir / "data" / "line_segments" / "dataset_cached.json")
 
         logger.info(f"Encoding: {input_json} -> {output_json}")
 
         from llm_engineering.applications.training.images_encoder import encode_dataset_images
         encode_dataset_images(input_json, output_json, images_dir, config_data["vq_model_path"])
 
-        logger.success(f"Done! Update dataset_path: {Path(output_json).relative_to(root_dir)}")
+        logger.success(f"Done!")
 
     if run_train:
         config_path = root_dir / "configs" / "training.yaml"
