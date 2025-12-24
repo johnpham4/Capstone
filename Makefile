@@ -6,7 +6,7 @@ uv:
 	uv sync --all-groups
 
 zenml_up:
-	docker compose -f compose.zenml.yml up -d
+	docker compose -f compose.yaml up -d
 
 zenml:
 	uv run zenml connect --url http://localhost:8080 --username admin --password Admin@123
