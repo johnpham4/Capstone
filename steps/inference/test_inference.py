@@ -10,6 +10,13 @@ from torchvision import transforms
 from models.modeling_geomagvit import GeoMAGVIT
 from models.prompting_utils import UniversalPrompting
 
+def make_coord_grid(h, w, device):
+    ys = torch.linspace(-1, 1, h, device=device)
+    xs = torch.linspace(-1, 1, w, device=device)
+    grid_y, grid_x = torch.meshgrid(ys, xs, indexing="ij")
+    coord = torch.stack([grid_x, grid_y], dim=0)  # (2, H, W)
+    return coord
+
 
 @step
 def test_inference_step(
@@ -108,6 +115,14 @@ def test_inference_step(
     logger.info(f"Decoding tokens to image, shape: {image_tokens.shape}")
     with torch.no_grad():
         generated_image = vq_model.decode_code(image_tokens)
+       
+        B, C, H, W = generated_image.shape
+        coord_grid = make_coord_grid(H, W, generated_image.device)
+        coord_grid = coord_grid.unsqueeze(0).repeat(B, 1, 1, 1) 
+        generated_image = torch.cat([generated_image, coord_grid], dim=1)
+        # Project back to RGB
+        proj = torch.nn.Conv2d(5, 3, kernel_size=1, bias=False).to(generated_image.device)
+        generated_image = proj(generated_image)
 
     generated_image = torch.clamp((generated_image + 1.0) / 2.0, 0.0, 1.0) * 255.0
     generated_image = generated_image[0].permute(1, 2, 0).cpu().numpy().astype(np.uint8)
