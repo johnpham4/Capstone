@@ -1,0 +1,920 @@
+[
+  {
+    "stt": 1,
+    "problem_id": "d290d33c-2d87-454c-a24e-54a570f65595",
+    "title": "1.27",
+    "page": 18,
+    "content": "1.27. Một hình lăng trụ đứng có đáy là một tam giác với ba cạnh bằng ba x, bốn x và năm x (biết rằng đó là một tam giác vuông), chiều cao của hình lăng trụ bằng y (x lớn hơn 0, y lớn hơn 0). Hãy tìm đa thức với hai biến x và y biểu thị diện tích toàn phần (tổng diện tích xung quanh và diện tích hai đáy) của hình lăng trụ đó. Xác định bậc của đa thức tìm được.",
+    "figures": [],
+    "page_image": "output/pages/page_018.png"
+  },
+  {
+    "stt": 2,
+    "problem_id": "fb3e0135-86c0-464e-96c8-07fbce2ae52d",
+    "title": "2.12",
+    "page": 24,
+    "content": "2.12. Từ một khối lập phương có độ dài cạnh là x cộng 3 (cm), ta cắt bỏ một khối lập phương có độ dài x trừ 1 (cm) (H.2.3). Tính thể tích phần còn lại, viết kết quả dưới dạng đa thức.",
+    "figures": [
+      "(H.2.3)"
+    ],
+    "page_image": "output/pages/page_024.png"
+  },
+  {
+    "stt": 3,
+    "problem_id": "e795267d-a5c6-470a-bff1-ecd9b9a4f2df",
+    "title": "2.24",
+    "page": 30,
+    "content": "2.24. Từ một miếng bia có dạng hình tròn (H.2.4) với bán kính R (cm), người ta khoét một hình tròn ở giữa có bán kính r (cm), r nhỏ hơn R.\na) Viết công thức tính diện tích phần còn lại của miếng bìa.\nb) Tính diện tích phần còn lại của miếng bìa biết tổng hai bán kính là mười centimet và hiệu hai bán kính là ba centimet.",
+    "figures": [
+      "(H.2.4)"
+    ],
+    "page_image": "output/pages/page_030.png"
+  },
+  {
+    "stt": 4,
+    "problem_id": "427191c1-d58e-427e-b98f-88bc9e298701",
+    "title": "3.1",
+    "page": 32,
+    "content": "3.1. Chứng minh rằng cả bốn góc của một tứ giác không thể đều là góc nhọn, không thể đều là góc tù.",
+    "figures": [],
+    "page_image": "output/pages/page_032.png"
+  },
+  {
+    "stt": 5,
+    "problem_id": "bd2f88b6-4bc7-4a17-9d93-c8b91870e7c1",
+    "title": "3.2",
+    "page": 32,
+    "content": "3.2. Chứng minh rằng trong một tứ giác, độ dài mỗi cạnh bé hơn tổng độ dài ba cạnh còn lại.",
+    "figures": [],
+    "page_image": "output/pages/page_032.png"
+  },
+  {
+    "stt": 6,
+    "problem_id": "85ca4e4a-590e-48d9-a78a-7ca564082e70",
+    "title": "3.3",
+    "page": 32,
+    "content": "3.3. Chứng minh tổng độ dài hai đường chéo của tứ giác:\na) Bé hơn chu vi của tứ giác;  \nb) Lớn hơn tổng hai cạnh đối tùy ý của tứ giác, từ đó lớn hơn nửa chu vi của tứ giác.\nb) Lớn hơn tổng hai cạnh đối tùy ý của tứ giác, từ đó lớn hơn nửa chu vi của tứ giác.",
+    "figures": [],
+    "page_image": "output/pages/page_032.png"
+  },
+  {
+    "stt": 7,
+    "problem_id": "5c441935-d086-48fc-927d-d7efd1f9f003",
+    "title": "3.4",
+    "page": 32,
+    "content": "3.4. Tìm điểm bên trong tứ giác ABC sao cho tổng khoảng cách từ M đến bốn đỉnh A, B, C, D là bé nhất.",
+    "figures": [],
+    "page_image": "output/pages/page_032.png"
+  },
+  {
+    "stt": 8,
+    "problem_id": "f019abc6-906a-4223-a6d1-fda6770ca80d",
+    "title": "3.5",
+    "page": 32,
+    "content": "3.5. Cho tứ giác ABCD với AB = BC, CD = DA, góc B = 100°, góc D = 120°. Tính góc A và góc C.",
+    "figures": [],
+    "page_image": "output/pages/page_032.png"
+  },
+  {
+    "stt": 9,
+    "problem_id": "3ef3604b-5821-426b-b6aa-77cd45980bd1",
+    "title": "3.6",
+    "page": 32,
+    "content": "3.6. a) Góc kề bù với góc tại một đỉnh của tứ giác gọi là một góc ngoài tại đỉnh đó của tứ giác. (Có hai góc ngoài tại một đỉnh của tứ giác, chúng đối đỉnh nên thường gọi tắt là góc ngoài tại đỉnh đó của tứ giác). Hãy tính tổng bốn góc ngoài tại bốn đỉnh của một tứ giác.\nb) Định nghĩa góc ngoài tại một đỉnh của tam giác một cách tương tự. Hỏi tổng các góc ngoài của một tam giác bằng bao nhiêu?",
+    "figures": [],
+    "page_image": "output/pages/page_032.png"
+  },
+  {
+    "stt": 10,
+    "problem_id": "acfb7fd4-a379-4e93-ae8b-ec9c5ad70ccf",
+    "title": "3.8",
+    "page": 34,
+    "content": "3.8. Chứng minh rằng trong hình thang có nhiều nhất hai góc tù.",
+    "figures": [],
+    "page_image": "output/pages/page_034.png"
+  },
+  {
+    "stt": 11,
+    "problem_id": "d2c7cd92-567e-48c6-b289-dd23b2639a85",
+    "title": "3.9",
+    "page": 34,
+    "content": "3.9. Cho tam giác ABC vuông cân tại đỉnh A. Ghép thêm vào phía ngoài tam giác đó tam giác BCD vuông cân tại đỉnh B. Chứng minh tứ giác ABDC là một hình thang vuông (hình thang có một cạnh bên vuông góc với hai đáy).\nChứng minh tứ giác ABDC là một hình thang vuông (hình thang có một cạnh bên vuông góc với hai đáy).",
+    "figures": [],
+    "page_image": "output/pages/page_034.png"
+  },
+  {
+    "stt": 12,
+    "problem_id": "3e5e1234-ea45-45de-9e94-3a752cecbdb3",
+    "title": "3.12",
+    "page": 37,
+    "content": "3.12. Xét hai hình bình hành ABCD và MNCB.\na) Chứng minh A, B, C là ba điểm thẳng hàng;\n\nb) Chứng minh B là trung điểm của AC;\n\nc) Hỏi tam giác AB thỏa mãn điều kiện gì để MNCA là một hình thang cân?\n\nd) Lấy điểm D để tứ giác MNDC là hình bình hành. Hỏi tam giác AB thỏa mãn điều kiện gì để MMNDA là một hình thang cân?",
+    "figures": [],
+    "page_image": "output/pages/page_037.png"
+  },
+  {
+    "stt": 13,
+    "problem_id": "659a86d7-7eb1-4ce0-a47c-379fe6b69c32",
+    "title": "3.14",
+    "page": 37,
+    "content": "3.14. Cho hình bình hành ABCD với góc A tù. Dựng bên ngoài hình bình hành đó các tam giác đều ABE và DAF. Chứng minh rằng tam giác CEF là tam giác đều (Gợi ý: Chứng minh các tam giác AEF, DCF, BEC bằng nhau).",
+    "figures": [],
+    "page_image": "output/pages/page_037.png"
+  },
+  {
+    "stt": 14,
+    "problem_id": "44574481-cfe8-49df-b8bd-0af3bcd1f1bb",
+    "title": "3.15",
+    "page": 37,
+    "content": "3.15. Chứng minh rằng nếu hai góc kề của mỗi cạnh của một tứ giác đều là hai góc bù nhau thì tứ giác đó là một hình bình hành.",
+    "figures": [],
+    "page_image": "output/pages/page_037.png"
+  },
+  {
+    "stt": 15,
+    "problem_id": "9326746b-eed3-4d0c-8510-d5d28a6a5566",
+    "title": "3.16",
+    "page": 37,
+    "content": "3.16. Cho hình thang ABCD với hai đáy AB, CD. Gọi K là trung điểm của BC. Lấy điểm A', D' sao cho K là trung điểm của AA' và DD'. Hỏi tứ giác A'A'DD là hình gì? Vì sao?",
+    "figures": [],
+    "page_image": "output/pages/page_037.png"
+  },
+  {
+    "stt": 16,
+    "problem_id": "e6662d0a-6055-4457-9f8e-879d9de22b90",
+    "title": "3.19",
+    "page": 37,
+    "content": "3.19. Cho tam giác ABC không vuông tại A. Dựng bên ngoài tam giác đó hai tam giác ABD, ACE vuông cân tại đỉnh A rồi dựng hình bình hành AE1Đ.  \na) Chứng minh hai tam giác ABC và DAI bằng nhau.  \nb) Chứng minh đường thẳng AI vuông góc với BC.  \nc) Chứng minh đường thẳng BE vuông góc với đường thẳng CD.  \nd) Gọi K là trung điểm của BD, chứng minh KC = KI và KC vuông góc với KI.  \n(Gợi ý: Chứng minh hai tam giác AKI và BKC bằng nhau).",
+    "figures": [],
+    "page_image": "output/pages/page_037.png"
+  },
+  {
+    "stt": 17,
+    "problem_id": "58d0c7ac-d89b-4f9e-b00c-ae3ff7c8522e",
+    "title": "3.20",
+    "page": 39,
+    "content": "3.20. Cho tam giác ABC cân tại A, AH là đường cao. Gọi M, N lần lượt là trung điểm của AB, AC. Gọi D, E lần lượt là điểm sao cho M là trung điểm của HD, N là trung điểm của HE.\na) Chứng minh rằng AHBD, AHCE, BCED là những hình chữ nhật.  \nb) Tại sao giao điểm của BE và CD là trung điểm của AH?  \nc) Giải thích tại sao hai lần H bằng HE, BE bằng CD.",
+    "figures": [],
+    "page_image": "output/pages/page_039.png"
+  },
+  {
+    "stt": 18,
+    "problem_id": "2807388f-9e78-40cc-9a70-8e03d5828d11",
+    "title": "3.21",
+    "page": 39,
+    "content": "3.21. Hai đường trung tuyến BM, CN của tam giác ABC cân tại A cắt nhau tại G. Gọi H, K lần lượt là điểm sao cho trung điểm của GH là M, trung điểm của GK là N. Chứng minh tứ giác BCHK là hình chữ nhật.",
+    "figures": [],
+    "page_image": "output/pages/page_039.png"
+  },
+  {
+    "stt": 19,
+    "problem_id": "77342ff5-e1e0-4df2-abcb-0f6be7a43e17",
+    "title": "3.22",
+    "page": 39,
+    "content": "3.22. 1. Sử dụng tính chất tổng các góc của một tam giác bằng một trăm tám mươi độ để chứng minh:\na) Trong tam giác vuông, đường trung tuyến ứng với cạnh huyền bằng nửa cạnh huyền.\nb) Tam giác ABC có đường trung tuyến AM bằng nửa đoạn thẳng BC thì tam giác ABC vuông tại đỉnh A.\n2. Sử dụng tính chất hai đường chéo của hình chữ nhật bằng nhau để chứng minh a), b) của ý 1.",
+    "figures": [],
+    "page_image": "output/pages/page_039.png"
+  },
+  {
+    "stt": 20,
+    "problem_id": "856c35b0-da6b-4311-bf21-9bd4febfcfdc",
+    "title": "3.24",
+    "page": 42,
+    "content": "3.24. Gọi O là giao điểm hai đường chéo của hình bình hành ABCD. Với mỗi tam giác OAB, OBC, OCD, ODA, xét giao điểm ba đường phân giác của tam giác đó. Tại sao bốn điểm vừa vẽ là bốn đỉnh của một hình thoi?",
+    "figures": [],
+    "page_image": "output/pages/page_042.png"
+  },
+  {
+    "stt": 21,
+    "problem_id": "b27d981f-57ec-4604-a03c-d2f16700dce7",
+    "title": "3.25",
+    "page": 42,
+    "content": "3.25. Cho hình vuông ABCD. Với điểm M nằm giữa C và D, kẻ tia phân giác của góc DAM; nó cắt CD ở N. Đường thẳng qua N vuông góc với AM cắt BC ở P. Tính số đo của góc NAP.",
+    "figures": [],
+    "page_image": "output/pages/page_042.png"
+  },
+  {
+    "stt": 22,
+    "problem_id": "68bb95fc-f49f-4dbf-a1ef-ab5f2453d0ab",
+    "title": "3.26",
+    "page": 42,
+    "content": "3.26. Cho hình vuông ABCD với tâm O và có cạnh bằng 2 cm. Hai tia Ox, Oy tạo thành góc vuông. Tính diện tích của phần hình vuông nằm bên trong góc xOy.",
+    "figures": [],
+    "page_image": "output/pages/page_042.png"
+  },
+  {
+    "stt": 23,
+    "problem_id": "6713221f-1b55-465f-8301-6f0a30b707e6",
+    "title": "3.27",
+    "page": 42,
+    "content": "3.27. Xét tam giác ABC vuông cân tại A. Lấy trên cạnh BC hai điểm D, E sao cho BD = DE = EC. Lấy các điểm F, G lần lượt thuộc cạnh AC, AB sao cho FE, GD vuông góc với BC.\nChứng minh tứ giác DEFG là một hình vuông.",
+    "figures": [],
+    "page_image": "output/pages/page_042.png"
+  },
+  {
+    "stt": 24,
+    "problem_id": "9166616b-6860-4d8d-9140-2e6733ef0dd7",
+    "title": "3.28",
+    "page": 44,
+    "content": "3.28. Cho tam giác ABC. Với mỗi điểm M nằm giữa B và C, lấy điểm N thuộc cạnh AB, điểm P thuộc cạnh AC sao cho MN song song với AC, MP vuông góc với AB.\na) Hỏi tứ giác ANMP là hình gì?\n\nb) Hỏi M ở vị trí nào để tứ giác ANMP là một hình thoi?\n\nc) Tam giác ABC phải thoả mãn điều kiện gì để tứ giác ANMP là một hình chữ nhật?\n\nd) Khi tam giác ABC thoả mãn điều kiện nói trong câu c, tìm vị trí của M để NP ngắn nhất.\n\ne) Tam giác ABC thoả mãn điều kiện gì và M ở vị trí nào trên cạnh BC để tứ giác ANMP là một hình vuông?",
+    "figures": [],
+    "page_image": "output/pages/page_044.png"
+  },
+  {
+    "stt": 25,
+    "problem_id": "34b2703a-1c10-419e-a2ea-e17d0afd2600",
+    "title": "3.29",
+    "page": 44,
+    "content": "3.29. Gọi H là giao của ba đường cao A1, B2, C3 của tam giác nhọn ABC.\nDùng công thức tính diện tích tam giác để chứng minh:\nHỏi khi góc A của tam giác ABC là góc tù thì công thức đó thay đổi thế nào?",
+    "figures": [],
+    "page_image": "output/pages/page_044.png"
+  },
+  {
+    "stt": 26,
+    "problem_id": "992eab49-3abe-4eef-86f5-976ff178296d",
+    "title": "3.30",
+    "page": 44,
+    "content": "3.30. Khái niệm tam giác, tứ giác có thể mở rộng thành khái niệm n-giac (n là số tự nhiên lớn hơn 2) như sau:\nĐa giác là hình tạo bởi n đoạn thẳng (gọi là cạnh của đa giác) A1A2, A2A3, ... AnA1 (các điểm A1, A2, .... An gọi là đỉnh của đa giác), trong đó không có ba đỉnh nào cùng nằm trên một đường thẳng và hình nằm về một phía đối với mỗi đường thẳng chứa một cạnh.\nKhi n bằng 3, 4, 5, 6, 7, 8, ?— giác còn được gọi lần lượt là tam giác, tứ giác, ngũ giác, lục giác, thất giác, bát giác.\nHai đỉnh của đa giác gọi là kề nhau nếu chúng là hai đỉnh của một cạnh của đa giác.\nĐoạn thẳng nối hai đỉnh không kề nhau của đa giác gọi là một đường chéo của bảy giác.",
+    "figures": [],
+    "page_image": "output/pages/page_044.png"
+  },
+  {
+    "stt": 27,
+    "problem_id": "651f9033-ded3-4379-9131-8e6e92b474e5",
+    "title": "3.31",
+    "page": 45,
+    "content": "3.31. Hai cạnh kề nhau của một đa giác là hai cạnh có cùng chung một đỉnh của đa giác đó; chúng xác định hai tia của một góc gọi là góc tại đỉnh đó của đa giác.\n\nMỗi đa giác có n góc.\n\na) Kẻ n trừ 3 đường chéo của đa giác cùng đi qua đỉnh A, thì đa giác được chia thành bao nhiêu tam giác, từ đó suy ra tổng các góc của đa giác bằng (n trừ 2) nhân với 180 độ.\n\nb) Góc kề bù với một góc tại một đỉnh của đa giác gọi là một góc ngoài tại đỉnh đó của đa giác.\n\nVới mỗi đỉnh của một đa giác, xét một góc ngoài tại đỉnh đó của đa giác thì hỏi tổng n góc ngoài đó bằng bao nhiêu?",
+    "figures": [],
+    "page_image": "output/pages/page_045.png"
+  },
+  {
+    "stt": 28,
+    "problem_id": "53eb35bf-a2f7-4db9-a47a-15751322b02d",
+    "title": "3.32",
+    "page": 45,
+    "content": "3.32. N-giac gọi là n-giac đều nếu tất cả các cạnh của nó bằng nhau và tất cả các góc của nó bằng nhau.  \na) Tính số đo mỗi góc của một n-giac đều.  \nb) Tứ giác đều là hình gì?\na) Tính số đo mỗi góc của một đa giác đều.  \nb) Tứ giác đều là hình gì?",
+    "figures": [],
+    "page_image": "output/pages/page_045.png"
+  },
+  {
+    "stt": 29,
+    "problem_id": "14522c69-b9e0-4c1d-a551-76ad06fd19aa",
+    "title": "4.2",
+    "page": 48,
+    "content": "4.2. Tìm độ dài x trong các hình vẽ sau (H.5.4):",
+    "figures": [
+      "(H.5.4)"
+    ],
+    "page_image": "output/pages/page_048.png"
+  },
+  {
+    "stt": 30,
+    "problem_id": "7078120e-5afd-4058-8bf6-72d6d93ccc52",
+    "title": "4.3",
+    "page": 48,
+    "content": "4.3. Tìm độ dài x trong Hình năm phẩy năm:",
+    "figures": [],
+    "page_image": "output/pages/page_048.png"
+  },
+  {
+    "stt": 31,
+    "problem_id": "463d574b-7275-4222-aa25-2535609eb61a",
+    "title": "4.4",
+    "page": 48,
+    "content": "4.4. Cho Hình 5.6.  \nChứng minh rằng AB song song với KI.",
+    "figures": [],
+    "page_image": "output/pages/page_048.png"
+  },
+  {
+    "stt": 32,
+    "problem_id": "7ed2ced0-c232-43be-bc1a-71a75933cf8a",
+    "title": "4.7",
+    "page": 50,
+    "content": "4.7. Tìm độ dài x, y trong hình vẽ dưới đây: H.1",
+    "figures": [
+      "H.1"
+    ],
+    "page_image": "output/pages/page_050.png"
+  },
+  {
+    "stt": 33,
+    "problem_id": "f10598fc-961b-4b9f-bd2d-08ad43b1e1fe",
+    "title": "4.8",
+    "page": 50,
+    "content": "4.8. Cho tam giác DEF. Gọi H, K, L lần lượt là các trung điểm của DE, DF và EF. Chứng minh rằng tứ giác HKL là hình bình hành.",
+    "figures": [],
+    "page_image": "output/pages/page_050.png"
+  },
+  {
+    "stt": 34,
+    "problem_id": "d909024c-f1c8-4411-b70c-f15b02a7455c",
+    "title": "4.9",
+    "page": 50,
+    "content": "4.9. Cho tam giác ABC, các đường trung tuyến BD, CE cắt nhau tại G. Gọi I, K theo thứ tự là trung điểm của GB, GC. Chứng minh rằng: EI = DK.",
+    "figures": [],
+    "page_image": "output/pages/page_050.png"
+  },
+  {
+    "stt": 35,
+    "problem_id": "b539f3f3-2ae8-4d15-9463-b250475edfe7",
+    "title": "4.10",
+    "page": 50,
+    "content": "4.10. Cho hình chữ nhật ABCD. Gọi D, E, F, G lần lượt là trung điểm các cạnh AB, BC, CD, DA. Tứ giác DEFG là hình gì? Vì sao?",
+    "figures": [],
+    "page_image": "output/pages/page_050.png"
+  },
+  {
+    "stt": 36,
+    "problem_id": "4765c5e9-7f75-46d1-bac6-190e02d9960d",
+    "title": "4.11",
+    "page": 52,
+    "content": "4.11. Tính độ dài x trong Hình năm phẩy mười hai.",
+    "figures": [],
+    "page_image": "output/pages/page_052.png"
+  },
+  {
+    "stt": 37,
+    "problem_id": "1197c1dc-3266-44e9-a736-51ffba989b76",
+    "title": "4.12",
+    "page": 52,
+    "content": "4.12. Cho tam giác ABC, trung tuyến AI. Tia phân giác góc AIB và tia phân giác góc AIC cắt AB, AC lần lượt tại M và N. Chứng minh MN song song với BC.",
+    "figures": [],
+    "page_image": "output/pages/page_052.png"
+  },
+  {
+    "stt": 38,
+    "problem_id": "62de915e-da67-46d2-8e49-5eb87413b939",
+    "title": "4.13",
+    "page": 52,
+    "content": "4.13. Cho tam giác AABC có AD, BE, CF lần lượt là đường phân giác của góc A, góc B, góc C. Chú ý rằng: AE chia CD theo tỉ lệ BF. Chứng minh rằng EC chia DB theo tỉ lệ FA.",
+    "figures": [],
+    "page_image": "output/pages/page_052.png"
+  },
+  {
+    "stt": 39,
+    "problem_id": "a471dfb7-3d7a-4bb3-b537-479e0295d88e",
+    "title": "4.14",
+    "page": 52,
+    "content": "4.14. Cho tam giác ABC, phân giác AD (D thuộc BC). Kẻ DE song song với AB (E thuộc AC). Chứng minh rằng: AB trừ EC = AC trừ EA.",
+    "figures": [],
+    "page_image": "output/pages/page_052.png"
+  },
+  {
+    "stt": 40,
+    "problem_id": "d22add39-6def-4a8b-82f4-e91a2f826c83",
+    "title": "4.15",
+    "page": 55,
+    "content": "4.15. Cho tam giác ABC, điểm I nằm trong tam giác. Lấy điểm D trên cạnh A, qua D kẻ đường thẳng song song với AB, cắt cạnh B tại E. Qua E kẻ đường thẳng song song với BC, cắt cạnh C tại F. Chứng minh rằng: DF song song với AC.",
+    "figures": [],
+    "page_image": "output/pages/page_055.png"
+  },
+  {
+    "stt": 41,
+    "problem_id": "5e52d929-41fc-4601-be51-7a29ffab997b",
+    "title": "4.16",
+    "page": 55,
+    "content": "4.16. Cho tam giác ABC, các đường trung tuyến BD, CE. Gọi M, N theo thứ tự là trung điểm của BE, CD. Gọi I, K theo thứ tự là giao điểm của MN với BD và CE. Chứng minh MI = IK = KN.",
+    "figures": [],
+    "page_image": "output/pages/page_055.png"
+  },
+  {
+    "stt": 42,
+    "problem_id": "96ad679e-e19a-42d5-8840-ff358eb0c22c",
+    "title": "4.17",
+    "page": 55,
+    "content": "4.17. Cho tam giác ABC cân tại A, các đường phân giác BD, CE (D thuộc AC, E thuộc AB).  \nChứng minh DE song song với BC.",
+    "figures": [],
+    "page_image": "output/pages/page_055.png"
+  },
+  {
+    "stt": 43,
+    "problem_id": "5a8fcf3d-8b0c-4c40-b1bd-74fd6c59522b",
+    "title": "5.7",
+    "page": 62,
+    "content": "5.7. Biểu đồ Hình 5.1 cho biết tỉ lệ độc giả của báo điện tử Vnexpress ủng hộ các phương án thiết kế cầu Tràn Hưng Đạo, Hà Nội (Phương án 1: Cầu dằm — cáp hỗn hợp; Phương án 2: Cầu vòm kết hợp dây văng; Phương án 3: Cầu dầm hộp bê tông cốt thép dự ứng lực kết hợp trụ tháp).\nBiết rằng có bảy nghìn bảy trăm năm mươi bốn lượt độc giả tham gia bình chọn.\na) Lập bảng thống kê cho biết số lượng bình chọn cho mỗi loại.\n\nb) Vẽ biểu đồ cột biểu diễn dữ liệu trong bảng thống kê này.",
+    "figures": [],
+    "page_image": "output/pages/page_062.png"
+  },
+  {
+    "stt": 44,
+    "problem_id": "8468f195-af04-4da7-9985-f4eab793300d",
+    "title": "5.9",
+    "page": 63,
+    "content": "5.9. Cho biểu đồ đoạn thẳng H.5.2.\na) Lập bảng thống kê biểu diễn dữ liệu cho trong biểu đồ.  \nb) Vẽ biểu đồ cột biểu diễn dữ liệu này.",
+    "figures": [
+      "H.5.2"
+    ],
+    "page_image": "output/pages/page_063.png"
+  },
+  {
+    "stt": 45,
+    "problem_id": "767a681a-fce9-4888-a9fc-99dbcb40875a",
+    "title": "5.18",
+    "page": 70,
+    "content": "5.18. Cho biểu đồ Hình năm phẩy mười.\na) Lập bảng thống kê biểu diễn số liệu được biểu diễn trên biểu đồ.\n\nb) Nhận xét về xu thế của doanh thu từ đồ uống có cồn trên toàn cầu trước năm 2020. Tại sao doanh thu năm 2020 có sụt giảm mạnh?\n\nc) Năm 2021, tỷ lệ doanh thu đồ uống có cồn theo loại được cho trong biểu đồ Hình 5.11.\na) Lập bảng thống kê biểu diễn số liệu được biểu diễn trên biểu đồ.\nb) Nhận xét về xu thế của doanh thu từ đồ uống có cồn trên toàn cầu trước năm hai nghìn hai mươi. Tại sao doanh thu năm hai nghìn hai mươi có sụt giảm mạnh?\nc) Năm 2021, tỷ lệ doanh thu đồ uống có cồn theo loại được cho trong biểu đồ Hình 5.11.\nc) Năm 2021, tỷ lệ doanh thu đồ uống có cồn theo loại được cho trong biểu đồ H.1.",
+    "figures": [
+      "H.1"
+    ],
+    "page_image": "output/pages/page_070.png"
+  },
+  {
+    "stt": 46,
+    "problem_id": "361ed77b-091d-4eb5-89c0-6834d34f0555",
+    "title": "5.19",
+    "page": 71,
+    "content": "5.19. Biểu đồ Hình 5.12. cho biết số bàn thắng ghi được của chủ nhân chiếc giày vàng tại giải ngoại hạng Anh và La Liga (giải vô địch quốc gia Tây Ban Nha) trong một số năm gần đây.\na) So sánh về số bàn thắng mà chủ nhân chiếc giày vàng ghi được tại hai giải bóng đá từ mùa giải hai nghìn mười lăm hai nghìn mười sáu đến mùa giải hai nghìn hai mươi hai.\nb) Cầu thủ ghi được nhiều nhất bao nhiêu bàn thắng trong một mùa giải tính từ mùa giải 2015/2016 đến mùa giải 2021/2022?",
+    "figures": [],
+    "page_image": "output/pages/page_071.png"
+  },
+  {
+    "stt": 47,
+    "problem_id": "895d0359-6a3e-4cd1-bff8-6ae608d8257e",
+    "title": "5.21",
+    "page": 74,
+    "content": "5.21. Biểu đồ Hình 5.13. biểu diễn xếp hạng thế giới của đội tuyển bóng đá nam Việt Nam và Thái Lan vào tháng 10 trong mười năm từ năm 2013 đến năm 2022.\na) Dữ liệu được biểu diễn trên biểu đồ Hình 5.13 và biểu đồ Hình 5.3 có giống nhau không?\n\nb) Dãy số liệu về xếp hạng thế giới của bóng đá nam Việt Nam là dãy số liệu rời rạc hay liên tục?\n\nc) So sánh sự khác nhau trong việc biểu diễn các trục ở Hình 5.13 và Hình 5.3. Biểu diễn như ở Hình 5.13 có ưu điểm gì trong việc nhận ra xu thế của thứ hạng?\nb) Dãy số liệu về xếp hạng thế giới của bóng đá nam Việt Nam là dãy số liệu rời rạc hay liên tục?\nc) So sánh sự khác nhau trong việc biểu diễn các trục ở Hình một và Hình hai. Biểu diễn như ở Hình một có ưu điểm gì trong việc nhận ra xu thế của thứ hạng?",
+    "figures": [],
+    "page_image": "output/pages/page_074.png"
+  },
+  {
+    "stt": 48,
+    "problem_id": "16075728-3305-4ecc-aebc-19cd7851093d",
+    "title": "5.23",
+    "page": 75,
+    "content": "5.23. Biểu đồ Hình 5.16 cho biết kinh phí chính phủ Mỹ, Anh chi cho hệ thống chăm sóc sức khỏe, bảo hiểm sức khỏe xã hội bao gồm cả bảo hiểm sức khỏe bắt buộc (gọi chung là chăm sóc sức khỏe) từ năm 1960 đến 2020.",
+    "figures": [],
+    "page_image": "output/pages/page_075.png"
+  },
+  {
+    "stt": 49,
+    "problem_id": "2e01705c-3f07-4a69-a4a4-446ed7b53e7f",
+    "title": "1.27",
+    "page": 82,
+    "content": "1.27. Diện tích toàn phần của hình lăng trụ bằng S toàn phần = S xung quanh + 2S đáy, trong đó S xung quanh là diện tích xung quanh, S đáy là diện tích một mặt đáy của hình lăng trụ. Ta có:\n* Chu vi đáy của hình lăng trụ là ba x cộng bốn x cộng năm x bằng mười hai x, chiều cao là y nên S_u bằng mười hai xy.\n* Đây là tam giác vuông có cạnh lớn nhất là năm x nên hai cạnh góc vuông là ba x và bốn x. Vậy diện tích của nó bằng một phần hai nhân ba x nhân bốn x bằng sáu x bình phương.\n\nDo đó, biểu thức biểu thị diện tích toàn phần của hình lăng trụ là...\nDo đó, biểu thức biểu thị diện tích toàn phần của hình lăng trụ là:\nĐó là một đa thức bậc hai.",
+    "figures": [],
+    "page_image": "output/pages/page_082.png"
+  },
+  {
+    "stt": 50,
+    "problem_id": "ddf0c318-758b-4753-8693-ba3352403004",
+    "title": "3.1",
+    "page": 88,
+    "content": "3.1. Nếu cả bốn góc của tứ giác đều bé hơn 90° thì tổng của chúng bé hơn 360°, vô lý.  \nNếu cả bốn góc của tứ giác đều lớn hơn 90° thì tổng của chúng lớn hơn 360°, vô lý.\n\n3.2. Trong tứ giác ABCD, AB nhỏ hơn AD cộng DB nhỏ hơn AD cộng (BC cộng CD).\n\n3.3. Xét tứ giác ABCD. Chu vi tứ giác ABCD là P bằng AB cộng BC cộng CD cộng DA.  \na) Ta có AC nhỏ hơn AB cộng BC và AC nhỏ hơn CD cộng DA nên 2AC nhỏ hơn P.  \nTương tự, ta có 2BD nhỏ hơn P.  \nVậy 2(AC cộng BD) nhỏ hơn 2P, do đó AC cộng BD nhỏ hơn P.  \nb) Gọi O là giao điểm của AC và BD.  \nTa có OA cộng OB lớn hơn AB, OC cộng OD lớn hơn CD nên AC cộng BD bằng OA cộng OC cộng OB cộng OD lớn hơn AB cộng CD.  \nTương tự, AC cộng BD lớn hơn AD cộng BC.  \nVậy 2(AC cộng BD) lớn hơn AB cộng BC cộng CD cộng DA bằng P, do đó AC cộng BD lớn hơn P.  \n(Ta đã sử dụng nhiều bất đẳng thức tam giác và quy tắc: Nếu a lớn hơn a', b lớn hơn b' thì a cộng b lớn hơn a' cộng b'; nếu a nhỏ hơn b', b nhỏ hơn b' thì a cộng b nhỏ hơn a' cộng b').",
+    "figures": [],
+    "page_image": "output/pages/page_088.png"
+  },
+  {
+    "stt": 51,
+    "problem_id": "91f4a06b-6fb7-4123-a0fa-c2b9297f1290",
+    "title": "3.1",
+    "page": 88,
+    "content": "3.1. Nếu cả bốn góc của tứ giác đều bé hơn 90 độ thì tổng của chúng bé hơn 360 độ, vô lý.  \nNếu cả bốn góc của tứ giác đều lớn hơn 90 độ thì tổng của chúng lớn hơn 360 độ, vô lý.",
+    "figures": [],
+    "page_image": "output/pages/page_088.png"
+  },
+  {
+    "stt": 52,
+    "problem_id": "eb99f6c0-802d-484d-a339-4be73fa10c69",
+    "title": "3.2",
+    "page": 88,
+    "content": "3.2. Trong tứ giác ABCD, độ dài cạnh AB nhỏ hơn tổng độ dài cạnh AD và DB, và tổng độ dài cạnh AD với tổng độ dài cạnh BC và CD.",
+    "figures": [],
+    "page_image": "output/pages/page_088.png"
+  },
+  {
+    "stt": 53,
+    "problem_id": "8bf94aa6-b5d8-471d-b04e-4b7c90bf4c0c",
+    "title": "3.3",
+    "page": 88,
+    "content": "3.3. Xét tứ giác ABCD. Chu vi tứ giác ABCD là P, được tính bằng AB + BC + CD + DA.\na) Ta có AC < AB + BC và AC < CD + DA nên 2AC < P. Tương tự, ta có 2BD < P.\nVậy 2(AC + BD) < 2P do đó AC + BD < P.\nb) Gọi O là giao điểm của AC và BD.\nTa có OA + OB > AB, OC + OD > CD nên AC + BD = OA + OC + OB + OD > AB + CD.\nTương tự, AC + BD > AD + BC.\nVậy 2(AC + BD) > AB + BC + CD + DA = P, từ đó suy ra AC + BD > P. (Ta đã sử dụng nhiều bất đẳng thức tam giác và quy tắc: Nếu a > a', b > b' thì a + b > a' + b'; nếu a < a', b < b' thì a + b < a' + b').",
+    "figures": [],
+    "page_image": "output/pages/page_088.png"
+  },
+  {
+    "stt": 54,
+    "problem_id": "cdaa8849-6394-4c50-a329-7268f670ece4",
+    "title": "3.4",
+    "page": 88,
+    "content": "3.4.\nTrước hết cho hai điểm phân biệt P, Q thì với mọi điểm M thuộc mặt phẳng có MP + MQ > PQ và MP + MQ = PQ chỉ khi M thuộc đoạn thẳng PQ. Thật vậy, nếu M không thuộc đường thẳng PQ thì MP + MQ > PQ (bất đẳng thức tam giác); nếu M thuộc đoạn thẳng PQ thì MP + MQ = PQ; còn nếu M thuộc đường thẳng PQ nhưng không thuộc đoạn thẳng PQ thì hoặc P nằm giữa M và Q hoặc Q nằm giữa P và M, dễ thấy trong cả hai trường hợp đó, MP + MQ > PQ.\nVới điểm M tùy ý trong tứ giác ABCD, ta có MA + MC > AC, MB + MD > BD. \n\nNên MA + MB + MC + MD > AC + BD và MA + MB + MC + MD = AC + BD chỉ khi M vừa thuộc đoạn thẳng AC vừa thuộc đoạn thẳng BD, tức là M phải trùng với giao điểm O của AC và BD.",
+    "figures": [],
+    "page_image": "output/pages/page_088.png"
+  },
+  {
+    "stt": 55,
+    "problem_id": "543e055d-532f-43b5-ac44-98fb5cd00a5d",
+    "title": "3.5",
+    "page": 89,
+    "content": "3.5. (H.3.6). Do AB = BC, tam giác BAC cân tại B mà B = 100°; A = C = 40°.\nDo CD = DA, tam giác DAC cân tại D mà D = 120°; A = C = 30°.\nVậy tứ giác ABCD có A = C = 70°.",
+    "figures": [
+      "(H.3.6)"
+    ],
+    "page_image": "output/pages/page_089.png"
+  },
+  {
+    "stt": 56,
+    "problem_id": "2d91f4a7-8a10-43ba-86df-bd6e894d6416",
+    "title": "3.6",
+    "page": 89,
+    "content": "3.6. a) Với tứ giác ABCD, ta có:\nb) Với tam giác ABC, ta có:\n(180 độ - Â) + (180 độ - B) + (180 độ - €) = 3 x 180 độ - (Â + B + €) = 360 độ.",
+    "figures": [],
+    "page_image": "output/pages/page_089.png"
+  },
+  {
+    "stt": 57,
+    "problem_id": "04d6dee8-c8e0-43de-88f2-ecf8f5a91d4a",
+    "title": "3.9",
+    "page": 89,
+    "content": "3.9. (H.3.7). Tác giả ABC = 45° = BCO nên AB song song với CD (hai góc so le trong bằng nhau).\nVậy ABCD là một hình thang với AB, CD là hai đáy; cạnh bên của hình thang đó là AC vuông góc với đáy AB nên hình thang đó là hình thang vuông.",
+    "figures": [
+      "(H.3.7)"
+    ],
+    "page_image": "output/pages/page_089.png"
+  },
+  {
+    "stt": 58,
+    "problem_id": "5be65a85-f9ab-4d47-8ab3-039df0ec1959",
+    "title": "3.10",
+    "page": 90,
+    "content": "3.10. (H.3.8). Do ABCD là hình thang cân nên BC = AD, AC = BD. Vậy AABC = ABAD (c.c.c) nên BAC = ABD. Từ đó OAB là tam giác cân tại O và suy ra OA = OB.\nTa có AC = BD nên OA = OB, suy ra O cách đều A và B; O cách đều C và D;\nMặt khác, SAB, SCD là các tam giác cân tại đỉnh S nên SA = SB, SC = SD, suy ra S cũng cách đều A và B, cách đều C và D.\nVậy S và O cùng nằm trên đường trung trực của AB, của CD nên đường thẳng SO đi qua trung điểm của AB và CD.",
+    "figures": [
+      "(H.3.8)"
+    ],
+    "page_image": "output/pages/page_090.png"
+  },
+  {
+    "stt": 59,
+    "problem_id": "8f68249b-7db5-4eae-983b-6da9da38fe99",
+    "title": "3.11",
+    "page": 90,
+    "content": "3.11. (H.3.9). Do CA là tia phân giác của góc E nên tam giác ABC cân tại A. Đặt BAC = a thì C = 20. Vì ABCD là hình thang cân nên D = 2a.",
+    "figures": [
+      "(H.3.9)"
+    ],
+    "page_image": "output/pages/page_090.png"
+  },
+  {
+    "stt": 60,
+    "problem_id": "7f9d8f80-fdf5-48f7-89be-b087ef494989",
+    "title": "3.11",
+    "page": 90,
+    "content": "3.11. (H.3.9). Do CA là tia phân giác của góc E nên tam giác ABC cân tại B.\nĐặt Bằng = «thì C = 20. Vi ABCD là hình thang cân, đáy D = 2c.\nTam giác ADC vuông tại A, nên ADC cộng ACD bằng 2a cộng a bằng 90 độ, suy ra a bằng 30 độ, D bằng 60 độ.\nLấy điểm M thuộc cạnh huyền DC sao cho DM bằng AD thì AMD là tam giác đều và tam giác MAC cân tại M (với hai góc ở đáy bằng 30 độ), do DC bằng 2AD. Vậy AB bằng BC bằng AD, DC bằng 2AD nên chu vi hình thang bằng 5AD bằng 10 cm.",
+    "figures": [
+      "(H.3.9)"
+    ],
+    "page_image": "output/pages/page_090.png"
+  },
+  {
+    "stt": 61,
+    "problem_id": "5e732030-2ac6-4010-80cf-5a988a4b8e90",
+    "title": "3.12",
+    "page": 90,
+    "content": "3.12. (H.3.10 a)\na) Do AB song song với MN, BC vuông góc với MN nén A, B, C thang hàng.\nb) Do AB bằng MN, BC bằng MN mà A, B, C thẳng hàng nên M là trung điểm của AC.",
+    "figures": [
+      "(H.3.10"
+    ],
+    "page_image": "output/pages/page_090.png"
+  },
+  {
+    "stt": 62,
+    "problem_id": "9602c664-e29c-401f-9d47-d5f966f7a209",
+    "title": "3.13",
+    "page": 91,
+    "content": "3.13. (H.3.11). Xét hình thang ABCD với hai đáy AB và CD. Giả sử AB < CD.\nKẻ đường thẳng đi qua 8 song song với AD, nó cắt CD tại E thì ABED là hình bình hành nên AB = DE; do AB < CD nên E nằm giữa C và D, do đó EC = DC - AB.\nTa có AD bằng BE nên trong tam giác BEC, BE cộng BC lớn hơn EC có nghĩa là AD cộng BC lớn hơn DC trừ AB.\nTa có đoạn AD bằng đoạn BE nên trong tam giác BEC,\nBa phẩy một bốn. (H.3.12)\nBa góc EAF, CDF, EBC đều bằng hai trăm bốn mươi độ trừ đi góc BAD nên các tam giác AEF, DCF, BEC bằng nhau (c.g.c).\nVậy EF bằng CF bằng EC hay tam giác CEF là tam giác đều.",
+    "figures": [
+      "(H.3.12)",
+      "(H.3.11)"
+    ],
+    "page_image": "output/pages/page_091.png"
+  },
+  {
+    "stt": 63,
+    "problem_id": "e60e37c5-24bd-4bff-b1cc-5de71dff97e0",
+    "title": "3.15",
+    "page": 92,
+    "content": "3.15. Xét tứ giác ABCD có tính chất hai góc kề mỗi cạnh là hai góc bù nhau.  \nVì mỗi góc A và C cùng là góc bù của góc B nên góc A bằng góc C.  \nVì mỗi góc B và D cùng là góc bù của góc A nên góc B bằng góc D.  \nVậy ABCD có mỗi cặp góc đối đều bằng nhau nên nó là một hình bình hành.",
+    "figures": [],
+    "page_image": "output/pages/page_092.png"
+  },
+  {
+    "stt": 64,
+    "problem_id": "78e9716f-6a6c-4051-872a-40676b4ba0cd",
+    "title": "3.15",
+    "page": 92,
+    "content": "3.15. Xét tứ giác ABCD có tính chất hai góc kề mỗi cạnh là hai góc bù nhau.\nVì mỗi góc A và C cùng là góc bù của góc B nên góc A bằng góc C.\nVì mỗi góc B và D cùng là góc bù của góc A nên góc B bằng góc C.",
+    "figures": [],
+    "page_image": "output/pages/page_092.png"
+  },
+  {
+    "stt": 65,
+    "problem_id": "eac49672-9e9b-4478-b73a-08a32c39eac8",
+    "title": "3.16",
+    "page": 92,
+    "content": "3.16. (H.3.13)\nTứ giác AD'A'D có hai đường chéo AA', DD' cắt nhau tại trung điểm của mỗi đường nên là một hình bình hành.",
+    "figures": [
+      "(H.3.13)"
+    ],
+    "page_image": "output/pages/page_092.png"
+  },
+  {
+    "stt": 66,
+    "problem_id": "793c4130-3062-4814-bf06-73a0bdd2bb02",
+    "title": "3.17",
+    "page": 92,
+    "content": "3.17. (H.3.14). Gọi K là trung điểm của A8 thì cần tìm E thuộc Ox, E thuộc Oy sao cho K là trung điểm của DE.\nLấy điểm M sao cho K là trung điểm của OM, kẻ các đường thẳng qua M song song với Ox, song song với Oy cắt Ox ở D, cắt Oy ở E cần tìm.",
+    "figures": [
+      "(H.3.14)"
+    ],
+    "page_image": "output/pages/page_092.png"
+  },
+  {
+    "stt": 67,
+    "problem_id": "2af1e8f9-53bc-4418-a985-8010de332b32",
+    "title": "3.18",
+    "page": 92,
+    "content": "3.18. (H.3.15). Các tam giác AEH và CFG bằng nhau (c.g.c) nên EH bằng FG.\nCác tam giác BEG, DFH bằng nhau (c.g.c) nên EG bằng FH.\nTứ giác EGFH có các cạnh đối bằng nhau nên là một hình bình hành. Gọi O là giao điểm của AC và BD thì O là trung điểm của BD.",
+    "figures": [
+      "(H.3.15)"
+    ],
+    "page_image": "output/pages/page_092.png"
+  },
+  {
+    "stt": 68,
+    "problem_id": "f2a588cb-03a8-40f5-a618-e7580683e5b7",
+    "title": "3.19",
+    "page": 93,
+    "content": "3.19. (H.3.16)\na) Ta có góc AID cộng góc DAE bằng một trăm tám mươi độ (hai góc kề một cạnh của hình bình hành), góc BAC cộng góc DAE bằng một trăm tám mươi độ (vì tổng bốn góc tại đỉnh A bằng ba trăm sáu mươi độ), vậy góc AID bằng góc BAC.\nTừ đó AADI bằng ABAC (cùng giá trị chung).\nb) Al cắt BC tại H thì DA + BAH = 90°, mà DA = ABC nên ABC + BAH = 90°, do đó AHB là góc vuông.\nc) Ta có góc ABE bằng góc DAC cộng 90 độ. Từ đó, góc ABE bằng góc DAC (c.g.c) nên gọi điểm giao của DC và BE, ta có góc JBA bằng góc JDA. Từ góc BAD bằng 90 độ suy ra đường vuông góc với BE.\nd) Chú ý KAI = 45° + DAI = 45° + ABC = KBC suy ra AAKI = ABKC (c.g.c) nén Ki = KC. Tam giác KAB vuông cân tại K, mà AKI = BKC nén Kiva KC vuông góc.\nBa phẩy hai mươi. (H.3.17)\na) Dễ thấy đó là những hình bình hành có một góc vuông nên là hình chữ nhật.\nb) Vì ADHC là hình bình hành nên CD cắt AH tại trung điểm của AH.\nVì A E H B là hình bình hành nên B E cắt A H tại trung điểm của A H.\nc) Vì các đường chéo của hình chữ nhật bằng nhau nên BE = CD, DH = AB = AC = HE.",
+    "figures": [
+      "(H.3.17)",
+      "(H.3.16)"
+    ],
+    "page_image": "output/pages/page_093.png"
+  },
+  {
+    "stt": 69,
+    "problem_id": "7169cd5b-7d5a-4192-ab80-add10f58450e",
+    "title": "3.21",
+    "page": 94,
+    "content": "3.21. (H.3.18). Vì M là trung điểm của AC và của GH nên AGCH là hình bình hành, từ đó HC bằng AG và HC song song với AG. Tương tự, KB bằng AG và KB song song với AG.\nVậy BCHK có hai cạnh đối BK, CH bằng nhau và song song nên là một hình bình hành.\nVì tam giác ABC cân tại A nên trung tuyến AG là đường cao tức AG vuông góc với BC hay KB vuông góc với BC, suy ra BCHK là hình chữ nhật.",
+    "figures": [
+      "(H.3.18)"
+    ],
+    "page_image": "output/pages/page_094.png"
+  },
+  {
+    "stt": 70,
+    "problem_id": "bfdd06a4-a2d9-47bd-9531-915f46c0822a",
+    "title": "3.22",
+    "page": 94,
+    "content": "3.22. 1. (H.3.19). a) Cho tam giác ABC vuông tại A. Do B là góc nhọn, có điểm M thuộc BC sao cho góc BAM = góc ABM: tam giác ABM cân tại M, nên MA = MB.\nDo góc BAM cộng góc MAC bằng góc ABM cộng góc ACM bằng 90 độ nên suy ra góc MAC bằng góc ACM, do tam giác ACM cân tại M, tức là MA bằng MC.\nb) Ngược lại, nếu có M thuộc BC sao cho MA = MB = MC thì tam giác MAB cân tại M, tam giác MAC cân tại M nên A = B + C mà A + B + C = 180 độ, nên A = 90 độ.\n2. M là trung điểm của cạnh BC của tam giác ABC; lấy điểm P sao cho M là trung điểm của AP thì ABPC là một hình bình hành (H.3.20).\na) Nếu tam giác ABC vuông tại A thì ABPC là hình chữ nhật, do đó hai đường chéo BC và AP bằng nhau, suy ra MA bằng MB bằng MC.\nb) Nếu có M thuộc BC sao cho MA = MB = MC thì suy ra BC = AP; hình bình hành ABPC có hai đường chéo bằng nhau nên là hình chữ nhật. Vậy tam giác ABC vuông tại A.",
+    "figures": [
+      "(H.3.19)",
+      "(H.3.20)"
+    ],
+    "page_image": "output/pages/page_094.png"
+  },
+  {
+    "stt": 71,
+    "problem_id": "7af73838-789b-4754-9c0e-8c6bc5e0ed6c",
+    "title": "3.23",
+    "page": 95,
+    "content": "3.23. (H.3.21). Xét hình bình hành ABCD có đường cao AH (H thuộc đường thẳng CD), và đường cao AK (K thuộc đường thẳng BC), AH bằng AK.\nTa có hai tam giác vuông ACH và ACK bằng nhau (cạnh huyền và một cạnh góc vuông) nên CA là tia phân giác của góc A. Suy ra hình bình hành đó là một hình thoi. (Hai trường hợp hình vẽ: góc A nhọn và góc A tù)",
+    "figures": [
+      "(H.3.21)"
+    ],
+    "page_image": "output/pages/page_095.png"
+  },
+  {
+    "stt": 72,
+    "problem_id": "0affe48a-c0b3-4e0a-81e5-3492f8fb0242",
+    "title": "3.24",
+    "page": 95,
+    "content": "3.24. (H.3.22). Gọi P, Q lần lượt là giao điểm ba đường phân giác của tam giác OAB, OCD thì O, P, Q thẳng hàng trên đường phân giác của góc AOB và do đó APAB = AQCD (giống cạnh góc) nên khoảng cách từ P đến các cạnh của tam giác OAB bằng khoảng cách từ Q đến các cạnh của tam giác OCD, rồi suy ra OP = OQ.\nGọi R, S lần lượt là giao điểm ba đường phân giác của tam giác OAD, OBC thì O là trung điểm của R và đường thang RS là đường phân giác của góc AOB.\nDo góc AOB và góc AOD là hai góc kề bù nên hai đường phân giác PQ, RS vuông góc với nhau. Tứ giác PQRS có hai đường chéo cắt nhau tại trung điểm của mỗi đường và vuông góc với nhau là hình thoi.",
+    "figures": [
+      "(H.3.22)"
+    ],
+    "page_image": "output/pages/page_095.png"
+  },
+  {
+    "stt": 73,
+    "problem_id": "e8c881ef-3cdd-4a99-b30d-cecefa3130fd",
+    "title": "3.25",
+    "page": 95,
+    "content": "3.25. (H.3.23). Đường thẳng NP cắt AM ở Q thì do N cách đều hai đường thẳng AD, AQ nên ND = NA.",
+    "figures": [
+      "(H.3.23)"
+    ],
+    "page_image": "output/pages/page_095.png"
+  },
+  {
+    "stt": 74,
+    "problem_id": "47d1ab52-faea-4dfb-8dec-6a457ecbe574",
+    "title": "3.26",
+    "page": 96,
+    "content": "3.26. (H.3.24). Tia Ox phải cắt một cạnh của hình vuông, giả sử Ox cắt cạnh AB tại M. Khi M trùng với A hay B thì tia Oy phải qua một đỉnh của hình vuông và sẽ thấy phần hình vuông nằm trong góc xOy là một phần tư của hình vuông.\nKhi M nằm giữa A và B thì tia OY phải cắt cạnh BC hoặc cạnh AD; giả sử OY cắt BC tại N thì N nằm giữa B và C.\nHai tam giác OAM và OBN bằng nhau (giống cạnh, giống cạnh) nên có cùng diện tích. Suy ra diện tích phân hình vuông nằm trong góc xOy bằng diện tích tam giác AOB tức bằng diện tích hình vuông.\n\nCũng lập luận tương tự khi V nằm giữa A và Đ.\n\nVậy trong mọi trường hợp diện tích cần tìm bằng fig = 1 (cm²).",
+    "figures": [
+      "(H.3.24)"
+    ],
+    "page_image": "output/pages/page_096.png"
+  },
+  {
+    "stt": 75,
+    "problem_id": "bb6a5b39-5385-4e69-9bd8-b32beeb6e805",
+    "title": "3.27",
+    "page": 96,
+    "content": "3.27. (H.3.25). Vì các góc B và C của tam giác ABC bằng 45 độ nên các tam giác GDB và CEF là tam giác vuông cân.\n27. (H.3.25). Vì các góc B và C của tam giác\nABC bằng 45 độ nên các tam giác GDB và\nCEF là tam giác vuông cân.\n\nTa có GD = DE = EF bằng 380, GD bằng FE\nnên GDEF là hình chữ nhật có hai cạnh\nkề bằng nhau do đó là hình vuông.\nTa có GD = DE = EF (độ dài 380), GDH FE nên GDEF là hình chữ nhật có hai cạnh kề bằng nhau, do đó là hình vuông.",
+    "figures": [
+      "(H.3.25)"
+    ],
+    "page_image": "output/pages/page_096.png"
+  },
+  {
+    "stt": 76,
+    "problem_id": "8f0125ce-4a67-4362-bd3b-b0f6f8ac9e38",
+    "title": "3.28",
+    "page": 97,
+    "content": "3.28. (H.3.26)\na) Tứ giác ANMP là hình bình hành vì có hai cặp cạnh đối song song.\nb) Để A N M P là hình thoi thì tia A M phải là tia phân giác của góc A.\nc) Để ANMP là hình chữ nhật thì góc A phải vuông tức là tam giác ABC vuông tại A.\nd) Khi góc A là góc vuông, ANMP là hình chữ nhật nên AM bằng NP. Vậy NP ngắn nhất khi AM ngắn nhất tức là AM là đường cao của tam giác ABC.\ne) Tứ giác ANMP là hình vuông thì nó phải là hình chữ nhật và là hình thoi, tức là tam giác ABC vuông tại A và có tia AM là phân giác của góc A.",
+    "figures": [
+      "(H.3.26)"
+    ],
+    "page_image": "output/pages/page_097.png"
+  },
+  {
+    "stt": 77,
+    "problem_id": "d1c0bebe-a38f-430f-92a8-0034ead31207",
+    "title": "3.29",
+    "page": 97,
+    "content": "3.29.\nKý hiệu S là diện tích tam giác, ta có S bằng A nhân với h trên hai, từ đó S bằng A nhân với l.\nI (điểm H nằm bên trong tam giác ABC)  \nA1 B1 C1 Sáng  \n- SABC = 4,  \nSáng\nKhi góc A là góc tù, H nằm trong góc đối đỉnh với góc BAC, ta có.\nH1 H2 H3  \nS = A - B - C nên ta được 1 = ——————.  \nABC HBC HAS HAC V AI B U BK",
+    "figures": [],
+    "page_image": "output/pages/page_097.png"
+  },
+  {
+    "stt": 78,
+    "problem_id": "17453ab9-fbc4-4d3b-aed5-d008247fdc75",
+    "title": "3.31",
+    "page": 98,
+    "content": "3.31. a) Kẻ n trừ 3 đường chéo đi qua một đỉnh cho trước của đa giác thì chúng chia n giác thành n trừ 2 tam giác; tổng các góc của n giác là tổng các góc của các tam giác đó nên tổng đó bằng (n trừ 2) nhân 180 độ.",
+    "figures": [],
+    "page_image": "output/pages/page_098.png"
+  },
+  {
+    "stt": 79,
+    "problem_id": "f3241d17-5587-4b22-9928-835c0210d44e",
+    "title": "3.31",
+    "page": 98,
+    "content": "3.31. a) Kẻ ba đường chéo đi qua một đỉnh cho trước của n-góc thì chúng chia n-góc thành n - 2 tam giác; tổng các góc của n-góc là tổng các góc của các tam giác đó nên tổng đó bằng (n - 2) nhân 180 độ.\n\nb) Nếu một góc của n-góc có số đo là α độ thì góc ngoài tại đỉnh đó có số đo 180 độ - α độ.\n\nTừ đó tổng các góc ngoài có số đo là n nhân 180 độ - tổng các góc của n-góc tức là n nhân 180 độ - (n - 2) nhân 180 độ = 2 nhân 180 độ = 360 độ.\nb) Nếu một góc của n - giác có số đo là α° thì góc ngoài tại đỉnh đó có số đo 180° - α°.",
+    "figures": [],
+    "page_image": "output/pages/page_098.png"
+  },
+  {
+    "stt": 80,
+    "problem_id": "e74092d8-258e-4a19-bc69-444d0058f1ec",
+    "title": "3.32",
+    "page": 98,
+    "content": "3.32. a) Số đo mối góc của n - giác đều là n nhân với 180 độ chia cho n.  \nb) Tứ giác đều là hình vuông và hình vuông là một tứ giác đều.",
+    "figures": [],
+    "page_image": "output/pages/page_098.png"
+  },
+  {
+    "stt": 81,
+    "problem_id": "360420ec-0f2c-4c39-8b59-58a9fbbcbde9",
+    "title": "3.32",
+    "page": 98,
+    "content": "3.32. a) Số đo mỗi góc của n-góc đều là (n - 2) nhân 180° chia cho n.\nb) Tứ giác đều là hình vuông và hình vuông là một tứ giác đều.",
+    "figures": [],
+    "page_image": "output/pages/page_098.png"
+  },
+  {
+    "stt": 82,
+    "problem_id": "7df3f755-cfb1-4bd5-bc4f-45c6ee4a1c9e",
+    "title": "4.5",
+    "page": 99,
+    "content": "4.5. (H.5.17)\na) Xét tam giác ADC: MI song song với DC nên AB song song với AC theo định lý Thalès: MD chia cho DC.  \nXét tam giác ABC: IN song song với AB nên theo định lý Thalès: AN chia cho BN.  \nĐịnh lý Thalès: AC chia cho NC. Hình 5.17  \nTừ đó, suy ra AN chia cho MD bằng NC.  \nSuy ra AM chia cho AN.\n\nb) Xét tam giác ADC: MI song song với DC nên theo định lý Thalès: AD chia cho AC.  \nXét tam giác ABC: IN song song với AB nên theo định lý Thalès: CB chia cho CA.  \nAM chia cho CN bằng AI chia cho CI, và AN cộng CI chia cho AC.  \nTừ đó có AD cộng CB chia cho AC bằng CA chia cho CA.\n¬ AM _ BN  \nTừ đó, suy ra \\(\\frac{MD}{NC} = \\frac{AM}{AI}\\).  \nXét tam giác ADC: \\(\\frac{MI}{DC}\\) nên theo định lý Thalès: \\(\\frac{AD}{AC} = \\frac{AM}{AI}\\).  \nXét tam giác ABC: \\(\\frac{IN}{AB}\\) nên theo định lý Thalès: \\(\\frac{AE}{EL} = \\frac{CB}{CA}\\).  \nTa có \\(\\frac{AM}{CN} + \\frac{AI}{CI} = \\frac{1}{4} = \\frac{1}{CA} = \\frac{1}{CA} = 1\\),  \n\\(\\frac{AD}{CB} = \\frac{AC}{CA} = \\frac{CA}{CA}\\).",
+    "figures": [
+      "(H.5.17)"
+    ],
+    "page_image": "output/pages/page_099.png"
+  },
+  {
+    "stt": 83,
+    "problem_id": "450593d4-58da-432e-b1ed-ca126d0a5683",
+    "title": "4.6",
+    "page": 99,
+    "content": "4.6. (H.5.18)\nTa có A M Z N C và A M = N C nên tứ giác A M C N là hình bình hành. Suy ra A N bằng 4 M C.\nXét tam giác ABP: MQ chia theo định lý Thalés: AM / AP = MQ / QP.",
+    "figures": [
+      "(H.5.18)"
+    ],
+    "page_image": "output/pages/page_099.png"
+  },
+  {
+    "stt": 84,
+    "problem_id": "86b425f9-6f4f-4194-8a6c-eb295fa277ee",
+    "title": "4.7",
+    "page": 100,
+    "content": "4.7. a) Xét tam giác AABC có: M là trung điểm AB; N là trung điểm AC nên MN là đường trung bình của tam giác AABC. Suy ra MN bằng một nửa cạnh BC, tức là MN = 28C = 2 nhân với 10 bằng 5 (theo tính chất đường trung bình của tam giác).\n\nb) Xét hình thang LPN và MN song song với PN nên HI song song với MN. Xét tứ giác AMNP có: I là trung điểm của PN (PI = IN = 4) và HI song song với MN nên H là trung điểm của PM. Do đó y = 5.",
+    "figures": [],
+    "page_image": "output/pages/page_100.png"
+  },
+  {
+    "stt": 85,
+    "problem_id": "57c363b9-80af-4049-9b17-8eb585caf66a",
+    "title": "4.7",
+    "page": 100,
+    "content": "4.7. a) Xét tam giác AABC có: M là trung điểm của cạnh AB; N là trung điểm của cạnh AC nên MN là đường trung bình của tam giác AABC. Suy ra MN bằng một nửa cạnh BC, tức là MN bằng 28 cm bằng 2 nhân 10 bằng 5 (theo tính chất đường trung bình của tam giác).\nb) Xét hình H1 | PN và MN là LPN nén HI và MN.\nXét AMNP có: I là trung điểm của PN (PI = IN = 4) và H là trung điểm của MN nên H là trung điểm của PM. Do đó y = 5.",
+    "figures": [],
+    "page_image": "output/pages/page_100.png"
+  },
+  {
+    "stt": 86,
+    "problem_id": "0a189230-2904-47af-abd3-46423e371934",
+    "title": "4.8",
+    "page": 100,
+    "content": "4.8. (H.5.19) Xét ADEF có: H là trung điểm DE; K là trung điểm DF nên HK là đường trung bình của tam giác ADEF. Suy ra HK = SEF và HK khác EF (tính chất đường trung bình của tam giác), mà EF = SEF nên HK = EI. Xét tứ giác HKIE: | HK = EI và HK // EF nên tứ giác HKIE là hình bình hành.",
+    "figures": [
+      "(H.5.19)"
+    ],
+    "page_image": "output/pages/page_100.png"
+  },
+  {
+    "stt": 87,
+    "problem_id": "c8717150-97c8-48de-8390-f0a5a763d241",
+    "title": "4.9",
+    "page": 100,
+    "content": "4.9. (H.5.20) Xét tam giác AABC có: E là trung điểm của AB, D là trung điểm của AC nên DE là đường trung bình của tam giác AABC. Suy ra ED = 2BC và ED / BC (tính chất đường trung bình của tam giác). Xét tam giác AGBC có: I là trung điểm của GB; K là trung điểm của GC nên IK là đường trung bình của tam giác AGBC.",
+    "figures": [
+      "(H.5.20)"
+    ],
+    "page_image": "output/pages/page_100.png"
+  },
+  {
+    "stt": 88,
+    "problem_id": "27107655-8f29-41ad-a9a4-d7564d757828",
+    "title": "4.10",
+    "page": 101,
+    "content": "4.10. (H.5.21) Tam giác ABC có: D là trung điểm AB; E là trung điểm BC nên DE là đường trung bình của tam giác ABC. Suy ra DE = một nửa AC (tính chất đường trung bình của tam giác).\n4 1 4 PUB 24  \nTương tự GF = ae : ĐG = ge. EF = gue:  \n\nTa có AC = B0 (tứ giác ABCD là hình chữ nhật) nên DE = EF = FG = GD.  \nTứ giác DEFG có DE = EF = FG = GD nên tứ giác DEFG là hình thoi.\n4 1 4 FUE OLE  \nTương tự GF = ae : ĐG = ge. EF = gue:  \nTa có AC = B0 (tứ giác ABCD là hình chữ nhật) nên DE = EF = FG = GD.  \nTứ giác DEFG có DE = EF = FG = GD nên tứ giác DEFG là hình thoi.\nTương tự GF = aac : ĐG = năm trăm tám mươi : EF = năm trăm tám mươi.",
+    "figures": [
+      "(H.5.21)"
+    ],
+    "page_image": "output/pages/page_101.png"
+  },
+  {
+    "stt": 89,
+    "problem_id": "c38f538d-4b4b-4009-9c96-d510a4f1c48d",
+    "title": "4.12",
+    "page": 101,
+    "content": "4.12. (H. 5.22)  \na) Trong tam giác AIB, IM là phân giác của góc A/B nên MA chia IA (4)  \nMB chia IB  \nTrong tam giác A/C, IN là phân giác của góc AIC nên BA chia TA (2)  \nNC chia IC  \nIB = IC (I là trung điểm BC). (3)\nTừ (1), (2), (3) ta có: ỨA MÃ suy ra MN song song với BC (định lý Thales đảo) MB NC.",
+    "figures": [],
+    "page_image": "output/pages/page_101.png"
+  },
+  {
+    "stt": 90,
+    "problem_id": "4d642d46-561a-473e-ae75-039ed2597b4f",
+    "title": "4.13",
+    "page": 102,
+    "content": "4.13. (H. 5.23)  \nTam giác AABC có AD là phân giác của góc A.  \nDC chia AC thành hai đoạn: AC và Ach: = \"...  \nDB chia AB thành hai đoạn.  \nTương tự, ta có:  \nAE chia BA. BE chia CB  \nEC chia BC. FA chia CA  \n.. AE chia CD. BF chia BA, AC, CB  \nDo đó: = = = SS  \nEC chia DB. FA chia BC, AB, CA\n13. (H. 5.23)  \nTam giác AABC có AD là phân giác của góc A.  \nDC chia AC thành hai đoạn: AC và Ach.  \nDB chia AB thành hai đoạn: AB và tương tự, ta có:  \nAE chia BA, BE chia CB,  \nEC chia BC, FA chia CA.  \nDo đó: AE chia CD, BF chia BA, AC chia CB.  \nVì vậy: EC chia DB, FA chia BC, AB chia CA.\n4. 14. (H. 5.24)\n\nTam giác AABC có AD là phân giác của góc BAC.\n\nTỉ số DB trên AB bằng tỉ số DC trên AC.\n\nTheo định lý Thalès trong tam giác, suy ra tỉ số AB trên EC bằng tỉ số AC trên EC.\n1. C 2. A 3. D 4. C 5. D 6. C  \n7. C 8. D 9. D 10. B 11. B 12. C",
+    "figures": [],
+    "page_image": "output/pages/page_102.png"
+  },
+  {
+    "stt": 91,
+    "problem_id": "86d6bc27-321c-4c0a-a38d-e88644fe4704",
+    "title": "4.17",
+    "page": 103,
+    "content": "4.17. (H. 5.27) Tam giác AABC có:\nPee dồ, Vẽ hình OSI UU.  \nBD là phân giác của góc B nên DA chia cho EB bằng DC chia cho BC (tính chất đường phân giác trong tam giác). (1)  \nCE là phân giác của góc C nên AE chia cho EC bằng EB chia cho CB (tính chất đường phân giác trong tam giác). (2)  \nAB = AC (tam giác ABC cân tại A). (3)  \nSuy ra DA chia cho EA bằng DC chia cho EB.  \nTừ (1), (2), (3), suy ra: DA chia cho EA bằng DC chia cho EB.  \nSuy ra ED bằng BC (định lý Thales đảo).\n(Tính chất đường phân giác trong tam giác). (1)  \nCE là phân giác của góc E nên \\(\\frac{AE}{EC} = \\frac{AB}{BC}\\)\n(tính chất đường phân giác trong tam giác). (2)  \nAB = AC (tam giác ABC cân tại A). (3)  \ns DA = EA  \nTừ (1), (2), (3), suy ra: \\(\\frac{DA}{EA} = \\frac{DC}{EB}\\).  \nSuy ra ED // BC (định lý Thales đảo).",
+    "figures": [],
+    "page_image": "output/pages/page_103.png"
+  },
+  {
+    "stt": 92,
+    "problem_id": "cd8440be-9764-4a1f-8322-f9c3f878de2b",
+    "title": "4.19",
+    "page": 104,
+    "content": "4.19. (H. 5.29) Xét tam giác AOMN, Ai chia ON.\nnên MA = M (định lý Thalès)  \nMO MN  \n1B // MO nén oot (định lý Thalès)  \nNO NM  \nMA NB M NI Mi + N MN  \nSuy ra — + — = — + — = — = - = 1.  \nMO NO MN NM MN MN",
+    "figures": [],
+    "page_image": "output/pages/page_104.png"
+  },
+  {
+    "stt": 93,
+    "problem_id": "fc0bf433-01dd-4042-9fd8-eb578540c638",
+    "title": "4.20",
+    "page": 104,
+    "content": "4.20. (H. 5.30) Tứ giác AABD có:\nA là phân giác của góc A nên AE = AF (tính chất đường phân giác trong tam giác). Tương tự: DC = NC mà AB = DC suy ra MB = DC = NC. DA = NA, MD = AD, NA.",
+    "figures": [],
+    "page_image": "output/pages/page_104.png"
+  },
+  {
+    "stt": 94,
+    "problem_id": "b63966bd-0f73-4a5f-8ae5-12b55bce7e63",
+    "title": "5.14",
+    "page": 108,
+    "content": "5.14. Trong biểu đồ hình quạt tròn, cả hình tròn biểu diễn một trăm phần trăm nhưng cả hình tròn trong biểu đồ Hình 5.5 biểu diễn sáu mươi phần trăm cộng sáu mươi ba phần trăm cộng bảy mươi phần trăm bằng một trăm chín mươi ba phần trăm là không hợp lý.",
+    "figures": [],
+    "page_image": "output/pages/page_108.png"
+  },
+  {
+    "stt": 95,
+    "problem_id": "7bba3390-b5a9-435b-b3ed-98e895f650cb",
+    "title": "5.21",
+    "page": 110,
+    "content": "5.21. a) Dữ liệu được biểu diễn trên hai biểu đồ là giống nhau.\nb) Số liệu rời rạc.\nc) Các giá trị biểu diễn trên trục đứng của hai biểu đồ theo thứ tự ngược nhau. Dùng biểu diễn như hình năm phẩy mười ba thuận lợi hơn trong việc nhận ra xu thế của thứ hạng vì đường gấp khúc đi lên biểu diễn cho việc tăng về thứ hạng (thứ hạng nhỏ đi).",
+    "figures": [],
+    "page_image": "output/pages/page_110.png"
+  }
+]
