@@ -6,6 +6,9 @@ data_processing.ipynb
 .env
 venv/
 env/
-
+notebook/draft_2
+notebook/notebook_draft
+text_reference_last.ipynb
+text_reference_phobert.ipynb
 
 
