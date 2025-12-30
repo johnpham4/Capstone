@@ -9,7 +9,7 @@ class Settings(BaseSettings):
 
     # Model paths
     VQ_MODEL: str = "JO-KU/Geo-MAGVIT"
-    BASE_LLM: str = "Qwen/Qwen2.5-3B-Instruct"
+    BASE_LLM: str = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
 
     YOLOV_SEGMENTATION_MODEL_ID: str = "yolov8x-doclaynet-epoch64-imgsz640-initiallr1e-4-finallr1e-5.pt"
 

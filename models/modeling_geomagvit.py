@@ -20,30 +20,30 @@ class Encoder(ModelMixin, ConfigMixin):
         in_channels: int = 3
         num_res_blocks: int = 4
         z_channels: int = 13
-        ch_mult: List[int] = field(default_factory=lambda: [1, 2, 2, 2, 4, 4])  
+        ch_mult: List[int] = field(default_factory=lambda: [1, 2, 2, 2, 4, 4])
         resolution: int = 512
         double_z: bool = False
-        
-        
-    def __init__(self, 
+
+
+    def __init__(self,
                  ch: int = 128,
-                 out_ch: int = 3, 
-                 in_channels: int = 3, 
-                 num_res_blocks: int = 4, 
-                 z_channels: int = 13, 
-                 ch_mult:List[int]=[1, 2, 2, 2, 4, 4], 
+                 out_ch: int = 3,
+                 in_channels: int = 3,
+                 num_res_blocks: int = 4,
+                 z_channels: int = 13,
+                 ch_mult:List[int]=[1, 2, 2, 2, 4, 4],
                  resolution=512,
                  double_z=False,
                 ):
         super().__init__()
-        
+
         self.in_channels = in_channels
         self.z_channels = z_channels
         self.resolution = resolution
 
         self.num_res_blocks = num_res_blocks
         self.num_blocks = len(ch_mult)
-        
+
         self.conv_in = nn.Conv2d(in_channels,
                                  ch,
                                  kernel_size=(3, 3),
@@ -62,23 +62,23 @@ class Encoder(ModelMixin, ConfigMixin):
             for _ in range(self.num_res_blocks):
                 block.append(ResBlock(block_in, block_out))
                 block_in = block_out
-            
+
             down = nn.Module()
             down.block = block
             if i_level < self.num_blocks - 1:
                 down.downsample = nn.Conv2d(block_out, block_out, kernel_size=(3, 3), stride=(2, 2), padding=1)
 
             self.down.append(down)
-        
+
         ### mid
         self.mid_block = nn.ModuleList()
         for res_idx in range(self.num_res_blocks):
             self.mid_block.append(ResBlock(block_in, block_in))
-        
+
         ### end
         self.norm_out = nn.GroupNorm(32, block_out, eps=1e-6)
         self.conv_out = nn.Conv2d(block_out, z_channels, kernel_size=(1, 1))
-            
+
     def forward(self, x):
 
         ## down
@@ -86,14 +86,14 @@ class Encoder(ModelMixin, ConfigMixin):
         for i_level in range(self.num_blocks):
             for i_block in range(self.num_res_blocks):
                 x = self.down[i_level].block[i_block](x)
-            
+
             if i_level <  self.num_blocks - 1:
                 x = self.down[i_level].downsample(x)
-        
-        ## mid 
+
+        ## mid
         for res in range(self.num_res_blocks):
             x = self.mid_block[res](x)
-        
+
 
         x = self.norm_out(x)
         x = swish(x)
@@ -107,19 +107,19 @@ class LFQ(nn.Module):
                  codebook_size: int = 2**13,
                  num_codebooks: int = 1,):
         super().__init__()
-        
+
         self.codebook_size = codebook_size
         self.codebook_dim = dim
         self.dim = dim
         self.num_codebooks = num_codebooks
-        
+
         codebook_dims = self.codebook_dim * num_codebooks
-        
+
         has_projections = dim != codebook_dims
         self.has_projections = has_projections
         self.register_buffer('mask', 2 ** torch.arange(self.codebook_dim), persistent=False)
         self.register_buffer('zero', torch.tensor(0.), persistent = False)
-        
+
         # codes
 
         all_codes = torch.arange(codebook_size)
@@ -127,10 +127,10 @@ class LFQ(nn.Module):
         codebook = bits * 2.0 - 1.0
 
         self.register_buffer('codebook', codebook, persistent = False)
-    
+
     def indices_to_bits(self, x):
         """
-        x: long tensor of indices 
+        x: long tensor of indices
 
         returns big endian bits
         eg: 3(010) then output:[False, True, False]
@@ -139,20 +139,20 @@ class LFQ(nn.Module):
         # x is now big endian bits, the last dimension being the bits
         x = (x.unsqueeze(-1) & mask) != 0
         return x
-    
-        
+
+
     def get_codebook_entry(self, x, bhwc): #0610
 
         mask = 2 ** torch.arange(self.codebook_dim, device=x.device, dtype=torch.long)
-        
+
         x = (x.unsqueeze(-1) & mask) != 0
         x = x * 2.0 - 1.0 #back to the float
-        ## scale back to the 
+        ## scale back to the
         b, h, w, c = bhwc
         x = rearrange(x, "b (h w) c -> b h w c", h=h, w=w, c=c)
         x = rearrange(x, "b h w c -> b c h w")
         return x
-    
+
     def bits_to_indices(self, bits):
         """
         bits: bool tensor of big endian bits, where the last dimension is the bit dimension
@@ -168,7 +168,7 @@ class LFQ(nn.Module):
             device=bits.device,
         )
         return (bits * indices).sum(-1)
-    
+
     def decode(self, x):
         """
         x: ... NH
@@ -184,10 +184,10 @@ class LFQ(nn.Module):
         x = x * 2 - 1
         x = rearrange(x, "... NC Z-> ... (NC Z)")
         return x
-    
-    
+
+
     def forward(
-        self, 
+        self,
         x,
     ):
         """
@@ -195,7 +195,7 @@ class LFQ(nn.Module):
         b - batch
         n - sequence (or flattened spatial dimensions)
         d - feature dimension, which is also log2(codebook size)
-        c - number of codebook dim 
+        c - number of codebook dim
         """
 
         x = rearrange(x, 'b d ... -> b ... d')
@@ -206,12 +206,12 @@ class LFQ(nn.Module):
 
 
         codebook_value = torch.Tensor([1.0]).to(device=x.device, dtype=x.dtype)
-        quantized = torch.where(x > 0, codebook_value, -codebook_value) # higher than 0 filled 
+        quantized = torch.where(x > 0, codebook_value, -codebook_value) # higher than 0 filled
 
         # calculate indices
         indices = reduce((quantized > 0).int() * self.mask.int(), 'b n c d -> b n c', 'sum')
 
-        
+
 
 
         # use straight-through gradients (optionally with custom activation fn) if training
@@ -227,8 +227,8 @@ class LFQ(nn.Module):
         quantized = unpack_one(quantized, ps, 'b * d')
         quantized = rearrange(quantized, 'b ... d -> b d ...')
 
-        
-        
+
+
         indices = unpack_one(indices, ps, 'b * c')
         indices = indices.flatten()
 
@@ -237,14 +237,14 @@ class LFQ(nn.Module):
 
 
 class Decoder(ModelMixin, ConfigMixin):
-    def __init__(self, 
-                 ch: int = 128, 
+    def __init__(self,
+                 ch: int = 128,
                  out_ch: int = 3,
                  in_channels: int = 3,
                  num_res_blocks:int = 4,
-                 z_channels:int = 13, 
-                 ch_mult:List[int]=[1, 2, 2, 2, 4, 4], 
-                 resolution:int = 512, 
+                 z_channels:int = 13,
+                 ch_mult:List[int]=[1, 2, 2, 2, 4, 4],
+                 resolution:int = 512,
                  double_z: bool = False):
         super().__init__()
 
@@ -263,7 +263,7 @@ class Decoder(ModelMixin, ConfigMixin):
         self.mid_block = nn.ModuleList()
         for res_idx in range(self.num_res_blocks):
             self.mid_block.append(ResBlock(block_in, block_in))
-        
+
         self.up = nn.ModuleList()
 
         self.adaptive = nn.ModuleList()
@@ -278,19 +278,19 @@ class Decoder(ModelMixin, ConfigMixin):
                 # else:
                 block.append(ResBlock(block_in, block_out))
                 block_in = block_out
-            
+
             up = nn.Module()
             up.block = block
             if i_level > 0:
                 up.upsample = Upsampler(block_in)
             self.up.insert(0, up)
-        
+
         self.norm_out = nn.GroupNorm(32, block_in, eps=1e-6)
 
         self.conv_out = nn.Conv2d(block_in, out_ch, kernel_size=(3, 3), padding=1)
-    
+
     def forward(self, z):
-        
+
         style = z.clone() #for adaptive groupnorm
 
         z = self.conv_in(z)
@@ -298,17 +298,17 @@ class Decoder(ModelMixin, ConfigMixin):
         ## mid
         for res in range(self.num_res_blocks):
             z = self.mid_block[res](z)
-        
+
         ## upsample
         for i_level in reversed(range(self.num_blocks)):
             ### pass in each resblock first adaGN
             z = self.adaptive[i_level](z, style)
             for i_block in range(self.num_res_blocks):
                 z = self.up[i_level].block[i_block](z)
-            
+
             if i_level > 0:
                 z = self.up[i_level].upsample(z)
-        
+
         z = self.norm_out(z)
         z = swish(z)
         z = self.conv_out(z)
@@ -326,7 +326,7 @@ class GeoMAGVIT(ModelMixin, ConfigMixin):
         self.decoder = Decoder()
         self.quantize = LFQ()
         self.z_channels = 13
-                    
+
     def encode(self, x):
         h = self.encoder(x)
         quant, indices = self.quantize(h)
@@ -337,23 +337,23 @@ class GeoMAGVIT(ModelMixin, ConfigMixin):
         #dec:batch * 3 * 512 * 512
         dec = self.decoder(quant)
         return dec
-    
+
     def get_code(self, pixel_values):
         hidden_states = self.encoder(pixel_values)
         quant, indices = self.quantize(hidden_states)
         indices = indices.reshape(pixel_values.shape[0], -1)
-        
+
         return indices
 
     def decode_code(self, codebook_indices, shape=None):
-        
-        
-        z_q = self.quantize.get_codebook_entry(codebook_indices, 
-                                               (codebook_indices.shape[0],int(math.sqrt(codebook_indices.shape[-1])),int(math.sqrt(codebook_indices.shape[-1])), self.z_channels)) 
-        
-        
+
+
+        z_q = self.quantize.get_codebook_entry(codebook_indices,
+                                               (codebook_indices.shape[0],int(math.sqrt(codebook_indices.shape[-1])),int(math.sqrt(codebook_indices.shape[-1])), self.z_channels))
+
+
         dec = self.decoder(z_q)
-        
+
         return dec
 
     def forward(self, input):
@@ -365,10 +365,10 @@ class GeoMAGVIT(ModelMixin, ConfigMixin):
 # swish:x*sigmoid(x)
 def swish(x):
     # swish
-    return x*torch.sigmoid(x)   
+    return x*torch.sigmoid(x)
 
 class ResBlock(nn.Module):
-    def __init__(self, 
+    def __init__(self,
                  in_filters,
                  out_filters,
                  use_conv_shortcut = False,
@@ -393,7 +393,7 @@ class ResBlock(nn.Module):
                 self.conv_shortcut = nn.Conv2d(in_filters, out_filters, kernel_size=(3, 3), padding=1, bias=False)
             else:
                 self.nin_shortcut = nn.Conv2d(in_filters, out_filters, kernel_size=(1, 1), padding=0, bias=False)
-    
+
 
     def forward(self, x, **kwargs):
         residual = x
@@ -422,7 +422,7 @@ class AdaptiveGroupNorm(nn.Module):
         self.gamma = nn.Linear(z_channel, in_filters)
         self.beta = nn.Linear(z_channel, in_filters)
         self.eps = eps
-    
+
     def forward(self, x, quantizer):
         B, C, _, _ = x.shape
         # quantizer = F.adaptive_avg_pool2d(quantizer, (1, 1))
@@ -436,12 +436,12 @@ class AdaptiveGroupNorm(nn.Module):
         bias = rearrange(quantizer, "b c h w -> b c (h w)")
         bias = bias.mean(dim=-1)
         bias = self.beta(bias).view(B, C, 1, 1)
-       
+
         x = self.gn(x)
         x = scale * x + bias
 
         return x
-  
+
 
 class Upsampler(nn.Module):
     def __init__(
@@ -508,4 +508,3 @@ if __name__ == '__main__':
     import ipdb
     ipdb.set_trace()
     print()
-

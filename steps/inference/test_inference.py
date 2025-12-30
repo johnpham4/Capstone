@@ -24,13 +24,13 @@ def test_inference_step(
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # Use base Qwen model if no trained model path provided
-    base_model = "Qwen/Qwen2.5-3B-Instruct"
+    # Use base DeepSeek-R1-Distill model if no trained model path provided
+    base_model = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
     actual_model_path = model_path if model_path and Path(model_path).exists() else base_model
 
     logger.info(f"Loading model from: {actual_model_path}")
     if actual_model_path == base_model:
-        logger.warning("No trained model found, using base Qwen model (not fine-tuned)")
+        logger.warning("No trained model found, using base DeepSeek-R1-Distill-Qwen-1.5B model (not fine-tuned)")
 
     model = AutoModelForCausalLM.from_pretrained(
         actual_model_path,

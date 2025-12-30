@@ -143,12 +143,12 @@ def main(
         with open(config_path) as f:
             config_data = yaml.safe_load(f)
 
-        # Empty model_path means use base Qwen model
+        # Empty model_path means use base DeepSeek-R1-Distill model
         model_path = config_data.get("model_path", "")
         if model_path:
             model_path = str(root_dir / model_path)
             if not Path(model_path).exists():
-                logger.warning(f"Trained model not found at {model_path}, will use base Qwen model")
+                logger.warning(f"Trained model not found at {model_path}, will use base DeepSeek-R1-Distill-Qwen-1.5B model")
                 model_path = ""
 
         test_prompt = config_data.get("test_prompt", "Vẽ đoạn thẳng AB có độ dài 5")
@@ -157,7 +157,7 @@ def main(
         pipeline_args["run_name"] = f"inference_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
 
         logger.info("Starting inference pipeline")
-        logger.info(f"Model: {model_path or 'Base Qwen2.5-3B-Instruct'}")
+        logger.info(f"Model: {model_path or 'Base DeepSeek-R1-Distill-Qwen-1.5B'}")
         logger.info(f"Prompt: {test_prompt}")
 
         inference_pipeline.with_options(**pipeline_args)(

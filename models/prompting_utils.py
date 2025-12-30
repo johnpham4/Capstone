@@ -203,10 +203,6 @@ class UniversalPrompting():
             attention_masks.append(temp_masks.unsqueeze(0))
         return torch.cat(sequence_ids, dim=0).to(torch.long), torch.cat(attention_masks, dim=0).to(torch.long)
 
-
-
-
-
     def mix_prompt(self, image_ids, instruction_ids, response_ids):
         device = image_ids.device
         sequence_ids = []

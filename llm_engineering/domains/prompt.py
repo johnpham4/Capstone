@@ -1,0 +1,13 @@
+from llm_engineering.domains.orm.nosql import NoSQLBaseDocument
+from llm_engineering.domains.types import DataCategory
+
+
+class Prompt(NoSQLBaseDocument):
+    template: str
+    input_variables: dict
+    content: str
+    num_tokens: int | None = None
+
+    class Config:
+        category = DataCategory.PROMPT
+
