@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Any
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from langchain_core.language_models.llms import LLM
@@ -8,18 +8,30 @@ from pydantic import PrivateAttr
 class QwenLocalLLM(LLM):
     model_name: str = "Qwen/Qwen2.5-Coder-7B-Instruct"
 
-    _tokenizer: AutoTokenizer = PrivateAttr()
-    _model: AutoModelForCausalLM = PrivateAttr()
+    _tokenizer: Any = PrivateAttr()
+    _model: Any = PrivateAttr()
+
+    class Config:
+        arbitrary_types_allowed = True
 
     def __init__(self):
         super().__init__()
 
-        self._tokenizer = AutoTokenizer.from_pretrained(self.model_name)
-        self._model = AutoModelForCausalLM.from_pretrained(
-            self.model_name,
-            device_map="auto",
-            torch_dtype=torch.float16,
-            load_in_8bit=True,
+        object.__setattr__(
+            self,
+            "_tokenizer",
+            AutoTokenizer.from_pretrained(self.model_name),
+        )
+
+        object.__setattr__(
+            self,
+            "_model",
+            AutoModelForCausalLM.from_pretrained(
+                self.model_name,
+                device_map="auto",
+                torch_dtype=torch.float16,
+                load_in_8bit=True,
+            ),
         )
 
     @property
