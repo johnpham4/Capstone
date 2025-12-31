@@ -10,7 +10,6 @@ from llm_engineering.settings import settings
 # from pipelines.figure_extraction import figure_extraction_pipeline
 from pipelines.dataset_upload import dataset_upload_pipeline
 from pipelines.dataset_generation import dataset_generation_pipeline
-from pipelines.gmbl_dataset_upload import gmbl_dataset_upload_pipeline
 from pipelines.training import training_pipeline
 from pipelines.inference import inference_pipeline
 
