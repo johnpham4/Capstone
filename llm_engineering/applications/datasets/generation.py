@@ -62,7 +62,7 @@ class DatasetGeneration(ABC):
         test_size: float = 0.2,
     ) -> TrainTestSplit:
 
-        dataset = cls.dsl_generator(prompts)
+        dataset = cls.dsl_generator(cls.get_system_prompt().content, prompts)
 
         processed_datasets = cls.post_process_datasets(dataset, test_size=test_size)
 

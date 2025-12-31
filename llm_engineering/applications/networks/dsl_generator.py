@@ -18,7 +18,8 @@ class DSLGenerator(metaclass=SingletonMeta):
 
     def __call__(
         self,
-        prompts: list[GenerateDatasetSamplesPrompt]
+        system_prompt: str,
+        prompts: list[GenerateDatasetSamplesPrompt],
     ) -> InstructDataset:
 
         def _to_prompt(prompt: GenerateDatasetSamplesPrompt) -> str:
