@@ -79,10 +79,11 @@ class InstructiveDatasetGenerator(DatasetGeneration):
     prompt_template_str = """Based on the following few-shot examples, convert the Vietnamese geometry problem to GMBL format.
 
 IMPORTANT:
-- Output MUST be a valid JSON array with ONE object
-- Follow EXACTLY the patterns in examples
-- Use ONLY keywords from examples
-- If unsure, output simpler GMBL
+- Do NOT output anything else.
+- NO explanations, NO commentary.
+- Output MUST be a single JSON array with exactly one object.
+- Follow the examples exactly.
+- Escape characters properly if needed.
 
 FEW-SHOT EXAMPLES:
 [
