@@ -98,9 +98,7 @@ def main(
         assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
         pipeline_args["run_name"] = f"generate_gmbl_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
 
-        assert settings.COHERE_API_KEY, "Cohere API key required. Set COHERE_API_KEY in .env"
         logger.info("Starting GMBL dataset generation pipeline")
-
         dataset_generation_pipeline.with_options(**pipeline_args)()
 
     # if run_upload_gmbl:
