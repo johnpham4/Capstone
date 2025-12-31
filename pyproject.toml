@@ -27,6 +27,7 @@ dependencies = [
     "langchain-core>=1.2.5",
     "langchain>=1.2.0",
     "scikit-learn>=1.7.2",
+    "langchain-huggingface>=1.2.0",
 ]
 
 uv.group.ocr = [

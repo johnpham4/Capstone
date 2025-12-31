@@ -4,7 +4,7 @@ from llm_engineering.applications.networks.dsl_generator import DSLGenerator
 
 from llm_engineering.domains.documents import Document
 from llm_engineering.domains.prompt import GenerateDatasetSamplesPrompt, Prompt
-from llm_engineering.domains.dataset import InstructDataset, InstructDatasetSample, TrainTestSplit
+from llm_engineering.domains.dataset import InstructDataset, TrainTestSplit
 from . import utils as generation_utils
 
 class DatasetGeneration(ABC):

@@ -1,6 +1,4 @@
-from typing import List
 from langchain_core.messages import SystemMessage, HumanMessage
-from langchain.output_parsers import PydanticOutputParser
 from langchain_core.exceptions import OutputParserException
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
