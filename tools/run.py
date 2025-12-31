@@ -9,6 +9,8 @@ from llm_engineering.domains.training_config import TrainingConfig
 from llm_engineering.settings import settings
 # from pipelines.figure_extraction import figure_extraction_pipeline
 from pipelines.dataset_upload import dataset_upload_pipeline
+from pipelines.dataset_generation import dataset_generation_pipeline
+from pipelines.gmbl_dataset_upload import gmbl_dataset_upload_pipeline
 from pipelines.training import training_pipeline
 from pipelines.inference import inference_pipeline
 
@@ -33,6 +35,18 @@ from pipelines.inference import inference_pipeline
     help="Upload dataset to HuggingFace Hub"
 )
 @click.option(
+    "--run-generate-gmbl",
+    is_flag=True,
+    default=False,
+    help="Generate GMBL dataset from Vietnamese captions"
+)
+@click.option(
+    "--run-upload-gmbl",
+    is_flag=True,
+    default=False,
+    help="Upload GMBL dataset to HuggingFace Hub"
+)
+@click.option(
     "--run-train",
     is_flag=True,
     default=False,
@@ -53,11 +67,13 @@ from pipelines.inference import inference_pipeline
 def main(
     no_cache: bool = False,
     run_upload_dataset: bool = False,
+    run_generate_gmbl: bool = False,
+    run_upload_gmbl: bool = False,
     run_train: bool = False,
     encode_images: bool = False,
     run_inference: bool = False,
 ) -> None:
-    assert run_upload_dataset or run_train or encode_images or run_inference, "Please use one of the options"
+    assert run_upload_dataset or run_generate_gmbl or run_upload_gmbl or run_train or encode_images or run_inference, "Please use one of the options"
 
     pipeline_args = {"enable_cache": not no_cache}
     root_dir = Path(__file__).resolve().parent.parent
@@ -78,6 +94,40 @@ def main(
         assert settings.HF_TOKEN, "HuggingFace token required. Set HF_TOKEN in .env"
         logger.info("Starting dataset upload pipeline")
         dataset_upload_pipeline.with_options(**pipeline_args)()
+
+    if run_generate_gmbl:
+        pipeline_args["config_path"] = root_dir / "configs" / "dataset_generation.yaml"
+        assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
+        pipeline_args["run_name"] = f"generate_gmbl_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
+
+        assert settings.COHERE_API_KEY, "Cohere API key required. Set COHERE_API_KEY in .env"
+        logger.info("Starting GMBL dataset generation pipeline")
+
+        dataset_generation_pipeline.with_options(**pipeline_args)()
+
+    # if run_upload_gmbl:
+    #     pipeline_args["config_path"] = root_dir / "configs" / "dataset_generation.yaml"
+    #     assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
+    #     pipeline_args["run_name"] = f"upload_gmbl_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
+
+    #     with open(pipeline_args["config_path"]) as f:
+    #         config_data = yaml.safe_load(f)
+    #     params = config_data.get("parameters", {})
+
+    #     assert settings.HF_TOKEN, "HuggingFace token required. Set HF_TOKEN in .env"
+    #     logger.info("Starting GMBL dataset upload pipeline")
+
+    #     dataset_path = str(root_dir / params.get("dataset_path", "./data/generated_gmbl/dataset.json"))
+    #     if not Path(dataset_path).exists():
+    #         logger.error(f"Dataset not found: {dataset_path}")
+    #         logger.info("Please run with --run-generate-gmbl first")
+    #         return
+
+    #     num_uploaded = gmbl_dataset_upload_pipeline.with_options(**pipeline_args)(
+    #         dataset_path=dataset_path,
+    #         repo_id=params["repo_id"]
+    #     )
+    #     logger.success(f"Uploaded {num_uploaded} samples to {params['repo_id']}")
 
     if encode_images:
         config_path = root_dir / "configs" / "training.yaml"

@@ -14,3 +14,6 @@ class Prompt(NoSQLBaseDocument):
 
 class GenerateDatasetSamplesPrompt(Prompt):
     document: Document
+
+    class Config:
+        arbitrary_types_allowed = True

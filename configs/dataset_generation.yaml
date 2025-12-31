@@ -1,0 +1,3 @@
+parameters:
+  source_json_path: "./data/data-1k/diagram_train_1k_vn.json"
+  test_size: 0.2

@@ -28,22 +28,19 @@ class Settings(BaseSettings):
 
     HF_TOKEN: str
 
-    # OpenAI API
-    OPENAI_MODEL_ID: str = "gpt-4o-mini"
-    OPENAI_API_KEY: str | None = None
+    # Cohere API
+    COHERE_MODEL_ID: str = "command-r-plus-08-2024"
+    COHERE_API_KEY: str | None = None
 
     @property
-    def OPENAI_MAX_TOKEN_WINDOW(self) -> int:
+    def COHERE_MAX_TOKEN_WINDOW(self) -> int:
         official_max_token_window = {
-            "gpt-3.5-turbo": 16385,
-            "gpt-4-turbo": 128000,
-            "gpt-4o": 128000,
-            "gpt-4o-mini": 128000,
-        }.get(self.OPENAI_MODEL_ID, 128000)
+            "command-r-plus-08-2024": 128000,
+            "command-a-translate-08-2025": 8000,
+        }.get(self.COHERE_MODEL_ID, 128000)
 
-        max_token_window = int(official_max_token_window * 0.90)
+        return int(official_max_token_window * 0.90)
 
-        return max_token_window
 
 
 settings = Settings()
