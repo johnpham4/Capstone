@@ -24,7 +24,7 @@ class DSLGenerator(metaclass=SingletonMeta):
 
         def _to_prompt(prompt: GenerateDatasetSamplesPrompt) -> str:
             messages = [
-                SystemMessage(content=self.get_system_prompt().content),
+                SystemMessage(content=system_prompt),
                 HumanMessage(content=prompt.content),
             ]
             return "\n".join(m.content for m in messages)
