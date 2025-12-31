@@ -1,3 +1,4 @@
+from llm_engineering.domains.documents import Document
 from llm_engineering.domains.orm.nosql import NoSQLBaseDocument
 from llm_engineering.domains.types import DataCategory
 
@@ -11,3 +12,5 @@ class Prompt(NoSQLBaseDocument):
     class Config:
         category = DataCategory.PROMPT
 
+class GenerateDatasetSamplesPrompt(Prompt):
+    document: Document

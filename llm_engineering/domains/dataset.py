@@ -36,18 +36,13 @@ class InstructDataset(NoSQLBaseDocument):
 
 
 class TrainTestSplit(NoSQLBaseDocument):
-    train: dict
-    test: dict
+    train: InstructDataset
+    test: InstructDataset
     test_split_size: float
 
     def to_huggingface(self, flatten: bool = False) -> "DatasetDict":
-        train_datasets = {
-            dataset.to_huggingface for dataset in self.train.items()
-        }
-
-        test_datasets = {
-            dataset.to_huggingface for dataset in self.test.items()
-        }
+        train_datasets = self.train.to_huggingface()
+        test_datasets = self.test.to_huggingface()
 
         if flatten:
             train_datasets = concatenate_datasets(list(train_datasets.values()))
@@ -60,8 +55,8 @@ class TrainTestSplit(NoSQLBaseDocument):
 
 
 class InstructTrainTestSplit(TrainTestSplit):
-    train: dict[InstructDataset]
-    test: dict[InstructDataset]
+    train: InstructDataset
+    test: InstructDataset
     test_split_size: float
 
     class Config:
