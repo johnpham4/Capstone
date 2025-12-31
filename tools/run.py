@@ -7,10 +7,10 @@ import yaml
 from llm_engineering.domains.training_config import TrainingConfig
 from llm_engineering.settings import settings
 
-from pipelines_zenml.dataset_upload import dataset_upload_pipeline
-from pipelines_zenml.dataset_generation import dataset_generation_pipeline
-from pipelines_zenml.training import training_pipeline
-from pipelines_zenml.inference import inference_pipeline
+from pipelines.dataset_upload import dataset_upload_pipeline
+from pipelines.dataset_generation import dataset_generation_pipeline
+from pipelines.training import training_pipeline
+from pipelines.inference import inference_pipeline
 
 
 @click.command()
