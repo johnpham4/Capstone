@@ -55,38 +55,28 @@ Provide your response strictly as JSON.
 
 
 class InstructiveDatasetGenerator(DatasetGeneration):
-    prompt_template_str = """Based on the examples below, convert the following Vietnamese geometry problem into GMBL format.
+    prompt_template_str = """Convert this Vietnamese geometry problem to GMBL format.
 
-IMPORTANT:
-- Output MUST be a JSON array with exactly ONE object.
-- Follow the examples exactly.
-- Only use the keywords shown in the examples.
-- Do NOT add explanations or extra text.
-- Escape newlines properly with \\n.
+RULES:
+1. Return ONLY a JSON array with ONE object
+2. JSON must have "instruction" and "answer" fields
+3. Use \\n for newlines in "answer" field
+4. NO markdown, NO extra text, NO explanations
+5. Follow these examples:
 
-EXAMPLES:
-[
-  {
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm M là trung điểm của đoạn thẳng BC",
-    "answer": "(param (A B C) triangle)\\n(assert (right-angle A B C))\\n(define M point (midpoint B C))"
-  },
-  {
-    "instruction": "Tam giác ABC, AB = AC",
-    "answer": "(param (A B C) triangle)\\n(assert (congruent-segments A B A C))"
-  },
-  {
-    "instruction": "Đường tròn O",
-    "answer": "(param O circle)"
-  },
-  {
-    "instruction": "Hình vuông ABCD, đường chéo AC",
-    "answer": "(param (A B C D) square)\\n(define AC line (line A C))"
-  }
-]
+Example 1:
+[{"instruction": "Tam giác ABC, góc ABC = 90, điểm M là trung điểm của đoạn thẳng BC", "answer": "(param (A B C) triangle)\\n(assert (right-angle A B C))\\n(define M point (midpoint B C))"}]
 
-Problem: {{extract}}
+Example 2:
+[{"instruction": "Tam giác ABC, AB = AC", "answer": "(param (A B C) triangle)\\n(assert (congruent-segments A B A C))"}]
 
-Output JSON array with ONE object:"""
+Example 3:
+[{"instruction": "Đường tròn O", "answer": "(param O circle)"}]
+
+Now convert this problem:
+{{extract}}
+
+JSON output:"""
 
     @classmethod
     def post_process_datasets(cls, dataset: InstructDataset, test_size: float) -> TrainTestSplit:

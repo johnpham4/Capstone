@@ -5,8 +5,9 @@ from langchain_core.language_models.llms import LLM
 from pydantic import PrivateAttr
 
 
-class QwenLocalLLM(LLM):
-    model_name: str = "Qwen/Qwen2.5-Coder-7B-Instruct"
+class VistralLocalLLM(LLM):
+    """Vistral-7B-Chat model optimized for Vietnamese language tasks."""
+    model_name: str = "Viet-Mistral/Vistral-7B-Chat"
 
     _tokenizer: Any = PrivateAttr()
     _model: Any = PrivateAttr()
@@ -41,7 +42,7 @@ class QwenLocalLLM(LLM):
 
     @property
     def _llm_type(self) -> str:
-        return "qwen-local"
+        return "vistral-local"
 
     def _call(
         self,
@@ -56,7 +57,9 @@ class QwenLocalLLM(LLM):
         outputs = self._model.generate(
             **inputs,
             max_new_tokens=3600,
-            temperature=0.2,
+            temperature=0.1,  # Lower temperature for more deterministic output
+            do_sample=True,
+            top_p=0.95,
         )
 
         return self._tokenizer.decode(
