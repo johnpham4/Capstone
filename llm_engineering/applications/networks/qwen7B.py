@@ -53,13 +53,19 @@ class QwenLocalLLM(LLM):
             return_tensors="pt"
         ).to(self._model.device)
 
+        input_length = inputs["input_ids"].shape[1]
+
         outputs = self._model.generate(
             **inputs,
             max_new_tokens=3600,
             temperature=0.2,
+            do_sample=True,
+            pad_token_id=self._tokenizer.eos_token_id,
         )
 
+        # Decode only the newly generated tokens (exclude the prompt)
+        generated_tokens = outputs[0][input_length:]
         return self._tokenizer.decode(
-            outputs[0],
+            generated_tokens,
             skip_special_tokens=True
-        )
+        ).strip()

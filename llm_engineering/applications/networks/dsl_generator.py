@@ -20,27 +20,37 @@ class DSLGenerator:
     @staticmethod
     def _extract_json_array(raw: str) -> str:
         """Extract JSON array from LLM output, handling markdown blocks and extra text."""
+        # Remove any conversation markers (System:, Human:, Assistant:)
+        raw = re.sub(r'^(System|Human|Assistant):\s*', '', raw, flags=re.MULTILINE)
+
         # Remove markdown code blocks
         raw = re.sub(r'```json\s*', '', raw)
         raw = re.sub(r'```\s*', '', raw)
 
-        # Find the last JSON array (most likely the actual output)
-        # Look for pattern: Output JSON array with ONE object: [...]
-        output_match = re.search(r'Output JSON array with ONE object:\s*(\[.*?\])(?:\s*$|\s*\])', raw, re.DOTALL)
+        # Find JSON array - look for pattern with balanced brackets
+        # Pattern 1: After "JSON output:" or similar
+        output_match = re.search(r'(?:JSON output|Output):\s*(\[\s*\{.*?\}\s*\])', raw, re.DOTALL | re.IGNORECASE)
         if output_match:
-            return output_match.group(1)
+            json_str = output_match.group(1)
+            # Clean trailing punctuation
+            json_str = re.sub(r'[.,;!?]+\s*$', '', json_str)
+            return json_str.strip()
 
-        # Fallback: find any JSON array, prefer the last one
-        matches = re.findall(r'(\[\s*\{.*?\}\s*\])', raw, re.DOTALL)
+        # Pattern 2: Find the last complete JSON array
+        matches = re.findall(r'(\[\s*\{[^\[\]]*"instruction"[^\[\]]*"answer"[^\[\]]*\}\s*\])', raw, re.DOTALL)
         if matches:
-            return matches[-1]  # Return the last match
+            json_str = matches[-1]
+            json_str = re.sub(r'[.,;!?]+\s*$', '', json_str)
+            return json_str.strip()
 
-        # Last resort: try to find any array structure
-        match = re.search(r'(\[.*\])', raw, re.DOTALL)
+        # Pattern 3: Any JSON array structure
+        match = re.search(r'(\[\s*\{.*?\}\s*\])', raw, re.DOTALL)
         if match:
-            return match.group(1)
+            json_str = match.group(1)
+            json_str = re.sub(r'[.,;!?]+\s*$', '', json_str)
+            return json_str.strip()
 
-        raise ValueError(f"No JSON array found in LLM output: {raw[:200]}...")
+        raise ValueError(f"No JSON array found in LLM output: {raw[:300]}...")
 
     def __call__(self, system_prompt: str, prompts: list[GenerateDatasetSamplesPrompt]) -> InstructDataset:
 
