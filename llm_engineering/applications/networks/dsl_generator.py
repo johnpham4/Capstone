@@ -2,6 +2,9 @@ import re
 import json
 from loguru import logger
 from abc import ABC, abstractmethod
+from tqdm.auto import tqdm
+
+
 from langchain_core.messages import SystemMessage, HumanMessage, BaseMessage
 from llm_engineering.applications.networks.qwen7B import QwenLocalLLM
 from llm_engineering.applications.datasets.output_parser import ListPydanticOutputParser
@@ -54,7 +57,7 @@ class DSLGenerator:
         string_prompts = [_to_messages(p) for p in prompts]
         batches = misc.batch(string_prompts, size=24)
 
-        for batch in batches:
+        for batch in tqdm(batches, desc="Processing batches"):
             raw_results = chain.batch(batch)
             for raw in raw_results:
                 try:
