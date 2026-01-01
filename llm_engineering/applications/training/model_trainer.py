@@ -3,11 +3,9 @@ from datasets import Dataset
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from loguru import logger
 import json
-import torch
 
 from llm_engineering.applications.training.callbacks.logger import LossLoggingCallback
 from llm_engineering.domains.training_config import TrainingConfig
-from llm_engineering.applications.training.data_collator import T2DDataCollatorCached
 
 
 class ModelTrainer:
@@ -78,15 +76,13 @@ class ModelTrainer:
     def train(self, train_dataset, eval_dataset=None, resume_from_checkpoint=None):
         logger.info("Initializing Trainer")
 
-        data_collator = T2DDataCollatorCached(tokenizer=self.tokenizer)
-
         trainer = Trainer(
             model=self.model,
             args=self._get_training_args(),
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
             tokenizer=self.tokenizer,
-            data_collator=data_collator,
+            data_collator="",
             callbacks=[LossLoggingCallback()],
         )
 
