@@ -43,8 +43,13 @@ Provide your response strictly as JSON.
         )
 
     @classmethod
-    def generate(cls, prompts: list[GenerateDatasetSamplesPrompt], test_size: float = 0.2) -> TrainTestSplit:
-        dataset = cls.dsl_generator(cls.get_system_prompt().content, prompts)
+    def generate(cls, prompts: list[GenerateDatasetSamplesPrompt], test_size: float = 0.2, run_id: str = "gmbl_gen") -> TrainTestSplit:
+        dataset = cls.dsl_generator(
+            cls.get_system_prompt().content,
+            prompts,
+            run_id=run_id,
+            checkpoint_every=50
+        )
         processed = cls.post_process_datasets(dataset, test_size=test_size)
         return processed
 

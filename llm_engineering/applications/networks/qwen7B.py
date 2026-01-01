@@ -24,8 +24,10 @@ class QwenLocalLLM(LLM):
         )
 
         quantization_config = BitsAndBytesConfig(
-            load_in_8bit=True,
-            llm_int8_threshold=6.0,
+            load_in_4bit=True,  # 4-bit for 2x speed vs 8-bit
+            bnb_4bit_compute_dtype=torch.float16,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
         )
 
         object.__setattr__(
@@ -74,11 +76,12 @@ class QwenLocalLLM(LLM):
 
         outputs = self._model.generate(
             **inputs,
-            max_new_tokens=512,
+            max_new_tokens=200,  # Optimized: GMBL outputs are short
             temperature=0.1,
             do_sample=True,
             top_p=0.9,
             pad_token_id=self._tokenizer.eos_token_id if self._tokenizer.eos_token_id else self._tokenizer.pad_token_id,
+            num_beams=1,  # Greedy decoding for speed
         )
 
         # Decode only the newly generated tokens (exclude the prompt)

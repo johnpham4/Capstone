@@ -1,5 +1,6 @@
 import re
 import json
+from pathlib import Path
 from loguru import logger
 from typing import List
 from tqdm.auto import tqdm
@@ -24,19 +25,39 @@ class DSLGenerator:
     This separation allows better debugging when LLM output is unstable.
     """
 
-    def __init__(self):
+    def __init__(self, checkpoint_dir: str = "/tmp/dsl_checkpoints"):
         self.llm = QwenLocalLLM()
         self.parser = ListPydanticOutputParser(pydantic_object=InstructDatasetSample)
+        self.checkpoint_dir = Path(checkpoint_dir)
+        self.checkpoint_dir.mkdir(parents=True, exist_ok=True)
+
+    def _save_checkpoint(self, samples: List[InstructDatasetSample], batch_idx: int, run_id: str):
+        """Save intermediate results."""
+        checkpoint_file = self.checkpoint_dir / f"{run_id}_batch_{batch_idx}.json"
+        data = [{"instruction": s.instruction, "answer": s.answer} for s in samples]
+        with open(checkpoint_file, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+
+    def _load_checkpoints(self, run_id: str) -> List[InstructDatasetSample]:
+        """Load existing checkpoints."""
+        samples = []
+        for cp_file in sorted(self.checkpoint_dir.glob(f"{run_id}_batch_*.json")):
+            with open(cp_file, 'r', encoding='utf-8') as f:
+                for item in json.load(f):
+                    samples.append(InstructDatasetSample(instruction=item["instruction"], answer=item["answer"]))
+        if samples:
+            logger.info(f"Resumed {len(samples)} samples from checkpoints")
+        return samples
 
     def _extract_json_array(self, raw: str) -> str:
         """
-        Extract JSON array from LLM output.
+        Extract valid JSON array from potentially malformed LLM output.
 
-        Handles common LLM output issues:
-        - Markdown code blocks (```json)
-        - Extra text before/after JSON
+        Handles:
+        - Markdown code blocks
+        - Conversation markers (System:, Human:, Assistant:)
         - Trailing punctuation
-        - Conversation markers (System:, Human:)
+        - Multiple extraction patterns
 
         Args:
             raw: Raw LLM output string
@@ -85,8 +106,6 @@ class DSLGenerator:
     def _process_single_prompt(
         self,
         raw_output: str,
-        prompt_num: int,
-        total: int
     ) -> List[InstructDatasetSample]:
         """
         Process a single LLM output to extract dataset samples.
@@ -114,13 +133,15 @@ class DSLGenerator:
         else:
             samples = [parsed]
 
-        logger.info(f"✓ Success - Generated {len(samples)} sample(s)")
+        logger.info(f"Success - Generated {len(samples)} sample(s)")
         return samples
 
     def __call__(
         self,
         system_prompt: str,
-        prompts: List[GenerateDatasetSamplesPrompt]
+        prompts: List[GenerateDatasetSamplesPrompt],
+        run_id: str = "default",
+        checkpoint_every: int = 10
     ) -> InstructDataset:
         """
         Generate GMBL dataset from Vietnamese geometry problems.
@@ -128,10 +149,16 @@ class DSLGenerator:
         Args:
             system_prompt: System instruction for LLM
             prompts: List of geometry problems to convert
+            run_id: Unique ID for checkpointing
+            checkpoint_every: Save checkpoint every N batches
 
         Returns:
             InstructDataset with successfully generated samples
         """
+
+        # Try resume from checkpoint
+        all_samples = self._load_checkpoints(run_id)
+        start_batch = len(all_samples) // 16
 
         def _to_messages(prompt: GenerateDatasetSamplesPrompt) -> List[BaseMessage]:
             """Convert prompt to LangChain message format."""
@@ -140,60 +167,49 @@ class DSLGenerator:
                 HumanMessage(content=prompt.content)
             ]
 
-        # Initialize tracking
-        all_samples = []
-        stats = {"success": 0, "failed": 0, "total": len(prompts)}
-
         # Prepare batches
         messages_batch = [_to_messages(p) for p in prompts]
-        batches = list(misc.batch(messages_batch, size=4))
+        batches = list(misc.batch(messages_batch, size=16))
 
-        logger.info(f"Processing {stats['total']} prompts in {len(batches)} batches...")
+        logger.info(f"Processing {len(prompts)} prompts in {len(batches)} batches...")
+        if start_batch > 0:
+            logger.info(f"Resuming from batch {start_batch + 1}")
+
+        batch_samples = []
 
         # Process each batch
-        for batch_idx, batch in enumerate(tqdm(batches, desc="Processing batches")):
-            logger.info(f"Batch {batch_idx + 1}/{len(batches)} - {len(batch)} prompts")
+        for batch_idx in tqdm(range(start_batch, len(batches)), desc="Processing batches"):
+            batch = batches[batch_idx]
+            logger.info(f"Batch {batch_idx + 1}/{len(batches)}")
 
             # Get raw outputs from LLM (no auto-parsing)
             raw_outputs = self.llm.batch(batch)
 
             # Process each output
             for idx, raw_output in enumerate(raw_outputs):
-                prompt_num = batch_idx * 4 + idx + 1
-
                 try:
-                    # Process with detailed logging
-                    samples = self._process_single_prompt(raw_output, prompt_num, stats['total'])
+                    samples = self._process_single_prompt(raw_output)
+                    batch_samples.extend(samples)
                     all_samples.extend(samples)
-                    stats['success'] += 1
 
                 except json.JSONDecodeError as e:
-                    stats['failed'] += 1
-                    logger.error(f"✗ JSON parse error: {e}")
-                    logger.error(f"Raw output:\n{raw_output[:800]}\n")
+                    logger.error(f"JSON parse error: {e}")
 
                 except ValueError as e:
-                    stats['failed'] += 1
-                    logger.error(f"✗ Extraction error: {e}")
-                    logger.error(f"Raw output:\n{raw_output[:800]}\n")
+                    logger.error(f"Extraction error: {e}")
 
                 except Exception as e:
-                    stats['failed'] += 1
-                    logger.exception(f"✗ Unexpected error: {e}")
-                    logger.error(f"Raw output:\n{raw_output[:800]}\n")
+                    logger.error(f"Unexpected error: {e}")
 
-            # Batch summary
-            logger.info(
-                f"Batch {batch_idx + 1} done: "
-                f"{stats['success']} success, {stats['failed']} failed"
-            )
+            # Checkpoint
+            if (batch_idx + 1) % checkpoint_every == 0:
+                self._save_checkpoint(batch_samples, batch_idx, run_id)
+                batch_samples = []
 
-        # Final summary
-        success_rate = (stats['success'] / stats['total'] * 100) if stats['total'] > 0 else 0
-        logger.info(f"GENERATION COMPLETE")
-        logger.info(f"Total prompts: {stats['total']}")
-        logger.info(f"Successful: {stats['success']} ({success_rate:.1f}%)")
-        logger.info(f"Failed: {stats['failed']} ({100-success_rate:.1f}%)")
+        # Final checkpoint
+        if batch_samples:
+            self._save_checkpoint(batch_samples, len(batches) - 1, run_id)
+
         logger.info(f"Generated samples: {len(all_samples)}")
 
         return InstructDataset(samples=all_samples)
