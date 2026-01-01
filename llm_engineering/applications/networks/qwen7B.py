@@ -48,24 +48,44 @@ class QwenLocalLLM(LLM):
         prompt: str,
         stop: Optional[List[str]] = None,
     ) -> str:
-        inputs = self._tokenizer(
-            prompt,
-            return_tensors="pt"
-        ).to(self._model.device)
+        # Apply Qwen's chat template if tokenizer supports it
+        if hasattr(self._tokenizer, 'apply_chat_template'):
+            # Try to parse as chat messages
+            try:
+                # LangChain passes formatted string, we need to use it as-is
+                inputs = self._tokenizer(
+                    prompt,
+                    return_tensors="pt",
+                    add_special_tokens=True
+                ).to(self._model.device)
+            except Exception:
+                # Fallback to direct tokenization
+                inputs = self._tokenizer(
+                    prompt,
+                    return_tensors="pt"
+                ).to(self._model.device)
+        else:
+            inputs = self._tokenizer(
+                prompt,
+                return_tensors="pt"
+            ).to(self._model.device)
 
         input_length = inputs["input_ids"].shape[1]
 
         outputs = self._model.generate(
             **inputs,
-            max_new_tokens=3600,
-            temperature=0.2,
+            max_new_tokens=512,
+            temperature=0.1,
             do_sample=True,
-            pad_token_id=self._tokenizer.eos_token_id,
+            top_p=0.9,
+            pad_token_id=self._tokenizer.eos_token_id if self._tokenizer.eos_token_id else self._tokenizer.pad_token_id,
         )
 
         # Decode only the newly generated tokens (exclude the prompt)
         generated_tokens = outputs[0][input_length:]
-        return self._tokenizer.decode(
+        result = self._tokenizer.decode(
             generated_tokens,
             skip_special_tokens=True
         ).strip()
+
+        return result
