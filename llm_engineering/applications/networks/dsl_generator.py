@@ -105,7 +105,14 @@ class DSLGenerator:
 
         cleaned_json = self._extract_json_array(raw_output)
 
-        samples = self.parser.parse(cleaned_json)
+        # Parse to objects - parser might return single object or list
+        parsed = self.parser.parse(cleaned_json)
+
+        # Ensure result is always a list
+        if isinstance(parsed, list):
+            samples = parsed
+        else:
+            samples = [parsed]
 
         logger.info(f"✓ Success - Generated {len(samples)} sample(s)")
         return samples
