@@ -29,7 +29,7 @@ ngrok_up:
 encode:
 	uv run python -m tools.run --encode-images
 
-dataset:
+generation:
 	uv run python tools/run.py --run-generate-gmbl
 
 data:

@@ -1,4 +1,4 @@
-from langchain_core.output_parsers import PydanticOutputParser
+from langchain.output_parsers import PydanticOutputParser
 
 
 class ListPydanticOutputParser(PydanticOutputParser):

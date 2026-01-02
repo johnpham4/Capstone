@@ -10,10 +10,10 @@ from steps.dataset import (
 
 @pipeline
 def dataset_generation_pipeline(
-    source_json_path: str = "./data/data-1k/diagram_train_1k_vn.json",
+    source_json_path: str = "./dataset/data/diagrams.json",
     test_size: float = 0.2,
     save_json: bool = True,
-    output_dir: str = "./data/generated_gmbl"
+    output_dir: str = "./dataset/generated_gmbl"
 ):
     logger.info("Starting GMBL dataset generation pipeline")
 

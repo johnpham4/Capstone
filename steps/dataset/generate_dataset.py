@@ -73,7 +73,7 @@ def generate_gmbl_dataset(
 @step
 def save_dataset_to_json(
     train_test_split: TrainTestSplit,
-    output_dir: str = "./data/generated_gmbl"
+    output_dir: str
 ) -> Annotated[str, "output_path"]:
 
     output_path = Path(output_dir)
