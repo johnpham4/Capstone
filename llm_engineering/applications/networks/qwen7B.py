@@ -24,10 +24,9 @@ class QwenLocalLLM(LLM):
         )
 
         quantization_config = BitsAndBytesConfig(
-            load_in_4bit=True,  # 4-bit for 2x speed vs 8-bit
-            bnb_4bit_compute_dtype=torch.float16,
-            bnb_4bit_use_double_quant=True,
-            bnb_4bit_quant_type="nf4",
+            load_in_8bit=True,
+            llm_int8_threshold=6.0,
+            llm_int8_has_fp16_weight=False
         )
 
         object.__setattr__(
@@ -54,7 +53,6 @@ class QwenLocalLLM(LLM):
         if hasattr(self._tokenizer, 'apply_chat_template'):
             # Try to parse as chat messages
             try:
-                # LangChain passes formatted string, we need to use it as-is
                 inputs = self._tokenizer(
                     prompt,
                     return_tensors="pt",
@@ -76,12 +74,12 @@ class QwenLocalLLM(LLM):
 
         outputs = self._model.generate(
             **inputs,
-            max_new_tokens=200,  # Optimized: GMBL outputs are short
-            temperature=0.1,
-            do_sample=True,
+            max_new_tokens=256,
+            temperature=0.9,
+            do_sample=False,
             top_p=0.9,
             pad_token_id=self._tokenizer.eos_token_id if self._tokenizer.eos_token_id else self._tokenizer.pad_token_id,
-            num_beams=1,  # Greedy decoding for speed
+            num_beams=1,
         )
 
         # Decode only the newly generated tokens (exclude the prompt)

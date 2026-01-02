@@ -8,7 +8,7 @@ from loguru import logger
 from llm_engineering.applications.datasets.generation import InstructiveDatasetGenerator
 from llm_engineering.domains.documents import Document
 from llm_engineering.domains.prompt import GenerateDatasetSamplesPrompt
-
+from llm_engineering.domains.dataset import TrainTestSplit
 
 @step
 def load_source_data(
@@ -54,8 +54,9 @@ def create_prompts(
 def generate_gmbl_dataset(
     prompts: list[GenerateDatasetSamplesPrompt],
     test_size: float = 0.2,
-) -> Annotated[str, "output_path"]:
-    """Generate GMBL dataset using LLM"""
+) -> Annotated[TrainTestSplit, "train_test_split"]:
+
+
     logger.info(f"Generating dataset from {len(prompts)} prompts...")
 
     train_test_split = InstructiveDatasetGenerator.generate(
@@ -66,12 +67,20 @@ def generate_gmbl_dataset(
     logger.info(f"Generated {train_test_split.train.num_samples} train samples")
     logger.info(f"Generated {train_test_split.test.num_samples} test samples")
 
-    # Save to JSON
-    output_dir = Path("./data/generated_gmbl")
-    output_dir.mkdir(parents=True, exist_ok=True)
+    return train_test_split
 
-    train_path = output_dir / "train.json"
-    test_path = output_dir / "test.json"
+
+@step
+def save_dataset_to_json(
+    train_test_split: TrainTestSplit,
+    output_dir: str = "./data/generated_gmbl"
+) -> Annotated[str, "output_path"]:
+
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    train_path = output_path / "train.json"
+    test_path = output_path / "test.json"
 
     train_data = [sample.model_dump() for sample in train_test_split.train.samples]
     test_data = [sample.model_dump() for sample in train_test_split.test.samples]
@@ -85,34 +94,5 @@ def generate_gmbl_dataset(
     logger.success(f"Saved train dataset to {train_path}")
     logger.success(f"Saved test dataset to {test_path}")
 
-    return str(output_dir)
+    return str(output_path)
 
-
-@step
-def merge_datasets(
-    dataset_dir: str,
-) -> Annotated[str, "merged_path"]:
-    """Merge train and test datasets for upload"""
-    dataset_path = Path(dataset_dir)
-
-    train_path = dataset_path / "train.json"
-    test_path = dataset_path / "test.json"
-
-    with open(train_path, "r", encoding="utf-8") as f:
-        train_data = json.load(f)
-
-    with open(test_path, "r", encoding="utf-8") as f:
-        test_data = json.load(f)
-
-    # Create HuggingFace format
-    hf_dataset = {
-        "train": train_data,
-        "test": test_data
-    }
-
-    merged_path = dataset_path / "dataset.json"
-    with open(merged_path, "w", encoding="utf-8") as f:
-        json.dump(hf_dataset, f, ensure_ascii=False, indent=2)
-
-    logger.success(f"Merged dataset saved to {merged_path}")
-    return str(merged_path)
