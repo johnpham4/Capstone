@@ -7,11 +7,6 @@ import yaml
 from llm_engineering.domains.training_config import TrainingConfig
 from llm_engineering.settings import settings
 
-from pipelines.dataset_upload import dataset_upload_pipeline
-from pipelines.dataset_generation import dataset_generation_pipeline
-from pipelines.training import training_pipeline
-from pipelines.inference import inference_pipeline
-
 
 @click.command()
 @click.option(
@@ -26,6 +21,12 @@ from pipelines.inference import inference_pipeline
 #     default=False,
 #     help="Run extraction pipeline (figures + text)"
 # )
+@click.option(
+    "--run-prepare-data",
+    is_flag=True,
+    default=False,
+    help="Prepare SynthGeo dataset with Vietnamese translations"
+)
 @click.option(
     "--run-upload-dataset",
     is_flag=True,
@@ -64,6 +65,7 @@ from pipelines.inference import inference_pipeline
 )
 def main(
     no_cache: bool = False,
+    run_prepare_data: bool = False,
     run_upload_dataset: bool = False,
     run_generate_gmbl: bool = False,
     run_upload_gmbl: bool = False,
@@ -71,7 +73,7 @@ def main(
     encode_images: bool = False,
     run_inference: bool = False,
 ) -> None:
-    assert run_upload_dataset or run_generate_gmbl or run_upload_gmbl or run_train or encode_images or run_inference, "Please use one of the options"
+    assert run_prepare_data or run_upload_dataset or run_generate_gmbl or run_upload_gmbl or run_train or encode_images or run_inference, "Please use one of the options"
 
     pipeline_args = {"enable_cache": not no_cache}
     root_dir = Path(__file__).resolve().parent.parent
@@ -84,6 +86,15 @@ def main(
     #     logger.info("Starting extraction pipeline (figures + text)")
     #     figure_extraction_pipeline.with_options(**pipeline_args)()
 
+    if run_prepare_data:
+        pipeline_args["config_path"] = root_dir / "configs" / "data_preparation.yaml"
+        assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
+        pipeline_args["run_name"] = f"data_prep_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
+
+        logger.info("Starting data preparation pipeline")
+        from pipelines.data_preparation import data_preparation_pipeline
+        data_preparation_pipeline.with_options(**pipeline_args)()
+
     if run_upload_dataset:
         pipeline_args["config_path"] = root_dir / "configs" / "dataset_upload.yaml"
         assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
@@ -91,6 +102,7 @@ def main(
 
         assert settings.HF_TOKEN, "HuggingFace token required. Set HF_TOKEN in .env"
         logger.info("Starting dataset upload pipeline")
+        from pipelines.dataset_upload import dataset_upload_pipeline
         dataset_upload_pipeline.with_options(**pipeline_args)()
 
     if run_generate_gmbl:
@@ -99,6 +111,7 @@ def main(
         pipeline_args["run_name"] = f"generate_gmbl_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
 
         logger.info("Starting GMBL dataset generation pipeline")
+        from pipelines.dataset_generation import dataset_generation_pipeline
         dataset_generation_pipeline.with_options(**pipeline_args)()
 
     # if run_upload_gmbl:
@@ -169,6 +182,7 @@ def main(
 
         pipeline_args["run_name"] = f"training_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
 
+        from pipelines.training import training_pipeline
         training_pipeline.with_options(**pipeline_args)(
             config=config,
             train_data=dataset_path,
@@ -206,6 +220,7 @@ def main(
         logger.info(f"Model: {model_path or 'Base DeepSeek-R1-Distill-Qwen-1.5B'}")
         logger.info(f"Prompt: {test_prompt}")
 
+        from pipelines.inference import inference_pipeline
         inference_pipeline.with_options(**pipeline_args)(
             model_path=model_path,
             vq_model_path=config_data["vq_model_path"],

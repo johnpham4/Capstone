@@ -32,3 +32,5 @@ encode:
 dataset:
 	uv run python tools/run.py --run-generate-gmbl
 
+data:
+	uv run python -m tools.run --run-prepare-data --no-cache
