@@ -47,14 +47,22 @@ class DSLGenerator(metaclass=SingletonMeta):
 
         raise ValueError(f"No valid JSON in output. Preview: {raw[:300]}")
 
-    def _process_single_prompt(self, raw_output: str) -> List[InstructDatasetSample]:
+    def _process_single_prompt(self, raw_output: str, image_dir: str) -> List[InstructDatasetSample]:
+        """Parse LLM output and inject image_dir into each sample"""
         cleaned_json = self._extract_json_array(raw_output)
-        parsed = self.parser.parse(cleaned_json)
 
-        if isinstance(parsed, list):
-            samples = parsed
-        else:
-            samples = [parsed]
+        # Parse as raw dict first (not Pydantic yet)
+        raw_data = json.loads(cleaned_json)
+
+        if not isinstance(raw_data, list):
+            raw_data = [raw_data]
+
+        # Inject image_dir into each dict before Pydantic validation
+        for item in raw_data:
+            item['image_dir'] = image_dir
+
+        # Now convert to Pydantic models
+        samples = [InstructDatasetSample(**item) for item in raw_data]
 
         logger.info(f"Success - Generated {len(samples)} sample(s)")
         return samples
@@ -63,7 +71,7 @@ class DSLGenerator(metaclass=SingletonMeta):
         self,
         system_prompt: str,
         prompts: List[GenerateDatasetSamplesPrompt],
-        batch_size: int = 64
+        batch_size: int = 16
     ) -> InstructDataset:
         all_samples = []
 
@@ -85,8 +93,12 @@ class DSLGenerator(metaclass=SingletonMeta):
             raw_outputs = self.llm.batch(batch)
 
             for idx, raw_output in enumerate(raw_outputs):
+                # Get corresponding prompt to extract image_dir
+                prompt_idx = batch_idx * batch_size + idx
+                prompt = prompts[prompt_idx]
+
                 try:
-                    samples = self._process_single_prompt(raw_output)
+                    samples = self._process_single_prompt(raw_output, prompt.document.image_dir)
                     all_samples.extend(samples)
 
                 except json.JSONDecodeError as e:

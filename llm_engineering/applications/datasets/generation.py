@@ -53,12 +53,10 @@ Any violation is considered an error.
         )
 
     @classmethod
-    def generate(cls, prompts: list[GenerateDatasetSamplesPrompt], test_size: float = 0.2, run_id: str = "gmbl_gen") -> TrainTestSplit:
+    def generate(cls, prompts: list[GenerateDatasetSamplesPrompt], test_size: float = 0.2) -> TrainTestSplit:
         dataset = cls.dsl_generator(
             cls.get_system_prompt().content,
             prompts,
-            run_id=run_id,
-            checkpoint_every=50
         )
         processed = cls.post_process_datasets(dataset, test_size=test_size)
         return processed
@@ -70,83 +68,46 @@ Any violation is considered an error.
 
 
 class InstructiveDatasetGenerator(DatasetGeneration):
-    prompt_template_str = """You are a geometry formalization system.
+    prompt_template_str = """Convert the Vietnamese geometry problem into GMBL (Geometry Meaning-Based Language).
 
-Your task is to convert Vietnamese geometry problems into GMBL
-(Geometry Meaning-Based Language), a formal geometry DSL.
+GEOMETRY ONTOLOGY:
+- ENTITY TYPES: point, line, circle
+- DECLARATION: (param A point), (param (A B C) point), (param O circle), (define l line)
+- PREDICATES: (passes-through line point), (intersect circle circle point point), (intersect line circle point point), (intersect line line point)
 
-========================
-GEOMETRY ONTOLOGY
-========================
+CRITICAL RULES:
+1. Declare all objects before use
+2. Do NOT invent objects not mentioned in the problem
+3. Use correct predicate arity
+4. If a line has no name, introduce a fresh symbol like l, l1, l2
 
-ENTITY TYPES:
-- point
-- line
-- circle
+OUTPUT FORMAT:
+Return ONLY valid JSON array with ONE object:
+{
+  "instruction": "<original Vietnamese problem>",
+  "answer": "<GMBL code with \\n for newlines>"
+}
 
-DECLARATION:
-- (param A point)
-- (param (A B C) point)
-- (param O circle)
-- (param (O B) circle)
-- (define l line)
+NO markdown code blocks, NO extra text, NO explanations.
 
-PREDICATES (ARITY FIXED):
-- (passes-through line point)
-- (intersect circle circle point point)
-- (intersect line circle point point)
-- (intersect line line point)
+EXAMPLES:
 
-RULES:
-1. Every object must be declared before use
-2. Do NOT invent objects
-3. Symbols cannot have multiple types
-4. Circles are identified by their centers
-5. Intersection predicates MUST use correct arity
-6. Use ONE intersection statement per object pair
-7. If a line is mentioned without name, introduce a fresh symbol l
-
-========================
-OUTPUT FORMAT
-========================
-
-Return ONLY a JSON array with ONE object.
-
-The object must contain:
-- "instruction"
-- "answer"
-
-Use \\n for newlines inside "answer".
-NO markdown.
-NO explanation.
-NO extra text.
-
-========================
-EXAMPLES
-========================
-
-Example 1:
 [{
   "instruction": "Đường tròn O",
   "answer": "(param O circle)"
 }]
 
-Example 2:
 [{
   "instruction": "Hai đường tròn O và B cắt nhau tại C và D",
   "answer": "(param (O B) circle)\\n(param (C D) point)\\n(intersect O B C D)"
 }]
 
-Example 3:
 [{
   "instruction": "Đường thẳng đi qua điểm A",
   "answer": "(param A point)\\n(define l line)\\n(passes-through l A)"
 }]
 
-========================
-PROBLEM
-========================
-
+PROBLEM TO CONVERT:
 {{extract}}
 
 JSON output:

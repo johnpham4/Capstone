@@ -17,6 +17,10 @@ env/
 .env
 .env.local
 
+dataset/
+
+data/
+
 # IDEs and Editors
 .vscode/
 .idea/
