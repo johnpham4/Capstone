@@ -8,7 +8,7 @@ from doclayout_yolo import YOLOv10
 from huggingface_hub import snapshot_download
 from loguru import logger
 
-from llm_engineering.applications.networks.base import SingletonMeta
+from llm_engineering.applications.networks.singleton.base import SingletonMeta
 from llm_engineering.domains.figure_documents import BBox, Caption, Figure
 
 

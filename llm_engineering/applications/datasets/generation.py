@@ -1,11 +1,27 @@
 from abc import ABC, abstractmethod
+
+import tiktoken
+from langchain_openai import ChatOpenAI
+from loguru import logger
+from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
+from langchain_core.prompts import PromptTemplate
+from langchain_core.exceptions import OutputParserException
+
+
+from llm_engineering.applications.datasets.output_parser import ListPydanticOutputParser
+from llm_engineering.applications.utils import misc
+from llm_engineering.settings import settings
 from llm_engineering.domains.documents import Document
 from llm_engineering.domains.prompt import GenerateDatasetSamplesPrompt, Prompt
-from llm_engineering.domains.dataset import InstructDataset, TrainTestSplit
+from llm_engineering.domains.dataset import InstructDataset, InstructDatasetSample, TrainTestSplit
 from llm_engineering.applications.networks.dsl_generator import DSLGenerator
+
 from . import utils as generation_utils
+from .output_parser import ListPydanticOutputParser
 
 class DatasetGeneration(ABC):
+    tokenizer = tiktoken.encoding_for_model(settings.OPENAI_MODEL_ID)
+
     system_prompt_template = """You are a geometry formalization system.
 
 You convert Vietnamese geometry problems into GMBL
@@ -22,7 +38,6 @@ Any violation is considered an error.
 """
 
     prompt_template_str: str | None = None
-    dsl_generator = DSLGenerator()
 
     @classmethod
     def get_system_prompt(cls) -> Prompt:
@@ -34,7 +49,6 @@ Any violation is considered an error.
 
     @classmethod
     def get_prompt(cls, document: Document) -> GenerateDatasetSamplesPrompt:
-        from langchain_core.prompts import PromptTemplate
 
         prompt_template = PromptTemplate.from_template(
             template=cls.prompt_template_str,
@@ -53,15 +67,74 @@ Any violation is considered an error.
         )
 
     @classmethod
-    def generate(cls, prompts: list[GenerateDatasetSamplesPrompt], test_size: float = 0.2, run_id: str = "gmbl_gen") -> TrainTestSplit:
-        dataset = cls.dsl_generator(
-            cls.get_system_prompt().content,
-            prompts,
-            run_id=run_id,
-            checkpoint_every=50
+    def generate(cls, prompts: list[GenerateDatasetSamplesPrompt], test_size: float = 0.2, batch_size: int = 16) -> TrainTestSplit:
+        def _to_langchain(prompt: GenerateDatasetSamplesPrompt) -> list[BaseMessage]:
+            return [
+                SystemMessage(content=cls.get_system_prompt().content),
+                HumanMessage(content=prompt.content)
+            ]
+
+        assert settings.OPENAI_API_KEY is not None, "OpenAI API key must be set to generate datasets"
+
+        llm = ChatOpenAI(
+            model=settings.OPENAI_MODEL_ID,
+            api_key=settings.OPENAI_API_KEY,
+            max_tokens=512,  # Increased for complex GMBL
+            temperature=0.3,  # Lower for more deterministic output
         )
-        processed = cls.post_process_datasets(dataset, test_size=test_size)
-        return processed
+
+        from langchain_core.output_parsers import JsonOutputParser
+        parser = JsonOutputParser()
+        chain = llm | parser
+
+        messages_batch = [_to_langchain(p) for p in prompts]
+        batches = list(misc.batch(messages_batch, size=batch_size))
+
+        samples = []
+        for batch_idx, batch in enumerate(batches):
+            try:
+                raw_outputs = chain.batch(batch, stop=None)
+
+                for idx, raw_output in enumerate(raw_outputs):
+                    prompt_idx = batch_idx * batch_size + idx
+                    if prompt_idx >= len(prompts):
+                        continue
+
+                    prompt = prompts[prompt_idx]
+
+                    # raw_output is either a dict or list
+                    if isinstance(raw_output, list):
+                        sample_dicts = raw_output
+                    elif isinstance(raw_output, dict):
+                        sample_dicts = [raw_output]
+                    else:
+                        logger.warning(f"Unexpected output type: {type(raw_output)}")
+                        continue
+
+                    # Inject image_dir into each dict BEFORE Pydantic validation
+                    for sample_dict in sample_dicts:
+                        sample_dict['image_dir'] = prompt.document.image_dir
+
+                        # Now convert to Pydantic model
+                        try:
+                            sample = InstructDatasetSample(**sample_dict)
+                            samples.append(sample)
+                        except Exception as e:
+                            logger.error(f"Pydantic validation error: {e}")
+                            logger.debug(f"Sample dict: {sample_dict}")
+
+            except OutputParserException as e:
+                logger.error(f"Parse error in batch {batch_idx}: {str(e)}")
+                logger.debug(f"Problematic output preview: {str(e)[:500]}")
+            except Exception as e:
+                logger.error(f"Unexpected error in batch {batch_idx}: {type(e).__name__}: {str(e)}")
+
+        dataset = InstructDataset(samples=samples)
+        logger.info(f"Generated {len(dataset.samples)} samples.")
+
+        processed_datasets = cls.post_process_datasets(dataset, test_size=test_size)
+
+        return processed_datasets
 
     @classmethod
     @abstractmethod
@@ -70,86 +143,218 @@ Any violation is considered an error.
 
 
 class InstructiveDatasetGenerator(DatasetGeneration):
-    prompt_template_str = """You are a geometry formalization system.
+    prompt_template_str = """Convert Vietnamese geometry to GMBL (Geometry Meaning-Based Language).
 
-Your task is to convert Vietnamese geometry problems into GMBL
-(Geometry Meaning-Based Language), a formal geometry DSL.
+=== GMBL SYNTAX ===
 
-========================
-GEOMETRY ONTOLOGY
-========================
+Commands:
+(param <name> <type> <parameterization>) - declare geometric object
+(define <name> <type> <value>) - compute object from existing ones
+(assert <predicate>) - add constraint
 
-ENTITY TYPES:
-- point
-- line
-- circle
+Types: point, line, circle
 
-DECLARATION:
-- (param A point)
-- (param (A B C) point)
-- (param O circle)
-- (param (O B) circle)
-- (define l line)
+Common Functions:
+midp A B - midpoint of AB
+incenter/circumcenter/excenter A B C - triangle centers → point
+incircle/circumcircle/excircle A B C - triangle circles → circle
+foot A L1 - perpendicular foot from A to L1
+inter-ll L1 L2 - intersection of two lines
+connecting A B - line through A and B
+perp-at A L1 - line through A perpendicular to L1
+perp-bis A B - perpendicular bisector of AB
+diam A B - circle with diameter AB
 
-PREDICATES (ARITY FIXED):
-- (passes-through line point)
-- (intersect circle circle point point)
-- (intersect line circle point point)
-- (intersect line line point)
+Predicates:
+cong A B C D - |AB| = |CD| (4 points)
+para L1 L2 - L1 ∥ L2 (2 lines)
+perp L1 L2 - L1 ⟂ L2 (2 lines)
+= N1 N2 - equality
+on-seg P A B - P on segment AB (3 args)
+on-circ P C - P on circle C (2 args)
+
+Parameterizations:
+triangle - (param (A B C) triangle)
+(right-tri B) - right triangle at B
+  CRITICAL: ALREADY contains angle ABC = 90
+  NEVER add: (assert (= (uangle A B C) 90))
+  NEVER add: (assert (= (uangle C B A) 90))
+(iso-tri A) - isosceles with AB=AC
+  CRITICAL: ALREADY contains AB = AC constraint
+  NEVER add: (assert (cong A B A C))
+(acute-iso-tri A) - acute isosceles at A
+  CRITICAL: ALREADY contains AB = AC and acute angles
+(on-seg A B) - point on segment AB
+(on-circ O) - point on circle O
+
+Shape types:
+triangle, trapezoid, rectangle, square - use EXACT type from instruction
+WRONG: (param (A B C D) triangle) for trapezoid
+RIGHT: (param (A B C D) trapezoid)
+
+CRITICAL:
+- (uangle A B C) = angle at vertex B (middle letter)
+- Parameterizations have IMPLICIT constraints - check BEFORE asserting
+- Use cong A B C D for segment equality, NOT (= |A B| |C D|)
+
+=== TRANSLATION RULES ===
+
+Vietnamese → GMBL:
+"tam giác ABC" → (param (A B C) triangle)
+"tam giác ABC vuông tại B" → (param (A B C) (right-tri B))
+"điểm D nằm trên AB" → (param D point (on-seg A B))
+"D là trung điểm AB" → (define D point (midp A B))
+"tâm nội tiếp I" → (define I point (incenter A B C))
+"đường tròn nội tiếp O" → (define O circle (incircle A B C))
+"đường thẳng qua A, B" → (define l line (connecting A B))
+"AB song song CD" → (assert (para (connecting A B) (connecting C D)))
+"AB vuông góc CD" → (assert (perp (connecting A B) (connecting C D)))
+"AB = CD" → (assert (cong A B C D))
+"góc ABC = 60" → (assert (= (uangle A B C) 60))
+"góc ABC = góc DEF" → (assert (= (uangle A B C) (uangle D E F)))
+
+=== CRITICAL ERRORS TO AVOID ===
+
+1. CONFLICTING ANGLES - HIGHEST PRIORITY
+   When instruction says "Tam giác ABC, góc ABC = 90" use (right-tri B)
+   Then SKIP "góc ABC = 90" - DON'T assert it again!
+
+   Example instruction: "Tam giác ABC, góc ABC = 90, góc BAC = 45"
+   WRONG: (param (A B C) (right-tri B))\n(assert (= (uangle A B C) 45))
+   WHY: (uangle A B C) is angle at B = 90 from right-tri, CAN'T be 45
+   RIGHT: (param (A B C) (right-tri B))\n(assert (= (uangle B A C) 45))
+
+   RULE: (right-tri B) means angle at B = 90
+   - (uangle A B C) = 90 - NEVER assert this
+   - (uangle C B A) = 90 - NEVER assert this
+   - "góc BAC = 45" means angle at A → (uangle B A C)
+   - "góc ACB = 45" means angle at C → (uangle A C B)
+
+   CRITICAL: Read instruction angles carefully - vertex is middle letter!
+
+2. CIRCLES in on-seg - ABSOLUTELY FORBIDDEN
+   WRONG: (define O circle (excircle A B C))\n(assert (on-seg O B C))
+   WRONG: (define O circle (excircle A B C))\n(assert (on-seg O (connecting B C)))
+   WHY: O is CIRCLE type - NEVER EVER in on-seg
+   RIGHT: (define O circle (excircle A B C)) - that's ALL, NO assertions
+
+   "tiếp xúc với BC" = excircle IS tangent - NO on-seg needed
+   Check: If variable is circle, SKIP all on-seg for that variable
+
+3. SAME POINT in connecting - CRITICAL RULE
+   RULE: (connecting X Y) requires X ≠ Y (two DIFFERENT points)
+
+   WRONG: (connecting A A) - same point repeated
+   WRONG: (connecting B B), (connecting C C), etc. - ANY repeated point
+   RIGHT: SKIP if only 1 point available
+
+   Vietnamese "đường thẳng đi qua điểm B" = only 1 point → SKIP entirely
+
+   WRONG inter-ll: SAME LINE
+   RULE: (inter-ll L1 L2) requires L1 and L2 are DIFFERENT lines
+
+   WRONG: (inter-ll (connecting A B) (connecting B A)) - AB = BA
+   WRONG: (inter-ll (connecting X Y) (connecting Y X)) - reversed order = same line
+   RIGHT: Check if both connecting use same 2 points → SKIP inter-ll
+
+   Vietnamese "AB và BA cắt nhau" = same line → SKIP
+
+4. WRONG SHAPE TYPES
+   WRONG: (param (A B C D) triangle) for "hình thang"
+   RIGHT: (param (A B C D) trapezoid)
+   Read instruction: triangle(3), trapezoid/rectangle/square(4), pentagon(5)
+
+5. WRONG SYNTAX for segment equality
+   WRONG: (assert (= |A B| |A C|))
+   RIGHT: (assert (cong A B A C))
+
+   For congruent triangles "ABC ≅ DEF":
+   WRONG: (assert (cong A B C D E F))
+   RIGHT: (assert (cong A B D E))
+          (assert (cong B C E F))
+          (assert (cong A C D F))
+
+   RULE: cong takes EXACTLY 4 points (2 segments)
+   - (cong A B C D) means |AB| = |CD|
+   - NEVER use 6 points in one cong
+
+6. WRONG VARIABLES in connecting
+   WRONG: "vuông góc với AC" → (perp-at C (connecting A B))
+   RIGHT: "vuông góc với AC" → (perp-at C (connecting A C))
+
+7. NESTED FUNCTIONS in assert - NEVER DO THIS
+   WRONG: (assert (on-seg (foot O (connecting B C)) B C))
+   WHY: Can't use foot directly in assert
+   RIGHT: (define F point (foot O (connecting B C)))\\n(assert (on-seg F B C))
+
+   WRONG: (assert (on-seg (inter-ll L1 L2) B C))
+   RIGHT: (define P point (inter-ll L1 L2))\\n(assert (on-seg P B C))
+
+   RULE: ALWAYS define intersection/foot points FIRST in separate line
+   NEVER nest foot/inter-ll/midp inside assert
+
+8. WRONG CIRCLE FUNCTION ARGUMENTS
+   WRONG: (define O circle (incircle A A))
+   WRONG: (define O circle (excircle A B))
+   RIGHT: (define O circle (incircle A B C)) - needs 3 points
+   RIGHT: (define O circle (excircle A B C)) - needs 3 points
+
+   incircle/excircle/circumcircle require EXACTLY 3 points
+
+   WRONG TYPE:
+   WRONG: (define O point (excircle A B C)) - excircle returns CIRCLE
+   RIGHT: (define O circle (excircle A B C))
+   WRONG: (define O circle (excenter A B C)) - excenter returns POINT
+   RIGHT: (define O point (excenter A B C))
+
+9. EXTRA CHARACTERS
+   WRONG: ...answer ends with }]} or missing )
+   RIGHT: ...answer ends with ) - balance ALL parentheses
+
+=== OUTPUT FORMAT ===
+
+Return ONLY JSON array with this EXACT structure:
+[{
+  "instruction": "Copy Vietnamese text from input",
+  "answer": "GMBL code with \\n between lines"
+}]
 
 RULES:
-1. Every object must be declared before use
-2. Do NOT invent objects
-3. Symbols cannot have multiple types
-4. Circles are identified by their centers
-5. Intersection predicates MUST use correct arity
-6. Use ONE intersection statement per object pair
-7. If a line is mentioned without name, introduce a fresh symbol l
+- ONLY 2 fields: instruction and answer
+- NO extra fields (variables, params, etc.)
+- answer is plain text string with \\n separators
+- NO markdown, NO code blocks, NO explanation
 
-========================
-OUTPUT FORMAT
-========================
+CORRECT:
+[{"instruction": "Tam giác ABC vuông tại B", "answer": "(param (A B C) (right-tri B))"}]
 
-Return ONLY a JSON array with ONE object.
+CORRECT multi-line:
+[{"instruction": "Tam giác ABC, M trung điểm BC", "answer": "(param (A B C) triangle)\\n(define M point (midp B C))"}]
 
-The object must contain:
-- "instruction"
-- "answer"
+WRONG: {"variables": {...}, "params": [...]}
 
-Use \\n for newlines inside "answer".
-NO markdown.
-NO explanation.
-NO extra text.
+=== VERIFICATION CHECKLIST ===
 
-========================
-EXAMPLES
-========================
+Before output, check EVERY line:
+[ ] CIRCLES: If O is circle (excircle/incircle), NEVER EVER in on-seg
+[ ] "tiếp xúc BC" with excircle → define excircle only, NO on-seg
+[ ] CONNECTING: Must be (connecting X Y) where X ≠ Y, NOT same point
+[ ] "đường thẳng đi qua B" alone (only 1 point) → SKIP completely
+[ ] inter-ll SAME LINE: AB and BA = SAME LINE → SKIP inter-ll completely
+[ ] inter-ll: If 2 lines share same 2 points (reversed) → SKIP
+[ ] NESTED: NO foot/inter-ll inside assert - define point separately FIRST
+[ ] CONG: Triangle congruence needs 3 separate asserts, NOT 6 points in one
+[ ] INCIRCLE/EXCIRCLE: Need exactly 3 points - (incircle A B C)
+[ ] TYPES: excircle→circle, excenter→point, incircle→circle, incenter→point
+[ ] ANGLES: (right-tri B) → SKIP "góc ABC = 90" redundant assertions
+[ ] ANGLES: "góc BAC" = angle at A → (uangle B A C), middle letter is vertex
+[ ] Each variable declared ONCE only
+[ ] All parentheses balanced - count ( and )
+[ ] NO extra }} or }] at end
 
-Example 1:
-[{
-  "instruction": "Đường tròn O",
-  "answer": "(param O circle)"
-}]
+Input: {{extract}}
 
-Example 2:
-[{
-  "instruction": "Hai đường tròn O và B cắt nhau tại C và D",
-  "answer": "(param (O B) circle)\\n(param (C D) point)\\n(intersect O B C D)"
-}]
-
-Example 3:
-[{
-  "instruction": "Đường thẳng đi qua điểm A",
-  "answer": "(param A point)\\n(define l line)\\n(passes-through l A)"
-}]
-
-========================
-PROBLEM
-========================
-
-{{extract}}
-
-JSON output:
+Output JSON array:
 """
 
     @classmethod
