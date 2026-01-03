@@ -30,7 +30,7 @@ encode:
 	uv run python -m tools.run --encode-images
 
 generation:
-	uv run python tools/run.py --run-generate-gmbl
+	uv run python tools/run.py --run-generate-gmbl --no-cache
 
 data:
 	uv run python -m tools.run --run-prepare-data --no-cache
