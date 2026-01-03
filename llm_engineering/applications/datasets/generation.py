@@ -143,239 +143,159 @@ Any violation is considered an error.
 
 
 class InstructiveDatasetGenerator(DatasetGeneration):
-    prompt_template_str = """Convert Vietnamese geometry description to GMBL (Geometry Meaning-Based Language).
+    prompt_template_str = """Convert Vietnamese geometry to GMBL (Geometry Meaning-Based Language).
 
-=== SYNTAX ===
+=== GMBL SYNTAX ===
 
-1. PARAM - Declare base objects:
-   (param A point)
-   (param (A B C) triangle)
-   (param (A B C) (right-tri B))
-   (param D point (on-seg A B))
+Commands:
+(param <name> <type> <parameterization>) - declare geometric object
+(define <name> <type> <value>) - compute object from existing ones
+(assert <predicate>) - add constraint
 
-2. DEFINE - Compute derived objects:
-   (define M point (midp A B))
-   (define O point (incenter A B C))
-   (define l line (connecting A B))
-   (define c circle (incircle A B C))
+Types: point, line, circle
 
-3. ASSERT - State constraints:
-   (assert (cong A B C D))
-   (assert (para L1 L2))
-   (assert (perp L1 L2))
-   (assert (= (uangle A B C) (uangle D E F)))
-
-=== TYPE RULES ===
-
-Centers are POINTS:
-- (incenter A B C) returns point
-- (circumcenter A B C) returns point
-- (excenter A B C) returns point
-
-Circles are CIRCLES:
-- (incircle A B C) returns circle
-- (circumcircle A B C) returns circle
-- (excircle A B C) returns circle
-
-=== ANGLE NOTATION ===
-
-(uangle A B C) - angle at vertex B (middle letter)
-- góc ABC (at vertex B) → (uangle A B C)
-- góc BAC (at vertex A) → (uangle B A C)
-- góc ACB (at vertex C) → (uangle A C B)
-
-CRITICAL: Middle letter is the vertex
-- (uangle A B C) ≠ (uangle B A C) ≠ (uangle A C B)
-- Each angle must use correct vertex position
-
-=== KEY FUNCTIONS ===
-
-Points:
-- (midp A B) - midpoint
-- (incenter A B C) - incenter
-- (circumcenter A B C) - circumcenter
-- (excenter A B C) - excenter
-- (orthocenter A B C) - orthocenter
-- (centroid A B C) - centroid
-- (foot A L1) - perpendicular foot
-- (inter-ll L1 L2) - line intersection
-
-Lines:
-- (connecting A B) - line through points
-- (perp-bis A B) - perpendicular bisector
-- (perp-at A L1) - perpendicular at point
-
-Circles:
-- (incircle A B C) - incircle
-- (circumcircle A B C) - circumcircle
-- (excircle A B C) - excircle
-- (diam A B) - circle with diameter
+Common Functions:
+midp A B - midpoint of AB
+incenter/circumcenter/excenter A B C - triangle centers → point
+incircle/circumcircle/excircle A B C - triangle circles → circle
+foot A L1 - perpendicular foot from A to L1
+inter-ll L1 L2 - intersection of two lines
+connecting A B - line through A and B
+perp-at A L1 - line through A perpendicular to L1
+perp-bis A B - perpendicular bisector of AB
+diam A B - circle with diameter AB
 
 Predicates:
-- (cong A B C D) - segment equality
-- (para L1 L2) - parallel
-- (perp L1 L2) - perpendicular
-- (= (uangle A B C) N) - angle equality
-- (on-circ P C) - point on circle (NOT on-seg)
-- (on-seg P A B) - point on segment
+cong A B C D - |AB| = |CD| (4 points)
+para L1 L2 - L1 ∥ L2 (2 lines)
+perp L1 L2 - L1 ⟂ L2 (2 lines)
+= N1 N2 - equality
+on-seg P A B - P on segment AB (3 args)
+on-circ P C - P on circle C (2 args)
 
-=== CRITICAL CONSTRAINTS ===
+Parameterizations:
+triangle - (param (A B C) triangle)
+(right-tri B) - right triangle at B
+  CRITICAL: ALREADY contains angle ABC = 90
+  NEVER add: (assert (= (uangle A B C) 90))
+  NEVER add: (assert (= (uangle C B A) 90))
+(iso-tri A) - isosceles with AB=AC
+  CRITICAL: ALREADY contains AB = AC constraint
+  NEVER add: (assert (cong A B A C))
+(acute-iso-tri A) - acute isosceles at A
+  CRITICAL: ALREADY contains AB = AC and acute angles
+(on-seg A B) - point on segment AB
+(on-circ O) - point on circle O
 
-1. All variables must be declared before use
-   - Check param and define statements
-   - Never use undefined variables in assert
+Shape types:
+triangle, trapezoid, rectangle, square - use EXACT type from instruction
+WRONG: (param (A B C D) triangle) for trapezoid
+RIGHT: (param (A B C D) trapezoid)
 
-2. Angle vertices must match
-   - góc ABC → (uangle A B C) at vertex B
-   - góc BAC → (uangle B A C) at vertex A
-   - góc ACB → (uangle A C B) at vertex C
+CRITICAL:
+- (uangle A B C) = angle at vertex B (middle letter)
+- Parameterizations have IMPLICIT constraints - check BEFORE asserting
+- Use cong A B C D for segment equality, NOT (= |A B| |C D|)
 
-3. Point on circle requires on-circ
-   - "điểm P nằm trên đường tròn O" → (param P point (on-circ O))
-   - NOT on-seg when O is circle
+=== TRANSLATION RULES ===
 
-4. Line requires two different points
-   - (connecting A B) valid only if A ≠ B
-   - NEVER use (connecting A A) - invalid
-   - If instruction mentions line without two points, infer from context
-   - If no context available, use perp-at or other constructors
-
-5. No duplicate variable declarations
-   - Use param OR define, never both for same variable
-
-6. Handle incomplete instructions carefully
-   - "đường thẳng qua C vuông góc AB" → use (perp-at C (connecting A B))
-   - "đường thẳng qua C" alone → skip if no second point available
-   - Never hallucinate undefined points
-
-=== VIETNAMESE MAPPING ===
-
+Vietnamese → GMBL:
 "tam giác ABC" → (param (A B C) triangle)
 "tam giác ABC vuông tại B" → (param (A B C) (right-tri B))
-"tam giác ABC cân tại A" → (param (A B C) (iso-tri A))
-"điểm M nằm trên BC" → (param M point (on-seg B C))
-"M là trung điểm BC" → (define M point (midp B C))
+"điểm D nằm trên AB" → (param D point (on-seg A B))
+"D là trung điểm AB" → (define D point (midp A B))
 "tâm nội tiếp I" → (define I point (incenter A B C))
 "đường tròn nội tiếp O" → (define O circle (incircle A B C))
-"đường tròn bàng tiếp E" → (define E circle (excircle A B C))
-"đường thẳng qua A và B" → (define l line (connecting A B))
+"đường thẳng qua A, B" → (define l line (connecting A B))
 "AB song song CD" → (assert (para (connecting A B) (connecting C D)))
 "AB vuông góc CD" → (assert (perp (connecting A B) (connecting C D)))
 "AB = CD" → (assert (cong A B C D))
+"góc ABC = 60" → (assert (= (uangle A B C) 60))
 "góc ABC = góc DEF" → (assert (= (uangle A B C) (uangle D E F)))
 
-=== EXAMPLES ===
+=== CRITICAL ERRORS TO AVOID ===
 
-Input: "Tam giác ABC"
-Output:
+1. CONFLICTING ANGLES - HIGHEST PRIORITY
+   When instruction says "Tam giác ABC, góc ABC = 90" use (right-tri B)
+   Then SKIP "góc ABC = 90" - DON'T assert it again!
+
+   Example instruction: "Tam giác ABC, góc ABC = 90, góc BAC = 45"
+   WRONG: (param (A B C) (right-tri B))\n(assert (= (uangle A B C) 45))
+   WHY: (uangle A B C) is angle at B = 90 from right-tri, CAN'T be 45
+   RIGHT: (param (A B C) (right-tri B))\n(assert (= (uangle B A C) 45))
+
+   RULE: (right-tri B) means angle at B = 90
+   - (uangle A B C) = 90 - NEVER assert this
+   - (uangle C B A) = 90 - NEVER assert this
+   - "góc BAC = 45" means angle at A → (uangle B A C)
+   - "góc ACB = 45" means angle at C → (uangle A C B)
+
+   CRITICAL: Read instruction angles carefully - vertex is middle letter!
+   WRONG: (assert (on-seg O B C)) when O is circle
+   RIGHT: Only POINTS can be in on-seg - check variable type first
+
+3. SAME POINT in connecting
+   WRONG: (define l line (connecting C C))
+   RIGHT: Line needs TWO DIFFERENT points
+
+4. WRONG SHAPE TYPES
+   WRONG: (param (A B C D) triangle) for "hình thang"
+   RIGHT: (param (A B C D) trapezoid)
+   Read instruction: triangle(3), trapezoid/rectangle/square(4), pentagon(5)
+
+5. WRONG SYNTAX for segment equality
+   WRONG: (assert (= |A B| |A C|))
+   RIGHT: (assert (cong A B A C))
+
+6. WRONG VARIABLES in connecting
+   WRONG: "vuông góc với AC" → (perp-at C (connecting A B))
+   RIGHT: "vuông góc với AC" → (perp-at C (connecting A C))
+
+7. NESTED FUNCTIONS in assert
+   WRONG: (assert (on-seg (inter-ll L1 L2) B C))
+   RIGHT: (define P point (inter-ll L1 L2))\n(assert (on-seg P B C))
+
+8. EXTRA CHARACTERS
+   WRONG: ...answer ends with }]} or missing )
+   RIGHT: ...answer ends with ) - balance ALL parentheses
+
+=== OUTPUT FORMAT ===
+
+Return ONLY JSON array with this EXACT structure:
 [{
-  "instruction": "Tam giác ABC",
-  "answer": "(param (A B C) triangle)"
+  "instruction": "Copy Vietnamese text from input",
+  "answer": "GMBL code with \\n between lines"
 }]
 
-Input: "Tam giác ABC vuông tại B"
-Output:
-[{
-  "instruction": "Tam giác ABC vuông tại B",
-  "answer": "(param (A B C) (right-tri B))"
-}]
+RULES:
+- ONLY 2 fields: instruction and answer
+- NO extra fields (variables, params, etc.)
+- answer is plain text string with \\n separators
+- NO markdown, NO code blocks, NO explanation
 
-Input: "Tam giác ABC, điểm M là trung điểm BC"
-Output:
-[{
-  "instruction": "Tam giác ABC, điểm M là trung điểm BC",
-  "answer": "(param (A B C) triangle)\\n(define M point (midp B C))"
-}]
+CORRECT:
+[{"instruction": "Tam giác ABC vuông tại B", "answer": "(param (A B C) (right-tri B))"}]
 
-Input: "Tam giác ABC, đường tròn nội tiếp O"
-Output:
-[{
-  "instruction": "Tam giác ABC, đường tròn nội tiếp O",
-  "answer": "(param (A B C) triangle)\\n(define O circle (incircle A B C))"
-}]
+CORRECT multi-line:
+[{"instruction": "Tam giác ABC, M trung điểm BC", "answer": "(param (A B C) triangle)\\n(define M point (midp B C))"}]
 
-Input: "Tam giác ABC, đường thẳng đi qua B và C"
-Output:
-[{
-  "instruction": "Tam giác ABC, đường thẳng đi qua B và C",
-  "answer": "(param (A B C) triangle)\\n(define l line (connecting B C))"
-}]
+WRONG: {"variables": {...}, "params": [...]}
 
-Input: "Tam giác ABC, AB = AC"
-Output:
-[{
-  "instruction": "Tam giác ABC, AB = AC",
-  "answer": "(param (A B C) triangle)\\n(assert (cong A B A C))"
-}]
+=== VERIFICATION CHECKLIST ===
 
-Input: "Tam giác ABC, BC song song DE"
-Output:
-[{
-  "instruction": "Tam giác ABC, BC song song DE",
-  "answer": "(param (A B C) triangle)\\n(param D point)\\n(param E point)\\n(define l1 line (connecting B C))\\n(define l2 line (connecting D E))\\n(assert (para l1 l2))"
-}]
-
-Input: "Tam giác ABC, đường thẳng đi qua B và C"
-Output:
-[{
-  "instruction": "Tam giác ABC, đường thẳng đi qua B và C",
-  "answer": "(param (A B C) triangle)\\n(define l line (connecting B C))"
-}]
-
-Input: "Tam giác ABC, đường thẳng qua C vuông góc AB"
-Output:
-[{
-  "instruction": "Tam giác ABC, đường thẳng qua C vuông góc AB",
-  "answer": "(param (A B C) triangle)\\n(define l line (perp-at C (connecting A B)))"
-}]
-
-=== COMMON ERRORS ===
-
-Error: Using undefined variables
-Wrong: (assert (= (uangle A B C) (uangle D E F)))  [D, E, F not declared]
-Right: (assert (= (uangle A B C) 90))
-
-Error: Wrong angle vertex
-Wrong: góc BAC = 45 → (assert (= (uangle A B C) 45))  [vertex is A not B]
-Right: góc BAC = 45 → (assert (= (uangle B A C) 45))
-
-Error: Wrong parameterization for circle
-Wrong: điểm N trên đường tròn O → (param N point (on-seg O))
-Right: điểm N trên đường tròn O → (param N point (on-circ O))
-
-Error: Confusing center point vs circle
-Wrong: (define O point (incenter A B C))  [for "đường tròn nội tiếp O"]
-Right: (define O circle (incircle A B C))
-
-Error: Same point in connecting
-Wrong: đường thẳng qua C → (define l line (connecting C C))
-Right: Use perp-at or skip if no second point
-
-Error: Hallucinating undefined points
-Wrong: đường thẳng qua C → (define l line (connecting C E))  [E not declared]
-Right: Only use declared variables or infer from triangle vertices
-
-Error: Double declaration
-Wrong: (param O circle)\n(define O circle (diam A B))
-Right: (define O circle (diam A B))
-
-=== REQUIREMENTS ===
-
-1. Declare all variables before use
-2. Use correct types: point vs circle
-3. Use cong for segments, = for angles
-4. Never declare same variable twice
-5. Create all mentioned objects
-6. Balance parentheses
-7. Use \\n for line breaks
-8. Return JSON array with one object
-9. No markdown, no explanation
-
-=== TASK ===
+Before output, verify:
+[ ] ANGLES: If (right-tri B) used, SKIP "góc ABC = 90" from instruction
+[ ] ANGLES: "góc BAC" = angle at A → (uangle B A C), middle letter is vertex
+[ ] Each variable declared ONCE only
+[ ] on-seg: first arg is POINT not circle
+[ ] connecting: TWO DIFFERENT points (not C C)
+[ ] No nested functions in assert - define first
+[ ] All parentheses balanced - count ( and )
+[ ] NO extra }} or }] at end
 
 Input: {{extract}}
 
-Output (JSON only):
+Output JSON array:
 """
 
     @classmethod

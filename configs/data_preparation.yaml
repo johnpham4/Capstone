@@ -3,4 +3,5 @@ parameters:
   text_filename: "diagram_val.json"
   split: "test"
 
-  limit: 16
+  limit: 50
+
