@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 
 from langchain_core.messages import SystemMessage, HumanMessage, BaseMessage
 
-from llm_engineering.applications.networks.base import SingletonMeta
+from llm_engineering.applications.networks.singleton.base import SingletonMeta
 from llm_engineering.applications.networks.qwen7B import QwenLocalLLM
 from llm_engineering.applications.datasets.output_parser import ListPydanticOutputParser
 from llm_engineering.domains.dataset import InstructDataset, InstructDatasetSample

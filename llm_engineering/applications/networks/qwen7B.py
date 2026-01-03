@@ -75,9 +75,7 @@ class QwenLocalLLM(LLM):
         outputs = self._model.generate(
             **inputs,
             max_new_tokens=256,
-            temperature=0.9,
             do_sample=False,
-            top_p=0.9,
             pad_token_id=self._tokenizer.eos_token_id if self._tokenizer.eos_token_id else self._tokenizer.pad_token_id,
             num_beams=1,
         )

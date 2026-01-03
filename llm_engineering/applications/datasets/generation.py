@@ -68,47 +68,86 @@ Any violation is considered an error.
 
 
 class InstructiveDatasetGenerator(DatasetGeneration):
-    prompt_template_str = """Convert the Vietnamese geometry problem into GMBL (Geometry Meaning-Based Language).
+    prompt_template_str = """Convert Vietnamese geometry problem to GMBL (Geometry Meaning-Based Language) following EXACT syntax from examples.
 
-GEOMETRY ONTOLOGY:
-- ENTITY TYPES: point, line, circle
-- DECLARATION: (param A point), (param (A B C) point), (param O circle), (define l line)
-- PREDICATES: (passes-through line point), (intersect circle circle point point), (intersect line circle point point), (intersect line line point)
+=== GMBL SYNTAX RULES ===
 
-CRITICAL RULES:
-1. Declare all objects before use
-2. Do NOT invent objects not mentioned in the problem
-3. Use correct predicate arity
-4. If a line has no name, introduce a fresh symbol like l, l1, l2
+1. DECLARATION (must come first):
+   (param A point)              ; Single point
+   (param (A B C) triangle)     ; Triangle with 3 points
+   (param O circle)             ; Circle
+   (param D point (on-seg A B)) ; Point on segment with constraint
 
-OUTPUT FORMAT:
-Return ONLY valid JSON array with ONE object:
-{
-  "instruction": "<original Vietnamese problem>",
-  "answer": "<GMBL code with \\n for newlines>"
-}
+2. DEFINITION (derived objects):
+   (define O point (circumcenter A B C))  ; Circumcenter
+   (define M point (midp A B))            ; Midpoint
+   (define l line (line A B))             ; Line through 2 points
 
-NO markdown code blocks, NO extra text, NO explanations.
+3. PREDICATES:
+   (on-seg D A B)          ; D on segment AB
+   (on-circ P O)           ; P on circle O
+   (cong A B C D)          ; AB = CD
+   (para l1 l2)            ; l1 parallel l2
+   (perp l1 l2)            ; l1 perpendicular l2
 
-EXAMPLES:
+4. CRITICAL ERRORS TO AVOID:
+   (intersect l1 l2 (param P point))  ; NEVER declare param inside expression
+   (define O circle)                  ; If O is center, use "point" not "circle"
+   (intersect A B C)                  ; Points cannot intersect
+   (passes-through O N)               ; Wrong predicate name
 
+=== CORRECT EXAMPLES ===
+
+Example 1 - Simple triangle:
 [{
-  "instruction": "Đường tròn O",
-  "answer": "(param O circle)"
+  "instruction": "Tam giác ABC",
+  "answer": "(param (A B C) triangle)"
 }]
 
+Example 2 - Triangle with point on segment:
 [{
-  "instruction": "Hai đường tròn O và B cắt nhau tại C và D",
-  "answer": "(param (O B) circle)\\n(param (C D) point)\\n(intersect O B C D)"
+  "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB",
+  "answer": "(param (A B C) triangle)\\n(param D point (on-seg A B))"
 }]
 
+Example 3 - Circumcenter:
 [{
-  "instruction": "Đường thẳng đi qua điểm A",
-  "answer": "(param A point)\\n(define l line)\\n(passes-through l A)"
+  "instruction": "Tam giác ABC nhọn, điểm O là tâm đường tròn ngoại tiếp",
+  "answer": "(param (A B C) acute-tri)\\n(define O point (circumcenter A B C))"
 }]
 
-PROBLEM TO CONVERT:
-{{extract}}
+Example 4 - Midpoint:
+[{
+  "instruction": "Tam giác ABC, điểm M là trung điểm của BC",
+  "answer": "(param (A B C) triangle)\\n(define M point (midp B C))"
+}]
+
+Example 5 - Line through points:
+[{
+  "instruction": "Tam giác ABC, đường thẳng đi qua A và B",
+  "answer": "(param (A B C) triangle)\\n(define l line (line A B))"
+}]
+
+Example 6 - Right triangle:
+[{
+  "instruction": "Tam giác ABC vuông tại B",
+  "answer": "(param (A B C) triangle)\\n(assert (is-right A B C))"
+}]
+
+Example 7 - Circle:
+[{
+  "instruction": "Đường tròn O, điểm A nằm trên đường tròn",
+  "answer": "(param O circle)\\n(param A point (on-circ O))"
+}]
+
+=== YOUR TASK ===
+Problem: {{extract}}
+
+OUTPUT REQUIREMENTS:
+- Return ONLY valid JSON array with ONE object
+- Use \\n for newlines in "answer" field
+- NO markdown, NO explanation, NO extra text
+- Follow EXACT syntax from examples above
 
 JSON output:
 """
