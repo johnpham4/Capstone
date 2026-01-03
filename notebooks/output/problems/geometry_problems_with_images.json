@@ -1,7 +1,7 @@
 [
   {
     "stt": 1,
-    "problem_id": "745c0c56-e14a-450f-b602-237d453806b7",
+    "problem_id": "0e432849-94c9-439b-8519-3f043191ad69",
     "title": "2.12",
     "page": 24,
     "content": "Từ một khối lập phương có độ dài cạnh là x + 3 (cm), ta cắt bỏ một khối lập phương có độ dài x - 1 (cm) (H.2.3). Tính thể tích phần còn lại, viết kết quả dưới dạng đa thức.",
@@ -16,7 +16,7 @@
   },
   {
     "stt": 2,
-    "problem_id": "2e15dd3a-544a-4b33-b5d2-7c33f6d740db",
+    "problem_id": "35570b14-2f44-4d9d-b6d1-302af65e9797",
     "title": "2.24",
     "page": 30,
     "content": "Từ một miếng bia có dạng hình tròn (H.2.4) với bán kính R(cm), người ta khoét một hình tròn ở giữa có bán kính r(cm), r < R.",
@@ -31,7 +31,7 @@
   },
   {
     "stt": 3,
-    "problem_id": "78b1e31e-1324-46bb-9e49-82cb8efd830c",
+    "problem_id": "381d703a-7cfd-498d-be89-fadfcb58c9fe",
     "title": "3.5",
     "page": 32,
     "content": "Cho tứ giác ABCD với AB = BC, CD = DA, góc B = 100 độ, góc D = 120 độ. Tính góc A và góc C.",
@@ -46,7 +46,7 @@
   },
   {
     "stt": 4,
-    "problem_id": "5b223882-7842-4913-8bea-cb0555d064ff",
+    "problem_id": "f4e1b427-bce8-4b6f-81e3-ef9364a8dc4c",
     "title": "3.9",
     "page": 34,
     "content": "Cho tam giác ABC vuông cân tại đỉnh A. Ghép thêm vào phía ngoài tam giác đó tam giác BCD vuông cân tại đỉnh B. Chứng minh tứ giác ABDC là một hình thang vuông (hình thang có một cạnh bên vuông góc với hai đáy).",
@@ -61,7 +61,7 @@
   },
   {
     "stt": 5,
-    "problem_id": "13726bc6-4cc5-4f08-b175-feef18c0df06",
+    "problem_id": "75b51b64-0d84-4f36-bed9-78d2eaa0b5df",
     "title": "3.10",
     "page": 34,
     "content": "Cho hình thang cân ABCD với hai đường thẳng chứa hai cạnh bên AD, BC cắt nhau tại S. Gọi O là giao điểm của hai đường chéo AC và BD. Chứng minh đường thẳng SO đi qua trung điểm của AB, đi qua trung điểm của CD.",
@@ -76,10 +76,10 @@
   },
   {
     "stt": 6,
-    "problem_id": "8e4dc479-77cd-4756-8e02-afca3175d8f7",
+    "problem_id": "896a12e7-2a33-46ca-accc-5f907bc8bca2",
     "title": "3.11",
     "page": 34,
-    "content": "Cho hình thang cân ABCD với hai đáy AB và CD, đường chéo AC vuông góc cạnh bên AD, tia CA là tia phân giác của góc AOB. Tính chu vi của hình thang đó biết rằng AD = 2 cm.",
+    "content": "Cho hình thang cân ABC với hai đáy AB và CD, đường chéo AC vuông góc với cạnh bên AD, tia CA là tia phân giác của góc O. Tính chu vi của hình thang đó biết rằng AÐ = 2 cm.",
     "figures": [
       "H.3.9"
     ],
@@ -91,7 +91,7 @@
   },
   {
     "stt": 7,
-    "problem_id": "f5538e53-b604-4c46-8557-2d7a9c4bee94",
+    "problem_id": "93f32abd-c908-49f2-bf0a-9c99dc97734b",
     "title": "3.12",
     "page": 37,
     "content": "Xét hai hình bình hành Ä⁄NBA và MNCB.",
@@ -106,7 +106,7 @@
   },
   {
     "stt": 8,
-    "problem_id": "098937ca-91f0-452f-9cf0-24c3e5b7e645",
+    "problem_id": "3a34b5b8-12d5-4968-9d3d-6d6cd66185bd",
     "title": "3.13",
     "page": 37,
     "content": "Chứng minh rằng tổng hai cạnh bên của hình thang lớn hơn hiệu hai đáy của nó.",
@@ -121,7 +121,7 @@
   },
   {
     "stt": 9,
-    "problem_id": "83e8168a-293c-41a8-814f-1fab3b03fbed",
+    "problem_id": "e5756460-4f28-416b-b062-8bc7fb6623cf",
     "title": "3.14",
     "page": 37,
     "content": "Cho hình bình hành ABCO với góc A tù. Dựng bên ngoài hình bình hành đó các tam giác đều ABE và DAF. Chứng minh rằng tam giác CEF là tam giác đều (Gợi ý: Chứng minh các tam giác AEF, DCF, BEC bằng nhau).",
@@ -136,7 +136,7 @@
   },
   {
     "stt": 10,
-    "problem_id": "30b15c21-a713-4035-a2ce-5023963b515f",
+    "problem_id": "2b8ea096-c887-4b57-9c6f-42b6265742b0",
     "title": "3.16",
     "page": 37,
     "content": "Cho hình thang ABCD với hai đáy AB, CD. Gọi K là trung điểm của BC. Lấy điểm A', D' sao cho K là trung điểm của AA' và DD'. Hỏi tứ giác A2A'D'D là hình gì? Vì sao?",
@@ -151,7 +151,7 @@
   },
   {
     "stt": 11,
-    "problem_id": "bafe3eea-3f9f-45b8-ba35-fa1a88c17cc8",
+    "problem_id": "bb17f2ff-9d0e-48c1-a8f1-11ce71f6c583",
     "title": "3.17",
     "page": 37,
     "content": "Cho hai điểm phân biệt A, B nằm bên trong góc xOy (không bẹt). Tìm điểm D thuộc tia Ox, điểm E thuộc tia Oy sao cho AD/BE là một hình bình hành.",
@@ -166,7 +166,7 @@
   },
   {
     "stt": 12,
-    "problem_id": "277198e4-2754-479b-9d62-1e585ecf1785",
+    "problem_id": "71d1da9f-9015-4f12-8fe4-1da5533e92cc",
     "title": "3.18",
     "page": 37,
     "content": "Cho hình bình hành ABCD. Lấy các điểm E thuộc AB, F thuộc CD sao cho AE = CF; lấy các điểm G thuộc BC, H thuộc AD sao cho BG = DH. Chứng minh EGFH là một hình bình hành và các đường thẳng AC, BD, EF, GH đồng quy.",
@@ -181,10 +181,10 @@
   },
   {
     "stt": 13,
-    "problem_id": "c544d5ab-74fc-4dec-a71e-bf9b0e56d14b",
+    "problem_id": "450f7190-38c3-4844-93b2-57af217bf220",
     "title": "3.19",
     "page": 37,
-    "content": "Cho tam giác ABC không vuông tại A. Dựng bên ngoài tam giác đó hai tam giác ABD, ACE vuông cân tại đỉnh A rồi dựng hình bình hành AE1Đ. a) Chứng minh hai tam giác ABC và DAI bằng nhau. b) Chứng minh đường thẳng AI vuông góc với BC. c) Chứng minh đường thẳng BE vuông góc với đường thẳng CĐ. d) Gọi K là trung điểm của BD, chứng minh KC = Ki và KC vuông góc với KI. (Gợi ý: Chứng minh hai tam giác AKi và BKC bằng nhau).",
+    "content": "Cho tam giác ABC không vuông tại A. Dựng bên ngoài tam giác đó hai tam giác ABD, ACE vuông cân tại đỉnh A rồi dựng hình bình hành AE1Đ. a) Chứng minh hai tam giác ABC và DAI bằng nhau. b) Chứng minh đường thẳng AI vuông góc BC. c) Chứng minh đường thẳng BE vuông góc đường thẳng CĐ. d) Gọi K là trung điểm của BD, chứng minh KC = Ki và KC vuông góc KI. (Gợi ý: Chứng minh hai tam giác AKi và BKC bằng nhau).",
     "figures": [
       "H.3.16"
     ],
@@ -196,22 +196,7 @@
   },
   {
     "stt": 14,
-    "problem_id": "3f8a9302-0b5c-4248-a338-2d16fec89220",
-    "title": "3.20",
-    "page": 39,
-    "content": "Cho tam giác ABC cân tại A, AH là đường cao. Gọi M, N lần lượt là trung điểm của AB, AC. Gọi D, E lần lượt là điểm sao cho M là trung điểm của HD, N là trung điểm của HE.",
-    "figures": [
-      "H.3.24"
-    ],
-    "page_image": "output/pages/page_039.png",
-    "figure_images": [
-      "output/diagrams/H.3.24.png"
-    ],
-    "has_figure_images": true
-  },
-  {
-    "stt": 15,
-    "problem_id": "d86ce029-a79e-426c-bca8-0a14d85e5cff",
+    "problem_id": "e4307be5-8add-4dea-8de3-c74b151a614d",
     "title": "3.21",
     "page": 39,
     "content": "Hai đường trung tuyến BM, CN của tam giác ABC cân tại A cắt nhau tại G. Gọi H, K lần lượt là điểm sao cho trung điểm của GH là M, trung điểm của GK là N. Chứng minh tứ giác BCHK là hình chữ nhật.",
@@ -225,8 +210,8 @@
     "has_figure_images": true
   },
   {
-    "stt": 16,
-    "problem_id": "f0a9131f-9c89-47a1-8939-aa6064eae8db",
+    "stt": 15,
+    "problem_id": "ca0c0ac6-55fd-4353-b986-dc2298939f5e",
     "title": "3.22",
     "page": 39,
     "content": "1. Sử dụng tính chất tổng các góc của một tam giác bằng 180 độ để chứng minh:",
@@ -240,23 +225,8 @@
     "has_figure_images": true
   },
   {
-    "stt": 17,
-    "problem_id": "d129e7e0-3c61-4f3e-bdcf-550eb79ce6af",
-    "title": "3.23",
-    "page": 42,
-    "content": "Chứng minh hình bình hành có hai đường cao xuất phát từ một đỉnh bằng nhau là một hình thoi.",
-    "figures": [
-      "H.3.21a"
-    ],
-    "page_image": "output/pages/page_042.png",
-    "figure_images": [
-      "output/diagrams/H.3.21a.png"
-    ],
-    "has_figure_images": true
-  },
-  {
-    "stt": 18,
-    "problem_id": "148fc301-8a3d-44bd-b77e-09f686bade38",
+    "stt": 16,
+    "problem_id": "dd8c1c10-87f9-4d52-b0dc-9c992ee564f1",
     "title": "3.24",
     "page": 42,
     "content": "Gọi O là giao điểm hai đường chéo của hình bình hành ABCD. Với mỗi tam giác OAB, OBC, OCD, ODA, xét giao điểm ba đường phân giác của tam giác đó. Tại sao bốn điểm vừa vẽ là bốn đỉnh của một hình thoi?",
@@ -270,8 +240,8 @@
     "has_figure_images": true
   },
   {
-    "stt": 19,
-    "problem_id": "0ec25eed-5faa-4835-b25c-28e8f062ac29",
+    "stt": 17,
+    "problem_id": "61c75fc1-ae64-4959-a8fd-5817019678a1",
     "title": "3.25",
     "page": 42,
     "content": "Cho hình vuông ABCD. Với điểm M nằm giữa C và D, kẻ tia phân giác của góc DAM; nó cắt CD ở N. Đường thẳng qua N vuông góc với AM cắt BC ở P. Tính số đo của góc NAP.",
@@ -285,8 +255,8 @@
     "has_figure_images": true
   },
   {
-    "stt": 20,
-    "problem_id": "0ad0413b-27be-44d2-b351-3649b8264adf",
+    "stt": 18,
+    "problem_id": "50e85c64-1a4d-4ed5-8f4e-82d6aeb42de8",
     "title": "3.26",
     "page": 42,
     "content": "Cho hình vuông ABCD với tâm O và có cạnh bằng 2 cm. Hai tia Ox, Oy tạo thành góc vuông. Tính diện tích của phần hình vuông nằm bên trong góc xOy.",
@@ -300,56 +270,56 @@
     "has_figure_images": true
   },
   {
-    "stt": 21,
-    "problem_id": "602fdbbe-ae4d-42b2-bcd4-891d68da4a74",
+    "stt": 19,
+    "problem_id": "3d000d11-2485-4da9-812b-8003580c595a",
     "title": "3.27",
     "page": 42,
     "content": "Xét tam giác ABC vuông cân tại A. Lấy trên cạnh AC hai điểm D, E sao cho BD = DE = EC. Lấy các điểm F, G lần lượt thuộc cạnh AC, AB sao cho FE, GD vuông góc BC.",
     "figures": [
-      "H.3.2"
+      "H.3.25"
     ],
     "page_image": "output/pages/page_042.png",
     "figure_images": [
-      "output/diagrams/H.3.2.png"
+      "output/diagrams/H.3.25.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 20,
+    "problem_id": "92853d90-2e0f-41df-8984-a78d91e019b9",
+    "title": "3.28",
+    "page": 44,
+    "content": "Cho tam giác ABC. Với mỗi điểm M nằm giữa B và C, lấy điểm N thuộc cạnh AB, điểm P thuộc cạnh AC sao cho MN/AC, MP vuông góc AB.",
+    "figures": [
+      "H.3.26"
+    ],
+    "page_image": "output/pages/page_044.png",
+    "figure_images": [
+      "output/diagrams/H.3.26.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 21,
+    "problem_id": "2ac25c19-4b54-4b5e-8a1a-354338f54b7a",
+    "title": "4.4",
+    "page": 48,
+    "content": "Cho Hình 5.6. Chứng minh rằng AB song song KI.",
+    "figures": [
+      "H.5.6"
+    ],
+    "page_image": "output/pages/page_048.png",
+    "figure_images": [
+      "output/diagrams/H.5.6.png"
     ],
     "has_figure_images": true
   },
   {
     "stt": 22,
-    "problem_id": "d59d82e6-1e51-45c0-901a-95cb1532c4fd",
-    "title": "3.28",
-    "page": 44,
-    "content": "Cho tam giác ABC. Với mỗi điểm M nằm giữa B và C, lấy điểm N thuộc cạnh AB, điểm P thuộc cạnh AC sao cho MN/AC, MP vuông góc AB.",
-    "figures": [
-      "H.3.2"
-    ],
-    "page_image": "output/pages/page_044.png",
-    "figure_images": [
-      "output/diagrams/H.3.2.png"
-    ],
-    "has_figure_images": true
-  },
-  {
-    "stt": 23,
-    "problem_id": "b1db674d-e490-4518-bd2f-81458ca7ca2d",
-    "title": "4.2",
-    "page": 48,
-    "content": "Tìm độ dài x trong các hình vẽ sau :",
-    "figures": [
-      "hình54"
-    ],
-    "page_image": "output/pages/page_048.png",
-    "figure_images": [
-      "output/diagrams/hình54.png"
-    ],
-    "has_figure_images": true
-  },
-  {
-    "stt": 24,
-    "problem_id": "8f327a6f-b050-4984-bb18-67e67d974b36",
+    "problem_id": "21633b8b-79ea-4416-a9d3-eba59782ed04",
     "title": "4.5",
     "page": 48,
-    "content": "Cho hình thang ABCD (AB song song DC). Một đường thẳng song song với hai đáy cắt các đoạn thẳng AD, AC, BC theo thứ tự tại M, L, N. Chứng minh rằng: AM/MD = BN/NC; SN E ca ND > NC' >) aD cB",
+    "content": "Cho hình thang ABCD (AB song song DC). Một đường thẳng song song với hai đáy cắt các đoạn thẳng AD, AC, BC theo thứ tự tại M, L, N. Chứng minh rằng: AM BN AM CN a) AM/MD = SN/E ca ND/NC > aD cB",
     "figures": [
       "H.5.17"
     ],
@@ -360,8 +330,8 @@
     "has_figure_images": true
   },
   {
-    "stt": 25,
-    "problem_id": "176759ff-c7f0-438b-ac58-8478bf773425",
+    "stt": 23,
+    "problem_id": "d65ded27-63db-4471-a2d2-6978df672541",
     "title": "4.6",
     "page": 48,
     "content": "Cho hình bình hành ABCD có M, N lần lượt là trung điểm của AB và CD. Gọi P, Q theo thứ tự là giao điểm của AN và CM với đường chéo BD. Chứng minh rằng: DP = PQ = QB.",
@@ -375,8 +345,8 @@
     "has_figure_images": true
   },
   {
-    "stt": 26,
-    "problem_id": "bdc9a4fa-a3c0-4f36-bdae-c77b6adfdfe3",
+    "stt": 24,
+    "problem_id": "00a2d5c7-ba5d-4350-abba-ab6c2ed6483a",
     "title": "4.8",
     "page": 50,
     "content": "Cho tam giác DEF. Gọi H, K, I lần lượt là các trung điểm của DE, DF và EF. Chứng minh rằng tứ giác HKI là hình bình hành.",
@@ -390,8 +360,8 @@
     "has_figure_images": true
   },
   {
-    "stt": 27,
-    "problem_id": "12a8bd87-3f0d-4e97-b8cf-7394b308456e",
+    "stt": 25,
+    "problem_id": "386a1d1f-e17f-40f9-8c1d-36c6f4586250",
     "title": "4.9",
     "page": 50,
     "content": "Cho tam giác ABC, các đường trung tuyến BD, CE cắt nhau tại G. Gọi I, K theo thứ tự là trung điểm của GB, GC. Chứng minh rằng: EI = DK.",
@@ -405,8 +375,8 @@
     "has_figure_images": true
   },
   {
-    "stt": 28,
-    "problem_id": "b7c2c809-f6bd-4ca2-ab93-0f3caff37f6b",
+    "stt": 26,
+    "problem_id": "3c657fb6-984f-4d17-8ff0-5105307ae487",
     "title": "4.10",
     "page": 50,
     "content": "Cho hình chữ nhật ABCD. Gọi D, E, F, G lần lượt là trung điểm các cạnh AB, BC, CD, DA. Tứ giác DEFG là hình gì? Vì sao?",
@@ -420,17 +390,19 @@
     "has_figure_images": true
   },
   {
-    "stt": 29,
-    "problem_id": "64725741-0e1d-408c-a1b0-ba58c4afe983",
-    "title": "5.9",
-    "page": 63,
-    "content": "Cho biểu đồ đoạn thẳng H.5.2.",
+    "stt": 27,
+    "problem_id": "6e5096da-e19e-4e3d-ac85-312a4e182283",
+    "title": "5.15",
+    "page": 68,
+    "content": "Cho hai biểu đồ Hình 5.6 và Hình 5.7.",
     "figures": [
-      "H.5.21"
+      "H.5.7",
+      "H.5.6"
     ],
-    "page_image": "output/pages/page_063.png",
+    "page_image": "output/pages/page_068.png",
     "figure_images": [
-      "output/diagrams/H.5.21.png"
+      "output/diagrams/H.5.7.png",
+      "output/diagrams/H.5.6.png"
     ],
     "has_figure_images": true
   }
