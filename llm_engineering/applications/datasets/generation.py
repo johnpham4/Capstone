@@ -231,12 +231,26 @@ Vietnamese → GMBL:
    - "góc ACB = 45" means angle at C → (uangle A C B)
 
    CRITICAL: Read instruction angles carefully - vertex is middle letter!
-   WRONG: (assert (on-seg O B C)) when O is circle
-   RIGHT: Only POINTS can be in on-seg - check variable type first
 
-3. SAME POINT in connecting
-   WRONG: (define l line (connecting C C))
-   RIGHT: Line needs TWO DIFFERENT points
+2. CIRCLES in on-seg - ABSOLUTELY FORBIDDEN
+   WRONG: (define O circle (excircle A B C))\n(assert (on-seg O B C))
+   WRONG: (define O circle (excircle A B C))\n(assert (on-seg O (connecting B C)))
+   WHY: O is CIRCLE type - NEVER EVER in on-seg
+   RIGHT: (define O circle (excircle A B C)) - that's ALL, NO assertions
+
+   "tiếp xúc với BC" = excircle IS tangent - NO on-seg needed
+   Check: If variable is circle, SKIP all on-seg for that variable
+
+3. SAME POINT in connecting - CRITICAL RULE
+   WRONG: "đường thẳng đi qua điểm B" → (define l line (connecting B B))
+   WHY: Need 2 DIFFERENT points for a line
+   RIGHT: SKIP entire phrase - don't create line
+
+   WRONG: (define m line (connecting B B))
+   WRONG: (define l line (connecting A A))
+   RIGHT: connecting needs points X Y where X ≠ Y
+
+   If instruction says only 1 point for line, SKIP completely
 
 4. WRONG SHAPE TYPES
    WRONG: (param (A B C D) triangle) for "hình thang"
@@ -251,9 +265,19 @@ Vietnamese → GMBL:
    WRONG: "vuông góc với AC" → (perp-at C (connecting A B))
    RIGHT: "vuông góc với AC" → (perp-at C (connecting A C))
 
-7. NESTED FUNCTIONS in assert
+7. NESTED FUNCTIONS in assert - NEVER DO THIS
+   WRONG: (assert (on-seg (foot O (connecting B C)) B C))
+   WHY: Can't use foot directly in assert
+   RIGHT: (define F point (foot O (connecting B C)))\\n(assert (on-seg F B C))
+
    WRONG: (assert (on-seg (inter-ll L1 L2) B C))
-   RIGHT: (define P point (inter-ll L1 L2))\n(assert (on-seg P B C))
+   RIGHT: (define P point (inter-ll L1 L2))\\n(assert (on-seg P B C))
+
+   RULE: ALWAYS define intersection/foot points in separate line FIRST
+   NEVER nest foot/inter-ll/midp inside assert
+
+   RULE: ALWAYS define intersection/foot points FIRST in separate line
+   NEVER nest foot/inter-ll/midp inside assert
 
 8. EXTRA CHARACTERS
    WRONG: ...answer ends with }]} or missing )
@@ -283,8 +307,15 @@ WRONG: {"variables": {...}, "params": [...]}
 
 === VERIFICATION CHECKLIST ===
 
-Before output, verify:
-[ ] ANGLES: If (right-tri B) used, SKIP "góc ABC = 90" from instruction
+Before output, check EVERY line:
+[ ] NESTED: NO foot/inter-ll inside assert - define point separately FIRST
+[ ] CIRCLES: If O is circle (excircle/incircle), NEVER EVER in on-seg
+[ ] "tiếp xúc BC" with excircle → define excircle only, NO on-seg
+[ ] SINGLE POINT: "đường thẳng đi qua B" alone → SKIP completely
+[ ] connecting: Must be (connecting X Y) where X ≠ Y, NOT (connecting B B)
+[ ] ANGLES: (right-tri B) → SKIP "góc ABC = 90" from instruction
+[ ] Each variable declared ONCE
+[ ] All parentheses balanced
 [ ] ANGLES: "góc BAC" = angle at A → (uangle B A C), middle letter is vertex
 [ ] Each variable declared ONCE only
 [ ] on-seg: first arg is POINT not circle
