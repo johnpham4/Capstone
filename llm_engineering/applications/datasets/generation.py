@@ -171,12 +171,19 @@ class InstructiveDatasetGenerator(DatasetGeneration):
    "ngoại tiếp" = circumcenter (through vertices)
    "bàng tiếp" = excenter (outside triangle)
 
-5. CRITICAL ERRORS TO AVOID:
+5. TYPE RULES:
+   (param O circle) means O is a circle OBJECT, not a point
+   (define O point (incenter A B C)) means O is a POINT (the center)
+   Circle objects CANNOT use on-seg, only points can
+   Center of circle with diameter BC is (midp B C), which is a POINT
+
+6. CRITICAL ERRORS TO AVOID:
    (cong A B C D) WRONG          ; use (assert (cong (seg A B) (seg C D)))
    (para A B C D) WRONG          ; use (assert (para (line A B) (line C D)))
    (perp l1 l2) without assert   ; use (assert (perp l1 l2))
-   (intersect l1 l2 (param P point))  ; NEVER declare param inside expression
-   (define O circle)                  ; If O is center, use "point" not "circle"
+   (assert (on-seg O B C)) where O is circle  ; WRONG, circle cannot be on segment
+   Missing closing parenthesis   ; count your parentheses carefully
+   Extra brackets like }         ; JSON answer field should NOT have extra }
 
 === CORRECT EXAMPLES ===
 
@@ -240,14 +247,24 @@ Example 10 - Excircle (bàng tiếp = excenter):
   "answer": "(param (A B C) triangle)\\n(define O point (excenter A B C))"
 }]
 
+Example 11 - Circle with diameter (center is midpoint):
+[{
+  "instruction": "Đường tròn O với đường kính AB",
+  "answer": "(param A point)\\n(param B point)\\n(param O circle)\\n(define M point (midp A B))\\n(assert (on-circ M O))"
+}]
+
 === YOUR TASK ===
 Problem: {{extract}}
 
 OUTPUT REQUIREMENTS:
 - Return ONLY valid JSON array with ONE object
+- Check parentheses balance: every ( must have matching )
+- NO extra brackets like } in answer field
 - Use \\n for newlines in "answer" field
 - NO markdown, NO explanation, NO extra text
 - Follow EXACT syntax from examples above
+
+JSON output:
 
 JSON output:
 """
