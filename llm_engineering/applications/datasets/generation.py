@@ -242,15 +242,22 @@ Vietnamese → GMBL:
    Check: If variable is circle, SKIP all on-seg for that variable
 
 3. SAME POINT in connecting - CRITICAL RULE
-   WRONG: "đường thẳng đi qua điểm B" → (define l line (connecting B B))
-   WHY: Need 2 DIFFERENT points for a line
-   RIGHT: SKIP entire phrase - don't create line
+   RULE: (connecting X Y) requires X ≠ Y (two DIFFERENT points)
 
-   WRONG: (define m line (connecting B B))
-   WRONG: (define l line (connecting A A))
-   RIGHT: connecting needs points X Y where X ≠ Y
+   WRONG: (connecting A A) - same point repeated
+   WRONG: (connecting B B), (connecting C C), etc. - ANY repeated point
+   RIGHT: SKIP if only 1 point available
 
-   If instruction says only 1 point for line, SKIP completely
+   Vietnamese "đường thẳng đi qua điểm B" = only 1 point → SKIP entirely
+
+   WRONG inter-ll: SAME LINE
+   RULE: (inter-ll L1 L2) requires L1 and L2 are DIFFERENT lines
+
+   WRONG: (inter-ll (connecting A B) (connecting B A)) - AB = BA
+   WRONG: (inter-ll (connecting X Y) (connecting Y X)) - reversed order = same line
+   RIGHT: Check if both connecting use same 2 points → SKIP inter-ll
+
+   Vietnamese "AB và BA cắt nhau" = same line → SKIP
 
 4. WRONG SHAPE TYPES
    WRONG: (param (A B C D) triangle) for "hình thang"
@@ -260,6 +267,16 @@ Vietnamese → GMBL:
 5. WRONG SYNTAX for segment equality
    WRONG: (assert (= |A B| |A C|))
    RIGHT: (assert (cong A B A C))
+
+   For congruent triangles "ABC ≅ DEF":
+   WRONG: (assert (cong A B C D E F))
+   RIGHT: (assert (cong A B D E))
+          (assert (cong B C E F))
+          (assert (cong A C D F))
+
+   RULE: cong takes EXACTLY 4 points (2 segments)
+   - (cong A B C D) means |AB| = |CD|
+   - NEVER use 6 points in one cong
 
 6. WRONG VARIABLES in connecting
    WRONG: "vuông góc với AC" → (perp-at C (connecting A B))
@@ -273,13 +290,24 @@ Vietnamese → GMBL:
    WRONG: (assert (on-seg (inter-ll L1 L2) B C))
    RIGHT: (define P point (inter-ll L1 L2))\\n(assert (on-seg P B C))
 
-   RULE: ALWAYS define intersection/foot points in separate line FIRST
-   NEVER nest foot/inter-ll/midp inside assert
-
    RULE: ALWAYS define intersection/foot points FIRST in separate line
    NEVER nest foot/inter-ll/midp inside assert
 
-8. EXTRA CHARACTERS
+8. WRONG CIRCLE FUNCTION ARGUMENTS
+   WRONG: (define O circle (incircle A A))
+   WRONG: (define O circle (excircle A B))
+   RIGHT: (define O circle (incircle A B C)) - needs 3 points
+   RIGHT: (define O circle (excircle A B C)) - needs 3 points
+
+   incircle/excircle/circumcircle require EXACTLY 3 points
+
+   WRONG TYPE:
+   WRONG: (define O point (excircle A B C)) - excircle returns CIRCLE
+   RIGHT: (define O circle (excircle A B C))
+   WRONG: (define O circle (excenter A B C)) - excenter returns POINT
+   RIGHT: (define O point (excenter A B C))
+
+9. EXTRA CHARACTERS
    WRONG: ...answer ends with }]} or missing )
    RIGHT: ...answer ends with ) - balance ALL parentheses
 
@@ -308,19 +336,19 @@ WRONG: {"variables": {...}, "params": [...]}
 === VERIFICATION CHECKLIST ===
 
 Before output, check EVERY line:
-[ ] NESTED: NO foot/inter-ll inside assert - define point separately FIRST
 [ ] CIRCLES: If O is circle (excircle/incircle), NEVER EVER in on-seg
 [ ] "tiếp xúc BC" with excircle → define excircle only, NO on-seg
-[ ] SINGLE POINT: "đường thẳng đi qua B" alone → SKIP completely
-[ ] connecting: Must be (connecting X Y) where X ≠ Y, NOT (connecting B B)
-[ ] ANGLES: (right-tri B) → SKIP "góc ABC = 90" from instruction
-[ ] Each variable declared ONCE
-[ ] All parentheses balanced
+[ ] CONNECTING: Must be (connecting X Y) where X ≠ Y, NOT same point
+[ ] "đường thẳng đi qua B" alone (only 1 point) → SKIP completely
+[ ] inter-ll SAME LINE: AB and BA = SAME LINE → SKIP inter-ll completely
+[ ] inter-ll: If 2 lines share same 2 points (reversed) → SKIP
+[ ] NESTED: NO foot/inter-ll inside assert - define point separately FIRST
+[ ] CONG: Triangle congruence needs 3 separate asserts, NOT 6 points in one
+[ ] INCIRCLE/EXCIRCLE: Need exactly 3 points - (incircle A B C)
+[ ] TYPES: excircle→circle, excenter→point, incircle→circle, incenter→point
+[ ] ANGLES: (right-tri B) → SKIP "góc ABC = 90" redundant assertions
 [ ] ANGLES: "góc BAC" = angle at A → (uangle B A C), middle letter is vertex
 [ ] Each variable declared ONCE only
-[ ] on-seg: first arg is POINT not circle
-[ ] connecting: TWO DIFFERENT points (not C C)
-[ ] No nested functions in assert - define first
 [ ] All parentheses balanced - count ( and )
 [ ] NO extra }} or }] at end
 
