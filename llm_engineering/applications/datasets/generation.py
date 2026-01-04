@@ -116,6 +116,9 @@ Any violation is considered an error.
                         sample_dict['image_dir'] = prompt.document.image_dir
 
                         # Now convert to Pydantic model
+                        if isinstance(sample_dict.get("answer"), list):
+                            sample_dict["answer"] = "\n".join(sample_dict["answer"])
+                        
                         try:
                             sample = InstructDatasetSample(**sample_dict)
                             samples.append(sample)
@@ -143,214 +146,253 @@ Any violation is considered an error.
 
 
 class InstructiveDatasetGenerator(DatasetGeneration):
-    prompt_template_str = """Convert Vietnamese geometry to GMBL (Geometry Meaning-Based Language).
+    prompt_template_str = """Convert Vietnamese geometry problems to GMBL (Geometry Meaning-Based Language).
 
-=== GMBL SYNTAX ===
+Bạn đang dịch ĐỀ BÀI / CAPTION HÌNH HỌC TIẾNG VIỆT sang GMBL.  
+Hãy đọc kỹ từng câu tiếng Việt, xác định đúng đối tượng hình học, quan hệ và ràng buộc,  
+sau đó chuyển đổi chính xác sang cú pháp GMBL bên dưới.
 
-Commands:
-(param <name> <type> <parameterization>) - declare geometric object
-(define <name> <type> <value>) - compute object from existing ones
-(assert <predicate>) - add constraint
+==============================
+=== CÁC LỆNH CƠ BẢN (GMBL) ===
+==============================
 
-Types: point, line, circle
+1. param  
+Dùng để KHAI BÁO một đối tượng hình học mới (tự do), có thể kèm tham số hóa.
 
-Common Functions:
-midp A B - midpoint of AB
-incenter/circumcenter/excenter A B C - triangle centers → point
-incircle/circumcircle/excircle A B C - triangle circles → circle
-foot A L1 - perpendicular foot from A to L1
-inter-ll L1 L2 - intersection of two lines
-connecting A B - line through A and B
-perp-at A L1 - line through A perpendicular to L1
-perp-bis A B - perpendicular bisector of AB
-diam A B - circle with diameter AB
+Cú pháp:
+- (param <tên> <kiểu> <tham_số_hóa>)
+- (param (<tên1> <tên2> ... <tênN>) <tham_số_hóa>)
 
-Predicates:
-cong A B C D - |AB| = |CD| (4 points)
-para L1 L2 - L1 ∥ L2 (2 lines)
-perp L1 L2 - L1 ⟂ L2 (2 lines)
-= N1 N2 - equality
-on-seg P A B - P on segment AB (3 args)
-on-circ P C - P on circle C (2 args)
+Ví dụ tiếng Việt → GMBL:
+- "Tam giác ABC" → (param (A B C) triangle)
+- "Điểm D nằm trên đoạn AB" → (param D point (on-seg A B))
+- "Đường thẳng d đi qua A" → (param d line (through A))
 
-Parameterizations:
-triangle - (param (A B C) triangle)
-(right-tri B) - right triangle at B
-  CRITICAL: ALREADY contains angle ABC = 90
-  NEVER add: (assert (= (uangle A B C) 90))
-  NEVER add: (assert (= (uangle C B A) 90))
-(iso-tri A) - isosceles with AB=AC
-  CRITICAL: ALREADY contains AB = AC constraint
-  NEVER add: (assert (cong A B A C))
-(acute-iso-tri A) - acute isosceles at A
-  CRITICAL: ALREADY contains AB = AC and acute angles
-(on-seg A B) - point on segment AB
-(on-circ O) - point on circle O
+ QUAN TRỌNG:
+- MỖI đối tượng chỉ được param MỘT LẦN
+- Nếu một điểm / đường / đường tròn đã param → TUYỆT ĐỐI KHÔNG param lại
+- Line BẮT BUỘC khai báo bằng param (KHÔNG dùng define cho line)
 
-Shape types:
-triangle, trapezoid, rectangle, square - use EXACT type from instruction
-WRONG: (param (A B C D) triangle) for trapezoid
-RIGHT: (param (A B C D) trapezoid)
+------------------------------------------------
 
-CRITICAL:
-- (uangle A B C) = angle at vertex B (middle letter)
-- Parameterizations have IMPLICIT constraints - check BEFORE asserting
-- Use cong A B C D for segment equality, NOT (= |A B| |C D|)
+2. define  
+Dùng để ĐỊNH NGHĨA một đối tượng được SUY RA từ các đối tượng đã tồn tại  
+(CHỈ dùng cho point / circle / number — KHÔNG dùng cho line)
 
-=== TRANSLATION RULES ===
+Cú pháp:
+- (define <tên> <kiểu> <giá_trị>)
 
-Vietnamese → GMBL:
-"tam giác ABC" → (param (A B C) triangle)
-"tam giác ABC vuông tại B" → (param (A B C) (right-tri B))
-"điểm D nằm trên AB" → (param D point (on-seg A B))
-"D là trung điểm AB" → (define D point (midp A B))
-"tâm nội tiếp I" → (define I point (incenter A B C))
-"đường tròn nội tiếp O" → (define O circle (incircle A B C))
-"đường thẳng qua A, B" → (define l line (connecting A B))
-"AB song song CD" → (assert (para (connecting A B) (connecting C D)))
-"AB vuông góc CD" → (assert (perp (connecting A B) (connecting C D)))
-"AB = CD" → (assert (cong A B C D))
-"góc ABC = 60" → (assert (= (uangle A B C) 60))
-"góc ABC = góc DEF" → (assert (= (uangle A B C) (uangle D E F)))
+Ví dụ:
+- "D là trung điểm AB" → (define D point (midp A B))
+- "O là tâm đường tròn ngoại tiếp tam giác ABC"
+  → (define O point (circumcenter A B C))
 
-=== CRITICAL ERRORS TO AVOID ===
+------------------------------------------------
 
-1. CONFLICTING ANGLES - HIGHEST PRIORITY
-   When instruction says "Tam giác ABC, góc ABC = 90" use (right-tri B)
-   Then SKIP "góc ABC = 90" - DON'T assert it again!
+3. assert  
+Dùng để THÊM RÀNG BUỘC hình học (mệnh đề đúng).
 
-   Example instruction: "Tam giác ABC, góc ABC = 90, góc BAC = 45"
-   WRONG: (param (A B C) (right-tri B))\n(assert (= (uangle A B C) 45))
-   WHY: (uangle A B C) is angle at B = 90 from right-tri, CAN'T be 45
-   RIGHT: (param (A B C) (right-tri B))\n(assert (= (uangle B A C) 45))
+Cú pháp:
+- (assert <mệnh_đề>)
 
-   RULE: (right-tri B) means angle at B = 90
-   - (uangle A B C) = 90 - NEVER assert this
-   - (uangle C B A) = 90 - NEVER assert this
-   - "góc BAC = 45" means angle at A → (uangle B A C)
-   - "góc ACB = 45" means angle at C → (uangle A C B)
+Ví dụ:
+- "AB song song CD"
+  → (assert (para lAB lCD))
+- "AB vuông góc CD"
+  → (assert (perp lAB lCD))
+- "AB = AC"
+  → (assert (cong A B A C))
 
-   CRITICAL: Read instruction angles carefully - vertex is middle letter!
+------------------------------------------------
 
-2. CIRCLES in on-seg - ABSOLUTELY FORBIDDEN
-   WRONG: (define O circle (excircle A B C))\n(assert (on-seg O B C))
-   WRONG: (define O circle (excircle A B C))\n(assert (on-seg O (connecting B C)))
-   WHY: O is CIRCLE type - NEVER EVER in on-seg
-   RIGHT: (define O circle (excircle A B C)) - that's ALL, NO assertions
+4. eval  
+Dùng để kiểm tra một mệnh đề trong mô hình cuối cùng (hiếm dùng khi dịch đề).
 
-   "tiếp xúc với BC" = excircle IS tangent - NO on-seg needed
-   Check: If variable is circle, SKIP all on-seg for that variable
+================
+=== KIỂU DỮ LIỆU
+================
+- point   : điểm
+- line    : đường thẳng
+- circle  : đường tròn
+- number  : số
 
-3. SAME POINT in connecting - CRITICAL RULE
-   RULE: (connecting X Y) requires X ≠ Y (two DIFFERENT points)
+====================================
+=== CÁCH HIỂU TIẾNG VIỆT → GMBL ===
+====================================
 
-   WRONG: (connecting A A) - same point repeated
-   WRONG: (connecting B B), (connecting C C), etc. - ANY repeated point
-   RIGHT: SKIP if only 1 point available
+A. ĐIỂM – POINT
 
-   Vietnamese "đường thẳng đi qua điểm B" = only 1 point → SKIP entirely
+- "Điểm A" → (param A point)
+- "D nằm trên đoạn AB" → (param D point (on-seg A B))
+- "E nằm trên đường thẳng d" → (param E point (on-line d))
+- "P nằm trên đường tròn (O)" → (param P point (on-circ C0))
 
-   WRONG inter-ll: SAME LINE
-   RULE: (inter-ll L1 L2) requires L1 and L2 are DIFFERENT lines
+------------------------------------------------
 
-   WRONG: (inter-ll (connecting A B) (connecting B A)) - AB = BA
-   WRONG: (inter-ll (connecting X Y) (connecting Y X)) - reversed order = same line
-   RIGHT: Check if both connecting use same 2 points → SKIP inter-ll
+B. ĐƯỜNG THẲNG – LINE
 
-   Vietnamese "AB và BA cắt nhau" = same line → SKIP
+- "Đường thẳng AB"
+  → (param lAB line (through A))
+     (assert (on-line B lAB))
 
-4. WRONG SHAPE TYPES
-   WRONG: (param (A B C D) triangle) for "hình thang"
-   RIGHT: (param (A B C D) trapezoid)
-   Read instruction: triangle(3), trapezoid/rectangle/square(4), pentagon(5)
+- "Đường thẳng đi qua A và B"
+  → (param l line (through A))
+     (assert (on-line B l))
 
-5. WRONG SYNTAX for segment equality
-   WRONG: (assert (= |A B| |A C|))
-   RIGHT: (assert (cong A B A C))
+ LUẬT CỰC KỲ QUAN TRỌNG:
+- TUYỆT ĐỐI KHÔNG dùng connecting
+- Line phải được param trước khi dùng trong para / perp / on-line
+- "Đường thẳng đi qua B" (chỉ 1 điểm) → KHÔNG VIẾT GMBL
+- Line đã tồn tại → KHÔNG khai báo lại
 
-   For congruent triangles "ABC ≅ DEF":
-   WRONG: (assert (cong A B C D E F))
-   RIGHT: (assert (cong A B D E))
-          (assert (cong B C E F))
-          (assert (cong A C D F))
+------------------------------------------------
 
-   RULE: cong takes EXACTLY 4 points (2 segments)
-   - (cong A B C D) means |AB| = |CD|
-   - NEVER use 6 points in one cong
+C. TAM GIÁC – TRIANGLE
 
-6. WRONG VARIABLES in connecting
-   WRONG: "vuông góc với AC" → (perp-at C (connecting A B))
-   RIGHT: "vuông góc với AC" → (perp-at C (connecting A C))
+- "Tam giác ABC"
+  → (param (A B C) triangle)
 
-7. NESTED FUNCTIONS in assert - NEVER DO THIS
-   WRONG: (assert (on-seg (foot O (connecting B C)) B C))
-   WHY: Can't use foot directly in assert
-   RIGHT: (define F point (foot O (connecting B C)))\\n(assert (on-seg F B C))
+- "Tam giác ABC vuông tại B"
+  → (param (A B C) (right-tri B))
 
-   WRONG: (assert (on-seg (inter-ll L1 L2) B C))
-   RIGHT: (define P point (inter-ll L1 L2))\\n(assert (on-seg P B C))
+ (right-tri B) ĐÃ BAO GỒM:
+- ∠ABC = 90
+- TUYỆT ĐỐI KHÔNG assert lại góc này
 
-   RULE: ALWAYS define intersection/foot points FIRST in separate line
-   NEVER nest foot/inter-ll/midp inside assert
+- "Tam giác ABC cân tại A"
+  → (param (A B C) (iso-tri A))
 
-8. WRONG CIRCLE FUNCTION ARGUMENTS
-   WRONG: (define O circle (incircle A A))
-   WRONG: (define O circle (excircle A B))
-   RIGHT: (define O circle (incircle A B C)) - needs 3 points
-   RIGHT: (define O circle (excircle A B C)) - needs 3 points
+ (iso-tri A) ĐÃ BAO GỒM AB = AC  
+→ KHÔNG assert (cong A B A C)
 
-   incircle/excircle/circumcircle require EXACTLY 3 points
+------------------------------------------------
 
-   WRONG TYPE:
-   WRONG: (define O point (excircle A B C)) - excircle returns CIRCLE
-   RIGHT: (define O circle (excircle A B C))
-   WRONG: (define O circle (excenter A B C)) - excenter returns POINT
-   RIGHT: (define O point (excenter A B C))
+D. GÓC – ANGLE
 
-9. EXTRA CHARACTERS
-   WRONG: ...answer ends with }]} or missing )
-   RIGHT: ...answer ends with ) - balance ALL parentheses
+QUY TẮC:
+- (uangle A B C) = ∠ABC (đỉnh là chữ GIỮA)
 
-=== OUTPUT FORMAT ===
+Ví dụ:
+- "góc ABC = 60"
+  → (assert (= (uangle A B C) 60))
 
-Return ONLY JSON array with this EXACT structure:
-[{
-  "instruction": "Copy Vietnamese text from input",
-  "answer": "GMBL code with \\n between lines"
-}]
+- "góc BAC = 45"
+  → (assert (= (uangle B A C) 45))
 
-RULES:
-- ONLY 2 fields: instruction and answer
-- NO extra fields (variables, params, etc.)
-- answer is plain text string with \\n separators
-- NO markdown, NO code blocks, NO explanation
+------------------------------------------------
 
-CORRECT:
-[{"instruction": "Tam giác ABC vuông tại B", "answer": "(param (A B C) (right-tri B))"}]
+E. TRUNG ĐIỂM – MIDPOINT
 
-CORRECT multi-line:
-[{"instruction": "Tam giác ABC, M trung điểm BC", "answer": "(param (A B C) triangle)\\n(define M point (midp B C))"}]
+- "D là trung điểm AB"
+  → (define D point (midp A B))
 
-WRONG: {"variables": {...}, "params": [...]}
+------------------------------------------------
 
-=== VERIFICATION CHECKLIST ===
+F. ĐƯỜNG TRÒN – CIRCLE
 
-Before output, check EVERY line:
-[ ] CIRCLES: If O is circle (excircle/incircle), NEVER EVER in on-seg
-[ ] "tiếp xúc BC" with excircle → define excircle only, NO on-seg
-[ ] CONNECTING: Must be (connecting X Y) where X ≠ Y, NOT same point
-[ ] "đường thẳng đi qua B" alone (only 1 point) → SKIP completely
-[ ] inter-ll SAME LINE: AB and BA = SAME LINE → SKIP inter-ll completely
-[ ] inter-ll: If 2 lines share same 2 points (reversed) → SKIP
-[ ] NESTED: NO foot/inter-ll inside assert - define point separately FIRST
-[ ] CONG: Triangle congruence needs 3 separate asserts, NOT 6 points in one
-[ ] INCIRCLE/EXCIRCLE: Need exactly 3 points - (incircle A B C)
-[ ] TYPES: excircle→circle, excenter→point, incircle→circle, incenter→point
-[ ] ANGLES: (right-tri B) → SKIP "góc ABC = 90" redundant assertions
-[ ] ANGLES: "góc BAC" = angle at A → (uangle B A C), middle letter is vertex
-[ ] Each variable declared ONCE only
-[ ] All parentheses balanced - count ( and )
-[ ] NO extra }} or }] at end
+- "Đường tròn ngoại tiếp tam giác ABC"
+  → (define C0 circle (circumcircle A B C))
+
+- "O là tâm đường tròn ngoại tiếp tam giác ABC"
+  → (define O point (circumcenter A B C))
+
+- "Đường tròn đường kính AB"
+  → (define C0 circle (diam A B))
+
+ QUAN TRỌNG:
+- incircle / excircle / circumcircle → CIRCLE
+- incenter / excenter / circumcenter → POINT
+- Circle TUYỆT ĐỐI KHÔNG dùng trong on-seg
+
+------------------------------------------------
+
+G. SONG SONG – VUÔNG GÓC
+
+- "AB song song CD"
+  → (assert (para lAB lCD))
+
+- "AB vuông góc CD"
+  → (assert (perp lAB lCD))
+
+------------------------------------------------
+H. ĐƯỜNG TRÒN TIẾP XÚC TAM GIÁC
+
+Nếu trong đề bài tiếng Việt có mô tả:
+- "đường tròn nội tiếp tam giác"
+- "đường tròn bàng tiếp tam giác"
+- "đường tròn ngoại tiếp tam giác"
+- hoặc bất kỳ câu nào nói rằng ĐƯỜNG TRÒN tiếp xúc / liên quan trực tiếp đến tam giác
+
+THÌ BẮT BUỘC PHẢI:
+1. Khai báo ĐIỂM TÂM bằng define (incenter / excenter / circumcenter)
+2. ĐỒNG THỜI khai báo ĐƯỜNG TRÒN tương ứng bằng define
+
+TUYỆT ĐỐI KHÔNG CHỈ KHAI BÁO MỖI ĐIỂM TÂM MÀ BỎ QUA ĐƯỜNG TRÒN.
+
+Ví dụ ĐÚNG:
+
+- "Đường tròn nội tiếp tam giác ABC, tâm I"
+  → (define I point (incenter A B C))
+    (define C0 circle (incircle A B C))
+
+- "Đường tròn bàng tiếp tam giác ABC"
+  → (define O point (excenter A B C))
+    (define C0 circle (excircle A B C))
+
+- "Đường tròn ngoại tiếp tam giác ABC"
+  → (define O point (circumcenter A B C))
+    (define C0 circle (circumcircle A B C))
+
+QUY TẮC CỨNG:
+- Nếu đề có ĐƯỜNG TRÒN → PHẢI có circle object
+- Điểm tâm CHỈ LÀ PHỤ, KHÔNG ĐƯỢC THAY THẾ ĐƯỜNG TRÒN
+- Không được bỏ circle trong mọi trường hợp có tiếp xúc tam giác
+===========================
+=== CÁC LỖI NGHIÊM CẤM ===
+===========================
+
+- KHÔNG dùng connecting
+- KHÔNG param lại đối tượng đã tồn tại
+- KHÔNG define line
+- KHÔNG nest (foot / inter-ll / midp) trong assert
+- cong CHỈ NHẬN 4 ĐIỂM
+- inter-ll cần 2 LINE KHÁC NHAU
+- Circle KHÔNG BAO GIỜ xuất hiện trong on-seg
+- Kiểm tra cân bằng ngoặc ()
+
+
+========================
+=== ĐỊNH DẠNG ĐẦU RA ===
+========================
+
+CHỈ trả về JSON array:
+
+[
+  {
+    "instruction": "Nguyên văn đề bài tiếng Việt",
+    "answer": "Mã GMBL với \n giữa các dòng"
+  }
+]
+
+QUY TẮC:
+- CHỈ 2 field: instruction, answer
+- KHÔNG markdown
+- KHÔNG giải thích
+- KHÔNG ký tự thừa
+
+
+Ví dụ hoàn hảo:
+
+1. instruction: Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC
+answer: (param (A B C) (iso-tri A))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))\n(define O point (circumcenter A B C))\n(define C0 circle (circumcircle A B C))
+
+2. instruction: Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn D với đường kính AB
+answer: (param (A B C) (iso-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(define D0 circle (diam A B))
+
+3. instruction: Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, góc ADE = 90
+answer: (param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))\n(define O point (excenter A B C))\n(define C0 circle (excircle A B C))
+
+...
 
 Input: {{extract}}
 
