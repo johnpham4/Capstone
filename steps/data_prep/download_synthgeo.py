@@ -9,7 +9,7 @@ from llm_engineering.applications.datasets.extraction_service import SynthGeoDat
 def download_synthgeo_dataset(
     repo_id: str = "JO-KU/SynthGeo228K",
     text_filename: str = "diagram_val.json",
-    split: str = "test",
+    split: str = "validation",
     local_dir: Optional[str] = None,
     limit: Optional[int] = None,
 ) -> Annotated[list[dict], "diagram_texts"]:
