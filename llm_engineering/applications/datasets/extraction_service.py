@@ -9,15 +9,7 @@ from loguru import logger
 
 
 class SynthGeoDatasetExtractor:
-    """
-    SynthGeo extractor (ZIP + STREAMING).
 
-    RULES (MATCH COLAB):
-    - diagram_texts SORT by image
-    - ZIP(streaming_dataset, diagram_texts)
-    - NO image map
-    - NO full dataset download
-    """
 
     def __init__(
         self,
