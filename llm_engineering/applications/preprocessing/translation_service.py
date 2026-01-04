@@ -80,7 +80,11 @@ class GeometryTranslator:
         # 7. NUMBERS
         ("two", "hai"),
         ("three", "ba"),
-        ("one", "một")
+        ("one", "một"),
+        
+        # 8. OTHERS
+        ("is", "là"),
+        ("are", "là")
     ]
 
     # Special geometry symbols
