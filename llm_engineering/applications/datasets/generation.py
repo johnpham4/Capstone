@@ -113,7 +113,9 @@ Any violation is considered an error.
 
                     # Inject image_dir into each dict BEFORE Pydantic validation
                     for sample_dict in sample_dicts:
-                        sample_dict['image_dir'] = prompt.document.image_dir
+                        img_dir = prompt.document.image_dir
+                        img_dir = "images" + img_dir.split("/")[1]
+                        sample_dict['image_dir'] = img_dir
 
                         # Now convert to Pydantic model
                         try:

@@ -4,7 +4,7 @@ import json
 from zenml import step
 from loguru import logger
 
-from llm_engineering.applications.datasets.extraction_service import SynthGeoDatasetExtractor
+from llm_engineering.applications.datasets.extraction import SynthGeoDatasetExtractor
 
 
 @step
