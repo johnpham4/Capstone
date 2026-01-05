@@ -1,0 +1,5 @@
+# Triangle with incenter and centroid
+(param (A B C) triangle)
+(define I point (incenter A B C))
+(define G point (centroid A B C))
+(define M point (midp B C))

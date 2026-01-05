@@ -39,7 +39,7 @@ def upload_to_huggingface(
         })
 
         train_dataset = Dataset.from_dict({
-            "image": [d["image_dir"] for d in train_data],
+            "image": [str(dataset_path / d["image_dir"]) for d in train_data],
             "instruction": [d["instruction"] for d in train_data],
             "output": [d["answer"] for d in train_data]
         }, features=features)
@@ -48,7 +48,7 @@ def upload_to_huggingface(
 
         if test_data:
             test_dataset = Dataset.from_dict({
-                "image": [d["image_dir"] for d in test_data],
+                "image": [str(dataset_path / d["image_dir"]) for d in test_data],
                 "instruction": [d["instruction"] for d in test_data],
                 "output": [d["answer"] for d in test_data]
             }, features=features)
@@ -71,12 +71,66 @@ def upload_to_huggingface(
         logger.info(f"Uploading {total_samples} samples (train: {len(dataset_dict['train'])}, test: {len(dataset_dict['test'])}) to {repo_id}")
 
     try:
+        # Create README with dataset card
+        readme_content = f"""---
+dataset_info:
+  features:
+  - name: image
+    dtype: image
+  - name: instruction
+    dtype: string
+  - name: output
+    dtype: string
+  splits:
+  - name: train
+    num_examples: {len(dataset_dict['train'])}
+"""
+        if 'test' in dataset_dict:
+            readme_content += f"""  - name: test
+    num_examples: {len(dataset_dict['test'])}
+"""
+
+        readme_content += """
+tags:
+- geometry
+- vision-language
+- multimodal
+task_categories:
+- visual-question-answering
+language:
+- en
+size_categories:
+- 1K<n<10K
+---
+
+# Geometry Dataset
+
+This dataset contains geometry problems with diagrams for vision-language model training.
+
+## Dataset Structure
+
+- **image**: Geometry diagram image
+- **instruction**: Problem statement or question
+- **output**: Answer or solution
+"""
+
         dataset_dict.push_to_hub(
             repo_id=repo_id,
             token=token,
         )
 
-        logger.success(f"Successfully uploaded dataset")
+        # Upload README separately
+        from huggingface_hub import HfApi
+        api = HfApi()
+        api.upload_file(
+            path_or_fileobj=readme_content.encode(),
+            path_in_repo="README.md",
+            repo_id=repo_id,
+            repo_type="dataset",
+            token=token,
+        )
+
+        logger.success(f"Successfully uploaded dataset with README")
         return total_samples
 
     except Exception as e:

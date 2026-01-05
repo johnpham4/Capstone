@@ -1,4 +1,3 @@
 parameters:
-  dataset_path: "dataset/geometry_figures"
-  repo_id: "minn4/geometry-figures"
-  split: "train"
+  dataset_dir: "dataset/data"
+  repo_id: "minn4/gmbl"

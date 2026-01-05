@@ -23,17 +23,15 @@ def save_prepared_dataset(
 
     output_file = output_path / output_filename
 
-    # Save the main dataset JSON
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(diagram_texts, f, ensure_ascii=False, indent=2)
 
     logger.success(f"Saved dataset to {output_file}")
 
-    # Always download and save images
     logger.info("Downloading and saving images...")
 
     extractor = SynthGeoDatasetExtractor(repo_id=repo_id)
-    image_dataset = extractor.load_images(split=image_split, streaming=True)
+    image_dataset = extractor.load_images(split=image_split)
 
     image_dir = output_path / "images"
     saved_count = extractor.save_images_with_captions(

@@ -4,7 +4,6 @@ from loguru import logger
 
 
 class GeometryTranslator:
-    """Service for translating geometry text from English to Vietnamese"""
 
     # Translation rules ordered by priority (process first to last)
     TRANSLATION_RULES: List[Tuple[str, str]] = [
@@ -81,7 +80,7 @@ class GeometryTranslator:
         ("two", "hai"),
         ("three", "ba"),
         ("one", "một"),
-        
+
         # 8. OTHERS
         ("is", "là"),
         ("are", "là")
@@ -95,15 +94,6 @@ class GeometryTranslator:
 
     @classmethod
     def translate(cls, text: str) -> str:
-        """
-        Translate geometry text from English to Vietnamese.
-
-        Args:
-            text: English geometry description
-
-        Returns:
-            Vietnamese translation
-        """
         if not text or not isinstance(text, str):
             logger.warning(f"Invalid input text: {text}")
             return ""
@@ -152,15 +142,7 @@ class GeometryTranslator:
 
     @classmethod
     def translate_batch(cls, texts: List[str]) -> List[str]:
-        """
-        Translate a batch of geometry texts.
 
-        Args:
-            texts: List of English geometry descriptions
-
-        Returns:
-            List of Vietnamese translations
-        """
         results = []
         for text in texts:
             try:

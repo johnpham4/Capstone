@@ -9,8 +9,6 @@ from loguru import logger
 
 
 class SynthGeoDatasetExtractor:
-
-
     def __init__(
         self,
         repo_id: str = "JO-KU/SynthGeo228K",
@@ -19,9 +17,7 @@ class SynthGeoDatasetExtractor:
         self.repo_id = repo_id
         self.local_dir = local_dir or "./data/SynthGeo228K"
 
-    
-    # 1. Download diagram metadata
-    
+
     def download_diagram_text(
         self,
         filename: str = "diagram_val.json",
@@ -40,27 +36,23 @@ class SynthGeoDatasetExtractor:
         with open(path, "r", encoding="utf-8") as f:
             diagram_texts = json.load(f)
 
-        # normalize caption + extract id
-        for d in diagram_texts:
-            if isinstance(d.get("caption"), list):
-                d["caption"] = d["caption"][0]
+        for diagram in diagram_texts:
+            if isinstance(diagram.get("caption"), list):
+                diagram["caption"] = diagram["caption"][0]
+                diagram["image"] = "images" + "/" + diagram["image"].split("/")[1]
+            match = re.search(r"\d+", diagram["image"])
+            diagram["id"] = int(match.group()) if match else None
 
-            match = re.search(r"\d+", d["image"])
-            d["id"] = int(match.group()) if match else None
-
-        # SORT
         diagram_texts = sorted(diagram_texts, key=lambda x: x["image"])
 
         logger.success(f"Loaded {len(diagram_texts)} diagram texts (sorted)")
+
+        Path.unlink(path)
         return diagram_texts
 
-    
-    # 2. Load images (STREAMING)
-    
     def load_images(
         self,
         split: str = "validation",
-        streaming: bool = True,
     ):
         logger.info(f"Loading {split} split (streaming)")
 
@@ -70,9 +62,6 @@ class SynthGeoDatasetExtractor:
             streaming=True
         )
 
-    
-    # 3. ZIP + SAVE
-    
     def save_images_with_captions(
         self,
         output_dir: str,
@@ -104,9 +93,6 @@ class SynthGeoDatasetExtractor:
         logger.success(f"Saved {saved} images")
         return saved
 
-    
-    # 4. Save JSON
-    
     def save_json(
         self,
         diagram_texts: List[Dict],
@@ -122,36 +108,3 @@ class SynthGeoDatasetExtractor:
         logger.success(f"Saved dataset JSON: {out}")
         return str(out)
 
-    
-    # 5. Full pipeline (ZIP version)
-    
-    def extract_and_process(
-        self,
-        text_filename: str = "diagram_val.json",
-        split: str = "validation",
-        output_dir: Optional[str] = None,
-        save_images: bool = True,
-        limit: Optional[int] = None
-    ):
-
-        diagram_texts = self.download_diagram_text(text_filename)
-
-        if limit:
-            diagram_texts = diagram_texts[:limit]
-
-        image_dataset = self.load_images(split)
-
-        base_dir = Path(output_dir or self.local_dir)
-
-        if save_images:
-            self.save_images_with_captions(
-                output_dir=str(base_dir / "images"),
-                diagram_texts=diagram_texts,
-                image_dataset=image_dataset,
-                limit=limit
-            )
-
-        json_path = base_dir / "processed_dataset.json"
-        self.save_json(diagram_texts, str(json_path))
-
-        return diagram_texts, str(json_path)
