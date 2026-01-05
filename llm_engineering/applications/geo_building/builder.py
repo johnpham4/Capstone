@@ -154,47 +154,100 @@ class SimpleBuilder:
             self.named_points[p] = SimplePoint(result.x[idx], result.x[idx+1])
 
     def sample_triangle(self, points, sampler, args):
-        """Sample a triangle"""
+        """Sample a triangle - initialized randomly, will be optimized later"""
+        # Khởi tạo ngẫu nhiên - giống TfOptimizer.mkvar()
+        # Thay vì hardcode, ta tạo tọa độ ngẫu nhiên
+        # Optimizer sẽ điều chỉnh sau để thỏa constraints
+
         if sampler == "triangle":
-            # Regular triangle
-            A = SimplePoint(-2, 0)
-            B = SimplePoint(2, 0)
-            C = SimplePoint(0, 2*math.sqrt(3))
-            self.named_points[points[0]] = A
-            self.named_points[points[1]] = B
-            self.named_points[points[2]] = C
+            # Tam giác thường: ngẫu nhiên hoàn toàn
+            for i, p in enumerate(points):
+                x = np.random.uniform(-2, 2)
+                y = np.random.uniform(-1, 3)
+                self.named_points[p] = SimplePoint(x, y)
+
         elif sampler == "right-tri":
-            # Right triangle
-            A = SimplePoint(-2, 0)
-            B = SimplePoint(2, 0)
-            C = SimplePoint(2, 3)
-            self.named_points[points[0]] = A
-            self.named_points[points[1]] = B
-            self.named_points[points[2]] = C
+            # Tam giác vuông tại điểm đầu tiên
+            # Khởi tạo gần đúng, optimizer sẽ tinh chỉnh
+            special_p = args[0] if args else points[0]
+            special_idx = points.index(special_p)
+
+            # Đỉnh vuông góc ở gốc tọa độ
+            self.named_points[points[special_idx]] = SimplePoint(0, 0)
+
+            # 2 đỉnh còn lại trên 2 trục
+            remaining = [p for i, p in enumerate(points) if i != special_idx]
+            self.named_points[remaining[0]] = SimplePoint(np.random.uniform(1, 3), 0)
+            self.named_points[remaining[1]] = SimplePoint(0, np.random.uniform(1, 3))
+
         elif sampler == "equi-tri":
-            # Equilateral triangle
-            A = SimplePoint(-2, 0)
-            B = SimplePoint(2, 0)
-            C = SimplePoint(0, 2*math.sqrt(3))
-            self.named_points[points[0]] = A
-            self.named_points[points[1]] = B
-            self.named_points[points[2]] = C
+            # Tam giác đều: khởi tạo gần đúng
+            # 2 đỉnh đáy ngang, đỉnh trên cao sqrt(3)/2 * cạnh_đáy
+            base_y = np.random.uniform(-1, 0)
+            base_left = np.random.uniform(-2, -1)
+            base_right = np.random.uniform(1, 2)
+            base_len = base_right - base_left
+
+            self.named_points[points[0]] = SimplePoint(base_left, base_y)
+            self.named_points[points[1]] = SimplePoint(base_right, base_y)
+            self.named_points[points[2]] = SimplePoint(
+                (base_left + base_right) / 2,
+                base_y + base_len * math.sqrt(3) / 2
+            )
+
         elif sampler == "iso-tri":
-            # Isosceles triangle
-            A = SimplePoint(0, 3)
-            B = SimplePoint(-2, 0)
-            C = SimplePoint(2, 0)
-            self.named_points[points[0]] = A
-            self.named_points[points[1]] = B
-            self.named_points[points[2]] = C
+            # Tam giác cân: đỉnh đặc biệt trên đường cao
+            special_p = args[0] if args else points[0]
+            special_idx = points.index(special_p)
+
+            # Cạnh đáy ngang
+            base_y = np.random.uniform(-1, 0)
+            base_left = np.random.uniform(-2, -1)
+            base_right = np.random.uniform(1, 2)
+            center_x = (base_left + base_right) / 2
+
+            remaining = [p for i, p in enumerate(points) if i != special_idx]
+            self.named_points[remaining[0]] = SimplePoint(base_left, base_y)
+            self.named_points[remaining[1]] = SimplePoint(base_right, base_y)
+
+            # Đỉnh cân nằm trên đường cao
+            self.named_points[points[special_idx]] = SimplePoint(
+                center_x,
+                base_y + np.random.uniform(2, 3)
+            )
+
+        elif sampler == "acute-tri":
+            # Tam giác nhọn: tất cả góc < 90 độ
+            # Khởi tạo trong hình tròn để tránh góc tù
+            for i, p in enumerate(points):
+                angle = (i * 120 + np.random.uniform(-30, 30)) * math.pi / 180
+                radius = np.random.uniform(1.5, 2.5)
+                self.named_points[p] = SimplePoint(
+                    radius * math.cos(angle),
+                    radius * math.sin(angle)
+                )
+
+        elif sampler == "acute-iso-tri":
+            # Tam giác cân nhọn
+            special_p = args[0] if args else points[0]
+            special_idx = points.index(special_p)
+
+            base_y = 0
+            base_width = np.random.uniform(2, 3)
+
+            remaining = [p for i, p in enumerate(points) if i != special_idx]
+            self.named_points[remaining[0]] = SimplePoint(-base_width/2, base_y)
+            self.named_points[remaining[1]] = SimplePoint(base_width/2, base_y)
+            self.named_points[points[special_idx]] = SimplePoint(
+                0,
+                base_y + np.random.uniform(1, 2)
+            )
         else:
-            # Default triangle
-            A = SimplePoint(-1.5, 0)
-            B = SimplePoint(1.5, 0)
-            C = SimplePoint(0, 2.5)
-            self.named_points[points[0]] = A
-            self.named_points[points[1]] = B
-            self.named_points[points[2]] = C
+            # Default: ngẫu nhiên hoàn toàn
+            for p in points:
+                x = np.random.uniform(-2, 2)
+                y = np.random.uniform(-1, 3)
+                self.named_points[p] = SimplePoint(x, y)
 
     def parameterize(self, instr):
         """Parameterize a point or line"""
