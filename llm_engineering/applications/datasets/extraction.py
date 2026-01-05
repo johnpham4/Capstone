@@ -71,6 +71,7 @@ class SynthGeoDatasetExtractor:
     ) -> int:
 
         output_path = Path(output_dir)
+        self.img_dir = output_path
         output_path.mkdir(parents=True, exist_ok=True)
 
         saved = 0
@@ -100,6 +101,7 @@ class SynthGeoDatasetExtractor:
     ) -> str:
 
         out = Path(output_file)
+        self.json_path = out
         out.parent.mkdir(parents=True, exist_ok=True)
 
         with open(out, "w", encoding="utf-8") as f:
@@ -107,4 +109,21 @@ class SynthGeoDatasetExtractor:
 
         logger.success(f"Saved dataset JSON: {out}")
         return str(out)
+
+    @classmethod
+    def filter_triangles(cls, diagram_texts: List[Dict]) -> List[Dict]:
+        """Filter diagrams to keep only triangles (remove circles, quadrilaterals, etc.)"""
+        pattern = r"(cir|excenter|square|incenter|excenter|trapezoid|quadrilateral|rectangle|parallelogram|hexagon|polygon)"
+
+        triangle_texts = []
+        for diagram in diagram_texts:
+            match = re.search(pattern, diagram["caption"], re.IGNORECASE)
+            if match is None:
+                triangle_texts.append(diagram)
+
+        return triangle_texts
+
+
+
+
 

@@ -30,6 +30,7 @@ class GeometryTranslator:
         ("incenter", "tâm đường tròn nội tiếp"),
         ("excircle", "đường tròn bàng tiếp"),
         ("excenter", "tâm đường tròn bàng tiếp"),
+        ("orthocenter", "trực tâm"),
         ("parallelogram", "hình bình hành"),
         ("quadrilateral", "tứ giác"),
         ("rectangle", "hình chữ nhật"),
