@@ -1,0 +1,574 @@
+[
+  {
+    "stt": 1,
+    "problem_id": "948d8671-db39-45e2-85fe-3bfae0299396",
+    "title": "2.12",
+    "page": 24,
+    "content": "Từ một khối lập phương có độ dài cạnh là x + 3 (cm), ta cắt bỏ một khối lập phương có độ dài x - 1(cm) (H.2.3). Tính thẻ tích phần còn lại, viết kết quả dưới dạng đa thức.",
+    "figures": [
+      "H.2.3"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_024.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.2.3.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 2,
+    "problem_id": "00c65ca6-be7e-48f3-99b8-fa2af83b1ad9",
+    "title": "2.24",
+    "page": 30,
+    "content": "Từ một miếng bia có dạng hình tròn (H.2.4) với bán kính R(cm), người ta khoét một hình tròn ở giữa có bán kính r(cm),r < R.",
+    "figures": [
+      "H.2.4"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_030.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.2.4.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 3,
+    "problem_id": "b53b38bf-a63c-4443-936b-be438aa3a184",
+    "title": "3.5",
+    "page": 32,
+    "content": "Cho tứ giác ABCD với AB = BC, CD = DA, B = 100°, D = 120°. Tinh A va C.",
+    "figures": [
+      "H.3.6"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_032.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.6.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 4,
+    "problem_id": "0ccd2deb-9958-4eed-a0c8-ac733009254a",
+    "title": "3.9",
+    "page": 34,
+    "content": "Cho tam giác ABC vuông cân tại đỉnh A. Ghép thêm vào phía ngoài tam giác đó tam giác BCD vuông cân tại đỉnh 8. Chứng minh tứ giác ABDC là một hình thang vuông (hình thang có một cạnh bên vuông góc với hai đáy).",
+    "figures": [
+      "H.3.7"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_034.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.7.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 5,
+    "problem_id": "fa47ac63-cfbb-4311-9aa6-2b3666a56304",
+    "title": "3.10",
+    "page": 34,
+    "content": "Cho hình thang cân ABCD với hai đường thắng chứa hai cạnh bên AD, BC cắt nhau tai S. Goi O là giao điểm của hai đường chéo AC và BD. Chứng minh đường thẳng SO di qua trung điểm của AB, đi qua trung điểm của CD.",
+    "figures": [
+      "H.3.8"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_034.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.8.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 6,
+    "problem_id": "56d2eaff-97c0-4435-ae73-cacc4294ef4f",
+    "title": "3.11",
+    "page": 34,
+    "content": "Cho hình thang cân ABC? với hai đáy AB và CD, đường chéo AC vuông góc với cạnh bên AD, tia CA là tia phân giác của góc Œ. Tinh chu vi của hình thang đó biết rằng AÐ = 2 cm.",
+    "figures": [
+      "H.3.9"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_034.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.9.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 7,
+    "problem_id": "2ba241b3-d22c-4068-bc95-4668e2a278d8",
+    "title": "3.12",
+    "page": 37,
+    "content": "Xét hai hình bình hành Ä⁄NBA và MNCB.",
+    "figures": [
+      "H.3.10a"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_037.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.10a.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 8,
+    "problem_id": "8025847e-66f1-4c76-ab33-789d47c2f631",
+    "title": "3.13",
+    "page": 37,
+    "content": "Chứng minh rằng tổng hai cạnh bên của hình thang lớn hơn hiệu hai đáy của nó.",
+    "figures": [
+      "H.3.11"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_037.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.11.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 9,
+    "problem_id": "ed862555-6b5a-4f37-9322-64b80bebb439",
+    "title": "3.14",
+    "page": 37,
+    "content": "Cho hình bình hành ABCO với góc A tu. Dựng bên ngoài hình bình hành đó các tam giác đều ABE và DAF. Chứng minh rằng tam giác CEF là tam giác đều (Gợi ý: Chứng minh các tam giác AEF, DCF, BEC bằng nhau).",
+    "figures": [
+      "H.3.12"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_037.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.12.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 10,
+    "problem_id": "a7437b22-9eaa-454d-9eb0-97079b537159",
+    "title": "3.16",
+    "page": 37,
+    "content": "Cho hình thang ABCD với hai đáy AB, CD. Gọi K là trung điểm của BC. Lay điểm A', Ð' sao cho K là trung điểm của AA' và DD'. Hỏi tứ giác A2A'ÐD là hinh gi? Vi sao?",
+    "figures": [
+      "H.3.13"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_037.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.13.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 11,
+    "problem_id": "3ee13ac2-2da4-484b-99fa-6513e6ed159a",
+    "title": "3.17",
+    "page": 37,
+    "content": "Cho hai điểm phân biệt A, B nằm bên trong góc xOy (không bẹt). Tìm điểm D thuộc tia Ox, điểm E thuộc tia Oy sao cho ADÐBE là một hình bình hành.",
+    "figures": [
+      "H.3.14"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_037.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.14.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 12,
+    "problem_id": "17a946a6-ec60-4f8c-b0b5-409e8bdf7b66",
+    "title": "3.18",
+    "page": 37,
+    "content": "Cho hình bình hành ABCØ. Lấy các điểm E thuộc A8, F thuộc CD sao cho AE = CF; lấy các điểm G thuộc BC, H thuộc AD sao cho BG = DH. Chứng minh EGFH là một hình bình hành và các đường thẳng AC, BD, EF, GH đồng quy.",
+    "figures": [
+      "H.3.15"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_037.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.15.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 13,
+    "problem_id": "0831a512-4ebd-4938-a574-624e877b6573",
+    "title": "3.19",
+    "page": 37,
+    "content": "Cho tam giác ABC không vuông tại A. Dựng bên ngoài tam giác đó hai tam giác ABD, ACE vuông cân tại đỉnh A rồi dựng hình bình hành AE1Đ. a) Chứng minh hai tam giác ABC và DAI bằng nhau. b) Chứng minh đường thẳng AI vuông góc với BC. c) Chứng minh đường thẳng BE vuông góc với đường thẳng CÐ. d) Gọi K là trung điểm của BD, chứng minh KC = Ki và KC vuông góc với KI. (Gợi ý: Chứng minh hai tam giác AKi và BKC bằng nhau).",
+    "figures": [
+      "H.3.16"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_037.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.16.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 14,
+    "problem_id": "e47f2b1d-252c-4c61-beb0-bd4acdd54a30",
+    "title": "3.21",
+    "page": 39,
+    "content": "Hai đường trung tuyến BM, CN của tam giác ABC cân tại A cắt nhau tại G. Gọi H, K lần lượt là điểm sao cho trung điểm của GH là M, trung điểm của GK là N. Chứng minh tứ giác BCHK là hình chữ nhật.",
+    "figures": [
+      "H.3.18"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_039.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.18.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 15,
+    "problem_id": "65a1409d-d707-4ed5-97ac-81b304ad7e78",
+    "title": "3.22",
+    "page": 39,
+    "content": "1. Sử dụng tính chất tổng các góc của một tam giác bằng 180° để chứng minh:",
+    "figures": [
+      "H.3.19"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_039.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.19.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 16,
+    "problem_id": "ce66bb78-b397-4d04-a54a-47d4cef3d65e",
+    "title": "3.24",
+    "page": 42,
+    "content": "Gọi O là giao điểm hai đường chéo của hình bình hành ABCDØ. Với mỗi tam giác OAB, OBC, OCD, ODA, xét giao điểm ba đường phân giác của tam giác đó. Tại sao bốn điểm vừa vẽ là bốn đỉnh của một hình thoi?",
+    "figures": [
+      "H.3.22"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_042.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.22.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 17,
+    "problem_id": "78345a30-c113-4a82-a2d4-1663dcb1cf3d",
+    "title": "3.25",
+    "page": 42,
+    "content": "Cho hình vuông ABCD. Với điểm M nằm giữa C va D, ké tia phân giác của góc DAM; nó cắt CD ở N. Đường thẳng qua N vuông góc với AM cắt BC ở P. Tính số đo của góc NAP.",
+    "figures": [
+      "H.3.23"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_042.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.23.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 18,
+    "problem_id": "cffd61de-acb9-454c-bdee-c4d0b95674c3",
+    "title": "3.26",
+    "page": 42,
+    "content": "Cho hình vuông AB8CD với tâm O và có cạnh bằng 2 cm. Hai tia Ox, Oy tạo thành góc vuông. Tính diện tích của phần hình vuông nằm bên trong góc xÓy.",
+    "figures": [
+      "H.3.24"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_042.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.24.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 19,
+    "problem_id": "db7e6a4f-a61f-4434-a899-d914dbcf9388",
+    "title": "3.27",
+    "page": 42,
+    "content": "Xét tam giác ABC vuông cân tại A. Lấy trên cạnh 8C hai điểm D, E sao cho BD= DE= EC. Lẫy các điểm F, G lần lượt thuộc cạnh AC, AB sao cho FE, GD vuông góc với BC.",
+    "figures": [
+      "H.3.25"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_042.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.25.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 20,
+    "problem_id": "e29c8c4e-ac06-4d11-8e8c-407a4ebb71a4",
+    "title": "3.28",
+    "page": 44,
+    "content": "Cho tam giác ABC. Với mỗi điểm M nằm giữa B và C, lấy điểm N thuộc cạnh AB, điểm P thuộc cạnh AC sao cho MN / AC, MP (¡ AB.",
+    "figures": [
+      "H.3.26"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_044.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.3.26.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 21,
+    "problem_id": "da7fc609-0b26-4b52-91a4-5a6540ea9097",
+    "title": "4.2",
+    "page": 48,
+    "content": "Tìm độ dài x trong các hình vẽ sau (H.5.4):",
+    "figures": [
+      "H.5.4"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_048.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.4.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 22,
+    "problem_id": "b890c835-0268-4f79-830f-5771b3204ec7",
+    "title": "4.3",
+    "page": 48,
+    "content": "Tìm độ dài x trong Hình 5.5:",
+    "figures": [
+      "H.5.5"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_048.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.5.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 23,
+    "problem_id": "77520807-e0aa-491d-9ecb-53a5225206c5",
+    "title": "4.4",
+    "page": 48,
+    "content": "Cho Hình 5.6. Chứng minh rằng AB / KI.",
+    "figures": [
+      "H.5.6"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_048.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.6.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 24,
+    "problem_id": "861b9177-f5fa-4357-9755-c549fded4907",
+    "title": "4.5",
+    "page": 48,
+    "content": "Cho hình thang ABCD (AB ⁄ DC). Một đường thẳng song song với hai đáy cắt các đoạn thẳng AD, AC, BC theo thứ tự tại M, |, N. Chứng minh rằng: AM BN AM CN a) ——=——_; SN E ca ND > NC’ >) aD cB",
+    "figures": [
+      "H.5.17"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_048.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.17.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 25,
+    "problem_id": "be32dff0-0d8e-4ec3-b7fa-47ce06e9a77a",
+    "title": "4.6",
+    "page": 48,
+    "content": "Cho hình bình hành ABCD có M,N lần lượt là trung điểm của AB và CD. Gọi P, Q theo thứ tự là giao điểm của AN và CM với đường chéo BD. Chứng minh rằng: DP = PQ = QB.",
+    "figures": [
+      "H.5.18"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_048.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.18.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 26,
+    "problem_id": "8c250731-9029-490a-966e-f6046a0cce8c",
+    "title": "4.8",
+    "page": 50,
+    "content": "Cho tam giác DEF. Gọi H, K, ¡ lần lượt là các trung điểm của DE, DF va EF. Chứng minh rằng tứ giác /E là hình bình hành.",
+    "figures": [
+      "H.5.19"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_050.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.19.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 27,
+    "problem_id": "bba2ecea-b0b9-41fd-bed4-104cd3e15703",
+    "title": "4.9",
+    "page": 50,
+    "content": "Cho tam giác ABC, các đường trung tuyến BD, CE cat nhau tai G. Gọi |, K theo thứ tự là trung điểm của GB, GC. Chứng minh rằng: EI = ÐK.",
+    "figures": [
+      "H.5.20"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_050.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.20.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 28,
+    "problem_id": "a9a1982e-f3ba-4904-a41a-cb1715e06a83",
+    "title": "4.10",
+    "page": 50,
+    "content": "Cho hình chữ nhật ABCD. Gọi D, E, F G lần lượt là trung diém cac canh AB, BC, CD, DA. Tứ giác DEFG là hình gì? Vì sao?",
+    "figures": [
+      "H.5.21"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_050.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.21.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 29,
+    "problem_id": "33c73c62-d1f9-47c7-a299-da02628f68b8",
+    "title": "5.7",
+    "page": 62,
+    "content": "Biểu đồ Hình 5.1. cho biết tỉ lệ độc giả của báo điện tử Vnexpress ủng hộ các phương án thiết kế cầu Tràn Hưng Đạo, Hà Nội (Phương án 1: Cầu dằm — cáp hỗn hợp; Phương án 2: Cầu vòm kết hợp dây văng; Phương án 3: Cầu dầm hộp bê tông cốt thép dự ứng lực kết hợp trụ tháp). Biết rằng có 7 754 lượt độc giả tham gia bình chọn.",
+    "figures": [
+      "H.5.1"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_062.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.1.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 30,
+    "problem_id": "36d6087f-2a10-47d2-82b6-e92beb10bee7",
+    "title": "5.9",
+    "page": 63,
+    "content": "Cho biểu đồ đoạn thẳng Hình 5.2.",
+    "figures": [
+      "H.5.2"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_063.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.2.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 31,
+    "problem_id": "342454b3-d388-4a5b-a88a-a58cc8d50cba",
+    "title": "5.15",
+    "page": 68,
+    "content": "Cho hai biểu đồ Hình 5.6. và Hình 5.7.",
+    "figures": [
+      "H.5.6",
+      "H.5.7"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_068.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.6.png",
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.7.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 32,
+    "problem_id": "1c10ccbf-2297-4622-b83a-6e381f983bc3",
+    "title": "5.16",
+    "page": 68,
+    "content": "Một người sử dụng ứng dụng đếm số bước chân trên điện thoại. Sau một thời gian anh ta vào kiểm tra ứng dụng thì thấy có biểu đồ Hình 5.8.",
+    "figures": [
+      "H.5.8"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_068.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.8.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 33,
+    "problem_id": "534122a2-2191-4a76-9d1a-cecce8995cda",
+    "title": "5.17",
+    "page": 69,
+    "content": "Cho biểu đồ Hình 5.9.",
+    "figures": [
+      "H.5.9"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_069.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.9.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 34,
+    "problem_id": "0a01ea98-de6e-4748-93c6-5015d69895d7",
+    "title": "5.18",
+    "page": 70,
+    "content": "Cho biểu đồ Hình 5.10.",
+    "figures": [
+      "H.5.10"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_070.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.10.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 35,
+    "problem_id": "cebb4d6a-daef-411e-9c82-75a97f58def5",
+    "title": "5.19",
+    "page": 71,
+    "content": "Biểu đồ Hình 5.12. cho biết số bàn thắng ghi được của chủ nhân chiếc giày vàng tại giải ngoại hạng Anh và La Liga (giải vô địch quốc gia Tây Ban Nha) †rong một số năm gan day.",
+    "figures": [
+      "H.5.12"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_071.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.12.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 36,
+    "problem_id": "72dd017e-05eb-4e17-9a2d-80cfa0f78d26",
+    "title": "5.21",
+    "page": 74,
+    "content": "Biểu đồ Hình 5.13. biểu diễn xếp hạng thế giới của đội tuyển bóng đá nam Việt Nam và Thái Lan vào tháng 10 trong 10 năm từ năm 2013 đến năm 2022.",
+    "figures": [
+      "H.5.13"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_074.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.13.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 37,
+    "problem_id": "f7d48ef9-f0b8-4aba-85bb-e6da8ec796fe",
+    "title": "5.22",
+    "page": 74,
+    "content": "Cho biểu đồ Hình 5.14.",
+    "figures": [
+      "H.5.14"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_074.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.14.png"
+    ],
+    "has_figure_images": true
+  },
+  {
+    "stt": 38,
+    "problem_id": "16da6bfe-454b-4d48-a7a8-1c798df29fc2",
+    "title": "5.23",
+    "page": 75,
+    "content": "Biểu đồ Hình 5.16 cho biết kinh phí chính phủ Mỹ, Anh chi cho hệ thống chăm sóc sức khoẻ, bảo hiểm sức khoẻ xã hội bao gồm cả bảo hiểm sức khoẻ bắt buộc (gọi chung là chăm sóc sức khoẻ) từ năm 1960 đến 2020.",
+    "figures": [
+      "H.5.16"
+    ],
+    "page_image": "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/pages/page_075.png",
+    "figure_images": [
+      "output/sach-bai-tap-toan-8-tap-1-ket-noi-tri-thuc-voi-cuoc-song_262202515/diagrams/H.5.16.png"
+    ],
+    "has_figure_images": true
+  }
+]
