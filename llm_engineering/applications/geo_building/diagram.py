@@ -28,9 +28,12 @@ class Diagram(collections.namedtuple("Diagram", [
         fig, ax = plt.subplots()
 
         if xs and ys:
-            ax.scatter(xs, ys)
+            ax.scatter(xs, ys, s=30, zorder=5)  # Điểm nhỏ hơn (s=30 thay vì default 20)
             for i, n in enumerate(names):
-                ax.annotate(str(n), (xs[i], ys[i]))
+                # Offset text lên trên và sang phải một chút
+                ax.annotate(str(n), (xs[i], ys[i]),
+                           xytext=(5, 5), textcoords='offset points',
+                           fontsize=12, fontweight='bold')
 
         # Plot unnamed points
         if unnamed_points:
@@ -40,8 +43,10 @@ class Diagram(collections.namedtuple("Diagram", [
 
         # Plot segments (triangle edges)
         for (p1, p2), c in zip(self.segments, self.seg_colors):
-            plt.plot([p1.x, p2.x], [p1.y, p2.y], c=c)
+            plt.plot([p1.x, p2.x], [p1.y, p2.y], c=c, linewidth=2, zorder=3)
 
+        # Tắt axis và grid
+        plt.axis('off')
         plt.axis('scaled')
         plt.axis('square')
 
@@ -66,41 +71,16 @@ class Diagram(collections.namedtuple("Diagram", [
         ax.set_xlim([lo_x_lim, hi_x_lim])
         ax.set_ylim([lo_y_lim, hi_y_lim])
 
-        def plot_line(L, name=None):
-            """Plot a line given in normal form"""
-            (nx, ny), r = L
-            if nx == 0:
-                l_angle = math.pi / 2
-            else:
-                l_angle = math.atan(ny / nx) % math.pi
+        # KHÔNG vẽ named lines (đường thẳng vô hạn) - chỉ vẽ segments
+        # Commented out line plotting
+        # def plot_line(L, name=None):
+        #     ...
 
-            if l_angle == 0:
-                if name is not None:
-                    plt.axvline(x=r, label=name)
-                else:
-                    plt.axvline(x=r, c="black", alpha=UNNAMED_ALPHA)
-            else:
-                slope = -1 / math.tan(l_angle)
-                intercept = r / math.sin(l_angle)
-                (lo_x_lim, hi_x_lim) = ax.get_xlim()
-                x_vals = np.array((lo_x_lim - 0.2, hi_x_lim + 0.2))
-                y_vals = intercept + slope * x_vals
-                if name is not None:
-                    plt.plot(x_vals, y_vals, label=name)
-                else:
-                    plt.plot(x_vals, y_vals, c="black", alpha=UNNAMED_ALPHA)
-
-        # Plot unnamed lines
-        for L in unnamed_lines:
-            plot_line(L)
-
-        # Plot named lines
-        for l, L in self.named_lines.items():
-            l_name = l.val
-            plot_line(L, l_name)
-
-        if self.named_lines:
-            plt.legend()
+        # Skip plotting lines - only plot segments above
+        # for L in unnamed_lines:
+        #     plot_line(L)
+        # for l, L in self.named_lines.items():
+        #     plot_line(L, l.val)
 
         if return_fig:
             return plt

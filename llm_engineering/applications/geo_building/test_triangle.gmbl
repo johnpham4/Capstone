@@ -1,2 +1,0 @@
-# Simple example: equilateral triangle
-(param (A B C) equi-tri)
