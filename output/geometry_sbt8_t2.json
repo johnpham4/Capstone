@@ -1,0 +1,128 @@
+[
+    {
+        "caption":[
+            "Quan sát Hình 7. Cho biết AB = 5 cm, AC = 6 cm, AD - 7.5 cm và BD song song CE. Tính độ dài DE."
+        ],
+        "image":"train/51.png", 
+        "imageid":"51"
+    },
+    {
+        "caption":[
+            "Cho tứ giác ABCD có điểm E thuộc AC. Kẻ EF song song AB (F thuộc BC), EI song song CD (I thuộc AD). Chứng minh EF/AB + EI/CD = 1."
+        ],
+        "image":"train/52.png",
+        "imageid":"52"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC có BC = 4 cm. Trên cạnh BC lấy điểm M sao cho CM = 1 cm. Trên cạnh AC lấy điểm N sao cho CN/AN = 1/3. Chứng minh MN song song AB."
+        ],
+        "image":"train/53.png",
+        "imageid":"53"
+    },
+    {
+        "caption":[
+            "Trong hình 10, cho biết QR song song NP và MQ = 10 cm, QN = 5 cm, RP = 6 cm. Tính độ dài MR."
+        ],
+        "image":"train/54.png",
+        "imageid":"54"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC và điểm D trên cạnh BC sao cho BD/BC = 3/4, điểm E trên đoạn AD sao cho AE/AD = 1/3. Gọi K là giao điểm của BE và AC. Tính tỉ số AK/KC."
+        ],
+        "image":"train/55.png",
+        "imageid":"55"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC vuông tại A có AB = 5 cm và BC = 13 cm. Qua trung điểm M của AB, vẽ một đường thẳn song song với AC cắt BC tại N (Hình 4). Tính độ dài MN."
+        ],
+        "image":"train/56.png",
+        "imageid":"56"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC vuông tại A có AB = 21 cm và AC = 28 cm. Tia phân giác của góc BAC cắt BC tại D. Tính độ dài BD, CD."
+        ],
+        "image":"train/57.png",
+        "imageid":"57"
+    },
+    {
+        "caption":[
+            "Cho biết ABCD và MNPQ là hai hình đồng dạng. Tính diện tích hình MNPQ."
+        ],
+        "image":"train/58.png",
+        "imageid":"58"
+    },
+    {
+        "caption":[
+            "Cho Hình 2, biết AM là đường trung tuyến của tam giác ABC, MD là tia phân giác của góc AMB, ME là tia phân giác của góc AMC. Chứng minh rằng tam giác ADE đồng dạng tam giác ABC."
+        ],
+        "image":"train/59.png",
+        "imageid":"59"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC có các đường phân giác AD, BE, CF (D thuộc BC, E thuộc AC, F thuộc AB). a) Chứng minh DB/DC nhân EC/EA nhân FA/FB = 1. b) Khi tam giác ABC cân tại A, chứng minh EF song song BC. C) Biết AB/AC = 2/3, tính tỉ số diện tích của tam giác ABD và tam giác ACD."
+        ],
+        "image":"train/60.png",
+        "imageid":"60"
+    },
+    {
+        "caption":[
+            "Quan sát Hình 1. Biết MN = 1 cm, MM' song song NN', OM' = 3 cm, M'N' = 1.5 cm, độ dài đoạn thẳng OM trong Hình 1 là"
+        ],
+        "image":"train/61.png",
+        "imageid":"61"
+    },
+    {
+        "caption":[
+            "Cho hình thang ABCD (AB song song CD) và DE = EC (Hình 8). Gọi O là giao điểm của AC và BD, K là giao điểm của EO và AB. Trong các khẳng định sau đây, có bao nhiêu khẳng định đúng? (I) AK/EC = KB/DE. (II) AK = KB. (III) AO/AC = AB/DC. (IV) AK/EC = OB/OD"
+        ],
+        "image":"train/62.png",
+        "imageid":"62"
+    },
+    {
+        "caption":[
+            "Cho Hình 10, tính độ dài x, y."
+        ],
+        "image":"train/63.png",
+        "imageid":"63"
+    },
+    {
+        "caption":[
+            "Trong Hình 4, cho biết EF song song BC. a) Chứng minh rằng tam giác AEF đồng dạng tam giác ABC. b) Tìm x."
+        ],
+        "image":"train/64.png",
+        "imageid":"64"
+    },
+    {
+        "caption":[
+            "Trong Hình 5, cho biết MN là đường trung bình của tam giác ABC. Tam giác ADE đồng dạng với tam giác ABC theo tỉ số k = 2/3. a) Chứng minh rằng tam giác ADE đồng dạng tam giác AMN. b) Tính tỉ số đồng dạng của tam giác ADE và tam giác AMN."
+        ],
+        "image":"train/65.png",
+        "imageid":"65"
+    },
+    {
+        "caption":[
+            "Trong Hình 6, cho biết tam giác ABC đồng dạng tam giác DEF. a) Tính số đo góc E. b) Tính độ dài các đoạn thẳng AB và EF."
+        ],
+        "image":"train/66.png",
+        "imageid":"66"
+    },
+    {
+        "caption":[
+            "Cho tam giác đều ABC, từ B và C kẻ các đường thẳng song song với AC và AB, hai đường này cắt nhau tại M. Qua M kẻ đường thẳng cắt AB tại E và cắt AC tại F. Chứng minh rằng: a) CA/CF = ME/MF và BE/BA = ME/MF. b) Tam giác BCE đồng dạng tam giác CFB."
+        ],
+        "image":"train/67.png",
+        "imageid":"67"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC có ba góc nhọn. Trên cạnh AB lấy điểm D, trên cạnh AC lấy điểm E sao cho góc ADE bằng góc ACB. a) Chứng minh rằng tam giác AED đồng dạng tam giác ABC. b) Tia phân giác cảu góc B'AC cắt DE tại M và cắt BC tại N. Chứng minh rằng ME nhân NC = MD nhân NB."
+        ],
+        "image":"train/68.png",
+        "imageid":"68"
+    }
+]

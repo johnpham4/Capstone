@@ -1,0 +1,177 @@
+[
+    {
+        "caption":[
+            "Từ một miếng bìa có dạng hình tròn (H.2.4) với bán kính R (cm), người ta khoét một hình tròn ở giữa có bán kính r (cm), r < R. a) Viết công thức tính diện tích phần còn lại của miếng bìa. b) Tính diện tích phần còn lại của miếng bìa biết tổng bán kính là 10 cm và hiệu hai bán kính là 3 cm."
+        ],
+        "image":"train/69.png", 
+        "imageid":"69"
+    },
+    {
+        "caption":[
+            "Cho tứ giác ABCD có AB = BC, CD = DA, góc B bằng 100 độ, góc D bằng 120 độ. Tính góc A và góc C."
+        ],
+        "image":"train/70.png", 
+        "imageid":"70"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC vuông cân tại đỉnh A. Ghép thêm vào phía ngoài tam giác đó tam giác BCD vuông cân tại đỉnh B. Chứng minh tứ giác ABDC là một hình thang vuông (hình thang có một cạnh bên vuông góc với hai đáy)."
+        ],
+        "image":"train/71.png", 
+        "imageid":"71"
+    },
+    {
+        "caption":[
+            "Cho hình thang cân ABCD với hai đường thẩng chứa hai cạnh bên AD, BC cắt nhau tại S. Gọi O là giao điểm của hai đường chéo AC và BD. Chứng minh đường thẳng SO đi qua trung điểm của AB, đi qua trung điểm của CD."
+        ],
+        "image":"train/72.png", 
+        "imageid":"72"
+    },
+    {
+        "caption":[
+            "Cho hình thang cân ABCD với hai đáy AB và CD, đường chéo AC vuông góc với cạnh bên AD, tia CA là tia phân giác của góc C. Tính chu vi của hình thang đó biết rằng AD = 2 cm."
+        ],
+        "image":"train/73.png", 
+        "imageid":"73"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC cân tại A. Với điểm D nằm giữa A và B, lấy điểm E nằm giữa A và C sao cho AD = CE. Từ D kẻ đường thẳng song song với AC, cắt BC ở F. Chứng minh ADFE là hình bình hành, từ đó suy ra trung điểm của AF thuộc đường thẳn DE."
+        ],
+        "image":"train/74.png", 
+        "imageid":"74"
+    },
+    {
+        "caption":[
+            "Cho hình bình hành ABCD với góc A tù. Dựng bên ngoài hình bình hành đó các tam giác đều ABE và DAF. Chứng minh rằng tam giác CEF là tam giác đều (Gợi ý: Chứng minh các tam giác AEF, DCF, BEC bằng nhau)."
+        ],
+        "image":"train/75.png", 
+        "imageid":"75"
+    },
+    {
+        "caption":[
+            "Cho hình Thang ABCD với hai đáy AB, CD. Gọi K à trung điểm của BC. Lấy diểm A', D' sao cho K là trung điểm AA' và DD'. Hỏi tứ giác AD'A'D là hình gì? Vì sao?"
+        ],
+        "image":"train/76.png", 
+        "imageid":"76"
+    },
+    {
+        "caption":[
+            "Cho hình bình hành ABCD. Lấy các điểm E thuộc AB, F thuộc CD sao cho AE = CF, lấy các điểm G thuộc BC, H thuộc AD sao cho BG = DH. Chứng minh EGFH là một hình bình hành và các đường thẳng AC, BD, EF, GH đồng quy."
+        ],
+        "image":"train/77.png", 
+        "imageid":"77"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC cân tại A, AH là đường cao. Gọi M, N lần lượt là trung điểm của AB, AC. Gọi D, E lần lượt là điểm sao cho M là trung điểm của HD, H là trung điểm của HE. a) Chứng minh AHBD, AHCE, BCED là những hình chữ nhật. b) Tại sao giao điểm của BE và CD là trung điểm của AH? c) Giải thích tại sao DH = HE, BE = CD."
+        ],
+        "image":"train/78.png", 
+        "imageid":"78"
+    },
+    {
+        "caption":[
+            "Hai đường trung tuyến BM, CN của tam giác ABC cân tại A cắt nhau tại G. Gọi H, K lần lượt là điểm sao cho trung điểm của GH là M, trung điểm của GK là N. Chứng minh tứ giác BCHK là hình chữ nhật."
+        ],
+        "image":"train/79.png", 
+        "imageid":"79"
+    },
+    {
+        "caption":[
+            "Cho hình vuông ABCD. Lấy các điểm M, N lần lượt thuộc cạnh AD, DC sao cho AM = DN. CHứng minh BM = AN và AN vuông góc BM."
+        ],
+        "image":"train/80.png", 
+        "imageid":"80"
+    },
+    {
+        "caption":[
+            "Cho hình vuông ABCD. Với các điểm M nằm giữa C và D, kẻ tia phân giác của góc DAM, nó cắt CD ở N. Đường thẳng qua N vuông góc với AM cắt BC ở P. Tính số đo của góc NAP."
+        ],
+        "image":"train/81.png", 
+        "imageid":"81"
+    },
+    {
+        "caption":[
+            "Cho hình thang ABCD (AB song song DC). Một đường thẳng song song với hai đáy cắt các đoạn thẳng AD, AC, BC theo thứ tự tại M, I, N. Chứng minh rằng: a) AM/MD = BN/NC; b) AM/AD + CN/Cb = 1"
+        ],
+        "image":"train/82.png", 
+        "imageid":"82"
+    },
+    {
+        "caption":[
+            "Cho hình bình hành ABCD có M, N lần lượt là trung điểm của AB và CD. Gọi P, Q theo thứ tự là giao điểm của AN và CM với đường chéo BD. Chứng minh rằng: DP = PQ = QB."
+        ],
+        "image":"train/83.png", 
+        "imageid":"83"
+    },
+    {
+        "caption":[
+            "Cho tam giác DEF với H và K lần lượt là trung điểm của DE, DF. Biết HK = 8 cm. Tính EF."
+        ],
+        "image":"train/84.png", 
+        "imageid":"84"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC vuông tại A. Gọi các điểm H, I, K lần lượt là trung điểm của AB, BC, AC. Chứng minh tứ giác AHIK là hình chữ nhật."
+        ],
+        "image":"train/85.png", 
+        "imageid":"85"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC, các đường trung tuyến BD, CE cắt nhau tại G. Gọi I, K theo thứ tự là trung điểm của GB, GC. Chứng minh rằng: EI = DK."
+        ],
+        "image":"train/86.png", 
+        "imageid":"86"
+    },
+    {
+        "caption":[
+            "Cho hình chữ nhật ABCD. Gọi D, E, F, G lần lượt là trung điểm các cạnh AB, BC, CD, DA. Tứ giác DEFG là hình gì? Vì sao?"
+        ],
+        "image":"train/87.png", 
+        "imageid":"87"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC vuông tại A có AB = 12 cm, AC = 9 cm, BC = 15 cm. Tia phân giác góc B cắt AC tại I. Tính AI, IC."
+        ],
+        "image":"train/88.png", 
+        "imageid":"88"
+    },
+    {
+        "caption":[
+            "Cho hình vuông ABCD có M là trung điểm của AD, AC cắt BM tại điểm I. Chứng minh rằng IB = 2IM."
+        ],
+        "image":"train/89.png", 
+        "imageid":"89"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC, trung tuyến AI. Tia phân giác góc AIB và tia phân giác góc AIC cắt AB, AC lần lượt tại M và N. Chứng minh MN song song BC."
+        ],
+        "image":"train/90.png", 
+        "imageid":"90"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC có AD, BE, CF lần lượt là đường phân giác của góc A, góc B, góc C (D thuộc BC, E thuộc AC, F thuộc AB). Chứng minh rằng: AE/EC nhân CD/DB nhân BF/FA = 1"
+        ],
+        "image":"train/91.png", 
+        "imageid":"91"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC, phân giác AD (D thuộc BC). Kẻ DE song song AB (E thuộc AC). Chứng minh rằng: AB nhân AC = AC nhân EA."
+        ],
+        "image":"train/92.png", 
+        "imageid":"92"
+    },
+    {
+        "caption":[
+            "Xét tam giác ABC vuông cân tại A. Lấy trên cạnh BC hai điểm D, E sao cho BD = DE = EC. Lấy các điểm F, G lần lượt thuộc cạnh AC, AB sao cho FE, GD vuông góc với BC. Chứng minh tứ giác DEFG là một hình vuông."
+        ],
+        "image":"train/93.png", 
+        "imageid":"93"
+    }
+]
