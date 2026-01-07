@@ -4,9 +4,9 @@ from loguru import logger
 from steps.data_prep import (
     download_synthgeo_dataset,
     translate_captions_to_vietnamese,
-    save_prepared_dataset
+    save_prepared_dataset,
+    filter_triangle
 )
-
 
 @pipeline
 def data_preparation_pipeline(
@@ -32,7 +32,6 @@ def data_preparation_pipeline(
         diagram_texts=diagram_texts,
     )
 
-    # Step 3: Save prepared dataset with images (always download images)
     output_path = save_prepared_dataset(
         diagram_texts=diagram_texts_translated,
         output_dir=output_dir,
@@ -40,7 +39,8 @@ def data_preparation_pipeline(
         image_split=split,
         repo_id=repo_id,
     )
-
     logger.success(f"Data preparation pipeline completed. Dataset saved to: {output_path}")
+
+    filter_triangle(diagram_texts=diagram_texts_translated, output_dir=output_dir)
 
     return output_path
