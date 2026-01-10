@@ -1,0 +1,1 @@
+(param (A B C) (iso-tri A))\n(param D point (on-seg A B))

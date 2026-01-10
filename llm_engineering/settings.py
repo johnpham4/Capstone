@@ -8,17 +8,16 @@ class Settings(BaseSettings):
     DATABASE_NAME: str = "unigeo"
 
     BASE_LLM: str = "Qwen/Qwen2.5-Coder-7B-Instruct"
-
-    YOLOV_SEGMENTATION_MODEL_ID: str = "yolov8x-doclaynet-epoch64-imgsz640-initiallr1e-4-finallr1e-5.pt"
-
-    # Figure Extraction
-    FIGURE_DETECTOR_MODEL: str = "juliozhao/DocLayout-YOLO-DocStructBench-imgsz1280-2501"
-    FIGURE_DETECTOR_LOCAL_DIR: str = "./models/DocLayout-YOLO-DocStructBench-imgsz1280-2501"
-    FIGURE_DETECTOR_DEVICE: str = "auto"
-    FIGURE_DETECTION_CONF: float = 0.25
-    FIGURE_DETECTION_IMGSZ: int = 1280
-
     HF_TOKEN: str
+
+    AWS_ACCESS_KEY_ID: str | None = None
+    AWS_SECRET_ACCESS_KEY: str | None = None
+    AWS_REGION: str = "us-east-1"
+    AWS_ARN_ROLE: str | None = None
+
+    # Comet ML
+    COMET_API_KEY: str | None = None
+    COMET_PROJECT: str = "geouni-finetuning"
 
     OPENAI_MODEL_ID: str = "gpt-4o-mini"
     OPENAI_API_KEY: str | None = None

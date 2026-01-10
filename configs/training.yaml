@@ -1,25 +1,7 @@
-vq_model_path: "JO-KU/Geo-MAGVIT"
-# Using DeepSeek-R1-Distill-Qwen-1.5B as specified in GeoUni paper
-# This model is distilled from DeepSeek-R1 (671B) and optimized for reasoning tasks
-base_llm_path: "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
-output_dir: "./checkpoints/line_segments"
+parameters:
+  num_train_epochs: 1
+  per_device_train_batch_size: 2
+  learning_rate: 2.0e-4
+  dataset_huggingface_workspace: "minn4"
 
-dataset_path: "./data/line_segments/dataset_cached.json"
-images_dir: "./data/line_segments/images"
-
-batch_size: 2
-epochs: 12
-learning_rate: 3.0e-4
-lora_r: 32
-lora_alpha: 64
-gradient_accumulation_steps: 4
-
-use_8bit: true
-gradient_checkpointing: true
-fp16: true
-
-# Post-training options
-merge_model: true
-push_to_hub: false
-hf_repo_name: "your-username/geouni-line-segments"
 

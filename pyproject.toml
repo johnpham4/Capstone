@@ -17,7 +17,6 @@ dependencies = [
     "pydantic>=2.0.0",
     "pydantic-settings>=2.0.0",
     "loguru>=0.7.0",
-    "python-doctr[torch]>=0.8.0",
     "zenml[server]==0.91.2",
     "click>=8.0.1",
     "dill>=0.3.8",
@@ -30,6 +29,8 @@ dependencies = [
     "huggingface-hub>=0.36.0",
     "langchain-openai>=1.1.6",
     "tiktoken>=0.12.0",
+    "boto3>=1.42.24",
+    "sagemaker>=2.0,<3.0",
 ]
 
 [build-system]

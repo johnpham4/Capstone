@@ -1,65 +1,72 @@
 from pathlib import Path
 
+import boto3
 from huggingface_hub import HfApi
 from loguru import logger
-
-try:
-    from sagemaker.huggingface import HuggingFace
-except ModuleNotFoundError:
-    logger.warning("Couldn't load SageMaker imports. Run 'poetry install --with aws' to support AWS.")
+from sagemaker.huggingface import HuggingFace
+from sagemaker.session import Session
 
 from llm_engineering.settings import settings
 
 finetuning_dir = Path(__file__).resolve().parent
-finetuning_requirements_path = finetuning_dir / "requirements.txt"
 
 
 def run_finetuning_on_sagemaker(
-    finetuning_type: str = "sft",
-    num_train_epochs: int = 3,
+    num_train_epochs: int = 1,
     per_device_train_batch_size: int = 2,
-    learning_rate: float = 3e-4,
-    dataset_huggingface_workspace: str = "mlabonne",
-    is_dummy: bool = False,
+    learning_rate: float = 2e-4,
+    dataset_huggingface_workspace: str = "minn4",
+    model_name: str = "meta-llama/Llama-2-7b-hf",
 ) -> None:
-    assert settings.HUGGINGFACE_ACCESS_TOKEN, "Hugging Face access token is required."
-    assert settings.AWS_ARN_ROLE, "AWS ARN role is required."
+    assert settings.HF_TOKEN, "Hugging Face access token is required. Set HF_TOKEN in .env"
+    assert settings.AWS_ARN_ROLE, "AWS ARN role is required. Set AWS_ARN_ROLE in .env"
+    assert settings.AWS_ACCESS_KEY_ID, "AWS_ACCESS_KEY_ID is required. Set it in .env"
+    assert settings.AWS_SECRET_ACCESS_KEY, "AWS_SECRET_ACCESS_KEY is required. Set it in .env"
+    assert settings.AWS_REGION, "AWS_REGION is required. Set it in .env"
 
     if not finetuning_dir.exists():
         raise FileNotFoundError(f"The directory {finetuning_dir} does not exist.")
-    if not finetuning_requirements_path.exists():
-        raise FileNotFoundError(f"The file {finetuning_requirements_path} does not exist.")
+
+    # Create boto3 session with credentials from settings
+    boto_session = boto3.Session(
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        region_name=settings.AWS_REGION,
+    )
+    sagemaker_session = Session(boto_session=boto_session)
 
     api = HfApi()
-    user_info = api.whoami(token=settings.HUGGINGFACE_ACCESS_TOKEN)
+    user_info = api.whoami(token=settings.HF_TOKEN)
     huggingface_user = user_info["name"]
     logger.info(f"Current Hugging Face user: {huggingface_user}")
 
     hyperparameters = {
-        "finetuning_type": finetuning_type,
         "num_train_epochs": num_train_epochs,
         "per_device_train_batch_size": per_device_train_batch_size,
         "learning_rate": learning_rate,
         "dataset_huggingface_workspace": dataset_huggingface_workspace,
         "model_output_huggingface_workspace": huggingface_user,
+        "model_name": model_name,
     }
-    if is_dummy:
-        hyperparameters["is_dummy"] = True
 
-    # Create the HuggingFace SageMaker estimator
+    # Use SageMaker pre-built HuggingFace container (PyTorch 2.1, transformers 4.36)
+    # Llama-2 works with transformers 4.36
+    logger.info(f"Using SageMaker pre-built container: PyTorch 2.1, transformers 4.36")
+    logger.info(f"Training model: {model_name}")
+
     huggingface_estimator = HuggingFace(
         entry_point="finetune.py",
         source_dir=str(finetuning_dir),
         instance_type="ml.g5.2xlarge",
         instance_count=1,
         role=settings.AWS_ARN_ROLE,
+        sagemaker_session=sagemaker_session,
         transformers_version="4.36",
         pytorch_version="2.1",
         py_version="py310",
         hyperparameters=hyperparameters,
-        requirements_file=finetuning_requirements_path,
         environment={
-            "HUGGING_FACE_HUB_TOKEN": settings.HUGGINGFACE_ACCESS_TOKEN,
+            "HUGGING_FACE_HUB_TOKEN": settings.HF_TOKEN,
             "COMET_API_KEY": settings.COMET_API_KEY,
             "COMET_PROJECT_NAME": settings.COMET_PROJECT,
         },

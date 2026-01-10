@@ -31,3 +31,13 @@ generation:
 
 data:
 	uv run python -m tools.run --run-prepare-data --no-cache
+
+simple_finetune:
+	uv run python tools/run.py --run-finetune
+
+option_finetune:
+	uv run python tools/run.py --run-finetune --num-epochs 1 --batch-size 2 --learning-rate 2e-4
+
+build_aws:
+	cd /mnt/d/projects/GeoUni/llm_engineering/model/finetuning
+	bash build.sh
