@@ -7,16 +7,9 @@ import torch
 from datasets import load_dataset
 from huggingface_hub import HfApi
 from huggingface_hub.utils import RepositoryNotFoundError
-from transformers import (
-    AutoModelForCausalLM,
-    AutoTokenizer,
-    BitsAndBytesConfig,
-    TrainingArguments,
-    TextStreamer,
-)
-from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+from unsloth import FastLanguageModel, is_bfloat16_supported
+from transformers import TrainingArguments, TextStreamer
 from trl import SFTTrainer
-from transformers import TextStreamer  # Import for streaming
 
 gmbl_prompt = """### Instruction:
 Chuyển đổi mô tả hình học tiếng Việt sang GMBL code.
@@ -58,45 +51,33 @@ def load_model(
     lora_dropout: float,
     target_modules: List[str],
 ) -> tuple:
-    # 4-bit quantization config
-    bnb_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.bfloat16,
-        bnb_4bit_use_double_quant=True,
+    # Load model with Unsloth
+    model, tokenizer = FastLanguageModel.from_pretrained(
+        model_name=model_name,
+        max_seq_length=max_seq_length,
+        dtype=None,  # Auto detection
+        load_in_4bit=load_in_4bit,
     )
 
-    # Load model with quantization
-    model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        quantization_config=bnb_config,
-        device_map="auto",
-        trust_remote_code=True,
-    )
-    model = prepare_model_for_kbit_training(model)
-
-    # LoRA config
-    peft_config = LoraConfig(
+    # Add LoRA adapters
+    model = FastLanguageModel.get_peft_model(
+        model,
         r=lora_rank,
         lora_alpha=lora_alpha,
         lora_dropout=lora_dropout,
         target_modules=target_modules,
         bias="none",
-        task_type="CAUSAL_LM",
+        use_gradient_checkpointing="unsloth",
+        random_state=3407,
+        use_rslora=False,
+        loftq_config=None,
     )
-    model = get_peft_model(model, peft_config)
-    model.print_trainable_parameters()
-
-    # Load tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-    tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "right"
 
     return model, tokenizer
 
 
 def finetune(
-    model_name: str = "meta-llama/Llama-2-7b-hf",
+    model_name: str = "unsloth/Qwen2.5-7B",
     output_dir: str = "/opt/ml/model",
     dataset_huggingface_workspace: str = "minn4",
     max_seq_length: int = 2048,
@@ -104,11 +85,11 @@ def finetune(
     lora_rank: int = 16,
     lora_alpha: int = 16,
     lora_dropout: float = 0.0,
-    target_modules: List[str] = ["q_proj", "k_proj", "v_proj", "o_proj"],  # Llama modules
+    target_modules: List[str] = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
     learning_rate: float = 2e-4,
     num_train_epochs: int = 1,
     per_device_train_batch_size: int = 2,
-    gradient_accumulation_steps: int = 8,
+    gradient_accumulation_steps: int = 4,
 ) -> tuple:
     model, tokenizer = load_model(
         model_name, max_seq_length, load_in_4bit, lora_rank, lora_alpha, lora_dropout, target_modules
@@ -148,13 +129,12 @@ def finetune(
             num_train_epochs=num_train_epochs,
             per_device_train_batch_size=per_device_train_batch_size,
             gradient_accumulation_steps=gradient_accumulation_steps,
-            fp16=not torch.cuda.is_bf16_supported(),
-            bf16=torch.cuda.is_bf16_supported(),
+            fp16=not is_bfloat16_supported(),
+            bf16=is_bfloat16_supported(),
             logging_steps=1,
             optim="adamw_8bit",
             weight_decay=0.001,
             lr_scheduler_type="linear",
-            per_device_eval_batch_size=per_device_train_batch_size,
             warmup_steps=5,
             output_dir=output_dir,
             report_to="comet_ml",
@@ -170,63 +150,27 @@ def finetune(
 def inference(
     model: Any,
     tokenizer: Any,
-    dataset_huggingface_workspace: str = "minn4",
-    num_examples: int = 3,
+    prompt: str = "Triangle ABC, AB=AC.",
+    max_new_tokens: int = 256,
 ) -> None:
-    print("\n" + "="*80)
-    print("INFERENCE - Testing model on samples")
-    print("="*80)
+    model = FastLanguageModel.for_inference(model)
+    message = gmbl_prompt.format(prompt, "")
+    inputs = tokenizer([message], return_tensors="pt").to("cuda")
 
-    model.eval()
-
-    # Load test dataset
-    test_dataset = load_dataset(f"{dataset_huggingface_workspace}/gmbl", split="test")
-
-    # Select examples: first (easy), middle, last (hard)
-    indices = [0, len(test_dataset)//2, min(len(test_dataset)-1, num_examples-1)]
-
-    from transformers import GenerationConfig
-    generation_config = GenerationConfig(
-        max_new_tokens=256,
-        do_sample=False,
-        use_cache=True,
-        pad_token_id=tokenizer.pad_token_id,
-        eos_token_id=tokenizer.eos_token_id,
-    )
-
-    for idx in indices:
-        sample = test_dataset[idx]
-        instruction = sample["instruction"]
-        ground_truth = sample["output"]
-
-        print(f"\n{'='*80}")
-        print(f"Example {idx + 1}:")
-        print(f"{'='*80}")
-        print(f"Instruction: {instruction}")
-        print(f"\nGround Truth:\n{ground_truth}")
-        print(f"\nModel Output:")
-
-        # Generate
-        prompt = gmbl_prompt.format(instruction, "")
-        inputs = tokenizer([prompt], return_tensors="pt").to("cuda")
-
-        streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
-        outputs = model.generate(**inputs, generation_config=generation_config, streamer=streamer)
-
-        print(f"{'='*80}\n")
+    text_streamer = TextStreamer(tokenizer)
+    _ = model.generate(**inputs, streamer=text_streamer, max_new_tokens=max_new_tokens, use_cache=True)
 
 
 def save_model(model: Any, tokenizer: Any, output_dir: str, push_to_hub: bool = False, repo_id: Optional[str] = None):
-    model.save_pretrained(output_dir)
-    tokenizer.save_pretrained(output_dir)
+    # Save with Unsloth's optimized method
+    model.save_pretrained_merged(output_dir, tokenizer, save_method="merged_16bit")
 
     if push_to_hub and repo_id:
         print(f"Saving model to '{repo_id}'")
-        model.push_to_hub(repo_id)
-        tokenizer.push_to_hub(repo_id)
+        model.push_to_hub_merged(repo_id, tokenizer, save_method="merged_16bit")
 
 
-def check_if_huggingface_model_exists(model_id: str, default_value: str = "meta-llama/Llama-2-7b-hf") -> str:
+def check_if_huggingface_model_exists(model_id: str, default_value: str = "unsloth/Qwen2.5-7B") -> str:
     api = HfApi()
 
     try:
@@ -235,7 +179,7 @@ def check_if_huggingface_model_exists(model_id: str, default_value: str = "meta-
         print(f"Model '{model_id}' does not exist.")
         model_id = default_value
         print(f"Defaulting to '{model_id}'")
-        print("Train your own 'GeoUni-Llama2-7B' model to avoid this behavior.")
+        print("Train your own 'GeoUni-Qwen2.5-7B' model to avoid this behavior.")
 
     return model_id
 
@@ -243,7 +187,7 @@ def check_if_huggingface_model_exists(model_id: str, default_value: str = "meta-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--model_name", type=str, default="meta-llama/Llama-2-7b-hf")
+    parser.add_argument("--model_name", type=str, default="unsloth/Qwen2.5-7B")
     parser.add_argument("--num_train_epochs", type=int, default=3)
     parser.add_argument("--per_device_train_batch_size", type=int, default=2)
     parser.add_argument("--learning_rate", type=float, default=3e-4)
@@ -279,8 +223,7 @@ if __name__ == "__main__":
         learning_rate=args.learning_rate,
     )
 
-    # Test inference on 3 examples from test set
-    inference(model, tokenizer, dataset_huggingface_workspace=args.dataset_huggingface_workspace)
+    inference(model, tokenizer)
 
-    sft_output_model_repo_id = f"{args.model_output_huggingface_workspace}/GeoUni-Llama2-7B"
+    sft_output_model_repo_id = f"{args.model_output_huggingface_workspace}/GeoUni-Qwen2.5-7B"
     save_model(model, tokenizer, "model_sft", push_to_hub=True, repo_id=sft_output_model_repo_id)
