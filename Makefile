@@ -31,3 +31,21 @@ generation:
 
 data:
 	uv run python -m tools.run --run-prepare-data --no-cache
+
+simple_finetune:
+	uv run python tools/run.py --run-finetune
+
+option_finetune:
+	uv run python tools/run.py --run-finetune --num-epochs 1 --batch-size 2 --learning-rate 2e-4
+
+aws_roles:
+	uv run python llm_engineering/infrastructures/aws/roles/create_execution_role.py
+
+deploy_endpoint:
+	uv run python llm_engineering/infrastructures/aws/deploy/huggingface/run.py
+
+del_endpoint:
+	uv run python llm_engineering/infrastructures/aws/deploy/delete_sagemaker_endpoint.py
+
+del_endpoint_config:
+	uv run python llm_engineering/infrastructures/aws/deploy/delete_sagemaker_endpoint_config.py
