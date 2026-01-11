@@ -8,7 +8,7 @@ try:
 except ModuleNotFoundError:
     logger.warning("Couldn't load SageMaker imports. Run 'poetry install --with aws' to support AWS.")
 
-from llm_engineering import settings
+from llm_engineering.settings import settings
 
 evaluation_dir = Path(__file__).resolve().parent
 evaluation_requirements_path = evaluation_dir / "requirements.txt"
@@ -30,7 +30,7 @@ def run_evaluation_on_sagemaker(is_dummy: bool = True) -> None:
     logger.info(f"Current Hugging Face user: {huggingface_user}")
 
     env = {
-        "HUGGING_FACE_HUB_TOKEN": settings.HUGGINGFACE_ACCESS_TOKEN,
+        "HUGGING_FACE_HUB_TOKEN": settings.HF_TOKEN,
         "OPENAI_API_KEY": settings.OPENAI_API_KEY,
         "DATASET_HUGGINGFACE_WORKSPACE": huggingface_user,
         "MODEL_HUGGINGFACE_WORKSPACE": huggingface_user,
