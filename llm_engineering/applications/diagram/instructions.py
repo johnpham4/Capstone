@@ -1,11 +1,4 @@
-"""
-Instruction classes for geometry solver
-"""
-
-
-class Parameterize:
-    """Instruction to parameterize geometric objects"""
-
+class Parameter:
     def __init__(self, objects, param_type, args=()):
         self.objects = objects
         self.param_type = param_type
@@ -18,13 +11,3 @@ class Parameterize:
             return f"param ({obj_str}) ({self.param_type} {args_str})"
         else:
             return f"param ({obj_str}) {self.param_type}"
-
-
-class Assert:
-    """Instruction to assert a constraint"""
-
-    def __init__(self, constraint):
-        self.constraint = constraint
-
-    def __str__(self):
-        return f"assert ({self.constraint})"

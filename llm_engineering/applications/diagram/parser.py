@@ -1,10 +1,12 @@
 class Parser:
+
     @classmethod
     def parse_sexprs(cls, lines: list[str]):
         try:
+            parser = cls()
             results = list()
             for l in lines:
-                sexp = cls.parse_sexpr(l)
+                sexp = parser.parse_sexpr(l)
                 if sexp:
                     results.append(sexp)
             return results
