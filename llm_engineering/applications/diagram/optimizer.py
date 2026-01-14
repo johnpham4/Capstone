@@ -42,7 +42,6 @@ class Optimizer:
             y = torch.tensor(y, dtype=torch.float64, device=self.device)
         return TorchPoint(x, y)
 
-
     def mkvar(self, name, lo=-1.0, hi=1.0):
         """Create a trainable variable"""
         val = torch.empty(1, dtype=torch.float64, device=self.device).uniform_(lo, hi)
@@ -383,6 +382,3 @@ class Optimizer:
                 diagram.add_triangle(p1, p2, p3, equal_sides)
 
         return diagram
-
-
-

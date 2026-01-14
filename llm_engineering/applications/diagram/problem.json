@@ -2,5 +2,5 @@
     "id": "f0bbe31b-33a9-4c2f-b902-2ff6e2fdd8eb",
     "image_dir": "images/img_103155.png",
     "instruction": "Tam giác ABC, AB = AC",
-    "answer": "(param (A B C) (iso-tri A))\n(define D point (midp A B))"
+    "answer": "(param (A B C) (iso-tri A))"
 }

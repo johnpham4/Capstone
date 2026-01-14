@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     DATABASE_NAME: str = "unigeo"
 
     BASE_LLM: str = "Qwen/Qwen2.5-Coder-7B-Instruct"
-    HF_TOKEN: str
+    HF_TOKEN: str | None = None
 
     # AWS Credentials
     AWS_ACCESS_KEY_ID: str | None = None
