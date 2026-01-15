@@ -187,7 +187,7 @@ def check_if_huggingface_model_exists(model_id: str, default_value: str = "unslo
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--model_name", type=str, default="unsloth/Qwen2.5-7B")
+    parser.add_argument("--model_name", type=str, default="unsloth/Falcon-H1R-7B")
     parser.add_argument("--num_train_epochs", type=int, default=3)
     parser.add_argument("--per_device_train_batch_size", type=int, default=2)
     parser.add_argument("--learning_rate", type=float, default=3e-4)
@@ -211,7 +211,7 @@ if __name__ == "__main__":
     print(f"Number of GPUs: '{args.n_gpus}'")  # noqa
 
     print("Starting SFT training...")  # noqa
-    print(f"Training from base model '{args.model_name}'")  # noqa
+    print(f"Training from base model '{args.model_name}'")
 
     output_dir_sft = Path(args.model_dir) / "output_sft"
     model, tokenizer = finetune(

@@ -1,24 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import Iterable
-import math
-
-class GeometricPoint:
-    def __init__(self, x, y, name=None):
-        self.x = x
-        self.y = y
-        self.name = name
-
-    def distance_to(self, other):
-        """Calculate distance to another point"""
-        return math.sqrt((self.x - other.x)**2 + (self.y - other.y)**2)
-
-    def __str__(self):
-        if self.name:
-            return f"{self.name}({self.x:.2f}, {self.y:.2f})"
-        return f"({self.x:.2f}, {self.y:.2f})"
-
 
 class Primitive(ABC):
+    """Base class for all geometric primitives"""
+
     def __init__(self, val):
         self.val = val
 
@@ -36,7 +20,7 @@ class Primitive(ABC):
 
 
 class Point(Primitive):
-    """Represents a geometric point"""
+    """Value Object: Represents a geometric point in DSL"""
 
     def __str__(self) -> str:
         if isinstance(self.val, str):
@@ -46,35 +30,43 @@ class Point(Primitive):
 
 
 class Line(Primitive):
+    """Value Object: Represents a geometric line"""
+
     def points_on(self):
         if isinstance(self.val, str):
             return []
-
-        pred, points = self.val
-
-        if pred == "connecting":
-            return points
-        elif pred in ("paraAt", "perpAt"):
-            return [points[0]]
-        elif pred == "mediator":
-            return []
+        head, args = self.val
+        if head == "through":
+            return [args[0]]
         return []
 
     def __str__(self) -> str:
         if isinstance(self.val, str):
             return self.val
-
-        pred, args = self.val
-        return f"({pred} {' '.join(map(str, args))})"
+        head, args = self.val
+        if head == "through":
+            return f"(through {args[0]})"
+        return f"({head} {' '.join(map(str, args))})"
 
 
 class Triangle(Primitive):
+    """Value Object: Represents a triangle"""
+
     def __init__(self, points: list[Point]):
         if len(points) != 3:
             raise ValueError("Triangle must have exactly 3 points")
-
         self.points = points
         super().__init__(tuple(p.val for p in points))
 
     def __str__(self) -> str:
         return f"Triangle({', '.join(map(str, self.points))})"
+
+
+class Circle(Primitive):
+    """Value Object: Represents a circle"""
+
+    def __str__(self) -> str:
+        if isinstance(self.val, str):
+            return self.val
+        head, args = self.val
+        return f"({head} {' '.join(map(str, args))})"

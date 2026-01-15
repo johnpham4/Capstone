@@ -7,7 +7,9 @@ class Settings(BaseSettings):
     DATABASE_HOST: str = "mongodb://geo_engineering:geo_engineering@127.0.0.1:27017"
     DATABASE_NAME: str = "unigeo"
 
-    BASE_LLM: str = "Qwen/Qwen2.5-Coder-7B-Instruct"
+    # HuggingFace Model
+    BASE_LLM: str = "unsloth/Falcon-H1R-7B"
+    HF_MODEL_ID: str = f"minn4/text2diagram-Falcon-H1R-7B"
     HF_TOKEN: str | None = None
 
     # AWS Credentials
@@ -15,10 +17,6 @@ class Settings(BaseSettings):
     AWS_SECRET_ACCESS_KEY: str | None = None
     AWS_REGION: str = "us-east-1"
     AWS_ARN_ROLE: str | None = None
-
-    # HuggingFace Model
-    HF_MODEL_ID: str = "minn4/GeoUni-Qwen2.5-7B"
-    HUGGINGFACE_ACCESS_TOKEN: str | None = None
 
     # SageMaker Endpoint Config
     SAGEMAKER_ENDPOINT_INFERENCE: str = "text2diagram-llm-endpoint"
@@ -45,6 +43,14 @@ class Settings(BaseSettings):
 
     OPENAI_MODEL_ID: str = "gpt-4o-mini"
     OPENAI_API_KEY: str | None = None
+
+    # RabbitMQ Configuration
+    RABBITMQ_URL: str = "amqp://guest:guest@localhost:5672/"
+
+    # Diagram Generation
+    OUTPUT_DIR: str = "./output/diagrams"
+    DIAGRAM_OPTIMIZER_EPOCHS: int = 1000
+    DIAGRAM_OPTIMIZER_LR: float = 0.01
 
     @property
     def OPENAI_MAX_TOKEN_WINDOW(self) -> int:

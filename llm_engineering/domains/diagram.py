@@ -1,5 +1,11 @@
 from enum import StrEnum, auto
 
+
+class DiagramType(StrEnum):
+    TRIANGLE = auto()
+    QUADRILATERAL = auto()
+    CIRCLE = auto()
+
 class TriangleType(StrEnum):
     SCALENE = auto()        # tam giác thường
     ISOSCELES = auto()     # cân

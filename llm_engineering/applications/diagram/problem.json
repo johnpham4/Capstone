@@ -1,6 +1,54 @@
-{
-    "id": "f0bbe31b-33a9-4c2f-b902-2ff6e2fdd8eb",
-    "image_dir": "images/img_103155.png",
-    "instruction": "Tam giác ABC, AB = AC",
-    "answer": "(param (A B C) (iso-tri A))"
-}
+[
+    {
+        "instruction": "Tam giác ABC",
+        "answer": "(triangle (A B C))"
+    },
+    {
+        "instruction": "Tam giác ABC cân tại A",
+        "answer": "(triangle (A B C) (isosceles A))"
+    },
+    {
+        "instruction": "Tam giác ABC vuông tại B",
+        "answer": "(triangle (A B C) (right B))"
+    },
+    {
+        "instruction": "Tam giác ABC vuông cân tại B",
+        "answer": "(triangle (A B C) (right_isosceles B))"
+    },
+    {
+        "instruction": "Tam giác ABC đều",
+        "answer": "(triangle (A B C) (equilateral))"
+    },
+    {
+        "instruction": "Tam giác ABC, M là trung điểm BC",
+        "answer": "(triangle (A B C))\n(define M point (midpoint B C))\n(segment A M)"
+    },
+    {
+        "instruction": "Tam giác ABC có trọng tâm G",
+        "answer": "(triangle (A B C))\n(define G point (centroid A B C))"
+    },
+    {
+        "instruction": "Tam giác ABC có đường tròn nội tiếp tâm I",
+        "answer": "(triangle (A B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
+    },
+    {
+        "instruction": "Tam giác ABC có đường tròn ngoại tiếp tâm O",
+        "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+    },
+    {
+        "instruction": "Tam giác ABC vuông tại A, có trực tâm H",
+        "answer": "(triangle (A B C) (right A))\n(define H point (orthocenter A B C))"
+    },
+    {
+        "instruction": "Tam giác ABC, điểm D nằm trên đoạn AB",
+        "answer": "(triangle (A B C))\n(define D point (on-seg A B))"
+    },
+    {
+        "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+        "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
+    },
+    {
+        "instruction": "Tam giác ABC cân tại A, có đường cao AH",
+        "answer": "(triangle (A B C) (isosceles A))\n(define H point (perpendicular A (B C)))\n(segment A H)"
+    }
+]

@@ -4,8 +4,10 @@ import torch.optim as optim
 
 from collections import namedtuple
 
-from instructions import Parameter
-from primitives import *
+from llm_engineering.domains.geometry.instructions import Parameter
+from llm_engineering.domains.geometry.value_objects import Point, Line
+from llm_engineering.domains.geometry.entities import GeometricPoint, Diagram
+from llm_engineering.applications.diagram.initializer import Initializer
 
 from loguru import logger
 
@@ -27,7 +29,11 @@ class Optimizer:
         self.loss_fns = {}  # Loss functions (for training)
         self.ndgs = {}  # Non-degeneracy conditions
         self.goals = {}  # Goal constraints to achieve
-        self.iso_triangles = {}  # Lưu thông tin tam giác cân: key -> apex_idx
+
+        # Diagram metadata tracking
+        self.triangles_metadata = {}  # (p1, p2, p3) -> {type, right_angle_at, equal_sides}
+        self.circles = []  # [(center_name, radius_or_points)]
+        self.segments = []  # [(p1_name, p2_name)]
 
         # Optimization parameters
         self.has_loss = False
@@ -42,9 +48,11 @@ class Optimizer:
             y = torch.tensor(y, dtype=torch.float64, device=self.device)
         return TorchPoint(x, y)
 
-    def mkvar(self, name, lo=-1.0, hi=1.0):
-        """Create a trainable variable"""
-        val = torch.empty(1, dtype=torch.float64, device=self.device).uniform_(lo, hi)
+    def mkvar(self, name, lo=-1.0, hi=1.0, init_value=None):
+        if init_value is not None:
+            val = torch.tensor([init_value], dtype=torch.float64, device=self.device)
+        else:
+            val = torch.empty(1, dtype=torch.float64, device=self.device).uniform_(lo, hi)
         param = nn.Parameter(val)
         self.trainable_vars.append(param)
         return param.squeeze()
@@ -86,8 +94,8 @@ class Optimizer:
         return LineNF(n, r)
 
     def on_line(self, p: TorchPoint, line: LineNF):
-        # line in normal form: n · p - r = 0
-        return line.n.x * p.x + line.n.y * p.y - line.r
+        # line in normal form: n · p - f = 0
+        return line.n.x * p.x + line.n.y * p.y - line.f
 
     def collinear(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
         # Use cross product: (p2-p1) × (p3-p1) = 0
@@ -97,6 +105,11 @@ class Optimizer:
         v2y = p3.y - p1.y
         return v1x * v2y - v1y * v2x
 
+    def dist_to_line(self, point: TorchPoint, p1: TorchPoint, p2: TorchPoint):
+        """Distance from point to line defined by p1, p2"""
+        line = self.pp2lnf(p1, p2)
+        return torch.abs(self.on_line(point, line))
+
     def register_pt(self, p: TorchPoint, P, save_name=True):
         if save_name:
             assert p.val not in self.name2pt
@@ -104,12 +117,6 @@ class Optimizer:
 
         self.all_points.append(P)
         return P
-
-    def register_line(self, l, L):
-        """Register a line with its name"""
-        assert l.val not in self.name2line
-        self.name2line[l.val] = L
-        return L
 
     def register_loss(self, key, val_fn, weight: float = 1.0):
         assert key not in self.loss_fns
@@ -133,64 +140,259 @@ class Optimizer:
             raise RuntimeError(f"Invalid point type: {type(p)}")
 
 
-    def sample_uniform(self, p, lo=-1.0, hi=1.0, save_name=True):
+    def sample_uniform(self, p, lo=-1.0, hi=1.0, save_name=True, init_coords=None):
         """Sample a point uniformly in a box"""
-        x = self.mkvar(f"{p.val}_x", lo, hi)
-        y = self.mkvar(f"{p.val}_y", lo, hi)
+        if init_coords is not None:
+            x = self.mkvar(f"{p.val}_x", lo, hi, init_value=init_coords[0])
+            y = self.mkvar(f"{p.val}_y", lo, hi, init_value=init_coords[1])
+        else:
+            x = self.mkvar(f"{p.val}_x", lo, hi)
+            y = self.mkvar(f"{p.val}_y", lo, hi)
         P = self.get_point(x, y)
         return self.register_pt(p, P, save_name)
 
-    def sample_triangle(self, points: list):
+    def sample_triangle(self, points: list, constraints: dict = None):
+        """
+        Universal triangle sampler with flexible constraints
+
+        Args:
+            points: List of 3 Point objects
+            constraints: Dict with optional keys:
+                - 'type': 'isosceles', 'right', 'equilateral', 'right_isosceles'
+                - 'apex_idx': vertex index for isosceles (0, 1, or 2)
+                - 'right_idx': vertex index for right angle (0, 1, or 2)
+        """
         assert len(points) == 3
 
-        # Create points with learnable coordinates
-        p1 = self.sample_uniform(points[0])
-        p2 = self.sample_uniform(points[1])
-        p3 = self.sample_uniform(points[2])
+        constraints = constraints or {}
+        tri_type = constraints.get('type', 'scalene')
+        apex_idx = constraints.get('apex_idx', 0)
+        right_idx = constraints.get('right_idx', 0)
 
-        # Add non-degeneracy constraint (points should not be collinear)
-        self.register_ndg(f"tri_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
-                         lambda a=p1, b=p2, c=p3: self.collinear(a, b, c), weight=1.0)
+        # Smart initialization based on type
+        if tri_type == 'isosceles':
+            init_coords = Initializer.init_isoceles_triangle(apex_idx)
+        elif tri_type == 'right':
+            init_coords = Initializer.init_right_triangle(right_idx)
+        elif tri_type == 'equilateral':
+            init_coords = Initializer.init_equilateral_triangle()
+        elif tri_type == 'right_isosceles':
+            init_coords = Initializer.init_right_isoceles_triangle(right_idx)
+        else:
+            # Scalene triangle init
+            init_coords = Initializer.init_scalene_triangle()
 
-        return [p1, p2, p3]
-
-    def sample_isoceles_triangle(self, points: list, apex):
-        assert len(points) == 3
-
-        apex_idx = None
-        for i, p in enumerate(points):
-            if p.val == apex.val:
-                apex_idx = i
-                break
-
-        if apex_idx is None:
-            apex_idx = 0
+        init_coords = Initializer.add_noise(init_coords)
 
         # Create points
-        p1 = self.sample_uniform(points[0])
-        p2 = self.sample_uniform(points[1])
-        p3 = self.sample_uniform(points[2])
-
+        p1 = self.sample_uniform(points[0], init_coords=init_coords[0])
+        p2 = self.sample_uniform(points[1], init_coords=init_coords[1])
+        p3 = self.sample_uniform(points[2], init_coords=init_coords[2])
         pts = [p1, p2, p3]
-        apex_pt = pts[apex_idx]
-        other_pts = [pts[i] for i in range(3) if i != apex_idx]
 
-        # Constraint: equal distances from apex to other two points
-        self.register_loss(f"iso_{points[0].val}_{points[1].val}_{points[2].val}",
-                          lambda ap=apex_pt, o0=other_pts[0], o1=other_pts[1]: self.dist(ap, o0) - self.dist(ap, o1),
-                          weight=10.0)
+        # Add geometric constraints based on type
+        metadata = {'type': tri_type}
+
+        if tri_type == 'isosceles' or tri_type == 'right_isosceles':
+            apex_pt = pts[apex_idx]
+            other_pts = [pts[i] for i in range(3) if i != apex_idx]
+            self.register_loss(f"iso_{points[0].val}_{points[1].val}_{points[2].val}",
+                              lambda ap=apex_pt, o0=other_pts[0], o1=other_pts[1]: self.dist(ap, o0) - self.dist(ap, o1),
+                              weight=10.0)
+            others = [i for i in range(3) if i != apex_idx]
+            metadata['equal_sides'] = [(apex_idx, others[0]), (apex_idx, others[1])]
+
+        if tri_type == 'right' or tri_type == 'right_isosceles':
+            right_pt = pts[right_idx]
+            other_pts = [pts[i] for i in range(3) if i != right_idx]
+            def right_loss():
+                vec1_x = other_pts[0].x - right_pt.x
+                vec1_y = other_pts[0].y - right_pt.y
+                vec2_x = other_pts[1].x - right_pt.x
+                vec2_y = other_pts[1].y - right_pt.y
+                return vec1_x * vec2_x + vec1_y * vec2_y
+            self.register_loss(f"right_{points[0].val}_{points[1].val}_{points[2].val}",
+                              right_loss, weight=10.0)
+            metadata['right_angle_at'] = right_idx
+
+        if tri_type == 'equilateral':
+            self.register_loss(f"equi_12_23_{points[0].val}",
+                              lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
+            self.register_loss(f"equi_23_31_{points[0].val}",
+                              lambda: self.dist(p2, p3) - self.dist(p3, p1), weight=10.0)
+            metadata['equal_sides'] = [(0, 1), (1, 2), (2, 0)]
 
         # Non-degeneracy
         self.register_ndg(f"tri_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
                          lambda a=p1, b=p2, c=p3: self.collinear(a, b, c), weight=1.0)
 
-        # Lưu thông tin tam giác cân
+        # Track metadata
         key = (points[0].val, points[1].val, points[2].val)
-        self.iso_triangles[key] = apex_idx
+        self.triangles_metadata[key] = metadata
 
         return [p1, p2, p3]
 
-    def paramerter_on_seg(self, p, segment_points: list):
+    def _define_altitude_foot(self, point_name, vertex_point, segment_points):
+        """Define foot of altitude from vertex to opposite side (perpendicular projection)"""
+        assert len(segment_points) == 2
+
+        foot = self.sample_uniform(point_name)
+        vertex = self.lookup_pt(vertex_point)
+        p1 = self.lookup_pt(segment_points[0])
+        p2 = self.lookup_pt(segment_points[1])
+
+        # Loss 1: perpendicular to segment
+        def perpendicular_loss():
+            vec_vf_x = foot.x - vertex.x
+            vec_vf_y = foot.y - vertex.y
+            vec_seg_x = p2.x - p1.x
+            vec_seg_y = p2.y - p1.y
+            dot = vec_vf_x * vec_seg_x + vec_vf_y * vec_seg_y
+            return dot ** 2
+
+        # Loss 2: on segment (collinearity)
+        def on_segment_loss():
+            vec_1f_x = foot.x - p1.x
+            vec_1f_y = foot.y - p1.y
+            vec_12_x = p2.x - p1.x
+            vec_12_y = p2.y - p1.y
+            cross = vec_1f_x * vec_12_y - vec_1f_y * vec_12_x
+            return cross ** 2
+
+        self.register_loss(f"perpendicular_{point_name.val}", perpendicular_loss, weight=10.0)
+        self.register_loss(f"on_segment_{point_name.val}", on_segment_loss, weight=10.0)
+
+        return foot
+
+    def _define_centroid(self, point_name, triangle_points):
+        assert len(triangle_points) == 3
+
+        p1 = self.lookup_pt(triangle_points[0])
+        p2 = self.lookup_pt(triangle_points[1])
+        p3 = self.lookup_pt(triangle_points[2])
+
+        # Create learnable point
+        centroid = self.sample_uniform(point_name)
+
+        # Constraint: must be at centroid position
+        def centroid_loss():
+            expected_x = (p1.x + p2.x + p3.x) / 3
+            expected_y = (p1.y + p2.y + p3.y) / 3
+            return (centroid.x - expected_x)**2 + (centroid.y - expected_y)**2
+
+        self.register_loss(f"centroid_{point_name.val}", centroid_loss, weight=10.0)
+        return centroid
+
+    def _define_incenter(self, point_name, triangle_points):
+        """Define incenter - equal distance to all sides"""
+        assert len(triangle_points) == 3
+
+        p1 = self.lookup_pt(triangle_points[0])
+        p2 = self.lookup_pt(triangle_points[1])
+        p3 = self.lookup_pt(triangle_points[2])
+
+        # Create named point with smart init
+        init_coords = Initializer.init_triangle_incircle()
+        init_coords = Initializer.add_noise(init_coords)
+        incenter = self.sample_uniform(point_name, init_coords=init_coords[3])
+
+        # Constraint: equal distance to all sides
+        def incircle_loss():
+            d1 = self.dist_to_line(incenter, p1, p2)
+            d2 = self.dist_to_line(incenter, p2, p3)
+            d3 = self.dist_to_line(incenter, p3, p1)
+            return (d1 - d2)**2 + (d2 - d3)**2
+
+        self.register_loss(f"incenter_{point_name.val}", incircle_loss, weight=10.0)
+        return incenter
+
+    def _define_circumcenter(self, point_name, triangle_points):
+        """Define circumcenter - equal distance to all vertices"""
+        assert len(triangle_points) == 3
+
+        p1 = self.lookup_pt(triangle_points[0])
+        p2 = self.lookup_pt(triangle_points[1])
+        p3 = self.lookup_pt(triangle_points[2])
+
+        # Create named point with smart init
+        init_coords = Initializer.init_triangle_circumcircle(radius=1.0)
+        init_coords = Initializer.add_noise(init_coords, noise_scale=0.02)
+        circumcenter = self.sample_uniform(point_name, init_coords=init_coords[3])
+
+        # Constraint: equal distance to all vertices
+        def circumcircle_loss():
+            d1 = self.dist(circumcenter, p1)
+            d2 = self.dist(circumcenter, p2)
+            d3 = self.dist(circumcenter, p3)
+            return (d1 - d2)**2 + (d2 - d3)**2
+
+        self.register_loss(f"circumcenter_{point_name.val}", circumcircle_loss, weight=10.0)
+        return circumcenter
+
+    def _define_orthocenter(self, point_name, triangle_points):
+        """Define orthocenter - intersection of altitudes"""
+        assert len(triangle_points) == 3
+
+        p1 = self.lookup_pt(triangle_points[0])
+        p2 = self.lookup_pt(triangle_points[1])
+        p3 = self.lookup_pt(triangle_points[2])
+
+        # Create named point with smart init
+        init_coords = Initializer.init_right_triangle_with_orthocenter()
+        init_coords = Initializer.add_noise(init_coords)
+        orthocenter = self.sample_uniform(point_name, init_coords=init_coords[3])
+
+        # Constraint: altitudes intersect at orthocenter
+        def orthocenter_loss():
+            # Altitude from p1 perpendicular to p2-p3
+            vec_h1_x = p1.x - orthocenter.x
+            vec_h1_y = p1.y - orthocenter.y
+            vec_23_x = p3.x - p2.x
+            vec_23_y = p3.y - p2.y
+            perp1 = vec_h1_x * vec_23_x + vec_h1_y * vec_23_y
+
+            # Altitude from p2 perpendicular to p1-p3
+            vec_h2_x = p2.x - orthocenter.x
+            vec_h2_y = p2.y - orthocenter.y
+            vec_13_x = p3.x - p1.x
+            vec_13_y = p3.y - p1.y
+            perp2 = vec_h2_x * vec_13_x + vec_h2_y * vec_13_y
+
+            return perp1**2 + perp2**2
+
+        self.register_loss(f"orthocenter_{point_name.val}", orthocenter_loss, weight=10.0)
+        return orthocenter
+
+    def _define_midpoint(self, point_name, segment_points):
+        """Define midpoint of a segment"""
+        assert len(segment_points) == 2
+
+        p1 = self.lookup_pt(segment_points[0])
+        p2 = self.lookup_pt(segment_points[1])
+
+        # Learnable point
+        midpoint = self.sample_uniform(point_name)
+
+        # Loss 1: position at midpoint
+        def midpoint_loss():
+            expected_x = (p1.x + p2.x) / 2
+            expected_y = (p1.y + p2.y) / 2
+            return (midpoint.x - expected_x)**2 + (midpoint.y - expected_y)**2
+
+        # Loss 2: on segment (collinearity)
+        def on_segment_loss():
+            vec_1m_x = midpoint.x - p1.x
+            vec_1m_y = midpoint.y - p1.y
+            vec_12_x = p2.x - p1.x
+            vec_12_y = p2.y - p1.y
+            cross = vec_1m_x * vec_12_y - vec_1m_y * vec_12_x
+            return cross ** 2
+
+        self.register_loss(f"midpoint_{point_name.val}", midpoint_loss, weight=10.0)
+        self.register_loss(f"on_segment_mid_{point_name.val}", on_segment_loss, weight=10.0)
+        return midpoint
+
+    def parameter_on_seg(self, p, segment_points: list):
         assert len(segment_points) == 2
 
         p1 = self.lookup_pt(segment_points[0])
@@ -231,26 +433,121 @@ class Optimizer:
         #     self.process_assert(instr)
 
     def process_parameter(self, instr):
+        from llm_engineering.domains.geometry.types import TriangleType, DiagramType
+
+        diagram_type = instr.diagram_type
         param_type = instr.param_type
         objects = instr.objects
         args = instr.args
 
-        if param_type == "triangle":
-            self.sample_triangle(objects)
-        elif param_type == "iso-tri":
-            # Isosceles triangle with apex specified in args
-            apex = args[0] if args else objects[0]
-            self.sample_isoceles_triangle(objects, apex)
-        elif param_type == "on-seg":
-            self.paramerter_on_seg(objects[0], args)
-        elif param_type == "on-line":
+        # Dispatch based on diagram type
+        if diagram_type == DiagramType.TRIANGLE:
+            self._process_triangle_parameter(param_type, objects, args)
+        elif diagram_type == DiagramType.POINT:
+            self._process_point_parameter(param_type, objects, args)
+        elif diagram_type == DiagramType.CIRCLE:
+            self._process_circle_parameter(param_type, objects, args)
+        elif diagram_type == DiagramType.SEGMENT:
+            self._process_segment_parameter(objects)
+        elif diagram_type == DiagramType.LINE:
+            pass  # Lines just for visualization, no constraints needed
+        else:
+            if self.verbosity:
+                logger.warning(f"Unsupported diagram type: {diagram_type}")
+
+    def _process_triangle_parameter(self, param_type, objects, args):
+        """Process triangle instructions using unified constraint-based approach"""
+        from llm_engineering.domains.geometry.types import TriangleType
+
+        # Handle TriangleType enum
+        if isinstance(param_type, TriangleType):
+            param_type_str = str(param_type).split('.')[-1].lower()
+        else:
+            param_type_str = str(param_type).lower() if param_type else ""
+
+        # Build constraints dict
+        constraints = {}
+
+        if param_type_str in ["isosceles", "iso-tri"]:
+            constraints['type'] = 'isosceles'
+            if args:
+                # Find apex index
+                for i, obj in enumerate(objects):
+                    if obj.val == args[0].val:
+                        constraints['apex_idx'] = i
+                        break
+        elif param_type_str in ["right"]:
+            constraints['type'] = 'right'
+            if args:
+                # Find right angle vertex index
+                for i, obj in enumerate(objects):
+                    if obj.val == args[0].val:
+                        constraints['right_idx'] = i
+                        break
+        elif param_type_str in ["equilateral", "equi"]:
+            constraints['type'] = 'equilateral'
+        elif param_type_str in ["right_isosceles", "right-isosceles"]:
+            constraints['type'] = 'right_isosceles'
+            if args:
+                for i, obj in enumerate(objects):
+                    if obj.val == args[0].val:
+                        constraints['right_idx'] = i
+                        constraints['apex_idx'] = i
+                        break
+        else:
+            constraints['type'] = 'scalene'
+
+        # Single unified call
+        self.sample_triangle(objects, constraints)
+
+    def _process_point_parameter(self, param_type, objects, args):
+        """Process point definitions (centroid, incenter, etc.)"""
+        param_type_str = str(param_type).lower() if param_type else ""
+
+        if param_type_str == "centroid":
+            self._define_centroid(objects[0], args)
+        elif param_type_str == "orthocenter":
+            self._define_orthocenter(objects[0], args)
+        elif param_type_str == "incenter":
+            self._define_incenter(objects[0], args)
+        elif param_type_str == "circumcenter":
+            self._define_circumcenter(objects[0], args)
+        elif param_type_str == "midpoint":
+            self._define_midpoint(objects[0], args)
+        elif param_type_str in ["altitude_foot", "altitude-foot", "projection", "perpendicular"]:
+            # args[0] is vertex, args[1:] are segment endpoints
+            self._define_altitude_foot(objects[0], args[0], args[1:])
+        elif param_type_str in ["on-seg", "on_seg"]:
+            self.parameter_on_seg(objects[0], args)
+        elif param_type_str in ["on-line", "on_line"]:
             self.parameter_on_line(objects[0], args)
-        elif param_type == "coords":
-            # Free point
+        elif param_type_str == "coords" or param_type_str == "":
             self.sample_uniform(objects[0])
         else:
             if self.verbosity:
-                logger.warning(f"Unsupported parameterization: {param_type}")
+                logger.warning(f"Unsupported point construction: {param_type_str}")
+
+    def _process_circle_parameter(self, param_type, objects, args):
+        """Process circle instructions and track them"""
+        param_type_str = str(param_type).lower() if param_type else ""
+        center_name = objects[0].val if hasattr(objects[0], 'val') else str(objects[0])
+
+        if param_type_str == "incircle":
+            # Incircle defined by triangle points
+            self.circles.append((center_name, {'type': 'incircle', 'triangle': [p.val for p in args]}))
+        elif param_type_str == "circumcircle":
+            # Circumcircle defined by triangle points
+            self.circles.append((center_name, {'type': 'circumcircle', 'triangle': [p.val for p in args]}))
+        else:
+            if self.verbosity:
+                logger.warning(f"Unsupported circle type: {param_type_str}")
+
+    def _process_segment_parameter(self, objects):
+        """Track segment for visualization"""
+        if len(objects) >= 2:
+            p1_name = objects[0].val if hasattr(objects[0], 'val') else str(objects[0])
+            p2_name = objects[1].val if hasattr(objects[1], 'val') else str(objects[1])
+            self.segments.append((p1_name, p2_name))
 
 
     def preprocess(self):
@@ -289,7 +586,7 @@ class Optimizer:
         optimizer = optim.Adam(self.trainable_vars, lr=lr)
 
         if self.verbosity:
-            logger.info(f"Optimization ({epochs} Epochs")
+            logger.info(f"Optimization ({epochs}) Epochs")
 
         for i in range(epochs):
             optimizer.zero_grad()
@@ -347,7 +644,6 @@ class Optimizer:
         return self.get_diagram()
 
     def get_diagram(self):
-        from diagram import Diagram
 
         diagram = Diagram()
 
@@ -358,27 +654,30 @@ class Optimizer:
             geo_pt = GeometricPoint(x, y, name)
             diagram.add_point(name, geo_pt)
 
-        # Try to detect triangles (3 consecutive points)
-        point_names = list(self.name2pt.keys())
-        if len(point_names) >= 3:
-            for i in range(0, len(point_names) - 2, 3):
-                p1_name = point_names[i]
-                p2_name = point_names[i + 1]
-                p3_name = point_names[i + 2]
-
+        # Add triangles with metadata
+        for key, metadata in self.triangles_metadata.items():
+            p1_name, p2_name, p3_name = key
+            if p1_name in diagram.points and p2_name in diagram.points and p3_name in diagram.points:
                 p1 = diagram.points[p1_name]
                 p2 = diagram.points[p2_name]
                 p3 = diagram.points[p3_name]
 
-                # Kiểm tra nếu là tam giác cân
-                key = (p1_name, p2_name, p3_name)
-                equal_sides = None
-                if key in self.iso_triangles:
-                    apex_idx = self.iso_triangles[key]
-                    # apex_idx là đỉnh, 2 cạnh bằng nhau là từ apex đến 2 đỉnh còn lại
-                    others = [j for j in range(3) if j != apex_idx]
-                    equal_sides = [(apex_idx, others[0]), (apex_idx, others[1])]
+                equal_sides = metadata.get('equal_sides')
+                right_angle_at = metadata.get('right_angle_at')
 
-                diagram.add_triangle(p1, p2, p3, equal_sides)
+                diagram.add_triangle(p1, p2, p3, equal_sides, right_angle_at)
+
+        # Add circles
+        for center_name, info in self.circles:
+            if center_name in diagram.points:
+                center = diagram.points[center_name]
+                diagram.add_circle(center, info)
+
+        # Add segments
+        for p1_name, p2_name in self.segments:
+            if p1_name in diagram.points and p2_name in diagram.points:
+                p1 = diagram.points[p1_name]
+                p2 = diagram.points[p2_name]
+                diagram.add_segment(p1, p2)
 
         return diagram
