@@ -46,12 +46,11 @@ class Initializer:
         ]
 
     @staticmethod
-    def init_scalene_triangle(scale: float = 1.0) -> List[Tuple[float, float]]:
-        """Scalene triangle with all sides different"""
+    def init_scalene_triangle(scale: float = 2.0):
         return [
-            (-0.6 * scale, -0.3 * scale),    # Bottom left
-            (0.5 * scale, -0.2 * scale),     # Bottom right (shorter base)
-            (0.1 * scale, 0.7 * scale)       # Top (offset to left)
+            (0.0, 0.8 * scale),        # A: top
+            (-0.7 * scale, -0.4 * scale),  # B: left
+            (0.9 * scale, -0.2 * scale),   # C: right (không đối xứng)
         ]
 
     @staticmethod

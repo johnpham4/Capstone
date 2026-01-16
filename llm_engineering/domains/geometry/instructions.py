@@ -27,9 +27,14 @@ class Parameter:
 @dataclass
 class Assertion:
     """Represents an assertion/constraint in DSL"""
-    constraint: Any
+    constraint_type: str = None
+    objects: Tuple[Any, ...] = ()
+    constraint: Any = None
 
     def __str__(self) -> str:
+        if self.constraint_type:
+            obj_str = ' '.join([str(o) for o in self.objects])
+            return f"assert ({self.constraint_type} {obj_str})"
         return f"assert ({self.constraint})"
 
 

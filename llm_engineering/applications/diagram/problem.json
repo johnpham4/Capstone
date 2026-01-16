@@ -13,6 +13,6 @@
     },
     {
         "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-        "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(define p point (projection C (segment A B)))\n(segment B C)\n(segment D E)\n(line C p)"
+        "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(define H point (projection C (segment A B)))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(line C H)"
     }
 ]

@@ -54,14 +54,16 @@ def create_prompts(
 def generate_gmbl_dataset(
     prompts: list[GenerateDatasetSamplesPrompt],
     test_size: float = 0.2,
+    batch_size: int = 4,
 ) -> Annotated[TrainTestSplit, "train_test_split"]:
 
 
-    logger.info(f"Generating dataset from {len(prompts)} prompts...")
+    logger.info(f"Generating dataset from {len(prompts)} prompts with batch_size={batch_size}...")
 
     train_test_split = InstructiveDatasetGenerator.generate(
         prompts=prompts,
-        test_size=test_size
+        test_size=test_size,
+        batch_size=batch_size
     )
 
     logger.info(f"Generated {train_test_split.train.num_samples} train samples")

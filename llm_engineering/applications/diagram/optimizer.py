@@ -591,16 +591,66 @@ class Optimizer:
     def process_assertion(self, assertion):
         """Process assertion/constraint instructions"""
         # Assertions are handled separately - they add constraints to existing objects
-        # For now, we'll log them and handle common cases
         if self.verbosity:
             logger.info(f"Processing assertion: {assertion}")
 
-        # TODO: Implement assertion processing based on constraint type
-        # Common assertions:
-        # - (on-line P l): Point P on line l
-        # - (para l1 l2): Line l1 parallel to l2
-        # - (perp l1 l2): Line l1 perpendicular to l2
-        # - (= (uangle ...) (uangle ...)): Angle equality
+        # Parse assertion type and apply constraints
+        if hasattr(assertion, 'constraint_type'):
+            if assertion.constraint_type == 'parallel':
+                self._add_parallel_constraint(assertion.objects)
+            elif assertion.constraint_type == 'perpendicular':
+                self._add_perpendicular_constraint(assertion.objects)
+
+    def _add_parallel_constraint(self, segments):
+        """Add parallel constraint between two segments"""
+        if len(segments) != 4:  # Need 4 points for 2 segments
+            logger.warning(f"Parallel constraint needs 4 points (2 segments), got {len(segments)}")
+            return
+
+        p1 = self.lookup_pt(segments[0])
+        p2 = self.lookup_pt(segments[1])
+        p3 = self.lookup_pt(segments[2])
+        p4 = self.lookup_pt(segments[3])
+
+        # Parallel: direction vectors proportional
+        # (p2-p1) × (p4-p3) = 0 (cross product = 0)
+        def parallel_loss():
+            dx1 = p2.x - p1.x
+            dy1 = p2.y - p1.y
+            dx2 = p4.x - p3.x
+            dy2 = p4.y - p3.y
+            # Cross product should be zero
+            cross = dx1 * dy2 - dy1 * dx2
+            return cross
+
+        seg1_name = f"{segments[0].val}_{segments[1].val}"
+        seg2_name = f"{segments[2].val}_{segments[3].val}"
+        self.register_loss(f"parallel_{seg1_name}_{seg2_name}", parallel_loss, weight=10.0)
+
+    def _add_perpendicular_constraint(self, segments):
+        """Add perpendicular constraint between two segments"""
+        if len(segments) != 4:
+            logger.warning(f"Perpendicular constraint needs 4 points (2 segments), got {len(segments)}")
+            return
+
+        p1 = self.lookup_pt(segments[0])
+        p2 = self.lookup_pt(segments[1])
+        p3 = self.lookup_pt(segments[2])
+        p4 = self.lookup_pt(segments[3])
+
+        # Perpendicular: dot product = 0
+        def perpendicular_loss():
+            dx1 = p2.x - p1.x
+            dy1 = p2.y - p1.y
+            dx2 = p4.x - p3.x
+            dy2 = p4.y - p3.y
+            # Dot product should be zero
+            dot = dx1 * dx2 + dy1 * dy2
+            return dot
+
+        seg1_name = f"{segments[0].val}_{segments[1].val}"
+        seg2_name = f"{segments[2].val}_{segments[3].val}"
+        self.register_loss(f"perpendicular_{seg1_name}_{seg2_name}", perpendicular_loss, weight=10.0)
 
 
     def preprocess(self):

@@ -68,7 +68,7 @@ Any violation is considered an error.
         )
 
     @classmethod
-    def generate(cls, prompts: list[GenerateDatasetSamplesPrompt], test_size: float = 0.2, batch_size: int = 16) -> TrainTestSplit:
+    def generate(cls, prompts: list[GenerateDatasetSamplesPrompt], test_size: float = 0.2, batch_size: int = 4) -> TrainTestSplit:
         def _to_langchain(prompt: GenerateDatasetSamplesPrompt) -> list[BaseMessage]:
             return [
                 SystemMessage(content=cls.get_system_prompt().content),
@@ -93,6 +93,11 @@ Any violation is considered an error.
 
         samples = []
         for batch_idx, batch in enumerate(batches):
+            # Add delay between batches to avoid rate limit
+            if batch_idx > 0:
+                import time
+                time.sleep(2)  # 2 seconds delay
+
             try:
                 raw_outputs = chain.batch(batch, stop=None)
 

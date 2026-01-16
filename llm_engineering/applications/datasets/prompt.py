@@ -69,7 +69,53 @@ Ví dụ:
 "Nối A với M" → (segment A M)
 
 ══════════════════════════
-4. ĐƯỜNG TRÒN (CIRCLE)
+4. ĐƯỜNG THẲNG (LINE)
+══════════════════════════
+
+Cú pháp: (line A B)
+
+⚠️ KHI NÀO DÙNG LINE:
+- Khi đề bài nói "đường thẳng" (không phải "đoạn thẳng")
+- Khi cần vẽ đường thẳng vuông góc/song song kéo dài vô hạn
+- Ví dụ: "đường thẳng đi qua C vuông góc với AB"
+
+⚠️ KHI NÀO DÙNG SEGMENT:
+- Khi đề bài nói "đoạn thẳng", "nối", "vẽ"
+- Khi chỉ cần vẽ đoạn giữa 2 điểm (hữu hạn)
+- Khi chiếu 1 điểm nằm trên đoạn thẳng hoặc trung tuyến
+- Ví dụ: "vẽ đoạn AM", "nối B với C"
+
+Ví dụ:
+"Đường thẳng đi qua C vuông góc với AB"
+→ (define H point (projection C (segment A B)))
+   (line C H)
+
+"Vẽ đoạn thẳng BC" → (segment B C)
+
+══════════════════════════
+5. RÀNG BUỘC SONG SONG (PARALLEL)
+══════════════════════════
+
+Cú pháp: (parallel (segment A B) (segment C D))
+
+Ví dụ:
+"BC song song với DE" → (parallel (segment B C) (segment D E))
+"AB // CD" → (parallel (segment A B) (segment C D))
+
+⚠️ CHỈ áp dụng cho các đoạn thẳng / đường thẳng ĐÃ được khai báo
+
+══════════════════════════
+6. RÀNG BUỘC VUÔNG GÓC (PERPENDICULAR)
+══════════════════════════
+
+Cú pháp: (perpendicular (segment A B) (segment C D))
+
+Ví dụ:
+"AB vuông góc với CD" → (perpendicular (segment A B) (segment C D))
+"AB ⊥ CD" → (perpendicular (segment A B) (segment C D))
+
+══════════════════════════
+7. ĐƯỜNG TRÒN (CIRCLE)
 ══════════════════════════
 
 Cú pháp: (circle <tâm> <cách_xác_định>)
@@ -95,11 +141,13 @@ b) Đường tròn ngoại tiếp:
 1. Thứ tự khai báo:
    - Khai báo tam giác TRƯỚC
    - Định nghĩa điểm phụ thuộc SAU
-   - Vẽ đoạn thẳng / đường tròn CUỐI CÙNG
+   - Vẽ đoạn thẳng / đường tròn
+   - Khai báo ràng buộc (parallel, perpendicular) CUỐI CÙNG
 
 2. Tên điểm:
    - Sử dụng chữ cái in hoa: A, B, C, D, E, F, G, H, I, M, O...
    - Giữ nguyên tên từ đề bài tiếng Việt
+   - Nếu đề bài không đặt tên điểm (vd: chân đường cao không tên), đặt tên theo quy ước: H, H1, H2...
 
 3. Loại tam giác:
    - (right B) nghĩa là góc B = 90°
@@ -110,6 +158,16 @@ b) Đường tròn ngoại tiếp:
    - LUÔN phải có (define ... point ...) cho tâm
    - SAU ĐÓ mới có (circle tâm ...)
    - Không được bỏ qua bất kỳ cái nào
+
+5. Ràng buộc parallel/perpendicular:
+   - CHỈ áp dụng khi đề bài EXPLICIT nói "song song" hoặc "vuông góc"
+   - PHẢI khai báo các segment/line TRƯỚC khi dùng parallel/perpendicular
+   - Ví dụ SAI: (parallel (segment B C) (segment D E)) mà chưa có (segment B C)
+   - Ví dụ ĐÚNG: (segment B C) → (segment D E) → (parallel (segment B C) (segment D E))
+
+6. Line vs Segment:
+   - Dùng LINE khi: "đường thẳng", "đường thẳng kéo dài", "đường vuông góc"
+   - Dùng SEGMENT khi: "đoạn thẳng", "vẽ", "nối", "cạnh"
 
 ════════════════════════════════
 === VÍ DỤ HOÀN CHỈNH ===
@@ -160,14 +218,56 @@ Output:
 (define O point (circumcenter A B C))
 (circle O (circumcircle A B C))
 
-Ví dụ 7: Tam giác cân với trung điểm và đường tròn nội tiếp
-Input: "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp"
+Ví dụ 7: Tam giác với song song
+Input: "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE"
 Output:
-(triangle (A B C) (isosceles A))
+(triangle (A B C))
+(define D point (segment A B))
+(define E point (segment A C))
+(segment B C)
+(segment D E)
+(parallel (segment B C) (segment D E))
+
+Ví dụ 8: Tam giác với đường thẳng vuông góc
+Input: "Tam giác ABC, đường thẳng đi qua C vuông góc với AB"
+Output:
+(triangle (A B C))
+(define H point (projection C (segment A B)))
+(line C H)
+
+Ví dụ 9: Tam giác phức tạp kết hợp
+Input: "Tam giác ABC, điểm D nằm trên AB, điểm E nằm trên AC, BC song song với DE, đường thẳng đi qua C vuông góc với AB"
+Output:
+(triangle (A B C))
+(define D point (segment A B))
+(define E point (segment A C))
+(define H point (projection C (segment A B)))
+(segment B C)
+(segment D E)
+(parallel (segment B C) (segment D E))
+(line C H)
+
+Ví dụ 10: Tam giác với trung tuyến
+Input: "Tam giác ABC, vẽ trung tuyến AM"
+Output:
+(triangle (A B C))
 (define M point (midpoint B C))
-(define I point (incenter A B C))
-(circle I (incircle A B C))
 (segment A M)
+
+Ví dụ 11: Tam giác với đường cao
+Input: "Tam giác ABC, kẻ đường cao AH từ A xuống BC"
+Output:
+(triangle (A B C))
+(define H point (projection A (segment B C)))
+(segment A H)
+
+Ví dụ 12: Tam giác với đường trung bình
+Input: "Tam giác ABC, D là trung điểm AB, E là trung điểm AC, vẽ đường trung bình DE"
+Output:
+(triangle (A B C))
+(define D point (midpoint A B))
+(define E point (midpoint A C))
+(segment D E)
 
 ════════════════════════════════
 === LƯU Ý DỊCH TIẾNG VIỆT ===
@@ -177,13 +277,35 @@ Từ khóa thường gặp:
 - "trung điểm" → midpoint
 - "trọng tâm" → centroid
 - "trực tâm" → orthocenter
-- "tâm đường tròn nội tiếp" → incenter
-- "tâm đường tròn ngoại tiếp" → circumcenter
-- "đường cao" / "chân đường cao" → projection
-- "nằm trên đoạn" → segment
+- "tâm đường tròn nội tiếp" / "tâm nội tiếp" → incenter
+- "tâm đường tròn ngoại tiếp" / "tâm ngoại tiếp" → circumcenter
+- "đường cao" / "chân đường cao" / "hình chiếu" → projection
+- "nằm trên đoạn" / "thuộc đoạn" → segment
 - "cân tại" → isosceles
 - "vuông tại" → right
 - "tam giác đều" → equilateral
+- "song song" / "//" → parallel
+- "vuông góc" / "⊥" → perpendicular
+- "đường thẳng" → line
+- "đoạn thẳng" / "vẽ" / "nối" → segment
+
+⚠️ CÁC TRƯỜNG HỢP ĐẶC BIỆT:
+
+1. TRUNG TUYẾN:
+   "Trung tuyến AM" = Trung điểm M của BC + vẽ đoạn AM
+   → (define M point (midpoint B C))
+      (segment A M)
+
+2. ĐƯỜNG CAO:
+   "Đường cao AH" = Hình chiếu H của A xuống BC + vẽ đoạn AH
+   → (define H point (projection A (segment B C)))
+      (segment A H)
+
+3. ĐƯỜNG TRUNG BÌNH:
+   "Đường trung bình DE nối trung điểm AB và AC"
+   → (define D point (midpoint A B))
+      (define E point (midpoint A C))
+      (segment D E)
 
 ════════════════════════════════
 === ĐỊNH DẠNG ĐẦU RA ===
@@ -216,4 +338,10 @@ Ví dụ JSON output:
     "answer": "(triangle (A B C) (right B))\\n(define G point (centroid A B C))"
   }
 ]
+
+════════════════════════════════
+=== ĐẦU VÀO CẦN XỬ LÝ ===
+════════════════════════════════
+
+{{ extract }}
 """

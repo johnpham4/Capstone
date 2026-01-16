@@ -113,13 +113,23 @@ class SynthGeoDatasetExtractor:
     @classmethod
     def filter_triangles(cls, diagram_texts: List[Dict]) -> List[Dict]:
         """Filter diagrams to keep only triangles (remove circles, quadrilaterals, etc.)"""
-        pattern = r"(cir|excenter|square|incenter|excenter|trapezoid|quadrilateral|rectangle|parallelogram|hexagon|polygon)"
+        non_triangle_pattern = r"(square|trapezoid|quadrilateral|rectangle|parallelogram|hexagon|polygon)"
+        triangle_pattern = r"\btriangle\b"
 
         triangle_texts = []
+
         for diagram in diagram_texts:
-            match = re.search(pattern, diagram["caption"], re.IGNORECASE)
-            if match is None:
-                triangle_texts.append(diagram)
+            caption = diagram["caption"]
+
+            # Có triangle
+            if not re.search(triangle_pattern, caption, re.IGNORECASE):
+                continue
+
+            # Không có hình khác
+            if re.search(non_triangle_pattern, caption, re.IGNORECASE):
+                continue
+
+            triangle_texts.append(diagram)
 
         return triangle_texts
 

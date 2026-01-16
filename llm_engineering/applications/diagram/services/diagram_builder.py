@@ -35,6 +35,10 @@ class DiagramBuilder:
             self.process_segment(cmd)
         elif head == "line":
             self.process_line(cmd)
+        elif head == "parallel":
+            self.process_parallel(cmd)
+        elif head == "perpendicular":
+            self.process_perpendicular(cmd)
         else:
             raise NotImplementedError(f"Command not supported: {head}")
 
@@ -168,5 +172,59 @@ class DiagramBuilder:
             objects=[p1, p2],
             param_type="line",
             args=()
+        )
+        self.instructions.append(instr)
+
+    def process_parallel(self, cmd):
+        """Process: (parallel (segment B C) (segment D E))"""
+        if len(cmd) != 3:
+            raise RuntimeError(f"Parallel requires 2 segments: {cmd}")
+
+        seg1 = cmd[1]
+        seg2 = cmd[2]
+
+        if not (isinstance(seg1, tuple) and isinstance(seg2, tuple)):
+            raise RuntimeError(f"Parallel arguments must be segments: {cmd}")
+
+        if seg1[0] != "segment" or seg2[0] != "segment":
+            raise RuntimeError(f"Parallel requires segments: {cmd}")
+
+        # Extract 4 points: B, C, D, E
+        p1 = Point(seg1[1])
+        p2 = Point(seg1[2])
+        p3 = Point(seg2[1])
+        p4 = Point(seg2[2])
+
+        from llm_engineering.domains.geometry.instructions import Assertion
+        instr = Assertion(
+            constraint_type='parallel',
+            objects=[p1, p2, p3, p4]
+        )
+        self.instructions.append(instr)
+
+    def process_perpendicular(self, cmd):
+        """Process: (perpendicular (segment A B) (segment C D))"""
+        if len(cmd) != 3:
+            raise RuntimeError(f"Perpendicular requires 2 segments: {cmd}")
+
+        seg1 = cmd[1]
+        seg2 = cmd[2]
+
+        if not (isinstance(seg1, tuple) and isinstance(seg2, tuple)):
+            raise RuntimeError(f"Perpendicular arguments must be segments: {cmd}")
+
+        if seg1[0] != "segment" or seg2[0] != "segment":
+            raise RuntimeError(f"Perpendicular requires segments: {cmd}")
+
+        # Extract 4 points
+        p1 = Point(seg1[1])
+        p2 = Point(seg1[2])
+        p3 = Point(seg2[1])
+        p4 = Point(seg2[2])
+
+        from llm_engineering.domains.geometry.instructions import Assertion
+        instr = Assertion(
+            constraint_type='perpendicular',
+            objects=[p1, p2, p3, p4]
         )
         self.instructions.append(instr)
