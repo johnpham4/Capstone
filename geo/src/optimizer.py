@@ -250,6 +250,82 @@ class Optimizer:
                      weight=1.0)
         return [point_1, point_2, point_3, point_4]
     
+    def sample_rectangle(self, points, corner_point): # hình chữ nhật
+        assert len(points) == 4
+        
+        point_1 = self.sample_uniform(points[0])
+        point_2 = self.sample_uniform(points[1])
+        point_3 = self.sample_uniform(points[2])
+        point_4 = self.sample_uniform(points[3])
+        
+        pts = [point_1, point_2, point_3, point_4]
+        
+        # constraint 1: canh doi nhau bang nhau AB = CD, BC = DA
+        def opposite_sides_constraint():
+            d01 = self.dist(pts[0], pts[1]) # AB
+            d12 = self.dist(pts[1], pts[2]) # BC
+            d23 = self.dist(pts[2], pts[3]) # CD
+            d30 = self.dist(pts[3], pts[0]) # DA
+            return (d01 - d23)**2 + (d12 - d30)**2
+        
+        self.register_loss(
+            f"rect_opposite_sides_{points[0].val}_{points[1].val}_{points[2].val}_{points[3].val}",
+            opposite_sides_constraint,
+            weight=10.0
+        )
+        
+        # dieu chinh do dai ti le canh hinh chu nhat
+        def aspect_ratio_constraint():
+            d01 = self.dist(pts[0], pts[1])  # AB 
+            d12 = self.dist(pts[1], pts[2])  # BC 
+            
+            # Đảm bảo BC > AB * 1.5
+            ratio = d12 / (d01 + 1e-8)
+            return torch.relu(1.5 - ratio)  # penalty nếu ratio < 1.5
+        
+        self.register_loss(f"rect_aspect_ratio", aspect_ratio_constraint, weight=5.0)
+
+
+        # constraint 2: 4 goc vuong nhau
+        def angle_at_A():
+            v1x = pts[3].x - pts[0].x # DA
+            v1y = pts[3].y - pts[0].y 
+            v2x = pts[1].x - pts[0].x # AB
+            v2y = pts[1].y - pts[0].y
+            return v1x * v2x + v1y * v2y # tich vo huong = 0
+        
+        def angle_at_B():
+            v1x = pts[0].x - pts[1].x # BA
+            v1y = pts[0].y - pts[1].y
+            v2x = pts[2].x - pts[1].x # BC
+            v2y = pts[2].y - pts[1].y
+            return v1x * v2x + v1y * v2y 
+        
+        def angle_at_C():
+            v1x = pts[1].x - pts[2].x # CB
+            v1y = pts[1].y - pts[2].y
+            v2x = pts[3].x - pts[2].x # CD
+            v2y = pts[3].y - pts[2].y
+            return v1x * v2x + v1y * v2y
+        
+        def angle_at_D():
+            v1x = pts[2].x - pts[3].x # DC
+            v1y = pts[2].y - pts[3].y
+            v2x = pts[0].x - pts[3].x # DA
+            v2y = pts[0].y - pts[3].y
+            return v1x * v2x + v1y * v2y
+
+        self.register_loss(f"rect_angle_A", angle_at_A, weight=100.0)
+        self.register_loss(f"rect_angle_B", angle_at_B, weight=100.0)
+        self.register_loss(f"rect_angle_C", angle_at_C, weight=100.0)
+        self.register_loss(f"rect_angle_D", angle_at_D, weight=100.0) 
+        
+        self.register_ndg(f"rect_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
+                     lambda a=pts[0], b=pts[1], c=pts[2]: self.collinear(a, b, c),
+                     weight=1.0)
+        
+        return [point_1, point_2, point_3, point_4]
+    
     def on_line(self, p: TorchPoint, line: LineNF):
         # line in normal form: n · p - r = 0
         return line.n.x * p.x + line.n.y * p.y - line.r
@@ -315,6 +391,9 @@ class Optimizer:
         elif param_type == "square":
             corner = args[0] if args else None
             self.sample_square(obj, corner)
+        elif param_type == "rectangle":
+            corner = args[0] if args else None
+            self.sample_rectangle(obj, corner)
             
         elif param_type == "on-seg":
             self.paramerter_on_seg(obj[0], args)

@@ -1,4 +1,4 @@
 {
-    "instruction": "Hình vuông ABCD",
-    "answer": "(param (A B C D) (square A))"
+    "instruction": "Hình chữ nhật ABCD",
+    "answer": "(param (A B C D) rectangle)"
 }
