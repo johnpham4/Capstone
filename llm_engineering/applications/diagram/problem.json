@@ -8,23 +8,27 @@
         "answer": "(square (A B C D))"
     },
     {
-        "instruction": "Hình vuông ACDB",
-        "answer": "(square (A C D B))"
-    },
-    {
-        "instruction": "Hình vuông EFGH",
-        "answer": "(square (E F G H))"
-    },
-    {
         "instruction": "Hình chữ nhật ABCD",
         "answer": "(rectangle (A B C D))"
     },
     {
-        "instruction": "Hình chữ nhật ACDB",
-        "answer": "(rectangle (A C D B))"
+        "instruction": "Hình bình hành ACDB",
+        "answer": "(parallelogram (A C D B))"
     },
     {
-        "instruction": "Hình chữ nhật KLMN",
-        "answer": "(rectangle (K L M N))"
+        "instruction": "Hình thang ABCD",
+        "answer": "(trapezoid (A B C D))"
+    },
+    {
+        "instruction": "Hình thoi KLMN",
+        "answer": "(rhombus (K L M N))"
+    },
+    {
+        "instruction": "Tứ giác ABCD",
+        "answer": "(quadrilateral (A B C D))"
+    },
+    {
+        "instruction": "Tứ giác EFGH",
+        "answer": "(quadrilateral (E F G H))"
     }
 ]

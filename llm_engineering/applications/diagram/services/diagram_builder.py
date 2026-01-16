@@ -3,7 +3,6 @@ from typing import List, Tuple, Any
 from llm_engineering.applications.diagram.services.dsl_parser import DSLParser
 from llm_engineering.domains.geometry import Point
 from llm_engineering.domains.geometry.instructions import Parameter
-# Import QuadrilateralType
 from llm_engineering.domains.geometry.types import DiagramType, TriangleType, QuadrilateralType
 
 
@@ -30,8 +29,14 @@ class DiagramBuilder:
             self.process_triangle(cmd)
         elif head == "square":
             self.process_square(cmd)
-        elif head == "rectangle": 
+        elif head == "rectangle":
             self.process_rectangle(cmd)
+        elif head == "parallelogram":
+            self.process_parallelogram(cmd)
+        elif head == "trapezoid":
+            self.process_trapezoid(cmd)
+        elif head == "rhombus":  # [NEW] Xử lý hình thoi
+            self.process_rhombus(cmd)
         elif head == "define":
             self.process_define(cmd)
         elif head == "circle":
@@ -45,7 +50,6 @@ class DiagramBuilder:
 
     def register_pt(self, p: Point):
         if p in self.points:
-            # Cho phép nhắc lại điểm
             pass
         else:
             self.points.append(p)
@@ -74,7 +78,6 @@ class DiagramBuilder:
             self.instructions.append(instr)
             return
 
-        # Two parameters: type + special point
         type_str = param_method[0].upper().replace('-', '_')
         special_p = Point(param_method[1])
 
@@ -87,7 +90,6 @@ class DiagramBuilder:
         self.instructions.append(instr)
 
     def process_square(self, cmd):
-        """Process DSL: (square (A B C D))"""
         if len(cmd) < 2:
             raise RuntimeError(f"Invalid square command: {cmd}")
         
@@ -103,7 +105,6 @@ class DiagramBuilder:
         self.instructions.append(instr)
 
     def process_rectangle(self, cmd):
-        """[NEW] Process DSL: (rectangle (A B C D))"""
         if len(cmd) < 2:
             raise RuntimeError(f"Invalid rectangle command: {cmd}")
         
@@ -115,12 +116,57 @@ class DiagramBuilder:
         for p in ps:
             self.register_pt(p)
 
-        
         instr = Parameter(DiagramType.QUADRILATERAL, ps, QuadrilateralType.RECTANGLE)
         self.instructions.append(instr)
 
+    def process_parallelogram(self, cmd):
+        if len(cmd) < 2:
+            raise RuntimeError(f"Invalid parallelogram command: {cmd}")
+        
+        points_data = cmd[1]
+        if len(points_data) != 4:
+            raise RuntimeError(f"Parallelogram requires exactly 4 points, got: {len(points_data)}")
+
+        ps = [Point(p) for p in points_data]
+        for p in ps:
+            self.register_pt(p)
+
+        instr = Parameter(DiagramType.QUADRILATERAL, ps, QuadrilateralType.PARALLELOGRAM)
+        self.instructions.append(instr)
+
+    def process_trapezoid(self, cmd):
+        if len(cmd) < 2:
+            raise RuntimeError(f"Invalid trapezoid command: {cmd}")
+        
+        points_data = cmd[1]
+        if len(points_data) != 4:
+            raise RuntimeError(f"Trapezoid requires exactly 4 points, got: {len(points_data)}")
+
+        ps = [Point(p) for p in points_data]
+        for p in ps:
+            self.register_pt(p)
+
+        instr = Parameter(DiagramType.QUADRILATERAL, ps, QuadrilateralType.TRAPEZOID)
+        self.instructions.append(instr)
+
+    def process_rhombus(self, cmd):
+        """[NEW] Process DSL: (rhombus (A B C D))"""
+        if len(cmd) < 2:
+            raise RuntimeError(f"Invalid rhombus command: {cmd}")
+        
+        points_data = cmd[1]
+        if len(points_data) != 4:
+            raise RuntimeError(f"Rhombus requires exactly 4 points, got: {len(points_data)}")
+
+        ps = [Point(p) for p in points_data]
+        for p in ps:
+            self.register_pt(p)
+
+        # Mapping sang kiểu RHOMBUS
+        instr = Parameter(DiagramType.QUADRILATERAL, ps, QuadrilateralType.RHOMBUS)
+        self.instructions.append(instr)
+
     def process_define(self, cmd):
-        """Process: (define G point (centroid A B C))"""
         if len(cmd) < 4:
             raise RuntimeError(f"Invalid define command: {cmd}")
 
@@ -153,7 +199,6 @@ class DiagramBuilder:
         self.instructions.append(instr)
 
     def process_circle(self, cmd):
-        """Process: (circle I (incircle A B C))"""
         if len(cmd) < 3:
             raise RuntimeError(f"Invalid circle command: {cmd}")
 
@@ -175,7 +220,6 @@ class DiagramBuilder:
         self.instructions.append(instr)
 
     def process_segment(self, cmd):
-        """Process: (segment A M)"""
         if len(cmd) != 3:
             raise RuntimeError(f"Segment requires 2 points: {cmd}")
 
@@ -191,7 +235,6 @@ class DiagramBuilder:
         self.instructions.append(instr)
 
     def process_line(self, cmd):
-        """Process: (line A B)"""
         if len(cmd) != 3:
             raise RuntimeError(f"Line requires 2 points: {cmd}")
 
