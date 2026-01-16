@@ -19,13 +19,14 @@ class Optimizer:
         
         self.name2pt = {}
         self.name2line = {} # Line name -> LineNF
-        self.all_points = []  # list of TorchPoint        
+        self.all_points = []  # list of TorchPoint      
         
         self.losses = {}  # Loss values (for logging)
         self.loss_fns = {}  # Loss functions (for training)
         self.ndgs = {}  # Non-degeneracy conditions
         self.goals = {}  # Goal constraints to achieve
         self.iso_triangles = {} # Lưu thông tin tam giác cân: key -> apex_idx
+        self.quadrilateral_type = None
         
         #optimize 
         self.has_loss = False
@@ -250,6 +251,8 @@ class Optimizer:
                      weight=1.0)
         return [point_1, point_2, point_3, point_4]
     
+    
+    
     def sample_rectangle(self, points, corner_point): # hình chữ nhật
         assert len(points) == 4
         
@@ -282,9 +285,7 @@ class Optimizer:
             # Đảm bảo BC > AB * 1.5
             ratio = d12 / (d01 + 1e-8)
             return torch.relu(1.5 - ratio)  # penalty nếu ratio < 1.5
-        
         self.register_loss(f"rect_aspect_ratio", aspect_ratio_constraint, weight=5.0)
-
 
         # constraint 2: 4 goc vuong nhau
         def angle_at_A():
@@ -325,6 +326,49 @@ class Optimizer:
                      weight=1.0)
         
         return [point_1, point_2, point_3, point_4]
+    
+
+    
+    def sample_rhombus (self, points, corner_point): # hình thoi
+        assert len(points) == 4
+
+        point_1 = self.sample_uniform(points[0])
+        point_2 = self.sample_uniform(points[1])
+        point_3 = self.sample_uniform(points[2])
+        point_4 = self.sample_uniform(points[3])
+        pts = [point_1, point_2, point_3, point_4]
+        
+        # constraint 1: 4 canh bang nhau AB = BC = CD = DA
+        def equal_sides_constraint():
+            d01 = self.dist(pts[0], pts[1]) # AB
+            d12 = self.dist(pts[1], pts[2]) # BC
+            d23 = self.dist(pts[2], pts[3]) # CD
+            d30 = self.dist(pts[3], pts[0]) # DA
+            
+            avg=(d01 + d12 + d23 + d30) / 4.0
+            return (d01 - avg)**2 + (d12 - avg)**2 + (d23 - avg)**2 + (d30 - avg)**2
+        self.register_loss(f"rhombus_sides_{points[0].val}_{points[1].val}_{points[2].val}_{points[3].val}",
+                      equal_sides_constraint,
+                      weight=10.0)  
+        
+        # constraint 2: 2 duong cheo vuong goc
+        def diagonals_perpendicular():
+            v_ac_x = pts[2].x - pts[0].x # AC
+            v_ac_y = pts[2].y - pts[0].y
+            v_bd_x = pts[3].x - pts[1].x # BD
+            v_bd_y = pts[3].y - pts[1].y
+            return v_ac_x * v_bd_x + v_ac_y * v_bd_y
+        
+        self.register_loss(f"rhombus_diagonals_{points[0].val}_{points[1].val}_{points[2].val}_{points[3].val}",
+                      diagonals_perpendicular,
+                      weight=100.0)      
+        self.register_ndg(f"rhombus_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
+                     lambda a=pts[0], b=pts[1], c=pts[2]: self.collinear(a, b, c),
+                     weight=1.0)
+        self.quadrilateral_type = "rhombus"
+        return [point_1, point_2, point_3, point_4]
+    
+    
     
     def on_line(self, p: TorchPoint, line: LineNF):
         # line in normal form: n · p - r = 0
@@ -394,6 +438,9 @@ class Optimizer:
         elif param_type == "rectangle":
             corner = args[0] if args else None
             self.sample_rectangle(obj, corner)
+        elif param_type == "rhombus":
+            corner = args[0] if args else None
+            self.sample_rhombus(obj, corner)
             
         elif param_type == "on-seg":
             self.paramerter_on_seg(obj[0], args)
@@ -528,8 +575,11 @@ class Optimizer:
             p2 = diagram.points[point_names[1]]
             p3 = diagram.points[point_names[2]]
             p4 = diagram.points[point_names[3]]
+            
+            # draw_diagonals = hasattr(self, 'quadrilateral_type') and self.quadrilateral_type == "rhombus"
+            # diagram.add_quadrilateral(p1, p2, p3, p4, draw_diagonals=draw_diagonals)
             diagram.add_quadrilateral(p1, p2, p3, p4)
-        
+            
         elif n >= 3:
             for i in range(0, len(point_names) - 2, 3):
                 p1_name = point_names[i]
