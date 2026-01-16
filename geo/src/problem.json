@@ -1,0 +1,4 @@
+{
+    "instruction": "Hình vuông ABCD",
+    "answer": "(param (A B C D) (square A))"
+}
