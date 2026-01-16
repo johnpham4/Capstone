@@ -97,12 +97,22 @@ class DiagramBuilder:
         construction_type = construction[0].lower()
         construction_args = construction[1:]
 
+        # Handle special cases where args contain nested structures
+        # e.g., (projection A (segment B C))
+        processed_args = []
+        for arg in construction_args:
+            if isinstance(arg, tuple):
+                # Flatten nested structures like (segment B C) -> [B, C]
+                processed_args.extend(arg[1:])
+            else:
+                processed_args.append(arg)
+
         # Create Parameter instruction for geometric construction
         instr = Parameter(
             diagram_type=DiagramType.POINT,
             objects=[Point(point_name)],
             param_type=construction_type,
-            args=tuple(Point(p) for p in construction_args)
+            args=tuple(Point(p) for p in processed_args)
         )
         self.instructions.append(instr)
 

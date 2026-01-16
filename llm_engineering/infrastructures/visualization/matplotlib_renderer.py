@@ -161,6 +161,37 @@ class MatplotlibDiagramRenderer:
         for p1, p2, color in self.diagram.segments:
             ax.plot([p1.x, p2.x], [p1.y, p2.y], color=color, linewidth=1.0, linestyle='--', alpha=0.7)
 
+        # Draw lines (infinite lines, extended with arrows)
+        for line_name, line_data in self.diagram.lines.items():
+            p1, p2 = line_data
+            # Calculate direction vector
+            dx = p2.x - p1.x
+            dy = p2.y - p1.y
+            length = np.sqrt(dx**2 + dy**2)
+
+            if length > 0:
+                # Normalize direction
+                dx /= length
+                dy /= length
+
+                # Extend line significantly beyond the two points
+                extend_factor = 2.0  # Extend line in both directions
+                start_x = p1.x - dx * extend_factor
+                start_y = p1.y - dy * extend_factor
+                end_x = p2.x + dx * extend_factor
+                end_y = p2.y + dy * extend_factor
+
+                # Draw extended line with arrows
+                ax.plot([start_x, end_x], [start_y, end_y],
+                       color='blue', linewidth=1.0, linestyle='-', alpha=0.6)
+
+                # Add arrow heads at both ends
+                arrow_size = 0.15
+                ax.annotate('', xy=(end_x, end_y), xytext=(end_x - dx * arrow_size, end_y - dy * arrow_size),
+                           arrowprops=dict(arrowstyle='->', color='blue', lw=1.0, alpha=0.6))
+                ax.annotate('', xy=(start_x, start_y), xytext=(start_x + dx * arrow_size, start_y + dy * arrow_size),
+                           arrowprops=dict(arrowstyle='->', color='blue', lw=1.0, alpha=0.6))
+
         # Draw points and labels
         if self.diagram.points:
             # Calculate centroid for label positioning

@@ -1,54 +1,18 @@
 [
     {
-        "instruction": "Tam giác ABC",
-        "answer": "(triangle (A B C))"
+        "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+        "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
     },
     {
-        "instruction": "Tam giác ABC cân tại A",
-        "answer": "(triangle (A B C) (isosceles A))"
+        "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+        "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
     },
     {
-        "instruction": "Tam giác ABC vuông tại B",
-        "answer": "(triangle (A B C) (right B))"
+        "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC, có trọng tâm G và trực tâm H",
+        "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(define G point (centroid A B C))\n(define H point (orthocenter A B C))\n(segment D E)\n(segment E F)\n(segment D F)"
     },
     {
-        "instruction": "Tam giác ABC vuông cân tại B",
-        "answer": "(triangle (A B C) (right_isosceles B))"
-    },
-    {
-        "instruction": "Tam giác ABC đều",
-        "answer": "(triangle (A B C) (equilateral))"
-    },
-    {
-        "instruction": "Tam giác ABC, M là trung điểm BC",
-        "answer": "(triangle (A B C))\n(define M point (midpoint B C))\n(segment A M)"
-    },
-    {
-        "instruction": "Tam giác ABC có trọng tâm G",
-        "answer": "(triangle (A B C))\n(define G point (centroid A B C))"
-    },
-    {
-        "instruction": "Tam giác ABC có đường tròn nội tiếp tâm I",
-        "answer": "(triangle (A B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
-    },
-    {
-        "instruction": "Tam giác ABC có đường tròn ngoại tiếp tâm O",
-        "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
-    },
-    {
-        "instruction": "Tam giác ABC vuông tại A, có trực tâm H",
-        "answer": "(triangle (A B C) (right A))\n(define H point (orthocenter A B C))"
-    },
-    {
-        "instruction": "Tam giác ABC, điểm D nằm trên đoạn AB",
-        "answer": "(triangle (A B C))\n(define D point (on-seg A B))"
-    },
-    {
-        "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-        "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
-    },
-    {
-        "instruction": "Tam giác ABC cân tại A, có đường cao AH",
-        "answer": "(triangle (A B C) (isosceles A))\n(define H point (perpendicular A (B C)))\n(segment A H)"
+        "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
+        "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(define p point (projection C (segment A B)))\n(segment B C)\n(segment D E)\n(line C p)"
     }
 ]

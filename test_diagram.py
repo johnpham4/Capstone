@@ -18,10 +18,10 @@ def test_single_problem(instruction, dsl_answer, output_path):
         builder = DiagramBuilder(dsl_lines)
 
         print(f"Points: {[p.val for p in builder.points]}")
-        print(f"Instructions: {builder.instructions}")
+        # print(f"Instructions: {builder.instructions}")
 
         opts = {
-            'epochs': 1000,
+            'epochs': 1500,
             'learning_rate': 0.01
         }
 
@@ -33,7 +33,7 @@ def test_single_problem(instruction, dsl_answer, output_path):
             print(f"  {name}: ({point.x:.4f}, {point.y:.4f})")
 
         renderer = MatplotlibDiagramRenderer()
-        fig, ax = renderer.render(diagram)
+        fig, ax = renderer.render(diagram, save=True, show=False, filename=str(output_path))
 
         fig.suptitle(instruction, fontsize=10, wrap=True)
 

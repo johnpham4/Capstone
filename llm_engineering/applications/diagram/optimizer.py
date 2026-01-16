@@ -28,12 +28,16 @@ class Optimizer:
         self.losses = {}  # Loss values (for logging)
         self.loss_fns = {}  # Loss functions (for training)
         self.ndgs = {}  # Non-degeneracy conditions
-        self.goals = {}  # Goal constraints to achieve
 
         # Diagram metadata tracking
         self.triangles_metadata = {}  # (p1, p2, p3) -> {type, right_angle_at, equal_sides}
         self.circles = []  # [(center_name, radius_or_points)]
         self.segments = []  # [(p1_name, p2_name)]
+        self.lines = []  # [(p1_name, p2_name)] for visualization
+        self.line_objects = {}  # line_name -> LineNF
+
+        # Unnamed point generation for auto-created intersections
+        self.unnamed_point_counter = 0
 
         # Optimization parameters
         self.has_loss = False
@@ -56,6 +60,15 @@ class Optimizer:
         param = nn.Parameter(val)
         self.trainable_vars.append(param)
         return param.squeeze()
+
+    def generate_unnamed_point_name(self):
+        """Generate sequential unnamed point names: P, P1, P2, P3..."""
+        if self.unnamed_point_counter == 0:
+            name = "P"
+        else:
+            name = f"P{self.unnamed_point_counter}"
+        self.unnamed_point_counter += 1
+        return name
 
     def const(self, x):
         return torch.tensor(x, dtype=torch.float64, device=self.device)
@@ -141,7 +154,7 @@ class Optimizer:
 
 
     def sample_uniform(self, p, lo=-1.0, hi=1.0, save_name=True, init_coords=None):
-        """Sample a point uniformly in a box"""
+
         if init_coords is not None:
             x = self.mkvar(f"{p.val}_x", lo, hi, init_value=init_coords[0])
             y = self.mkvar(f"{p.val}_y", lo, hi, init_value=init_coords[1])
@@ -152,16 +165,6 @@ class Optimizer:
         return self.register_pt(p, P, save_name)
 
     def sample_triangle(self, points: list, constraints: dict = None):
-        """
-        Universal triangle sampler with flexible constraints
-
-        Args:
-            points: List of 3 Point objects
-            constraints: Dict with optional keys:
-                - 'type': 'isosceles', 'right', 'equilateral', 'right_isosceles'
-                - 'apex_idx': vertex index for isosceles (0, 1, or 2)
-                - 'right_idx': vertex index for right angle (0, 1, or 2)
-        """
         assert len(points) == 3
 
         constraints = constraints or {}
@@ -232,8 +235,8 @@ class Optimizer:
 
         return [p1, p2, p3]
 
-    def _define_altitude_foot(self, point_name, vertex_point, segment_points):
-        """Define foot of altitude from vertex to opposite side (perpendicular projection)"""
+    def _define_projection(self, point_name, vertex_point, segment_points):
+
         assert len(segment_points) == 2
 
         foot = self.sample_uniform(point_name)
@@ -248,19 +251,10 @@ class Optimizer:
             vec_seg_x = p2.x - p1.x
             vec_seg_y = p2.y - p1.y
             dot = vec_vf_x * vec_seg_x + vec_vf_y * vec_seg_y
-            return dot ** 2
-
-        # Loss 2: on segment (collinearity)
-        def on_segment_loss():
-            vec_1f_x = foot.x - p1.x
-            vec_1f_y = foot.y - p1.y
-            vec_12_x = p2.x - p1.x
-            vec_12_y = p2.y - p1.y
-            cross = vec_1f_x * vec_12_y - vec_1f_y * vec_12_x
-            return cross ** 2
+            return dot
 
         self.register_loss(f"perpendicular_{point_name.val}", perpendicular_loss, weight=10.0)
-        self.register_loss(f"on_segment_{point_name.val}", on_segment_loss, weight=10.0)
+        self.register_loss(f"on_segment_{point_name.val}", lambda: self.collinear(foot, p1, p2), weight=10.0)
 
         return foot
 
@@ -364,32 +358,20 @@ class Optimizer:
         return orthocenter
 
     def _define_midpoint(self, point_name, segment_points):
-        """Define midpoint of a segment"""
         assert len(segment_points) == 2
 
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
 
-        # Learnable point
         midpoint = self.sample_uniform(point_name)
 
-        # Loss 1: position at midpoint
         def midpoint_loss():
             expected_x = (p1.x + p2.x) / 2
             expected_y = (p1.y + p2.y) / 2
             return (midpoint.x - expected_x)**2 + (midpoint.y - expected_y)**2
 
-        # Loss 2: on segment (collinearity)
-        def on_segment_loss():
-            vec_1m_x = midpoint.x - p1.x
-            vec_1m_y = midpoint.y - p1.y
-            vec_12_x = p2.x - p1.x
-            vec_12_y = p2.y - p1.y
-            cross = vec_1m_x * vec_12_y - vec_1m_y * vec_12_x
-            return cross ** 2
-
-        self.register_loss(f"midpoint_{point_name.val}", midpoint_loss, weight=10.0)
-        self.register_loss(f"on_segment_mid_{point_name.val}", on_segment_loss, weight=10.0)
+        self.register_loss(f"midpoint_{point_name.val}", midpoint_loss, weight=5.0)
+        self.register_loss(f"on_segment_mid_{point_name.val}", lambda: self.collinear(midpoint, p1, p2), weight=10.0)
         return midpoint
 
     def parameter_on_seg(self, p, segment_points: list):
@@ -398,15 +380,11 @@ class Optimizer:
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
 
-        # Create parameter t in [0, 1]
-        t = self.mkvar(f"{p.val}_t", 0.0, 1.0)
+        P = self.sample_uniform(p)
 
-        # Interpolate: p = p1 + t * (p2 - p1)
-        x = p1.x + t * (p2.x - p1.x)
-        y = p1.y + t * (p2.y - p1.y)
+        self.register_loss(f"on_seg_{p.val}", lambda: self.collinear(P, p1, p2), weight=10.0)
 
-        P = self.get_point(x, y)
-        return self.register_pt(p, P)
+        return P
 
     def parameter_on_line(self, p, line_points):
         assert len(line_points) == 2
@@ -414,23 +392,68 @@ class Optimizer:
         p1 = self.lookup_pt(line_points[0])
         p2 = self.lookup_pt(line_points[1])
 
-        # Create the line
-        line = self.pp2lnf(p1, p2)
-
         # Create a free point
         P = self.sample_uniform(p, save_name=False)
 
-        # Constrain it to be on the line
-        self.register_loss(f"on_line_{p.val}",
-                          lambda pt=P, ln=line: self.on_line(pt, ln), weight=10.0)
+        # Constrain it to be on the line - recompute line each iteration
+        def on_line_loss():
+            line = self.pp2lnf(p1, p2)
+            return self.on_line(P, line)**2
+
+        self.register_loss(f"on_line_{p.val}", on_line_loss, weight=10.0)
 
         return self.register_pt(p, P)
 
+    def _define_line_intersection(self, point_name, line1_points, line2_points):
+        """Define intersection point of two lines"""
+        assert len(line1_points) == 2 and len(line2_points) == 2
+
+        p1 = self.lookup_pt(line1_points[0])
+        p2 = self.lookup_pt(line1_points[1])
+        p3 = self.lookup_pt(line2_points[0])
+        p4 = self.lookup_pt(line2_points[1])
+
+        # Create learnable intersection point
+        intersection = self.sample_uniform(point_name)
+
+        # Constraint: point must be on both lines - recompute lines each iteration
+        def intersection_loss():
+            line1 = self.pp2lnf(p1, p2)
+            line2 = self.pp2lnf(p3, p4)
+            dist1 = self.on_line(intersection, line1)
+            dist2 = self.on_line(intersection, line2)
+            return dist1**2 + dist2**2
+
+        self.register_loss(f"intersection_{point_name.val}", intersection_loss, weight=10.0)
+        return intersection
+
+    def _define_perpendicular_bisector_point(self, point_name, segment_points):
+        """Define a point that lies on the perpendicular bisector of a segment"""
+        assert len(segment_points) == 2
+
+        p1 = self.lookup_pt(segment_points[0])
+        p2 = self.lookup_pt(segment_points[1])
+
+        # Create learnable point
+        point = self.sample_uniform(point_name)
+
+        # Constraint: equidistant from both endpoints
+        def perp_bisector_loss():
+            d1 = self.dist(point, p1)
+            d2 = self.dist(point, p2)
+            return (d1 - d2)**2
+
+        self.register_loss(f"perp_bisector_{point_name.val}", perp_bisector_loss, weight=10.0)
+        return point
+
     def process_instruction(self, instr):
+        from llm_engineering.domains.geometry.instructions import Assertion
+
         if isinstance(instr, Parameter):
             self.process_parameter(instr)
-        # elif isinstance(instr, Assert):
-        #     self.process_assert(instr)
+        elif isinstance(instr, Assertion):
+            self.process_assertion(instr)
+
 
     def process_parameter(self, instr):
         from llm_engineering.domains.geometry.types import TriangleType, DiagramType
@@ -450,13 +473,13 @@ class Optimizer:
         elif diagram_type == DiagramType.SEGMENT:
             self._process_segment_parameter(objects)
         elif diagram_type == DiagramType.LINE:
-            pass  # Lines just for visualization, no constraints needed
+            self._process_line_parameter(param_type, objects, args)
         else:
             if self.verbosity:
                 logger.warning(f"Unsupported diagram type: {diagram_type}")
 
     def _process_triangle_parameter(self, param_type, objects, args):
-        """Process triangle instructions using unified constraint-based approach"""
+
         from llm_engineering.domains.geometry.types import TriangleType
 
         # Handle TriangleType enum
@@ -468,7 +491,7 @@ class Optimizer:
         # Build constraints dict
         constraints = {}
 
-        if param_type_str in ["isosceles", "iso-tri"]:
+        if param_type_str == "isosceles":
             constraints['type'] = 'isosceles'
             if args:
                 # Find apex index
@@ -501,7 +524,7 @@ class Optimizer:
         self.sample_triangle(objects, constraints)
 
     def _process_point_parameter(self, param_type, objects, args):
-        """Process point definitions (centroid, incenter, etc.)"""
+
         param_type_str = str(param_type).lower() if param_type else ""
 
         if param_type_str == "centroid":
@@ -514,13 +537,21 @@ class Optimizer:
             self._define_circumcenter(objects[0], args)
         elif param_type_str == "midpoint":
             self._define_midpoint(objects[0], args)
-        elif param_type_str in ["altitude_foot", "altitude-foot", "projection", "perpendicular"]:
-            # args[0] is vertex, args[1:] are segment endpoints
-            self._define_altitude_foot(objects[0], args[0], args[1:])
-        elif param_type_str in ["on-seg", "on_seg"]:
+        elif param_type_str == "projection":
+            self._define_projection(objects[0], args[0], args[1:])
+        elif param_type_str == "segment":
             self.parameter_on_seg(objects[0], args)
-        elif param_type_str in ["on-line", "on_line"]:
+        elif param_type_str == "line":
             self.parameter_on_line(objects[0], args)
+        elif param_type_str in ["inter-ll", "inter_ll"]:
+            # args should be 4 points: line1_p1, line1_p2, line2_p1, line2_p2
+            if len(args) >= 4:
+                self._define_line_intersection(objects[0], args[0:2], args[2:4])
+            else:
+                if self.verbosity:
+                    logger.warning(f"inter-ll requires 4 points, got {len(args)}")
+        elif param_type_str in ["perp-bisector", "perpendicular-bisector"]:
+            self._define_perpendicular_bisector_point(objects[0], args)
         elif param_type_str == "coords" or param_type_str == "":
             self.sample_uniform(objects[0])
         else:
@@ -548,6 +579,28 @@ class Optimizer:
             p1_name = objects[0].val if hasattr(objects[0], 'val') else str(objects[0])
             p2_name = objects[1].val if hasattr(objects[1], 'val') else str(objects[1])
             self.segments.append((p1_name, p2_name))
+
+    def _process_line_parameter(self, param_type, objects, args):
+        """Process line instructions - store for visualization"""
+        # Line through 2 points: (line A B)
+        if len(objects) >= 2:
+            p1_name = objects[0].val if hasattr(objects[0], 'val') else str(objects[0])
+            p2_name = objects[1].val if hasattr(objects[1], 'val') else str(objects[1])
+            self.lines.append((p1_name, p2_name))
+
+    def process_assertion(self, assertion):
+        """Process assertion/constraint instructions"""
+        # Assertions are handled separately - they add constraints to existing objects
+        # For now, we'll log them and handle common cases
+        if self.verbosity:
+            logger.info(f"Processing assertion: {assertion}")
+
+        # TODO: Implement assertion processing based on constraint type
+        # Common assertions:
+        # - (on-line P l): Point P on line l
+        # - (para l1 l2): Line l1 parallel to l2
+        # - (perp l1 l2): Line l1 perpendicular to l2
+        # - (= (uangle ...) (uangle ...)): Angle equality
 
 
     def preprocess(self):
@@ -679,5 +732,14 @@ class Optimizer:
                 p1 = diagram.points[p1_name]
                 p2 = diagram.points[p2_name]
                 diagram.add_segment(p1, p2)
+
+        # Add lines
+        for p1_name, p2_name in self.lines:
+            if p1_name in diagram.points and p2_name in diagram.points:
+                p1 = diagram.points[p1_name]
+                p2 = diagram.points[p2_name]
+                # Store line as tuple for rendering
+                line_name = f"line_{p1_name}_{p2_name}"
+                diagram.add_line(line_name, (p1, p2))
 
         return diagram
