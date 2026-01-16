@@ -1,0 +1,30 @@
+[
+    {
+        "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC, có trọng tâm G và trực tâm H",
+        "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(define G point (centroid A B C))\n(define H point (orthocenter A B C))\n(segment D E)\n(segment E F)\n(segment D F)"
+    },
+    {
+        "instruction": "Hình vuông ABCD",
+        "answer": "(square (A B C D))"
+    },
+    {
+        "instruction": "Hình vuông ACDB",
+        "answer": "(square (A C D B))"
+    },
+    {
+        "instruction": "Hình vuông EFGH",
+        "answer": "(square (E F G H))"
+    },
+    {
+        "instruction": "Hình chữ nhật ABCD",
+        "answer": "(rectangle (A B C D))"
+    },
+    {
+        "instruction": "Hình chữ nhật ACDB",
+        "answer": "(rectangle (A C D B))"
+    },
+    {
+        "instruction": "Hình chữ nhật KLMN",
+        "answer": "(rectangle (K L M N))"
+    }
+]

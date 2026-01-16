@@ -14,23 +14,18 @@ zenml:
 zenml_status:
 	uv run zenml status
 
-extract:
-	uv run python -m tools.run --run-extract --no-cache
-
-upload:
-	uv run python -m tools.run --run-upload-dataset
-
-fe:
-	uv run python -m tools.run --run-feature-engineering --no-cache
 
 ngrok_up:
 	- curl -s http://localhost:4040/api/tunnels | grep -o 'https://[^"]*'
 
+data:
+	uv run python -m tools.run --run-prepare-data --no-cache
+
 generation:
 	uv run python tools/run.py --run-generate-gmbl --no-cache
 
-data:
-	uv run python -m tools.run --run-prepare-data --no-cache
+upload:
+	uv run python -m tools.run --run-upload-dataset
 
 simple_finetune:
 	uv run python tools/run.py --run-finetune

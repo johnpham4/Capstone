@@ -1,0 +1,223 @@
+"""
+Matplotlib Diagram Renderer - Infrastructure Layer
+Renders diagrams using matplotlib
+"""
+import matplotlib.pyplot as plt
+import numpy as np
+from pathlib import Path
+from loguru import logger
+
+from llm_engineering.domains.geometry import Diagram, GeometricPoint
+
+
+class MatplotlibDiagramRenderer:
+
+    def __init__(self, diagram: Diagram = None):
+        self.diagram = diagram
+
+    def _draw_tick_marks(self, ax, p1: GeometricPoint, p2: GeometricPoint, num_ticks: int) -> None:
+        mx, my = (p1.x + p2.x) / 2, (p1.y + p2.y) / 2
+        dx, dy = p2.x - p1.x, p2.y - p1.y
+        length = np.sqrt(dx**2 + dy**2)
+
+        # Normal vector (perpendicular)
+        nx, ny = -dy / length, dx / length
+
+        tick_size = length * 0.05
+        tick_spacing = length * 0.03
+
+        # Draw multiple ticks
+        for i in range(num_ticks):
+            offset = (i - (num_ticks - 1) / 2) * tick_spacing
+            # Perpendicular offset
+            tx, ty = mx + dx / length * offset, my + dy / length * offset
+
+            ax.plot(
+                [tx - nx * tick_size, tx + nx * tick_size],
+                [ty - ny * tick_size, ty + ny * tick_size],
+                'k-',
+                linewidth=1.5
+            )
+
+    def _draw_right_angle_symbol(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint) -> None:
+        # Vectors from vertex to other two points
+        v1x, v1y = p1.x - vertex.x, p1.y - vertex.y
+        v2x, v2y = p2.x - vertex.x, p2.y - vertex.y
+
+        # Normalize
+        len1 = np.sqrt(v1x**2 + v1y**2)
+        len2 = np.sqrt(v2x**2 + v2y**2)
+
+        if len1 == 0 or len2 == 0:
+            return
+
+        v1x, v1y = v1x / len1, v1y / len1
+        v2x, v2y = v2x / len2, v2y / len2
+
+        # Size of right angle symbol (10% of shortest leg)
+        size = min(len1, len2) * 0.1
+
+        # Draw small square
+        corner1 = (vertex.x + v1x * size, vertex.y + v1y * size)
+        corner2 = (vertex.x + v1x * size + v2x * size, vertex.y + v1y * size + v2y * size)
+        corner3 = (vertex.x + v2x * size, vertex.y + v2y * size)
+
+        ax.plot([corner1[0], corner2[0], corner3[0]],
+                [corner1[1], corner2[1], corner3[1]],
+                'k-', linewidth=1.0)
+
+    def render(
+        self,
+        diagram: Diagram = None,
+        show: bool = False,
+        save: bool = True,
+        filename: str = "diagram_output.png"
+    ):
+
+        if diagram:
+            self.diagram = diagram
+
+        if not self.diagram:
+            raise ValueError("No diagram to render")
+
+        fig, ax = plt.subplots(figsize=(8, 8))
+
+        # 1. Draw Triangles (Solid Lines)
+        for tri in self.diagram.triangles:
+            p1, p2, p3 = tri[0], tri[1], tri[2]
+            equal_sides = tri[3] if len(tri) > 3 else None
+            right_angle_at = tri[4] if len(tri) > 4 else None
+
+            xs = [p1.x, p2.x, p3.x, p1.x]
+            ys = [p1.y, p2.y, p3.y, p1.y]
+            ax.plot(xs, ys, 'k-', linewidth=1.5)
+
+            # Draw tick marks for equal sides
+            if equal_sides:
+                pts = [p1, p2, p3]
+                sides_map = {}
+                for pair_idx, (i, j) in enumerate(equal_sides):
+                    found = False
+                    for existing_sides, tick_num in sides_map.items():
+                        if (i, j) in existing_sides or (j, i) in existing_sides:
+                            found = True
+                            break
+                    if not found:
+                        equal_group = [(i, j)]
+                        for other_i, other_j in equal_sides:
+                            if (other_i, other_j) != (i, j) and (other_j, other_i) != (i, j):
+                                if i in (other_i, other_j) or j in (other_i, other_j):
+                                    equal_group.append((other_i, other_j))
+                        sides_map[tuple(equal_group)] = len(sides_map) + 1
+
+                drawn = set()
+                for sides_group, num_ticks in sides_map.items():
+                    for i, j in sides_group:
+                        if (i, j) not in drawn and (j, i) not in drawn:
+                            self._draw_tick_marks(ax, pts[i], pts[j], num_ticks)
+                            drawn.add((i, j))
+
+            if right_angle_at is not None:
+                pts = [p1, p2, p3]
+                vertex = pts[right_angle_at]
+                others = [pts[i] for i in range(3) if i != right_angle_at]
+                self._draw_right_angle_symbol(ax, vertex, others[0], others[1])
+
+        # 2. Draw Quadrilaterals (Solid Lines) - [UPDATED: No right angles]
+        if hasattr(self.diagram, 'quadrilaterals'):
+            for quad in self.diagram.quadrilaterals:
+                if len(quad) >= 4:
+                    xs = [p.x for p in quad] + [quad[0].x]
+                    ys = [p.y for p in quad] + [quad[0].y]
+                    
+                    ax.plot(xs, ys, 'k-', linewidth=1.5)
+
+        # 3. Draw Circles
+        for center, info in self.diagram.circles:
+            if isinstance(info, dict):
+                if info['type'] == 'incircle':
+                    tri_points = [self.diagram.points[name] for name in info['triangle'] if name in self.diagram.points]
+                    if len(tri_points) == 3:
+                        p1, p2 = tri_points[0], tri_points[1]
+                        num = abs((p2.y - p1.y) * center.x - (p2.x - p1.x) * center.y + p2.x * p1.y - p2.y * p1.x)
+                        den = np.sqrt((p2.y - p1.y)**2 + (p2.x - p1.x)**2)
+                        radius = num / den if den > 0 else 0.1
+                        circle = plt.Circle((center.x, center.y), radius, fill=False, edgecolor='blue', linewidth=1.0)
+                        ax.add_patch(circle)
+                elif info['type'] == 'circumcircle':
+                    tri_points = [self.diagram.points[name] for name in info['triangle'] if name in self.diagram.points]
+                    if len(tri_points) == 3:
+                        radius = center.distance_to(tri_points[0])
+                        circle = plt.Circle((center.x, center.y), radius, fill=False, edgecolor='green', linewidth=1.0)
+                        ax.add_patch(circle)
+            else:
+                circle = plt.Circle((center.x, center.y), info, fill=False, edgecolor='black', linewidth=1.0)
+                ax.add_patch(circle)
+
+        # 4. Draw Segments (Auxiliary - Dashed)
+        for p1, p2, color in self.diagram.segments:
+            ax.plot([p1.x, p2.x], [p1.y, p2.y], color=color, linewidth=1.0, linestyle='--', alpha=0.7)
+
+        # 5. Draw Lines
+        for line_name, line_data in self.diagram.lines.items():
+            p1, p2 = line_data
+            dx = p2.x - p1.x
+            dy = p2.y - p1.y
+            length = np.sqrt(dx**2 + dy**2)
+
+            if length > 0:
+                dx /= length
+                dy /= length
+                extend_factor = 2.0
+                start_x = p1.x - dx * extend_factor
+                start_y = p1.y - dy * extend_factor
+                end_x = p2.x + dx * extend_factor
+                end_y = p2.y + dy * extend_factor
+
+                ax.plot([start_x, end_x], [start_y, end_y],
+                       color='blue', linewidth=1.0, linestyle='-', alpha=0.6)
+
+                arrow_size = 0.15
+                ax.annotate('', xy=(end_x, end_y), xytext=(end_x - dx * arrow_size, end_y - dy * arrow_size),
+                           arrowprops=dict(arrowstyle='->', color='blue', lw=1.0, alpha=0.6))
+                ax.annotate('', xy=(start_x, start_y), xytext=(start_x + dx * arrow_size, start_y + dy * arrow_size),
+                           arrowprops=dict(arrowstyle='->', color='blue', lw=1.0, alpha=0.6))
+
+        # 6. Draw Points and Labels
+        if self.diagram.points:
+            cx = sum(p.x for p in self.diagram.points.values()) / len(self.diagram.points)
+            cy = sum(p.y for p in self.diagram.points.values()) / len(self.diagram.points)
+
+            for name, p in self.diagram.points.items():
+                ax.plot(p.x, p.y, 'ko', markersize=4)
+                dx, dy = p.x - cx, p.y - cy
+                dist = np.sqrt(dx**2 + dy**2)
+
+                if dist > 0:
+                    ox, oy = dx / dist * 12, dy / dist * 12
+                else:
+                    ox, oy = 8, 8
+
+                ax.annotate(
+                    name, (p.x, p.y),
+                    xytext=(ox, oy),
+                    textcoords='offset points',
+                    fontsize=10,
+                    fontweight='bold'
+                )
+
+        ax.set_aspect('equal')
+        ax.axis('off')
+
+        if save:
+            output_path = Path(filename)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            plt.savefig(str(output_path), bbox_inches='tight', dpi=150)
+            logger.info(f"Diagram saved to: {output_path}")
+
+        if show:
+            plt.show()
+        elif not save:
+            plt.close(fig)
+
+        return fig, ax
