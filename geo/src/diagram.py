@@ -18,12 +18,16 @@ class Diagram:
         """equal_sides: list các tuple chỉ cặp đỉnh có cạnh bằng nhau, vd [(0,1), (0,2)] cho tam giác cân tại đỉnh 0"""
         self.triangles.append((p1, p2, p3, equal_sides))
     
-    def add_quadrilateral(self, p1, p2, p3, p4):
+    def add_quadrilateral(self, p1, p2, p3, p4, draw_diagonals=False):
         """Thêm tứ giác ABCD bằng cách vẽ 4 cạnh"""
         self.add_segment(p1, p2)
         self.add_segment(p2, p3)
         self.add_segment(p3, p4)
         self.add_segment(p4, p1)
+        
+        # if draw_diagonals:
+        #     self.lines.append((p1, p3))  
+        #     self.lines.append((p2, p4))
 
     def add_segment(self, p1, p2, color="black"):
         self.segments.append((p1, p2, color))
