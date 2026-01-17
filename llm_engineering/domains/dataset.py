@@ -2,6 +2,7 @@ from enum import Enum
 
 from llm_engineering.domains.types import DataCategory
 from loguru import logger
+from pydantic import BaseModel
 
 try:
     from datasets import Dataset, DatasetDict, concatenate_datasets
@@ -10,7 +11,7 @@ except ImportError:
 
 from llm_engineering.domains.orm.nosql import NoSQLBaseDocument
 
-class InstructDatasetSample(NoSQLBaseDocument):
+class InstructDatasetSample(BaseModel):
     image_dir: str
     instruction: str
     answer: str
@@ -18,7 +19,7 @@ class InstructDatasetSample(NoSQLBaseDocument):
     class Settings:
         name: str = DataCategory.INSTRUCT_DATASET_SAMPLES
 
-class InstructDataset(NoSQLBaseDocument):
+class InstructDataset(BaseModel):
     samples: list[InstructDatasetSample]
 
     class Config:
@@ -50,7 +51,7 @@ class InstructDataset(NoSQLBaseDocument):
         return Dataset.from_dict(dataset_dict)
 
 
-class TrainTestSplit(NoSQLBaseDocument):
+class TrainTestSplit(BaseModel):
     train: InstructDataset
     test: InstructDataset
     test_split_size: float
@@ -66,7 +67,7 @@ class TrainTestSplit(NoSQLBaseDocument):
         return DatasetDict({"train": train_datasets, "test": test_datasets})
 
 
-class InstructTrainTestSplit(TrainTestSplit):
+class InstructTrainTestSplit(BaseModel):
     train: InstructDataset
     test: InstructDataset
     test_split_size: float
