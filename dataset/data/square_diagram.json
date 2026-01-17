@@ -1,0 +1,146 @@
+[
+  {
+    "image": "images/img_210001.png",
+    "caption": "square ABCD",
+    "id": 210001,
+    "caption_vn": "Hình vuông ABCD"
+  },
+  {
+    "image": "images/img_210002.png",
+    "caption": "square ABCD, AB = 4",
+    "id": 210002,
+    "caption_vn": "Hình vuông ABCD có cạnh AB = 4"
+  },
+  {
+    "image": "images/img_210003.png",
+    "caption": "square ABCD, angle ABC = 90",
+    "id": 210003,
+    "caption_vn": "Hình vuông ABCD có góc ABC = 90 độ"
+  },
+  {
+    "image": "images/img_210004.png",
+    "caption": "square ABCD, AB ⟂ BC",
+    "id": 210004,
+    "caption_vn": "Hình vuông ABCD có AB vuông góc BC"
+  },
+  {
+    "image": "images/img_210005.png",
+    "caption": "square ABCD, AB ∥ CD, BC ∥ AD",
+    "id": 210005,
+    "caption_vn": "Hình vuông ABCD có AB song song CD, BC song song AD"
+  },
+  {
+    "image": "images/img_210006.png",
+    "caption": "square ABCD, diagonal AC",
+    "id": 210006,
+    "caption_vn": "Hình vuông ABCD có đường chéo AC"
+  },
+  {
+    "image": "images/img_210007.png",
+    "caption": "square ABCD, diagonals AC and BD",
+    "id": 210007,
+    "caption_vn": "Hình vuông ABCD có hai đường chéo AC và BD"
+  },
+  {
+    "image": "images/img_210008.png",
+    "caption": "square ABCD, diagonals AC and BD intersect at O",
+    "id": 210008,
+    "caption_vn": "Hình vuông ABCD, hai đường chéo AC và BD cắt nhau tại O"
+  },
+  {
+    "image": "images/img_210009.png",
+    "caption": "square ABCD, AC ⟂ BD",
+    "id": 210009,
+    "caption_vn": "Hình vuông ABCD có AC vuông góc BD"
+  },
+  {
+    "image": "images/img_210010.png",
+    "caption": "square ABCD, AC = BD",
+    "id": 210010,
+    "caption_vn": "Hình vuông ABCD có hai đường chéo bằng nhau"
+  },
+  {
+    "image": "images/img_210011.png",
+    "caption": "square ABCD, O is midpoint of AC and BD",
+    "id": 210011,
+    "caption_vn": "Hình vuông ABCD, O là trung điểm của AC và BD"
+  },
+  {
+    "image": "images/img_210012.png",
+    "caption": "square ABCD, M is midpoint of AB",
+    "id": 210012,
+    "caption_vn": "Hình vuông ABCD, M là trung điểm của AB"
+  },
+  {
+    "image": "images/img_210013.png",
+    "caption": "square ABCD, N is midpoint of BC",
+    "id": 210013,
+    "caption_vn": "Hình vuông ABCD, N là trung điểm của BC"
+  },
+  {
+    "image": "images/img_210014.png",
+    "caption": "square ABCD, M and N are midpoints of AB and BC",
+    "id": 210014,
+    "caption_vn": "Hình vuông ABCD, M và N lần lượt là trung điểm của AB và BC"
+  },
+  {
+    "image": "images/img_210015.png",
+    "caption": "square ABCD, line through midpoint of AB parallel to CD",
+    "id": 210015,
+    "caption_vn": "Hình vuông ABCD, đường thẳng đi qua trung điểm AB và song song CD"
+  },
+  {
+    "image": "images/img_210016.png",
+    "caption": "square ABCD, triangle ABC",
+    "id": 210016,
+    "caption_vn": "Hình vuông ABCD, xét tam giác ABC"
+  },
+  {
+    "image": "images/img_210017.png",
+    "caption": "square ABCD, triangle ABD",
+    "id": 210017,
+    "caption_vn": "Hình vuông ABCD, xét tam giác ABD"
+  },
+  {
+    "image": "images/img_210018.png",
+    "caption": "square ABCD, triangle AOB",
+    "id": 210018,
+    "caption_vn": "Hình vuông ABCD, xét tam giác AOB"
+  },
+  {
+    "image": "images/img_210019.png",
+    "caption": "square ABCD, square is divided by diagonal AC",
+    "id": 210019,
+    "caption_vn": "Hình vuông ABCD được chia bởi đường chéo AC"
+  },
+  {
+    "image": "images/img_210020.png",
+    "caption": "square ABCD, square is divided into four equal squares",
+    "id": 210020,
+    "caption_vn": "Hình vuông ABCD được chia thành bốn hình vuông bằng nhau"
+  },
+  {
+    "image": "images/img_210021.png",
+    "caption": "square ABCD, square inscribed in a circle",
+    "id": 210021,
+    "caption_vn": "Hình vuông ABCD nội tiếp đường tròn"
+  },
+  {
+    "image": "images/img_210022.png",
+    "caption": "square ABCD, circle inscribed in the square",
+    "id": 210022,
+    "caption_vn": "Hình vuông ABCD có đường tròn nội tiếp"
+  },
+  {
+    "image": "images/img_210023.png",
+    "caption": "square ABCD on coordinate plane",
+    "id": 210023,
+    "caption_vn": "Hình vuông ABCD trên mặt phẳng tọa độ"
+  },
+  {
+    "image": "images/img_210024.png",
+    "caption": "square ABCD, one vertex at origin",
+    "id": 210024,
+    "caption_vn": "Hình vuông ABCD có một đỉnh tại gốc tọa độ"
+  }
+]

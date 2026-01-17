@@ -1,0 +1,306 @@
+[
+  {
+    "image": "images/img_100001.png",
+    "caption": "triangle ABC, AB = AC, angle A = 40, point D is midpoint of BC",
+    "id": 100001,
+    "caption_vn": "Tam giác ABC cân tại A, AB = AC, góc A = 40 độ, D là trung điểm của BC"
+  },
+  {
+    "image": "images/img_100002.png",
+    "caption": "triangle ABC, angle ABC = 90, AB = 6, BC = 8",
+    "id": 100002,
+    "caption_vn": "Tam giác ABC vuông tại B, AB = 6, BC = 8"
+  },
+  {
+    "image": "images/img_100003.png",
+    "caption": "triangle ABC, angle A = 50, angle B = 60, angle C = 70",
+    "id": 100003,
+    "caption_vn": "Tam giác ABC có góc A = 50 độ, góc B = 60 độ, góc C = 70 độ"
+  },
+  {
+    "image": "images/img_100004.png",
+    "caption": "equilateral triangle ABC, side length 6",
+    "id": 100004,
+    "caption_vn": "Tam giác đều ABC có cạnh bằng 6"
+  },
+  {
+    "image": "images/img_100005.png",
+    "caption": "triangle ABC, angle A > 90, altitude AH to BC",
+    "id": 100005,
+    "caption_vn": "Tam giác ABC tù tại A, đường cao AH hạ xuống BC"
+  },
+  {
+    "image": "images/img_100006.png",
+    "caption": "triangle ABC, median AM, M is midpoint of BC",
+    "id": 100006,
+    "caption_vn": "Tam giác ABC có trung tuyến AM, M là trung điểm của BC"
+  },
+  {
+    "image": "images/img_100007.png",
+    "caption": "triangle ABC, angle bisector AD, D on BC",
+    "id": 100007,
+    "caption_vn": "Tam giác ABC có đường phân giác AD, D thuộc BC"
+  },
+  {
+    "image": "images/img_100008.png",
+    "caption": "triangle ABC, right triangle at A, altitude AH",
+    "id": 100008,
+    "caption_vn": "Tam giác ABC vuông tại A, AH là đường cao"
+  },
+  {
+    "image": "images/img_100009.png",
+    "caption": "triangle ABC, AB = AC, altitude AH",
+    "id": 100009,
+    "caption_vn": "Tam giác ABC cân tại A, AH là đường cao"
+  },
+  {
+    "image": "images/img_100010.png",
+    "caption": "triangle ABC, point D on BC, AD ⟂ BC",
+    "id": 100010,
+    "caption_vn": "Tam giác ABC, D thuộc BC sao cho AD vuông góc BC"
+  },
+
+  {
+    "image": "images/img_100011.png",
+    "caption": "triangle ABC, angle A = 30, angle B = 60",
+    "id": 100011,
+    "caption_vn": "Tam giác ABC có góc A = 30 độ, góc B = 60 độ"
+  },
+  {
+    "image": "images/img_100012.png",
+    "caption": "triangle ABC, centroid G, medians intersect at G",
+    "id": 100012,
+    "caption_vn": "Tam giác ABC, các trung tuyến cắt nhau tại trọng tâm G"
+  },
+  {
+    "image": "images/img_100013.png",
+    "caption": "triangle ABC inscribed in a circle",
+    "id": 100013,
+    "caption_vn": "Tam giác ABC nội tiếp một đường tròn"
+  },
+  {
+    "image": "images/img_100014.png",
+    "caption": "triangle ABC, incircle touches BC at D",
+    "id": 100014,
+    "caption_vn": "Tam giác ABC có đường tròn nội tiếp tiếp xúc BC tại D"
+  },
+  {
+    "image": "images/img_100015.png",
+    "caption": "triangle ABC, AB ∥ DE, D on AC, E on BC",
+    "id": 100015,
+    "caption_vn": "Tam giác ABC, D thuộc AC, E thuộc BC sao cho DE song song AB"
+  },
+  {
+    "image": "images/img_100016.png",
+    "caption": "triangle ABC, angle C = 90, median CM",
+    "id": 100016,
+    "caption_vn": "Tam giác ABC vuông tại C, CM là trung tuyến"
+  },
+  {
+    "image": "images/img_100017.png",
+    "caption": "triangle ABC, AB = 5, AC = 7, BC = 8",
+    "id": 100017,
+    "caption_vn": "Tam giác ABC có AB = 5, AC = 7, BC = 8"
+  },
+  {
+    "image": "images/img_100018.png",
+    "caption": "triangle ABC, angle A = angle B",
+    "id": 100018,
+    "caption_vn": "Tam giác ABC có góc A bằng góc B"
+  },
+  {
+    "image": "images/img_100019.png",
+    "caption": "triangle ABC, right triangle, circumcenter O",
+    "id": 100019,
+    "caption_vn": "Tam giác ABC vuông, O là tâm đường tròn ngoại tiếp"
+  },
+  {
+    "image": "images/img_100020.png",
+    "caption": "triangle ABC, obtuse at B, median BM",
+    "id": 100020,
+    "caption_vn": "Tam giác ABC tù tại B, BM là trung tuyến"
+  },
+
+  {
+    "image": "images/img_100021.png",
+    "caption": "triangle ABC, angle A = 45, altitude AH",
+    "id": 100021,
+    "caption_vn": "Tam giác ABC có góc A = 45 độ, AH là đường cao"
+  },
+  {
+    "image": "images/img_100022.png",
+    "caption": "triangle ABC, AB ⟂ AC, angle B = 30",
+    "id": 100022,
+    "caption_vn": "Tam giác ABC vuông tại A, góc B = 30 độ"
+  },
+  {
+    "image": "images/img_100023.png",
+    "caption": "triangle ABC, point D on BC, BD = DC",
+    "id": 100023,
+    "caption_vn": "Tam giác ABC, D thuộc BC sao cho BD = DC"
+  },
+  {
+    "image": "images/img_100024.png",
+    "caption": "triangle ABC, angle bisectors intersect at I",
+    "id": 100024,
+    "caption_vn": "Tam giác ABC, các đường phân giác cắt nhau tại I"
+  },
+  {
+    "image": "images/img_100025.png",
+    "caption": "triangle ABC, altitude AH, median AM",
+    "id": 100025,
+    "caption_vn": "Tam giác ABC có AH là đường cao, AM là trung tuyến"
+  },
+  {
+    "image": "images/img_100026.png",
+    "caption": "triangle ABC, AB = AC, angle B = 70",
+    "id": 100026,
+    "caption_vn": "Tam giác ABC cân tại A, góc B = 70 độ"
+  },
+  {
+    "image": "images/img_100027.png",
+    "caption": "triangle ABC, right triangle, angle A = 45",
+    "id": 100027,
+    "caption_vn": "Tam giác ABC vuông, góc A = 45 độ"
+  },
+  {
+    "image": "images/img_100028.png",
+    "caption": "triangle ABC, perpendicular bisector of BC passes through A",
+    "id": 100028,
+    "caption_vn": "Tam giác ABC, đường trung trực của BC đi qua A"
+  },
+  {
+    "image": "images/img_100029.png",
+    "caption": "triangle ABC, angle A = 100, B = 40",
+    "id": 100029,
+    "caption_vn": "Tam giác ABC có góc A = 100 độ, góc B = 40 độ"
+  },
+  {
+    "image": "images/img_100030.png",
+    "caption": "triangle ABC, median AM = median BN",
+    "id": 100030,
+    "caption_vn": "Tam giác ABC có trung tuyến AM bằng trung tuyến BN"
+  },
+
+  {
+    "image": "images/img_100031.png",
+    "caption": "triangle ABC, inscribed angle equals half central angle",
+    "id": 100031,
+    "caption_vn": "Tam giác ABC có góc nội tiếp bằng nửa góc ở tâm"
+  },
+  {
+    "image": "images/img_100032.png",
+    "caption": "triangle ABC, AB ∥ CD, C and D outside triangle",
+    "id": 100032,
+    "caption_vn": "Tam giác ABC, đường thẳng CD song song AB, C và D nằm ngoài tam giác"
+  },
+  {
+    "image": "images/img_100033.png",
+    "caption": "triangle ABC, angle A = angle C",
+    "id": 100033,
+    "caption_vn": "Tam giác ABC có góc A bằng góc C"
+  },
+  {
+    "image": "images/img_100034.png",
+    "caption": "triangle ABC, right triangle, hypotenuse BC",
+    "id": 100034,
+    "caption_vn": "Tam giác ABC vuông, BC là cạnh huyền"
+  },
+  {
+    "image": "images/img_100035.png",
+    "caption": "triangle ABC, altitude from A equals median from A",
+    "id": 100035,
+    "caption_vn": "Tam giác ABC có đường cao từ A bằng trung tuyến từ A"
+  },
+  {
+    "image": "images/img_100036.png",
+    "caption": "triangle ABC, AB = BC, angle B = 80",
+    "id": 100036,
+    "caption_vn": "Tam giác ABC cân tại B, góc B = 80 độ"
+  },
+  {
+    "image": "images/img_100037.png",
+    "caption": "triangle ABC, three altitudes intersect at H",
+    "id": 100037,
+    "caption_vn": "Tam giác ABC, ba đường cao cắt nhau tại trực tâm H"
+  },
+  {
+    "image": "images/img_100038.png",
+    "caption": "triangle ABC, exterior angle at A equals sum of interior opposite angles",
+    "id": 100038,
+    "caption_vn": "Tam giác ABC, góc ngoài tại A bằng tổng hai góc trong không kề"
+  },
+  {
+    "image": "images/img_100039.png",
+    "caption": "triangle ABC, angle A = 60, AB = AC",
+    "id": 100039,
+    "caption_vn": "Tam giác ABC có góc A = 60 độ và AB = AC"
+  },
+  {
+    "image": "images/img_100040.png",
+    "caption": "triangle ABC, median AM, point M on BC",
+    "id": 100040,
+    "caption_vn": "Tam giác ABC có trung tuyến AM, M thuộc BC"
+  },
+
+  {
+    "image": "images/img_100041.png",
+    "caption": "triangle ABC, acute triangle, circumcenter inside",
+    "id": 100041,
+    "caption_vn": "Tam giác ABC nhọn, tâm đường tròn ngoại tiếp nằm trong tam giác"
+  },
+  {
+    "image": "images/img_100042.png",
+    "caption": "triangle ABC, obtuse triangle, circumcenter outside",
+    "id": 100042,
+    "caption_vn": "Tam giác ABC tù, tâm đường tròn ngoại tiếp nằm ngoài tam giác"
+  },
+  {
+    "image": "images/img_100043.png",
+    "caption": "triangle ABC, right triangle, circumcenter midpoint of hypotenuse",
+    "id": 100043,
+    "caption_vn": "Tam giác ABC vuông, tâm đường tròn ngoại tiếp là trung điểm cạnh huyền"
+  },
+  {
+    "image": "images/img_100044.png",
+    "caption": "triangle ABC, AB = AC, median equals altitude",
+    "id": 100044,
+    "caption_vn": "Tam giác ABC cân tại A, trung tuyến đồng thời là đường cao"
+  },
+  {
+    "image": "images/img_100045.png",
+    "caption": "triangle ABC, angle A = 90, angle B = angle C",
+    "id": 100045,
+    "caption_vn": "Tam giác ABC vuông tại A và có góc B bằng góc C"
+  },
+  {
+    "image": "images/img_100046.png",
+    "caption": "triangle ABC, points D and E are midpoints of AB and AC",
+    "id": 100046,
+    "caption_vn": "Tam giác ABC, D và E lần lượt là trung điểm của AB và AC"
+  },
+  {
+    "image": "images/img_100047.png",
+    "caption": "triangle ABC, line through midpoint parallel to base",
+    "id": 100047,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua trung điểm một cạnh và song song đáy"
+  },
+  {
+    "image": "images/img_100048.png",
+    "caption": "triangle ABC, angle A = 30, hypotenuse equals twice shorter side",
+    "id": 100048,
+    "caption_vn": "Tam giác ABC vuông có góc 30 độ, cạnh huyền gấp đôi cạnh ngắn"
+  },
+  {
+    "image": "images/img_100049.png",
+    "caption": "triangle ABC, isosceles right triangle at A",
+    "id": 100049,
+    "caption_vn": "Tam giác ABC vuông cân tại A"
+  },
+  {
+    "image": "images/img_100050.png",
+    "caption": "triangle ABC, angle sum equals 180",
+    "id": 100050,
+    "caption_vn": "Tam giác ABC có tổng ba góc bằng 180 độ"
+  }
+]
