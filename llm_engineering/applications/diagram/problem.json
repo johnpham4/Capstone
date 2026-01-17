@@ -1,0 +1,6 @@
+[
+    {
+    "instruction": "Hình vuông ABCD, O là trung điểm của AC và BD",
+    "answer": "(square (A B C D))\n(define O point (intersection (segment A C) (segment B D)))"
+  }
+]

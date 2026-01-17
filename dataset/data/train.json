@@ -1,1286 +1,1136 @@
 [
   {
-    "id": "f7c0d9ad-2fc7-460e-8b49-d159bbfd0de3",
-    "image_dir": "images/img_100003.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
-  },
-  {
-    "id": "22b160c5-75cb-4c31-8d4e-74ad946e1b64",
-    "image_dir": "images/img_100047.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "f94a9c4e-7b58-4c8b-b279-8aa8bb91a696",
-    "image_dir": "images/img_100038.png",
+    "id": "4a1704ba-3536-401d-a283-e8d8789f4081",
+    "image_dir": "images/img_210018.png",
     "instruction": "Tam giác ABC",
     "answer": "(triangle (A B C))"
   },
   {
-    "id": "1c047a9a-2467-4797-b34a-4c0b4c69c7c3",
-    "image_dir": "images/img_100023.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+    "id": "c6dfe77e-3c6a-43c5-be29-128bef5d64a0",
+    "image_dir": "images/img_210024.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
   },
   {
-    "id": "224da815-1e60-473a-91e4-9bfe2d2545aa",
-    "image_dir": "images/img_100016.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "8985d201-e907-49ef-ae07-dffa1866558b",
-    "image_dir": "images/img_100006.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
-  },
-  {
-    "id": "4c9f2126-d48a-404d-aba1-70e3a1f9e207",
-    "image_dir": "images/img_100026.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "7446743d-e3b2-4f8f-8f77-3b06d1563a7a",
-    "image_dir": "images/img_100040.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "db3b389d-e301-45a7-8082-5c46582e1715",
-    "image_dir": "images/img_100039.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
-  },
-  {
-    "id": "32350c67-58b3-43a0-a1b8-6d3f867428d1",
-    "image_dir": "images/img_100005.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
-  },
-  {
-    "id": "fa629778-49d4-4d59-b66a-08e870afbc5c",
-    "image_dir": "images/img_100015.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
-  },
-  {
-    "id": "b47f8b8c-e565-4f27-8760-4d73ad3828e4",
-    "image_dir": "images/img_100013.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "cc4e2850-c502-4568-b85e-fd4fa9df67d3",
-    "image_dir": "images/img_100032.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "4d9b659c-990b-4b4f-baae-7aa23ae75c91",
-    "image_dir": "images/img_100044.png",
+    "id": "f736ff35-eb5e-4ead-945a-21010e298ea3",
+    "image_dir": "images/img_210018.png",
     "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
     "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "dc3dab22-8c6d-4ea1-9e05-5beea2c84022",
-    "image_dir": "images/img_100024.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
-  },
-  {
-    "id": "a20f582e-c231-4c0b-b012-c734e817bb6a",
-    "image_dir": "images/img_100016.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "9d7ea23f-c38b-4152-a25a-293a19041098",
-    "image_dir": "images/img_100018.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "c35f68f3-be07-400b-960b-868fe293f853",
-    "image_dir": "images/img_100010.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
-  },
-  {
-    "id": "a07b7141-4bd3-4d21-a004-a7af4b2709da",
-    "image_dir": "images/img_100005.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "e2f4b6c1-0585-4c0a-b185-3f9d9e46bf51",
-    "image_dir": "images/img_100020.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "2828c559-748a-42f2-a4b6-e62f11f44235",
-    "image_dir": "images/img_100043.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "1e2d73e9-6c5e-43f8-9c53-8d39590bb5e5",
-    "image_dir": "images/img_100036.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "269b1aba-9258-4435-83e2-54c09c17b7e5",
-    "image_dir": "images/img_100009.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "e83be8c2-2e23-47de-9a0e-53229f125bba",
-    "image_dir": "images/img_100027.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "1c6c1896-ef54-42fb-a425-9e6b2160af51",
-    "image_dir": "images/img_100040.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "2bd5b43f-fe69-46e7-93dd-bdbf5068c47e",
-    "image_dir": "images/img_100048.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
-  },
-  {
-    "id": "4e2ac8e1-fb4a-492d-b7fe-3af72024fa51",
-    "image_dir": "images/img_100042.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "52f5171a-a901-4efc-b3fb-92abaa1943e6",
-    "image_dir": "images/img_100020.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "d752759f-b442-4b4d-afd5-58b03583867d",
-    "image_dir": "images/img_100048.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
-  },
-  {
-    "id": "ac9fe889-2e3d-4c6d-9c1c-dd8e95c0c298",
-    "image_dir": "images/img_100018.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "e7ddf642-1a77-49e4-860d-d40920190858",
-    "image_dir": "images/img_100035.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "073960ec-34e9-4e2a-818d-cb45929ac4ad",
-    "image_dir": "images/img_100021.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "f46ede91-4122-43eb-98c8-cd1f2bfba836",
-    "image_dir": "images/img_100032.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "b6eb46a3-d51c-48eb-ade7-83c754209f7c",
-    "image_dir": "images/img_100040.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "00481617-458f-4aa3-8753-77fcc5ab8dcd",
-    "image_dir": "images/img_100017.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
-  },
-  {
-    "id": "a550f8f7-0bbc-4375-bcd1-ea52495edb0c",
-    "image_dir": "images/img_100034.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
-  },
-  {
-    "id": "aad4edae-150f-4324-b656-02f00e39f50b",
-    "image_dir": "images/img_100026.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "498b0559-5391-4a32-923a-e25d54e816b9",
-    "image_dir": "images/img_100025.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "5c2d05f0-7673-4d36-80a7-395004bb9c39",
-    "image_dir": "images/img_100015.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "b32f2e30-c5c5-4ea5-8499-90c254f98c22",
-    "image_dir": "images/img_100046.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "f38c45a1-3ebe-47b1-b9f6-2211a0a0dc84",
-    "image_dir": "images/img_100015.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
-  },
-  {
-    "id": "cf46242a-4f99-4a60-ab4e-66a0f2f7fe7f",
-    "image_dir": "images/img_100041.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "261f761e-b6e0-42a1-9905-9ccbb00665d4",
-    "image_dir": "images/img_100015.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
-  },
-  {
-    "id": "cda458fa-540c-4ed5-bfff-0d0c365d50ae",
-    "image_dir": "images/img_100022.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "b64fd1de-1e54-4cbe-8ae1-71b96204288d",
-    "image_dir": "images/img_100050.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "12da9b10-07ff-4258-8d5c-3403330bfca1",
-    "image_dir": "images/img_100042.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "bf05a4b5-bba4-42d0-b79d-8b4a6dc9fbe2",
-    "image_dir": "images/img_100023.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "3d1a1c84-278c-4343-8627-89d2766a61ab",
-    "image_dir": "images/img_100007.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "32219b08-7700-4099-8882-29a4ae7a3423",
-    "image_dir": "images/img_100025.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "48728a0a-9da7-4650-8268-b324408b395f",
-    "image_dir": "images/img_100048.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
-  },
-  {
-    "id": "846288a4-e014-47e0-b7a0-f0aa975a20d3",
-    "image_dir": "images/img_100032.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "66559de3-b253-4643-9d9e-a26670091a32",
-    "image_dir": "images/img_100002.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
-  },
-  {
-    "id": "85bc61c1-b911-496b-b0e5-5387857e4e66",
-    "image_dir": "images/img_100013.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "905a3707-8d5e-4eb1-a192-80e7e07cc24b",
-    "image_dir": "images/img_100049.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "6e839a0d-c5a4-4c5b-a1ae-859f0f753aea",
-    "image_dir": "images/img_100031.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
-  },
-  {
-    "id": "3a164c3b-d85a-4e38-9e69-4455f0b8b622",
-    "image_dir": "images/img_100021.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "0a866cb2-2fc9-4750-8130-0d8d70a0affd",
-    "image_dir": "images/img_100014.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "b4d390e9-46be-49d8-8f21-4763997327ca",
-    "image_dir": "images/img_100038.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "fc16bef3-7388-4372-a418-05644d8e3a5a",
-    "image_dir": "images/img_100043.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "773a8c5e-b546-47bf-b91c-295e10ead499",
-    "image_dir": "images/img_100029.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
-  },
-  {
-    "id": "8d23a8c2-7f99-4a8e-a98c-c927cd78e398",
-    "image_dir": "images/img_100008.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "7c51da9e-b697-4051-9e83-5d7147309e22",
-    "image_dir": "images/img_100004.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "610300b0-1e65-4b4c-bb40-6ac4dfe51ad6",
-    "image_dir": "images/img_100008.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "4bb4f77b-1603-41a9-85a7-74a38b85dc0c",
-    "image_dir": "images/img_100007.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "90c8a9e8-a921-40dc-9f14-6f492b8fd551",
-    "image_dir": "images/img_100010.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
-  },
-  {
-    "id": "ba9845a0-6ff4-4976-9117-2211c74d9d5d",
-    "image_dir": "images/img_100024.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "3b91e657-c008-4580-a355-b69ff3b74cac",
-    "image_dir": "images/img_100028.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
-  },
-  {
-    "id": "b6935518-5953-4e2d-ab62-2cbd2d3351ef",
-    "image_dir": "images/img_100035.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "cadcc4ef-f68a-47c8-9f3a-7d78b89be404",
-    "image_dir": "images/img_100012.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "9750782a-b3e7-471e-9a63-b3224501c6a2",
-    "image_dir": "images/img_100029.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "e24ac3f8-2669-41d0-a614-f7c0f8ab040c",
-    "image_dir": "images/img_100049.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "fdebf6a7-29bf-42f7-90c4-0517d165e57c",
-    "image_dir": "images/img_100017.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "7e9b0ab9-71ff-4be9-80d0-26aab8ea504c",
-    "image_dir": "images/img_100010.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "f8018b65-06b7-46e2-bfd5-735f6c77b774",
-    "image_dir": "images/img_100022.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
-  },
-  {
-    "id": "a1ada59b-f663-4a1a-9501-81b15c35c128",
-    "image_dir": "images/img_100031.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
-  },
-  {
-    "id": "e254dd4f-0325-469f-b70a-ee4623fa5455",
-    "image_dir": "images/img_100017.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
-  },
-  {
-    "id": "fda33629-bc57-4e18-aa77-b0e3ff8f32a8",
-    "image_dir": "images/img_100029.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
-  },
-  {
-    "id": "12381404-e627-449a-8a6c-65930856b105",
-    "image_dir": "images/img_100007.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "83cc7225-8277-465d-8229-62d7db53ac44",
-    "image_dir": "images/img_100049.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "ae748183-a501-4570-9602-4e647525c69e",
-    "image_dir": "images/img_100034.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
-  },
-  {
-    "id": "73f5e94b-591d-4ee0-bb8a-40f41cb4667d",
-    "image_dir": "images/img_100038.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "2f28b17e-5841-4a5f-b165-80822e376c35",
-    "image_dir": "images/img_100036.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "5fb0ed54-c1b8-4b7a-a3de-7e43b543c6ac",
-    "image_dir": "images/img_100001.png",
+    "id": "d5696525-37ba-4d47-92e9-5dc3e756f547",
+    "image_dir": "images/img_210017.png",
     "instruction": "Tam giác ABC có đường tròn nội tiếp tâm I",
     "answer": "(triangle (A B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
   },
   {
-    "id": "6fb167fb-30f4-4b4a-af9b-7a66ffdceb93",
-    "image_dir": "images/img_100002.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
-  },
-  {
-    "id": "5e68d526-7211-437b-82ab-fb26a276b0fc",
-    "image_dir": "images/img_100017.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
-  },
-  {
-    "id": "fe63edf3-715b-4516-a23f-12ee61edc7d2",
-    "image_dir": "images/img_100011.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "e5bc3c8b-7a01-4d34-85aa-d0f9e11a5c99",
-    "image_dir": "images/img_100021.png",
+    "id": "b1a3f3fc-79a7-4a5f-a03b-68afb304b88c",
+    "image_dir": "images/img_210003.png",
     "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
   },
   {
-    "id": "71cb2c18-5bf8-40e1-834f-99987a4d0f1d",
-    "image_dir": "images/img_100031.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
-  },
-  {
-    "id": "07d5558a-0ef1-4547-8ff7-6b31a6a6b5c2",
-    "image_dir": "images/img_100031.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "84c7ecfd-a1a8-4751-995c-9cf84d90b34f",
-    "image_dir": "images/img_100043.png",
+    "id": "5e632ad7-fcb4-4a9f-9b93-ec7419470269",
+    "image_dir": "images/img_210013.png",
     "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
     "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "5585f1c4-566b-4e5d-b4bb-5579021fa8f8",
-    "image_dir": "images/img_100019.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
+    "id": "29050721-c6a1-4551-98fc-431f5f1c70a4",
+    "image_dir": "images/img_210002.png",
+    "instruction": "Hình vuông ABCD có hai đường chéo AC và BD",
+    "answer": "(square (A B C D))\n(segment A C)\n(segment B D)"
   },
   {
-    "id": "2c0b029f-a7d6-4bf2-b478-b71538ead2dd",
-    "image_dir": "images/img_100018.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "dc28a817-5d54-414f-aa6c-dd3c1f724947",
-    "image_dir": "images/img_100036.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "6a9b50eb-43bd-4972-b350-785a5d707914",
-    "image_dir": "images/img_100034.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
-  },
-  {
-    "id": "9d3e2542-e61b-4cb7-ae95-b456a49795e0",
-    "image_dir": "images/img_100021.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "45e9dbf8-0a48-40dd-be1c-e41088830289",
-    "image_dir": "images/img_100009.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "06f28519-5ce8-4ce7-bd96-ea3961e762d7",
-    "image_dir": "images/img_100029.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
-  },
-  {
-    "id": "a7fe9b4a-fd67-4377-ac7a-5281d3a84e7d",
-    "image_dir": "images/img_100014.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "58287b58-a20a-4c77-b6be-aea6fb3c6c4b",
-    "image_dir": "images/img_100006.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
-  },
-  {
-    "id": "694a6b27-a9ed-43ad-b183-dd5cd565980f",
-    "image_dir": "images/img_100025.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "c17fd288-cd98-4eec-a813-d5cff677a75d",
-    "image_dir": "images/img_100034.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "23eae62e-afbb-433f-a1f1-7552206e6d4e",
-    "image_dir": "images/img_100035.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "8afb4607-ac72-4398-947a-a557256c235c",
-    "image_dir": "images/img_100008.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "173fdf67-0b80-4609-b4e0-d9fd794217c5",
-    "image_dir": "images/img_100004.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "253e7e87-6115-4132-a89e-14d7237ea9b3",
-    "image_dir": "images/img_100049.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "49527e09-1682-44b9-905f-b968bd42bddb",
-    "image_dir": "images/img_100007.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "3b0fc591-f902-484e-913e-cec6d6a9c901",
-    "image_dir": "images/img_100046.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "935fba4a-3739-44ce-9032-6b5ef9277bfa",
-    "image_dir": "images/img_100002.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
-  },
-  {
-    "id": "430a2584-5b2b-45ee-bd0f-42106ecb148e",
-    "image_dir": "images/img_100026.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "aef539e4-387b-4fed-b030-86366382e0f2",
-    "image_dir": "images/img_100008.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "698e7c34-174a-40bc-97d8-fd1b4658b4da",
-    "image_dir": "images/img_100037.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "04dbc2dd-7e17-48ea-91fc-e56d84df1a8f",
-    "image_dir": "images/img_100014.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "a6906db9-b571-4dd8-81bd-b24c7429c35b",
-    "image_dir": "images/img_100028.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
-  },
-  {
-    "id": "84edd242-90ef-4d52-a5a5-46fff30044d8",
-    "image_dir": "images/img_100027.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "53383439-ba76-4494-92fb-e7d99bd0e38a",
-    "image_dir": "images/img_100048.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
-  },
-  {
-    "id": "4e1ac46f-695c-439d-80e0-3d04f176fe5d",
-    "image_dir": "images/img_100039.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "8a4db4b3-fa51-469e-a91f-4e4b88020c9d",
-    "image_dir": "images/img_100015.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
-  },
-  {
-    "id": "5aea591e-cc05-4649-b9dd-cd439aa68832",
-    "image_dir": "images/img_100039.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
-  },
-  {
-    "id": "e88cd57f-4fb4-45c4-ba4e-e91e5f750866",
-    "image_dir": "images/img_100014.png",
+    "id": "1b5936b4-e903-4ee9-9a74-8da74a1dd139",
+    "image_dir": "images/img_210021.png",
     "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
     "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
   },
   {
-    "id": "10b6482c-2aa6-4cd5-b939-1a2a38eee74f",
-    "image_dir": "images/img_100010.png",
+    "id": "8bbbe87e-bb6f-4392-868d-407a339dfc5d",
+    "image_dir": "images/img_210016.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
+  },
+  {
+    "id": "3ac286e2-2322-449f-b235-4d705c3f0d01",
+    "image_dir": "images/img_210015.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "f904589f-31ec-4a40-8fbe-9db9c6cb958d",
+    "image_dir": "images/img_210013.png",
+    "instruction": "Hình vuông ABCD, hai đường chéo AC và BD cắt nhau tại O",
+    "answer": "(square (A B C D))\n(define O point (intersection (segment A C) (segment B D)))\n(segment A C)\n(segment B D)"
+  },
+  {
+    "id": "ba73d6cd-fb26-4a0c-83e8-ebaf89cbb77a",
+    "image_dir": "images/img_210008.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
+  },
+  {
+    "id": "3b802f79-5549-48e0-b3c8-e6002859a934",
+    "image_dir": "images/img_210009.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "f8f7dd7a-831b-4acd-a3ee-d2cf3ecea565",
+    "image_dir": "images/img_210017.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "403b37d3-ccb9-492c-9d1e-9d650a5c6931",
+    "image_dir": "images/img_210021.png",
+    "instruction": "Hình vuông ABCD có góc ABC = 90 độ",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "f2905bc8-c275-4ece-a808-3f1fcc00dfaf",
+    "image_dir": "images/img_210012.png",
+    "instruction": "Tam giác ABC cân tại A, có đường cao AH",
+    "answer": "(triangle (A B C) (isosceles A))\n(define H point (projection A (segment B C)))\n(segment A H)"
+  },
+  {
+    "id": "e898e8d5-6c99-479c-b2af-9995cdae6b3f",
+    "image_dir": "images/img_210022.png",
+    "instruction": "Hình vuông ABCD có cạnh AB = 4",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "a67255d6-2515-4de3-94eb-8e4c9800a28c",
+    "image_dir": "images/img_210011.png",
+    "instruction": "Hình vuông ABCD có AB song song CD, BC song song AD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "3b999332-0910-47d2-aeb5-5d5ab89cc839",
+    "image_dir": "images/img_210014.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "3c419987-fc8a-4587-9457-6a29c32cff4c",
+    "image_dir": "images/img_210019.png",
     "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
     "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "id": "ec5f7d73-6b37-4a95-9fad-e93eefbae80e",
-    "image_dir": "images/img_100033.png",
+    "id": "eefff433-f936-46ea-9b25-0c921de17dab",
+    "image_dir": "images/img_210023.png",
+    "instruction": "Tam giác ABC cân tại A, có đường cao AH",
+    "answer": "(triangle (A B C) (isosceles A))\n(define H point (projection A (segment B C)))\n(segment A H)"
+  },
+  {
+    "id": "1a88b2ae-3e06-4f9d-9e2e-ab66823a5668",
+    "image_dir": "images/img_210015.png",
+    "instruction": "Hình vuông ABCD có cạnh AB = 4",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "e9f18ee7-3799-4d48-aab4-223a3d0fdb89",
+    "image_dir": "images/img_210013.png",
+    "instruction": "Hình vuông ABCD có hai đường chéo AC và BD",
+    "answer": "(square (A B C D))\n(segment A C)\n(segment B D)"
+  },
+  {
+    "id": "64c72e03-03f0-4a53-ae20-7ef3adf9c20f",
+    "image_dir": "images/img_210008.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "be102c78-d0a8-4823-bdd4-11c659a764cd",
+    "image_dir": "images/img_210011.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "31f7c3de-39ce-4d17-8d98-5614649754b6",
+    "image_dir": "images/img_210012.png",
     "instruction": "Tam giác ABC có đường tròn nội tiếp tâm I",
     "answer": "(triangle (A B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
   },
   {
-    "id": "e56b6ed8-b328-4507-8e2a-fa8c97cbb053",
-    "image_dir": "images/img_100009.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+    "id": "9f69e644-ed86-4d55-b876-fb371376589a",
+    "image_dir": "images/img_210012.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
   },
   {
-    "id": "6c7ed4de-6e7a-4528-b531-c6e2043ac336",
-    "image_dir": "images/img_100026.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+    "id": "e7da8045-4c62-43be-9a81-72e13d6ba579",
+    "image_dir": "images/img_210005.png",
+    "instruction": "Tam giác ABC cân tại A, có đường cao AH",
+    "answer": "(triangle (A B C) (isosceles A))\n(define H point (projection A (segment B C)))\n(segment A H)"
   },
   {
-    "id": "41f1fe83-e3c0-4470-a30e-f7232a8e7eb6",
-    "image_dir": "images/img_100006.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
-  },
-  {
-    "id": "017855ce-2caa-40af-8559-0c97942f061f",
-    "image_dir": "images/img_100038.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "87f580e6-b5d5-42ae-9d24-21c482ea3c60",
-    "image_dir": "images/img_100037.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "8f9d5bf9-17d0-4daf-a066-0b55933f5195",
-    "image_dir": "images/img_100018.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "52b13b64-2e77-4a59-80f7-d20cc3d5db84",
-    "image_dir": "images/img_100009.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "dbe99803-d58f-459f-a23b-0f9487836310",
-    "image_dir": "images/img_100043.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "56d02387-06be-44a8-b64a-4e4b9ce3f659",
-    "image_dir": "images/img_100011.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
-  },
-  {
-    "id": "d92600e7-e113-4283-bccc-ebe81047a24b",
-    "image_dir": "images/img_100020.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "fb018ab1-3359-44a9-9f2f-f3dd11afef32",
-    "image_dir": "images/img_100050.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "9a8658ba-e39b-4a6e-ba77-3cef82901777",
-    "image_dir": "images/img_100010.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
-  },
-  {
-    "id": "3af73a07-8688-4644-bc21-ada9457fd534",
-    "image_dir": "images/img_100031.png",
+    "id": "62045243-fbbf-41b3-b6e1-428da7a55296",
+    "image_dir": "images/img_210003.png",
     "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
     "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "id": "85ee3420-dbf5-48c1-afb8-5ff6ab7c878a",
-    "image_dir": "images/img_100035.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+    "id": "9daa29e2-c8e3-4f17-95c7-00cb9db74a20",
+    "image_dir": "images/img_210022.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "4d926004-61bf-4ac7-97ad-e0caf2f2291f",
-    "image_dir": "images/img_100002.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+    "id": "3d1a3f2f-75e8-4e86-bc02-e6da977df48e",
+    "image_dir": "images/img_210014.png",
+    "instruction": "Hình vuông ABCD có góc ABC = 90 độ",
+    "answer": "(square (A B C D))"
   },
   {
-    "id": "cbfcdde8-a786-4311-b158-3651ebf5b44e",
-    "image_dir": "images/img_100022.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
-  },
-  {
-    "id": "0f7d4e13-499c-4bfe-89d0-05fc21ec5f7d",
-    "image_dir": "images/img_100012.png",
+    "id": "8663d53f-6c3f-418a-91ea-5b7b0bce0180",
+    "image_dir": "images/img_210004.png",
     "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
     "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "ff9b8285-0d89-4b1c-aa74-36e6f1f0080a",
-    "image_dir": "images/img_100028.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+    "id": "bc41a5da-4ff7-47fa-9913-1ae1f934a4c4",
+    "image_dir": "images/img_210003.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "c0071686-110f-4afc-8ebf-7c1ec0b8a5e0",
-    "image_dir": "images/img_100046.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+    "id": "2ef52d96-4024-4c18-ba66-86d4a9f98beb",
+    "image_dir": "images/img_210022.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
   },
   {
-    "id": "2c8a5b88-b6f7-42bf-88fc-b6587888c1a4",
-    "image_dir": "images/img_100039.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
+    "id": "ec83a9ef-28d9-498a-8ba6-ca7200899483",
+    "image_dir": "images/img_210012.png",
+    "instruction": "Tam giác ABC, M là trung điểm BC",
+    "answer": "(triangle (A B C))\n(define M point (midpoint B C))"
   },
   {
-    "id": "253d2951-0aea-4099-a1db-6ccc3d4f908d",
-    "image_dir": "images/img_100047.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "1cf486ef-7aa0-4e26-8b41-ccd0f19fd941",
-    "image_dir": "images/img_100011.png",
+    "id": "0788b614-4d2e-42c8-a068-8bbf13745921",
+    "image_dir": "images/img_210008.png",
     "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
     "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "id": "26c208e3-59d6-4dd0-91ae-807f037dc092",
-    "image_dir": "images/img_100036.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "0204fa2e-50e8-4735-8975-0981e2c4bdca",
-    "image_dir": "images/img_100017.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
-  },
-  {
-    "id": "fa309418-b56b-4c88-b1e1-e57b2cfdd74b",
-    "image_dir": "images/img_100008.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "d796b110-5bcf-4d16-a986-32b106159b0e",
-    "image_dir": "images/img_100003.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
-  },
-  {
-    "id": "e9fc932b-5fbd-4fe8-8789-da221499750d",
-    "image_dir": "images/img_100037.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "f9322949-f6d1-42df-b290-14d62e3384c3",
-    "image_dir": "images/img_100023.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "9777bafd-63cc-4bd4-ba90-86bd90c87afa",
-    "image_dir": "images/img_100020.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "bebc0d0f-9723-4c43-b290-177b1b358a3a",
-    "image_dir": "images/img_100018.png",
+    "id": "85ceacfe-e0e1-4d20-aa5b-55ac91719c95",
+    "image_dir": "images/img_210008.png",
     "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
     "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "d198fb0b-f387-4d3e-93bd-e964fe8c2e5b",
-    "image_dir": "images/img_100045.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+    "id": "c07e1032-13ba-4fe1-9002-91cb87eec03b",
+    "image_dir": "images/img_210001.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
   },
   {
-    "id": "344bbd6c-4500-4d1d-9508-1dc7ce7cf89e",
-    "image_dir": "images/img_100046.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+    "id": "378abc7f-76e6-4ac3-a1b0-6202b7e47adf",
+    "image_dir": "images/img_210020.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "70f0d6a5-191f-443c-b275-4446e2b71beb",
-    "image_dir": "images/img_100019.png",
+    "id": "4a504d4e-66ac-4fac-8e27-5864d411d555",
+    "image_dir": "images/img_210007.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "88a20caf-0c04-4b91-b87a-a49008e26cc9",
+    "image_dir": "images/img_210012.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "0bdfc188-6ca7-4dbf-9f3f-04f3a575f16f",
+    "image_dir": "images/img_210019.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "4effe771-6549-489b-be0f-a00e163558d5",
+    "image_dir": "images/img_210023.png",
     "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
     "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "id": "da5cd56d-98bb-4113-96df-74cefbb27cf0",
-    "image_dir": "images/img_100003.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+    "id": "bbebf30c-79d0-433c-8181-2c63d781d5e6",
+    "image_dir": "images/img_210008.png",
+    "instruction": "Tam giác ABC có đường tròn nội tiếp tâm I",
+    "answer": "(triangle (A B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
   },
   {
-    "id": "07495322-c7b3-46d0-8c72-c56215da311f",
-    "image_dir": "images/img_100004.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "2fc50873-fe1b-49f9-b621-0a8486459be9",
-    "image_dir": "images/img_100013.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "6a98f1aa-67d6-42b5-bf44-03f6988428b9",
-    "image_dir": "images/img_100044.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "3315dcd1-8e98-4c4d-9052-c4dce7fb6997",
-    "image_dir": "images/img_100028.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "10575296-61a4-447f-847e-5744e8878e5c",
-    "image_dir": "images/img_100005.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
-  },
-  {
-    "id": "42f4148d-a9a6-42a8-9eca-4727abc978fd",
-    "image_dir": "images/img_100036.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "1247541e-0ec0-4036-a444-8f64c1f88164",
-    "image_dir": "images/img_100016.png",
+    "id": "20445f6e-a919-4123-abd2-f5ba8b23c5b1",
+    "image_dir": "images/img_210015.png",
     "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
     "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
   },
   {
-    "id": "ad8d7421-4c7a-4b64-b232-482f0edeb5e8",
-    "image_dir": "images/img_100045.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
+    "id": "0011d5ce-ec5c-4486-a44b-f343dbe05a20",
+    "image_dir": "images/img_210021.png",
+    "instruction": "Hình vuông ABCD có cạnh AB = 4",
+    "answer": "(square (A B C D))"
   },
   {
-    "id": "7e7dae78-fdc8-4ea0-b533-3a6d88fdef42",
-    "image_dir": "images/img_100028.png",
+    "id": "2faf6ddb-de49-4f55-bf96-4aba7e7a6b53",
+    "image_dir": "images/img_210004.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "2d9bb5cc-8a94-496c-8ee6-8a6a83e04a3e",
+    "image_dir": "images/img_210002.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "40c62463-b05a-4f1d-ac80-8efc5bb639d2",
+    "image_dir": "images/img_210004.png",
+    "instruction": "Hình vuông ABCD, M là trung điểm của AB",
+    "answer": "(square (A B C D))\n("
+  },
+  {
+    "id": "c27c9b05-2917-4e3c-8629-e0ef001915e4",
+    "image_dir": "images/img_210004.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "a014b7b0-a694-487e-8ebe-9d2da6de1270",
+    "image_dir": "images/img_210005.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
+  },
+  {
+    "id": "4f6a11e9-630b-42c7-beed-80fe15dd1250",
+    "image_dir": "images/img_210016.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "1cb907df-d13a-4ee2-8103-ca4498340233",
+    "image_dir": "images/img_210023.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "e6f8991e-990e-4e23-af42-9f9c13be3a17",
+    "image_dir": "images/img_210017.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "35b678f8-0c7e-45ca-a54d-483f6886c079",
+    "image_dir": "images/img_210006.png",
+    "instruction": "Hình vuông ABCD nội tiếp đường tròn",
+    "answer": "(square (A B C D))\n(define O point (intersection (segment A C) (segment B D)))\n(circle O (circumcircle A B C D))"
+  },
+  {
+    "id": "68ecc7d2-b385-41b5-ace9-71ab36915333",
+    "image_dir": "images/img_210014.png",
+    "instruction": "Hình vuông ABCD có AB vuông góc BC",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "d3dfd71e-579e-4f2a-909d-421c0f6dbbe4",
+    "image_dir": "images/img_210020.png",
     "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
     "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "id": "ddb7dc11-1264-47cc-a048-cef79a3a7b10",
-    "image_dir": "images/img_100042.png",
+    "id": "671dbee1-a3ac-4fbb-8196-63b41a85de46",
+    "image_dir": "images/img_210010.png",
     "instruction": "Tam giác ABC",
     "answer": "(triangle (A B C))"
   },
   {
-    "id": "b48539e2-2eef-461e-8fee-5dc4280df189",
-    "image_dir": "images/img_100047.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "133c4319-cac0-4297-a29d-4727843a8ba2",
-    "image_dir": "images/img_100014.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
-  },
-  {
-    "id": "c0820a6c-e6ba-4eda-8cf5-b217bfa9eaea",
-    "image_dir": "images/img_100012.png",
+    "id": "e4b213c8-df67-4dd4-927a-9beb3b6f9339",
+    "image_dir": "images/img_210005.png",
     "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "id": "f10ab37f-2c72-49e4-a2cd-fc8383e1293f",
-    "image_dir": "images/img_100023.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "12017af5-19fd-4065-b6a9-6f7331f5e8a7",
-    "image_dir": "images/img_100011.png",
+    "id": "b80ecee2-2164-4ed1-9cdd-8644cbd1e87d",
+    "image_dir": "images/img_210020.png",
     "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
   },
   {
-    "id": "e4abcce7-dd02-4906-ad56-0a6d131a2daf",
-    "image_dir": "images/img_100042.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+    "id": "960e7618-3786-4ba6-af43-1dcaef2041a4",
+    "image_dir": "images/img_210010.png",
+    "instruction": "Tam giác ABC cân tại A, có đường cao AH",
+    "answer": "(triangle (A B C) (isosceles A))\n(define H point (projection A (segment B C)))\n(segment A H)"
   },
   {
-    "id": "bdf1ea99-e03e-490e-8fa0-eea20e28a9e5",
-    "image_dir": "images/img_100038.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "28119190-300b-46c8-9b9f-09bb83115dd9",
-    "image_dir": "images/img_100042.png",
+    "id": "d6718b0c-e73d-4932-99b6-d37c66e22294",
+    "image_dir": "images/img_210015.png",
     "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
     "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
   },
   {
-    "id": "2e4ff4f1-2c54-452f-ab3b-e50694a3f3ac",
-    "image_dir": "images/img_100041.png",
+    "id": "6d78eace-e607-4040-97ea-58e18d299530",
+    "image_dir": "images/img_210003.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "175b1b34-1cda-4871-ac1d-ab60f40ae55e",
+    "image_dir": "images/img_210017.png",
+    "instruction": "Tam giác ABC, M là trung điểm BC",
+    "answer": "(triangle (A B C))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "fd7c40b3-ec59-4c40-aab9-703e6d5f479e",
+    "image_dir": "images/img_210014.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "7a31b0d7-2d29-4d8b-9a6f-72ec70cd7bc6",
+    "image_dir": "images/img_210016.png",
     "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
     "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
   },
   {
-    "id": "0a18ea87-9d22-49cb-b6df-73b434b0ca0c",
-    "image_dir": "images/img_100050.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "49254636-8b4b-4fd8-bf07-995c403c6c82",
-    "image_dir": "images/img_100045.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "c0d24d04-ec1f-4d02-9935-17d80e44de53",
-    "image_dir": "images/img_100037.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "9eb7be21-ff28-4262-8922-141f19b01ab9",
-    "image_dir": "images/img_100013.png",
+    "id": "860fa5d3-7f77-422e-884f-8cc4fa074715",
+    "image_dir": "images/img_210001.png",
     "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
     "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "8fb7a731-94df-4003-ae60-5735bbb08118",
-    "image_dir": "images/img_100011.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+    "id": "d73a6666-bc48-4b02-9c75-334f798cf0cf",
+    "image_dir": "images/img_210010.png",
+    "instruction": "Tam giác ABC, M là trung điểm BC",
+    "answer": "(triangle (A B C))\n(define M point (midpoint B C))"
   },
   {
-    "id": "e263b518-82b9-4596-88a1-4065bd6ce617",
-    "image_dir": "images/img_100019.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+    "id": "5860a7f7-cdc0-4daa-8350-ab3c912c171d",
+    "image_dir": "images/img_210006.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "id": "c24ca2f0-6cbc-4223-a088-01bf90c6e9f9",
-    "image_dir": "images/img_100006.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
+    "id": "c2d90827-f43b-48b7-8b7e-93a4ce207514",
+    "image_dir": "images/img_210015.png",
+    "instruction": "Hình vuông ABCD có góc ABC = 90 độ",
+    "answer": "(square (A B C D))"
   },
   {
-    "id": "b2f9f583-e2b1-4150-9c4f-73cd9d07365e",
-    "image_dir": "images/img_100013.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "c4640321-681b-447c-923f-e4630f8a996b",
-    "image_dir": "images/img_100044.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "2af9770c-1801-481e-8260-67ad6a34f6c1",
-    "image_dir": "images/img_100035.png",
+    "id": "6ef93b85-232d-48a0-ac4d-492ff190b52f",
+    "image_dir": "images/img_210014.png",
     "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
     "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "ffd3e603-ebe1-41e9-a141-0436f7995b24",
-    "image_dir": "images/img_100049.png",
+    "id": "86d28fd6-ec7f-46d2-90f3-0f578af6882e",
+    "image_dir": "images/img_210011.png",
+    "instruction": "Hình vuông ABCD có cạnh AB = 4",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "537dcbcc-7aba-4346-9ca4-6e889b2ecf4b",
+    "image_dir": "images/img_210011.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "db50433a-e03e-43de-bfb8-951c135ae9b5",
+    "image_dir": "images/img_210017.png",
+    "instruction": "Tam giác ABC cân tại A, có đường cao AH",
+    "answer": "(triangle (A B C) (isosceles A))\n(define H point (projection A (segment B C)))\n(segment A H)"
+  },
+  {
+    "id": "2355c6d5-c065-4f4c-b8c2-b9a32f5a9e87",
+    "image_dir": "images/img_210005.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "caecc260-d149-4c77-b9a0-fe36453ad6d2",
+    "image_dir": "images/img_210014.png",
+    "instruction": "Hình vuông ABCD có AB song song CD, BC song song AD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "d1a1024a-1457-4ad7-add1-313f5c6e03c3",
+    "image_dir": "images/img_210007.png",
+    "instruction": "Hình vuông ABCD có AB song song CD, BC song song AD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "90e08884-0714-4c3c-8106-92d35cacab98",
+    "image_dir": "images/img_210003.png",
+    "instruction": "Tam giác ABC có đường tròn nội tiếp tâm I",
+    "answer": "(triangle (A B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
+  },
+  {
+    "id": "85b527f9-122a-4bfd-bec5-c395e966d1a4",
+    "image_dir": "images/img_210016.png",
+    "instruction": "Hình vuông ABCD, hai đường chéo AC và BD cắt nhau tại O",
+    "answer": "(square (A B C D))\n(define O point (intersection (segment A C) (segment B D"
+  },
+  {
+    "id": "1468cbb5-78a4-43b5-a807-120c2d9d0270",
+    "image_dir": "images/img_210014.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "fa7a04b1-74d7-484d-932c-19784f9b680e",
+    "image_dir": "images/img_210004.png",
+    "instruction": "Hình vuông ABCD có hai đường chéo AC và BD",
+    "answer": "(square (A B C D))\n(segment A C)\n(segment B D)"
+  },
+  {
+    "id": "e881347a-fc9b-4211-be82-0a0badebf984",
+    "image_dir": "images/img_210002.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "6a31f991-43f1-45cc-beed-15bfb2e3d3d6",
+    "image_dir": "images/img_210024.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "af0d58c7-6ccf-49e9-9925-1b03f154e77a",
+    "image_dir": "images/img_210020.png",
+    "instruction": "Tam giác ABC cân tại A, có đường cao AH",
+    "answer": "(triangle (A B C) (isosceles A))\n(define H point (projection A (segment B C)))\n(segment A H)"
+  },
+  {
+    "id": "a1e6c943-b64b-46c1-a5ee-9d3dd4b4cd91",
+    "image_dir": "images/img_210001.png",
+    "instruction": "Hình vuông ABCD có cạnh AB = 4",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "fd66b7cd-af11-423a-97b4-9fa8aaec1ff0",
+    "image_dir": "images/img_210004.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "0f3c2cab-fea9-4d6a-b95f-0528aa028143",
+    "image_dir": "images/img_210023.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "ef4b30b6-5ccf-4cc2-9ce3-3548c2113d68",
+    "image_dir": "images/img_210024.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "ee2b14d3-f1c8-4751-80ed-edfa973206dc",
+    "image_dir": "images/img_210017.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "id": "d3033419-f184-47f8-9d5d-000e8dae9e92",
+    "image_dir": "images/img_210001.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "f6f33b58-94a7-4544-9d5c-04cd6e7fafea",
+    "image_dir": "images/img_210004.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "a483aa76-7f12-4f02-b4aa-342bb4b2ab39",
+    "image_dir": "images/img_210014.png",
+    "instruction": "Hình vuông ABCD có cạnh AB = 4",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "31f75e60-89e1-4a9b-8d46-d5bd15f774c6",
+    "image_dir": "images/img_210018.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "99e96fd3-504d-4f3b-b329-d6963aa3d621",
+    "image_dir": "images/img_210024.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "1756d3ba-a8cb-40d3-b382-9c193bce9ea2",
+    "image_dir": "images/img_210018.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "e560db14-0c3a-4cf2-b08c-d734302a1f4b",
+    "image_dir": "images/img_210014.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "d09b26b4-56fa-4113-8195-a2e9b46b9aab",
+    "image_dir": "images/img_210002.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "0705176c-238e-45ab-8761-a0121c20d718",
+    "image_dir": "images/img_210008.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "5cd652c3-654c-4c95-a6f2-bdf5ae2b96fa",
+    "image_dir": "images/img_210015.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "a4392a00-5238-4253-a25a-935f0620b53c",
+    "image_dir": "images/img_210021.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "a2fe67bd-8bf3-4738-9f5b-a1760a9aa985",
+    "image_dir": "images/img_210001.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "4c401ba2-b0de-4305-bd58-5c14169eb918",
+    "image_dir": "images/img_210022.png",
+    "instruction": "Hình vuông ABCD có góc ABC = 90 độ",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "d351bde9-313e-455b-b62a-895ccd65fc1c",
+    "image_dir": "images/img_210019.png",
+    "instruction": "Tam giác ABC có đường tròn nội tiếp tâm I",
+    "answer": "(triangle (A B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
+  },
+  {
+    "id": "4b03728b-e08b-497b-84f6-e790ab2eb94c",
+    "image_dir": "images/img_210009.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "6fdd34d5-8f34-451d-85ae-70663f8b692e",
+    "image_dir": "images/img_210019.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
+  },
+  {
+    "id": "d515df18-6553-4540-bb64-9f60a919d18c",
+    "image_dir": "images/img_210008.png",
+    "instruction": "Tam giác ABC cân tại A, có đường cao AH",
+    "answer": "(triangle (A B C) (isosceles A))\n(define H point (projection A (segment B C)))\n(segment A H)"
+  },
+  {
+    "id": "6d6b22ae-d692-4a94-a97d-b6d5d9304108",
+    "image_dir": "images/img_210006.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "de833845-cf37-49dd-8502-77b7f0fd714f",
+    "image_dir": "images/img_210016.png",
+    "instruction": "Hình vuông ABCD có hai đường chéo AC và BD",
+    "answer": "(square (A B C D))\n(segment A C)\n(segment B D)"
+  },
+  {
+    "id": "0d3fcd69-3f19-4964-b2ee-11282b2c70b2",
+    "image_dir": "images/img_210005.png",
     "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
     "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "b361502b-4bd5-4a12-a0fd-898038c0c42a",
-    "image_dir": "images/img_100040.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "69d94707-e2de-49e9-a12b-7bd4a123f092",
-    "image_dir": "images/img_100041.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "3da91642-7af6-49ba-847f-05014a6d2371",
-    "image_dir": "images/img_100027.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "5578e479-37f7-4f71-9648-39e43c0b6fbc",
-    "image_dir": "images/img_100009.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "c1894f48-ffe7-4b81-ad3b-bbdb013d8f41",
-    "image_dir": "images/img_100034.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
-  },
-  {
-    "id": "d5f77037-231d-4702-a568-6826f22c6987",
-    "image_dir": "images/img_100048.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "e1b53432-4623-4c1b-b9c1-e4dbcb21950d",
-    "image_dir": "images/img_100002.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "81e27137-7845-4178-9e73-4f113fdbff0c",
-    "image_dir": "images/img_100012.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "f9184783-da78-4ac5-8783-0e5d05a28e54",
-    "image_dir": "images/img_100032.png",
+    "id": "d008cf1f-aadb-49f0-a1a8-c13a3bfb2977",
+    "image_dir": "images/img_210015.png",
     "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
     "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "140aa05f-4387-462e-a67f-1d3ececbc869",
-    "image_dir": "images/img_100027.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "4ffcde40-9b11-4322-bb6b-eb479f165624",
-    "image_dir": "images/img_100032.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "c2e718b5-e580-49e7-8812-6719c21f6e41",
-    "image_dir": "images/img_100022.png",
-    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
-  },
-  {
-    "id": "a232b107-5cf2-4dc7-ab18-7b18563aa616",
-    "image_dir": "images/img_100021.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "9a876f84-4bdf-44e1-ab6c-b1ad1d604a53",
-    "image_dir": "images/img_100025.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "a02e2f1f-6e42-41d1-ae4c-72be420aa5be",
-    "image_dir": "images/img_100019.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
-  },
-  {
-    "id": "d7dae2fe-f550-4134-9584-02494b041c04",
-    "image_dir": "images/img_100043.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
-  },
-  {
-    "id": "31292b60-8706-468b-aa5b-d65b82ad6f9b",
-    "image_dir": "images/img_100016.png",
-    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
-  },
-  {
-    "id": "6ba78c6c-94c2-4c47-8f93-3a743d1e4044",
-    "image_dir": "images/img_100046.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
-  },
-  {
-    "id": "77e3e01a-fed7-480f-a555-acf6ab026e48",
-    "image_dir": "images/img_100045.png",
+    "id": "114cec79-92fa-433e-a0bc-bba1ce165ead",
+    "image_dir": "images/img_210003.png",
     "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
     "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "429077b4-167c-4da9-893b-54f7fe8288fd",
-    "image_dir": "images/img_100026.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
+    "id": "8a001ebc-0db3-48fa-b0db-235970d745c0",
+    "image_dir": "images/img_210019.png",
+    "instruction": "Tam giác ABC, M là trung điểm BC",
+    "answer": "(triangle (A B C))\n(define M point (midpoint B C))"
   },
   {
-    "id": "659a56a3-f7b9-4d23-b31b-e0f7ea60edcb",
-    "image_dir": "images/img_100050.png",
+    "id": "673ac002-3bd2-48dd-ac7f-e4f2bcfbe222",
+    "image_dir": "images/img_210018.png",
+    "instruction": "Hình vuông ABCD có góc ABC = 90 độ",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "3c71bc65-f533-4e8c-a1ce-11c625d4c368",
+    "image_dir": "images/img_210010.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "id": "6b643066-2bff-47da-9c94-452e1267a634",
+    "image_dir": "images/img_210005.png",
+    "instruction": "Tam giác ABC có đường tròn nội tiếp tâm I",
+    "answer": "(triangle (A B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
+  },
+  {
+    "id": "527ced51-a8f3-43d4-8113-a0f6c0f4d3fb",
+    "image_dir": "images/img_210021.png",
     "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
   },
   {
-    "id": "c514ddf6-46b9-447e-bd3c-de8b0dc89bbf",
-    "image_dir": "images/img_100005.png",
+    "id": "5962c7e8-690c-4b12-a1c5-ae63925a2229",
+    "image_dir": "images/img_210006.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "2135d33b-7e68-4910-9823-65651097048f",
+    "image_dir": "images/img_210012.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "8f255a1d-9fef-468f-85c1-949ea300a46a",
+    "image_dir": "images/img_210019.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "d7af9782-3475-4723-b1f2-c7e9fa1a7d46",
+    "image_dir": "images/img_210005.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "69510121-52a9-4354-915a-cb7fcb03f5e3",
+    "image_dir": "images/img_210017.png",
     "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
   },
   {
-    "id": "e951663d-6ad0-42a9-96c0-687037db0639",
-    "image_dir": "images/img_100041.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "138024cf-26d6-4d43-8826-608dd0be0115",
-    "image_dir": "images/img_100016.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "98e2dd42-c16f-4b7d-a7f2-17ef11ac04c9",
-    "image_dir": "images/img_100023.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))"
-  },
-  {
-    "id": "a3b330da-7eaa-4959-9358-420cf9c37dec",
-    "image_dir": "images/img_100004.png",
+    "id": "f3ce5cc4-7c84-4864-9b04-a8d266e37cbd",
+    "image_dir": "images/img_210001.png",
     "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
     "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
   },
   {
-    "id": "a2fa11df-b99e-43b3-bd70-61873205cd33",
-    "image_dir": "images/img_100020.png",
+    "id": "1c23a273-1125-4f70-a9d1-28b6f2d6b3c4",
+    "image_dir": "images/img_210013.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "567a5d6a-b387-44d7-8ab1-a6ca2b1586eb",
+    "image_dir": "images/img_210007.png",
     "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
     "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
   },
   {
-    "id": "10f92b5c-b00f-4205-92b4-38d02b36d5e1",
-    "image_dir": "images/img_100039.png",
-    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
+    "id": "5610979f-61fe-4656-9c62-06f795b0f840",
+    "image_dir": "images/img_210016.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "c42601ba-4fb3-4459-a496-6ec0891ad198",
-    "image_dir": "images/img_100022.png",
+    "id": "20f68db8-110b-438f-9d09-c47b17bd31c3",
+    "image_dir": "images/img_210022.png",
+    "instruction": "Hình vuông ABCD có AB vuông góc BC",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "d0cfb1a6-1b4d-4a3a-bdde-3fb5736c37bc",
+    "image_dir": "images/img_210019.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "557f1c8c-2bee-4518-bbc7-6a82c2d953f3",
+    "image_dir": "images/img_210023.png",
+    "instruction": "Tam giác ABC có đường tròn nội tiếp tâm I",
+    "answer": "(triangle (A B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
+  },
+  {
+    "id": "e2ea5018-5917-42fb-9db3-339ac952b836",
+    "image_dir": "images/img_210006.png",
+    "instruction": "Hình vuông ABCD, hai đường chéo AC và BD cắt nhau tại O",
+    "answer": "(square (A B C D))\n(define O point (intersection (segment A C) (segment B D)))\n(segment A C)\n(segment B D)"
+  },
+  {
+    "id": "aa6208b5-3216-4b4e-b96b-e0e399461ce0",
+    "image_dir": "images/img_210010.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "6bf129d8-5dae-4136-8cb0-7cf98090a2b4",
+    "image_dir": "images/img_210004.png",
+    "instruction": "Hình vuông ABCD, hai đường chéo AC và BD cắt nhau tại O",
+    "answer": "(square (A B C D))\n(define O point (intersection (segment A C) (segment B D)))\n(segment A C)\n(segment B D)"
+  },
+  {
+    "id": "232dd66a-1c05-4c9b-9fb0-303901acf0e5",
+    "image_dir": "images/img_210001.png",
+    "instruction": "Hình vuông ABCD có góc ABC = 90 độ",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "dfbd7806-91cf-4f3d-9379-460082526670",
+    "image_dir": "images/img_210013.png",
+    "instruction": "Hình vuông ABCD, O là trung điểm của AC và BD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "b1a6bc91-70f3-440d-92a5-a4856f79e2a9",
+    "image_dir": "images/img_210011.png",
+    "instruction": "Hình vuông ABCD có góc ABC = 90 độ",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "d2dd57f3-b63e-488c-bb0b-aef04aa1490d",
+    "image_dir": "images/img_210010.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "bdebaa0f-13bc-4810-8765-2ff7b4d93828",
+    "image_dir": "images/img_210024.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "0eb7d5de-9e76-489d-95e7-87160c682c17",
+    "image_dir": "images/img_210022.png",
+    "instruction": "Hình vuông ABCD có AB song song CD, BC song song AD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "088172a2-db04-44cd-a320-d41d45af821f",
+    "image_dir": "images/img_210011.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "a92f96cc-494b-4d1f-bc4e-2d7e6951aa53",
+    "image_dir": "images/img_210001.png",
+    "instruction": "Hình vuông ABCD có AB vuông góc BC",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "407fe9e6-4eea-421f-8c8e-bef7ab5a6960",
+    "image_dir": "images/img_210002.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "00110812-2948-4807-8593-a3d8b8762ba7",
+    "image_dir": "images/img_210007.png",
+    "instruction": "Hình vuông ABCD có góc ABC = 90 độ",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "351fded4-cf20-4f54-96ef-fe3e2d3c4fac",
+    "image_dir": "images/img_210021.png",
+    "instruction": "Hình vuông ABCD có AB vuông góc BC",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "7436c4a0-9bb4-42d1-9643-5ded3e7bcc46",
+    "image_dir": "images/img_210016.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "2d9fe65a-ef00-4476-abe7-a36070cc26e1",
+    "image_dir": "images/img_210002.png",
+    "instruction": "Hình vuông ABCD, hai đường chéo AC và BD cắt nhau tại O",
+    "answer": "(square (A B C D))\n(define O point (intersection (segment A C) (segment B D)))\n(segment A C)\n(segment B D)"
+  },
+  {
+    "id": "7f255100-c067-4f7b-9135-a5bf25bfff23",
+    "image_dir": "images/img_210020.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "0182fe59-390c-4deb-94be-69a9c43a9704",
+    "image_dir": "images/img_210009.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "id": "582d8eb3-b8b6-4408-8369-ab77007451d6",
+    "image_dir": "images/img_210022.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "70bb5de1-0cd9-4182-9674-500e1bcc5563",
+    "image_dir": "images/img_210016.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "657e8c40-edcc-418c-8980-9c1bce53dfd3",
+    "image_dir": "images/img_210021.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "a66ba082-85a6-4833-ba11-a5bd2f802648",
+    "image_dir": "images/img_210023.png",
+    "instruction": "Tam giác ABC, M là trung điểm BC",
+    "answer": "(triangle (A B C))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "3322a578-998d-4178-8e10-dd178710711d",
+    "image_dir": "images/img_210008.png",
+    "instruction": "Tam giác ABC, M là trung điểm BC",
+    "answer": "(triangle (A B C))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "9ad96efe-eb10-4fa5-8f62-513be3189df7",
+    "image_dir": "images/img_210007.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "2dd27cd4-7507-40f5-ab71-e3bb730bf05e",
+    "image_dir": "images/img_210013.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "c3770587-bbce-4b12-a0d3-0cb2f1a25b1b",
+    "image_dir": "images/img_210006.png",
+    "instruction": "Hình vuông ABCD, M là trung điểm của AB",
+    "answer": "(square (A B C D))\n(define M point (midpoint A B))"
+  },
+  {
+    "id": "69abb39e-28a0-46a6-9f56-d9d43b4460cf",
+    "image_dir": "images/img_210021.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "6dc514c9-0509-4942-af68-00ab3dbc169e",
+    "image_dir": "images/img_210024.png",
+    "instruction": "Hình vuông ABCD có cạnh AB = 4",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "64ce3525-de9d-437b-9f35-ff5add516c3f",
+    "image_dir": "images/img_210020.png",
+    "instruction": "Tam giác ABC có đường tròn nội tiếp tâm I",
+    "answer": "(triangle (A B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
+  },
+  {
+    "id": "5870d037-dbf1-4d12-803a-a52294ae4bf7",
+    "image_dir": "images/img_210007.png",
+    "instruction": "Hình vuông ABCD có cạnh AB = 4",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "00b19770-e80d-4968-8b09-1e47e93b14a1",
+    "image_dir": "images/img_210006.png",
+    "instruction": "Hình vuông ABCD có đường chéo AC",
+    "answer": "(square (A B C D))\n(segment A C)"
+  },
+  {
+    "id": "00ac4bf1-05ae-4553-b270-5c1e8fadd5f7",
+    "image_dir": "images/img_210011.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "0da8cb31-35e4-46ea-a1bf-a99b424fd257",
+    "image_dir": "images/img_210003.png",
+    "instruction": "Tam giác ABC cân tại A, có đường cao AH",
+    "answer": "(triangle (A B C) (isosceles A))\n(define H point (projection A (segment B C)))\n(segment A H)"
+  },
+  {
+    "id": "c964e9f4-c9d4-4b2f-9b5e-7e54ad3e251b",
+    "image_dir": "images/img_210007.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "9dcb1823-28d8-4488-a2eb-d26cdb799f4e",
+    "image_dir": "images/img_210019.png",
+    "instruction": "Tam giác ABC cân tại A, có đường cao AH",
+    "answer": "(triangle (A B C) (isosceles A))\n(define H point (projection A (segment B C)))\n(segment A H)"
+  },
+  {
+    "id": "1fc96e4f-82b3-4161-82fa-dc383c168d9b",
+    "image_dir": "images/img_210024.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "7072747a-0ba5-4528-8cef-a31278b375c6",
+    "image_dir": "images/img_210022.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "a4d707e8-3bfe-4043-8ba4-8f6021d36dd7",
+    "image_dir": "images/img_210015.png",
+    "instruction": "Hình vuông ABCD có AB vuông góc BC",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "2979971c-3561-4b60-ba9a-79c6305572f9",
+    "image_dir": "images/img_210005.png",
+    "instruction": "Tam giác ABC, M là trung điểm BC",
+    "answer": "(triangle (A B C))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "f4f450bc-2579-49a7-bb10-d0a2b53e0f1f",
+    "image_dir": "images/img_210018.png",
+    "instruction": "Hình vuông ABCD có AB song song CD, BC song song AD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "bb536ea9-60ba-4a25-9ec2-593388e59571",
+    "image_dir": "images/img_210023.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
+  },
+  {
+    "id": "5e3641ba-7ba5-4adf-b1d8-96af5e7808d6",
+    "image_dir": "images/img_210001.png",
     "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "b622c378-6c92-437a-b89b-b8db494ca113",
+    "image_dir": "images/img_210007.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "dda32587-144b-4f44-bf94-b3f25f8c7d98",
+    "image_dir": "images/img_210018.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "830c273d-702b-4087-a54d-8ad44702f310",
+    "image_dir": "images/img_210015.png",
+    "instruction": "Hình vuông ABCD có AB song song CD, BC song song AD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "55e51d89-2d6a-494c-862d-65f4225b83ad",
+    "image_dir": "images/img_210018.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "23c61d15-32d1-4c40-9846-493fc92fdd87",
+    "image_dir": "images/img_210013.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "499ce25f-7b57-4737-90e5-5f23e7561d01",
+    "image_dir": "images/img_210012.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "id": "ea762372-a223-4501-9132-835d030f0ad4",
+    "image_dir": "images/img_210014.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "947f01fa-44d3-49c3-806a-604b166f5551",
+    "image_dir": "images/img_210011.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "449482f3-e4df-4b55-a005-a9c74aeb327b",
+    "image_dir": "images/img_210009.png",
+    "instruction": "Hình vuông ABCD có đường chéo AC",
+    "answer": "(square (A B C D))\n(segment A C)"
+  },
+  {
+    "id": "04a55d35-d512-4f7d-8612-4ccc94d389de",
+    "image_dir": "images/img_210015.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "d14f2608-3ac3-4f03-b16c-7c19d3503f9d",
+    "image_dir": "images/img_210024.png",
+    "instruction": "Hình vuông ABCD có AB song song CD, BC song song AD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "5e1a7457-c62f-4031-a1db-99b6885e6690",
+    "image_dir": "images/img_210003.png",
+    "instruction": "Tam giác ABC, M là trung điểm BC",
+    "answer": "(triangle (A B C))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "54e7ee65-0b23-4489-a98e-934f018ecdd9",
+    "image_dir": "images/img_210022.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "108a3dc3-4f31-498c-afcc-7b8a2a5aee03",
+    "image_dir": "images/img_210009.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "7e69faea-22e3-4f50-8298-5920b7aae3a7",
+    "image_dir": "images/img_210013.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "fd14abb9-744e-4e87-ba84-c76e01a7da86",
+    "image_dir": "images/img_210002.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "e009fe88-68a9-4c8c-b6d3-9f71510e89ca",
+    "image_dir": "images/img_210011.png",
+    "instruction": "Hình vuông ABCD có AB vuông góc BC",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "4463f44e-5445-4e20-a579-01e57c78c05e",
+    "image_dir": "images/img_210021.png",
+    "instruction": "Hình vuông ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "id": "c705e11f-6ed6-4a17-a660-5ac77455af06",
+    "image_dir": "images/img_210013.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   }
 ]
