@@ -1,0 +1,3 @@
+parameters:
+  dataset_dir: "dataset/data"
+  repo_id: "minn4/gmbl"

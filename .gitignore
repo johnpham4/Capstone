@@ -1,16 +1,68 @@
+# Python
 __pycache__/
-*.pyc
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
 
-~$*.docx
-.env
+# Virtual environments
+.venv
 venv/
+ENV/
 env/
-output/Evalutation
-output/pages
-output/problems
-output/problems_diagrams
-output/geometry_sbt8_t2.json
-output/geometry8_t1.json
-output/problems.json
-geo-model-builder/
+.virtualenv
 
+# Environment variables
+.env
+.env.local
+
+images/
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+outputs/
+models/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# ZenML
+.zen/
+*.db
+
+# Docker
+*.log
+docker-compose.override.yml
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
