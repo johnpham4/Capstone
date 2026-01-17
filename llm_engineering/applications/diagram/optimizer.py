@@ -20,7 +20,13 @@ class Optimizer:
         self.instructions = instructions
         self.opts = opts
         self.verbosity = verbosity
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+        # Initialize state
+        self._init_state()
+
+    def _init_state(self):
+        """Initialize/reset optimizer state for new attempt"""
         self.name2pt = {}  # Point name -> TorchPoint (with tensors)
         self.name2line = {}  # Line name -> LineNF
         self.all_points = []  # All points for visualization
@@ -43,8 +49,6 @@ class Optimizer:
         self.has_loss = False
         self.trainable_vars = []  # List of nn.Parameter objects
 
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
     def get_point(self, x, y):
         if not isinstance(x, torch.Tensor):
             x = torch.tensor(x, dtype=torch.float64, device=self.device)
@@ -53,6 +57,10 @@ class Optimizer:
         return TorchPoint(x, y)
 
     def mkvar(self, name, lo=-1.0, hi=1.0, init_value=None):
+        # Add attempt_id to variable name to avoid conflicts across attempts
+        if hasattr(self, 'current_attempt'):
+            name = f"{name}_a{self.current_attempt}"
+
         if init_value is not None:
             val = torch.tensor([init_value], dtype=torch.float64, device=self.device)
         else:
@@ -265,8 +273,10 @@ class Optimizer:
         p2 = self.lookup_pt(triangle_points[1])
         p3 = self.lookup_pt(triangle_points[2])
 
-        # Create learnable point
-        centroid = self.sample_uniform(point_name)
+        # Centroid is deterministic: (A+B+C)/3 - compute directly with small learnable offset
+        init_x = (p1.x.item() + p2.x.item() + p3.x.item()) / 3
+        init_y = (p1.y.item() + p2.y.item() + p3.y.item()) / 3
+        centroid = self.sample_uniform(point_name, init_coords=(init_x, init_y))
 
         # Constraint: must be at centroid position
         def centroid_loss():
@@ -285,19 +295,19 @@ class Optimizer:
         p2 = self.lookup_pt(triangle_points[1])
         p3 = self.lookup_pt(triangle_points[2])
 
-        # Create named point with smart init
-        init_coords = Initializer.init_triangle_incircle()
-        init_coords = Initializer.add_noise(init_coords)
-        incenter = self.sample_uniform(point_name, init_coords=init_coords[3])
+        # Init near centroid (incenter is inside triangle, close to centroid)
+        init_x = (p1.x.item() + p2.x.item() + p3.x.item()) / 3
+        init_y = (p1.y.item() + p2.y.item() + p3.y.item()) / 3
+        incenter = self.sample_uniform(point_name, init_coords=(init_x, init_y))
 
         # Constraint: equal distance to all sides
         def incircle_loss():
             d1 = self.dist_to_line(incenter, p1, p2)
             d2 = self.dist_to_line(incenter, p2, p3)
             d3 = self.dist_to_line(incenter, p3, p1)
-            return (d1 - d2)**2 + (d2 - d3)**2
+            return (d1 - d2)**2 + (d2 - d3)**2 + (d3 - d1)**2  # Add third comparison
 
-        self.register_loss(f"incenter_{point_name.val}", incircle_loss, weight=10.0)
+        self.register_loss(f"incenter_{point_name.val}", incircle_loss, weight=50.0)  # Increased from 10.0
         return incenter
 
     def _define_circumcenter(self, point_name, triangle_points):
@@ -308,10 +318,10 @@ class Optimizer:
         p2 = self.lookup_pt(triangle_points[1])
         p3 = self.lookup_pt(triangle_points[2])
 
-        # Create named point with smart init
-        init_coords = Initializer.init_triangle_circumcircle(radius=1.0)
-        init_coords = Initializer.add_noise(init_coords, noise_scale=0.02)
-        circumcenter = self.sample_uniform(point_name, init_coords=init_coords[3])
+        # Init near centroid (circumcenter can be inside or outside triangle)
+        init_x = (p1.x.item() + p2.x.item() + p3.x.item()) / 3
+        init_y = (p1.y.item() + p2.y.item() + p3.y.item()) / 3
+        circumcenter = self.sample_uniform(point_name, init_coords=(init_x, init_y))
 
         # Constraint: equal distance to all vertices
         def circumcircle_loss():
@@ -331,10 +341,10 @@ class Optimizer:
         p2 = self.lookup_pt(triangle_points[1])
         p3 = self.lookup_pt(triangle_points[2])
 
-        # Create named point with smart init
-        init_coords = Initializer.init_right_triangle_with_orthocenter()
-        init_coords = Initializer.add_noise(init_coords)
-        orthocenter = self.sample_uniform(point_name, init_coords=init_coords[3])
+        # Init near centroid (orthocenter can be inside or outside triangle)
+        init_x = (p1.x.item() + p2.x.item() + p3.x.item()) / 3
+        init_y = (p1.y.item() + p2.y.item() + p3.y.item()) / 3
+        orthocenter = self.sample_uniform(point_name, init_coords=(init_x, init_y))
 
         # Constraint: altitudes intersect at orthocenter
         def orthocenter_loss():
@@ -370,8 +380,8 @@ class Optimizer:
             expected_y = (p1.y + p2.y) / 2
             return (midpoint.x - expected_x)**2 + (midpoint.y - expected_y)**2
 
-        self.register_loss(f"midpoint_{point_name.val}", midpoint_loss, weight=5.0)
-        self.register_loss(f"on_segment_mid_{point_name.val}", lambda: self.collinear(midpoint, p1, p2), weight=10.0)
+        self.register_loss(f"midpoint_{point_name.val}", midpoint_loss, weight=20.0)  # Increased from 5.0
+        self.register_loss(f"on_segment_mid_{point_name.val}", lambda: self.collinear(midpoint, p1, p2), weight=20.0)  # Increased from 10.0
         return midpoint
 
     def parameter_on_seg(self, p, segment_points: list):
@@ -612,20 +622,35 @@ class Optimizer:
         p3 = self.lookup_pt(segments[2])
         p4 = self.lookup_pt(segments[3])
 
-        # Parallel: direction vectors proportional
-        # (p2-p1) × (p4-p3) = 0 (cross product = 0)
         def parallel_loss():
+            # Direction vector 1
             dx1 = p2.x - p1.x
             dy1 = p2.y - p1.y
+            len1 = torch.sqrt(dx1**2 + dy1**2) + 1e-8
+
+            # Direction vector 2
             dx2 = p4.x - p3.x
             dy2 = p4.y - p3.y
-            # Cross product should be zero
-            cross = dx1 * dy2 - dy1 * dx2
-            return cross
+            len2 = torch.sqrt(dx2**2 + dy2**2) + 1e-8
+
+            # Normalize
+            dx1_norm = dx1 / len1
+            dy1_norm = dy1 / len1
+            dx2_norm = dx2 / len2
+            dy2_norm = dy2 / len2
+
+            # Cross product of normalized vectors should be zero
+            cross = dx1_norm * dy2_norm - dy1_norm * dx2_norm
+
+            # Also check dot product is close to ±1 (same or opposite direction)
+            dot = dx1_norm * dx2_norm + dy1_norm * dy2_norm
+            angle_error = 1 - torch.abs(dot)  # Should be 0 if parallel
+
+            return cross + angle_error
 
         seg1_name = f"{segments[0].val}_{segments[1].val}"
         seg2_name = f"{segments[2].val}_{segments[3].val}"
-        self.register_loss(f"parallel_{seg1_name}_{seg2_name}", parallel_loss, weight=10.0)
+        self.register_loss(f"parallel_{seg1_name}_{seg2_name}", parallel_loss, weight=50.0)  # Increased from 10.0
 
     def _add_perpendicular_constraint(self, segments):
         """Add perpendicular constraint between two segments"""
@@ -668,7 +693,7 @@ class Optimizer:
             def compute_reg():
                 norms = [self.norm(p) for p in self.name2pt.values()]
                 return torch.stack(norms).mean()
-            self.register_loss("regularization", compute_reg, weight=0.01)
+            self.register_loss("regularization", compute_reg, weight=0.001)  # Reduced from 0.01
 
     def make_points_distinct(self):
         pts = list(self.name2pt.values())
@@ -703,10 +728,12 @@ class Optimizer:
             optimizer.step()
 
             if self.verbosity and i % 100 == 0:
-                logger.info(f"Iteration {i:4d}: Loss = {total_loss.item():.6f}")
+                # Log loss breakdown
+                breakdown = ", ".join([f"{k}: {v.item():.6f}" for k, v in self.losses.items()])
+                logger.info(f"Iteration {i:4d}: Total = {total_loss.item():.6f} | {breakdown}")
 
-            # Early stopping
-            if total_loss.item() < 1e-6:
+            # Early stopping - stricter threshold
+            if total_loss.item() < 1e-8:  # Reduced from 1e-6
                 if self.verbosity >= 0:
                     logger.info(f"Converged at iteration {i} with loss {total_loss.item():.6f}")
                 break
@@ -731,20 +758,73 @@ class Optimizer:
         for key, loss in self.losses.items():
             logger.info(f"{key:30s}: {loss.item():.6f}")
 
-    def solve(self):
+    def solve_single(self, attempt_id=0):
+        """Solve with single initialization attempt"""
+        self.current_attempt = attempt_id
+
         # Preprocess instructions
         self.preprocess()
 
         # Add regularization
         self.regularize_points()
-        # self.make_points_distinct()
 
         # Optimize
+        loss = float('inf')
         if self.has_loss:
-            self.train(epochs=self.opts.get('epochs', 1000),
-                      lr=self.opts.get('learning_rate', 0.01))
+            loss = self.train(epochs=self.opts.get('epochs', 1000),
+                            lr=self.opts.get('learning_rate', 0.01))
 
-        return self.get_diagram()
+        return self.get_diagram(), loss
+
+    def solve(self, n_tries=None):
+        """Solve with multiple initialization attempts"""
+        import random
+
+        # Default to 1 try for backward compatibility
+        if n_tries is None:
+            n_tries = self.opts.get('n_tries', 1)
+
+        eps = self.opts.get('eps', 1e-6)
+        best_loss = float('inf')
+        best_diagram = None
+
+        for attempt in range(n_tries):
+            if attempt > 0:
+                # Reset state for new attempt
+                self._init_state()
+
+                # Set different random seed for varied initialization
+                random.seed(self.opts.get('seed', 42) + attempt)
+                torch.manual_seed(self.opts.get('seed', 42) + attempt)
+
+            if self.verbosity and n_tries > 1:
+                logger.info(f"\nAttempt {attempt + 1}/{n_tries}")
+
+            try:
+                diagram, loss = self.solve_single(attempt_id=attempt)
+
+                # Early stopping if converged
+                if loss < eps:
+                    if self.verbosity and n_tries > 1:
+                        logger.success(f"Converged at attempt {attempt + 1} with loss {loss:.6f}")
+                    return diagram
+
+                # Track best result
+                if loss < best_loss:
+                    best_loss = loss
+                    best_diagram = diagram
+                    if self.verbosity and n_tries > 1:
+                        logger.info(f"New best loss: {loss:.6f}")
+
+            except Exception as e:
+                if self.verbosity:
+                    logger.error(f"Attempt {attempt + 1} failed: {e}")
+                continue
+
+        if self.verbosity and n_tries > 1:
+            logger.info(f"\nBest loss after {n_tries} attempts: {best_loss:.6f}")
+
+        return best_diagram if best_diagram is not None else self.get_diagram()
 
     def get_diagram(self):
 

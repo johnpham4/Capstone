@@ -84,49 +84,6 @@ class Initializer:
         return Initializer.init_rectangle(side, side)
 
     @staticmethod
-    def init_triangle_incircle(scale: float = 1.0) -> List[Tuple[float, float]]:
-        """Initialize equilateral triangle with incenter at origin"""
-        h = math.sqrt(3) / 3 * scale
-        return [
-            (0.0, 2 * h),           # Top
-            (-0.5 * scale, -h),     # Bottom left
-            (0.5 * scale, -h),      # Bottom right
-            (0.0, 0.0)              # Incenter at origin
-        ]
-
-    @staticmethod
-    def init_triangle_circumcircle(radius: float = 1.0) -> List[Tuple[float, float]]:
-        """Initialize triangle inscribed in circle with circumcenter at origin"""
-        # 3 points evenly spaced on circle (120 degrees apart)
-        angles = [math.pi/2, 7*math.pi/6, 11*math.pi/6]  # 90°, 210°, 330°
-        return [
-            (radius * math.cos(a), radius * math.sin(a))
-            for a in angles
-        ] + [(0.0, 0.0)]  # Circumcenter at origin
-
-    @staticmethod
-    def init_triangle_with_centroid(scale: float = 1.0) -> List[Tuple[float, float]]:
-        """Initialize triangle with centroid at origin"""
-        # Any triangle, centroid will be at average of vertices
-        return [
-            (0.0, 0.6 * scale),      # Top
-            (-0.5 * scale, -0.3 * scale),  # Bottom left
-            (0.5 * scale, -0.3 * scale),   # Bottom right
-            (0.0, 0.0)               # Centroid at origin
-        ]
-
-    @staticmethod
-    def init_right_triangle_with_orthocenter(scale: float = 1.0) -> List[Tuple[float, float]]:
-        """Initialize right triangle with orthocenter at right angle vertex"""
-        # For right triangle, orthocenter = right angle vertex
-        return [
-            (0.0, 0.0),              # Orthocenter (right angle)
-            (0.8 * scale, 0.0),      # Along x-axis
-            (0.0, 0.6 * scale),      # Along y-axis
-            (0.0, 0.0)               # Orthocenter position
-        ]
-
-    @staticmethod
     def add_noise(coords: List[Tuple[float, float]], noise_scale: float = 0.05) -> List[Tuple[float, float]]:
         import random
         return [

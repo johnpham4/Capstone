@@ -11,7 +11,6 @@ def test_single_problem(instruction, dsl_answer, output_path):
     print(f"\n{'='*60}")
     print(f"Instruction: {instruction}")
     print(f"DSL: {dsl_answer}")
-    print(f"{'='*60}")
 
     try:
         dsl_lines = dsl_answer.split('\n') if '\n' in dsl_answer else [dsl_answer]
@@ -20,10 +19,8 @@ def test_single_problem(instruction, dsl_answer, output_path):
         print(f"Points: {[p.val for p in builder.points]}")
         # print(f"Instructions: {builder.instructions}")
 
-        opts = {
-            'epochs': 1500,
-            'learning_rate': 0.01
-        }
+        opts = {'epochs': 1000, 'n_tries': 3, 'eps': 1e-6, 'seed': 42}
+
 
         optimizer = Optimizer(builder.instructions, opts, verbosity=True)
         diagram = optimizer.solve()
@@ -40,11 +37,11 @@ def test_single_problem(instruction, dsl_answer, output_path):
         plt.savefig(output_path, dpi=150, bbox_inches='tight')
         plt.close(fig)
 
-        print(f"✅ Saved to {output_path}")
+        print(f"Saved to {output_path}")
         return True
 
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"Error: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -53,7 +50,7 @@ def test_single_problem(instruction, dsl_answer, output_path):
 def main():
     path = "dataset/data/test.json"
     json_path = Path(path)
-    output_dir = Path("output/")
+    output_dir = Path("output_fixed")
     output_dir.mkdir(parents=True, exist_ok=True)
 
     with open(json_path, 'r', encoding='utf-8') as f:
@@ -75,7 +72,6 @@ def main():
     print(f"\n{'='*60}")
     print(f"Completed: {success_count}/{len(problems)} diagrams generated")
     print(f"Output directory: {output_dir.absolute()}")
-    print(f"{'='*60}")
 
 
 if __name__ == "__main__":
