@@ -354,6 +354,10 @@ class Optimizer:
         self.register_loss(f"on_segment_{point_name.val}", lambda: self.collinear(foot, p1, p2), weight=10.0)
 
         return foot
+    
+    def _define_intersection(self, point_name, args):
+        assert len(args) == 2
+        pass
 
     def _define_centroid(self, point_name, triangle_points):
         assert len(triangle_points) == 3
@@ -655,6 +659,9 @@ class Optimizer:
             self._define_midpoint(objects[0], args)
         elif param_type_str == "projection":
             self._define_projection(objects[0], args[0], args[1:])
+        elif param_type_str == "intersection":
+            self._define_intersection(objects[0], args)
+        
         elif param_type_str == "segment":
             self.parameter_on_seg(objects[0], args)
         elif param_type_str == "line":
