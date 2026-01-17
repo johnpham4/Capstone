@@ -35,6 +35,7 @@ class Diagram:
     """
     points: Dict[str, GeometricPoint] = field(default_factory=dict)
     triangles: List[tuple] = field(default_factory=list)
+    quadrilaterals: List[dict] = field(default_factory=list)
     segments: List[tuple] = field(default_factory=list)
     circles: List[tuple] = field(default_factory=list)  # (center, radius_or_info)
     lines: Dict[str, Any] = field(default_factory=dict)
@@ -57,6 +58,16 @@ class Diagram:
         """
         self.triangles.append((p1, p2, p3, equal_sides, right_angle_at))
 
+    def add_quadrilateral(self, p1, p2, p3, p4, metadata):
+        """Add a quadrilateral to the diagram"""
+        quadrilateral = {
+            'points': [p1, p2, p3, p4],
+            'type': metadata.get('type', 'general')
+        }
+        if not hasattr(self, 'quadrilaterals'):
+            self.quadrilaterals = []
+        self.quadrilaterals.append(quadrilateral)
+        
     def add_circle(self, center: GeometricPoint, info: Any) -> None:
         """Add a circle to the diagram"""
         self.circles.append((center, info))

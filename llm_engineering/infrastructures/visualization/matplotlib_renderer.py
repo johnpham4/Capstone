@@ -8,6 +8,7 @@ from pathlib import Path
 from loguru import logger
 
 from llm_engineering.domains.geometry import Diagram, GeometricPoint
+from llm_engineering.domains.geometry.types import QuadrilateralType
 
 
 class MatplotlibDiagramRenderer:
@@ -128,6 +129,41 @@ class MatplotlibDiagramRenderer:
                 vertex = pts[right_angle_at]
                 others = [pts[i] for i in range(3) if i != right_angle_at]
                 self._draw_right_angle_symbol(ax, vertex, others[0], others[1])
+
+        # Draw quadrilaterals
+        for quad in self.diagram.quadrilaterals:
+            points = quad['points']
+            quad_type = quad.get('type', QuadrilateralType.GENERAL)
+            
+            # Draw edges
+            xs = [p.x for p in points] + [points[0].x]
+            ys = [p.y for p in points] + [points[0].y]
+            ax.plot(xs, ys, 'k-', linewidth=1.5)
+            
+            # Draw right angle markers for all 4 corners (square/rectangle)
+            if quad_type in [QuadrilateralType.SQUARE, QuadrilateralType.RECTANGLE]:
+                for i in range(4):
+                    vertex = points[i]
+                    p1 = points[(i - 1) % 4]
+                    p2 = points[(i + 1) % 4]
+                    self._draw_right_angle_symbol(ax, vertex, p1, p2)
+            
+            # Draw equal side markings
+            equal_sides = quad.get('equal_sides', [])
+            if equal_sides:
+                if quad_type == QuadrilateralType.SQUARE:
+                    # All 4 sides equal - draw same number of ticks on all sides
+                    for i in range(4):
+                        p1 = points[i]
+                        p2 = points[(i + 1) % 4]
+                        self._draw_tick_marks(ax, p1, p2, 1)
+                elif quad_type == QuadrilateralType.RECTANGLE:
+                    # Opposite sides equal - draw 1 tick on AB/CD, 2 ticks on BC/DA
+                    for i in range(4):
+                        p1 = points[i]
+                        p2 = points[(i + 1) % 4]
+                        num_ticks = 1 if i % 2 == 0 else 2
+                        self._draw_tick_marks(ax, p1, p2, num_ticks)
 
         # Draw circles
         for center, info in self.diagram.circles:

@@ -40,11 +40,11 @@ def test_single_problem(instruction, dsl_answer, output_path):
         plt.savefig(output_path, dpi=150, bbox_inches='tight')
         plt.close(fig)
 
-        print(f"✅ Saved to {output_path}")
+        print(f"Saved to {output_path}")
         return True
 
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"Error: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -71,10 +71,8 @@ def main():
         if test_single_problem(instruction, answer, output_path):
             success_count += 1
 
-    print(f"\n{'='*60}")
     print(f"Completed: {success_count}/{len(problems)} diagrams generated")
     print(f"Output directory: {output_dir.absolute()}")
-    print(f"{'='*60}")
 
 
 if __name__ == "__main__":

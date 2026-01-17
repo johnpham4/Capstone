@@ -85,6 +85,15 @@ class Initializer:
         return Initializer.init_rectangle(side, side)
 
     @staticmethod
+    def init_scalene_quadrilateral(scale: float = 1.0) -> List[Tuple[float, float]]:
+        return [
+            (-0.6 * scale, -0.3 * scale),    # Bottom left
+            (0.5 * scale, -0.2 * scale),     # Bottom right (shorter base)
+            (0.1 * scale, 0.7 * scale),      # Top right (offset to left)
+            (-0.4 * scale, 0.4 * scale)      # Top left
+        ]
+
+    @staticmethod
     def init_triangle_incircle(scale: float = 1.0) -> List[Tuple[float, float]]:
         """Initialize equilateral triangle with incenter at origin"""
         h = math.sqrt(3) / 3 * scale

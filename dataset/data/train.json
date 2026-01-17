@@ -1,1070 +1,1286 @@
 [
   {
-    "id": "869ee3ff-bc8a-456e-ae5b-aa7f7c4c37f4",
-    "image_dir": "images/img_103573.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm M là trung điểm của đoạn thẳng BC",
-    "answer": "(param (A B C) (right-tri B))\n(define M point (midp B C))"
+    "id": "f7c0d9ad-2fc7-460e-8b49-d159bbfd0de3",
+    "image_dir": "images/img_100003.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
   },
   {
-    "id": "ccf3e05b-585d-49e9-b118-be6579627fc0",
-    "image_dir": "images/img_100000.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through B))\n(assert (on-line C l))"
+    "id": "22b160c5-75cb-4c31-8d4e-74ad946e1b64",
+    "image_dir": "images/img_100047.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
   },
   {
-    "id": "f4d9a189-08ca-4116-b5b3-ed4809280cfc",
-    "image_dir": "images/img_106562.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(param (A B C) (iso-tri A))\n(param l line (through A))\n(assert (perp l (midp B C)))"
-  },
-  {
-    "id": "975e9244-4c0d-4b4f-a09b-334da6094c25",
-    "image_dir": "images/img_106703.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng BC",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param LCD line (through C))\n(assert (= (uangle A C D) (uangle D C B)))\n(param LBC line (through D))\n(assert (perp LBC LCD))"
-  },
-  {
-    "id": "9effec8b-8842-4226-ba79-cf7b07fac284",
-    "image_dir": "images/img_101785.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(param (A B C) (iso-tri A))\n(param lBC line (through A))\n(assert (perp lBC lAB))"
-  },
-  {
-    "id": "38b2713e-885a-4382-a5be-230410e0cffd",
-    "image_dir": "images/img_102751.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P",
-    "answer": "(param (A B C) triangle)\n(param P point (inter-ll lA lB))\n(param lA line (through A))\n(param lB line (through B))"
-  },
-  {
-    "id": "b1d2797b-7c9c-45dc-93ec-65900e2cebb6",
-    "image_dir": "images/img_101636.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(param (A B C))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))\n(param l line (through C))\n(assert (perp l LBC))"
-  },
-  {
-    "id": "d3560918-9d44-4d5a-b8ef-f3f4ec3dd653",
-    "image_dir": "images/img_101014.png",
-    "instruction": "Điểm A",
-    "answer": "(param A point)"
-  },
-  {
-    "id": "8b2b8030-acdb-416d-a4c2-be4ab903bcd2",
-    "image_dir": "images/img_103151.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
-  },
-  {
-    "id": "90af505f-dc28-4b8b-a808-10b9b7b90030",
-    "image_dir": "images/img_100644.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30",
-    "answer": "(param (A B C) (right-tri B))"
-  },
-  {
-    "id": "14d9a923-3732-4b76-905d-77e0da45821a",
-    "image_dir": "images/img_100929.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
-    "answer": "(param (A B C) (right-tri B))\n(param L1 line (through C))\n(assert (perp L1 LBC))\n(param L2 line (through B))\n(assert (perp L2 LAC))"
-  },
-  {
-    "id": "08d41d21-6586-4cb7-b530-d5afaa1e9eaf",
-    "image_dir": "images/img_102910.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng BC",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param LCD line (through C))\n(assert (= (uangle A C D) (uangle D C B)))\n(param LBC line (through B))\n(assert (perp LBC LCD))"
-  },
-  {
-    "id": "236ce560-171a-4f77-a929-120b1b3ea682",
-    "image_dir": "images/img_106751.png",
-    "instruction": "Đường thẳng AB",
-    "answer": "(param lAB line (through A))\n(assert (on-line B lAB))"
-  },
-  {
-    "id": "1bd445f7-71eb-454a-90ea-b793f071cb64",
-    "image_dir": "images/img_103818.png",
+    "id": "f94a9c4e-7b58-4c8b-b279-8aa8bb91a696",
+    "image_dir": "images/img_100038.png",
     "instruction": "Tam giác ABC",
-    "answer": "(param (A B C) triangle)"
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "f4352dd7-08f6-4855-a5c0-d043f0d8d6c8",
-    "image_dir": "images/img_100512.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param LCD line (through C))\n(assert (= (uangle A C D) (uangle D C B)))"
+    "id": "1c047a9a-2467-4797-b34a-4c0b4c69c7c3",
+    "image_dir": "images/img_100023.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
   },
   {
-    "id": "53ee12d9-173d-4872-b11c-292505a3b00a",
-    "image_dir": "images/img_100473.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(param (A B C) triangle)\n(param l line (through B))\n(assert (on-line C l))"
+    "id": "224da815-1e60-473a-91e4-9bfe2d2545aa",
+    "image_dir": "images/img_100016.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
   },
   {
-    "id": "957df288-1bde-4110-a23a-9d2feaae6efd",
-    "image_dir": "images/img_103728.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30",
-    "answer": "(param (A B C) (right-tri B))\n(assert (= (uangle A B C) 60))\n(assert (= (uangle B A C) 30))"
+    "id": "8985d201-e907-49ef-ae07-dffa1866558b",
+    "image_dir": "images/img_100006.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
   },
   {
-    "id": "fe155115-5cb4-472e-b9e6-d6802f93df8b",
-    "image_dir": "images/img_103589.png",
-    "instruction": "Ngũ giác ABCDE, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(param (A B C D E) polygon)\n(param l line (perp (midp A B)))"
+    "id": "4c9f2126-d48a-404d-aba1-70e3a1f9e207",
+    "image_dir": "images/img_100026.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
   },
   {
-    "id": "fc4e7d41-03db-4407-8ee0-2c6be1461174",
-    "image_dir": "images/img_102170.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm E là đường trung trực của đoạn thẳng BC, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LBC line (through E))\n(assert (perp LBC LDE))"
+    "id": "7446743d-e3b2-4f8f-8f77-3b06d1563a7a",
+    "image_dir": "images/img_100040.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
   },
   {
-    "id": "35bdb861-01d3-44e7-9114-e8d44f2f78b4",
-    "image_dir": "images/img_102699.png",
+    "id": "db3b389d-e301-45a7-8082-5c46582e1715",
+    "image_dir": "images/img_100039.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+  },
+  {
+    "id": "32350c67-58b3-43a0-a1b8-6d3f867428d1",
+    "image_dir": "images/img_100005.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+  },
+  {
+    "id": "fa629778-49d4-4d59-b66a-08e870afbc5c",
+    "image_dir": "images/img_100015.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+  },
+  {
+    "id": "b47f8b8c-e565-4f27-8760-4d73ad3828e4",
+    "image_dir": "images/img_100013.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "cc4e2850-c502-4568-b85e-fd4fa9df67d3",
+    "image_dir": "images/img_100032.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "4d9b659c-990b-4b4f-baae-7aa23ae75c91",
+    "image_dir": "images/img_100044.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "dc3dab22-8c6d-4ea1-9e05-5beea2c84022",
+    "image_dir": "images/img_100024.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "id": "a20f582e-c231-4c0b-b012-c734e817bb6a",
+    "image_dir": "images/img_100016.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "9d7ea23f-c38b-4152-a25a-293a19041098",
+    "image_dir": "images/img_100018.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "c35f68f3-be07-400b-960b-868fe293f853",
+    "image_dir": "images/img_100010.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
+  },
+  {
+    "id": "a07b7141-4bd3-4d21-a004-a7af4b2709da",
+    "image_dir": "images/img_100005.png",
     "instruction": "Tam giác ABC",
-    "answer": "(param (A B C) triangle)"
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "95a0bbab-093d-4c2e-abe0-33a24cabb9ba",
-    "image_dir": "images/img_102055.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm B",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param LCD line (through C))\n(param LDC line (through D))\n(assert (on-line C LCD))\n(assert (on-line B LDC))\n(assert (= (uangle A C D) (uangle D C B)))"
+    "id": "e2f4b6c1-0585-4c0a-b185-3f9d9e46bf51",
+    "image_dir": "images/img_100020.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "3be7c294-822b-4966-8acb-5c548771d232",
-    "image_dir": "images/img_102198.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, AF vuông góc với BC",
-    "answer": "(param (A B C) (iso-tri A))\n(define D point (midp A B))\n(define E point (midp A C))\n(param F point (on-seg B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))\n(assert (= (uangle B A F) (uangle C A F))\n(param LAF line (through A))\n(assert (perp LAF LBC))"
+    "id": "2828c559-748a-42f2-a4b6-e62f11f44235",
+    "image_dir": "images/img_100043.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
   },
   {
-    "id": "231729cd-1a00-42fa-9175-0fa70eea6163",
-    "image_dir": "images/img_100897.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
-    "answer": "(param (A B C) triangle)\n(define D point (midp A B))\n(define E point (midp A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
+    "id": "1e2d73e9-6c5e-43f8-9c53-8d39590bb5e5",
+    "image_dir": "images/img_100036.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
   },
   {
-    "id": "e0685b23-2a86-4287-b657-f230ae8aa38e",
-    "image_dir": "images/img_101547.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm B",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through B))"
+    "id": "269b1aba-9258-4435-83e2-54c09c17b7e5",
+    "image_dir": "images/img_100009.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "0318bd0a-4191-42bb-9ac0-04ac316fd2bc",
-    "image_dir": "images/img_102993.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
+    "id": "e83be8c2-2e23-47de-9a0e-53229f125bba",
+    "image_dir": "images/img_100027.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
   },
   {
-    "id": "eb1602fb-08f2-48a3-a9a3-a6850aa4dd08",
-    "image_dir": "images/img_102316.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param LCD line (through C))\n(assert (= (uangle A C D) (uangle D C B)))"
+    "id": "1c6c1896-ef54-42fb-a425-9e6b2160af51",
+    "image_dir": "images/img_100040.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
   },
   {
-    "id": "556a7562-4ace-429d-a367-a3c56c098e96",
-    "image_dir": "images/img_101979.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm M là trung điểm của đoạn thẳng AB",
-    "answer": "(param (A B C) (right-tri B))\n(define M point (midp A B))"
+    "id": "2bd5b43f-fe69-46e7-93dd-bdbf5068c47e",
+    "image_dir": "images/img_100048.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
   },
   {
-    "id": "d563f431-ff3e-44df-958f-d04a57b1ce74",
-    "image_dir": "images/img_106963.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through C))\n(assert (perp lAB l))"
+    "id": "4e2ac8e1-fb4a-492d-b7fe-3af72024fa51",
+    "image_dir": "images/img_100042.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
   },
   {
-    "id": "89991f2c-3f37-43d0-b1b9-1c9be1db35e7",
-    "image_dir": "images/img_106364.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, đường thẳng AF, BC song song với DE, góc BAF = góc CAF",
-    "answer": "(param (A B C))\n(define D point (midp A B))\n(define E point (midp A C))\n(param F point (on-seg B C))\n(param LDE line (through D))\n(param LAF line (through A))\n(assert (on-line E LDE))\n(assert (on-line F LBC))\n(assert (para LBC LDE))\n(assert (= (uangle B A F) (uangle C A F)))"
+    "id": "52f5171a-a901-4efc-b3fb-92abaa1943e6",
+    "image_dir": "images/img_100020.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
   },
   {
-    "id": "6c4d10f2-1aaa-4bc4-9e8f-636ae0b391d1",
-    "image_dir": "images/img_101066.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(param (A B C) (right-tri B))\n(param L line (through A))\n(param LBC line (through B))\n(assert (on-line C LBC))"
+    "id": "d752759f-b442-4b4d-afd5-58b03583867d",
+    "image_dir": "images/img_100048.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
   },
   {
-    "id": "087864a2-66ad-4d5a-990d-90bdfa80f77b",
-    "image_dir": "images/img_102473.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(param (A B C) triangle)\n(param l line (through B))\n(assert (on-line C l))"
+    "id": "ac9fe889-2e3d-4c6d-9c1c-dd8e95c0c298",
+    "image_dir": "images/img_100018.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
   },
   {
-    "id": "247ca41e-ddc5-40dc-a55c-7c9e63339092",
-    "image_dir": "images/img_1038.png",
-    "instruction": "Ngũ giác ABCDE, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng CD, đường thẳng PQ",
-    "answer": "(param (A B C D E) polygon)\n(param P point (on-seg A B))\n(param Q point (on-seg C D))\n(param LPQ line (through P))\n(assert (on-line Q LPQ))"
-  },
-  {
-    "id": "53e66442-9b88-40de-a017-5891f9e223aa",
-    "image_dir": "images/img_10101.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB, góc ADE = 90, góc CFE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(define F point (midp B C))\n(param LDE line (through D))\n(param LEF line (through E))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (on-line F LBC))\n(assert (para LBC LDE))\n(assert (para LEF LDE))\n(assert (perp LDE LDE))\n(assert (perp LEF LDE))"
-  },
-  {
-    "id": "23999fde-4ac5-4486-a270-7f718c3d6ea9",
-    "image_dir": "images/img_106556.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(param (A B C) triangle)\n(param l line (through D))\n(assert (perp lAB l))"
-  },
-  {
-    "id": "9058179b-1623-4156-b59c-078f20b87c20",
-    "image_dir": "images/img_100058.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
-    "answer": "(param (A B C) (iso-tri A))\n(param lC line (through C))\n(assert (perp lC (lAB)))\n(param lB line (through B))\n(assert (perp lB (lAC)))"
-  },
-  {
-    "id": "0c8aae38-b214-4186-9373-a1a179499f23",
-    "image_dir": "images/img_102676.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through A))"
-  },
-  {
-    "id": "fc318ded-4f70-470b-8ba2-9c4898f0b73d",
-    "image_dir": "images/img_101323.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB",
-    "answer": "(param (A B C) triangle)\n(param D point (on-seg A B))\n(assert (= (uangle A C D) (uangle D C B)))"
-  },
-  {
-    "id": "ca03f30f-3787-4621-8583-16f84bf57d90",
-    "image_dir": "images/img_103360.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(param F point (on-seg B C))\n(param LDE line (through D))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))\n(assert (= (uangle B A F) (uangle C A F)))\n(assert (perp LDE LBC))"
-  },
-  {
-    "id": "7de40db0-dde7-4cd4-9368-fedd6ad3a9b0",
-    "image_dir": "images/img_106651.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(param (A B C) (right-tri B))\n(param lAB line (through A))\n(assert (on-line B lAB))\n(param lAC line (through A))\n(assert (on-line C lAC))"
-  },
-  {
-    "id": "95981448-1efe-4c19-8e19-5deff564ae2e",
-    "image_dir": "images/img_103830.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
-  },
-  {
-    "id": "a98d49d8-ce0b-424e-a12c-fddbaa14ceca",
-    "image_dir": "images/img_10676.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(param (A B C) (right-tri B))\n(param L line (through D))"
-  },
-  {
-    "id": "4986af2c-6abf-4ef5-8f07-6cb1eab86fec",
-    "image_dir": "images/img_101173.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm B",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param LCD line (through C))\n(param LBC line (through B))\n(assert (= (uangle A C D) (uangle D C B)))"
-  },
-  {
-    "id": "68443046-98b8-4427-97e3-8ed8cb12714d",
-    "image_dir": "images/img_10209.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through C))"
-  },
-  {
-    "id": "8994768d-568d-495b-b048-05155674103a",
-    "image_dir": "images/img_100817.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm E là đường trung trực của đoạn thẳng BC, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LBC line (through E))\n(assert (perp LBC LDE))"
-  },
-  {
-    "id": "84c57760-baf5-4f5c-83f3-8d3553279312",
-    "image_dir": "images/img_100088.png",
-    "instruction": "Tam giác ABC, điểm M là trung điểm của đoạn thẳng AB",
-    "answer": "(param (A B C) triangle)\n(define M point (midp A B))"
-  },
-  {
-    "id": "b8673bb6-20e1-40b7-87d7-be292a448d9b",
-    "image_dir": "images/img_102738.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45",
-    "answer": "(param (A B C) (right-tri B))"
-  },
-  {
-    "id": "60ca24dd-80e8-4042-b9ac-a4e9f2e4d10c",
-    "image_dir": "images/img_102432.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng BC, đường thẳng DE, AC song song với DE",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LAC line (through A))\n(assert (on-line C LAC))\n(assert (para LAC LDE))"
-  },
-  {
-    "id": "ea12ee3e-1647-42eb-b911-de7e86907af2",
-    "image_dir": "images/img_102190.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(param (A B C) triangle)\n(param l line (through B))\n(assert (on-line C l))"
-  },
-  {
-    "id": "40ecc213-d359-4758-bca2-2e6e8852793d",
-    "image_dir": "images/img_106524.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through C))\n(assert (perp l (line (through B))))"
-  },
-  {
-    "id": "e3cb853c-2627-46b3-81bb-a4cf635fbc26",
-    "image_dir": "images/img_106694.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng BC, góc ACD = góc DCB, góc CAE = góc EAB, đường thẳng DE, đường thẳng AE, AF vuông góc với BC",
-    "answer": "(param (A B C))\n(param D point (on-seg A B))\n(param E point (on-seg B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LAE line (through A))\n(assert (on-line E LAE))\n(assert (cong (uangle A C D) (uangle D C B)))\n(assert (cong (uangle C A E) (uangle E A B))\n(param LAF line (through A))\n(assert (perp LAF (on-line B C)))"
-  },
-  {
-    "id": "c67ebc03-4115-47f1-8ca2-fa48fd24f769",
-    "image_dir": "images/img_102371.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(param (A B C) (iso-tri A))\n(param lAB line (through A))\n(assert (on-line B lAB))\n(param lAC line (through A))\n(assert (on-line C lAC))"
-  },
-  {
-    "id": "b48e0759-1a72-492e-bc6e-7e963b23be04",
-    "image_dir": "images/img_100089.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through A))"
-  },
-  {
-    "id": "89eac75d-a35b-43e2-a74a-574d2f720590",
-    "image_dir": "images/img_100170.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
-    "answer": "(param (A B C) (right-tri B))\n(param L1 line (through C))\n(assert (perp L1 (line AC)))\n(param L2 line (through B))\n(assert (perp L2 (line AC)))"
-  },
-  {
-    "id": "ff3d291e-b49e-4067-a991-fb362866a375",
-    "image_dir": "images/img_101527.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(param (A B C) triangle)\n(param l line (through B))\n(assert (on-line C l))"
-  },
-  {
-    "id": "ab12b3b5-afbe-4cdc-a7b3-633973600990",
-    "image_dir": "images/img_106419.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B",
-    "answer": "(param (A B C) (iso-tri A))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LDE line (through D))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))"
-  },
-  {
-    "id": "94e30cb4-269a-474c-a729-69dce7fbc4c0",
-    "image_dir": "images/img_103317.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B",
-    "answer": "(param (A B C))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LDE line (through D))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))"
-  },
-  {
-    "id": "a4ae7eb1-db90-4720-83fa-d098c5dbbea8",
-    "image_dir": "images/img_10031.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LBC line (through B))\n(assert (para LBC LDE))\n(assert (= (uangle A D E) 90))"
-  },
-  {
-    "id": "1a878052-ff6c-4868-ad2d-56cd601da751",
-    "image_dir": "images/img_101818.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(param (A B C) (right-tri B))\n(param lAB line (through A))\n(assert (on-line B lAB))\n(param lAC line (through A))\n(assert (on-line C lAC))"
-  },
-  {
-    "id": "0c14fe90-962d-4605-bf6e-b15b2f7eee9c",
-    "image_dir": "images/img_106512.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
-    "answer": "(param (A B C) (iso-tri A))\n(param lC line (through C))\n(assert (perp lC (line (through A))))\n(param lB line (through B))\n(assert (perp lB (line (through A))))"
-  },
-  {
-    "id": "c1d91b9c-a53f-4896-8135-2d3a236cb6a2",
-    "image_dir": "images/img_103420.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng BC, đường thẳng DE, AC song song với DE",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LAC line (through A))\n(assert (on-line C LAC))\n(assert (para LAC LDE))"
-  },
-  {
-    "id": "f8601ab9-fea3-4e2e-8b3e-c6afc3f76edf",
-    "image_dir": "images/img_106362.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through A))\n(param lBC line (through B))\n(assert (on-line C lBC))"
-  },
-  {
-    "id": "d3f517d1-9aed-43e0-b7c2-c914e38f8fac",
-    "image_dir": "images/img_107026.png",
-    "instruction": "Điểm A",
-    "answer": "(param A point)"
-  },
-  {
-    "id": "4174dc38-7715-499f-8b98-7946cf4aa53e",
-    "image_dir": "images/img_10158.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm B",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through B))"
-  },
-  {
-    "id": "77ac290c-be1c-4fbe-b9d0-665cd420c364",
-    "image_dir": "images/img_101330.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB",
-    "answer": "(param (A B C) triangle)\n(param D point (on-seg A B))\n(assert (= (uangle A C D) (uangle D C B)))"
-  },
-  {
-    "id": "7ddd4938-cb06-4fb1-bf97-d7595830914c",
-    "image_dir": "images/img_102696.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(param F point (on-seg B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))\n(assert (= (uangle B A F) (uangle C A F)))\n(assert (perp LDE LBC))"
-  },
-  {
-    "id": "4fee1a9a-3bca-4c4c-96c0-d707ecffd6f2",
-    "image_dir": "images/img_10118.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
-  },
-  {
-    "id": "1b6455ff-ce06-4bd8-ab00-db7b37b5d5a1",
-    "image_dir": "images/img_106986.png",
+    "id": "e7ddf642-1a77-49e4-860d-d40920190858",
+    "image_dir": "images/img_100035.png",
     "instruction": "Tam giác ABC",
-    "answer": "(param (A B C) triangle)"
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "288b45e0-1cd9-4ea8-b759-90df2f25b9fb",
-    "image_dir": "images/img_101521.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through C))\n(assert (perp l (line (through A))))"
+    "id": "073960ec-34e9-4e2a-818d-cb45929ac4ad",
+    "image_dir": "images/img_100021.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
   },
   {
-    "id": "20a4183f-ce11-4ddb-9239-a7c8b05e18bc",
-    "image_dir": "images/img_101127.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB, góc ADE = 90, góc CFE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(define F point (midp B C))\n(param LDE line (through D))\n(param LEF line (through E))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))\n(assert (para LEF LDE))\n(assert (perp LDE L A))\n(assert (perp LEF L C))"
-  },
-  {
-    "id": "43f21da2-dd7f-46ca-9e46-815b1726a252",
-    "image_dir": "images/img_102362.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
-  },
-  {
-    "id": "f3b39052-cc44-4a33-9001-6a836e645137",
-    "image_dir": "images/img_100430.png",
-    "instruction": "Tam giác ABC, tam giác DEF, tam giác ABC đồng dạng với tam giác DEF",
-    "answer": "(param (A B C) triangle)\n(param (D E F) triangle)\n(assert (similar (triangle A B C) (triangle D E F)))"
-  },
-  {
-    "id": "21ba4f0c-7d5f-44dc-8b0b-12cd4813d459",
-    "image_dir": "images/img_101417.png",
+    "id": "f46ede91-4122-43eb-98c8-cd1f2bfba836",
+    "image_dir": "images/img_100032.png",
     "instruction": "Tam giác ABC",
-    "answer": "(param (A B C) triangle)"
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "ca76cbba-2a7a-4fdd-abc2-85e05cd3756d",
-    "image_dir": "images/img_106125.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm M là trung điểm của đoạn thẳng BC",
-    "answer": "(param (A B C) (right-tri B))\n(define M point (midp B C))"
+    "id": "b6eb46a3-d51c-48eb-ade7-83c754209f7c",
+    "image_dir": "images/img_100040.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "ed014b13-105e-400e-bc5f-9000be48e540",
-    "image_dir": "images/img_106909.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC",
-    "answer": "(param (A B C) (right-tri B))\n(param LBC line (through B))\n(assert (perp LBC (through C)))"
+    "id": "00481617-458f-4aa3-8753-77fcc5ab8dcd",
+    "image_dir": "images/img_100017.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "id": "5474f715-6cd4-4255-a22d-1841e15f24c3",
-    "image_dir": "images/img_10323.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm P là trọng tâm của tam giác ABC",
-    "answer": "(param (A B C) (iso-tri A))\n(define P point (centroid A B C))"
+    "id": "a550f8f7-0bbc-4375-bcd1-ea52495edb0c",
+    "image_dir": "images/img_100034.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
   },
   {
-    "id": "72c182d2-a641-468c-b612-f7939bf0c8f3",
-    "image_dir": "images/img_100878.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through C))"
+    "id": "aad4edae-150f-4324-b656-02f00e39f50b",
+    "image_dir": "images/img_100026.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
   },
   {
-    "id": "ded7f884-f50a-46ea-bf31-95984b1ab940",
-    "image_dir": "images/img_103902.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(param (A B C) (iso-tri A))\n(param l line (through B))\n(assert (on-line C l))"
+    "id": "498b0559-5391-4a32-923a-e25d54e816b9",
+    "image_dir": "images/img_100025.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
   },
   {
-    "id": "aafa472d-d593-498b-a926-0aec6faaade0",
-    "image_dir": "images/img_106827.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, tam giác DEF, tam giác DEF = 90, góc EFD = 45, góc EDF = 45, tam giác ABC bằng tam giác DEF",
-    "answer": "(param (A B C) (right-tri B))\n(param (D E F) (right-tri E))\n(assert (cong A B C D E F))"
+    "id": "5c2d05f0-7673-4d36-80a7-395004bb9c39",
+    "image_dir": "images/img_100015.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "311aaf55-295e-4e58-bd6a-f585d22bbbe0",
+    "id": "b32f2e30-c5c5-4ea5-8499-90c254f98c22",
+    "image_dir": "images/img_100046.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "f38c45a1-3ebe-47b1-b9f6-2211a0a0dc84",
+    "image_dir": "images/img_100015.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
+  },
+  {
+    "id": "cf46242a-4f99-4a60-ab4e-66a0f2f7fe7f",
+    "image_dir": "images/img_100041.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "261f761e-b6e0-42a1-9905-9ccbb00665d4",
+    "image_dir": "images/img_100015.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "id": "cda458fa-540c-4ed5-bfff-0d0c365d50ae",
     "image_dir": "images/img_100022.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua C là đường trung trực của đoạn thẳng AB",
-    "answer": "(param (A B C) (iso-tri A))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))\n(param L line (through C))\n(assert (perp L lAB))"
-  },
-  {
-    "id": "1316298b-86be-4b3d-9cb8-260ea2601d3d",
-    "image_dir": "images/img_10120.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(param F point (on-seg B C))\n(param LDE line (through D))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))\n(assert (= (uangle B A F) (uangle C A F)))\n(assert (perp LDE (line A D)))"
-  },
-  {
-    "id": "0edc042a-251f-413f-911c-30296598d015",
-    "image_dir": "images/img_103792.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through A))"
-  },
-  {
-    "id": "180a2c7b-ddfb-4710-bcde-fa4a2728128e",
-    "image_dir": "images/img_103294.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(param (A B C) (right-tri B))\n(param L line (through A))\n(param LBC line (through B))\n(assert (on-line C LBC))"
-  },
-  {
-    "id": "7707beaa-8e9c-4243-9d0d-90bdd243b08f",
-    "image_dir": "images/img_103804.png",
-    "instruction": "Điểm A",
-    "answer": "(param A point)"
-  },
-  {
-    "id": "259f9af2-eb56-46b0-8dda-6cc1ce18bbe2",
-    "image_dir": "images/img_102614.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))\n(param LAC line (through C))\n(assert (perp LAC LDE))"
-  },
-  {
-    "id": "4351fa65-1d5b-4ef4-b2e2-d0112d33ac86",
-    "image_dir": "images/img_102569.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through B))\n(assert (perp l A C))"
-  },
-  {
-    "id": "fcd9550e-818a-4369-ae5e-4fe2f120fb18",
-    "image_dir": "images/img_102867.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB",
-    "answer": "(param (A B C))\n(define D point (midp A B))\n(define E point (midp A C))\n(define F point (midp B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LEF line (through E))\n(assert (on-line F LEF))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))\n(assert (para LEF LDE))"
-  },
-  {
-    "id": "97e7ec48-d082-4731-896a-f457bb2891a8",
-    "image_dir": "images/img_102344.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
-  },
-  {
-    "id": "ebde4c66-2d50-49b3-a7cc-124c3e0c62ff",
-    "image_dir": "images/img_101872.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through A))"
-  },
-  {
-    "id": "4f4932c4-9a58-4ddb-817f-4671c1379841",
-    "image_dir": "images/img_103009.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
-  },
-  {
-    "id": "af746b12-f9f1-4cd0-a515-ab2b8e5d54d3",
-    "image_dir": "images/img_107031.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C",
-    "answer": "(param (A B C) (iso-tri A))\n(param l line (through C))\n(assert (perp lAB l))"
-  },
-  {
-    "id": "7ec77c34-abfa-490a-97f7-fbf3064b879a",
-    "image_dir": "images/img_100407.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB",
-    "answer": "(param (A B C))\n(define D point (midp A B))\n(define E point (midp A C))\n(define F point (midp B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LEF line (through E))\n(assert (on-line F LEF))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))\n(assert (para LEF LDE))"
-  },
-  {
-    "id": "983913cf-8bc1-40a4-adab-9adc13c94c04",
-    "image_dir": "images/img_106891.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm M là trung điểm của đoạn thẳng AB",
-    "answer": "(param (A B C) (iso-tri A))\n(define M point (midp A B))"
-  },
-  {
-    "id": "c14516f0-7352-4d59-872a-6ea876c289cb",
-    "image_dir": "images/img_101788.png",
-    "instruction": "Trianlge ABC, góc ABC = 90",
-    "answer": "(param (A B C) (right-tri B))"
-  },
-  {
-    "id": "ff52899c-e5a7-48fa-9bf3-123a51f6edb5",
-    "image_dir": "images/img_102680.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB",
-    "answer": "(param (A B C))\n(param D point (on-seg A B))\n(assert (= (uangle A C D) (uangle D C B)))"
-  },
-  {
-    "id": "ba3f1512-1de9-4353-86b7-dcbe37e3b524",
-    "image_dir": "images/img_100191.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B",
-    "answer": "(param (A B C))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LDE line (through D))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))"
-  },
-  {
-    "id": "ddfd4f08-4821-441d-9015-af5d50cffe5e",
-    "image_dir": "images/img_102450.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, đường thẳng DF, BC song song với DE, AC song song với DF",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param F point (on-seg B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LDF line (through D))\n(assert (on-line F LDF))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))\n(assert (para LAC LDF))"
-  },
-  {
-    "id": "8be1fd57-b5e3-45b2-9cd6-7d6a2f2574d9",
-    "image_dir": "images/img_106746.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(param (A B C) (right-tri B))\n(param lAB line (through A))\n(assert (on-line B lAB))\n(param lAC line (through A))\n(assert (on-line C lAC))"
-  },
-  {
-    "id": "e6d636d5-b4ba-48a5-bbbb-a75afcfe39d7",
-    "image_dir": "images/img_10261.png",
-    "instruction": "Tam giác ABC, điểm P là trọng tâm của tam giác ABC",
-    "answer": "(param (A B C) triangle)\n(define P point (centroid A B C))"
-  },
-  {
-    "id": "e8e26fd4-ac34-4713-8e64-7a69bb85931e",
-    "image_dir": "images/img_103525.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
-    "answer": "(param (A B C) (right-tri B))\n(param lC line (through C))\n(assert (perp lC (line (through A))))\n(param lB line (through B))\n(assert (perp lB (line (through C))))"
-  },
-  {
-    "id": "8678fb44-2e81-4162-8357-5d8e75c51862",
-    "image_dir": "images/img_102788.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
-  },
-  {
-    "id": "aee19031-cc1c-4a16-93a0-9504b049b3e0",
-    "image_dir": "images/img_100307.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng BC",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param LCD line (through C))\n(assert (= (uangle A C D) (uangle D C B)))\n(param LBC line (through D))\n(assert (perp LBC LCD))"
-  },
-  {
-    "id": "8d56493a-65cf-449f-aa77-aa15c770359f",
-    "image_dir": "images/img_101930.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through D))\n(assert (on-line D l))"
-  },
-  {
-    "id": "fa54e3b3-6330-40d9-afed-818c5afc3969",
-    "image_dir": "images/img_103844.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through A))\n(param lBC line (through B))\n(assert (on-line C lBC))"
-  },
-  {
-    "id": "79203c74-0a00-4142-9c67-4ed2bcf97ea1",
-    "image_dir": "images/img_106835.png",
-    "instruction": "Tam giác ABC, AB = AC",
-    "answer": "(param (A B C) (iso-tri A))"
-  },
-  {
-    "id": "d08491e7-aa8a-4c7b-bc43-321d4e032972",
-    "image_dir": "images/img_101774.png",
     "instruction": "Tam giác ABC",
-    "answer": "(param (A B C) triangle)"
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "fee9db12-2549-457b-b5a3-e794cac8bb7f",
-    "image_dir": "images/img_101340.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C",
-    "answer": "(param (A B C) triangle)\n(param l line (through C))\n(param lAB line (through A))\n(assert (on-line B lAB))\n(assert (perp lAB l))"
-  },
-  {
-    "id": "47da1f50-f0ff-4651-b52f-fa726c664420",
-    "image_dir": "images/img_100375.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, đường thẳng DF, BC song song với DE, AC song song với DF",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param F point (on-seg B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LDF line (through D))\n(assert (on-line F LDF))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))\n(assert (para LAC LDF))"
-  },
-  {
-    "id": "c8633d99-59e7-40e4-9081-f8a005119c20",
-    "image_dir": "images/img_106474.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm M là trung điểm của đoạn thẳng AB",
-    "answer": "(param (A B C) (right-tri B))\n(define M point (midp A B))"
-  },
-  {
-    "id": "b08bf300-a764-497f-9376-441d45d848c4",
-    "image_dir": "images/img_103889.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm P là trọng tâm của tam giác ABC",
-    "answer": "(param (A B C) (right-tri B))\n(define P point (centroid A B C))"
-  },
-  {
-    "id": "03799394-62c6-4a64-aea5-639843f97e2b",
-    "image_dir": "images/img_100303.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm M là trung điểm của đoạn thẳng AB",
-    "answer": "(param (A B C) (right-tri B))\n(define M point (midp A B))"
-  },
-  {
-    "id": "3fe7d7dc-ed22-4209-8023-eb1da9a9f13c",
-    "image_dir": "images/img_106232.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P",
-    "answer": "(param (A B C) triangle)\n(param P point (on-line lA))\n(param lA line (through A))\n(param lB line (through B))\n(assert (on-line P lA))\n(assert (on-line P lB))"
-  },
-  {
-    "id": "eefde0a0-0116-4de7-b48d-eb8eee12fc7c",
-    "image_dir": "images/img_101533.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LDE line (through D))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (on-line E LDE))\n(assert (para LBC LDE))\n(assert (= (uangle A D E) 90))"
-  },
-  {
-    "id": "13d893e1-e7dd-41c3-9f0b-8b3806f59d1a",
-    "image_dir": "images/img_102819.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm E là đường trung trực của đoạn thẳng BC, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LDE line (through D))\n(param L line (through E))\n(assert (perp LDE L))"
-  },
-  {
-    "id": "48b5bfdf-2fb6-4600-89a9-a12ad5e369c8",
-    "image_dir": "images/img_102799.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through (midp A B)))"
-  },
-  {
-    "id": "e94ae78e-d767-41d9-bf80-b3aca346797a",
-    "image_dir": "images/img_103677.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
-    "answer": "(param (A B C) triangle)\n(define D point (midp A B))\n(define E point (midp A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
-  },
-  {
-    "id": "f301f5a3-6b96-4dfe-9eb9-9231809ad54c",
-    "image_dir": "images/img_100115.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm P là trực tâm của tam giác ABC",
-    "answer": "(param (A B C) (iso-tri A))\n(define P point (orthocenter A B C))"
-  },
-  {
-    "id": "00182cad-4c8b-4f30-89b2-6df5c5d7b209",
-    "image_dir": "images/img_101865.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A",
-    "answer": "(param (A B C) triangle)\n(param l line (through A))"
-  },
-  {
-    "id": "baf8aa1f-c7de-4114-9a6b-022c3c602a57",
-    "image_dir": "images/img_106884.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30",
-    "answer": "(param (A B C) (right-tri B))"
-  },
-  {
-    "id": "f9d3681a-8926-4981-af89-8e003d9cc831",
-    "image_dir": "images/img_102777.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
-  },
-  {
-    "id": "d02667ba-31a5-4c91-a250-fc6c49d39230",
-    "image_dir": "images/img_102459.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE",
-    "answer": "(param (A B C) triangle)\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
-  },
-  {
-    "id": "49eba957-cdd1-4087-a666-f10ae1b36141",
-    "image_dir": "images/img_103502.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(param (A B C) triangle)\n(param l line (through B))\n(assert (on-line C l))"
-  },
-  {
-    "id": "a4093f4d-a8a0-4c17-ae40-82c370d04710",
-    "image_dir": "images/img_101021.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through A))\n(param lBC line (through B))\n(assert (on-line C lBC))"
-  },
-  {
-    "id": "723419b8-b435-47ff-bd3f-d40357842ba2",
-    "image_dir": "images/img_102258.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(param (A B C) triangle)\n(param l line (through D))\n(assert (on-line A l))\n(assert (on-line B l))"
-  },
-  {
-    "id": "fb64688c-29d3-4a0e-a5bc-53db139c82a7",
-    "image_dir": "images/img_101682.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(param (A B C) triangle)\n(param l line (through D))\n(assert (perp lAB l))\n(assert (on-line D l))"
-  },
-  {
-    "id": "67541dad-74d0-4a3a-97f7-b1e1afe501f2",
-    "image_dir": "images/img_103162.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))\n(param l line (through C))\n(assert (perp l LBC))\n(assert (= (uangle A D E) 90))"
-  },
-  {
-    "id": "c102fc33-cb89-4f08-9c17-9d57ddcdbdbc",
-    "image_dir": "images/img_106535.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
-  },
-  {
-    "id": "b4e5c2b6-013e-416f-aa58-e82daffe67d8",
-    "image_dir": "images/img_100675.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))\n(param LAC line (through C))\n(assert (perp LAC LDE))\n(assert (= (uangle A D E) 90))"
-  },
-  {
-    "id": "107eea14-b709-4469-a449-c2e6f0b68d01",
-    "image_dir": "images/img_101746.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
-    "answer": "(param (A B C) triangle)\n(define D point (midp A B))\n(define E point (midp A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
-  },
-  {
-    "id": "b6f3ff89-5e4a-4b83-9726-ba335d63e1db",
-    "image_dir": "images/img_102175.png",
-    "instruction": "Điểm A",
-    "answer": "(param A point)"
-  },
-  {
-    "id": "12bcb9a8-8538-48a0-85d1-9b7eba7d2718",
-    "image_dir": "images/img_102953.png",
-    "instruction": "Tam giác ABC, điểm M là trung điểm của đoạn thẳng AB",
-    "answer": "(param (A B C) triangle)\n(define M point (midp A B))"
-  },
-  {
-    "id": "d1dfea3a-bab8-4b09-b3ba-b853ceb95f49",
-    "image_dir": "images/img_106774.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P",
-    "answer": "(param (A B C) (iso-tri A))\n(param P point (on-line lA))\n(param lA line (through A))\n(param lB line (through B))\n(assert (on-line P lA))\n(assert (on-line P lB))"
-  },
-  {
-    "id": "d9131b6a-90bc-4452-b422-b6b6692ca5db",
-    "image_dir": "images/img_100486.png",
+    "id": "b64fd1de-1e54-4cbe-8ae1-71b96204288d",
+    "image_dir": "images/img_100050.png",
     "instruction": "Tam giác ABC",
-    "answer": "(param (A B C) triangle)"
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "75e0c715-fad2-4032-a214-2fd61a027c32",
-    "image_dir": "images/img_103482.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B",
-    "answer": "(param (A B C) (iso-tri A))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
+    "id": "12da9b10-07ff-4258-8d5c-3403330bfca1",
+    "image_dir": "images/img_100042.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "2ef32f2f-3238-4038-bbe1-f04a599c617b",
-    "image_dir": "images/img_102499.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(param (A B C) triangle)\n(param l line (through C))\n(assert (perp l (line (through A))))\n(assert (on-line B l))"
+    "id": "bf05a4b5-bba4-42d0-b79d-8b4a6dc9fbe2",
+    "image_dir": "images/img_100023.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "8d41b317-6c6c-4b6b-84f7-54723046a47d",
-    "image_dir": "images/img_101365.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, đường thẳng DF, BC song song với DE, AC song song với DF",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param F point (on-seg B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LDF line (through D))\n(assert (on-line F LDF))\n(assert (para LBC LDE))\n(assert (para LAC LDF))"
+    "id": "3d1a1c84-278c-4343-8627-89d2766a61ab",
+    "image_dir": "images/img_100007.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
   },
   {
-    "id": "01b1e4ff-18a1-4a0b-8790-db01143e9dfe",
-    "image_dir": "images/img_100401.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LBC line (through B))\n(assert (para LBC LDE))\n(assert (= (uangle A D E) 90))"
+    "id": "32219b08-7700-4099-8882-29a4ae7a3423",
+    "image_dir": "images/img_100025.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
   },
   {
-    "id": "cfe482f4-1a4c-4ba5-b3c0-3b1eb94e83db",
-    "image_dir": "images/img_103020.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P",
-    "answer": "(param (A B C) triangle)\n(param P point (on-line lA))\n(param lA line (through A))\n(param lB line (through B))\n(assert (on-line P lA))\n(assert (on-line P lB))"
+    "id": "48728a0a-9da7-4650-8268-b324408b395f",
+    "image_dir": "images/img_100048.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
   },
   {
-    "id": "f3b770b6-380c-4753-81e0-e628691f6fde",
-    "image_dir": "images/img_101961.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (perp A B))"
+    "id": "846288a4-e014-47e0-b7a0-f0aa975a20d3",
+    "image_dir": "images/img_100032.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
   },
   {
-    "id": "dd3e1671-30d2-4511-bf9a-cafc01e4d8de",
-    "image_dir": "images/img_100060.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB",
-    "answer": "(param (A B C))\n(param D point (on-seg A B))\n(assert (= (uangle A C D) (uangle D C B)))"
+    "id": "66559de3-b253-4643-9d9e-a26670091a32",
+    "image_dir": "images/img_100002.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
   },
   {
-    "id": "79d7af54-6964-47a8-b610-427868ac0185",
-    "image_dir": "images/img_101653.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (perp A B))"
+    "id": "85bc61c1-b911-496b-b0e5-5387857e4e66",
+    "image_dir": "images/img_100013.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "e14b2f47-b820-4320-9a1f-176e9c5eceb0",
-    "image_dir": "images/img_103479.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))\n(assert (perp LDE LBC))"
+    "id": "905a3707-8d5e-4eb1-a192-80e7e07cc24b",
+    "image_dir": "images/img_100049.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "53e74e5e-1f27-43a6-b6b1-2ece7ed58e82",
-    "image_dir": "images/img_102520.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng BC, đường thẳng DE, AC song song với DE",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LAC line (through A))\n(assert (on-line C LAC))\n(assert (para LAC LDE))"
+    "id": "6e839a0d-c5a4-4c5b-a1ae-859f0f753aea",
+    "image_dir": "images/img_100031.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
   },
   {
-    "id": "3a457442-b4db-4954-b83c-42791256e0ee",
-    "image_dir": "images/img_106465.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))\n(param l line (through C))\n(assert (perp l LDE))\n(assert (= (uangle A D E) 90))"
+    "id": "3a164c3b-d85a-4e38-9e69-4455f0b8b622",
+    "image_dir": "images/img_100021.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "11353065-741c-4309-a6b2-d413fbe2e510",
-    "image_dir": "images/img_103042.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param LCD line (through C))\n(assert (= (uangle A C D) (uangle D C B)))"
+    "id": "0a866cb2-2fc9-4750-8130-0d8d70a0affd",
+    "image_dir": "images/img_100014.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
   },
   {
-    "id": "72fd3f84-cd60-430c-9655-94ee6681da81",
-    "image_dir": "images/img_106371.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(param (A B C) triangle)\n(param l line (through D))\n(assert (on-line A l))\n(assert (on-line B l))"
+    "id": "b4d390e9-46be-49d8-8f21-4763997327ca",
+    "image_dir": "images/img_100038.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "ecb2c56b-106e-4910-bb5c-232b8d3dd778",
-    "image_dir": "images/img_100161.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C",
-    "answer": "(param (A B C) (iso-tri A))\n(param lAB line (through A))\n(assert (on-line B lAB))\n(param l line (through C))\n(assert (perp lAB l))"
+    "id": "fc16bef3-7388-4372-a418-05644d8e3a5a",
+    "image_dir": "images/img_100043.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
   },
   {
-    "id": "067f6acc-8f7f-4670-b5b0-128a62d0c8f2",
-    "image_dir": "images/img_100849.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(param (A B C))\n(param D point (on-seg A B))\n(param LCD line (through C))\n(param LAB line (through A))\n(assert (on-line B LAB))\n(assert (cong (uangle A C D) (uangle D C B)))\n(assert (perp LAB LCD))"
+    "id": "773a8c5e-b546-47bf-b91c-295e10ead499",
+    "image_dir": "images/img_100029.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
   },
   {
-    "id": "6a47b8b7-3027-4268-8b6f-9d619877ffdf",
-    "image_dir": "images/img_106270.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
+    "id": "8d23a8c2-7f99-4a8e-a98c-c927cd78e398",
+    "image_dir": "images/img_100008.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "beacb27d-094b-45b2-b509-20253b5cfe86",
-    "image_dir": "images/img_100993.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng đi qua điểm B là đường trung trực của đoạn thẳng AC",
-    "answer": "(param (A B C) (right-tri B))\n(param lAB line (through A))\n(assert (on-line B lAB))\n(param lAC line (through B))\n(assert (on-line A lAC))"
+    "id": "7c51da9e-b697-4051-9e83-5d7147309e22",
+    "image_dir": "images/img_100004.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
   },
   {
-    "id": "ae4be833-6ce0-4e93-9048-06f32cd61a74",
-    "image_dir": "images/img_101660.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB, góc ADE = 90, góc CFE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(define F point (midp B C))\n(param LDE line (through D))\n(param LEF line (through E))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))\n(assert (para LEF LDE))\n(assert (perp LDE L A))\n(assert (perp LEF L F))"
+    "id": "610300b0-1e65-4b4c-bb40-6ac4dfe51ad6",
+    "image_dir": "images/img_100008.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
   },
   {
-    "id": "3285d162-c77c-4dbf-b6da-40d024b35638",
-    "image_dir": "images/img_10345.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(param (A B C) (iso-tri A))\n(param l line (through C))\n(assert (perp l A B))"
+    "id": "4bb4f77b-1603-41a9-85a7-74a38b85dc0c",
+    "image_dir": "images/img_100007.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "56a47288-6877-4868-838b-386382f6d60b",
-    "image_dir": "images/img_101987.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A và điểm C",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through A))\n(assert (on-line C l))"
+    "id": "90c8a9e8-a921-40dc-9f14-6f492b8fd551",
+    "image_dir": "images/img_100010.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
   },
   {
-    "id": "0bdc3457-da63-486d-be47-cdc90479cca0",
-    "image_dir": "images/img_102936.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, và điểm F nằm trên đoạn thẳng BC, BC song song với DE, AC song song với DF, đường thẳng DF",
-    "answer": "(param (A B C) (iso-tri A))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param F point (on-seg B C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))\n(param LAC line (through A))\n(assert (on-line C LAC))\n(param LDF line (through D))"
+    "id": "ba9845a0-6ff4-4976-9117-2211c74d9d5d",
+    "image_dir": "images/img_100024.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "52bbadb2-4687-4337-bed9-e92c6b48bbe5",
-    "image_dir": "images/img_103060.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(param (A B C) triangle)\n(param l line (through D))\n(assert (perp lAB l))"
+    "id": "3b91e657-c008-4580-a355-b69ff3b74cac",
+    "image_dir": "images/img_100028.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
   },
   {
-    "id": "767cf731-819b-4b9f-bb28-5ad38879f03f",
-    "image_dir": "images/img_100646.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B",
-    "answer": "(param (A B C))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LDE line (through D))\n(param LBC line (through B))\n(assert (para LBC LDE))"
+    "id": "b6935518-5953-4e2d-ab62-2cbd2d3351ef",
+    "image_dir": "images/img_100035.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
   },
   {
-    "id": "44659ee9-4335-447e-abd0-e55d72b8896c",
-    "image_dir": "images/img_10334.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB, góc ADE = 90, góc CFE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(define F point (midp B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LEF line (through E))\n(assert (on-line F LEF))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))\n(assert (para LEF LDE))\n(assert (perp LDE LBC))\n(assert (perp LEF LBC))"
+    "id": "cadcc4ef-f68a-47c8-9f3a-7d78b89be404",
+    "image_dir": "images/img_100012.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "f3f7df08-8b18-4311-ae60-224e18265253",
-    "image_dir": "images/img_106491.png",
-    "instruction": "Trianlge ABC, góc ABC = 90",
-    "answer": "(param (A B C) (right-tri B))"
+    "id": "9750782a-b3e7-471e-9a63-b3224501c6a2",
+    "image_dir": "images/img_100029.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "6a43b144-33c8-4941-9f40-b23a01f0b8d4",
-    "image_dir": "images/img_101198.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
-    "answer": "(param (A B C) (right-tri B))\n(param lC line (through C))\n(assert (perp lC (lAB)))\n(param lB line (through B))\n(assert (perp lB (lAC)))"
+    "id": "e24ac3f8-2669-41d0-a614-f7c0f8ab040c",
+    "image_dir": "images/img_100049.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
   },
   {
-    "id": "5548b39d-7dad-4b7a-80d7-39f85eb0e802",
-    "image_dir": "images/img_106384.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng BC, đường thẳng DE, AC song song với DE",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LAC line (through A))\n(assert (on-line C LAC))\n(assert (para LAC LDE))"
+    "id": "fdebf6a7-29bf-42f7-90c4-0517d165e57c",
+    "image_dir": "images/img_100017.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "b178c442-cfac-49f6-b2c7-aff59a3cfc18",
-    "image_dir": "images/img_100881.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, tam giác DEF, góc DEF = 90, góc EDF = 60, góc EFD = 30, tam giác ABC đồng dạng với tam giác DEF",
-    "answer": "(param (A B C) (right-tri B))\n(param (D E F) (right-tri E))\n(assert (sim A B C D E F))"
+    "id": "7e9b0ab9-71ff-4be9-80d0-26aab8ea504c",
+    "image_dir": "images/img_100010.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "8a70b3ad-d60a-47dc-af49-9f9d5fb36a1d",
-    "image_dir": "images/img_1007.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(param (A B C) triangle)\n(param lAB line (through A))\n(assert (on-line B lAB))\n(param lAC line (through A))\n(assert (on-line C lAC))"
+    "id": "f8018b65-06b7-46e2-bfd5-735f6c77b774",
+    "image_dir": "images/img_100022.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "id": "3632d0be-5d1e-49b2-aa54-9881dc2722ac",
-    "image_dir": "images/img_102508.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, BC song song với DE, góc BAF = góc CAF, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param F point (on-seg B C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))\n(assert (= (uangle B A F) (uangle C A F)))\n(param LAF line (through A))\n(assert (perp LAF LDE))"
+    "id": "a1ada59b-f663-4a1a-9501-81b15c35c128",
+    "image_dir": "images/img_100031.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
   },
   {
-    "id": "7cf31865-7734-4024-a455-9cd7b3941d7a",
-    "image_dir": "images/img_103927.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
+    "id": "e254dd4f-0325-469f-b70a-ee4623fa5455",
+    "image_dir": "images/img_100017.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
   },
   {
-    "id": "bea027ef-8ae4-4cb9-ba10-090f93d09c47",
-    "image_dir": "images/img_100971.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, góc BAF = góc FAC, BC song song với DE, đường thẳng AF",
-    "answer": "(param (A B C) triangle)\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param F point (on-seg B C))\n(param LAF line (through A))\n(assert (cong (uangle B A F) (uangle F A C)))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
+    "id": "fda33629-bc57-4e18-aa77-b0e3ff8f32a8",
+    "image_dir": "images/img_100029.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "id": "3a2ea6a9-8500-4d05-a2f3-c3b6b60078e3",
-    "image_dir": "images/img_106972.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm P là trực tâm của tam giác ABC",
-    "answer": "(param (A B C) (iso-tri A))\n(define P point (orthocenter A B C))"
+    "id": "12381404-e627-449a-8a6c-65930856b105",
+    "image_dir": "images/img_100007.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "3e3c4766-d25e-4331-8b89-2d62661998f5",
-    "image_dir": "images/img_102594.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB, góc ADE = 90, góc CFE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(define D point (midp A B))\n(define E point (midp A C))\n(define F point (midp B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LEF line (through E))\n(assert (on-line F LEF))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))\n(assert (para LEF LDE))\n(assert (perp LDE LBC))\n(assert (perp LEF LBC))"
+    "id": "83cc7225-8277-465d-8229-62d7db53ac44",
+    "image_dir": "images/img_100049.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
   },
   {
-    "id": "3a94d121-9f60-4701-9f4e-c9396d683dd5",
-    "image_dir": "images/img_100572.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AB",
-    "answer": "(param (A B C) (iso-tri A))\n(define D point (midp A B))\n(define E point (midp A C))\n(param LDE line (through D))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))\n(param Lperp line (through C))\n(assert (perp Lperp LBC))"
+    "id": "ae748183-a501-4570-9602-4e647525c69e",
+    "image_dir": "images/img_100034.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
   },
   {
-    "id": "e5b74ea9-c453-48ef-b245-55a44e0c6ce4",
-    "image_dir": "images/img_103706.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, góc ADE = 90",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))\n(param l line (through C))\n(assert (perp l LBC))\n(assert (= (uangle A D E) 90))"
+    "id": "73f5e94b-591d-4ee0-bb8a-40f41cb4667d",
+    "image_dir": "images/img_100038.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
   },
   {
-    "id": "8ce089a0-6599-43f1-b391-ad7f13136a09",
-    "image_dir": "images/img_103751.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C",
-    "answer": "(param (A B C) triangle)\n(param lAB line (through A))\n(assert (on-line B lAB))\n(param l line (through C))\n(assert (perp lAB l))"
+    "id": "2f28b17e-5841-4a5f-b165-80822e376c35",
+    "image_dir": "images/img_100036.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
   },
   {
-    "id": "e49b88c5-127c-4789-96fa-36aed013200c",
-    "image_dir": "images/img_10677.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through A))"
+    "id": "5fb0ed54-c1b8-4b7a-a3de-7e43b543c6ac",
+    "image_dir": "images/img_100001.png",
+    "instruction": "Tam giác ABC có đường tròn nội tiếp tâm I",
+    "answer": "(triangle (A B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
   },
   {
-    "id": "83930b3e-6fc7-4d53-9653-c32e0e7e8356",
-    "image_dir": "images/img_100053.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB",
-    "answer": "(param (A B C))\n(define D point (midp A B))\n(define E point (midp A C))\n(define F point (midp B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LEF line (through E))\n(assert (on-line F LEF))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(assert (para LBC LDE))\n(assert (para LEF LDE))"
+    "id": "6fb167fb-30f4-4b4a-af9b-7a66ffdceb93",
+    "image_dir": "images/img_100002.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
   },
   {
-    "id": "9dc2c877-d063-4883-bc85-00e73728d035",
-    "image_dir": "images/img_101032.png",
-    "instruction": "Ngũ giác ABCDE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(param (A B C D E) polygon)\n(param l line (through C))\n(assert (perp l lAB))"
+    "id": "5e68d526-7211-437b-82ab-fb26a276b0fc",
+    "image_dir": "images/img_100017.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
   },
   {
-    "id": "6446d8d6-2475-40e5-987f-63cae47d67d2",
-    "image_dir": "images/img_10264.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(param (A B C) triangle)\n(param l line (through C))\n(assert (perp lAB l))"
+    "id": "fe63edf3-715b-4516-a23f-12ee61edc7d2",
+    "image_dir": "images/img_100011.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "0f269bb3-7388-425e-bde8-4661c08a39f3",
-    "image_dir": "images/img_103606.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng BC, góc ACD = góc DCB, góc CAE = góc EAB, đường thẳng DE, đường thẳng AE",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg B C))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(param LAE line (through A))"
+    "id": "e5bc3c8b-7a01-4d34-85aa-d0f9e11a5c99",
+    "image_dir": "images/img_100021.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
   },
   {
-    "id": "ad8ac8a0-5060-4a36-b44a-1ed8c61787e6",
-    "image_dir": "images/img_103947.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))"
+    "id": "71cb2c18-5bf8-40e1-834f-99987a4d0f1d",
+    "image_dir": "images/img_100031.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
   },
   {
-    "id": "bb8a5115-cd06-46d7-a979-db65ea148d83",
-    "image_dir": "images/img_100850.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(param (A B C) (right-tri B))\n(param L line (through A))\n(param LBC line (through B))\n(assert (on-line C LBC))"
+    "id": "07d5558a-0ef1-4547-8ff7-6b31a6a6b5c2",
+    "image_dir": "images/img_100031.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
   },
   {
-    "id": "0a915c66-906e-4f8b-91b4-4af7b43d448b",
-    "image_dir": "images/img_106840.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(param (A B C) (right-tri B))\n(param l line (through A))\n(param lBC line (through B))\n(assert (on-line C lBC))"
+    "id": "84c7ecfd-a1a8-4751-995c-9cf84d90b34f",
+    "image_dir": "images/img_100043.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
   },
   {
-    "id": "b25eb457-acb5-4c8e-bafe-ca2de4490b4e",
-    "image_dir": "images/img_100450.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB",
-    "answer": "(param (A B C) (right-tri B))\n(param D point (on-seg A B))\n(param LCD line (through C))\n(assert (= (uangle A C D) (uangle D C B)))"
+    "id": "5585f1c4-566b-4e5d-b4bb-5579021fa8f8",
+    "image_dir": "images/img_100019.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
+  },
+  {
+    "id": "2c0b029f-a7d6-4bf2-b478-b71538ead2dd",
+    "image_dir": "images/img_100018.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "dc28a817-5d54-414f-aa6c-dd3c1f724947",
+    "image_dir": "images/img_100036.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "6a9b50eb-43bd-4972-b350-785a5d707914",
+    "image_dir": "images/img_100034.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "id": "9d3e2542-e61b-4cb7-ae95-b456a49795e0",
+    "image_dir": "images/img_100021.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "45e9dbf8-0a48-40dd-be1c-e41088830289",
+    "image_dir": "images/img_100009.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "06f28519-5ce8-4ce7-bd96-ea3961e762d7",
+    "image_dir": "images/img_100029.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+  },
+  {
+    "id": "a7fe9b4a-fd67-4377-ac7a-5281d3a84e7d",
+    "image_dir": "images/img_100014.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "58287b58-a20a-4c77-b6be-aea6fb3c6c4b",
+    "image_dir": "images/img_100006.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
+  },
+  {
+    "id": "694a6b27-a9ed-43ad-b183-dd5cd565980f",
+    "image_dir": "images/img_100025.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "c17fd288-cd98-4eec-a813-d5cff677a75d",
+    "image_dir": "images/img_100034.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "23eae62e-afbb-433f-a1f1-7552206e6d4e",
+    "image_dir": "images/img_100035.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "8afb4607-ac72-4398-947a-a557256c235c",
+    "image_dir": "images/img_100008.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "173fdf67-0b80-4609-b4e0-d9fd794217c5",
+    "image_dir": "images/img_100004.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "253e7e87-6115-4132-a89e-14d7237ea9b3",
+    "image_dir": "images/img_100049.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "49527e09-1682-44b9-905f-b968bd42bddb",
+    "image_dir": "images/img_100007.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "3b0fc591-f902-484e-913e-cec6d6a9c901",
+    "image_dir": "images/img_100046.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "935fba4a-3739-44ce-9032-6b5ef9277bfa",
+    "image_dir": "images/img_100002.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "id": "430a2584-5b2b-45ee-bd0f-42106ecb148e",
+    "image_dir": "images/img_100026.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "aef539e4-387b-4fed-b030-86366382e0f2",
+    "image_dir": "images/img_100008.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "698e7c34-174a-40bc-97d8-fd1b4658b4da",
+    "image_dir": "images/img_100037.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "04dbc2dd-7e17-48ea-91fc-e56d84df1a8f",
+    "image_dir": "images/img_100014.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "a6906db9-b571-4dd8-81bd-b24c7429c35b",
+    "image_dir": "images/img_100028.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
+  },
+  {
+    "id": "84edd242-90ef-4d52-a5a5-46fff30044d8",
+    "image_dir": "images/img_100027.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "53383439-ba76-4494-92fb-e7d99bd0e38a",
+    "image_dir": "images/img_100048.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "id": "4e1ac46f-695c-439d-80e0-3d04f176fe5d",
+    "image_dir": "images/img_100039.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "8a4db4b3-fa51-469e-a91f-4e4b88020c9d",
+    "image_dir": "images/img_100015.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
+  },
+  {
+    "id": "5aea591e-cc05-4649-b9dd-cd439aa68832",
+    "image_dir": "images/img_100039.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "id": "e88cd57f-4fb4-45c4-ba4e-e91e5f750866",
+    "image_dir": "images/img_100014.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "10b6482c-2aa6-4cd5-b939-1a2a38eee74f",
+    "image_dir": "images/img_100010.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "id": "ec5f7d73-6b37-4a95-9fad-e93eefbae80e",
+    "image_dir": "images/img_100033.png",
+    "instruction": "Tam giác ABC có đường tròn nội tiếp tâm I",
+    "answer": "(triangle (A B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))"
+  },
+  {
+    "id": "e56b6ed8-b328-4507-8e2a-fa8c97cbb053",
+    "image_dir": "images/img_100009.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "6c7ed4de-6e7a-4528-b531-c6e2043ac336",
+    "image_dir": "images/img_100026.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "41f1fe83-e3c0-4470-a30e-f7232a8e7eb6",
+    "image_dir": "images/img_100006.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+  },
+  {
+    "id": "017855ce-2caa-40af-8559-0c97942f061f",
+    "image_dir": "images/img_100038.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "87f580e6-b5d5-42ae-9d24-21c482ea3c60",
+    "image_dir": "images/img_100037.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "8f9d5bf9-17d0-4daf-a066-0b55933f5195",
+    "image_dir": "images/img_100018.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "52b13b64-2e77-4a59-80f7-d20cc3d5db84",
+    "image_dir": "images/img_100009.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "dbe99803-d58f-459f-a23b-0f9487836310",
+    "image_dir": "images/img_100043.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "56d02387-06be-44a8-b64a-4e4b9ce3f659",
+    "image_dir": "images/img_100011.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
+  },
+  {
+    "id": "d92600e7-e113-4283-bccc-ebe81047a24b",
+    "image_dir": "images/img_100020.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "fb018ab1-3359-44a9-9f2f-f3dd11afef32",
+    "image_dir": "images/img_100050.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "9a8658ba-e39b-4a6e-ba77-3cef82901777",
+    "image_dir": "images/img_100010.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+  },
+  {
+    "id": "3af73a07-8688-4644-bc21-ada9457fd534",
+    "image_dir": "images/img_100031.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "id": "85ee3420-dbf5-48c1-afb8-5ff6ab7c878a",
+    "image_dir": "images/img_100035.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "4d926004-61bf-4ac7-97ad-e0caf2f2291f",
+    "image_dir": "images/img_100002.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+  },
+  {
+    "id": "cbfcdde8-a786-4311-b158-3651ebf5b44e",
+    "image_dir": "images/img_100022.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
+  },
+  {
+    "id": "0f7d4e13-499c-4bfe-89d0-05fc21ec5f7d",
+    "image_dir": "images/img_100012.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "ff9b8285-0d89-4b1c-aa74-36e6f1f0080a",
+    "image_dir": "images/img_100028.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+  },
+  {
+    "id": "c0071686-110f-4afc-8ebf-7c1ec0b8a5e0",
+    "image_dir": "images/img_100046.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "2c8a5b88-b6f7-42bf-88fc-b6587888c1a4",
+    "image_dir": "images/img_100039.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
+  },
+  {
+    "id": "253d2951-0aea-4099-a1db-6ccc3d4f908d",
+    "image_dir": "images/img_100047.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "1cf486ef-7aa0-4e26-8b41-ccd0f19fd941",
+    "image_dir": "images/img_100011.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "id": "26c208e3-59d6-4dd0-91ae-807f037dc092",
+    "image_dir": "images/img_100036.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "0204fa2e-50e8-4735-8975-0981e2c4bdca",
+    "image_dir": "images/img_100017.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
+  },
+  {
+    "id": "fa309418-b56b-4c88-b1e1-e57b2cfdd74b",
+    "image_dir": "images/img_100008.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "d796b110-5bcf-4d16-a986-32b106159b0e",
+    "image_dir": "images/img_100003.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
+  },
+  {
+    "id": "e9fc932b-5fbd-4fe8-8789-da221499750d",
+    "image_dir": "images/img_100037.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "f9322949-f6d1-42df-b290-14d62e3384c3",
+    "image_dir": "images/img_100023.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "9777bafd-63cc-4bd4-ba90-86bd90c87afa",
+    "image_dir": "images/img_100020.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "bebc0d0f-9723-4c43-b290-177b1b358a3a",
+    "image_dir": "images/img_100018.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "d198fb0b-f387-4d3e-93bd-e964fe8c2e5b",
+    "image_dir": "images/img_100045.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "344bbd6c-4500-4d1d-9508-1dc7ce7cf89e",
+    "image_dir": "images/img_100046.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "70f0d6a5-191f-443c-b275-4446e2b71beb",
+    "image_dir": "images/img_100019.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "id": "da5cd56d-98bb-4113-96df-74cefbb27cf0",
+    "image_dir": "images/img_100003.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+  },
+  {
+    "id": "07495322-c7b3-46d0-8c72-c56215da311f",
+    "image_dir": "images/img_100004.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "2fc50873-fe1b-49f9-b621-0a8486459be9",
+    "image_dir": "images/img_100013.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "6a98f1aa-67d6-42b5-bf44-03f6988428b9",
+    "image_dir": "images/img_100044.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "3315dcd1-8e98-4c4d-9052-c4dce7fb6997",
+    "image_dir": "images/img_100028.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "10575296-61a4-447f-847e-5744e8878e5c",
+    "image_dir": "images/img_100005.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
+  },
+  {
+    "id": "42f4148d-a9a6-42a8-9eca-4727abc978fd",
+    "image_dir": "images/img_100036.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "1247541e-0ec0-4036-a444-8f64c1f88164",
+    "image_dir": "images/img_100016.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "ad8d7421-4c7a-4b64-b232-482f0edeb5e8",
+    "image_dir": "images/img_100045.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "7e7dae78-fdc8-4ea0-b533-3a6d88fdef42",
+    "image_dir": "images/img_100028.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "id": "ddb7dc11-1264-47cc-a048-cef79a3a7b10",
+    "image_dir": "images/img_100042.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "b48539e2-2eef-461e-8fee-5dc4280df189",
+    "image_dir": "images/img_100047.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "133c4319-cac0-4297-a29d-4727843a8ba2",
+    "image_dir": "images/img_100014.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "c0820a6c-e6ba-4eda-8cf5-b217bfa9eaea",
+    "image_dir": "images/img_100012.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "f10ab37f-2c72-49e4-a2cd-fc8383e1293f",
+    "image_dir": "images/img_100023.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "12017af5-19fd-4065-b6a9-6f7331f5e8a7",
+    "image_dir": "images/img_100011.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
+  },
+  {
+    "id": "e4abcce7-dd02-4906-ad56-0a6d131a2daf",
+    "image_dir": "images/img_100042.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "bdf1ea99-e03e-490e-8fa0-eea20e28a9e5",
+    "image_dir": "images/img_100038.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "28119190-300b-46c8-9b9f-09bb83115dd9",
+    "image_dir": "images/img_100042.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "2e4ff4f1-2c54-452f-ab3b-e50694a3f3ac",
+    "image_dir": "images/img_100041.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "0a18ea87-9d22-49cb-b6df-73b434b0ca0c",
+    "image_dir": "images/img_100050.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "49254636-8b4b-4fd8-bf07-995c403c6c82",
+    "image_dir": "images/img_100045.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "c0d24d04-ec1f-4d02-9935-17d80e44de53",
+    "image_dir": "images/img_100037.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "9eb7be21-ff28-4262-8922-141f19b01ab9",
+    "image_dir": "images/img_100013.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "8fb7a731-94df-4003-ae60-5735bbb08118",
+    "image_dir": "images/img_100011.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+  },
+  {
+    "id": "e263b518-82b9-4596-88a1-4065bd6ce617",
+    "image_dir": "images/img_100019.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+  },
+  {
+    "id": "c24ca2f0-6cbc-4223-a088-01bf90c6e9f9",
+    "image_dir": "images/img_100006.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "b2f9f583-e2b1-4150-9c4f-73cd9d07365e",
+    "image_dir": "images/img_100013.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "c4640321-681b-447c-923f-e4630f8a996b",
+    "image_dir": "images/img_100044.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "2af9770c-1801-481e-8260-67ad6a34f6c1",
+    "image_dir": "images/img_100035.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "ffd3e603-ebe1-41e9-a141-0436f7995b24",
+    "image_dir": "images/img_100049.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "b361502b-4bd5-4a12-a0fd-898038c0c42a",
+    "image_dir": "images/img_100040.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "69d94707-e2de-49e9-a12b-7bd4a123f092",
+    "image_dir": "images/img_100041.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "3da91642-7af6-49ba-847f-05014a6d2371",
+    "image_dir": "images/img_100027.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "5578e479-37f7-4f71-9648-39e43c0b6fbc",
+    "image_dir": "images/img_100009.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "c1894f48-ffe7-4b81-ad3b-bbdb013d8f41",
+    "image_dir": "images/img_100034.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
+  },
+  {
+    "id": "d5f77037-231d-4702-a568-6826f22c6987",
+    "image_dir": "images/img_100048.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "e1b53432-4623-4c1b-b9c1-e4dbcb21950d",
+    "image_dir": "images/img_100002.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "81e27137-7845-4178-9e73-4f113fdbff0c",
+    "image_dir": "images/img_100012.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "f9184783-da78-4ac5-8783-0e5d05a28e54",
+    "image_dir": "images/img_100032.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "140aa05f-4387-462e-a67f-1d3ececbc869",
+    "image_dir": "images/img_100027.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "4ffcde40-9b11-4322-bb6b-eb479f165624",
+    "image_dir": "images/img_100032.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "c2e718b5-e580-49e7-8812-6719c21f6e41",
+    "image_dir": "images/img_100022.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)"
+  },
+  {
+    "id": "a232b107-5cf2-4dc7-ab18-7b18563aa616",
+    "image_dir": "images/img_100021.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "9a876f84-4bdf-44e1-ab6c-b1ad1d604a53",
+    "image_dir": "images/img_100025.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "a02e2f1f-6e42-41d1-ae4c-72be420aa5be",
+    "image_dir": "images/img_100019.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
+  },
+  {
+    "id": "d7dae2fe-f550-4134-9584-02494b041c04",
+    "image_dir": "images/img_100043.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "31292b60-8706-468b-aa5b-d65b82ad6f9b",
+    "image_dir": "images/img_100016.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "6ba78c6c-94c2-4c47-8f93-3a743d1e4044",
+    "image_dir": "images/img_100046.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "77e3e01a-fed7-480f-a555-acf6ab026e48",
+    "image_dir": "images/img_100045.png",
+    "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))"
+  },
+  {
+    "id": "429077b4-167c-4da9-893b-54f7fe8288fd",
+    "image_dir": "images/img_100026.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "659a56a3-f7b9-4d23-b31b-e0f7ea60edcb",
+    "image_dir": "images/img_100050.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))"
+  },
+  {
+    "id": "c514ddf6-46b9-447e-bd3c-de8b0dc89bbf",
+    "image_dir": "images/img_100005.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
+  },
+  {
+    "id": "e951663d-6ad0-42a9-96c0-687037db0639",
+    "image_dir": "images/img_100041.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "138024cf-26d6-4d43-8826-608dd0be0115",
+    "image_dir": "images/img_100016.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "98e2dd42-c16f-4b7d-a7f2-17ef11ac04c9",
+    "image_dir": "images/img_100023.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))"
+  },
+  {
+    "id": "a3b330da-7eaa-4959-9358-420cf9c37dec",
+    "image_dir": "images/img_100004.png",
+    "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
+    "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))"
+  },
+  {
+    "id": "a2fa11df-b99e-43b3-bd70-61873205cd33",
+    "image_dir": "images/img_100020.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))"
+  },
+  {
+    "id": "10f92b5c-b00f-4205-92b4-38d02b36d5e1",
+    "image_dir": "images/img_100039.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
+  },
+  {
+    "id": "c42601ba-4fb3-4459-a496-6ec0891ad198",
+    "image_dir": "images/img_100022.png",
+    "instruction": "Tam giác ABC cân tại A, M là trung điểm BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)"
   }
 ]

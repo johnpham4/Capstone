@@ -7,6 +7,7 @@ from collections import namedtuple
 from llm_engineering.domains.geometry.instructions import Parameter
 from llm_engineering.domains.geometry.value_objects import Point, Line
 from llm_engineering.domains.geometry.entities import GeometricPoint, Diagram
+from llm_engineering.domains.geometry.types import QuadrilateralType
 from llm_engineering.applications.diagram.initializer import Initializer
 
 from loguru import logger
@@ -32,6 +33,7 @@ class Optimizer:
         # Diagram metadata tracking
         self.triangles_metadata = {}  # (p1, p2, p3) -> {type, right_angle_at, equal_sides}
         self.circles = []  # [(center_name, radius_or_points)]
+        self.quadrilaterals_metadata = {}
         self.segments = []  # [(p1_name, p2_name)]
         self.lines = []  # [(p1_name, p2_name)] for visualization
         self.line_objects = {}  # line_name -> LineNF
@@ -234,6 +236,101 @@ class Optimizer:
         self.triangles_metadata[key] = metadata
 
         return [p1, p2, p3]
+    
+    #tu giac
+    def sample_quadrilateral(self, points, corner_point, constraints=None, init_coords=None):
+        assert len(points) == 4
+        
+        constraints = constraints or {}
+        quadri_type = constraints.get('type', QuadrilateralType.GENERAL)
+        corner_idx = points.index(corner_point)
+        
+        if quadri_type == QuadrilateralType.SQUARE:
+            init_coords = Initializer.init_square(corner_idx)
+        elif quadri_type == QuadrilateralType.RECTANGLE:
+            init_coords = Initializer.init_rectangle(corner_idx)
+        elif quadri_type == QuadrilateralType.RHOMBUS:
+            init_coords = Initializer.init_rhombus(corner_idx)
+        else:
+            init_coords = Initializer.init_scalene_quadrilateral(corner_idx)
+        init_coords = Initializer.add_noise(init_coords)
+        
+        #create points
+        p1 = self.sample_uniform(points[0], init_coords=init_coords[0])
+        p2 = self.sample_uniform(points[1], init_coords=init_coords[1])
+        p3 = self.sample_uniform(points[2], init_coords=init_coords[2])
+        p4 = self.sample_uniform(points[3], init_coords=init_coords[3])
+        pts = [p1, p2, p3, p4]
+        
+        metadata = {'type': quadri_type}
+        
+        # Constraint: 4 goc vuong
+        def angle_at_A():
+            v1x = pts[3].x - pts[0].x # DA
+            v1y = pts[3].y - pts[0].y 
+            v2x = pts[1].x - pts[0].x # AB
+            v2y = pts[1].y - pts[0].y
+            return v1x * v2x + v1y * v2y # tich vo huong = 0
+        
+        def angle_at_B():
+            v1x = pts[0].x - pts[1].x # BA
+            v1y = pts[0].y - pts[1].y
+            v2x = pts[2].x - pts[1].x # BC
+            v2y = pts[2].y - pts[1].y
+            return v1x * v2x + v1y * v2y 
+        
+        def angle_at_C():
+            v1x = pts[1].x - pts[2].x # CB
+            v1y = pts[1].y - pts[2].y
+            v2x = pts[3].x - pts[2].x # CD
+            v2y = pts[3].y - pts[2].y
+            return v1x * v2x + v1y * v2y
+        
+        def angle_at_D():
+            v1x = pts[2].x - pts[3].x # DC
+            v1y = pts[2].y - pts[3].y
+            v2x = pts[0].x - pts[3].x # DA
+            v2y = pts[0].y - pts[3].y
+            return v1x * v2x + v1y * v2y
+
+        self.register_loss(f"rect_angle_A", angle_at_A, weight=100.0)
+        self.register_loss(f"rect_angle_B", angle_at_B, weight=100.0)
+        self.register_loss(f"rect_angle_C", angle_at_C, weight=100.0)
+        self.register_loss(f"rect_angle_D", angle_at_D, weight=100.0) 
+        
+        if quadri_type == QuadrilateralType.SQUARE:
+            # constraint: 4 canh bang nhau
+            def equal_sides_constraint():
+                d01 = self.dist(pts[0], pts[1]) # AB
+                d12 = self.dist(pts[1], pts[2]) # BC
+                d23 = self.dist(pts[2], pts[3]) # CD
+                d30 = self.dist(pts[3], pts[0]) # DA
+                avg=(d01 + d12 + d23 + d30) / 4.0
+                return (d01 - avg)**2 + (d12 - avg)**2 + (d23 - avg)**2 + (d30 - avg)**2
+            
+            self.register_loss(f"square_equal_sides", equal_sides_constraint, weight=10.0)
+            
+        elif quadri_type == QuadrilateralType.RECTANGLE:
+            # constraint: canh doi bang nhau
+            def equal_opposite_sides_constraint():
+                d01 = self.dist(pts[0], pts[1]) # AB
+                d12 = self.dist(pts[1], pts[2]) # BC
+                d23 = self.dist(pts[2], pts[3]) # CD
+                d30 = self.dist(pts[3], pts[0]) # DA
+                return (d01 - d23)**2 + (d12 - d30)**2
+            
+            self.register_loss(f"rect_opposite_sides_{points[0].val}_{points[1].val}_{points[2].val}_{points[3].val}",
+            equal_opposite_sides_constraint,weight=10.0)
+            metadata['equal_sides'] = [(0, 2), (1, 3)]
+            
+            self.register_ndg(f"rect_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
+                     lambda a=pts[0], b=pts[1], c=pts[2]: self.collinear(a, b, c),
+                     weight=1.0)
+        # Track metadata    
+        key = tuple(p.val for p in points)
+        self.quadrilaterals_metadata[key] = metadata
+        return [p1, p2, p3, p4]
+     
 
     def _define_projection(self, point_name, vertex_point, segment_points):
 
@@ -466,6 +563,8 @@ class Optimizer:
         # Dispatch based on diagram type
         if diagram_type == DiagramType.TRIANGLE:
             self._process_triangle_parameter(param_type, objects, args)
+        elif diagram_type == DiagramType.QUADRILATERAL:
+            self._process_quadrilateral_parameter(param_type, objects, args)
         elif diagram_type == DiagramType.POINT:
             self._process_point_parameter(param_type, objects, args)
         elif diagram_type == DiagramType.CIRCLE:
@@ -522,6 +621,23 @@ class Optimizer:
 
         # Single unified call
         self.sample_triangle(objects, constraints)
+        
+    def _process_quadrilateral_parameter(self, param_type, objects, args):
+        """Process quadrilateral parameters"""
+        # Convert param_type to QuadrilateralType enum
+        if param_type:
+            param_type_str = str(param_type).upper()
+            try:
+                quadri_type = QuadrilateralType[param_type_str]
+            except KeyError:
+                quadri_type = QuadrilateralType.GENERAL
+        else:
+            quadri_type = QuadrilateralType.GENERAL
+        
+        constraints = {'type': quadri_type}
+        corner_point = args[0] if args else objects[0]
+        
+        self.sample_quadrilateral(objects, corner_point, constraints)
 
     def _process_point_parameter(self, param_type, objects, args):
 
@@ -719,6 +835,18 @@ class Optimizer:
                 right_angle_at = metadata.get('right_angle_at')
 
                 diagram.add_triangle(p1, p2, p3, equal_sides, right_angle_at)
+        
+        # Add quadrilaterals with metadata
+        for key, metadata in self.quadrilaterals_metadata.items():  
+            p1_name, p2_name, p3_name, p4_name = key
+            if all(name in diagram.points for name in [p1_name, p2_name, p3_name, p4_name]):
+                diagram.add_quadrilateral(
+                    diagram.points[p1_name],
+                    diagram.points[p2_name],
+                    diagram.points[p3_name],
+                    diagram.points[p4_name],
+                    metadata
+                )
 
         # Add circles
         for center_name, info in self.circles:
