@@ -1,6 +1,4 @@
 from abc import ABC, abstractmethod
-
-import tiktoken
 from langchain_openai import ChatOpenAI
 from loguru import logger
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
@@ -21,7 +19,6 @@ from .output_parser import ListPydanticOutputParser
 from .prompt import prompt
 
 class DatasetGeneration(ABC):
-    tokenizer = tiktoken.encoding_for_model(settings.OPENAI_MODEL_ID)
 
     system_prompt_template = """You are a geometry formalization system.
 
