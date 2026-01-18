@@ -7,6 +7,7 @@ from collections import namedtuple
 from llm_engineering.domains.geometry.instructions import Parameter
 from llm_engineering.domains.geometry.value_objects import Point, Line
 from llm_engineering.domains.geometry.entities import GeometricPoint, Diagram
+from llm_engineering.domains.geometry.types import QuadrilateralType
 from llm_engineering.applications.diagram.initializer import Initializer
 
 from loguru import logger
@@ -38,6 +39,7 @@ class Optimizer:
         # Diagram metadata tracking
         self.triangles_metadata = {}  # (p1, p2, p3) -> {type, right_angle_at, equal_sides}
         self.circles = []  # [(center_name, radius_or_points)]
+        self.quadrilaterals_metadata = {}
         self.segments = []  # [(p1_name, p2_name)]
         self.lines = []  # [(p1_name, p2_name)] for visualization
         self.line_objects = {}  # line_name -> LineNF
@@ -171,6 +173,30 @@ class Optimizer:
             y = self.mkvar(f"{p.val}_y", lo, hi)
         P = self.get_point(x, y)
         return self.register_pt(p, P, save_name)
+    
+    def angle_constraint(p1, p2, p3, target_angle_rad): # góc = hằng số
+        """
+        Góc tại p2 giữa vector p2->p1 và p2->p3
+        """
+        # Vector từ p2 đến p1
+        v1x = p1.x - p2.x
+        v1y = p1.y - p2.y
+        
+        # Vector từ p2 đến p3
+        v2x = p3.x - p2.x
+        v2y = p3.y - p2.y
+        
+        # Chuẩn hóa
+        len1 = torch.sqrt(v1x**2 + v1y**2)
+        len2 = torch.sqrt(v2x**2 + v2y**2)
+        
+        # cos(angle) = dot(v1, v2) / (|v1| * |v2|)
+        cos_angle = (v1x * v2x + v1y * v2y) / (len1 * len2 + 1e-8)
+        
+        # Target
+        target_cos = torch.cos(torch.tensor(target_angle_rad))
+    
+        return (cos_angle - target_cos)**2
 
     def sample_triangle(self, points: list, constraints: dict = None):
         assert len(points) == 3
@@ -179,6 +205,7 @@ class Optimizer:
         tri_type = constraints.get('type', 'scalene')
         apex_idx = constraints.get('apex_idx', 0)
         right_idx = constraints.get('right_idx', 0)
+        equal_angles = constraints.get('equal_angles', None)
 
         # Smart initialization based on type
         if tri_type == 'isosceles':
@@ -233,6 +260,38 @@ class Optimizer:
                               lambda: self.dist(p2, p3) - self.dist(p3, p1), weight=10.0)
             metadata['equal_sides'] = [(0, 1), (1, 2), (2, 0)]
 
+        if equal_angles:
+            logger.info(f"Processing equal_angles constraint: {equal_angles}")
+            for idx1, idx2 in equal_angles:
+                def equal_angle_loss(i1=idx1, i2=idx2):
+                    # Góc tại đỉnh i1
+                    prev1 = (i1 - 1) % 3
+                    next1 = (i1 + 1) % 3
+                    v1_1x = pts[prev1].x - pts[i1].x
+                    v1_1y = pts[prev1].y - pts[i1].y
+                    v1_2x = pts[next1].x - pts[i1].x
+                    v1_2y = pts[next1].y - pts[i1].y
+                    len1_1 = torch.sqrt(v1_1x**2 + v1_1y**2 + 1e-8)
+                    len1_2 = torch.sqrt(v1_2x**2 + v1_2y**2 + 1e-8)
+                    cos1 = (v1_1x * v1_2x + v1_1y * v1_2y) / (len1_1 * len1_2)
+                    
+                    # Góc tại đỉnh i2
+                    prev2 = (i2 - 1) % 3
+                    next2 = (i2 + 1) % 3
+                    v2_1x = pts[prev2].x - pts[i2].x
+                    v2_1y = pts[prev2].y - pts[i2].y
+                    v2_2x = pts[next2].x - pts[i2].x
+                    v2_2y = pts[next2].y - pts[i2].y
+                    len2_1 = torch.sqrt(v2_1x**2 + v2_1y**2 + 1e-8)
+                    len2_2 = torch.sqrt(v2_2x**2 + v2_2y**2 + 1e-8)
+                    cos2 = (v2_1x * v2_2x + v2_1y * v2_2y) / (len2_1 * len2_2)
+                    
+                    return (cos1 - cos2)**2
+                self.register_loss(f"equal_angles_{idx1}_{idx2}_{points[0].val}",
+                              equal_angle_loss, weight=10.0)
+                
+            metadata['equal_angles'] = equal_angles
+        
         # Non-degeneracy
         self.register_ndg(f"tri_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
                          lambda a=p1, b=p2, c=p3: self.collinear(a, b, c), weight=1.0)
@@ -240,8 +299,108 @@ class Optimizer:
         # Track metadata
         key = (points[0].val, points[1].val, points[2].val)
         self.triangles_metadata[key] = metadata
+        logger.info(f"Triangle metadata for {key}: {metadata}")
 
         return [p1, p2, p3]
+    
+    #tu giac
+    def sample_quadrilateral(self, points, corner_point, constraints=None, init_coords=None):
+        assert len(points) == 4
+        
+        constraints = constraints or {}
+        quadri_type = constraints.get('type', QuadrilateralType.GENERAL)
+        
+        if quadri_type == QuadrilateralType.SQUARE:
+            init_coords = Initializer.init_square(side=1.0)
+        elif quadri_type == QuadrilateralType.RECTANGLE:
+            init_coords = Initializer.init_rectangle(width=1.0, height=0.7)
+        elif quadri_type == QuadrilateralType.RHOMBUS:
+            init_coords = Initializer.init_rhombus(scale=1.0)
+        else:
+            init_coords = Initializer.init_scalene_quadrilateral(scale=1.0)
+        init_coords = Initializer.add_noise(init_coords)
+        
+        #create points
+        p1 = self.sample_uniform(points[0], init_coords=init_coords[0])
+        p2 = self.sample_uniform(points[1], init_coords=init_coords[1])
+        p3 = self.sample_uniform(points[2], init_coords=init_coords[2])
+        p4 = self.sample_uniform(points[3], init_coords=init_coords[3])
+        pts = [p1, p2, p3, p4]
+        
+        metadata = {'type': quadri_type}
+        if quadri_type in [QuadrilateralType.SQUARE, QuadrilateralType.RECTANGLE]:
+        
+        # Constraint: 4 goc vuong
+            def angle_at_A():
+                v1x = pts[3].x - pts[0].x # DA
+                v1y = pts[3].y - pts[0].y 
+                v2x = pts[1].x - pts[0].x # AB
+                v2y = pts[1].y - pts[0].y
+                return v1x * v2x + v1y * v2y # tich vo huong = 0
+            
+            def angle_at_B():
+                v1x = pts[0].x - pts[1].x # BA
+                v1y = pts[0].y - pts[1].y
+                v2x = pts[2].x - pts[1].x # BC
+                v2y = pts[2].y - pts[1].y
+                return v1x * v2x + v1y * v2y 
+            
+            def angle_at_C():
+                v1x = pts[1].x - pts[2].x # CB
+                v1y = pts[1].y - pts[2].y
+                v2x = pts[3].x - pts[2].x # CD
+                v2y = pts[3].y - pts[2].y
+                return v1x * v2x + v1y * v2y
+            
+            def angle_at_D():
+                v1x = pts[2].x - pts[3].x # DC
+                v1y = pts[2].y - pts[3].y
+                v2x = pts[0].x - pts[3].x # DA
+                v2y = pts[0].y - pts[3].y
+                return v1x * v2x + v1y * v2y
+
+            self.register_loss(f"angle_A", angle_at_A, weight=100.0)
+            self.register_loss(f"angle_B", angle_at_B, weight=100.0)
+            self.register_loss(f"angle_C", angle_at_C, weight=100.0)
+            self.register_loss(f"angle_D", angle_at_D, weight=100.0) 
+            
+        if quadri_type == QuadrilateralType.SQUARE:
+            # constraint: 4 canh bang nhau
+            def equal_sides_constraint():
+                d01 = self.dist(pts[0], pts[1]) # AB
+                d12 = self.dist(pts[1], pts[2]) # BC
+                d23 = self.dist(pts[2], pts[3]) # CD
+                d30 = self.dist(pts[3], pts[0]) # DA
+                avg=(d01 + d12 + d23 + d30) / 4.0
+                return (d01 - avg)**2 + (d12 - avg)**2 + (d23 - avg)**2 + (d30 - avg)**2
+            
+            self.register_loss(f"square_equal_sides", equal_sides_constraint, weight=100.0)
+            self.register_ndg(f"square_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
+                         lambda a=pts[0], b=pts[1], c=pts[2]: self.collinear(a, b, c),
+                         weight=1.0)
+            metadata['equal_sides'] = [(0, 1), (1, 2), (2, 3), (3, 0)]
+        
+        elif quadri_type == QuadrilateralType.RECTANGLE:
+            # constraint: canh doi bang nhau
+            def equal_opposite_sides_constraint():
+                d01 = self.dist(pts[0], pts[1]) # AB
+                d12 = self.dist(pts[1], pts[2]) # BC
+                d23 = self.dist(pts[2], pts[3]) # CD
+                d30 = self.dist(pts[3], pts[0]) # DA
+                return (d01 - d23)**2 + (d12 - d30)**2
+            
+            self.register_loss(f"rect_opposite_sides_{points[0].val}_{points[1].val}_{points[2].val}_{points[3].val}",
+            equal_opposite_sides_constraint,weight=10.0)
+            metadata['equal_sides'] = [(0, 2), (1, 3)]
+            
+            self.register_ndg(f"rect_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
+                     lambda a=pts[0], b=pts[1], c=pts[2]: self.collinear(a, b, c),
+                     weight=1.0)
+        # Track metadata    
+        key = tuple(p.val for p in points)
+        self.quadrilaterals_metadata[key] = metadata
+        return [p1, p2, p3, p4]
+     
 
     def _define_projection(self, point_name, vertex_point, segment_points):
 
@@ -265,6 +424,10 @@ class Optimizer:
         self.register_loss(f"on_segment_{point_name.val}", lambda: self.collinear(foot, p1, p2), weight=10.0)
 
         return foot
+    
+    def _define_intersection(self, point_name, args):
+        assert len(args) == 2
+        pass
 
     def _define_centroid(self, point_name, triangle_points):
         assert len(triangle_points) == 3
@@ -476,6 +639,8 @@ class Optimizer:
         # Dispatch based on diagram type
         if diagram_type == DiagramType.TRIANGLE:
             self._process_triangle_parameter(param_type, objects, args)
+        elif diagram_type == DiagramType.QUADRILATERAL:
+            self._process_quadrilateral_parameter(param_type, objects, args)
         elif diagram_type == DiagramType.POINT:
             self._process_point_parameter(param_type, objects, args)
         elif diagram_type == DiagramType.CIRCLE:
@@ -500,6 +665,7 @@ class Optimizer:
 
         # Build constraints dict
         constraints = {}
+        
 
         if param_type_str == "isosceles":
             constraints['type'] = 'isosceles'
@@ -519,6 +685,7 @@ class Optimizer:
                         break
         elif param_type_str in ["equilateral", "equi"]:
             constraints['type'] = 'equilateral'
+            
         elif param_type_str in ["right_isosceles", "right-isosceles"]:
             constraints['type'] = 'right_isosceles'
             if args:
@@ -527,11 +694,42 @@ class Optimizer:
                         constraints['right_idx'] = i
                         constraints['apex_idx'] = i
                         break
+                    
+        elif param_type_str in ["equal_angles", "equal-angles"]:
+            # DSL: (triangle (A B C) (equal_angles 0 1))
+            # góc tại đỉnh 0 = góc tại đỉnh 1
+            constraints['type'] = 'scalene'
+            logger.info(f"Processing equal_angles with args: {args}")
+            if args and len(args) >= 2:
+                # args are now raw values (int or str), not Point objects
+                idx1 = int(str(args[0]))
+                idx2 = int(str(args[1]))
+                constraints['equal_angles'] = [(idx1, idx2)]
+                logger.info(f"Set equal_angles constraint: {constraints['equal_angles']}")
         else:
             constraints['type'] = 'scalene'
 
         # Single unified call
         self.sample_triangle(objects, constraints)
+        
+    def _process_quadrilateral_parameter(self, param_type, objects, args):
+        """Process quadrilateral parameters"""
+        # Convert param_type to QuadrilateralType enum
+        if param_type:
+            param_type_str = str(param_type).upper()
+            try:
+                quadri_type = QuadrilateralType[param_type_str]
+            except KeyError:
+                quadri_type = QuadrilateralType.GENERAL
+        else:
+            quadri_type = QuadrilateralType.GENERAL
+        
+        logger.info(f"Quadrilateral type: {quadri_type}")
+        
+        constraints = {'type': quadri_type}
+        corner_point = args[0] if args else objects[0]
+        
+        self.sample_quadrilateral(objects, corner_point, constraints)
 
     def _process_point_parameter(self, param_type, objects, args):
 
@@ -549,6 +747,9 @@ class Optimizer:
             self._define_midpoint(objects[0], args)
         elif param_type_str == "projection":
             self._define_projection(objects[0], args[0], args[1:])
+        elif param_type_str == "intersection":
+            self._define_intersection(objects[0], args)
+        
         elif param_type_str == "segment":
             self.parameter_on_seg(objects[0], args)
         elif param_type_str == "line":
@@ -847,8 +1048,21 @@ class Optimizer:
 
                 equal_sides = metadata.get('equal_sides')
                 right_angle_at = metadata.get('right_angle_at')
+                equal_angles = metadata.get('equal_angles')  
 
-                diagram.add_triangle(p1, p2, p3, equal_sides, right_angle_at)
+                diagram.add_triangle(p1, p2, p3, equal_sides, right_angle_at, equal_angles)  
+        
+        # Add quadrilaterals with metadata
+        for key, metadata in self.quadrilaterals_metadata.items():  
+            p1_name, p2_name, p3_name, p4_name = key
+            if all(name in diagram.points for name in [p1_name, p2_name, p3_name, p4_name]):
+                diagram.add_quadrilateral(
+                    diagram.points[p1_name],
+                    diagram.points[p2_name],
+                    diagram.points[p3_name],
+                    diagram.points[p4_name],
+                    metadata
+                )
 
         # Add circles
         for center_name, info in self.circles:
