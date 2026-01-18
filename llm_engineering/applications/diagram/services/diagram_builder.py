@@ -3,7 +3,7 @@ from typing import List, Tuple, Any
 from llm_engineering.applications.diagram.services.dsl_parser import DSLParser
 from llm_engineering.domains.geometry import Point
 from llm_engineering.domains.geometry.instructions import Parameter
-from llm_engineering.domains.geometry.types import DiagramType, TriangleType
+from llm_engineering.domains.geometry.types import DiagramType, QuadrilateralType, TriangleType
 
 
 class DiagramBuilder:
@@ -27,6 +27,8 @@ class DiagramBuilder:
 
         if head == "triangle":
             self.process_triangle(cmd)
+        elif head == "square":
+            self.process_square(cmd)
         elif head == "define":
             self.process_define(cmd)
         elif head == "circle":
@@ -71,16 +73,47 @@ class DiagramBuilder:
             self.instructions.append(instr)
             return
 
-        # Two parameters: type + special point
+        # Two or more parameters: type + arguments
         type_str = param_method[0].upper().replace('-', '_')
-        special_p = Point(param_method[1])
+        
+        # Handle different parameter types
+        param_type_lower = param_method[0].lower()
+        if param_type_lower in ['equal_angles', 'equal-angles']:
+            # For equal_angles, args are indices (integers), not Points
+            args = tuple(param_method[1:])
+        else:
+            # For other types (isosceles, right, etc.), args are Points
+            args = tuple(Point(p) for p in param_method[1:])
 
         try:
             head = TriangleType[type_str]
-            instr = Parameter(DiagramType.TRIANGLE, ps, head, (special_p,))
+            instr = Parameter(DiagramType.TRIANGLE, ps, head, args)
         except KeyError:
-            instr = Parameter(DiagramType.TRIANGLE, ps, param_method[0].lower(), (special_p,))
+            instr = Parameter(DiagramType.TRIANGLE, ps, param_type_lower, args)
 
+        self.instructions.append(instr)
+        
+    def process_square(self, cmd):
+        """Process square command: (square (A B C D))"""
+        if len(cmd) < 2:
+            raise RuntimeError(f"Invalid square command: {cmd}")
+        
+        ps = [Point(p) for p in cmd[1]]
+        
+        if len(ps) != 4:
+            raise ValueError(f"Square must have 4 vertices, got {len(ps)}")
+        
+        # Register all 4 points
+        for p in ps:
+            self.register_pt(p)
+        
+        instr = Parameter(
+            DiagramType.QUADRILATERAL,
+            ps,
+            QuadrilateralType.SQUARE,
+            (ps[0],)  # Corner point (default first vertex)
+        )
+        
         self.instructions.append(instr)
 
     def process_define(self, cmd):

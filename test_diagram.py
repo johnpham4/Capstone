@@ -69,7 +69,6 @@ def main():
         if test_single_problem(instruction, answer, output_path):
             success_count += 1
 
-    print(f"\n{'='*60}")
     print(f"Completed: {success_count}/{len(problems)} diagrams generated")
     print(f"Output directory: {output_dir.absolute()}")
 
