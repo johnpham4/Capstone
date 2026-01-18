@@ -50,13 +50,16 @@ class Diagram:
         self.points[name] = point
 
     def add_triangle(self, p1: GeometricPoint, p2: GeometricPoint, p3: GeometricPoint,
-                    equal_sides: Optional[List[tuple]] = None, right_angle_at: Optional[int] = None) -> None:
+                    equal_sides: Optional[List[tuple]] = None, 
+                    right_angle_at: Optional[int] = None,
+                    equal_angles: Optional[List[tuple]] = None) -> None:
         """
         Add a triangle to the diagram
         equal_sides: list of tuples indicating which sides are equal, e.g. [(0,1), (0,2)]
         right_angle_at: vertex index with right angle (0, 1, or 2)
+        equal_angles: list of tuples indicating which angles are equal, e.g. [(0, 1)] means angle at vertex 0 = angle at vertex 1
         """
-        self.triangles.append((p1, p2, p3, equal_sides, right_angle_at))
+        self.triangles.append((p1, p2, p3, equal_sides, right_angle_at, equal_angles))
 
     def add_quadrilateral(self, p1, p2, p3, p4, metadata):
         """Add a quadrilateral to the diagram"""

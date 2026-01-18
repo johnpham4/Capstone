@@ -14,9 +14,15 @@ class Diagram:
     def add_point(self, name, point):
         self.points[name] = point
 
-    def add_triangle(self, p1, p2, p3, equal_sides=None):
+    def add_triangle(self, p1, p2, p3, equal_sides=None, equal_angles=None):
         """equal_sides: list các tuple chỉ cặp đỉnh có cạnh bằng nhau, vd [(0,1), (0,2)] cho tam giác cân tại đỉnh 0"""
-        self.triangles.append((p1, p2, p3, equal_sides))
+        """equal_angles: list các tuple chỉ cặp đỉnh có góc bằng nhau, vd [(0,1)] cho góc tại đỉnh 0 = góc tại đỉnh 1"""
+        triangle = (p1, p2, p3)
+        self.triangles.append({
+            'points': triangle,
+            'equal_sides': equal_sides,
+            'equal_angles': equal_angles  
+        })
     
     def add_quadrilateral(self, p1, p2, p3, p4, draw_diagonals=False):
         """Thêm tứ giác ABCD bằng cách vẽ 4 cạnh"""

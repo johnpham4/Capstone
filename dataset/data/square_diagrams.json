@@ -7,15 +7,15 @@
   },
   {
     "image": "images/img_210002.png",
-    "caption": "square ABCD, AB = 4",
+    "caption": "square ABCD, AB = BC = CD = DA",
     "id": 210002,
-    "caption_vn": "Hình vuông ABCD có cạnh AB = 4"
+    "caption_vn": "Hình vuông ABCD có bốn cạnh bằng nhau"
   },
   {
     "image": "images/img_210003.png",
     "caption": "square ABCD, angle ABC = 90",
     "id": 210003,
-    "caption_vn": "Hình vuông ABCD có góc ABC = 90 độ"
+    "caption_vn": "Hình vuông ABCD có góc ABC bằng 90 độ"
   },
   {
     "image": "images/img_210004.png",
@@ -27,7 +27,7 @@
     "image": "images/img_210005.png",
     "caption": "square ABCD, AB ∥ CD, BC ∥ AD",
     "id": 210005,
-    "caption_vn": "Hình vuông ABCD có AB song song CD, BC song song AD"
+    "caption_vn": "Hình vuông ABCD có các cặp cạnh đối song song"
   },
   {
     "image": "images/img_210006.png",
@@ -45,13 +45,13 @@
     "image": "images/img_210008.png",
     "caption": "square ABCD, diagonals AC and BD intersect at O",
     "id": 210008,
-    "caption_vn": "Hình vuông ABCD, hai đường chéo AC và BD cắt nhau tại O"
+    "caption_vn": "Hình vuông ABCD, hai đường chéo cắt nhau tại O"
   },
   {
     "image": "images/img_210009.png",
     "caption": "square ABCD, AC ⟂ BD",
     "id": 210009,
-    "caption_vn": "Hình vuông ABCD có AC vuông góc BD"
+    "caption_vn": "Hình vuông ABCD có hai đường chéo vuông góc"
   },
   {
     "image": "images/img_210010.png",
@@ -61,9 +61,9 @@
   },
   {
     "image": "images/img_210011.png",
-    "caption": "square ABCD, O is midpoint of AC and BD",
+    "caption": "square ABCD, O is center of square",
     "id": 210011,
-    "caption_vn": "Hình vuông ABCD, O là trung điểm của AC và BD"
+    "caption_vn": "Hình vuông ABCD có O là tâm hình vuông"
   },
   {
     "image": "images/img_210012.png",
@@ -81,13 +81,13 @@
     "image": "images/img_210014.png",
     "caption": "square ABCD, M and N are midpoints of AB and BC",
     "id": 210014,
-    "caption_vn": "Hình vuông ABCD, M và N lần lượt là trung điểm của AB và BC"
+    "caption_vn": "Hình vuông ABCD, M và N là trung điểm của AB và BC"
   },
   {
     "image": "images/img_210015.png",
-    "caption": "square ABCD, line through midpoint of AB parallel to CD",
+    "caption": "square ABCD, line through M parallel to CD",
     "id": 210015,
-    "caption_vn": "Hình vuông ABCD, đường thẳng đi qua trung điểm AB và song song CD"
+    "caption_vn": "Hình vuông ABCD, đường thẳng qua trung điểm AB song song CD"
   },
   {
     "image": "images/img_210016.png",
@@ -109,13 +109,13 @@
   },
   {
     "image": "images/img_210019.png",
-    "caption": "square ABCD, square is divided by diagonal AC",
+    "caption": "square ABCD, square divided by diagonal AC",
     "id": 210019,
     "caption_vn": "Hình vuông ABCD được chia bởi đường chéo AC"
   },
   {
     "image": "images/img_210020.png",
-    "caption": "square ABCD, square is divided into four equal squares",
+    "caption": "square ABCD, square divided into four equal squares",
     "id": 210020,
     "caption_vn": "Hình vuông ABCD được chia thành bốn hình vuông bằng nhau"
   },
@@ -133,14 +133,26 @@
   },
   {
     "image": "images/img_210023.png",
-    "caption": "square ABCD on coordinate plane",
+    "caption": "square ABCD, circle centered at O tangent to AB BC CD DA",
     "id": 210023,
-    "caption_vn": "Hình vuông ABCD trên mặt phẳng tọa độ"
+    "caption_vn": "Hình vuông ABCD, đường tròn tâm O tiếp xúc với bốn cạnh"
   },
   {
     "image": "images/img_210024.png",
-    "caption": "square ABCD, one vertex at origin",
+    "caption": "square ABCD, circle tangent to AB at midpoint",
     "id": 210024,
-    "caption_vn": "Hình vuông ABCD có một đỉnh tại gốc tọa độ"
+    "caption_vn": "Hình vuông ABCD, đường tròn tiếp xúc cạnh AB tại trung điểm"
+  },
+  {
+    "image": "images/img_210025.png",
+    "caption": "square ABCD, symmetric about diagonal AC",
+    "id": 210025,
+    "caption_vn": "Hình vuông ABCD đối xứng qua đường chéo AC"
+  },
+  {
+    "image": "images/img_210026.png",
+    "caption": "square ABCD, symmetric about center O",
+    "id": 210026,
+    "caption_vn": "Hình vuông ABCD đối xứng qua tâm O"
   }
 ]
