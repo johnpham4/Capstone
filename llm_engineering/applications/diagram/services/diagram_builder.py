@@ -69,15 +69,23 @@ class DiagramBuilder:
             self.instructions.append(instr)
             return
 
-        # Two parameters: type + special point
+        # Two or more parameters: type + arguments
         type_str = param_method[0].upper().replace('-', '_')
-        special_p = Point(param_method[1])
+        
+        # Handle different parameter types
+        param_type_lower = param_method[0].lower()
+        if param_type_lower in ['equal_angles', 'equal-angles']:
+            # For equal_angles, args are indices (integers), not Points
+            args = tuple(param_method[1:])
+        else:
+            # For other types (isosceles, right, etc.), args are Points
+            args = tuple(Point(p) for p in param_method[1:])
 
         try:
             head = TriangleType[type_str]
-            instr = Parameter(DiagramType.TRIANGLE, ps, head, (special_p,))
+            instr = Parameter(DiagramType.TRIANGLE, ps, head, args)
         except KeyError:
-            instr = Parameter(DiagramType.TRIANGLE, ps, param_method[0].lower(), (special_p,))
+            instr = Parameter(DiagramType.TRIANGLE, ps, param_type_lower, args)
 
         self.instructions.append(instr)
         
