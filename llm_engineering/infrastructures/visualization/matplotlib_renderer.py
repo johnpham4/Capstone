@@ -68,7 +68,7 @@ class MatplotlibDiagramRenderer:
                 [corner1[1], corner2[1], corner3[1]],
                 'k-', linewidth=1.0)
 
-    def _draw_angle_arc(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, num_arcs: int = 1, radius: float = 0.3):
+    def _draw_angle_arc(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, num_arcs: int = 1, radius: float = 0.12):
         """
         Vẽ arc để đánh dấu góc tại vertex
         vertex: GeometricPoint - đỉnh góc
@@ -105,13 +105,13 @@ class MatplotlibDiagramRenderer:
         
         # Vẽ nhiều arcs để phân biệt
         for i in range(num_arcs):
-            r = radius + i * 0.1  # Mỗi arc cách nhau 0.1
+            r = radius + i * 0.05  # Mỗi arc cách nhau 0.05
             arc = patches.Arc((vertex.x, vertex.y), 2*r, 2*r, 
                              angle=0, 
                              theta1=angle1, 
                              theta2=angle2,
                              color='blue', 
-                             linewidth=1.5)
+                             linewidth=1.2)
             ax.add_patch(arc)
     
     def render(

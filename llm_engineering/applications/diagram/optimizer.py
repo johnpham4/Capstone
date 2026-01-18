@@ -689,10 +689,13 @@ class Optimizer:
             # DSL: (triangle (A B C) (equal_angles 0 1))
             # góc tại đỉnh 0 = góc tại đỉnh 1
             constraints['type'] = 'scalene'
+            logger.info(f"Processing equal_angles with args: {args}")
             if args and len(args) >= 2:
-                idx1 = int(args[0].val) if hasattr(args[0], 'val') else int(args[0])
-                idx2 = int(args[1].val) if hasattr(args[1], 'val') else int(args[1])
+                # args are now raw values (int or str), not Point objects
+                idx1 = int(str(args[0]))
+                idx2 = int(str(args[1]))
                 constraints['equal_angles'] = [(idx1, idx2)]
+                logger.info(f"Set equal_angles constraint: {constraints['equal_angles']}")
         else:
             constraints['type'] = 'scalene'
 
