@@ -114,7 +114,7 @@ Cú pháp: (square (A B C D))
 a) Tâm hình vuông (giao điểm 2 đường chéo):
    "Hình vuông ABCD, O là tâm" → 
    (square (A B C D))
-   (define O point (intersection (segment A C) (segment B D)))
+   (define O point (midpoint A C))
 
 b) Trung điểm cạnh:
    "M là trung điểm AB" →
@@ -127,13 +127,13 @@ c) Đường chéo:
 d) Hình vuông nội tiếp đường tròn:
    "Hình vuông ABCD nội tiếp đường tròn tâm O" →
    (square (A B C D))
-   (define O point (intersection (segment A C) (segment B D)))
+   (define O point (midpoint A C))
    (circle O (circumcircle A B C D))
 
 e) Đường tròn nội tiếp hình vuông:
    "Hình vuông ABCD có đường tròn nội tiếp tâm I" →
    (square (A B C D))
-   (define I point (intersection (segment A C) (segment B D)))
+   (define I point (midpoint A C))
    (circle I (incircle A B C D))
 
 f) Hình vuông bị chia cắt:
@@ -167,7 +167,7 @@ Ví dụ:
 
 "Hình vuông ABCD, hai đường chéo AC và BD cắt nhau tại O" →
 (square (A B C D))
-(define O point (intersection (segment A C) (segment B D)))
+(define O point (midpoint A C))
 (segment A C)
 (segment B D)
 
@@ -179,7 +179,7 @@ Ví dụ:
 
 "Hình vuông ABCD, O là trung điểm của AC và BD" →
 (square (A B C D))
-(define O point (intersection (segment A C) (segment B D)))
+(define O point (midpoint A C))
 
 "Hình vuông ABCD, M là trung điểm của AB" →
 (square (A B C D))
@@ -337,7 +337,7 @@ Output:
 Input: "Hình vuông ABCD, hai đường chéo AC và BD cắt nhau tại O"
 Output:
 (square (A B C D))
-(define O point (intersection (segment A C) (segment B D)))
+(define O point (midpoint A C))
 (segment A C)
 (segment B D)
 
@@ -348,7 +348,7 @@ Ví dụ 11: Hình vuông với tâm
 Input: "Hình vuông ABCD, O là trung điểm của AC và BD"
 Output:
 (square (A B C D))
-(define O point (intersection (segment A C) (segment B D)))
+(define O point (midpoint A C))
 
 Ví dụ 12: Hình vuông với trung điểm cạnh
 Input: "Hình vuông ABCD, M là trung điểm của AB"
@@ -378,14 +378,14 @@ Ví dụ 15: Hình vuông nội tiếp đường tròn
 Input: "Hình vuông ABCD nội tiếp đường tròn"
 Output:
 (square (A B C D))
-(define O point (intersection (segment A C) (segment B D)))
+(define O point (midpoint A C))
 (circle O (circumcircle A B C D))
 
 Ví dụ 16: Hình vuông ngoại tiếp đường tròn
 Input: "Hình vuông ABCD có đường tròn nội tiếp"
 Output:
 (square (A B C D))
-(define I point (intersection (segment A C) (segment B D)))
+(define I point (midpoint A C))
 (circle I (incircle A B C D))
 
 ════════════════════════════════
@@ -404,7 +404,7 @@ Từ khóa thường gặp:
 - "vuông tại" → right
 - "tam giác đều" → equilateral
 - "hình vuông" → square
-- "tâm hình vuông" / "giao điểm đường chéo" → intersection
+- "tâm hình vuông" / "giao điểm đường chéo" / "trung điểm đường chéo" → midpoint
 - "đường chéo" → segment (AC hoặc BD)
 - "cắt nhau tại" / "giao điểm" → intersection
 - "nội tiếp đường tròn" → inscribed (circumcircle)

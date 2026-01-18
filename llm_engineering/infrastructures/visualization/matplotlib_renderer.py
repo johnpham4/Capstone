@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
 from loguru import logger
+import matplotlib.patches as patches
 
 from llm_engineering.domains.geometry import Diagram, GeometricPoint
 from llm_engineering.domains.geometry.types import QuadrilateralType
@@ -67,6 +68,52 @@ class MatplotlibDiagramRenderer:
                 [corner1[1], corner2[1], corner3[1]],
                 'k-', linewidth=1.0)
 
+    def _draw_angle_arc(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, num_arcs: int = 1, radius: float = 0.3):
+        """
+        Vẽ arc để đánh dấu góc tại vertex
+        vertex: GeometricPoint - đỉnh góc
+        p1, p2: GeometricPoint - 2 điểm tạo thành góc
+        num_arcs: số arc (1 arc, 2 arcs, 3 arcs để phân biệt)
+        """
+        # Vector từ vertex đến 2 điểm
+        v1x = p1.x - vertex.x
+        v1y = p1.y - vertex.y
+        v2x = p2.x - vertex.x
+        v2y = p2.y - vertex.y
+        
+        # Normalize
+        v1_norm = np.sqrt(v1x**2 + v1y**2)
+        v2_norm = np.sqrt(v2x**2 + v2y**2)
+        
+        if v1_norm < 1e-8 or v2_norm < 1e-8:
+            return  # Skip if points are too close
+        
+        v1x = v1x / v1_norm
+        v1y = v1y / v1_norm
+        v2x = v2x / v2_norm
+        v2y = v2y / v2_norm
+        
+        # Tính góc (degrees)
+        angle1 = np.arctan2(v1y, v1x) * 180 / np.pi
+        angle2 = np.arctan2(v2y, v2x) * 180 / np.pi
+        
+        # Đảm bảo vẽ góc nhỏ hơn 180 độ
+        if angle2 < angle1:
+            angle1, angle2 = angle2, angle1
+        if angle2 - angle1 > 180:
+            angle1, angle2 = angle2, angle1 + 360
+        
+        # Vẽ nhiều arcs để phân biệt
+        for i in range(num_arcs):
+            r = radius + i * 0.1  # Mỗi arc cách nhau 0.1
+            arc = patches.Arc((vertex.x, vertex.y), 2*r, 2*r, 
+                             angle=0, 
+                             theta1=angle1, 
+                             theta2=angle2,
+                             color='blue', 
+                             linewidth=1.5)
+            ax.add_patch(arc)
+    
     def render(
         self,
         diagram: Diagram = None,
@@ -88,14 +135,18 @@ class MatplotlibDiagramRenderer:
             p1, p2, p3 = tri[0], tri[1], tri[2]
             equal_sides = tri[3] if len(tri) > 3 else None
             right_angle_at = tri[4] if len(tri) > 4 else None
+            equal_angles = tri[5] if len(tri) > 5 else None
+            
 
             xs = [p1.x, p2.x, p3.x, p1.x]
             ys = [p1.y, p2.y, p3.y, p1.y]
             ax.plot(xs, ys, 'k-', linewidth=1.5)
+            
+            # Define points array for all features
+            pts = [p1, p2, p3]
 
             # Draw tick marks for equal sides
             if equal_sides:
-                pts = [p1, p2, p3]
                 # Group equal sides by pairs
                 sides_map = {}  # {(i,j): tick_num}
                 for pair_idx, (i, j) in enumerate(equal_sides):
@@ -125,10 +176,25 @@ class MatplotlibDiagramRenderer:
 
             # Draw right angle symbol
             if right_angle_at is not None:
-                pts = [p1, p2, p3]
                 vertex = pts[right_angle_at]
                 others = [pts[i] for i in range(3) if i != right_angle_at]
                 self._draw_right_angle_symbol(ax, vertex, others[0], others[1])
+                
+            # Draw equal angles arcs
+            if equal_angles:
+                logger.info(f"Drawing equal angles arcs: {equal_angles}")
+                for idx1, idx2 in equal_angles:
+                    # Vẽ arc ở góc idx1
+                    self._draw_angle_arc(ax, pts[idx1], 
+                                        pts[(idx1-1)%3],
+                                        pts[(idx1+1)%3],
+                                        num_arcs=1)
+                    
+                    # Vẽ arc ở góc idx2 (cùng số arc)
+                    self._draw_angle_arc(ax, pts[idx2],
+                                        pts[(idx2-1)%3], 
+                                        pts[(idx2+1)%3],
+                                        num_arcs=1)
 
         # Draw quadrilaterals
         for quad in self.diagram.quadrilaterals:

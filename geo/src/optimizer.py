@@ -69,11 +69,16 @@ class Optimizer:
     
 
     def register_pt(self, p: TorchPoint, P, save_name=True):
-        if save_name:
-            assert p.val not in self.name2pt
-            self.name2pt[p.val] = P
+        if p.val in self.name2pt:
+            existing_name = self.name2pt[p.val]
+            if existing_name == p:
+                return p 
+            print(f"Warning: Point {p.val} already registered as '{existing_name}', skipping registration as '{P}'")
+            return self.points[existing_name]
+        self.name2pt[p.val] = P
 
-        self.all_points.append(P)
+        if save_name:
+            self.points[P] = p
         return P
     
     def register_line(self, line_name, line_nf): # line_nf: LineNF -> Line normalized form
@@ -211,6 +216,8 @@ class Optimizer:
             
             avg=(d01 + d12 + d23 + d30) / 4.0
             return (d01 - avg)**2 + (d12 - avg)**2 + (d23 - avg)**2 + (d30 - avg)**2
+        self.register_loss(f"square_equal_sides_{points[0].val}_{points[1].val}_{points[2].val}_{points[3].val}",
+                      equal_sides_constraint, weight=10.0)    
         
         # constraint 2: 4 goc vuong nhau
         def angle_at_A():

@@ -36,6 +36,18 @@ class Initializer:
         else:
             return [base_coords[1], base_coords[2], base_coords[0]]
 
+    def init_equal_angle_triangle(self, scale: float = 1.0) -> List[Tuple[float, float]]:
+        """Initialize triangle with two equal angles"""
+        # Isoceles triangle with apex at top
+        height = 0.8 * scale
+        half_base = 0.6 * scale
+        return [
+            (0.0, height),          # Apex
+            (-half_base, 0.0),     # Base left
+            (half_base, 0.0)       # Base right
+        ]
+        
+        
     @staticmethod
     def init_equilateral_triangle(scale: float = 1.0) -> List[Tuple[float, float]]:
         height = math.sqrt(3) / 2 * scale
