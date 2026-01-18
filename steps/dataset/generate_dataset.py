@@ -8,7 +8,7 @@ from loguru import logger
 from llm_engineering.applications.datasets.generation import InstructiveDatasetGenerator
 from llm_engineering.domains.documents import Document
 from llm_engineering.domains.prompt import GenerateDatasetSamplesPrompt
-from llm_engineering.domains.dataset import TrainTestSplit
+from llm_engineering.domains.dataset import InstructTrainTestSplit
 
 @step
 def load_source_data(
@@ -55,7 +55,7 @@ def generate_gmbl_dataset(
     prompts: list[GenerateDatasetSamplesPrompt],
     test_size: float = 0.2,
     batch_size: int = 4,
-) -> Annotated[TrainTestSplit, "train_test_split"]:
+) -> Annotated[InstructTrainTestSplit, "train_test_split"]:
 
 
     logger.info(f"Generating dataset from {len(prompts)} prompts with batch_size={batch_size}...")
@@ -74,7 +74,7 @@ def generate_gmbl_dataset(
 
 @step
 def save_dataset_to_json(
-    train_test_split: TrainTestSplit,
+    train_test_split: InstructTrainTestSplit,
     output_dir: str
 ) -> Annotated[str, "output_path"]:
 
