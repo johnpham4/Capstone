@@ -11,7 +11,7 @@ from llm_engineering.applications.utils import misc
 from llm_engineering.settings import settings
 from llm_engineering.domains.documents import Document
 from llm_engineering.domains.prompt import GenerateDatasetSamplesPrompt, Prompt
-from llm_engineering.domains.dataset import InstructDataset, InstructDatasetSample, TrainTestSplit
+from llm_engineering.domains.dataset import InstructDataset, InstructDatasetSample, InstructTrainTestSplit
 from llm_engineering.applications.networks.dsl_generator import DSLGenerator
 
 from . import utils as generation_utils
@@ -65,7 +65,7 @@ Any violation is considered an error.
         )
 
     @classmethod
-    def generate(cls, prompts: list[GenerateDatasetSamplesPrompt], test_size: float = 0.2, batch_size: int = 4) -> TrainTestSplit:
+    def generate(cls, prompts: list[GenerateDatasetSamplesPrompt], test_size: float = 0.2, batch_size: int = 4) -> InstructTrainTestSplit:
         def _to_langchain(prompt: GenerateDatasetSamplesPrompt) -> list[BaseMessage]:
             return [
                 SystemMessage(content=cls.get_system_prompt().content),
@@ -144,7 +144,7 @@ Any violation is considered an error.
 
     @classmethod
     @abstractmethod
-    def post_process_datasets(cls, dataset: InstructDataset, test_size: float) -> TrainTestSplit:
+    def post_process_datasets(cls, dataset: InstructDataset, test_size: float) -> InstructTrainTestSplit:
         pass
 
 
@@ -152,6 +152,6 @@ class InstructiveDatasetGenerator(DatasetGeneration):
     prompt_template_str = prompt
 
     @classmethod
-    def post_process_datasets(cls, dataset: InstructDataset, test_size: float) -> TrainTestSplit:
+    def post_process_datasets(cls, dataset: InstructDataset, test_size: float) -> InstructTrainTestSplit:
 
         return generation_utils.create_instruct_train_test_split([dataset], test_size=test_size, random_state=42)
