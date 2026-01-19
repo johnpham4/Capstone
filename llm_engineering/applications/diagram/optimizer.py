@@ -183,6 +183,8 @@ class Optimizer:
         right_idx = constraints.get('right_idx', 0)
 
         # Smart initialization based on type
+        equal_angles = constraints.get('equal_angles')
+        
         if tri_type == 'isosceles':
             init_coords = Initializer.init_isoceles_triangle(apex_idx)
         elif tri_type == 'right':
@@ -191,6 +193,10 @@ class Optimizer:
             init_coords = Initializer.init_equilateral_triangle()
         elif tri_type == 'right_isosceles':
             init_coords = Initializer.init_right_isoceles_triangle(right_idx)
+        elif equal_angles:
+            idx1, idx2 = equal_angles[0]
+            apex_idx = 3 - idx1 - idx2  # Đỉnh thứ 3 (0+1+2=3)
+            init_coords = Initializer.init_isoceles_triangle(apex_idx)
         else:
             # Scalene triangle init
             init_coords = Initializer.init_scalene_triangle()
@@ -234,6 +240,49 @@ class Optimizer:
             self.register_loss(f"equi_23_31_{points[0].val}",
                               lambda: self.dist(p2, p3) - self.dist(p3, p1), weight=10.0)
             metadata['equal_sides'] = [(0, 1), (1, 2), (2, 0)]
+        
+        # Handle equal_angles constraint
+        if equal_angles:
+            metadata['equal_angles'] = equal_angles
+            for idx1, idx2 in equal_angles:
+                # Enforce angle equality using cosine similarity
+                def angle_loss(i1=idx1, i2=idx2):
+                    # Angle at vertex i1
+                    v1_prev = pts[(i1-1)%3]
+                    v1_curr = pts[i1]
+                    v1_next = pts[(i1+1)%3]
+                    
+                    # Angle at vertex i2
+                    v2_prev = pts[(i2-1)%3]
+                    v2_curr = pts[i2]
+                    v2_next = pts[(i2+1)%3]
+                    
+                    # Cosine of angle at i1
+                    vec1a_x = v1_prev.x - v1_curr.x
+                    vec1a_y = v1_prev.y - v1_curr.y
+                    vec1b_x = v1_next.x - v1_curr.x
+                    vec1b_y = v1_next.y - v1_curr.y
+                    
+                    dot1 = vec1a_x * vec1b_x + vec1a_y * vec1b_y
+                    norm1a = torch.sqrt(vec1a_x**2 + vec1a_y**2 + 1e-8)
+                    norm1b = torch.sqrt(vec1b_x**2 + vec1b_y**2 + 1e-8)
+                    cos1 = dot1 / (norm1a * norm1b + 1e-8)
+                    
+                    # Cosine of angle at i2
+                    vec2a_x = v2_prev.x - v2_curr.x
+                    vec2a_y = v2_prev.y - v2_curr.y
+                    vec2b_x = v2_next.x - v2_curr.x
+                    vec2b_y = v2_next.y - v2_curr.y
+                    
+                    dot2 = vec2a_x * vec2b_x + vec2a_y * vec2b_y
+                    norm2a = torch.sqrt(vec2a_x**2 + vec2a_y**2 + 1e-8)
+                    norm2b = torch.sqrt(vec2b_x**2 + vec2b_y**2 + 1e-8)
+                    cos2 = dot2 / (norm2a * norm2b + 1e-8)
+                    
+                    return cos1 - cos2
+                
+                self.register_loss(f"equal_angle_{idx1}_{idx2}_{points[0].val}", 
+                                 angle_loss, weight=10.0)
 
         # Non-degeneracy
         self.register_ndg(f"tri_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
@@ -242,6 +291,8 @@ class Optimizer:
         # Track metadata
         key = (points[0].val, points[1].val, points[2].val)
         self.triangles_metadata[key] = metadata
+        
+        logger.info(f"Triangle {key} metadata: {metadata}")
 
         return [p1, p2, p3]
 
@@ -522,6 +573,39 @@ class Optimizer:
         self.register_loss(f"on_segment_mid_{point_name.val}", lambda: self.collinear(midpoint, p1, p2), weight=20.0)  # Increased from 10.0
         return midpoint
 
+    def _define_angle_bisector(self, point_name, angle_points):
+        """
+        Define angle bisector point
+        DSL format: (angle_bisector A B C) where A is vertex, angle BAC is bisected
+        Returns D on BC such that angle BAD = angle CAD
+        """
+        assert len(angle_points) >= 3, "angle_bisector requires at least 3 points [A, B, C]"
+        
+        vertex = self.lookup_pt(angle_points[0])  # A (đỉnh góc)
+        p1 = self.lookup_pt(angle_points[1])  # B
+        p2 = self.lookup_pt(angle_points[2])  # C
+        
+        # Smart initialization: midpoint of BC (works well for isosceles)
+        init_x = (p1.x.item() + p2.x.item()) / 2
+        init_y = (p1.y.item() + p2.y.item()) / 2
+        bisector_point = self.sample_uniform(point_name, init_coords=(init_x, init_y))
+        
+        # Save metadata for rendering
+        if not hasattr(self, 'angle_bisectors_metadata'):
+            self.angle_bisectors_metadata = []
+        
+        self.angle_bisectors_metadata.append({
+            'vertex': vertex if isinstance(vertex, str) else angle_points[0].val,
+            'bisector_point': point_name.val,
+            'angle_points': [p.val for p in angle_points]
+        })
+        
+        # Apply constraints using existing _process_angle_bisector
+        # Pass Point objects for compatibility
+        self._process_angle_bisector(angle_points[0], point_name, angle_points)
+        
+        return bisector_point
+
     def parameter_on_seg(self, p, segment_points: list):
         assert len(segment_points) == 2
 
@@ -601,6 +685,90 @@ class Optimizer:
             if self.verbosity:
                 logger.warning(f"Unsupported diagram type: {diagram_type}")
 
+    def _process_angle_bisector(self, vertex, bisector_point, angle_points):
+        # Trong tam giác ABC, AD là phân giác góc A
+        # vertex = A, bisector_point = D, angle_points = [A, B, C]
+        
+        p_vertex = self.name2pt[vertex.val]  # A
+        p_bisector = self.name2pt[bisector_point.val]  # D
+        
+        p1 = self.name2pt[angle_points[1].val]  # B 
+        p2 = self.name2pt[angle_points[2].val]  # C
+        
+        # constraint 1: D nam tren canh BC
+        def on_segment_loss():
+            # Vector BD và BC cùng phương (D nằm trên đường thẳng BC)
+            bd_x = p_bisector.x - p1.x  
+            bd_y = p_bisector.y - p1.y
+            bc_x = p2.x - p1.x  
+            bc_y = p2.y - p1.y
+            cross = bd_x * bc_y - bd_y * bc_x  # Cross product = 0 → cùng phương
+            
+            # D nằm giữa B và C: BD = t * BC với 0 <= t <= 1
+            bc_len_sq = bc_x**2 + bc_y**2
+            t = (bd_x * bc_x + bd_y * bc_y) / (bc_len_sq + 1e-8)
+            
+            # Phạt nếu t < 0 hoặc t > 1
+            between_penalty = torch.relu(-t) + torch.relu(t - 1)
+        
+            return cross**2 + 10.0 * between_penalty
+        
+        # constrain 2: goc BAD = goc CAD
+        def equal_angle_loss():
+            # Cosine of angle BAD
+            ab_x = p1.x - p_vertex.x # vector AB
+            ab_y = p1.y - p_vertex.y
+            ad_x = p_bisector.x - p_vertex.x # vector AD
+            ad_y = p_bisector.y - p_vertex.y
+            dot1 = ab_x * ad_x + ab_y * ad_y # tich vo huong
+            
+            ab_norm = torch.sqrt(ab_x**2 + ab_y**2 + 1e-8)
+            ad_norm = torch.sqrt(ad_x**2 + ad_y**2 + 1e-8)
+            cos_bad = dot1 / (ab_norm * ad_norm + 1e-8)
+            
+            # Cosine of angle CAD
+            ac_x = p2.x - p_vertex.x # vector AC
+            ac_y = p2.y - p_vertex.y
+            dot2 = ac_x * ad_x + ac_y * ad_y
+            
+            ac_norm = torch.sqrt(ac_x**2 + ac_y**2 + 1e-8)
+            cos_cad = dot2 / (ac_norm * ad_norm + 1e-8)
+            return (cos_bad - cos_cad)**2
+
+        #constraint 3: BD/DC = AB/AC (dinh ly phan giac)
+        def ratio_loss():
+            # bd length
+            bd_x = p_bisector.x - p1.x
+            bd_y = p_bisector.y - p1.y
+            bd_len = torch.sqrt(bd_x**2 + bd_y**2 + 1e-8)
+            
+            # dc length
+            dc_x = p2.x - p_bisector.x
+            dc_y = p2.y - p_bisector.y
+            dc_len = torch.sqrt(dc_x**2 + dc_y**2 + 1e-8)
+            
+            # ab length
+            ab_x = p1.x - p_vertex.x
+            ab_y = p1.y - p_vertex.y
+            ab_len = torch.sqrt(ab_x**2 + ab_y**2 + 1e-8)
+            
+            # ac length
+            ac_x = p2.x - p_vertex.x
+            ac_y = p2.y - p_vertex.y
+            ac_len = torch.sqrt(ac_x**2 + ac_y**2 + 1e-8)
+            
+            # bd/dc - ab/ac = 0
+            ratio_bd_dc = bd_len / (dc_len + 1e-8)
+            ratio_ab_ac = ab_len / (ac_len + 1e-8)
+            return (ratio_bd_dc - ratio_ab_ac)**2
+        
+        key = f"{vertex.val}_{bisector_point.val}"
+        self.register_loss(f"bisector_on_segment_{key}", on_segment_loss, weight=10.0)
+        self.register_loss(f"bisector_equal_angle_{key}", equal_angle_loss, weight=10.0)
+        self.register_loss(f"bisector_ratio_{key}", ratio_loss, weight=5.0)    
+        
+    
+    
     def _process_triangle_parameter(self, param_type, objects, args):
         if isinstance(param_type, TriangleType):
             param_type_str = str(param_type).split('.')[-1].lower()
@@ -638,6 +806,15 @@ class Optimizer:
                         constraints['right_idx'] = i
                         constraints['apex_idx'] = i
                         break
+                    
+        elif param_type_str in ["equal_angles", "equal-angles"]:
+            # DSL: (triangle (A B C) (equal_angles 0 1))
+            constraints['type'] = 'scalene'
+            if args and len(args) >= 2:
+                idx1 = int(str(args[0]))
+                idx2 = int(str(args[1]))
+                constraints['equal_angles'] = [(idx1, idx2)]
+                logger.info(f"Setting equal_angles constraint in process_triangle_parameter: {constraints['equal_angles']}")
         else:
             constraints['type'] = 'scalene'
 
@@ -676,6 +853,10 @@ class Optimizer:
             self._define_circumcenter(objects[0], args)
         elif param_type_str == "midpoint":
             self._define_midpoint(objects[0], args)
+        elif param_type_str == "bisector":
+            # DSL: (define D point (bisector A B C))
+            # args = [A, B, C] where A is vertex
+            self._define_angle_bisector(objects[0], args)
         elif param_type_str == "projection":
             self._define_projection(objects[0], args[0], args[1:])
         elif param_type_str == "intersection":
@@ -1018,6 +1199,8 @@ class Optimizer:
                 equal_sides = metadata.get('equal_sides')
                 right_angle_at = metadata.get('right_angle_at')
                 equal_angles = metadata.get('equal_angles')
+                
+                logger.info(f"Adding triangle {key} with equal_angles: {equal_angles}")
 
                 diagram.add_triangle(p1, p2, p3, equal_sides, right_angle_at, equal_angles)
 
@@ -1054,5 +1237,19 @@ class Optimizer:
                 # Store line as tuple for rendering
                 line_name = f"line_{p1_name}_{p2_name}"
                 diagram.add_line(line_name, (p1, p2))
+
+        # Add angle bisectors
+        if hasattr(self, 'angle_bisectors_metadata'):
+            for bisector_data in self.angle_bisectors_metadata:
+                # Convert point names to GeometricPoint objects
+                vertex_name = bisector_data['vertex']
+                bisector_point_name = bisector_data['bisector_point']
+                
+                if vertex_name in diagram.points and bisector_point_name in diagram.points:
+                    diagram.angle_bisectors.append({
+                        'vertex': diagram.points[vertex_name],
+                        'point': diagram.points[bisector_point_name],
+                        'angle_points': bisector_data.get('angle_points', [])
+                    })
 
         return diagram

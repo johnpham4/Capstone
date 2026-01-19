@@ -113,5 +113,50 @@
     "image_dir": "images/img_210007.png",
     "instruction": "Hình vuông ABCD có hai đường chéo AC và BD",
     "answer": "(square (A B C D))\n      (segment A C)\n      (segment B D)"
+  },
+  {
+    "image_dir": "images/img_210102.png",
+    "instruction": "Tam giác ABC cân tại A, AD là đường phân giác của góc A",
+    "answer": "(triangle (A B C) (isosceles A))\n      (define D point (bisector A B C))\n      (segment A D)"
+  },
+  {
+    "image_dir": "images/img_210106.png",
+    "instruction": "Tam giác ABC, AD là phân giác trong, AE là phân giác ngoài tại A",
+    "answer": "(triangle (A B C))\n      (define D point (bisector A B C))\n      (segment A D)\n      (define E point (bisector A C B))\n      (segment A E)"
+  },
+  {
+    "image_dir": "images/img_210101.png",
+    "instruction": "Tam giác ABC, AD là đường phân giác của góc BAC",
+    "answer": "(triangle (A B C))\n      (define D point (bisector A B C))\n      (segment A D)"
+  },
+  {
+    "image_dir": "images/img_210108.png",
+    "instruction": "Tam giác ABC, AD là đường phân giác, AH là đường cao",
+    "answer": "(triangle (A B C))\n      (define D point (bisector A B C))\n      (segment A D)\n      (define H point (projection A (segment B C)))\n      (segment A H)"
+  },
+  {
+    "image_dir": "images/img_210103.png",
+    "instruction": "Tam giác ABC vuông tại A, AD là đường phân giác của góc A",
+    "answer": "(triangle (A B C) (right A))\n(define D point (bisector A B C))\n(segment A D)"
+  },
+  {
+    "image_dir": "images/img_210110.png",
+    "instruction": "Tam giác ABC, AD là đường phân giác, I là tâm đường tròn nội tiếp",
+    "answer": "(triangle (A B C))\n      (define D point (bisector A B C))\n      (define I point (incenter A B C))"
+  },
+  {
+    "image_dir": "images/img_210105.png",
+    "instruction": "Tam giác ABC không cân, AD là đường phân giác của góc A",
+    "answer": "(triangle (A B C))\n      (define D point (bisector A B C))\n      (segment A D)"
+  },
+  {
+    "image_dir": "images/img_210104.png",
+    "instruction": "Tam giác ABC, AD là đường phân giác, D nằm trên cạnh BC",
+    "answer": "(triangle (A B C))\n      (define D point (bisector A B C))\n      (segment A D)"
+  },
+  {
+    "image_dir": "images/img_210107.png",
+    "instruction": "Tam giác ABC, AD là đường phân giác, AM là trung tuyến của BC",
+    "answer": "(triangle (A B C))\n(define D point (bisector A B C))\n(segment A D)\n(define M point (midpoint B C))\n(segment A M)"
   }
 ]

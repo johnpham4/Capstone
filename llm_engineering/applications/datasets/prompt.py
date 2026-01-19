@@ -21,6 +21,7 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL (S-expre
    - (incenter A B C) - tâm nội tiếp
    - (circumcenter A B C) - tâm ngoại tiếp
    - (projection A (segment B C)) - hình chiếu/đường cao
+   - (bisector A B C) - phân giác góc BAC từ đỉnh A
    - (segment A B) - điểm trên đoạn thẳng
    - (line A B) - điểm trên đường thẳng
 
@@ -55,6 +56,7 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL (S-expre
 - đường chéo → segment
 - song song → parallel
 - vuông góc → perpendicular
+- phân giác -> bisector
 
 ═══ QUY TẮC QUAN TRỌNG ═══
 
@@ -68,6 +70,7 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL (S-expre
 2. TRƯỜNG HỢP ĐẶC BIỆT:
    • Trung tuyến AM: (define M point (midpoint B C)) + (segment A M)
    • Đường cao AH: (define H point (projection A (segment B C))) + (segment A H)
+   • Phân giác AD: (define D point (bisector A B C)) + (segment A D)
    • Đường thẳng vuông góc qua C: (define H point (projection C (segment A B))) + (line C H)
    • Đường trung bình DE: (define D point (midpoint A B)) + (define E point (midpoint A C)) + (segment D E)
    • Tâm hình vuông O: (define O point (midpoint A C))
@@ -102,7 +105,13 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL (S-expre
       (define H point (projection A (segment B C)))
       (segment A H)
 
-4. Tam giác với song song:
+4. Tam giác với phân giác:
+   "Tam giác ABC có phân giác AD"
+   → (triangle (A B C))
+      (define D point (bisector A B C))
+      (segment A D)
+
+5. Tam giác với song song:
    "Tam giác ABC, D trên AB, E trên AC, BC // DE"
    → (triangle (A B C))
       (define D point (segment A B))
@@ -111,18 +120,18 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL (S-expre
       (segment D E)
       (parallel (segment B C) (segment D E))
 
-5. Hình vuông đơn giản:
+6. Hình vuông đơn giản:
    "Hình vuông ABCD" / "Hình vuông ABCD có AB vuông góc BC"
    → (square (A B C D))
 
-6. Hình vuông với đường chéo:
+7. Hình vuông với đường chéo:
    "Hình vuông ABCD, hai đường chéo AC và BD cắt nhau tại O"
    → (square (A B C D))
       (define O point (midpoint A C))
       (segment A C)
       (segment B D)
 
-7. Hình vuông với đường tròn:
+8. Hình vuông với đường tròn:
    "Hình vuông ABCD nội tiếp đường tròn"
    → (square (A B C D))
       (define O point (midpoint A C))

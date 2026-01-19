@@ -137,6 +137,7 @@ class MatplotlibDiagramRenderer:
             right_angle_at = tri[4] if len(tri) > 4 else None
             equal_angles = tri[5] if len(tri) > 5 else None
             
+            logger.info(f"Rendering triangle with equal_angles: {equal_angles} (tri length: {len(tri)})")
 
             xs = [p1.x, p2.x, p3.x, p1.x]
             ys = [p1.y, p2.y, p3.y, p1.y]
@@ -319,6 +320,29 @@ class MatplotlibDiagramRenderer:
                     fontsize=10,
                     fontweight='bold'
                 )
+                
+        # Draw angle bisectors
+        if hasattr(self.diagram, 'angle_bisectors') and self.diagram.angle_bisectors:
+            for bisector_data in self.diagram.angle_bisectors:
+                vertex = bisector_data['vertex']
+                bisector_point = bisector_data['point']
+                
+                # Vẽ đoạn thẳng từ vertex đến bisector_point (đường màu xanh lá nét đứt)
+                ax.plot([vertex.x, bisector_point.x], 
+                    [vertex.y, bisector_point.y], 
+                    'g--', linewidth=1.5, alpha=0.7)
+                
+                # Vẽ ký hiệu 2 góc bằng nhau (tương tự equal_angles)
+                angle_points = bisector_data.get('angle_points', [])
+                if len(angle_points) >= 3:
+                    # Lấy 2 điểm tạo góc: angle_points = [A, B, C] (A là đỉnh, góc BAC bị chia)
+                    p1 = self.diagram.points.get(angle_points[1])  # B
+                    p2 = self.diagram.points.get(angle_points[2])  # C
+                    
+                    if p1 and p2:
+                        # Vẽ arc ở 2 bên của phân giác để chỉ 2 góc bằng nhau
+                        self._draw_angle_arc(ax, vertex, p1, bisector_point, num_arcs=1, radius=0.08)
+                        self._draw_angle_arc(ax, vertex, bisector_point, p2, num_arcs=1, radius=0.08)
 
         # Configure axes
         ax.set_aspect('equal')

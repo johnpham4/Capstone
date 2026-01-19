@@ -1,5 +1,5 @@
 from llm_engineering.domains.documents import Document
-from llm_engineering.domains.orm.nosql import NoSQLBaseDocument
+from llm_engineering.domains.odm.nosql import NoSQLBaseDocument
 from llm_engineering.domains.types import DataCategory
 
 
