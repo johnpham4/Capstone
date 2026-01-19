@@ -2,13 +2,12 @@ import json
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-from llm_engineering.applications.diagram.services.diagram_builder import DiagramBuilder
+from llm_engineering.applications.diagram.diagram_builder import DiagramBuilder
 from llm_engineering.applications.diagram.optimizer import Optimizer
 from llm_engineering.infrastructures.visualization.matplotlib_renderer import MatplotlibDiagramRenderer
 
 
 def test_single_problem(instruction, dsl_answer, output_path):
-    print(f"\n{'='*60}")
     print(f"Instruction: {instruction}")
     print(f"DSL: {dsl_answer}")
 
@@ -53,13 +52,29 @@ def main():
     output_dir = Path("output_fixed")
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    # Find existing diagram files to determine starting index
+    existing_files = list(output_dir.glob("diagram_*.png"))
+    if existing_files:
+        # Extract numbers from filenames and find max
+        numbers = []
+        for f in existing_files:
+            try:
+                num = int(f.stem.split('_')[1])
+                numbers.append(num)
+            except (IndexError, ValueError):
+                pass
+        start_idx = max(numbers) + 1 if numbers else 1
+    else:
+        start_idx = 1
+
     with open(json_path, 'r', encoding='utf-8') as f:
         problems = json.load(f)
 
     print(f"Found {len(problems)} problems")
+    print(f"Starting from diagram_{start_idx:02d}.png")
 
     success_count = 0
-    for idx, problem in enumerate(problems, 1):
+    for idx, problem in enumerate(problems, start_idx):
         instruction = problem['instruction']
         answer = problem['answer']
 
