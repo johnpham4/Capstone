@@ -20,7 +20,7 @@ app = FastAPI(
 
 # Initialize RabbitMQ publisher
 publisher = RabbitMQPublisher()
-INPUT_QUEUE = "model_processing_queue"
+INPUT_QUEUE = "diagram"
 
 
 class DiagramRequest(BaseModel):
@@ -52,7 +52,6 @@ class DiagramStatusResponse(BaseModel):
 
 @app.on_event("startup")
 async def startup_event():
-    """Initialize queues on startup"""
     try:
         publisher.connect()
         publisher.declare_queue(INPUT_QUEUE)
