@@ -1,10 +1,9 @@
 import sys
 from loguru import logger
 
-from llm_engineering.infrastructures.db.rabbitmq import RabbitMQConsumer, RabbitMQPublisher
-from llm_engineering.infrastructures.db.processing_request_repository import processing_request_repository
+from llm_engineering.infrastructures.messaging.rabbitmq import RabbitMQConsumer, RabbitMQPublisher
+from llm_engineering.domains.processing_request import ProcessingRequest, RequestStatus
 from llm_engineering.domains.events import UserInputReceived, ModelProcessingCompleted, ProcessingFailed
-from llm_engineering.domains.processing_request import RequestStatus
 from llm_engineering.model.inference.inference import LLMInferenceSagemakerEndpoint
 from llm_engineering.settings import settings
 
@@ -31,11 +30,12 @@ class ModelProcessingWorker:
         try:
             logger.info(f"Processing model inference for request: {request_id}")
 
-            # Update status to processing
-            processing_request_repository.update_status(
-                request_id,
-                RequestStatus.PROCESSING_MODEL
-            )
+            # Get request and update status to processing
+            request = ProcessingRequest.get_by_id(request_id)
+            if not request:
+                raise ValueError(f"Request {request_id} not found")
+
+            request.update_status(RequestStatus.PROCESSING_MODEL)  # Auto saves
 
             problem_text = message.get('problem_text', '')
 
@@ -51,11 +51,7 @@ class ModelProcessingWorker:
             dsl_commands = self._parse_dsl_commands(model_output)
 
             # Update database with model results
-            processing_request_repository.update_model_output(
-                request_id,
-                model_output,
-                dsl_commands
-            )
+            request.update_model_output(model_output, dsl_commands)  # Auto saves
 
             # Publish event to diagram generation queue
             event = ModelProcessingCompleted(
@@ -75,11 +71,9 @@ class ModelProcessingWorker:
             logger.exception(f"Model processing failed for request {request_id}: {e}")
 
             # Update status to failed
-            processing_request_repository.update_status(
-                request_id,
-                RequestStatus.FAILED,
-                error_message=str(e)
-            )
+            request = ProcessingRequest.get_by_id(request_id)
+            if request:
+                request.update_status(RequestStatus.FAILED, error_message=str(e))  # Auto saves
 
             # Publish failure event
             failure_event = ProcessingFailed(

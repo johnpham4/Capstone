@@ -1,83 +1,92 @@
+import json
+from abc import ABC
+from typing import Generic, Type, TypeVar, Callable, Dict, Any, Optional
+from loguru import logger
+from pydantic import BaseModel, Field
+import pika
 
-class RabbitMQPublisher:
+from llm_engineering.domains.exceptions import ImproperlyConfigured
+from llm_engineering.infrastructures.messaging.rabbitmq import connection
+from llm_engineering.settings import settings
 
-    def declare_queue(self, queue_name: str, durable: bool = True):
-        """Declare a queue"""
-        if not self.channel:
-            self.connect()
-        self.channel.queue_declare(queue=queue_name, durable=durable)
-        logger.info(f"Queue '{queue_name}' declared")
+T = TypeVar("T", bound="QueueBaseDocument")
 
-    def publish(self, queue_name: str, message: Dict[str, Any]):
-        """Publish a message to a queue"""
+
+class QueueBaseDocument(BaseModel, Generic[T], ABC):
+    def to_queue(self: T, **kwargs) -> dict:
+        """Convert model to queue message format."""
+        return self.model_dump(**kwargs)
+
+    @classmethod
+    def from_queue(cls: Type[T], message: dict) -> T:
+        if not message:
+            raise ValueError("Message is empty")
+        return cls(**message)
+
+    def publish(self: T, queue_name: Optional[str] = None, **kwargs) -> bool:
         try:
-            if not self.channel:
-                self.connect()
+            target_queue = queue_name or self.get_queue_name()
+            message = self.to_queue(**kwargs)
 
-            self.channel.basic_publish(
+            channel = connection.channel
+            channel.queue_declare(queue=target_queue, durable=True)
+            channel.basic_publish(
                 exchange='',
-                routing_key=queue_name,
+                routing_key=target_queue,
                 body=json.dumps(message),
-                properties=pika.BasicProperties(
-                    delivery_mode=2,  # make message persistent
-                )
-            )
-            logger.info(f"Message published to queue '{queue_name}': {message.get('request_id', 'N/A')}")
-        except Exception as e:
-            logger.exception(f"Failed to publish message to '{queue_name}': {e}")
-            raise
-
-
-class RabbitMQConsumer:
-    """Base consumer for receiving messages from RabbitMQ queues"""
-
-    def __init__(self, queue_name: str, callback: Callable, url: Optional[str] = None):
-        super().__init__(url)
-        self.queue_name = queue_name
-        self.callback = callback
-
-    def declare_queue(self, durable: bool = True):
-        """Declare the queue"""
-        if not self.channel:
-            self.connect()
-        self.channel.queue_declare(queue=self.queue_name, durable=durable)
-        logger.info(f"Queue '{self.queue_name}' declared for consumer")
-
-    def _on_message_callback(self, ch, method, properties, body):
-        """Internal callback wrapper"""
-        try:
-            message = json.loads(body)
-            logger.info(f"Received message from '{self.queue_name}': {message.get('request_id', 'N/A')}")
-            self.callback(ch, method, properties, message)
-        except Exception as e:
-            logger.exception(f"Error processing message: {e}")
-            # Acknowledge to remove from queue even on error (or implement retry logic)
-            ch.basic_ack(delivery_tag=method.delivery_tag)
-
-    def start_consuming(self):
-        """Start consuming messages"""
-        try:
-            if not self.channel:
-                self.connect()
-
-            self.declare_queue()
-            self.channel.basic_consume(
-                queue=self.queue_name,
-                on_message_callback=self._on_message_callback,
-                auto_ack=False
+                properties=pika.BasicProperties(delivery_mode=2)
             )
 
-            logger.info(f"Started consuming from queue '{self.queue_name}'")
-            self.channel.start_consuming()
+            logger.info(f"Published message to queue '{target_queue}'")
+            return True
+
+        except Exception as e:
+            logger.exception(f"Failed to publish message: {e}")
+            return False
+
+    @classmethod
+    def consume(
+        cls: Type[T],
+        callback: Callable,
+        queue_name: Optional[str] = None,
+        auto_ack: bool = False
+    ) -> None:
+        try:
+            target_queue = queue_name or cls.get_queue_name()
+            channel = connection.channel
+            channel.queue_declare(queue=target_queue, durable=True)
+
+            def wrapped_callback(ch, method, properties, body):
+                try:
+                    message = json.loads(body)
+                    instance = cls.from_queue(message)
+                    callback(ch, method, properties, instance)
+                except Exception as e:
+                    logger.exception(f"Error processing message: {e}")
+                    if not auto_ack:
+                        ch.basic_ack(delivery_tag=method.delivery_tag)
+
+            channel.basic_consume(
+                queue=target_queue,
+                on_message_callback=wrapped_callback,
+                auto_ack=auto_ack
+            )
+
+            logger.info(f"Started consuming from queue '{target_queue}'")
+            channel.start_consuming()
+
         except KeyboardInterrupt:
             logger.info("Consumer stopped by user")
-            self.stop_consuming()
+            channel.stop_consuming()
         except Exception as e:
             logger.exception(f"Error in consumer: {e}")
             raise
 
-    def stop_consuming(self):
-        """Stop consuming messages"""
-        if self.channel:
-            self.channel.stop_consuming()
-        self.close()
+    @classmethod
+    def get_queue_name(cls: Type[T]) -> str:
+        """Get the queue name for this document type."""
+        if not hasattr(cls, "Settings") or not hasattr(cls.Settings, "queue_name"):
+            raise ImproperlyConfigured(
+                "Document should define a Settings configuration class with the queue_name attribute."
+            )
+        return cls.Settings.queue_name
