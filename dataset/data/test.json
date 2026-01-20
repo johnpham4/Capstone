@@ -1,6 +1,6 @@
 [
   {
-    "instruction": "Tam giác ABC, AD là đường phân giác, AM là trung tuyến của BC",
-    "answer": "(triangle (A B C))\n(define D point (bisector A B C))\n(segment A D)\n(define M point (midpoint B C))\n(segment A M)"
+    "instruction": "Tam giác ABC không cân, AD là đường phân giác của góc A",
+    "answer": "(triangle (A B C))\n(define D point (bisector B A C))\n(segment A D)"
   }
 ]

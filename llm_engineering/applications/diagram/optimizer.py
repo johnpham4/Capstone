@@ -43,6 +43,7 @@ class Optimizer:
         self.segments = []  # [(p1_name, p2_name)]
         self.lines = []  # [(p1_name, p2_name)] for visualization
         self.line_objects = {}  # line_name -> LineNF
+        self.angle_equal_assertions = []  # [(p1, p2, p3, p4, p5, p6)] for angle ABC = angle DEF
 
         # Unnamed point generation for auto-created intersections
         self.unnamed_point_counter = 0
@@ -181,7 +182,6 @@ class Optimizer:
         tri_type = constraints.get('type', 'scalene')
         apex_idx = constraints.get('apex_idx', 0)
         right_idx = constraints.get('right_idx', 0)
-
         # Smart initialization based on type
         equal_angles = constraints.get('equal_angles')
         
@@ -1027,6 +1027,11 @@ class Optimizer:
         angle1_name = f"{points[0].val}_{points[1].val}_{points[2].val}"
         angle2_name = f"{points[3].val}_{points[4].val}_{points[5].val}"
         self.register_loss(f"angle_equal_{angle1_name}_{angle2_name}", angle_equal_loss, weight=10.0)
+        
+        self.angle_equal_assertions.append({
+            'angle1': (points[0].val, points[1].val, points[2].val),  # (B, A, D)
+            'angle2': (points[3].val, points[4].val, points[5].val)   # (C, A, D)
+        })
 
 
     def preprocess(self):
@@ -1251,5 +1256,25 @@ class Optimizer:
                         'point': diagram.points[bisector_point_name],
                         'angle_points': bisector_data.get('angle_points', [])
                     })
+
+        # Add angle-equal assertions
+        for assertion in self.angle_equal_assertions:
+            angle1 = assertion['angle1']  # (p1, p2, p3)
+            angle2 = assertion['angle2']  # (p4, p5, p6)
+            
+            # Check all points exist
+            if all(pname in diagram.points for pname in angle1 + angle2):
+                diagram.angle_equal_assertions.append({
+                    'angle1': {
+                        'p1': diagram.points[angle1[0]],
+                        'vertex': diagram.points[angle1[1]],
+                        'p2': diagram.points[angle1[2]]
+                    },
+                    'angle2': {
+                        'p1': diagram.points[angle2[0]],
+                        'vertex': diagram.points[angle2[1]],
+                        'p2': diagram.points[angle2[2]]
+                    }
+                })
 
         return diagram

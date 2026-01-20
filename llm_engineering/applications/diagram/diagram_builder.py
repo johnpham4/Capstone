@@ -41,6 +41,8 @@ class DiagramBuilder:
             self.process_parallel(cmd)
         elif head == "perpendicular":
             self.process_perpendicular(cmd)
+        elif head == "angle-equal":
+            self.process_angle_equal(cmd)
         else:
             raise NotImplementedError(f"Command not supported: {head}")
 
@@ -259,5 +261,20 @@ class DiagramBuilder:
         instr = Assertion(
             constraint_type='perpendicular',
             objects=[p1, p2, p3, p4]
+        )
+        self.instructions.append(instr)
+
+    def process_angle_equal(self, cmd):
+        """Process: (angle-equal A B C D E F) -> ∠ABC = ∠DEF"""
+        if len(cmd) != 7:
+            raise RuntimeError(f"angle-equal requires 6 points: {cmd}")
+
+        # Extract 6 points for two angles
+        points = [Point(cmd[i]) for i in range(1, 7)]
+
+        from llm_engineering.domains.geometry.instructions import Assertion
+        instr = Assertion(
+            constraint_type='angle_equal',
+            objects=points
         )
         self.instructions.append(instr)

@@ -344,6 +344,26 @@ class MatplotlibDiagramRenderer:
                         self._draw_angle_arc(ax, vertex, p1, bisector_point, num_arcs=1, radius=0.08)
                         self._draw_angle_arc(ax, vertex, bisector_point, p2, num_arcs=1, radius=0.08)
 
+        # Draw angle-equal assertions (angle ABC = angle DEF)
+        if hasattr(self.diagram, 'angle_equal_assertions') and self.diagram.angle_equal_assertions:
+            for assertion in self.diagram.angle_equal_assertions:
+                angle1 = assertion['angle1']
+                angle2 = assertion['angle2']
+                
+                # Draw arc for angle 1 (p1-vertex-p2)
+                self._draw_angle_arc(ax, angle1['vertex'], 
+                                   angle1['p1'], 
+                                   angle1['p2'], 
+                                   num_arcs=1, 
+                                   radius=0.12)
+                
+                # Draw arc for angle 2 
+                self._draw_angle_arc(ax, angle2['vertex'],
+                                   angle2['p1'],
+                                   angle2['p2'],
+                                   num_arcs=1,
+                                   radius=0.12)
+
         # Configure axes
         ax.set_aspect('equal')
         ax.axis('off')

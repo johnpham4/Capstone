@@ -1,62 +1,92 @@
 [
   {
-    "image": "images/img_210101.png",
-    "caption": "triangle ABC, AD is angle bisector of angle BAC",
-    "id": 210101,
-    "caption_vn": "Tam giác ABC, AD là đường phân giác của góc BAC"
+    "image": "images/img_210401.png",
+    "caption": "triangle ABC, angle BAD equals angle CAD, D lies on BC",
+    "id": 210401,
+    "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, điểm D nằm trên cạnh BC."
   },
   {
-    "image": "images/img_210102.png",
-    "caption": "isosceles triangle ABC with AB = AC, AD is angle bisector of angle A",
-    "id": 210102,
-    "caption_vn": "Tam giác ABC cân tại A, AD là đường phân giác của góc A"
+    "image": "images/img_210402.png",
+    "caption": "triangle ABC, angle BAD equals angle CAD, D midpoint of BC, E midpoint of AC",
+    "id": 210402,
+    "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, D là trung điểm của BC, E là trung điểm của AC."
   },
   {
-    "image": "images/img_210103.png",
-    "caption": "right triangle ABC with angle A = 90 degrees, AD is angle bisector of angle A",
-    "id": 210103,
-    "caption_vn": "Tam giác ABC vuông tại A, AD là đường phân giác của góc A"
+    "image": "images/img_210403.png",
+    "caption": "triangle ABC, angle BAD equals angle CAD, M midpoint of BC, AM perpendicular to BC",
+    "id": 210403,
+    "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, M là trung điểm của BC, AM vuông góc với BC."
   },
   {
-    "image": "images/img_210104.png",
-    "caption": "triangle ABC, AD is angle bisector, D lies on BC",
-    "id": 210104,
-    "caption_vn": "Tam giác ABC, AD là đường phân giác, D nằm trên cạnh BC"
+    "image": "images/img_210404.png",
+    "caption": "triangle ABC, angle BAD equals angle CAD, DE parallel to BC",
+    "id": 210404,
+    "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, qua D kẻ DE song song với BC."
   },
   {
-    "image": "images/img_210105.png",
-    "caption": "triangle ABC, AD is angle bisector, AB ≠ AC",
-    "id": 210105,
-    "caption_vn": "Tam giác ABC không cân, AD là đường phân giác của góc A"
+    "image": "images/img_210405.png",
+    "caption": "triangle ABC, angle BAD equals angle CAD, D midpoint of BC, DE parallel to AC",
+    "id": 210405,
+    "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, D là trung điểm của BC, qua D kẻ DE song song với AC."
   },
   {
-    "image": "images/img_210106.png",
-    "caption": "triangle ABC, AD is internal angle bisector, AE is external angle bisector at A",
-    "id": 210106,
-    "caption_vn": "Tam giác ABC, AD là phân giác trong, AE là phân giác ngoài tại A"
+    "image": "images/img_210406.png",
+    "caption": "triangle ABC, angle BAD equals angle CAD, M midpoint of AB, DM parallel to AC",
+    "id": 210406,
+    "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, M là trung điểm của AB, DM song song với AC."
   },
   {
-    "image": "images/img_210107.png",
-    "caption": "triangle ABC, AD is angle bisector, AM is median of BC",
-    "id": 210107,
-    "caption_vn": "Tam giác ABC, AD là đường phân giác, AM là trung tuyến của BC"
+    "image": "images/img_210407.png",
+    "caption": "triangle ABC, angle BAD equals angle CAD, H foot of altitude from A",
+    "id": 210407,
+    "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, H là chân đường cao kẻ từ A xuống BC."
   },
   {
-    "image": "images/img_210108.png",
-    "caption": "triangle ABC, AD is angle bisector, AH is altitude",
-    "id": 210108,
-    "caption_vn": "Tam giác ABC, AD là đường phân giác, AH là đường cao"
+    "image": "images/img_210408.png",
+    "caption": "triangle ABC, angle BAD equals angle CAD, A, D, M are collinear, M midpoint of BC",
+    "id": 210408,
+    "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, A, D, M thẳng hàng, M là trung điểm của BC."
   },
   {
-    "image": "images/img_210109.png",
-    "caption": "triangle ABC, angle bisectors intersect at I",
-    "id": 210109,
-    "caption_vn": "Tam giác ABC, các đường phân giác cắt nhau tại điểm I"
+    "image": "images/img_210409.png",
+    "caption": "triangle ABC, angle BAD equals angle CAD, BE perpendicular to AC",
+    "id": 210409,
+    "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, BE vuông góc với AC."
   },
   {
-    "image": "images/img_210110.png",
-    "caption": "triangle ABC, AD is angle bisector, incircle centered at I",
-    "id": 210110,
-    "caption_vn": "Tam giác ABC, AD là đường phân giác, I là tâm đường tròn nội tiếp"
+    "image": "images/img_210410.png",
+    "caption": "triangle ABC, angle BAD equals angle CAD, CF perpendicular to AB",
+    "id": 210410,
+    "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, CF vuông góc với AB."
+  },
+  {
+    "image": "images/img_210411.png",
+    "caption": "triangle ABC, angle BAD equals angle CAD, DE parallel to AB, EF parallel to AC",
+    "id": 210411,
+    "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, qua D kẻ DE song song với AB, qua E kẻ EF song song với AC."
+  },
+  {
+    "image": "images/img_210412.png",
+    "caption": "triangle ABC, angle BAD equals angle CAD, M midpoint of BC, MN parallel to AC",
+    "id": 210412,
+    "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, M là trung điểm của BC, qua M kẻ MN song song với AC."
+  },
+  {
+    "image": "images/img_210413.png",
+    "caption": "triangle ABC, angle BAD equals angle CAD, D midpoint of BC, AD intersects median from B",
+    "id": 210413,
+    "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, D là trung điểm của BC, AD cắt trung tuyến kẻ từ B."
+  },
+  {
+    "image": "images/img_210414.png",
+    "caption": "triangle ABC, angle BAD equals angle CAD, M midpoint of BC, N midpoint of AB",
+    "id": 210414,
+    "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, M là trung điểm của BC, N là trung điểm của AB."
+  },
+  {
+    "image": "images/img_210415.png",
+    "caption": "triangle ABC, angle BAD equals angle CAD, A lies on perpendicular bisector of BC",
+    "id": 210415,
+    "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, điểm A nằm trên đường trung trực của BC."
   }
 ]
