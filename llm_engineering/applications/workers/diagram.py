@@ -3,10 +3,9 @@ import os
 from pathlib import Path
 from loguru import logger
 
-from llm_engineering.infrastructures.db.rabbitmq import RabbitMQConsumer
-from llm_engineering.infrastructures.db.processing_request_repository import processing_request_repository
+from llm_engineering.infrastructures.messaging.rabbitmq import RabbitMQConsumer
+from llm_engineering.domains.processing_request import ProcessingRequest, RequestStatus
 from llm_engineering.domains.events import ModelProcessingCompleted, DiagramGenerationCompleted, ProcessingFailed
-from llm_engineering.domains.processing_request import RequestStatus
 from llm_engineering.settings import settings
 
 # Import diagram generation components
@@ -20,25 +19,23 @@ OUTPUT_DIR = Path(settings.OUTPUT_DIR) if hasattr(settings, 'OUTPUT_DIR') else P
 
 
 class DiagramGenerationWorker:
-    """Worker to generate diagrams from DSL commands"""
 
     def __init__(self):
-        # Ensure output directory exists
         OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
         self.output_dir = OUTPUT_DIR
 
     def process_message(self, ch, method, properties, message: dict):
-        """Process incoming diagram generation request"""
         request_id = message.get('request_id')
 
         try:
             logger.info(f"Generating diagram for request: {request_id}")
 
-            # Update status to generating diagram
-            processing_request_repository.update_status(
-                request_id,
-                RequestStatus.GENERATING_DIAGRAM
-            )
+            # Get request and update status to generating diagram
+            request = ProcessingRequest.get_by_id(request_id)
+            if not request:
+                raise ValueError(f"Request {request_id} not found")
+
+            request.update_status(RequestStatus.GENERATING_DIAGRAM)  # Auto saves
 
             # Get DSL commands from message
             dsl_commands = message.get('dsl_commands', [])
@@ -87,17 +84,10 @@ class DiagramGenerationWorker:
             }
 
             # Update database with diagram result
-            processing_request_repository.update_diagram_result(
-                request_id,
-                str(diagram_path),
-                diagram_points
-            )
+            request.update_diagram_result(str(diagram_path), diagram_points)  # Auto saves
 
             # Update status to completed
-            processing_request_repository.update_status(
-                request_id,
-                RequestStatus.COMPLETED
-            )
+            request.update_status(RequestStatus.COMPLETED)  # Auto saves
 
             logger.info(f"Diagram generation completed for request: {request_id}")
 
@@ -108,18 +98,18 @@ class DiagramGenerationWorker:
             logger.exception(f"Diagram generation failed for request {request_id}: {e}")
 
             # Update status to failed
-            processing_request_repository.update_status(
-                request_id,
-                RequestStatus.FAILED,
-                error_message=f"Diagram generation failed: {str(e)}"
-            )
+            request = ProcessingRequest.get_by_id(request_id)
+            if request:
+                request.update_status(
+                    RequestStatus.FAILED,
+                    error_message=f"Diagram generation failed: {str(e)}"
+                )  # Auto saves
 
             # Acknowledge to remove from queue
             ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
 def main():
-    """Main entry point for diagram generation worker"""
     logger.info("Starting Diagram Generation Worker...")
 
     worker = DiagramGenerationWorker()
