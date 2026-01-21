@@ -363,5 +363,40 @@
     "image_dir": "images/img_210407.png",
     "instruction": "Tam giác ABC có góc BAD bằng góc CAD, H là chân đường cao kẻ từ A xuống BC.",
     "answer": "(triangle (A B C))\n(define H point (projection A (segment B C)))\n(segment A H)"
+  },
+  {
+    "image_dir": "images/img_250006.png",
+    "instruction": "Cho tam giác ABC là tam giác tù tại C, có góc ACB bằng 110 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD.",
+    "answer": "(triangle (A B C) (obtuse C))\n(angle-measure A C B 110)\n(define D point (midpoint A B))\n(segment C D)\n(define M point (bisector B A C))\n(on-segment M C D)\n(segment A M)"
+  },
+  {
+    "image_dir": "images/img_250001.png",
+    "instruction": "Cho tam giác ABC có góc A bằng 60 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD.",
+    "answer": "(triangle (A B C))\n(angle-measure B A C 60)\n(define D point (midpoint A B))\n(segment C D)\n(define M point (bisector B A C))\n(on-segment M C D)\n(segment A M)"
+  },
+  {
+    "image_dir": "images/img_250008.png",
+    "instruction": "Cho tam giác ABC thường, có góc A bằng 80 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD.",
+    "answer": "(triangle (A B C))\n(angle-measure B A C 80)\n(define D point (midpoint A B))\n(segment C D)\n(define M point (bisector B A C))\n(on-segment M C D)\n(segment A M)"
+  },
+  {
+    "image_dir": "images/img_250003.png",
+    "instruction": "Cho tam giác ABC vuông tại B, có góc A bằng 40 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD.",
+    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 40)\n(define D point (midpoint A B))\n(segment C D)\n(define M point (bisector B A C))\n(on-segment M C D)\n(segment A M)"
+  },
+  {
+    "image_dir": "images/img_250005.png",
+    "instruction": "Cho tam giác ABC là tam giác tù tại B, có góc ABC bằng 120 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD.",
+    "answer": "(triangle (A B C) (obtuse B))\n(angle-measure A B C 120)\n(define D point (midpoint A B))\n(segment C D)\n(define M point (bisector B A C))\n(on-segment M C D)\n(segment A M)"
+  },
+  {
+    "image_dir": "images/img_250004.png",
+    "instruction": "Cho tam giác ABC vuông tại A, có góc ABC bằng 30 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD.",
+    "answer": "(triangle (A B C) (right A))\n(angle-measure A B C 30)\n(define D point (midpoint A B))\n(segment C D)\n(define M point (bisector B A C))\n(on-segment M C D)\n(segment A M)"
+  },
+  {
+    "image_dir": "images/img_250007.png",
+    "instruction": "Cho tam giác ABC có góc A bằng 70 độ và góc B bằng 50 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD.",
+    "answer": "(triangle (A B C))\n(angle-measure B A C 70)\n(angle-measure A B C 50)\n(define D point (midpoint A B))\n(segment C D)\n(define M point (bisector B A C))\n(segment A M)"
   }
 ]

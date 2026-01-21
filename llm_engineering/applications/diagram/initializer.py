@@ -23,10 +23,14 @@ class Initializer:
 
     @staticmethod
     def init_right_triangle(right_angle_idx: int = 0, scale: float = 1.0) -> List[Tuple[float, float]]:
+        a = 0.9 * scale
+        b = 0.6 * scale
+
+        # Right angle at first point
         base_coords = [
-            (0.0, 0.0),
-            (0.8 * scale, 0.0),      # Along x-axis
-            (0.0, 0.8 * scale)       # Along y-axis
+            (-a / 2, -b / 2),   # Right angle
+            ( a / 2, -b / 2),   # Leg 1
+            (-a / 2,  b / 2)    # Leg 2
         ]
 
         if right_angle_idx == 0:
@@ -50,9 +54,9 @@ class Initializer:
     def init_scalene_triangle(scale: float = 1.0) -> List[Tuple[float, float]]:
         """Scalene triangle with all sides different"""
         return [
-            (-0.6 * scale, -0.3 * scale),    # A: top
-            (0.5 * scale, -0.2 * scale),     # B: left
-            (0.1 * scale, 0.7 * scale)       # C: right (không đối xứng)
+            (-0.7 * scale, -0.4 * scale),   # A
+            (0.8 * scale, -0.2 * scale),    # B
+            (-0.1 * scale, 0.9 * scale)     # C: right (không đối xứng)
         ]
 
     @staticmethod

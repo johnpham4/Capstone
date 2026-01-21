@@ -25,6 +25,10 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL (S-expre
    - (bisector B A C) - phân giác góc BAC từ đỉnh A
    - (segment A B) - điểm trên đoạn thẳng
    - (line A B) - điểm trên đường thẳng
+   
+   LƯU Ý: Trong cú pháp angle/bisector, đỉnh góc luôn nằm Ở GIỮA:
+     • (bisector B A C) = phân giác góc BAC, đỉnh tại A
+     • (angle-measure B A C 80) = góc BAC = 80°, đỉnh tại A
 
 3. ĐOẠN/ĐƯỜNG:
    - (segment A B) - đoạn thẳng (hữu hạn)
@@ -41,6 +45,7 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL (S-expre
    - (parallel (segment B C) (segment D E))
    - (perpendicular (segment A B) (segment C D))
    - (angle-equal A B C D E F) - ∠ABC = ∠DEF
+   - (on-segment M C D) - điểm M nằm trên đoạn thẳng CD
    Khai báo segment/line TRƯỚC khi dùng ràng buộc
 
 ═══ TỪ KHÓA TIẾNG VIỆT → DSL ═══
@@ -61,9 +66,25 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL (S-expre
 - vuông góc → perpendicular
 - phân giác/đường phân giác -> bisector
 - góc bằng nhau/hai góc bằng nhau → angle-equal
+- số đo góc → angle-measure
+- nằm trên/nằm trên đoạn thẳng → on-segment
 
 
 ═══ QUY TẮC QUAN TRỌNG ═══
+
+0. QUY TẮC VÀNG - ĐỌC KỸ TRƯỚC KHI VIẾT DSL:
+   
+   **Khi đề bài nói "góc X" (X là tên điểm):**
+   → Nghĩa là góc TẠI ĐỈNH X
+   → Trong DSL: vertex X phải Ở GIỮA
+   
+   VÍ DỤ BẮT BUỘC PHẢI NHỚ:
+    "góc A = 60°" → (angle-measure B A C 60)   [A ở GIỮA]
+    "góc B = 90°" → (angle-measure A B C 90)   [B ở GIỮA]
+    "góc C = 120°" → (angle-measure A C B 120) [C ở GIỮA]
+   
+   SAI: "góc A = 60°" → (angle-measure A B C 60)  [B ở giữa → góc B!]
+   SAI: "góc B = 90°" → (angle-measure B A C 90)  [A ở giữa → góc A!]
 
 1. THỨ TỰ KHAI BÁO:
    ① Hình (triangle/square) - LUÔN TRƯỚC
@@ -123,6 +144,57 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL (S-expre
    → (triangle (A B C))
 (define D point (bisector B A C))
 (segment A D)
+
+6. "Đường phân giác góc BAC cắt BC tại D"
+   → (triangle (A B C))
+(define D point (bisector B A C))
+(segment A D)
+
+7. "Phân giác của góc BAC cắt cạnh BC tại điểm D"
+   → (triangle (A B C))
+(define D point (bisector B A C))
+(segment A D)
+
+8. "Tam giác ABC, CD là trung tuyến cạnh AB, AM là phân giác góc A với M nằm trên BC"
+   → (triangle (A B C))
+(define D point (midpoint A B))
+(segment C D)
+(define M point (bisector B A C))
+(segment A M)
+
+8b. "Tam giác ABC tù tại C, góc ACB = 110°, CD là trung tuyến AB, AM là phân giác góc A với M nằm trên CD"
+   → (triangle (A B C) (obtuse C))
+(angle-measure A C B 110)
+(define D point (midpoint A B))
+(segment C D)
+(define M point (bisector B A C))
+(on-segment M C D)
+(segment A M)
+
+9. "Tam giác ABC tù tại B, góc ABC = 120 độ"
+   → (triangle (A B C) (obtuse B))
+(angle-measure A B C 120)
+
+9b. "Tam giác ABC, góc A = 80 độ"
+   → (triangle (A B C))
+(angle-measure B A C 80)
+
+9c. "Tam giác ABC vuông tại B, góc A = 40 độ"
+   → (triangle (A B C) (right B))
+(angle-measure B A C 40)
+   ❌ SAI: (angle-measure A B C 40)  [Đây là góc B, không phải góc A!]
+
+9d. "Tam giác ABC, góc B = 50 độ, góc C = 60 độ"
+   → (triangle (A B C))
+(angle-measure A B C 50)
+(angle-measure A C B 60)
+
+LƯU Ý: "góc A" = góc tại đỉnh A = góc BAC (vertex ở giữa cú pháp)
+
+10. "Tam giác vuông ABC vuông tại A, góc BAC = 90 độ, góc ABC = 30 độ"
+   → (triangle (A B C) (right A))
+(angle-measure B A C 90)
+(angle-measure A B C 30)
 
 TRƯỜNG HỢP KHÁC:
 "Tam giác ABC có góc BAD bằng góc CAD, M là trung điểm của BC."

@@ -18,9 +18,9 @@ def test_single_problem(instruction, dsl_answer, output_path):
 
         print(f"Points: {[p.val for p in builder.points]}")
         # print(f"Instructions: {builder.instructions}")
-        opts = {'epochs': 2000, 'n_tries': 1, 'eps': 1e-6, 'seed': 42}
+        opts = {'epochs': 3000, 'n_tries': 3, 'eps': 1e-6, 'seed': 42}
 
-        optimizer = Optimizer(builder.instructions, opts, verbosity=True)
+        optimizer = Optimizer(builder.instructions, opts, verbosity=False)
         diagram = optimizer.solve()
 
         print(f"\nFinal coordinates:")
