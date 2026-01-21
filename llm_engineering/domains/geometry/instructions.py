@@ -29,6 +29,7 @@ class Assertion:
     """Represents an assertion/constraint in DSL"""
     constraint_type: str = None
     objects: Tuple[Any, ...] = ()
+    value: float = None
     constraint: Any = None
 
     def __str__(self) -> str:

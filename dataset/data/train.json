@@ -293,5 +293,50 @@
     "image_dir": "images/img_210407.png",
     "instruction": "Tam giác ABC có góc BAD bằng góc CAD, H là chân đường cao kẻ từ A xuống BC.",
     "answer": "(triangle (A B C))\n(define H point (projection A (segment B C)))\n(segment A H)"
+  },
+  {
+    "image_dir": "images/img_210702.png",
+    "instruction": "Tam giác ABC là tam giác tù tại A, góc BAC bằng 110 độ.",
+    "answer": "(triangle (A B C) (obtuse A))"
+  },
+  {
+    "image_dir": "images/img_210706.png",
+    "instruction": "Tam giác ABC là tam giác tù tại C, góc ACB bằng 110 độ, AM là trung tuyến ứng với cạnh BC.",
+    "answer": "(triangle (A B C) (obtuse C))\n(define M point (midpoint B C))\n(segment A M)"
+  },
+  {
+    "image_dir": "images/img_210701.png",
+    "instruction": "Tam giác ABC là tam giác tù tại B, góc ABC bằng 120 độ.",
+    "answer": "(triangle (A B C) (obtuse B))\n(define D point (segment B C))\n(angle-equal A B D C A D)"
+  },
+  {
+    "image_dir": "images/img_210708.png",
+    "instruction": "Tam giác ABC là tam giác tù tại A, góc BAC bằng 105 độ, AD vuông góc với BC.",
+    "answer": "(triangle (A B C) (obtuse A))\n(define D point (segment A B))\n(segment A D)\n(segment B C)\n(perpendicular (segment A D) (segment B C))"
+  },
+  {
+    "image_dir": "images/img_210703.png",
+    "instruction": "Tam giác ABC là tam giác tù tại C, góc ACB bằng 135 độ.",
+    "answer": "(triangle (A B C) (obtuse C))"
+  },
+  {
+    "image_dir": "images/img_210710.png",
+    "instruction": "Tam giác ABC là tam giác tù tại B, góc ABC bằng 140 độ, M là trung điểm của AC, qua M kẻ MN song song với BC.",
+    "answer": "(triangle (A B C) (obtuse B))\n(define M point (midpoint A C))\n(segment M N)\n(segment B C)\n(parallel (segment B C) (segment M N))"
+  },
+  {
+    "image_dir": "images/img_210705.png",
+    "instruction": "Tam giác ABC là tam giác tù tại A, góc BAC bằng 120 độ, D là trung điểm của BC.",
+    "answer": "(triangle (A B C) (obtuse A))\n(define D point (midpoint B C))"
+  },
+  {
+    "image_dir": "images/img_210704.png",
+    "instruction": "Tam giác ABC là tam giác tù tại B, góc ABC bằng 100 độ, M là trung điểm của AC.",
+    "answer": "(triangle (A B C) (obtuse B))\n(define M point (midpoint A C))\n(segment A M)"
+  },
+  {
+    "image_dir": "images/img_210707.png",
+    "instruction": "Tam giác ABC là tam giác tù tại B, góc ABC bằng 130 độ, góc BAD bằng góc CAD.",
+    "answer": "(triangle (A B C) (obtuse B))\n(define D point (segment B C))\n(angle-equal B A D C A D)"
   }
 ]
