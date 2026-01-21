@@ -35,7 +35,7 @@ class Diagram:
     """
     points: Dict[str, GeometricPoint] = field(default_factory=dict)
     triangles: List[tuple] = field(default_factory=list)
-    quadrilaterals: List[dict] = field(default_factory=list)
+    quadrilaterals: List[List[GeometricPoint]] = field(default_factory=list)
     segments: List[tuple] = field(default_factory=list)
     circles: List[tuple] = field(default_factory=list)  # (center, radius_or_info)
     lines: Dict[str, Any] = field(default_factory=dict)
@@ -73,6 +73,7 @@ class Diagram:
             self.quadrilaterals = []
         self.quadrilaterals.append(quadrilateral)
         
+
     def add_circle(self, center: GeometricPoint, info: Any) -> None:
         """Add a circle to the diagram"""
         self.circles.append((center, info))
@@ -117,6 +118,7 @@ class Diagram:
                 for name, pt in self.points.items()
             },
             "triangles": len(self.triangles),
+            "quadrilaterals": len(self.quadrilaterals),
             "segments": len(self.segments),
             "lines": len(self.lines)
         }

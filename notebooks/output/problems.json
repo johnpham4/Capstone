@@ -1,0 +1,730 @@
+[
+    {
+        "caption": [
+            "Vẽ góc xOy = 40°. Vẽ tia Om là tia phân giác của góc xOy, Vẽ tia On là tia đối của tia Ox."
+        ],
+        "image": "train/1.png",
+        "image_id": "1"
+    },
+    {
+        "caption": [
+            "Vẽ hai đường thẳng xy và mn cắt nhau tại điểm O sao cho góc xOm = 120°. Tính các góc mOy, yOn, xOn."
+        ],
+        "image": "train/2.png",
+        "image_id": "2"
+    },
+    {
+        "caption": [
+            "Vẽ góc xAm = 50°. Vẽ tia phân giác An của góc xAm. Vẽ tia Ay là tia đối của tia An."
+        ],
+        "image": "train/3.png",
+        "image_id": "3"
+    },
+    {
+        "caption": [
+            "Vẽ góc xAy = 40°. Vẽ góc yAz là góc kề bù với góc xAy."
+        ],
+        "image": "train/4.png",
+        "image_id": "4"
+    },
+    {
+        "caption": [
+            "Cho góc bẹt xOy. Vẽ tia Oz sao cho góc xOz = 60°. Vẽ tia Om là tia phân giác của góc xOz. Vẽ tia On là tia phân giác của góc zOy."
+        ],
+        "image": "train/5.png",
+        "image_id": "5"
+    },
+    {
+        "caption": [
+            "Vẽ góc xOy = 60°. Vẽ tia Oz là tia đối của tia Ox. Vẽ tia Om là tia phân giác của góc zOy. Vẽ tia On là tia đối của tia Om."
+        ],
+        "image": "train/6.png",
+        "image_id": "6"
+    },
+    {
+        "caption": [
+            "Cho đường thằng xx', điểm A thuộc xx'. Trên tia Ax' lấy điểm B (điểm B khác điểm A). Vẽ tia By, trên tia By lấy điểm M. Hai điểm N và P thoả mãn góc NMA = góc MAB, góc PMy = góc MBx'."
+        ],
+        "image": "train/7.png",
+        "image_id": "7"
+    },
+    {
+        "caption": [
+            "Cho góc vuông uOv và tia Oy đi qua một điểm trong của góc đó. Vẽ tia Ox sao cho Ou là tia phân giác của góc xOy. Vẽ tia Oz sao cho Ov là tia phân giác của góc yOz."
+        ],
+        "image": "train/8.png",
+        "image_id": "8"
+    },
+    {
+        "caption": [
+            "ABCD là hình vuông, E là giao của AC và BD."
+        ],
+        "image": "train/9.png",
+        "image_id": "9"
+    },
+    {
+        "caption": [
+            "Cho hình vuông ABCD. Gọi M và N lần lượt là trung điềm của AB và AD"
+        ],
+        "image": "train/10.png",
+        "image_id": "10"
+    },
+    {
+        "caption": [
+            "Cho hình chữ nhật ABCD. Trên cạnh AD và BC lần lượt lấy hai điểm E và F sao cho AE = CF."
+        ],
+        "image": "train/11.png",
+        "image_id": "11"
+    },
+    {
+        "caption": [
+            "Tam giác cân ABC (AB = AC), cân tại đỉnh A."
+        ],
+        "image": "train/12.png",
+        "image_id": "12"
+    },
+    {
+        "caption": [
+            "Cho M là một điểm nằm trên đường trung trực của đoạn thẳng AB. Biết AM = 3 cm và góc AMB = 50°."
+        ],
+        "image": "train/13.png",
+        "image_id": "13"
+    },
+    {
+        "caption": [
+            "Cho tam giác ABC có hai đường cao BE và CF bằng nhau."
+        ],
+        "image": "train/14.png",
+        "image_id": "14"
+    },
+    {
+        "caption": [
+            "Cho tam giác ABC vuông tại đỉnh A. Gọi M là trung điểm của BC và D là điểm nằm trên tia đối của tia MA sao cho MD = MA."
+        ],
+        "image": "train/15.png",
+        "image_id": "15"
+    },
+    {
+        "caption": [
+            "Cho tam giác ABH vuông tại đỉnh H có góc ABH = 60°. Trên tia đối của tia HB lấy điềm C sao cho HB = HС."
+        ],
+        "image": "train/16.png",
+        "image_id": "16"
+    },
+    {
+        "caption": [
+            "Cho tam giác ABC cân tại đỉnh A có đường cao AH. Cho M là một điểm tùy ý trên đường thẳng AH sao cho M không trùng với A."
+        ],
+        "image": "train/17.png",
+        "image_id": "17"
+    },
+    {
+        "caption": [
+            "Cho tam giác ABC cân tại đỉnh A. Gọi M là trung điểm của BC. Trên cạnh AB và AC lấy các điểm P, Q sao cho MP, MQ lần lượt vuông góc với AB, AC."
+        ],
+        "image": "train/18.png",
+        "image_id": "18"
+    },
+    {
+        "caption": [
+            "Cho đường thẳng d đi qua trung điểm M của đoạn thằng AB và không vuông góc với AB. Kẻ AP, BQ (P thuộc d, Q thuộc d) vuông góc với đường thẳng d."
+        ],
+        "image": "train/19.png",
+        "image_id": "19"
+    },
+    {
+        "caption": [
+            "Cho hình thang cân ABCD có đáy lớn AD đáy nhỏ BC thoả mãn AD = 4 cm và AB = BC = CD = 2 cm."
+        ],
+        "image": "train/20.png",
+        "image_id": "20"
+    },
+    {   
+        "caption": [
+            "Cho tam giác ABC với đường cao AH, H ở giữa B và C, AB > AC. Vẽ tia phân giác của góc BAC cắt BC tại D."
+        ],
+        "image": "train/21.png",
+        "image_id": "21"
+    },
+    {   
+        "caption": [
+            "Cho tam giác ABC cân tại A, hai điểm D, E nằm trên đường thẳng BC, D nằm giữa B và C, C nằm giữa D và E."
+        ],
+        "image": "train/22.png",
+        "image_id": "22"
+    },
+    {   
+        "caption": [
+            "Cho tam giác ABC với AB > AC. Gọi M là trung điểm của cạnh BC. Lấy điểm P sao cho M là trung điểm của AP. Tia phân giác của góc BAC cắt BC tại D"
+        ],
+        "image": "train/23.png",
+        "image_id": "23"
+    },
+    {   
+        "caption": [
+            "Cho điểm A không thuộc đường thẳng BC. Xét bốn đoạn thằng AB, AH, AE, AC kẻ từ A đến đường thẳng BC thoả mãn các tính chất: AH vuông góc với đường thằng BC, H là trung điểm của BE, E là trung điểm của BC."
+        ],
+        "image": "train/24.png",
+        "image_id": "24"
+    },
+    {   
+        "caption": [
+            "G là trọng tâm của tam giác ABC, M là trung điểm của BC; N là điểm sao cho M là trung điểm của GN; D là điểm sao cho M là trung điểm của AD."
+        ],
+        "image": "train/25.png",
+        "image_id": "25"
+    }, 
+    {   
+        "caption": [
+            "Tam giác ABC có AB < BC < CA. Gọi I là điểm đồng quy của ba đường phân giác của tam giác."
+        ],
+        "image": "train/26.png",
+        "image_id": "26"
+    },
+    {   
+        "caption": [
+            "Cho góc xAy và một điểm G trong góc đó. Lấy hai điểm M, N trên tia AG sao cho AM = 3/2 AG, AN = 2AM. Qua N kẻ đường thẳng song song với đường thẳng chứa tia Ax, nó cắt Ay tại C. Đường thẳng CM cắt Ax tại B."
+        ],
+        "image": "train/27.png",
+        "image_id": "27"
+    },  
+    {   
+        "caption": [
+            "Gọi M là trung điểm của cạnh BC của tam giác ABC và D là điểm sao cho M là trung điểm của AD. Đường thẳng qua D và trung điểm của AB cắt BC tại U, đường thẳng qua D và trung điểm của AC cắt BC tại V."
+        ],
+        "image": "train/28.png",
+        "image_id": "28"
+    },
+    {   
+        "caption": [
+            "Gọi I là giao điểm của hai đường phân giác BE và CF của tam giác ABC. Đường thẳng qua I song song với BC cắt AB tại J và cắt AC tại K. Đường thẳng qua B vuông góc với BI cắt đường thẳng qua C vuông góc với CI tại điểm I'. Qua I' kẻ đường thẳng song song với BC cắt AB tại J', cắt AC tại K'."
+        ],
+        "image": "train/29.png",
+        "image_id": "29"
+    },
+    {   
+        "caption": [
+            "Cho tam giác ABC với M là trung điểm của BC. Lấy điểm N sao cho C là trung điểm của đoạn thẳng BN. Lấy điểm P sao cho M là trung điểm của đoạn thẳng AP."
+        ],
+        "image": "train/30.png",
+        "image_id": "30"
+    },
+    {   
+        "caption": [
+            "Cho tam giác ABC vuông. Kẻ đường thẳng vuông góc với cạnh huyền BC của tam giác ABC tại điểm D không thuộc đoạn BC. Nó cắt đường thẳng chứa cạnh AB tại E và cắt đường thẳng chứa cạnh AC tại F."
+        ],
+        "image": "train/31.png",
+        "image_id": "31"
+    },
+    {   
+        "caption": [
+            "Cho P là một điểm nằm trong góc nhọn xOy. Gọi M là điểm sao cho Ox là đường trung trực của đoạn thẳng PM, gọi N là điểm sao cho Oy là đường trung trực của đoạn thằng PN. Đường thẳng MN cắt Ox tại R, cắt Oy tại S."
+        ],
+        "image": "train/32.png",
+        "image_id": "32"
+    },
+    {   
+        "caption": [
+            "Cho M là một điểm tuỳ ý bên trong tam giác đều ABC. Lấy điểm N nằm khác phía với M đối với đường thẳng AC sao cho góc CAN = góc BAM và AN = AM."
+        ],
+        "image": "train/33.png",
+        "image_id": "33"
+    },
+    {   
+        "caption": [
+            "Cho C là trung điểm của đoạn thẳng AB. Gọi Ax, By là hai đường thẳng vuông góc với AB tại A và tại B. Một đường thẳng qua C cắt Ax tại M, cắt By tại P. Điểm N nằm trên tia đối của tia BP sao cho góc MCN là góc vuông. Gọi H là hình chiếu của C trên MN."
+        ],
+        "image": "train/34.png",
+        "image_id": "34"
+    },
+    {   
+        "caption": [
+            "Vẽ hình lăng trụ đứng tam giác ABC.A'B'C'."
+        ],
+        "image": "train/35.png",
+        "image_id": "35"
+    },
+    {   
+        "caption": [
+            "Hình lăng trụ đứng ABCD.A'B'C'D' có đáy ABCD là hình thang vuông tại A và B. AD = 20 cm, BC = 15 cm, AB = 10 cm, DD'= 30 cm."
+        ],
+        "image": "train/36.png",
+        "image_id": "36"
+    },
+    {   
+        "caption": [
+            "Vẽ hình lăng trụ đứng tứ giác MNPQ.M'N'P'Q'"
+        ],
+        "image": "train/37.png",
+        "image_id": "37"
+    },
+    {   
+        "caption": [
+            "Cho đoạn thằng AO = 3 cm. Em hãy vẽ đoạn thẳng AA' có O là tâm đối xứng."
+        ],
+        "image": "train/38.png",
+        "image_id": "38"
+    },
+    {   
+        "caption": [
+            "Đường thằng ở và hai điềm A ∈ d và B ∉ d."
+        ],
+        "image": "train/39.png",
+        "image_id": "39"
+    },
+    {   
+        "caption": [
+            "Hai đường thẳng a, b và hai điểm M, N sao cho M ∈ a, M ∈ b, N ∈ b."
+        ],
+        "image": "train/40.png",
+        "image_id": "40"
+    },
+    {   
+        "caption": [
+            "Ba đường thẳng a, b, c cùng đi qua điểm S; Ba điểm A є a, B ∈ b và C ∈ c thẳng hàng."
+        ],
+        "image": "train/41.png",
+        "image_id": "41"
+    },
+    {   
+        "caption": [
+            "Cho hai đường thẳng m, n và hai điểm A, B không nằm trên hai đường thẳng đó. Hãy tìm điểm M thuộc đường thẳng m và điểm N thuộc đường thẳng n sao cho bốn điểm M, N, A, B cùng nằm trên một đường thẳng."
+        ],
+        "image": "train/42.png",
+        "image_id": "42"
+    },
+    {   
+        "caption": [
+            "Cho hai điểm A và B cùng thuộc một đường thẳng xy"
+        ],
+        "image": "train/43.png",
+        "image_id": "43"
+    },
+    {   
+        "caption": [
+            "Cho hai điểm A và B cùng thuộc một đường thẳng xy"
+        ],
+        "image": "train/44.png",
+        "image_id": "44"
+    },
+    {   
+        "caption": [
+            "Cho ba điểm A, B và C cùng thuộc một đường thằng xy"
+        ],
+        "image": "train/45.png",
+        "image_id": "45"
+    },
+    {   
+        "caption": [
+            "Cho ba điểm A, B và C cùng thuộc một đường thằng xy"
+        ],
+        "image": "train/46.png",
+        "image_id": "46"
+    },
+    {   
+        "caption": [
+            "Cho ba điểm A, B và C cùng thuộc một đường thằng xy"
+        ],
+        "image": "train/47.png",
+        "image_id": "47"
+    },
+    {   
+        "caption": [
+            "Hai điểm A và B cách nhau 4 cm. Trên tia AB, lấy điểm C sao cho AC = 1 cm. Trên tia đối của tia BC, lấy điểm D sao cho BD = 2 cm."
+        ],
+        "image": "train/48.png",
+        "image_id": "48"
+    },
+    {   
+        "caption": [
+            "Cho hai điểm M và N nằm giữa hai điểm A và B. Biết rằng AN = BM"
+        ],
+        "image": "train/49.png",
+        "image_id": "49"
+    },
+    {   
+        "caption": [
+            "Cho hai điểm M và N nằm giữa hai điểm A và B. Biết rằng AN = BM"
+        ],
+        "image": "train/50.png",
+        "image_id": "50"
+    },
+    {
+        "caption":[
+            "Cho hình bình hành ABCD có M, N lần lượt là trung điểm của BC, AD. Vẽ MP song song BD (P thuộc AC) và NQ song song BD (Q thuộc AC)."
+        ],
+        "image":"train/51.png",
+        "imageid":"51"
+    },
+    {
+        "caption":[
+            "Cho tứ giác ABCD có điểm E thuộc AC. Kẻ EF song song AB (F thuộc BC), EI song song CD (I thuộc AD)."
+        ],
+        "image":"train/52.png",
+        "imageid":"52"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC có BC = 4 cm. Trên cạnh BC lấy điểm M sao cho CM = 1 cm. Trên cạnh AC lấy điểm N sao cho CN/AN = 1/3."
+        ],
+        "image":"train/53.png",
+        "imageid":"53"
+    },
+    {
+        "caption":[
+            "Cho hình thang ABCD (AB song song CD) và DE = EC. Gọi O là giao điểm của AC và BD, K là giao điểm của EO và AB."
+        ],
+        "image":"train/54.png",
+        "imageid":"54"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC và điểm D trên cạnh BC sao cho BD/BC = 3/4, điểm E trên đoạn AD sao cho AE/AD = 1/3. Gọi K là giao điểm của BE và AC."
+        ],
+        "image":"train/55.png",
+        "imageid":"55"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC vuông tại A có AB = 5 cm và BC = 13 cm. Qua trung điểm M của AB, vẽ một đường thẳn song song với AC cắt BC tại N (Hình 4)."
+        ],
+        "image":"train/56.png",
+        "imageid":"56"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC vuông tại A có AB = 21 cm và AC = 28 cm. Tia phân giác của góc BAC cắt BC tại D."
+        ],
+        "image":"train/57.png",
+        "imageid":"57"
+    },
+    {
+        "caption":[
+            "Cho biết ABCD và MNPQ là hai hình đồng dạng."
+        ],
+        "image":"train/58.png",
+        "imageid":"58"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC có cạnh BC = 10 cm. Trên cạnh AB lấy các điểm D, E sao cho AD = DE = EB. Từ D, E kẻ các đường thẳng song song với BC, cắt cạnh AC lần lượt tại M và N."
+        ],
+        "image":"train/59.png",
+        "imageid":"59"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC có các đường phân giác AD, BE, CF (D thuộc BC, E thuộc AC, F thuộc AB)."
+        ],
+        "image":"train/60.png",
+        "imageid":"60"
+    },
+    {
+        "caption":[
+            "Cho tam giác MNP có M'N' song song MN."
+        ],
+        "image":"train/61.png",
+        "imageid":"61"
+    },
+    {
+        "caption":[
+            "Cho hình thang ABCD (AB song song CD) và DE = EC (Hình 8). Gọi O là giao điểm của AC và BD, K là giao điểm của EO và AB."
+        ],
+        "image":"train/62.png",
+        "imageid":"62"
+    },
+    {
+        "caption":[
+            "Cho hình vuông ABCD có M, N, P, Q lần lượt là trung điểm của AB, BC, CD, DA."
+        ],
+        "image":"train/63.png",
+        "imageid":"63"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC có I thuộc AB và K thuộc AC. Kẻ IM song song BK (M thuộc AC), KN song song CI (N thuộc AB)."
+        ],
+        "image":"train/64.png",
+        "imageid":"64"
+    },
+    {
+        "caption":[
+            "Hai đường cao AM và BN của tam giác ABC cắt nhau tại H."
+        ],
+        "image":"train/65.png",
+        "imageid":"65"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC vuông tại A (AB < AC) và kẻ đường cao AH. Tia phân giác của góc B cắt AC tại E và cắt AH tại F."
+        ],
+        "image":"train/66.png",
+        "imageid":"66"
+    },
+    {
+        "caption":[
+            "Cho tam giác đều ABC, từ B và C kẻ các đường thẳng song song với AC và AB, hai đường này cắt nhau tại M. Qua M kẻ đường thẳng cắt AB tại E và cắt AC tại F."
+        ],
+        "image":"train/67.png",
+        "imageid":"67"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC có ba góc nhọn. Trên cạnh AB lấy điểm D, trên cạnh AC lấy điểm E sao cho góc ADE bằng góc ACB."
+        ],
+        "image":"train/68.png",
+        "imageid":"68"
+    },
+    {
+        "caption":[
+            "Từ một miếng bìa có dạng hình tròn với bán kính R (cm), người ta khoét một hình tròn ở giữa có bán kính r (cm), r < R."
+        ],
+        "image":"train/69.png", 
+        "imageid":"69"
+    },
+    {
+        "caption":[
+            "Cho tứ giác ABCD có AB = BC, CD = DA, góc B bằng 100 độ, góc D bằng 120 độ."
+        ],
+        "image":"train/70.png", 
+        "imageid":"70"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC vuông cân tại đỉnh A. Ghép thêm vào phía ngoài tam giác đó tam giác BCD vuông cân tại đỉnh B."
+        ],
+        "image":"train/71.png", 
+        "imageid":"71"
+    },
+    {
+        "caption":[
+            "Cho hình thang cân ABCD với hai đường thẩng chứa hai cạnh bên AD, BC cắt nhau tại S. Gọi O là giao điểm của hai đường chéo AC và BD."
+        ],
+        "image":"train/72.png", 
+        "imageid":"72"
+    },
+    {
+        "caption":[
+            "Cho hình thang cân ABCD với hai đáy AB và CD, đường chéo AC vuông góc với cạnh bên AD, tia CA là tia phân giác của góc C."
+        ],
+        "image":"train/73.png", 
+        "imageid":"73"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC cân tại A. Với điểm D nằm giữa A và B, lấy điểm E nằm giữa A và C sao cho AD = CE. Từ D kẻ đường thẳng song song với AC, cắt BC ở F."
+        ],
+        "image":"train/74.png", 
+        "imageid":"74"
+    },
+    {
+        "caption":[
+            "Cho hình bình hành ABCD với góc A tù. Dựng bên ngoài hình bình hành đó các tam giác đều ABE và DAF."
+        ],
+        "image":"train/75.png", 
+        "imageid":"75"
+    },
+    {
+        "caption":[
+            "Cho hình Thang ABCD với hai đáy AB, CD. Gọi K à trung điểm của BC. Lấy diểm A', D' sao cho K là trung điểm AA' và DD'."
+        ],
+        "image":"train/76.png", 
+        "imageid":"76"
+    },
+    {
+        "caption":[
+            "Cho hình bình hành ABCD. Lấy các điểm E thuộc AB, F thuộc CD sao cho AE = CF, lấy các điểm G thuộc BC, H thuộc AD sao cho BG = DH."
+        ],
+        "image":"train/77.png", 
+        "imageid":"77"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC cân tại A, AH là đường cao. Gọi M, N lần lượt là trung điểm của AB, AC. Gọi D, E lần lượt là điểm sao cho M là trung điểm của HD, H là trung điểm của HE."
+        ],
+        "image":"train/78.png", 
+        "imageid":"78"
+    },
+    {
+        "caption":[
+            "Hai đường trung tuyến BM, CN của tam giác ABC cân tại A cắt nhau tại G. Gọi H, K lần lượt là điểm sao cho trung điểm của GH là M, trung điểm của GK là N."
+        ],
+        "image":"train/79.png", 
+        "imageid":"79"
+    },
+    {
+        "caption":[
+            "Cho hình vuông ABCD. Lấy các điểm M, N lần lượt thuộc cạnh AD, DC sao cho AM = DN."
+        ],
+        "image":"train/80.png", 
+        "imageid":"80"
+    },
+    {
+        "caption":[
+            "Cho hình vuông ABCD. Với các điểm M nằm giữa C và D, kẻ tia phân giác của góc DAM, nó cắt CD ở N. Đường thẳng qua N vuông góc với AM cắt BC ở P."
+        ],
+        "image":"train/81.png", 
+        "imageid":"81"
+    },
+    {
+        "caption":[
+            "Cho hình thang ABCD (AB song song DC). Một đường thẳng song song với hai đáy cắt các đoạn thẳng AD, AC, BC theo thứ tự tại M, I, N."
+        ],
+        "image":"train/82.png", 
+        "imageid":"82"
+    },
+    {
+        "caption":[
+            "Cho hình bình hành ABCD có M, N lần lượt là trung điểm của AB và CD. Gọi P, Q theo thứ tự là giao điểm của AN và CM với đường chéo BD."
+        ],
+        "image":"train/83.png", 
+        "imageid":"83"
+    },
+    {
+        "caption":[
+            "Cho tam giác DEF với H và K lần lượt là trung điểm của DE, DF. Biết HK = 8 cm."
+        ],
+        "image":"train/84.png", 
+        "imageid":"84"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC vuông tại A. Gọi các điểm H, I, K lần lượt là trung điểm của AB, BC, AC."
+        ],
+        "image":"train/85.png", 
+        "imageid":"85"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC, các đường trung tuyến BD, CE cắt nhau tại G. Gọi I, K theo thứ tự là trung điểm của GB, GC."
+        ],
+        "image":"train/86.png", 
+        "imageid":"86"
+    },
+    {
+        "caption":[
+            "Cho hình chữ nhật ABCD. Gọi D, E, F, G lần lượt là trung điểm các cạnh AB, BC, CD, DA."
+        ],
+        "image":"train/87.png", 
+        "imageid":"87"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC vuông tại A có AB = 12 cm, AC = 9 cm, BC = 15 cm. Tia phân giác góc B cắt AC tại I."
+        ],
+        "image":"train/88.png", 
+        "imageid":"88"
+    },
+    {
+        "caption":[
+            "Cho hình vuông ABCD có M là trung điểm của AD, AC cắt BM tại điểm I."
+        ],
+        "image":"train/89.png", 
+        "imageid":"89"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC, trung tuyến AI. Tia phân giác góc AIB và tia phân giác góc AIC cắt AB, AC lần lượt tại M và N."
+        ],
+        "image":"train/90.png", 
+        "imageid":"90"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC có AD, BE, CF lần lượt là đường phân giác của góc A, góc B, góc C (D thuộc BC, E thuộc AC, F thuộc AB)."
+        ],
+        "image":"train/91.png", 
+        "imageid":"91"
+    },
+    {
+        "caption":[
+            "Cho tam giác ABC, phân giác AD (D thuộc BC). Kẻ DE song song AB (E thuộc AC)."
+        ],
+        "image":"train/92.png", 
+        "imageid":"92"
+    },
+    {
+        "caption":[
+            "Xét tam giác ABC vuông cân tại A. Lấy trên cạnh BC hai điểm D, E sao cho BD = DE = EC. Lấy các điểm F, G lần lượt thuộc cạnh AC, AB sao cho FE, GD vuông góc với BC."
+        ],
+        "image":"train/93.png", 
+        "imageid":"93"
+    },
+    {   
+        "caption": [
+            "Cho điểm I nằm giữa hai điểm A và B sao cho IA = IB"
+        ],
+        "image": "train/101.png",
+        "image_id": "101"
+    },
+    {   
+        "caption": [
+            "Cho O là trung điểm của đoạn thẳng AB dài 4 cm. Trên tia BA lấy điểm M, trên tia AB lấy điểm N sao cho BM = AN = 5 cm."
+        ],
+        "image": "train/102.png",
+        "image_id": "102"
+    },
+    {   
+        "caption": [
+            "Cho đoạn thẳng BC dài 4 cm. Gọi A là một điểm không nằm trên đường thẳng BC và D là một điểm nằm trên tia AB không trùng với A và B. I trung điểm của đoạn thằng BC."
+        ],
+        "image": "train/103.png",
+        "image_id": "103"
+    },
+    {   
+        "caption": [
+            "Cho đoạn thẳng BC dài 4 cm. Gọi A là một điểm không nằm trên đường thẳng BC và D là một điểm nằm trên tia AB không trùng với A và B. I trung điểm của đoạn thằng BC. Vẽ đường thẳng ở đi qua D và song song với BC. Giả sử đường thằng d cắt AC tại E. Gọi J là giao điểm của đường thẳng AI với DE."
+        ],
+        "image": "train/104.png",
+        "image_id": "104"
+    },
+    {   
+        "caption": [
+            "Cho đoạn thẳng AB. Gọi P và Q là hai điểm phân biệt nằm giữa điểm A và B sao cho AP = QB. Gọi I là trung điểm của đoạn thẳng AB."
+        ],
+        "image": "train/105.png",
+        "image_id": "105"
+    },
+    {   
+        "caption": [
+            "Đường thằng zz'cắt hai đường thằng xx' và yy' theo thứ tự tại A và B."
+        ],
+        "image": "train/106.png",
+        "image_id": "106"
+    },
+    {   
+        "caption": [
+            "Hãy vẽ một góc xOy và một đường thẳng cắt hai cạnh của góc tại A (thuộc Ox) và B (thuộc Oy). Gọi M là một điểm bất kì của đoạn thẳng AB."
+        ],
+        "image": "train/107.png",
+        "image_id": "107"
+    },
+    {   
+        "caption": [
+            "Gọi A là một điểm trong tuỳ ý của góc xOy không bẹt. Trên tia OA, ta lấy điểm M tuỳ ý khác O."
+        ],
+        "image": "train/108.png",
+        "image_id": "108"
+    },
+    {   
+        "caption": [
+            "Vẽ góc xOy không bẹt và điểm M là điểm trong của góc đó. Qua M, vẽ một đường thẳng cắt hai cạnh của góc tại A và B sao cho A ∈ Ox và B ∈ Oy."
+        ],
+        "image": "train/109.png",
+        "image_id": "109"
+    },
+    {   
+        "caption": [
+            "Vẽ góc xMy có số đo bằng 45°, sau đó vẽ tia đối Mx' của tia Mx và tia đối My' của tia My."
+        ],
+        "image": "train/110.png",
+        "image_id": "110"
+    },
+    {   
+        "caption": [
+            "Vẽ hai đường thẳng xx' và yy' cắt nhau tại điểm M sao cho góc xMy có số đo bằng 60°. Trên tia My', lấy một điểm N khác M rồi vẽ đường thằng aa' đi qua N và song song với xx'."
+        ],
+        "image": "train/111.png",
+        "image_id": "111"
+    }
+]

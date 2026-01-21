@@ -20,7 +20,7 @@ app = FastAPI(
 
 # Initialize RabbitMQ publisher
 publisher = RabbitMQPublisher()
-INPUT_QUEUE = "diagram"
+INPUT_QUEUE = "model_processing_queue"
 
 
 class DiagramRequest(BaseModel):
@@ -52,6 +52,7 @@ class DiagramStatusResponse(BaseModel):
 
 @app.on_event("startup")
 async def startup_event():
+    """Initialize queues on startup"""
     try:
         publisher.connect()
         publisher.declare_queue(INPUT_QUEUE)
@@ -211,4 +212,3 @@ async def health_check():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
