@@ -360,6 +360,8 @@ class Optimizer:
             init_coords = Initializer.init_equilateral_triangle()
         elif tri_type == 'right_isosceles':
             init_coords = Initializer.init_right_isoceles_triangle(right_idx)
+        elif tri_type == 'obtuse':
+            init_coords = Initializer.init_obtuse_triangle()
         elif equal_angles:
             idx1, idx2 = equal_angles[0]
             apex_idx = 3 - idx1 - idx2  # Đỉnh thứ 3 (0+1+2=3)
@@ -367,11 +369,9 @@ class Optimizer:
         else:
             # Scalene triangle init
             init_coords = Initializer.init_scalene_triangle()
-
         init_coords = Initializer.add_noise(init_coords)
 
         # Create points
-
         p1 = self.sample_uniform(points[0], init_coords=init_coords[0])
         p2 = self.sample_uniform(points[1], init_coords=init_coords[1])
         p3 = self.sample_uniform(points[2], init_coords=init_coords[2])
@@ -407,6 +407,9 @@ class Optimizer:
             self.register_loss(f"equi_23_31_{points[0].val}",
                               lambda: self.dist(p2, p3) - self.dist(p3, p1), weight=10.0)
             metadata['equal_sides'] = [(0, 1), (1, 2), (2, 0)]
+        
+        if tri_type == 'obtuse':
+            
         
         # Handle equal_angles constraint
         if equal_angles:

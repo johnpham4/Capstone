@@ -143,7 +143,6 @@ class Initializer:
         """
         Initialize triangle with angle bisector from apex
         """
-        # Start with isosceles for symmetry
         base_coords = [
             (0.0, 0.8 * scale),           # Apex A
             (-0.6 * scale, -0.4 * scale), # Base left B
@@ -163,7 +162,14 @@ class Initializer:
             return [bisector_coords[1], bisector_coords[0], bisector_coords[2], bisector_coords[3]]
         else:
             return [bisector_coords[2], bisector_coords[0], bisector_coords[1], bisector_coords[3]]
-    
+        
+    @staticmethod
+    def init_obtuse_triangle(apex_idx: int = 0) -> List[Tuple[float, float]]:
+        """Initialize an obtuse triangle"""
+        coords = [(0.0, 0.0), (1.0, 0.0), (-0.3, 0.5)]
+        if apex_idx != 0:
+            coords = [coords[apex_idx]] + [coords[i] for i in range(3) if i != apex_idx]
+        return coords
 
     @staticmethod
     def add_noise(coords: List[Tuple[float, float]], noise_scale: float = 0.05) -> List[Tuple[float, float]]:
