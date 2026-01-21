@@ -80,6 +80,7 @@ def finetune(
     model_name: str = "unsloth/Qwen2.5-7B",
     output_dir: str = "/opt/ml/model",
     dataset_huggingface_workspace: str = "minn4",
+    dataset_huggingface_repo_name: str = "gmbl",
     max_seq_length: int = 2048,
     load_in_4bit: bool = True,
     lora_rank: int = 16,
@@ -97,7 +98,7 @@ def finetune(
     EOS_TOKEN = tokenizer.eos_token
     print(f"Setting EOS_TOKEN to {EOS_TOKEN}")
 
-    dataset = load_dataset(f"{dataset_huggingface_workspace}/gmbl", split="train")
+    dataset = load_dataset(f"{dataset_huggingface_workspace}/{dataset_huggingface_repo_name}", split="train")
     print(f"Loaded dataset with {len(dataset)} samples.")
 
     # Format dataset - map to text field (EXACTLY like notebook)
