@@ -84,14 +84,30 @@ def save_dataset_to_json(
     train_path = output_path / "train.json"
     test_path = output_path / "test.json"
 
+    # Load existing data if file exists
+    existing_train = []
+    existing_test = []
+    
+    if train_path.exists():
+        with open(train_path, "r", encoding="utf-8") as f:
+            existing_train = json.load(f)
+    
+    if test_path.exists():
+        with open(test_path, "r", encoding="utf-8") as f:
+            existing_test = json.load(f)
+
     train_data = [sample.model_dump() for sample in train_test_split.train.samples]
     test_data = [sample.model_dump() for sample in train_test_split.test.samples]
 
+    # Merge old + new data
+    merged_train = existing_train + train_data
+    merged_test = existing_test + test_data
+
     with open(train_path, "w", encoding="utf-8") as f:
-        json.dump(train_data, f, ensure_ascii=False, indent=2)
+        json.dump(merged_train, f, ensure_ascii=False, indent=2)
 
     with open(test_path, "w", encoding="utf-8") as f:
-        json.dump(test_data, f, ensure_ascii=False, indent=2)
+        json.dump(merged_test, f, ensure_ascii=False, indent=2)
 
     logger.success(f"Saved train dataset to {train_path}")
     logger.success(f"Saved test dataset to {test_path}")

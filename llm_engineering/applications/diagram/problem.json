@@ -1,28 +1,34 @@
 [
     {
-    "id": "fb3b0df0-7e96-43e9-bdad-083e139ca10b",
-    "image_dir": "images/img_104219.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
-    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (circle O (incircle A B C)))"
-    },
-    {
-        "instruction": "Tam giác ABC cân tại A, D là trung điểm AB, E là trung điểm AC, DE song song với BC",
-        "answer": "(triangle (A B C) (isosceles A))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)"
-    },
-    {
-        "instruction": "Tam giác ABC vuông tại B, có trực tâm H, trọng tâm G, tâm đường tròn ngoại tiếp O",
-        "answer": "(triangle (A B C) (right B))\n(define H point (orthocenter A B C))\n(define G point (centroid A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
-    },
-    {
-        "instruction": "Tam giác ABC cân tại A, M là trung điểm BC, I là tâm đường tròn nội tiếp",
-        "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A M)"
-    },
-    {
         "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC, có trọng tâm G và trực tâm H",
         "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(define G point (centroid A B C))\n(define H point (orthocenter A B C))\n(segment D E)\n(segment E F)\n(segment D F)"
     },
     {
-        "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-        "answer": "(param (A B C))\n(param D point (on-seg A B))\n(param E point (on-seg A C))\n(param LBC line (through B))\n(assert (on-line C LBC))\n(param LDE line (through D))\n(assert (on-line E LDE))\n(assert (para LBC LDE))\n(param l line (through C))\n(assert (perp l LBC))"
+        "instruction": "Hình vuông ABCD",
+        "answer": "(square (A B C D))"
+    },
+    {
+        "instruction": "Hình chữ nhật ABCD",
+        "answer": "(rectangle (A B C D))"
+    },
+    {
+        "instruction": "Hình bình hành ACDB",
+        "answer": "(parallelogram (A C D B))"
+    },
+    {
+        "instruction": "Hình thang ABCD",
+        "answer": "(trapezoid (A B C D))"
+    },
+    {
+        "instruction": "Hình thoi KLMN",
+        "answer": "(rhombus (K L M N))"
+    },
+    {
+        "instruction": "Tứ giác ABCD",
+        "answer": "(quadrilateral (A B C D))"
+    },
+    {
+        "instruction": "Tứ giác EFGH",
+        "answer": "(quadrilateral (E F G H))"
     }
 ]

@@ -9,7 +9,7 @@ try:
 except ImportError:
     logger.warning("Huggingface datasets not installed. Install with `pip install datasets`")
 
-from llm_engineering.domains.orm.nosql import NoSQLBaseDocument
+from llm_engineering.domains.odm.nosql import NoSQLBaseDocument
 
 class InstructDatasetSample(BaseModel):
     image_dir: str
