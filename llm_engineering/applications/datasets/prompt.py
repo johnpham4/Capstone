@@ -10,6 +10,7 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL (S-expre
      - Vuông: (triangle (A B C) (right B))
      - Vuông cân: (triangle (A B C) (right_isosceles B))
      - Đều: (triangle (A B C) (equilateral))
+     - Tù: (triangle (A B C) (obtuse B))  # B là đỉnh góc tù
 
    • Hình vuông: (square (A B C D))
    CHỈ khai báo (square ...), KHÔNG assert thuộc tính tự nhiên (cạnh bằng nhau, góc vuông, song song)
@@ -52,6 +53,7 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL (S-expre
 - cân tại → isosceles
 - vuông tại → right
 - đều → equilateral
+- tù → obtuse
 - hình vuông → square
 - tâm hình vuông → midpoint (của đường chéo)
 - đường chéo → segment
@@ -108,7 +110,16 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL (S-expre
 (define H point (projection A (segment B C)))
 (segment A H)
 
-4. "Tam giác ABC có AD là đường phân giác của góc A"
+4. Tam giác tù:
+   "Tam giác ABC tù tại B"
+   → (triangle (A B C) (obtuse B))
+
+   "Tam giác ABC có góc B tù, M là trung điểm BC"
+   → (triangle (A B C) (obtuse B))
+(define M point (midpoint B C))
+(segment A M)
+
+5. "Tam giác ABC có AD là đường phân giác của góc A"
    → (triangle (A B C))
 (define D point (bisector B A C))
 (segment A D)
@@ -120,7 +131,7 @@ TRƯỜNG HỢP KHÁC:
 (angle-equal B A D C A D)
 (segment A D) 
 
-5. Tam giác với song song:
+6. Tam giác với song song:
    "Tam giác ABC, D trên AB, E trên AC, BC // DE"
    → (triangle (A B C))
 (define D point (segment A B))
@@ -129,24 +140,24 @@ TRƯỜNG HỢP KHÁC:
 (segment D E)
 (parallel (segment B C) (segment D E))
 
-6. Hình vuông đơn giản:
+7. Hình vuông đơn giản:
    "Hình vuông ABCD" / "Hình vuông ABCD có AB vuông góc BC"
    → (square (A B C D))
 
-7. Hình vuông với đường chéo:
+8. Hình vuông với đường chéo:
    "Hình vuông ABCD, hai đường chéo AC và BD cắt nhau tại O"
    → (square (A B C D))
 (define O point (midpoint A C))
 (segment A C)
 (segment B D)
 
-8. Hình vuông với đường tròn:
+9. Hình vuông với đường tròn:
    "Hình vuông ABCD nội tiếp đường tròn"
    → (square (A B C D))
 (define O point (midpoint A C))
 (circle O (circumcircle A B C D))
 
-9. Tam giác với góc bằng nhau:
+10. Tam giác với góc bằng nhau:
    "Tam giác ABC có góc BAD bằng góc CAD"
    → (triangle (A B C))
 (define D point (segment B C))

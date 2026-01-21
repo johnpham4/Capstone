@@ -35,7 +35,7 @@ class DiagramBuilder:
             self.process_parallelogram(cmd)
         elif head == "trapezoid":
             self.process_trapezoid(cmd)
-        elif head == "rhombus":  # [NEW] Xử lý hình thoi
+        elif head == "rhombus":  
             self.process_rhombus(cmd)
         elif head == "define":
             self.process_define(cmd)
