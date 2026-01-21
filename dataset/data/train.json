@@ -223,5 +223,75 @@
     "image_dir": "images/img_210407.png",
     "instruction": "Tam giác ABC có góc BAD bằng góc CAD, H là chân đường cao kẻ từ A xuống BC.",
     "answer": "(triangle (A B C))\n(define H point (projection A (segment B C)))\n(segment A H)"
+  },
+  {
+    "image_dir": "images/img_210406.png",
+    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, M là trung điểm của AB, DM song song với AC.",
+    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(define D point (segment A B))\n(segment D M)\n(segment A C)\n(parallel (segment D M) (segment A C))"
+  },
+  {
+    "image_dir": "images/img_210415.png",
+    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, điểm A nằm trên đường trung trực của BC.",
+    "answer": "(triangle (A B C))\n(define A point (segment (midpoint B C)))\n(define D point (segment B C))\n(angle-equal B A D C A D)"
+  },
+  {
+    "image_dir": "images/img_210414.png",
+    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, M là trung điểm của BC, N là trung điểm của AB.",
+    "answer": "(triangle (A B C))\n(define M point (midpoint B C))\n(define N point (midpoint A B))\n(angle-equal B A D C A D)"
+  },
+  {
+    "image_dir": "images/img_210412.png",
+    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, M là trung điểm của BC, qua M kẻ MN song song với AC.",
+    "answer": "(triangle (A B C))\n(define M point (midpoint B C))\n(segment M N)\n(segment A C)\n(parallel (segment M N) (segment A C))"
+  },
+  {
+    "image_dir": "images/img_210409.png",
+    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, BE vuông góc với AC.",
+    "answer": "(triangle (A B C))\n(define D point (segment B C))\n(angle-equal B A D C A D)\n(segment B E)\n(perpendicular (segment B E) (segment A C))"
+  },
+  {
+    "image_dir": "images/img_210410.png",
+    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, CF vuông góc với AB.",
+    "answer": "(triangle (A B C))\n(define D point (segment B C))\n(angle-equal B A D C A D)\n(define F point (projection C (segment A B)))\n(segment C F)"
+  },
+  {
+    "image_dir": "images/img_210403.png",
+    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, M là trung điểm của BC, AM vuông góc với BC.",
+    "answer": "(triangle (A B C))\n(define M point (midpoint B C))\n(segment A M)\n(perpendicular (segment A M) (segment B C))"
+  },
+  {
+    "image_dir": "images/img_210416.png",
+    "instruction": "Tam giác ABC vuông tại A, CD là đường phân giác, AM là trung tuyến của BC",
+    "answer": "(triangle (A B C) (right A))\n(define D point (bisector C A B))\n(define M point (midpoint B C))\n(segment A M)\n(segment C D)"
+  },
+  {
+    "image_dir": "images/img_210405.png",
+    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, D là trung điểm của BC, qua D kẻ DE song song với AC.",
+    "answer": "(triangle (A B C))\n(define D point (midpoint B C))\n(segment D E)\n(parallel (segment D E) (segment A C))\n(angle-equal B A D C A D)"
+  },
+  {
+    "image_dir": "images/img_210408.png",
+    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, A, D, M thẳng hàng, M là trung điểm của BC.",
+    "answer": "(triangle (A B C))\n(define M point (midpoint B C))\n(angle-equal B A D C A D)\n(segment A D)"
+  },
+  {
+    "image_dir": "images/img_210411.png",
+    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, qua D kẻ DE song song với AB, qua E kẻ EF song song với AC.",
+    "answer": "(triangle (A B C))\n(define D point (segment B C))\n(define E point (segment A C))\n(segment D E)\n(parallel (segment D E) (segment A B))\n(parallel (segment E F) (segment A C))"
+  },
+  {
+    "image_dir": "images/img_210413.png",
+    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, D là trung điểm của BC, AD cắt trung tuyến kẻ từ B.",
+    "answer": "(triangle (A B C))\n(define D point (midpoint B C))\n(segment A D)"
+  },
+  {
+    "image_dir": "images/img_210404.png",
+    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, qua D kẻ DE song song với BC.",
+    "answer": "(triangle (A B C))\n(define D point (segment B C))\n(segment D E)\n(parallel (segment B C) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_210407.png",
+    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, H là chân đường cao kẻ từ A xuống BC.",
+    "answer": "(triangle (A B C))\n(define H point (projection A (segment B C)))\n(segment A H)"
   }
 ]

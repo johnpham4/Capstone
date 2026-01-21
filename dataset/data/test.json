@@ -1,6 +1,6 @@
 [
   {
-    "instruction": "Hình vuông ABCD có đường tròn nội tiếp",
-    "answer": "(square (A B C D))\n(define O point (midpoint A C))\n(circle O (incircle A B C D))\n"
+    "instruction": "Tam giác ABC vuông tại A, CD là đường phân giác, AM là trung tuyến của BC",
+    "answer": "(triangle (A B C) (right A))\n(define D point (bisector C A B))\n(define M point (midpoint B C))\n(segment A M)\n(segment C D)"
   }
 ]
