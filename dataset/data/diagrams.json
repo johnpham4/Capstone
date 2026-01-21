@@ -372,6 +372,12 @@
     "caption_vn": "Tam giác ABC, AB = AC, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC"
   },
   {
+    "image": "images/img_100415.png",
+    "caption": "quadrilateral ABCD, circumcircle O of quadrilateral ABCD, a line through point O",
+    "id": 100415,
+    "caption_vn": "Tứ giác ABCD, đường tròn ngoại tiếp O của tứ giác ABCD, đường thẳng đi qua điểm O"
+  },
+  {
     "image": "images/img_100430.png",
     "caption": "triangle ABC, triangle DEF, triangle ABC is similar to triangle DEF",
     "id": 100430,
@@ -532,6 +538,12 @@
     "caption": "triangle ABC, AB = AC, a line is perpendicular bisector of segment AB, incircle O of triangle ABC",
     "id": 100658,
     "caption_vn": "Tam giác ABC, AB = AC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100660.png",
+    "caption": "quadrilateral ABCD, circumcircle O of quadrilateral ABCD, point E is on segment AB",
+    "id": 100660,
+    "caption_vn": "Tứ giác ABCD, đường tròn ngoại tiếp O của tứ giác ABCD, điểm E nằm trên đoạn thẳng AB"
   },
   {
     "image": "images/img_100666.png",

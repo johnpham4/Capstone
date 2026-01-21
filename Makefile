@@ -27,12 +27,6 @@ generation:
 upload:
 	uv run python -m tools.run --run-upload-dataset
 
-generation:
-	uv run python tools/run.py --run-generate-gmbl --no-cache
-
-upload:
-	uv run python -m tools.run --run-upload-dataset
-
 simple_finetune:
 	uv run python tools/run.py --run-finetune
 

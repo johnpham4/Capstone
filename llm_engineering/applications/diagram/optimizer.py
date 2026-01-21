@@ -114,7 +114,6 @@ class Optimizer:
         return line.n.x * p.x + line.n.y * p.y - line.f
 
 
-
     def dist_to_line(self, point: TorchPoint, p1: TorchPoint, p2: TorchPoint):
         line = self.pp2lnf(p1, p2)
         return torch.abs(self.on_line(point, line))
@@ -677,24 +676,6 @@ class Optimizer:
         p1 = self.name2pt[angle_points[1].val]  # B
         p2 = self.name2pt[angle_points[2].val]  # C
 
-        # constraint 1: D nam tren canh BC
-        def on_segment_loss():
-            # Vector BD và BC cùng phương (D nằm trên đường thẳng BC)
-            bd_x = p_bisector.x - p1.x
-            bd_y = p_bisector.y - p1.y
-            bc_x = p2.x - p1.x
-            bc_y = p2.y - p1.y
-            cross = bd_x * bc_y - bd_y * bc_x  # Cross product = 0 → cùng phương
-
-            # D nằm giữa B và C: BD = t * BC với 0 <= t <= 1
-            bc_len_sq = bc_x**2 + bc_y**2
-            t = (bd_x * bc_x + bd_y * bc_y) / (bc_len_sq + 1e-8)
-
-            # Phạt nếu t < 0 hoặc t > 1
-            between_penalty = torch.relu(-t) + torch.relu(t - 1)
-
-            return cross**2 + 10.0 * between_penalty
-
         # constrain 2: goc BAD = goc CAD
         def equal_angle_loss():
             cos_bad = self.angle_cosine(p1, p_vertex, p_bisector)
@@ -708,10 +689,8 @@ class Optimizer:
             return (ratio_bd_dc - ratio_ab_ac)**2
 
         key = f"{vertex.val}_{bisector_point.val}"
-        self.register_loss(f"bisector_on_segment_{key}", on_segment_loss, weight=10.0)
         self.register_loss(f"bisector_equal_angle_{key}", equal_angle_loss, weight=10.0)
         self.register_loss(f"bisector_ratio_{key}", ratio_loss, weight=5.0)
-
 
     def _process_triangle_parameter(self, param_type, objects, args):
         if isinstance(param_type, TriangleType):
