@@ -11,15 +11,14 @@ def test_single_problem(instruction, dsl_answer, output_path):
     print(f"Instruction: {instruction}")
     print(f"DSL: {dsl_answer}")
 
+
     try:
         dsl_lines = dsl_answer.split('\n') if '\n' in dsl_answer else [dsl_answer]
         builder = DiagramBuilder(dsl_lines)
 
         print(f"Points: {[p.val for p in builder.points]}")
         # print(f"Instructions: {builder.instructions}")
-
         opts = {'epochs': 1000, 'n_tries': 3, 'eps': 1e-6, 'seed': 42}
-
 
         optimizer = Optimizer(builder.instructions, opts, verbosity=True)
         diagram = optimizer.solve()
@@ -41,6 +40,7 @@ def test_single_problem(instruction, dsl_answer, output_path):
 
     except Exception as e:
         print(f"Error: {e}")
+
         import traceback
         traceback.print_exc()
         return False
@@ -75,6 +75,7 @@ def main():
 
     success_count = 0
     for idx, problem in enumerate(problems, start_idx):
+
         instruction = problem['instruction']
         answer = problem['answer']
 
@@ -83,10 +84,9 @@ def main():
 
         if test_single_problem(instruction, answer, output_path):
             success_count += 1
-
+            
     print(f"Completed: {success_count}/{len(problems)} diagrams generated")
     print(f"Output directory: {output_dir.absolute()}")
-
 
 if __name__ == "__main__":
     main()
