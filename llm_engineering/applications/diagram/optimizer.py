@@ -54,8 +54,6 @@ class Optimizer:
         self.trainable_vars = []  # List of nn.Parameter objects
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-
-
     def get_point(self, x, y):
         if not isinstance(x, torch.Tensor):
             x = torch.tensor(x, dtype=torch.float64, device=self.device)
@@ -148,13 +146,8 @@ class Optimizer:
 
     def register_pt(self, p: TorchPoint, P, save_name=True):
         if save_name:
-            assert p.val not in self.name2pt
+            assert p.val not in self.name2pt, f"Point {p.val} already registered"
             self.name2pt[p.val] = P
-
-            if p.val not in self.name2pt:
-                self.name2pt[p.val] = P
-            else:
-                self.name2pt[p.val] = P
         self.all_points.append(P)
         return P
 
@@ -193,173 +186,98 @@ class Optimizer:
         return self.register_pt(p, P, save_name)
 
 
-    def sample_square(self, points: list):
+    def _dot_product(self, pa: TorchPoint, pb: TorchPoint, pc: TorchPoint):
+        """Calculate dot product of vectors (pa-pb) and (pc-pb)"""
+        v1x, v1y = pa.x - pb.x, pa.y - pb.y
+        v2x, v2y = pc.x - pb.x, pc.y - pb.y
+        return v1x * v2x + v1y * v2y
+
+    def _cross_product_area(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
+        """Calculate cross product for area check (collinearity test)"""
+        v1x, v1y = p2.x - p1.x, p2.y - p1.y
+        v2x, v2y = p3.x - p1.x, p3.y - p1.y
+        return v1x * v2y - v1y * v2x
+
+    def _dot_product_vectors(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint, p4: TorchPoint):
+        """Calculate dot product of vectors (p2-p1) and (p4-p3)"""
+        v1x, v1y = p2.x - p1.x, p2.y - p1.y
+        v2x, v2y = p4.x - p3.x, p4.y - p3.y
+        return v1x * v2x + v1y * v2y
+
+    def _sample_quadrilateral_with_init(self, points: list, init_method, *args, noise: float = 0.05):
+        """Generic quadrilateral sampler using Initializer methods"""
         assert len(points) == 4
-        noise = 0.05
-        init_positions = [(-0.5, -0.5), (0.5, -0.5), (0.5, 0.5), (-0.5, 0.5)]
-        pt_objs = []
-        for i, p_def in enumerate(points):
-            ix, iy = init_positions[i]
-            nx = ix + random.uniform(-noise, noise)
-            ny = iy + random.uniform(-noise, noise)
-            p_obj = self.sample_uniform(p_def, init_coords=(nx, ny))
-            pt_objs.append(p_obj)
-        p1, p2, p3, p4 = pt_objs[0], pt_objs[1], pt_objs[2], pt_objs[3]
+        init_coords = init_method(*args)
+        init_coords = Initializer.add_noise(init_coords, noise)
+
+        pt_objs = [self.sample_uniform(p, init_coords=init_coords[i]) for i, p in enumerate(points)]
         names = [p.val for p in points]
         self.quadrilaterals.append(tuple(names))
+        return pt_objs, names
 
+    def sample_square(self, points: list):
+        assert len(points) == 4
+        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_square, 1.0)
+        p1, p2, p3, p4 = pt_objs
+
+        # All sides equal + right angle
         self.register_loss(f"sq_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
         self.register_loss(f"sq_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
         self.register_loss(f"sq_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
-
-        def dot_product(pa, pb, pc):
-            v1x, v1y = pa.x - pb.x, pa.y - pb.y
-            v2x, v2y = pc.x - pb.x, pc.y - pb.y
-            return v1x * v2x + v1y * v2y
-        self.register_loss(f"sq_right_B_{names[0]}", lambda: dot_product(p1, p2, p3), weight=10.0)
-
-        def area_check():
-             v1x, v1y = p2.x - p1.x, p2.y - p1.y
-             v2x, v2y = p3.x - p1.x, p3.y - p1.y
-             return v1x * v2y - v1y * v2x
-        self.register_ndg(f"sq_area_{names[0]}", area_check, weight=20.0)
+        self.register_loss(f"sq_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
+        self.register_ndg(f"sq_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
         return pt_objs
 
     def sample_rectangle(self, points: list):
         assert len(points) == 4
-        noise = 0.05
-        init_positions = [(-0.8, -0.5), (0.8, -0.5), (0.8, 0.5), (-0.8, 0.5)]
-        pt_objs = []
-        for i, p_def in enumerate(points):
-            ix, iy = init_positions[i]
-            nx = ix + random.uniform(-noise, noise)
-            ny = iy + random.uniform(-noise, noise)
-            p_obj = self.sample_uniform(p_def, init_coords=(nx, ny))
-            pt_objs.append(p_obj)
-        p1, p2, p3, p4 = pt_objs[0], pt_objs[1], pt_objs[2], pt_objs[3]
-        names = [p.val for p in points]
-        self.quadrilaterals.append(tuple(names))
+        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_rectangle, 1.6, 1.0)
+        p1, p2, p3, p4 = pt_objs
 
-        def dot_product(pa, pb, pc):
-            v1x, v1y = pa.x - pb.x, pa.y - pb.y
-            v2x, v2y = pc.x - pb.x, pc.y - pb.y
-            return v1x * v2x + v1y * v2y
-        self.register_loss(f"rect_right_B_{names[0]}", lambda: dot_product(p1, p2, p3), weight=10.0)
-        self.register_loss(f"rect_right_C_{names[0]}", lambda: dot_product(p2, p3, p4), weight=10.0)
-        self.register_loss(f"rect_right_D_{names[0]}", lambda: dot_product(p3, p4, p1), weight=10.0)
-
-        def area_check():
-             v1x, v1y = p2.x - p1.x, p2.y - p1.y
-             v2x, v2y = p3.x - p1.x, p3.y - p1.y
-             return v1x * v2y - v1y * v2x
-        self.register_ndg(f"rect_area_{names[0]}", area_check, weight=20.0)
+        # Three right angles
+        self.register_loss(f"rect_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
+        self.register_loss(f"rect_right_C_{names[0]}", lambda: self._dot_product(p2, p3, p4), weight=10.0)
+        self.register_loss(f"rect_right_D_{names[0]}", lambda: self._dot_product(p3, p4, p1), weight=10.0)
+        self.register_ndg(f"rect_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
         return pt_objs
 
     def sample_parallelogram(self, points: list):
         assert len(points) == 4
-        noise = 0.05
-        init_positions = [(-1.5, -0.5), (0.5, -0.5), (1.5, 0.5), (-0.5, 0.5)]
-        pt_objs = []
-        for i, p_def in enumerate(points):
-            ix, iy = init_positions[i]
-            nx = ix + random.uniform(-noise, noise)
-            ny = iy + random.uniform(-noise, noise)
-            p_obj = self.sample_uniform(p_def, init_coords=(nx, ny))
-            pt_objs.append(p_obj)
-        p1, p2, p3, p4 = pt_objs[0], pt_objs[1], pt_objs[2], pt_objs[3]
-        names = [p.val for p in points]
-        self.quadrilaterals.append(tuple(names))
+        # Use scalene quad init for parallelogram (more general shape)
+        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_scalene_quadrilateral, 1.5)
+        p1, p2, p3, p4 = pt_objs
 
-        def vec_diff_x():
-            v_ab_x = p2.x - p1.x
-            v_dc_x = p3.x - p4.x
-            return v_ab_x - v_dc_x
-        def vec_diff_y():
-            v_ab_y = p2.y - p1.y
-            v_dc_y = p3.y - p4.y
-            return v_ab_y - v_dc_y
-        self.register_loss(f"para_vec_x_{names[0]}", vec_diff_x, weight=10.0)
-        self.register_loss(f"para_vec_y_{names[0]}", vec_diff_y, weight=10.0)
-
-        def area_check():
-             v1x, v1y = p1.x - p2.x, p1.y - p2.y
-             v2x, v2y = p3.x - p2.x, p3.y - p2.y
-             return v1x * v2y - v1y * v2x
-        self.register_ndg(f"para_area_{names[0]}", area_check, weight=20.0)
+        # Opposite sides parallel
+        self.register_loss(f"para_vec_x_{names[0]}", lambda: (p2.x - p1.x) - (p3.x - p4.x), weight=10.0)
+        self.register_loss(f"para_vec_y_{names[0]}", lambda: (p2.y - p1.y) - (p3.y - p4.y), weight=10.0)
+        self.register_ndg(f"para_area_{names[0]}", lambda: self._cross_product_area(p2, p1, p3), weight=20.0)
         return pt_objs
 
     def sample_trapezoid(self, points: list):
         assert len(points) == 4
-        noise = 0.05
-        init_positions = [(-1.0, -0.5), (1.0, -0.5), (0.5, 0.5), (-0.5, 0.5)]
-        pt_objs = []
-        for i, p_def in enumerate(points):
-            ix, iy = init_positions[i]
-            nx = ix + random.uniform(-noise, noise)
-            ny = iy + random.uniform(-noise, noise)
-            p_obj = self.sample_uniform(p_def, init_coords=(nx, ny))
-            pt_objs.append(p_obj)
-        p1, p2, p3, p4 = pt_objs[0], pt_objs[1], pt_objs[2], pt_objs[3]
-        names = [p.val for p in points]
-        self.quadrilaterals.append(tuple(names))
+        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_scalene_quadrilateral, 1.2)
+        p1, p2, p3, p4 = pt_objs
 
-        def parallel_loss():
-            v_ab_x = p2.x - p1.x
-            v_ab_y = p2.y - p1.y
-            v_dc_x = p3.x - p4.x
-            v_dc_y = p3.y - p4.y
-            return v_ab_x * v_dc_y - v_ab_y * v_dc_x
-        self.register_loss(f"trap_para_{names[0]}", parallel_loss, weight=10.0)
-
-        def area_check():
-             v1x, v1y = p2.x - p1.x, p2.y - p1.y
-             v2x, v2y = p3.x - p2.x, p3.y - p2.y
-             return v1x * v2y - v1y * v2x
-        self.register_ndg(f"trap_area_{names[0]}", area_check, weight=20.0)
+        # One pair parallel
+        self.register_loss(f"trap_para_{names[0]}",
+                          lambda: (p2.x - p1.x) * (p3.y - p4.y) - (p2.y - p1.y) * (p3.x - p4.x), weight=10.0)
+        self.register_ndg(f"trap_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
         self.register_ndg(f"trap_ndg_top_{names[0]}", lambda: self.dist(p3, p4), weight=10.0)
         self.register_ndg(f"trap_ndg_bottom_{names[0]}", lambda: self.dist(p1, p2), weight=10.0)
         return pt_objs
 
     def sample_rhombus(self, points: list):
-        assert len(points) == 4, "Rhombus must have 4 points"
-        noise = 0.05
-        # Khởi tạo hình thoi (dạng Diamond)
-        init_positions = [(0.0, -0.8), (0.5, 0.0), (0.0, 0.8), (-0.5, 0.0)]
+        assert len(points) == 4
+        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_rhombus, 1.0)
+        p1, p2, p3, p4 = pt_objs
 
-        pt_objs = []
-        for i, p_def in enumerate(points):
-            ix, iy = init_positions[i]
-            nx = ix + random.uniform(-noise, noise)
-            ny = iy + random.uniform(-noise, noise)
-            p_obj = self.sample_uniform(p_def, init_coords=(nx, ny))
-            pt_objs.append(p_obj)
-
-        p1, p2, p3, p4 = pt_objs[0], pt_objs[1], pt_objs[2], pt_objs[3]
-        names = [p.val for p in points]
-        self.quadrilaterals.append(tuple(names))
-
-        # 4 cạnh bằng nhau
+        # All sides equal + diagonals perpendicular
         self.register_loss(f"rhombus_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
         self.register_loss(f"rhombus_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
         self.register_loss(f"rhombus_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
-
-        # Hai đường chéo vuông góc: AC vuông góc BD
-        def diagonals_perp():
-            v_ac_x = p3.x - p1.x
-            v_ac_y = p3.y - p1.y
-            v_bd_x = p4.x - p2.x
-            v_bd_y = p4.y - p2.y
-            return v_ac_x * v_bd_x + v_ac_y * v_bd_y
-        self.register_loss(f"rhombus_diag_perp_{names[0]}", diagonals_perp, weight=10.0)
-
-        # Chống bẹt
-        def area_check():
-             v1x, v1y = p2.x - p1.x, p2.y - p1.y
-             v2x, v2y = p3.x - p2.x, p3.y - p2.y
-             return v1x * v2y - v1y * v2x
-        self.register_ndg(f"rhombus_area_{names[0]}", area_check, weight=20.0)
+        self.register_loss(f"rhombus_diag_perp_{names[0]}",
+                          lambda: (p3.x - p1.x) * (p4.x - p2.x) + (p3.y - p1.y) * (p4.y - p2.y), weight=10.0)
+        self.register_ndg(f"rhombus_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
         self.register_ndg(f"rhombus_diag_ac_{names[0]}", lambda: self.dist(p1, p3), weight=10.0)
-
         return pt_objs
 
 
@@ -411,14 +329,8 @@ class Optimizer:
         if tri_type == 'right' or tri_type == 'right_isosceles':
             right_pt = pts[right_idx]
             other_pts = [pts[i] for i in range(3) if i != right_idx]
-            def right_loss():
-                vec1_x = other_pts[0].x - right_pt.x
-                vec1_y = other_pts[0].y - right_pt.y
-                vec2_x = other_pts[1].x - right_pt.x
-                vec2_y = other_pts[1].y - right_pt.y
-                return vec1_x * vec2_x + vec1_y * vec2_y
             self.register_loss(f"right_{points[0].val}_{points[1].val}_{points[2].val}",
-                              right_loss, weight=10.0)
+                              lambda: self._dot_product(other_pts[0], right_pt, other_pts[1]), weight=10.0)
             metadata['right_angle_at'] = right_idx
 
         if tri_type == 'equilateral':
@@ -509,89 +421,38 @@ class Optimizer:
 
         metadata = {'type': quadri_type}
         if quadri_type in [QuadrilateralType.SQUARE, QuadrilateralType.RECTANGLE]:
-
-        # Constraint: 4 goc vuong
-            def angle_at_A():
-                v1x = pts[3].x - pts[0].x # DA
-                v1y = pts[3].y - pts[0].y
-                v2x = pts[1].x - pts[0].x # AB
-                v2y = pts[1].y - pts[0].y
-                return v1x * v2x + v1y * v2y # tich vo huong = 0
-
-            def angle_at_B():
-                v1x = pts[0].x - pts[1].x # BA
-                v1y = pts[0].y - pts[1].y
-                v2x = pts[2].x - pts[1].x # BC
-                v2y = pts[2].y - pts[1].y
-                return v1x * v2x + v1y * v2y
-
-            def angle_at_C():
-                v1x = pts[1].x - pts[2].x # CB
-                v1y = pts[1].y - pts[2].y
-                v2x = pts[3].x - pts[2].x # CD
-                v2y = pts[3].y - pts[2].y
-                return v1x * v2x + v1y * v2y
-
-            def angle_at_D():
-                v1x = pts[2].x - pts[3].x # DC
-                v1y = pts[2].y - pts[3].y
-                v2x = pts[0].x - pts[3].x # DA
-                v2y = pts[0].y - pts[3].y
-                return v1x * v2x + v1y * v2y
-
-            self.register_loss(f"angle_A", angle_at_A, weight=100.0)
-            self.register_loss(f"angle_B", angle_at_B, weight=100.0)
-            self.register_loss(f"angle_C", angle_at_C, weight=100.0)
-            self.register_loss(f"angle_D", angle_at_D, weight=100.0)
+            # All 4 right angles using helper
+            self.register_loss(f"angle_A", lambda: self._dot_product(pts[3], pts[0], pts[1]), weight=100.0)
+            self.register_loss(f"angle_B", lambda: self._dot_product(pts[0], pts[1], pts[2]), weight=100.0)
+            self.register_loss(f"angle_C", lambda: self._dot_product(pts[1], pts[2], pts[3]), weight=100.0)
+            self.register_loss(f"angle_D", lambda: self._dot_product(pts[2], pts[3], pts[0]), weight=100.0)
 
         if quadri_type == QuadrilateralType.SQUARE:
-            # constraint: 4 canh bang nhau
-            def equal_sides_constraint():
-                d01 = self.dist(pts[0], pts[1]) # AB
-                d12 = self.dist(pts[1], pts[2]) # BC
-                d23 = self.dist(pts[2], pts[3]) # CD
-                d30 = self.dist(pts[3], pts[0]) # DA
-                avg=(d01 + d12 + d23 + d30) / 4.0
-                return (d01 - avg)**2 + (d12 - avg)**2 + (d23 - avg)**2 + (d30 - avg)**2
-
-            self.register_loss(f"square_equal_sides", equal_sides_constraint, weight=100.0)
-            self.register_ndg(f"square_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
-                         lambda a=pts[0], b=pts[1], c=pts[2]: self.collinear(a, b, c),
-                         weight=1.0)
+            # All 4 sides equal
+            dists = [self.dist(pts[i], pts[(i+1)%4]) for i in range(4)]
+            avg = sum(dists) / 4.0
+            self.register_loss(f"square_equal_sides",
+                             lambda: sum((d - avg)**2 for d in dists), weight=100.0)
+            self.register_ndg(f"square_ndg", lambda: self.collinear(pts[0], pts[1], pts[2]), weight=1.0)
             metadata['equal_sides'] = [(0, 1), (1, 2), (2, 3), (3, 0)]
 
         elif quadri_type == QuadrilateralType.RECTANGLE:
-            # constraint: canh doi bang nhau
-            def equal_opposite_sides_constraint():
-                d01 = self.dist(pts[0], pts[1]) # AB
-                d12 = self.dist(pts[1], pts[2]) # BC
-                d23 = self.dist(pts[2], pts[3]) # CD
-                d30 = self.dist(pts[3], pts[0]) # DA
-                return (d01 - d23)**2 + (d12 - d30)**2
-
-            self.register_loss(f"rect_opposite_sides_{points[0].val}_{points[1].val}_{points[2].val}_{points[3].val}",
-            equal_opposite_sides_constraint,weight=10.0)
+            # Opposite sides equal
+            self.register_loss(f"rect_opposite_sides",
+                             lambda: (self.dist(pts[0], pts[1]) - self.dist(pts[2], pts[3]))**2 +
+                                     (self.dist(pts[1], pts[2]) - self.dist(pts[3], pts[0]))**2,
+                             weight=10.0)
+            self.register_ndg(f"rect_ndg", lambda: self.collinear(pts[0], pts[1], pts[2]), weight=1.0)
             metadata['equal_sides'] = [(0, 2), (1, 3)]
 
-            self.register_ndg(f"rect_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
-                     lambda a=pts[0], b=pts[1], c=pts[2]: self.collinear(a, b, c),
-                     weight=1.0)
-
         elif quadri_type == QuadrilateralType.RHOMBUS:
-            def equal_all_sides_constraint():
-                d01 = self.dist(pts[0], pts[1])
-                d12 = self.dist(pts[1], pts[2])
-                d23 = self.dist(pts[2], pts[3])
-                d30 = self.dist(pts[3], pts[0])
-                avg = (d01 + d12 + d23 + d30) / 4.0
-                return (d01 - avg)**2 + (d12 - avg)**2 + (d23 - avg)**2 + (d30 - avg)**2
-
-            self.register_loss(f"rhombus_equal_sides_{points[0].val}", equal_all_sides_constraint, weight=10.0)
+            # All 4 sides equal (same as square)
+            dists = [self.dist(pts[i], pts[(i+1)%4]) for i in range(4)]
+            avg = sum(dists) / 4.0
+            self.register_loss(f"rhombus_equal_sides",
+                             lambda: sum((d - avg)**2 for d in dists), weight=10.0)
+            self.register_ndg(f"rhombus_ndg", lambda: self.collinear(pts[0], pts[1], pts[2]), weight=1.0)
             metadata['equal_sides'] = [(0, 1), (1, 2), (2, 3), (3, 0)]
-
-            self.register_ndg(f"rhombus_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
-                     lambda a=pts[0], b=pts[1], c=pts[2]: self.collinear(a, b, c),
-                     weight=1.0)
 
         # Track metadata
         key = tuple(p.val for p in points)
@@ -649,12 +510,12 @@ class Optimizer:
         init_coords = Initializer.init_triangle_incircle()
         init_coords = Initializer.add_noise(init_coords)
         incenter = self.sample_uniform(point_name, init_coords=init_coords[3])
-        def incircle_loss():
-            d1 = self.dist_to_line(incenter, p1, p2)
-            d2 = self.dist_to_line(incenter, p2, p3)
-            d3 = self.dist_to_line(incenter, p3, p1)
-            return (d1 - d2)**2 + (d2 - d3)**2
-        self.register_loss(f"incenter_{point_name.val}", incircle_loss, weight=10.0)
+
+        # Equal distance to all three sides
+        self.register_loss(f"incenter_{point_name.val}",
+                          lambda: (self.dist_to_line(incenter, p1, p2) - self.dist_to_line(incenter, p2, p3))**2 +
+                                  (self.dist_to_line(incenter, p2, p3) - self.dist_to_line(incenter, p3, p1))**2,
+                          weight=10.0)
         return incenter
 
     def _define_circumcenter(self, point_name, triangle_points):
@@ -665,12 +526,12 @@ class Optimizer:
         init_coords = Initializer.init_triangle_circumcircle(radius=1.0)
         init_coords = Initializer.add_noise(init_coords, noise_scale=0.02)
         circumcenter = self.sample_uniform(point_name, init_coords=init_coords[3])
-        def circumcircle_loss():
-            d1 = self.dist(circumcenter, p1)
-            d2 = self.dist(circumcenter, p2)
-            d3 = self.dist(circumcenter, p3)
-            return (d1 - d2)**2 + (d2 - d3)**2
-        self.register_loss(f"circumcenter_{point_name.val}", circumcircle_loss, weight=10.0)
+
+        # Equal distance to all three vertices
+        self.register_loss(f"circumcenter_{point_name.val}",
+                          lambda: (self.dist(circumcenter, p1) - self.dist(circumcenter, p2))**2 +
+                                  (self.dist(circumcenter, p2) - self.dist(circumcenter, p3))**2,
+                          weight=10.0)
         return circumcenter
 
     def _define_orthocenter(self, point_name, triangle_points):
@@ -681,19 +542,12 @@ class Optimizer:
         init_coords = Initializer.init_right_triangle_with_orthocenter()
         init_coords = Initializer.add_noise(init_coords)
         orthocenter = self.sample_uniform(point_name, init_coords=init_coords[3])
-        def orthocenter_loss():
-            vec_h1_x = p1.x - orthocenter.x
-            vec_h1_y = p1.y - orthocenter.y
-            vec_23_x = p3.x - p2.x
-            vec_23_y = p3.y - p2.y
-            perp1 = vec_h1_x * vec_23_x + vec_h1_y * vec_23_y
-            vec_h2_x = p2.x - orthocenter.x
-            vec_h2_y = p2.y - orthocenter.y
-            vec_13_x = p3.x - p1.x
-            vec_13_y = p3.y - p1.y
-            perp2 = vec_h2_x * vec_13_x + vec_h2_y * vec_13_y
-            return perp1**2 + perp2**2
-        self.register_loss(f"orthocenter_{point_name.val}", orthocenter_loss, weight=10.0)
+
+        # Two altitudes perpendicular to opposite sides: AH ⊥ BC, BH ⊥ AC
+        self.register_loss(f"orthocenter_{point_name.val}",
+                          lambda: self._dot_product_vectors(p1, orthocenter, p2, p3)**2 +
+                                  self._dot_product_vectors(p2, orthocenter, p1, p3)**2,
+                          weight=10.0)
         return orthocenter
 
     def _define_midpoint(self, point_name, segment_points):
@@ -701,12 +555,11 @@ class Optimizer:
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
         midpoint = self.sample_uniform(point_name)
-        def midpoint_loss():
-            expected_x = (p1.x + p2.x) / 2
-            expected_y = (p1.y + p2.y) / 2
-            return (midpoint.x - expected_x)**2 + (midpoint.y - expected_y)**2
-        self.register_loss(f"midpoint_{point_name.val}", midpoint_loss, weight=5.0)
-        self.register_loss(f"on_segment_mid_{point_name.val}", lambda: self.collinear(midpoint, p1, p2), weight=10.0)
+        self.register_loss(f"midpoint_{point_name.val}",
+                          lambda: (midpoint.x - (p1.x + p2.x)/2)**2 + (midpoint.y - (p1.y + p2.y)/2)**2,
+                          weight=5.0)
+        self.register_loss(f"on_segment_mid_{point_name.val}",
+                          lambda: self.collinear(midpoint, p1, p2), weight=10.0)
         return midpoint
 
     def parameter_on_seg(self, p, segment_points: list):
@@ -767,47 +620,15 @@ class Optimizer:
 
         return bisector_point
 
-    def parameter_on_seg(self, p, segment_points: list):
-        assert len(segment_points) == 2
-
-        p1 = self.lookup_pt(segment_points[0])
-        p2 = self.lookup_pt(segment_points[1])
-
-        P = self.sample_uniform(p)
-
-        self.register_loss(f"on_seg_{p.val}", lambda: self.collinear(P, p1, p2), weight=10.0)
-
-        return P
-
-    def parameter_on_line(self, p, line_points):
-        assert len(line_points) == 2
-
-        p1 = self.lookup_pt(line_points[0])
-        p2 = self.lookup_pt(line_points[1])
-
-        # Create a free point
-        P = self.sample_uniform(p, save_name=False)
-
-        # Constrain it to be on the line - recompute line each iteration
-        def on_line_loss():
-            line = self.pp2lnf(p1, p2)
-            return self.on_line(P, line)**2
-
-        self.register_loss(f"on_line_{p.val}", on_line_loss, weight=10.0)
-
-        return self.register_pt(p, P)
-
 
     def _define_perpendicular_bisector_point(self, point_name, segment_points):
         assert len(segment_points) == 2
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
         point = self.sample_uniform(point_name)
-        def perp_bisector_loss():
-            d1 = self.dist(point, p1)
-            d2 = self.dist(point, p2)
-            return (d1 - d2)**2
-        self.register_loss(f"perp_bisector_{point_name.val}", perp_bisector_loss, weight=10.0)
+        self.register_loss(f"perp_bisector_{point_name.val}",
+                          lambda: (self.dist(point, p1) - self.dist(point, p2))**2,
+                          weight=10.0)
         return point
 
     def process_instruction(self, instr):
@@ -827,17 +648,7 @@ class Optimizer:
         if diagram_type == DiagramType.TRIANGLE:
             self._process_triangle_parameter(param_type, objects, args)
         elif diagram_type == DiagramType.QUADRILATERAL:
-             p_type_str = str(param_type).split('.')[-1].lower()
-             if p_type_str == "square":
-                 self.sample_square(objects)
-             elif p_type_str == "rectangle":
-                 self.sample_rectangle(objects)
-             elif p_type_str == "parallelogram":
-                 self.sample_parallelogram(objects)
-             elif p_type_str == "trapezoid":
-                 self.sample_trapezoid(objects)
-             elif p_type_str == "rhombus": # [NEW]
-                 self.sample_rhombus(objects)
+            self._process_quadrilateral_parameter(param_type, objects, args)
         elif diagram_type == DiagramType.POINT:
             self._process_point_parameter(param_type, objects, args)
         elif diagram_type == DiagramType.CIRCLE:
@@ -981,22 +792,35 @@ class Optimizer:
         self.sample_triangle(objects, constraints)
 
     def _process_quadrilateral_parameter(self, param_type, objects, args):
-        """Process quadrilateral parameters"""
-        # Convert param_type to QuadrilateralType enum
+        """Process quadrilateral parameters - unified handler for all quadrilateral types"""
+        # Extract type string
         if param_type:
-            param_type_str = str(param_type).upper()
-            try:
-                quadri_type = QuadrilateralType[param_type_str]
-            except KeyError:
-                quadri_type = QuadrilateralType.GENERAL
+            param_type_str = str(param_type).split('.')[-1].lower()
         else:
-            quadri_type = QuadrilateralType.GENERAL
+            param_type_str = "general"
 
-        logger.info(f"Quadrilateral type: {quadri_type}")
+        # Map to appropriate sample function
+        quad_samplers = {
+            "square": self.sample_square,
+            "rectangle": self.sample_rectangle,
+            "parallelogram": self.sample_parallelogram,
+            "trapezoid": self.sample_trapezoid,
+            "rhombus": self.sample_rhombus,
+        }
 
-        constraints = {'type': quadri_type}
+        sampler = quad_samplers.get(param_type_str)
+        if sampler:
+            sampler(objects)
+        else:
+            # Default to general quadrilateral via sample_quadrilateral
+            try:
+                quadri_type = QuadrilateralType[param_type_str.upper()]
+            except (KeyError, AttributeError):
+                quadri_type = QuadrilateralType.GENERAL
+            constraints = {'type': quadri_type}
+            self.sample_quadrilateral(objects, constraints)
 
-        self.sample_quadrilateral(objects, constraints)
+        logger.info(f"Processed quadrilateral type: {param_type_str}")
 
     def _process_point_parameter(self, param_type, objects, args):
 
@@ -1102,12 +926,10 @@ class Optimizer:
         p4 = self.lookup_pt(points[3])
 
         def parallel_loss():
-            # Direction vector 1
             dx1 = p2.x - p1.x
             dy1 = p2.y - p1.y
             len1 = torch.sqrt(dx1**2 + dy1**2) + 1e-8
 
-            # Direction vector 2
             dx2 = p4.x - p3.x
             dy2 = p4.y - p3.y
             len2 = torch.sqrt(dx2**2 + dy2**2) + 1e-8
@@ -1272,16 +1094,10 @@ class Optimizer:
             logger.info(f"{key:30s}: {loss.item():.6f}")
 
     def solve_single(self, attempt_id=0):
-        """Solve with single initialization attempt"""
         self.current_attempt = attempt_id
-
-        # Preprocess instructions
         self.preprocess()
-
-        # Add regularization
         self.regularize_points()
 
-        # Optimize
         loss = float('inf')
         if self.has_loss:
             loss = self.train(epochs=self.opts.get('epochs', 1000),
