@@ -88,5 +88,11 @@
     "caption": "triangle ABC, angle BAD equals angle CAD, A lies on perpendicular bisector of BC",
     "id": 210415,
     "caption_vn": "Tam giác ABC có góc BAD bằng góc CAD, điểm A nằm trên đường trung trực của BC."
+  },
+  {
+    "image": "images/img_210416.png",
+    "caption": "Triangle ABC is right-angled at A, CD is the angle bisector, and AM is the median of BC.",
+    "id": 210416,
+    "caption_vn": "Tam giác ABC vuông tại A, CD là đường phân giác, AM là trung tuyến của BC"
   }
 ]

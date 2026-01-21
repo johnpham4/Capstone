@@ -116,10 +116,6 @@ class Optimizer:
         return line.n.x * p.x + line.n.y * p.y - line.f
 
     def collinear(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
-        # Use cross product: (p2-p1) × (p3-p1) = 0
-        return line.n.x * p.x + line.n.y * p.y - line.f
-
-    def collinear(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
         v1x = p2.x - p1.x
         v1y = p2.y - p1.y
         v2x = p3.x - p1.x
