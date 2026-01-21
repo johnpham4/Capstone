@@ -1,17 +1,6 @@
 [
   {
-    "image_dir": "images/img_210009.png",
-    "instruction": "Hình vuông ABCD có hai đường chéo vuông góc",
-    "answer": "(square (A B C D))\n      (segment A C)\n      (segment B D)\n      (perpendicular (segment A C) (segment B D))"
-  },
-  {
-    "image_dir": "images/img_210017.png",
-    "instruction": "Hình vuông ABCD, xét tam giác ABD",
-    "answer": "(square (A B C D))\n(triangle (A B D))"
-  },
-  {
-    "image_dir": "images/img_210001.png",
-    "instruction": "Hình vuông ABCD",
-    "answer": "(square (A B C D))\n"
+    "instruction": "Tam giác ABC vuông tại A, CD là đường phân giác, AM là trung tuyến của BC",
+    "answer": "(triangle (A B C) (right A))\n(define D point (bisector C A B))\n(define M point (midpoint B C))\n(segment A M)\n(segment C D)"
   }
 ]

@@ -36,18 +36,6 @@ class Initializer:
         else:
             return [base_coords[1], base_coords[2], base_coords[0]]
 
-    def init_equal_angle_triangle(self, scale: float = 1.0) -> List[Tuple[float, float]]:
-        """Initialize triangle with two equal angles"""
-        # Isoceles triangle with apex at top
-        height = 0.8 * scale
-        half_base = 0.6 * scale
-        return [
-            (0.0, height),          # Apex
-            (-half_base, 0.0),     # Base left
-            (half_base, 0.0)       # Base right
-        ]
-
-
     @staticmethod
     def init_equilateral_triangle(scale: float = 1.0) -> List[Tuple[float, float]]:
         height = math.sqrt(3) / 2 * scale
@@ -58,11 +46,13 @@ class Initializer:
         ]
 
     @staticmethod
-    def init_scalene_triangle(scale: float = 2.0):
+
+    def init_scalene_triangle(scale: float = 1.0) -> List[Tuple[float, float]]:
+        """Scalene triangle with all sides different"""
         return [
-            (0.0, 0.8 * scale),        # A: top
-            (-0.7 * scale, -0.4 * scale),  # B: left
-            (0.9 * scale, -0.2 * scale),   # C: right (không đối xứng)
+            (-0.6 * scale, -0.3 * scale),    # A: top
+            (0.5 * scale, -0.2 * scale),     # B: left
+            (0.1 * scale, 0.7 * scale)       # C: right (không đối xứng)
         ]
 
     @staticmethod
@@ -80,6 +70,7 @@ class Initializer:
             return [base_coords[1], base_coords[0], base_coords[2]]
         else:
             return [base_coords[1], base_coords[2], base_coords[0]]
+
 
     @staticmethod
     def init_rectangle(width: float = 1.0, height: float = 0.7) -> List[Tuple[float, float]]:
@@ -146,6 +137,33 @@ class Initializer:
             (0.0, 0.6 * scale),      # Along y-axis
             (0.0, 0.0)               # Orthocenter position
         ]
+    
+    @staticmethod
+    def init_triangle_with_angle_bisector(apex_idx: int = 0, scale: float = 1.0) -> List[Tuple[float, float]]:
+        """
+        Initialize triangle with angle bisector from apex
+        """
+        # Start with isosceles for symmetry
+        base_coords = [
+            (0.0, 0.8 * scale),           # Apex A
+            (-0.6 * scale, -0.4 * scale), # Base left B
+            (0.6 * scale, -0.4 * scale),  # Base right C
+        ]
+        
+        # D is midpoint of BC (for isosceles, bisector = median)
+        d_x = (base_coords[1][0] + base_coords[2][0]) / 2
+        d_y = (base_coords[1][1] + base_coords[2][1]) / 2
+        
+        bisector_coords = base_coords + [(d_x, d_y)]
+        
+        # Rotate based on apex_idx
+        if apex_idx == 0:
+            return bisector_coords
+        elif apex_idx == 1:
+            return [bisector_coords[1], bisector_coords[0], bisector_coords[2], bisector_coords[3]]
+        else:
+            return [bisector_coords[2], bisector_coords[0], bisector_coords[1], bisector_coords[3]]
+    
 
     @staticmethod
     def add_noise(coords: List[Tuple[float, float]], noise_scale: float = 0.05) -> List[Tuple[float, float]]:
