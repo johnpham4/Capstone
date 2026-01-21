@@ -96,6 +96,16 @@ class Initializer:
         ]
 
     @staticmethod
+    def init_rhombus(scale: float = 1.0) -> List[Tuple[float, float]]:
+        """Initialize rhombus (diamond shape)"""
+        return [
+            (0.0, -0.8 * scale),  # Bottom
+            (0.5 * scale, 0.0),   # Right
+            (0.0, 0.8 * scale),   # Top
+            (-0.5 * scale, 0.0)   # Left
+        ]
+
+    @staticmethod
     def init_triangle_incircle(scale: float = 1.0) -> List[Tuple[float, float]]:
         """Initialize equilateral triangle with incenter at origin"""
         h = math.sqrt(3) / 3 * scale
@@ -137,7 +147,7 @@ class Initializer:
             (0.0, 0.6 * scale),      # Along y-axis
             (0.0, 0.0)               # Orthocenter position
         ]
-    
+
     @staticmethod
     def init_triangle_with_angle_bisector(apex_idx: int = 0, scale: float = 1.0) -> List[Tuple[float, float]]:
         """
@@ -148,13 +158,13 @@ class Initializer:
             (-0.6 * scale, -0.4 * scale), # Base left B
             (0.6 * scale, -0.4 * scale),  # Base right C
         ]
-        
+
         # D is midpoint of BC (for isosceles, bisector = median)
         d_x = (base_coords[1][0] + base_coords[2][0]) / 2
         d_y = (base_coords[1][1] + base_coords[2][1]) / 2
-        
+
         bisector_coords = base_coords + [(d_x, d_y)]
-        
+
         # Rotate based on apex_idx
         if apex_idx == 0:
             return bisector_coords
