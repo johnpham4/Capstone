@@ -1,34 +1,6 @@
 [
     {
-        "instruction": "Tam giác ABC vuông tại B, D là trung điểm AB, E là trung điểm AC, F là trung điểm BC, có trọng tâm G và trực tâm H",
-        "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(define G point (centroid A B C))\n(define H point (orthocenter A B C))\n(segment D E)\n(segment E F)\n(segment D F)"
-    },
-    {
-        "instruction": "Hình vuông ABCD",
-        "answer": "(square (A B C D))"
-    },
-    {
-        "instruction": "Hình chữ nhật ABCD",
-        "answer": "(rectangle (A B C D))"
-    },
-    {
-        "instruction": "Hình bình hành ACDB",
-        "answer": "(parallelogram (A C D B))"
-    },
-    {
-        "instruction": "Hình thang ABCD",
-        "answer": "(trapezoid (A B C D))"
-    },
-    {
-        "instruction": "Hình thoi KLMN",
-        "answer": "(rhombus (K L M N))"
-    },
-    {
-        "instruction": "Tứ giác ABCD",
-        "answer": "(quadrilateral (A B C D))"
-    },
-    {
-        "instruction": "Tứ giác EFGH",
-        "answer": "(quadrilateral (E F G H))"
+        "instruction": "Tam giác ABC cân tại A, D là trung điểm AB, E là trung điểm AC, DE song song với BC",
+        "answer": "(triangle (A B C) (isosceles A))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)"
     }
 ]

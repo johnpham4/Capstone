@@ -1,6 +1,7 @@
 [
   {
-    "instruction": "Tam giác ABC là tam giác tù tại C, AM là trung tuyến ứng với cạnh BC.",
-    "answer": "(triangle (A B C) (obtuse C))\n(define M point (midpoint B C))\n(segment A M)"
+    "image_dir": "images/img_210406.png",
+    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, M là trung điểm của AB, DM song song với AC.",
+    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(define D point (segment A B))\n(segment D M)\n(segment A C)\n(parallel (segment D M) (segment A C))"
   }
 ]

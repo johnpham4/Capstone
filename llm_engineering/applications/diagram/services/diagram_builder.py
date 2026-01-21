@@ -1,6 +1,6 @@
 from typing import List, Tuple, Any
 
-from llm_engineering.applications.diagram.services.dsl_parser import DSLParser
+from llm_engineering.applications.diagram.dsl_parser import DSLParser
 from llm_engineering.domains.geometry import Point
 from llm_engineering.domains.geometry.instructions import Parameter
 from llm_engineering.domains.geometry.types import DiagramType, TriangleType, QuadrilateralType

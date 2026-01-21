@@ -6,8 +6,7 @@ from uuid import uuid4
 from pathlib import Path
 from loguru import logger
 
-from llm_engineering.infrastructures.db.rabbitmq import RabbitMQPublisher
-from llm_engineering.infrastructures.db.processing_request_repository import processing_request_repository
+from llm_engineering.infrastructures.messaging.rabbitmq import RabbitMQPublisher
 from llm_engineering.domains.processing_request import ProcessingRequest, RequestStatus
 from llm_engineering.domains.events import UserInputReceived
 
@@ -85,8 +84,7 @@ async def create_diagram_request(request: DiagramRequest):
             user_input=request.user_input,
             problem_text=request.problem_text
         )
-
-        processing_request_repository.create(processing_request)
+        processing_request.save()  # Save using ODM
 
         # Publish event to input processing queue
         event = UserInputReceived(
@@ -119,8 +117,8 @@ async def get_diagram_status(request_id: str):
     Get the status and results of a diagram generation request.
     """
     try:
-        # Fetch request from database
-        processing_request = processing_request_repository.get_by_id(request_id)
+        # Fetch request from database using ODM
+        processing_request = ProcessingRequest.get_by_id(request_id)
 
         if not processing_request:
             raise HTTPException(
@@ -158,7 +156,7 @@ async def get_diagram_image(request_id: str):
     """
     try:
         # Fetch request from database
-        processing_request = processing_request_repository.get_by_id(request_id)
+        processing_request = ProcessingRequest.get_by_id(request_id)
 
         if not processing_request:
             raise HTTPException(
