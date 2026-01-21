@@ -1,7 +1,7 @@
 [
   {
-    "image_dir": "images/img_210406.png",
-    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, M là trung điểm của AB, DM song song với AC.",
-    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(define D point (segment A B))\n(segment D M)\n(segment A C)\n(parallel (segment D M) (segment A C))"
+    "image_dir": "images/img_250008.png",
+    "instruction": "Cho tam giác ABC thường, có góc A bằng 80 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD.",
+    "answer": "(triangle (A B C))\n(angle-measure B A C 80)\n(define D point (midpoint A B))\n(segment C D)\n(define M point (bisector B A C))\n(on-segment M C D)\n(segment A M)"
   }
 ]

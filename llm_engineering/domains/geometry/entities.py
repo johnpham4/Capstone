@@ -41,6 +41,7 @@ class Diagram:
     lines: Dict[str, Any] = field(default_factory=dict)
     angle_bisectors: List[Dict] = field(default_factory=list)
     angle_equal_assertions: List[Dict] = field(default_factory=list)  # Store angle-equal constraints
+    angle_measures: List[Dict] = field(default_factory=list)  # Store angles with measure values to display
 
     # Tick marks for equal segments
     tick_styles: List[str] = field(default_factory=lambda: ["k-", "k--", "kx", "kxx", "kg", "k---"])
@@ -77,6 +78,15 @@ class Diagram:
     def add_circle(self, center: GeometricPoint, info: Any) -> None:
         """Add a circle to the diagram"""
         self.circles.append((center, info))
+
+    def add_angle_measure(self, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, degrees: float) -> None:
+        """Add an angle measure to be displayed (e.g., angle ABC = 120°)"""
+        self.angle_measures.append({
+            'vertex': vertex,
+            'p1': p1,
+            'p2': p2,
+            'degrees': degrees
+        })
 
     def add_segment(self, p1: GeometricPoint, p2: GeometricPoint, color: str = "black") -> None:
         """Add a line segment between two points"""

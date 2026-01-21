@@ -64,11 +64,12 @@ class MatplotlibDiagramRenderer:
                 [corner1[1], corner2[1], corner3[1]],
                 'k-', linewidth=1.0)
 
-    def _draw_angle_arc(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, num_arcs: int = 1, radius: float = 0.12):
+    def _draw_angle_arc(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, num_arcs: int = 1, radius: float = 0.12, draw_tick: bool = False):
         """
         vertex: GeometricPoint - đỉnh góc
         p1, p2: GeometricPoint - 2 điểm tạo thành góc
         num_arcs: số arc (1 arc, 2 arcs, 3 arcs để phân biệt)
+        draw_tick: có vẽ dấu gạch nhỏ trên arc không (để chỉ góc bằng nhau)
         """
         # Vector từ vertex đến 2 điểm
         v1x = p1.x - vertex.x
@@ -108,7 +109,78 @@ class MatplotlibDiagramRenderer:
                              color='blue', 
                              linewidth=1.2)
             ax.add_patch(arc)
+        
+        # Vẽ dấu gạch nhỏ ở giữa arc
+        if draw_tick:
+            # Tính góc giữa của arc
+            mid_angle = (angle1 + angle2) / 2
+            mid_rad = mid_angle * np.pi / 180
+            
+            # Vị trí giữa arc (sử dụng radius của arc ngoài cùng)
+            r_mid = radius + (num_arcs - 1) * 0.05
+            mid_x = vertex.x + r_mid * np.cos(mid_rad)
+            mid_y = vertex.y + r_mid * np.sin(mid_rad)
+            
+            # Vector RADIAL (từ tâm ra ngoài) - cắt vuông góc qua arc
+            tick_dx = np.cos(mid_rad)
+            tick_dy = np.sin(mid_rad)
+            
+            # Độ dài dấu gạch (cắt qua arc) - giảm từ 0.04 xuống 0.025
+            tick_length = 0.025
+            
+            ax.plot(
+                [mid_x - tick_dx * tick_length, mid_x + tick_dx * tick_length],
+                [mid_y - tick_dy * tick_length, mid_y + tick_dy * tick_length],
+                'b-',
+                linewidth=1.5
+            )
     
+    def _draw_angle_measure(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, angle_degrees: float, radius: float = 0.2):
+        """
+        Vẽ số đo góc
+        vertex: đỉnh góc
+        p1, p2: 2 điểm tạo thành góc
+        angle_degrees: số đo góc (độ)
+        radius: khoảng cách từ đỉnh đến text
+        """
+        # Vector từ vertex đến 2 điểm
+        v1x = p1.x - vertex.x
+        v1y = p1.y - vertex.y
+        v2x = p2.x - vertex.x
+        v2y = p2.y - vertex.y
+        
+        v1_norm = np.sqrt(v1x**2 + v1y**2)
+        v2_norm = np.sqrt(v2x**2 + v2y**2)
+        
+        if v1_norm < 1e-8 or v2_norm < 1e-8:
+            return
+        
+        v1x, v1y = v1x / v1_norm, v1y / v1_norm
+        v2x, v2y = v2x / v2_norm, v2y / v2_norm
+        
+        # Tính góc giữa (hướng đặt text)
+        angle1 = np.arctan2(v1y, v1x)
+        angle2 = np.arctan2(v2y, v2x)
+        
+        # Góc giữa (radian)
+        mid_angle = (angle1 + angle2) / 2
+        
+        # Điều chỉnh nếu góc vượt 180 độ
+        angle_diff = angle2 - angle1
+        if angle_diff > np.pi:
+            mid_angle += np.pi
+        elif angle_diff < -np.pi:
+            mid_angle -= np.pi
+        
+        # Text nằm bên trong arc, tại khoảng 60-65% radius của arc
+        text_radius = radius * 0.85 
+        text_x = vertex.x + text_radius * np.cos(mid_angle)
+        text_y = vertex.y + text_radius * np.sin(mid_angle)
+        
+        ax.text(text_x, text_y, f"{int(angle_degrees)}°",
+               fontsize=8.3, ha='center', va='center',
+               color='red', fontweight='bold',
+               bbox=dict(boxstyle='round,pad=0.15', facecolor='white', edgecolor='none', alpha=0.85))
 
     def render(
         self,
@@ -183,17 +255,19 @@ class MatplotlibDiagramRenderer:
             if equal_angles:
                 logger.info(f"Drawing equal angles arcs: {equal_angles}")
                 for idx1, idx2 in equal_angles:
-                    # Vẽ arc ở góc idx1
+                    # Vẽ arc ở góc idx1 với dấu gạch
                     self._draw_angle_arc(ax, pts[idx1], 
                                         pts[(idx1-1)%3],
                                         pts[(idx1+1)%3],
-                                        num_arcs=1)
+                                        num_arcs=1,
+                                        draw_tick=True)
                     
-                    # Vẽ arc ở góc idx2 (cùng số arc)
+                    # Vẽ arc ở góc idx2 (cùng số arc và dấu gạch)
                     self._draw_angle_arc(ax, pts[idx2],
                                         pts[(idx2-1)%3], 
                                         pts[(idx2+1)%3],
-                                        num_arcs=1)
+                                        num_arcs=1,
+                                        draw_tick=True)
 
         # Draw quadrilaterals
         for quad in self.diagram.quadrilaterals:
@@ -314,28 +388,6 @@ class MatplotlibDiagramRenderer:
                     fontweight='bold'
                 )
                 
-        # Draw angle bisectors
-        if hasattr(self.diagram, 'angle_bisectors') and self.diagram.angle_bisectors:
-            for bisector_data in self.diagram.angle_bisectors:
-                vertex = bisector_data['vertex']
-                bisector_point = bisector_data['point']
-                
-                # Vẽ đoạn thẳng từ vertex đến bisector_point (đường màu xanh lá nét đứt)
-                ax.plot([vertex.x, bisector_point.x], 
-                    [vertex.y, bisector_point.y], 
-                    'g--', linewidth=1.5, alpha=0.7)
-                
-                # Vẽ ký hiệu 2 góc bằng nhau (tương tự equal_angles)
-                angle_points = bisector_data.get('angle_points', [])
-                if len(angle_points) >= 3:
-                    # Lấy 2 điểm tạo góc: angle_points = [A, B, C] (A là đỉnh, góc BAC bị chia)
-                    p1 = self.diagram.points.get(angle_points[1])  # B
-                    p2 = self.diagram.points.get(angle_points[2])  # C
-                    
-                    if p1 and p2:
-                        # Vẽ arc ở 2 bên của phân giác để chỉ 2 góc bằng nhau
-                        self._draw_angle_arc(ax, vertex, p1, bisector_point, num_arcs=1, radius=0.08)
-                        self._draw_angle_arc(ax, vertex, bisector_point, p2, num_arcs=1, radius=0.08)
 
         # Draw angle-equal assertions (angle ABC = angle DEF)
         if hasattr(self.diagram, 'angle_equal_assertions') and self.diagram.angle_equal_assertions:
@@ -343,19 +395,64 @@ class MatplotlibDiagramRenderer:
                 angle1 = assertion['angle1']
                 angle2 = assertion['angle2']
                 
-                # Draw arc for angle 1 (p1-vertex-p2)
+                # Draw arc for angle 1 (p1-vertex-p2) với dấu gạch
                 self._draw_angle_arc(ax, angle1['vertex'], 
                                    angle1['p1'], 
                                    angle1['p2'], 
                                    num_arcs=1, 
-                                   radius=0.12)
+                                   radius=0.12,
+                                   draw_tick=True)
                 
-                # Draw arc for angle 2 
+                # Draw arc for angle 2 với dấu gạch
                 self._draw_angle_arc(ax, angle2['vertex'],
                                    angle2['p1'],
                                    angle2['p2'],
                                    num_arcs=1,
-                                   radius=0.12)
+                                   radius=0.12,
+                                   draw_tick=True)
+
+        # Issue 2: Draw angle bisector arcs (2 arcs for equal angles)
+        if hasattr(self.diagram, 'angle_bisectors_metadata') and self.diagram.angle_bisectors_metadata:
+            for bisector_data in self.diagram.angle_bisectors_metadata:
+                vertex_name = bisector_data['vertex']
+                bisector_pt_name = bisector_data['bisector_point']
+                angle_pts = bisector_data['angle_points']  # [B, A, C] where A is vertex
+                
+                vertex = self.diagram.get_point(vertex_name)
+                bisector_pt = self.diagram.get_point(bisector_pt_name)
+                p1 = self.diagram.get_point(angle_pts[0])  # B
+                p2 = self.diagram.get_point(angle_pts[2])  # C
+                
+                if vertex and bisector_pt and p1 and p2:
+                    # Arc 1: angle from p1 to bisector (góc BAM)
+                    self._draw_angle_arc(ax, vertex, p1, bisector_pt,
+                                       num_arcs=1, radius=0.12, draw_tick=True)
+                    # Arc 2: angle from bisector to p2 (góc MAC)
+                    self._draw_angle_arc(ax, vertex, bisector_pt, p2,
+                                       num_arcs=1, radius=0.12, draw_tick=True)
+
+        # Draw angle measures (display degree values)
+        if hasattr(self.diagram, 'angle_measures') and self.diagram.angle_measures:
+            for angle_data in self.diagram.angle_measures:
+                # Issue 1: Draw arc at the angle being measured
+                self._draw_angle_arc(
+                    ax,
+                    angle_data['vertex'],
+                    angle_data['p1'],
+                    angle_data['p2'],
+                    num_arcs=1,
+                    radius=0.15,
+                    draw_tick=False
+                )
+                # Draw the degree text
+                self._draw_angle_measure(
+                    ax,
+                    angle_data['vertex'],
+                    angle_data['p1'],
+                    angle_data['p2'],
+                    angle_data['degrees'],
+                    radius=0.25  # Slightly further out than arcs
+                )
 
         # Configure axes
         ax.set_aspect('equal')

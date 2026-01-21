@@ -1,62 +1,50 @@
 [
   {
-    "image": "images/img_210701.png",
-    "caption": "triangle ABC, angle ABC equals 120 degrees",
-    "id": 210701,
-    "caption_vn": "Tam giác ABC là tam giác tù tại B, góc ABC bằng 120 độ."
+    "image": "images/img_250001.png",
+    "caption": "triangle ABC, angle A = 60, CD is median of AB, AM is angle bisector, M on CD",
+    "id": 250001,
+    "caption_vn": "Cho tam giác ABC có góc A bằng 60 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD."
   },
   {
-    "image": "images/img_210702.png",
-    "caption": "triangle ABC, angle BAC equals 110 degrees",
-    "id": 210702,
-    "caption_vn": "Tam giác ABC là tam giác tù tại A, góc BAC bằng 110 độ."
+    "image": "images/img_250002.png",
+    "caption": "triangle ABC isosceles at A, angle A = 50, CD is median of AB, AM is angle bisector, M on CD",
+    "id": 250002,
+    "caption_vn": "Cho tam giác ABC cân tại A, có góc A bằng 50 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD."
   },
   {
-    "image": "images/img_210703.png",
-    "caption": "triangle ABC, angle ACB equals 135 degrees",
-    "id": 210703,
-    "caption_vn": "Tam giác ABC là tam giác tù tại C, góc ACB bằng 135 độ."
+    "image": "images/img_250003.png",
+    "caption": "triangle ABC right at B, angle A = 40, CD is median of AB, AM is angle bisector, M on CD",
+    "id": 250003,
+    "caption_vn": "Cho tam giác ABC vuông tại B, có góc A bằng 40 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD."
   },
   {
-    "image": "images/img_210704.png",
-    "caption": "triangle ABC, angle ABC equals 100 degrees, M midpoint of AC",
-    "id": 210704,
-    "caption_vn": "Tam giác ABC là tam giác tù tại B, góc ABC bằng 100 độ, M là trung điểm của AC."
+    "image": "images/img_250004.png",
+    "caption": "triangle ABC right at A, angle ABC = 30, CD is median of AB, AM is angle bisector, M on CD",
+    "id": 250004,
+    "caption_vn": "Cho tam giác ABC vuông tại A, có góc ABC bằng 30 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD."
   },
   {
-    "image": "images/img_210705.png",
-    "caption": "triangle ABC, angle BAC equals 120 degrees, D midpoint of BC",
-    "id": 210705,
-    "caption_vn": "Tam giác ABC là tam giác tù tại A, góc BAC bằng 120 độ, D là trung điểm của BC."
+    "image": "images/img_250005.png",
+    "caption": "triangle ABC obtuse at B, angle ABC = 120, CD is median of AB, AM is angle bisector, M on CD",
+    "id": 250005,
+    "caption_vn": "Cho tam giác ABC là tam giác tù tại B, có góc ABC bằng 120 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD."
   },
   {
-    "image": "images/img_210706.png",
-    "caption": "triangle ABC, angle ACB equals 110 degrees, AM median to BC",
-    "id": 210706,
-    "caption_vn": "Tam giác ABC là tam giác tù tại C, góc ACB bằng 110 độ, AM là trung tuyến ứng với cạnh BC."
+    "image": "images/img_250006.png",
+    "caption": "triangle ABC obtuse at C, angle ACB = 110, CD is median of AB, AM is angle bisector, M on CD",
+    "id": 250006,
+    "caption_vn": "Cho tam giác ABC là tam giác tù tại C, có góc ACB bằng 110 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD."
   },
   {
-    "image": "images/img_210707.png",
-    "caption": "triangle ABC, angle ABC equals 130 degrees, angle BAD equals angle CAD",
-    "id": 210707,
-    "caption_vn": "Tam giác ABC là tam giác tù tại B, góc ABC bằng 130 độ, góc BAD bằng góc CAD."
+    "image": "images/img_250007.png",
+    "caption": "triangle ABC, angle A = 70, angle B = 50, CD is median of AB, AM is angle bisector, M on CD",
+    "id": 250007,
+    "caption_vn": "Cho tam giác ABC có góc A bằng 70 độ và góc B bằng 50 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD."
   },
   {
-    "image": "images/img_210708.png",
-    "caption": "triangle ABC, angle BAC equals 105 degrees, AD perpendicular to BC",
-    "id": 210708,
-    "caption_vn": "Tam giác ABC là tam giác tù tại A, góc BAC bằng 105 độ, AD vuông góc với BC."
-  },
-  {
-    "image": "images/img_210709.png",
-    "caption": "triangle ABC, angle ACB equals 125 degrees, D midpoint of AB, DE parallel to AC",
-    "id": 210709,
-    "caption_vn": "Tam giác ABC là tam giác tù tại C, góc ACB bằng 125 độ, D là trung điểm của AB, qua D kẻ DE song song với AC."
-  },
-  {
-    "image": "images/img_210710.png",
-    "caption": "triangle ABC, angle ABC equals 140 degrees, M midpoint of AC, MN parallel to BC",
-    "id": 210710,
-    "caption_vn": "Tam giác ABC là tam giác tù tại B, góc ABC bằng 140 độ, M là trung điểm của AC, qua M kẻ MN song song với BC."
+    "image": "images/img_250008.png",
+    "caption": "triangle ABC scalene, angle A = 80, CD is median of AB, AM is angle bisector, M on CD",
+    "id": 250008,
+    "caption_vn": "Cho tam giác ABC thường, có góc A bằng 80 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD."
   }
 ]

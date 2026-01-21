@@ -7,7 +7,7 @@ from collections import namedtuple
 from llm_engineering.domains.geometry.instructions import Parameter
 from llm_engineering.domains.geometry.value_objects import Point, Line
 from llm_engineering.domains.geometry.entities import GeometricPoint, Diagram
-from llm_engineering.domains.geometry.types import QuadrilateralType
+from llm_engineering.domains.geometry.types import QuadrilateralType, TriangleType, DiagramType
 from llm_engineering.applications.diagram.initializer import Initializer
 
 from loguru import logger
@@ -21,31 +21,28 @@ class Optimizer:
         self.instructions = instructions
         self.opts = opts
         self.verbosity = verbosity
-
-        self.name2pt = {}  # Point name -> TorchPoint (with tensors)
-        self.name2line = {}  # Line name -> LineNF
-        self.all_points = []  # All points for visualization
-
-        self.losses = {}  # Loss values (for logging)
-        self.loss_fns = {}  # Loss functions (for training)
-        self.ndgs = {}  # Non-degeneracy conditions
-
-        # Diagram metadata tracking
-        self.triangles_metadata = {}  # (p1, p2, p3) -> {type, right_angle_at, equal_sides}
-        self.circles = []  # [(center_name, radius_or_points)]
-        self.quadrilaterals_metadata = {}
-        self.segments = []  # [(p1_name, p2_name)]
-        self.lines = []  # [(p1_name, p2_name)] for visualization
-        self.line_objects = {}  # line_name -> LineNF
-
-        # Unnamed point generation for auto-created intersections
-        self.unnamed_point_counter = 0
-
-        # Optimization parameters
-        self.has_loss = False
-        self.trainable_vars = []  # List of nn.Parameter objects
-
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self._init_state()  # Initialize all state variables
+    
+    def _init_state(self):
+        """Reset state for new optimization attempt"""
+        self.name2pt = {}
+        self.name2line = {}
+        self.all_points = []
+        self.losses = {}
+        self.loss_fns = {}
+        self.ndgs = {}
+        self.triangles_metadata = {}
+        self.circles = []
+        self.quadrilaterals_metadata = {}
+        self.segments = []
+        self.lines = []
+        self.line_objects = {}
+        self.angle_equal_assertions = []
+        self.angle_measures = []  # Store angles with measure values: [(vertex, p1, p2, degrees)]
+        self.unnamed_point_counter = 0
+        self.has_loss = False
+        self.trainable_vars = []
 
     def get_point(self, x, y):
         if not isinstance(x, torch.Tensor):
@@ -138,10 +135,11 @@ class Optimizer:
         return (cos1 - cos2)**2
 
     def _angle_bisector_ratio_loss(self, p_vertex: TorchPoint, p1: TorchPoint, p2: TorchPoint, p_bisector: TorchPoint):
-        """Loss for angle bisector theorem: BD/DC = AB/AC"""
-        ratio_bd_dc = self.segment_ratio(p1, p_bisector, p_bisector, p2)
-        ratio_ab_ac = self.segment_ratio(p_vertex, p1, p_vertex, p2)
-        return (ratio_bd_dc - ratio_ab_ac)**2
+        """Loss for angle bisector theorem: BD/DA = BC/AC (D divides AB)"""
+        # BD/DA = BC/AC (angle bisector theorem)
+        ratio_bd_da = self.segment_ratio(p1, p_bisector, p_bisector, p2)
+        ratio_bc_ac = self.segment_ratio(p_vertex, p1, p_vertex, p2)
+        return (ratio_bd_da - ratio_bc_ac)**2
 
     def dist_to_line(self, point: TorchPoint, p1: TorchPoint, p2: TorchPoint):
         """Distance from point to line defined by p1, p2"""
@@ -340,6 +338,7 @@ class Optimizer:
         tri_type = constraints.get('type', 'scalene')
         apex_idx = constraints.get('apex_idx', 0)
         right_idx = constraints.get('right_idx', 0)
+        equal_angles = constraints.get('equal_angles')  
 
         # Smart initialization based on type
         if tri_type == 'isosceles':
@@ -350,6 +349,8 @@ class Optimizer:
             init_coords = Initializer.init_equilateral_triangle()
         elif tri_type == 'right_isosceles':
             init_coords = Initializer.init_right_isoceles_triangle(right_idx)
+        elif tri_type == 'obtuse':
+            init_coords = Initializer.init_obtuse_triangle(apex_idx)
         else:
             # Scalene triangle init
             init_coords = Initializer.init_scalene_triangle()
@@ -605,10 +606,17 @@ class Optimizer:
         p2 = self.lookup_pt(segment_points[1])
 
         midpoint = self.sample_uniform(point_name)
-        # Midpoint formula already enforces exact position - no need for collinear constraint
-        self.register_loss(f"midpoint_{point_name.val}",
+        
+        # Constraint 1: Midpoint position (x,y coordinates)
+        self.register_loss(f"midpoint_pos_{point_name.val}",
                           lambda: (midpoint.x - (p1.x + p2.x)/2)**2 + (midpoint.y - (p1.y + p2.y)/2)**2,
-                          weight=50.0)
+                          weight=100.0)
+        
+        # Constraint 2: Collinearity 
+        self.register_loss(f"midpoint_collinear_{point_name.val}",
+                          lambda: self.collinear(midpoint, p1, p2),
+                          weight=100.0)
+        
         return midpoint
 
     def parameter_on_seg(self, p, segment_points: list):
@@ -646,15 +654,15 @@ class Optimizer:
         return intersection
 
     def _define_angle_bisector(self, point_name, angle_points):
-        assert len(angle_points) >= 3, "angle_bisector requires at least 3 points [A, B, C]"
+        assert len(angle_points) >= 3, "angle_bisector requires 3 points [B, A, C] where A is vertex"
 
-        vertex = self.lookup_pt(angle_points[0])  # A (đỉnh góc)
-        p1 = self.lookup_pt(angle_points[1])  # B
-        p2 = self.lookup_pt(angle_points[2])  # C
+        # DSL syntax: (bisector B A C) means angle BAC, bisector intersects BC at point
+        p1 = self.lookup_pt(angle_points[0])  # B (first ray point)
+        vertex = self.lookup_pt(angle_points[1])  # A (vertex - đỉnh góc)
+        p2 = self.lookup_pt(angle_points[2])  # C (second ray point)
 
-        # Smart initialization: midpoint of BC (works well for isosceles)
-        init_x = (p1.x.item() + p2.x.item()) / 2
-        init_y = (p1.y.item() + p2.y.item()) / 2
+        init_x = (vertex.x.item() + p1.x.item() + p2.x.item()) / 3
+        init_y = (vertex.y.item() + p1.y.item() + p2.y.item()) / 3
         bisector_point = self.sample_uniform(point_name, init_coords=(init_x, init_y))
 
         # Save metadata for rendering
@@ -662,15 +670,14 @@ class Optimizer:
             self.angle_bisectors_metadata = []
 
         self.angle_bisectors_metadata.append({
-            'vertex': vertex if isinstance(vertex, str) else angle_points[0].val,
+            'vertex': angle_points[1].val,  # A is the vertex
             'bisector_point': point_name.val,
             'angle_points': [p.val for p in angle_points]
         })
 
-        self._process_angle_bisector(angle_points[0], point_name, angle_points)
+        self._process_angle_bisector(angle_points[1], point_name, angle_points)
 
         return bisector_point
-
 
     def _define_perpendicular_bisector_point(self, point_name, segment_points):
         """Define a point that lies on the perpendicular bisector of a segment"""
@@ -696,7 +703,7 @@ class Optimizer:
 
 
     def process_parameter(self, instr):
-        from llm_engineering.domains.geometry.types import TriangleType, DiagramType
+        
 
         diagram_type = instr.diagram_type
         param_type = instr.param_type
@@ -721,33 +728,20 @@ class Optimizer:
                 logger.warning(f"Unsupported diagram type: {diagram_type}")
 
     def _process_angle_bisector(self, vertex, bisector_point, angle_points):
-        """Process angle bisector constraints using reusable helper methods"""
-        p_vertex = self.name2pt[vertex.val]  # A (đỉnh góc)
-        p_bisector = self.name2pt[bisector_point.val]  # D (điểm trên phân giác)
-        p1 = self.name2pt[angle_points[1].val]  # B
+        # angle_points = [B, A, C]
+        p1 = self.name2pt[angle_points[0].val]  # B
+        p_vertex = self.name2pt[vertex.val]  # A (đỉnh)
         p2 = self.name2pt[angle_points[2].val]  # C
+        p_bisector = self.name2pt[bisector_point.val]  # M (điểm trên phân giác)
 
         key = f"{vertex.val}_{bisector_point.val}"
         
-        # Constraint 1: D nằm trên đoạn BC
-        self.register_loss(
-            f"bisector_on_segment_{key}",
-            lambda: self._point_on_segment_loss(p_bisector, p1, p2),
-            weight=10.0
-        )
-        
-        # Constraint 2: Góc BAD = góc CAD (tính chất phân giác)
+        # Bisector constraint: Equal angles
+        # Need strong weight to balance with on-segment constraint (weight=150)
         self.register_loss(
             f"bisector_equal_angle_{key}",
-            lambda: self._angle_bisector_equal_loss(p_vertex, p1, p2, p_bisector),
-            weight=10.0
-        )
-        
-        # Constraint 3: BD/DC = AB/AC (định lý phân giác)
-        self.register_loss(
-            f"bisector_ratio_{key}",
-            lambda: self._angle_bisector_ratio_loss(p_vertex, p1, p2, p_bisector),
-            weight=5.0
+            lambda pv=p_vertex, p_1=p1, p_2=p2, pb=p_bisector: self._angle_bisector_equal_loss(pv, p_1, p_2, pb),
+            weight=100.0  # Increased to match other constraints
         )
 
 
@@ -789,18 +783,15 @@ class Optimizer:
         else:
             constraints['type'] = 'scalene'
 
-        # Single unified call
         self.sample_triangle(objects, constraints)
         
     def _process_quadrilateral_parameter(self, param_type, objects, args):
         """Process quadrilateral parameters - unified handler for all quadrilateral types"""
-        # Extract type string
         if param_type:
             param_type_str = str(param_type).split('.')[-1].lower()
         else:
             param_type_str = "general"
 
-        # Map to appropriate sample function
         quad_samplers = {
             "square": self.sample_square,
             "rectangle": self.sample_rectangle,
@@ -813,7 +804,6 @@ class Optimizer:
         if sampler:
             sampler(objects)
         else:
-            # Default to general quadrilateral via sample_quadrilateral
             try:
                 quadri_type = QuadrilateralType[param_type_str.upper()]
             except (KeyError, AttributeError):
@@ -852,6 +842,8 @@ class Optimizer:
                     logger.warning(f"inter-ll requires 4 points, got {len(args)}")
         elif param_type_str in ["perp-bisector", "perpendicular-bisector"]:
             self._define_perpendicular_bisector_point(objects[0], args)
+        elif param_type_str == "bisector":
+            self._define_angle_bisector(objects[0], args)
         elif param_type_str == "coords" or param_type_str == "":
             self.sample_uniform(objects[0])
         else:
@@ -903,6 +895,46 @@ class Optimizer:
                 self._add_perpendicular_constraint(assertion.objects)
             elif assertion.constraint_type == 'angle_equal':
                 self._add_angle_equal_constraint(assertion.objects)
+            elif assertion.constraint_type == 'angle_measure':
+                self._add_angle_measure(assertion.objects)
+            elif assertion.constraint_type == 'on_segment':
+                self._add_on_segment_constraint(assertion.objects)
+
+    def _add_angle_measure(self, points: list):
+        """Store angle measure for display: angle ABC = degrees"""
+        # Format: [p1, vertex, p2, degrees] - DSL: (angle-measure A C B 110) means angle ACB
+        if len(points) < 4:
+            logger.warning(f"Angle-measure needs 4 values (3 points + degrees), got {len(points)}")
+            return
+        
+        p1_name = points[0].val  # A
+        vertex_name = points[1].val  # C (đỉnh góc)
+        p2_name = points[2].val  # B
+        degrees = float(points[3].val) if hasattr(points[3], 'val') else float(points[3])  # 110
+        
+        # Store for later rendering
+        self.angle_measures.append((vertex_name, p1_name, p2_name, degrees))
+        if self.verbosity:
+            logger.info(f"Added angle measure: angle {p1_name}{vertex_name}{p2_name} = {degrees}°")
+
+    def _add_on_segment_constraint(self, points: list):
+        """Add constraint: point lies on segment"""
+        if len(points) != 3:
+            logger.warning(f"on_segment constraint needs 3 points (point, seg_p1, seg_p2), got {len(points)}")
+            return
+        
+        point = self.lookup_pt(points[0])
+        seg_p1 = self.lookup_pt(points[1])
+        seg_p2 = self.lookup_pt(points[2])
+        
+        key = f"{points[0].val}_on_{points[1].val}{points[2].val}"
+        self.register_loss(
+            f"on_segment_{key}",
+            lambda pt=point, p1=seg_p1, p2=seg_p2: self._point_on_segment_loss(pt, p1, p2),
+            weight=150.0  # High weight for explicit constraint
+        )
+        if self.verbosity:
+            logger.info(f"Added on-segment constraint: {points[0].val} on {points[1].val}{points[2].val}")
 
     def _add_parallel_constraint(self, points: list):
         """Add parallel constraint between two segments"""
@@ -1042,6 +1074,8 @@ class Optimizer:
         for key, loss in self.losses.items():
             logger.info(f"{key:30s}: {loss.item():.6f}")
 
+    
+
     def solve_single(self, attempt_id=0):
         self.current_attempt = attempt_id
         self.preprocess()
@@ -1050,10 +1084,60 @@ class Optimizer:
 
         loss = float('inf')
         if self.has_loss:
-            self.train(epochs=self.opts.get('epochs', 1000),
+            loss = self.train(epochs=self.opts.get('epochs', 1000),
                       lr=self.opts.get('learning_rate', 0.01))
 
-        return self.get_diagram()
+        return self.get_diagram(), loss
+    
+    def solve(self, n_tries=None):
+        """Solve with multiple initialization attempts"""
+        import random
+
+        # Default to 1 try for backward compatibility
+        if n_tries is None:
+            n_tries = self.opts.get('n_tries', 1)
+
+        eps = self.opts.get('eps', 1e-6)
+        best_loss = float('inf')
+        best_diagram = None
+
+        for attempt in range(n_tries):
+            if attempt > 0:
+                # Reset state for new attempt
+                self._init_state()
+
+                # Set different random seed for varied initialization
+                random.seed(self.opts.get('seed', 42) + attempt)
+                torch.manual_seed(self.opts.get('seed', 42) + attempt)
+
+            if self.verbosity and n_tries > 1:
+                logger.info(f"\nAttempt {attempt + 1}/{n_tries}")
+
+            try:
+                diagram, loss = self.solve_single(attempt_id=attempt)
+
+                # Early stopping if converged
+                if loss < eps:
+                    if self.verbosity and n_tries > 1:
+                        logger.success(f"Converged at attempt {attempt + 1} with loss {loss:.6f}")
+                    return diagram
+
+                # Track best result
+                if loss < best_loss:
+                    best_loss = loss
+                    best_diagram = diagram
+                    if self.verbosity and n_tries > 1:
+                        logger.info(f"New best loss: {loss:.6f}")
+
+            except Exception as e:
+                if self.verbosity:
+                    logger.error(f"Attempt {attempt + 1} failed: {e}")
+                continue
+
+        if self.verbosity and n_tries > 1:
+            logger.info(f"\nBest loss after {n_tries} attempts: {best_loss:.6f}")
+
+        return best_diagram if best_diagram is not None else self.get_diagram()
 
     def get_diagram(self):
 
@@ -1076,11 +1160,14 @@ class Optimizer:
 
                 equal_sides = metadata.get('equal_sides')
                 right_angle_at = metadata.get('right_angle_at')
+                equal_angles = metadata.get('equal_angles')
 
-                diagram.add_triangle(p1, p2, p3, equal_sides, right_angle_at)
-        
+                logger.info(f"Adding triangle {key} with equal_angles: {equal_angles}")
+
+                diagram.add_triangle(p1, p2, p3, equal_sides, right_angle_at, equal_angles)
+
         # Add quadrilaterals with metadata
-        for key, metadata in self.quadrilaterals_metadata.items():  
+        for key, metadata in self.quadrilaterals_metadata.items():
             p1_name, p2_name, p3_name, p4_name = key
             if all(name in diagram.points for name in [p1_name, p2_name, p3_name, p4_name]):
                 diagram.add_quadrilateral(
@@ -1097,14 +1184,12 @@ class Optimizer:
                 center = diagram.points[center_name]
                 diagram.add_circle(center, info)
 
-        # Add segments
         for p1_name, p2_name in self.segments:
             if p1_name in diagram.points and p2_name in diagram.points:
                 p1 = diagram.points[p1_name]
                 p2 = diagram.points[p2_name]
                 diagram.add_segment(p1, p2)
 
-        # Add lines
         for p1_name, p2_name in self.lines:
             if p1_name in diagram.points and p2_name in diagram.points:
                 p1 = diagram.points[p1_name]
@@ -1113,4 +1198,47 @@ class Optimizer:
                 line_name = f"line_{p1_name}_{p2_name}"
                 diagram.add_line(line_name, (p1, p2))
 
+        # Add angle bisectors
+        if hasattr(self, 'angle_bisectors_metadata'):
+            for bisector_data in self.angle_bisectors_metadata:
+                # Convert point names to GeometricPoint objects
+                vertex_name = bisector_data['vertex']
+                bisector_point_name = bisector_data['bisector_point']
+
+                if vertex_name in diagram.points and bisector_point_name in diagram.points:
+                    diagram.angle_bisectors.append({
+                        'vertex': diagram.points[vertex_name],
+                        'point': diagram.points[bisector_point_name],
+                        'angle_points': bisector_data.get('angle_points', [])
+                    })
+
+        # Add angle-equal assertions
+        for assertion in self.angle_equal_assertions:
+            angle1 = assertion['angle1']  # (p1, p2, p3)
+            angle2 = assertion['angle2']  # (p4, p5, p6)
+
+            if all(pname in diagram.points for pname in angle1 + angle2):
+                diagram.angle_equal_assertions.append({
+                    'angle1': {
+                        'p1': diagram.points[angle1[0]],
+                        'vertex': diagram.points[angle1[1]],
+                        'p2': diagram.points[angle1[2]]
+                    },
+                    'angle2': {
+                        'p1': diagram.points[angle2[0]],
+                        'vertex': diagram.points[angle2[1]],
+                        'p2': diagram.points[angle2[2]]
+                    }
+                })
+        
+        # Add angle measures for display
+        for vertex_name, p1_name, p2_name, degrees in self.angle_measures:
+            if all(pname in diagram.points for pname in [vertex_name, p1_name, p2_name]):
+                diagram.add_angle_measure(
+                    diagram.points[vertex_name],
+                    diagram.points[p1_name],
+                    diagram.points[p2_name],
+                    degrees
+                )
+        
         return diagram

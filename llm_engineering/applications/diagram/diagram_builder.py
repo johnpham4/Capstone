@@ -2,9 +2,8 @@ from typing import List, Tuple, Any
 
 from llm_engineering.applications.diagram.dsl_parser import DSLParser
 from llm_engineering.domains.geometry import Point
-from llm_engineering.domains.geometry.instructions import Parameter
+from llm_engineering.domains.geometry.instructions import Parameter, Assertion
 from llm_engineering.domains.geometry.types import DiagramType, QuadrilateralType, TriangleType
-
 
 class DiagramBuilder:
     def __init__(self, problem_lines: List[str]):
@@ -43,6 +42,10 @@ class DiagramBuilder:
             self.process_perpendicular(cmd)
         elif head == "angle-equal":
             self.process_angle_equal(cmd)
+        elif head == "angle-measure":
+            self.process_angle_measure(cmd)
+        elif head == "on-segment":
+            self.process_on_segment(cmd)
         else:
             raise NotImplementedError(f"Command not supported: {head}")
 
@@ -78,7 +81,6 @@ class DiagramBuilder:
         # Two or more parameters: type + arguments
         type_str = param_method[0].upper().replace('-', '_')
         
-        # Handle different parameter types
         param_type_lower = param_method[0].lower()
         if param_type_lower in ['equal_angles', 'equal-angles']:
             # For equal_angles, args are indices (integers), not Points
@@ -105,7 +107,6 @@ class DiagramBuilder:
         if len(ps) != 4:
             raise ValueError(f"Square must have 4 vertices, got {len(ps)}")
         
-        # Register all 4 points
         for p in ps:
             self.register_pt(p)
         
@@ -113,9 +114,8 @@ class DiagramBuilder:
             DiagramType.QUADRILATERAL,
             ps,
             QuadrilateralType.SQUARE,
-            (ps[0],)  # Corner point (default first vertex)
+            (ps[0],)  
         )
-        
         self.instructions.append(instr)
 
     def process_define(self, cmd):
@@ -198,7 +198,7 @@ class DiagramBuilder:
         """Process: (line A B)"""
         if len(cmd) != 3:
             raise RuntimeError(f"Line requires 2 points: {cmd}")
-
+        
         p1 = Point(cmd[1])
         p2 = Point(cmd[2])
 
@@ -230,7 +230,6 @@ class DiagramBuilder:
         p3 = Point(seg2[1])
         p4 = Point(seg2[2])
 
-        from llm_engineering.domains.geometry.instructions import Assertion
         instr = Assertion(
             constraint_type='parallel',
             objects=[p1, p2, p3, p4]
@@ -251,13 +250,11 @@ class DiagramBuilder:
         if seg1[0] != "segment" or seg2[0] != "segment":
             raise RuntimeError(f"Perpendicular requires segments: {cmd}")
 
-        # Extract 4 points
         p1 = Point(seg1[1])
         p2 = Point(seg1[2])
         p3 = Point(seg2[1])
         p4 = Point(seg2[2])
 
-        from llm_engineering.domains.geometry.instructions import Assertion
         instr = Assertion(
             constraint_type='perpendicular',
             objects=[p1, p2, p3, p4]
@@ -271,10 +268,45 @@ class DiagramBuilder:
 
         # Extract 6 points for two angles
         points = [Point(cmd[i]) for i in range(1, 7)]
-
-        from llm_engineering.domains.geometry.instructions import Assertion
         instr = Assertion(
             constraint_type='angle_equal',
             objects=points
+        )
+        self.instructions.append(instr)
+
+    def process_angle_measure(self, cmd):
+        """Process: (angle-measure A B C 120) -> ∠ABC = 120°"""
+        if len(cmd) != 5:
+            raise RuntimeError(f"angle-measure requires 3 points + 1 degree value: {cmd}")
+
+        # DSL format: (angle-measure A C B 110)
+        # Order: p1=A, vertex=C, p2=B
+        points = [Point(cmd[i]) for i in range(1, 4)]
+        degrees = cmd[4]  
+        
+        # Create a Point-like object for the degree value to fit into objects list
+        class DegreeValue:
+            def __init__(self, value):
+                self.val = str(value)
+        
+        instr = Assertion(
+            constraint_type='angle_measure',
+            objects=points + [DegreeValue(degrees)]
+        )
+        self.instructions.append(instr)
+
+    def process_on_segment(self, cmd):
+        """Process: (on-segment M C D) -> M lies on segment CD"""
+        if len(cmd) != 4:
+            raise RuntimeError(f"on-segment requires 3 points (point, seg_p1, seg_p2): {cmd}")
+        
+        # DSL format: (on-segment M C D) means M lies on segment CD
+        point = Point(cmd[1])  # M
+        seg_p1 = Point(cmd[2])  # C
+        seg_p2 = Point(cmd[3])  # D
+        
+        instr = Assertion(
+            constraint_type='on_segment',
+            objects=[point, seg_p1, seg_p2]
         )
         self.instructions.append(instr)
