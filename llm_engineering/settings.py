@@ -23,6 +23,11 @@ class Settings(BaseSettings):
     SAGEMAKER_ENDPOINT_CONFIG_INFERENCE: str = "text2diagram-llm-endpoint"
     GPU_INSTANCE_TYPE: str = "ml.g5.2xlarge"
 
+    # KV Cache & Optimization
+    USE_CACHE_INFERENCE: bool = True  # Enable KV cache for faster inference
+    MAX_CONCURRENT_REQUESTS: int = 128  # Max concurrent requests
+    MAX_WAITING_TOKENS: int = 20  # Max tokens waiting in queue
+
     # Model Inference Config
     SM_NUM_GPUS: int = 1
     MAX_INPUT_LENGTH: int = 1024

@@ -18,6 +18,9 @@ hugging_face_deploy_config = {
     "MAX_BATCH_TOTAL_TOKENS": json.dumps(settings.MAX_BATCH_TOTAL_TOKENS),
     "MAX_BATCH_PREFILL_TOKENS": json.dumps(settings.MAX_BATCH_TOTAL_TOKENS),
     "HF_MODEL_QUANTIZE": "bitsandbytes",
+    "USE_CACHE": json.dumps(settings.USE_CACHE_INFERENCE),  # Enable KV cache for autoregressive generation
+    "MAX_CONCURRENT_REQUESTS": json.dumps(settings.MAX_CONCURRENT_REQUESTS),  # Concurrent request handling
+    "MAX_WAITING_TOKENS": json.dumps(settings.MAX_WAITING_TOKENS),  # Token queue management
 }
 
 

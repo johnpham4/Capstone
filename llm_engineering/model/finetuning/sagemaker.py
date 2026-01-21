@@ -16,6 +16,7 @@ def run_finetuning_on_sagemaker(
     per_device_train_batch_size: int = 2,
     learning_rate: float = 2e-4,
     dataset_huggingface_workspace: str = "minn4",
+    dataset_huggingface_repo_name: str = "gmbl",
     model_name: str = "meta-llama/Llama-2-7b-hf",
 ) -> None:
     assert settings.HF_TOKEN, "Hugging Face access token is required. Set HF_TOKEN in .env"
@@ -45,6 +46,7 @@ def run_finetuning_on_sagemaker(
         "per_device_train_batch_size": per_device_train_batch_size,
         "learning_rate": learning_rate,
         "dataset_huggingface_workspace": dataset_huggingface_workspace,
+        "dataset_huggingface_repo_name": dataset_huggingface_repo_name,
         "model_output_huggingface_workspace": huggingface_user,
         "model_name": model_name,
     }
