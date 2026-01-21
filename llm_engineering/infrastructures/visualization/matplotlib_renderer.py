@@ -1,7 +1,3 @@
-"""
-Matplotlib Diagram Renderer - Infrastructure Layer
-Renders diagrams using matplotlib
-"""
 import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
@@ -70,7 +66,6 @@ class MatplotlibDiagramRenderer:
 
     def _draw_angle_arc(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, num_arcs: int = 1, radius: float = 0.12):
         """
-        Vẽ arc để đánh dấu góc tại vertex
         vertex: GeometricPoint - đỉnh góc
         p1, p2: GeometricPoint - 2 điểm tạo thành góc
         num_arcs: số arc (1 arc, 2 arcs, 3 arcs để phân biệt)
@@ -114,6 +109,7 @@ class MatplotlibDiagramRenderer:
                              linewidth=1.2)
             ax.add_patch(arc)
     
+
     def render(
         self,
         diagram: Diagram = None,
@@ -130,7 +126,7 @@ class MatplotlibDiagramRenderer:
 
         fig, ax = plt.subplots(figsize=(8, 8))
 
-        # Draw triangles
+        # 1. Draw Triangles (Solid Lines)
         for tri in self.diagram.triangles:
             p1, p2, p3 = tri[0], tri[1], tri[2]
             equal_sides = tri[3] if len(tri) > 3 else None
@@ -152,6 +148,7 @@ class MatplotlibDiagramRenderer:
                 sides_map = {}  # {(i,j): tick_num}
                 for pair_idx, (i, j) in enumerate(equal_sides):
                     # Check if this pair already has ticks
+
                     found = False
                     for existing_sides, tick_num in sides_map.items():
                         if (i, j) in existing_sides or (j, i) in existing_sides:
@@ -163,11 +160,12 @@ class MatplotlibDiagramRenderer:
                         for other_i, other_j in equal_sides:
                             if (other_i, other_j) != (i, j) and (other_j, other_i) != (i, j):
                                 # Check if they share a vertex
+
                                 if i in (other_i, other_j) or j in (other_i, other_j):
                                     equal_group.append((other_i, other_j))
                         sides_map[tuple(equal_group)] = len(sides_map) + 1
 
-                # Draw ticks for each group
+
                 drawn = set()
                 for sides_group, num_ticks in sides_map.items():
                     for i, j in sides_group:
@@ -242,69 +240,64 @@ class MatplotlibDiagramRenderer:
                         # Use distance from center to one side
                         p1, p2 = tri_points[0], tri_points[1]
                         # Distance formula from point to line
+
                         num = abs((p2.y - p1.y) * center.x - (p2.x - p1.x) * center.y + p2.x * p1.y - p2.y * p1.x)
                         den = np.sqrt((p2.y - p1.y)**2 + (p2.x - p1.x)**2)
                         radius = num / den if den > 0 else 0.1
                         circle = plt.Circle((center.x, center.y), radius, fill=False, edgecolor='blue', linewidth=1.0)
                         ax.add_patch(circle)
                 elif info['type'] == 'circumcircle':
-                    # Calculate circumradius from triangle
+
                     tri_points = [self.diagram.points[name] for name in info['triangle'] if name in self.diagram.points]
                     if len(tri_points) == 3:
-                        # Use distance from center to one vertex
                         radius = center.distance_to(tri_points[0])
                         circle = plt.Circle((center.x, center.y), radius, fill=False, edgecolor='green', linewidth=1.0)
                         ax.add_patch(circle)
             else:
-                # Simple radius
+
                 circle = plt.Circle((center.x, center.y), info, fill=False, edgecolor='black', linewidth=1.0)
                 ax.add_patch(circle)
 
-        # Draw segments
+        # 4. Draw Segments (Auxiliary - Dashed)
         for p1, p2, color in self.diagram.segments:
             ax.plot([p1.x, p2.x], [p1.y, p2.y], color=color, linewidth=1.0, linestyle='--', alpha=0.7)
 
-        # Draw lines (infinite lines, extended with arrows)
+        # 5. Draw Lines
         for line_name, line_data in self.diagram.lines.items():
             p1, p2 = line_data
-            # Calculate direction vector
             dx = p2.x - p1.x
             dy = p2.y - p1.y
             length = np.sqrt(dx**2 + dy**2)
 
             if length > 0:
-                # Normalize direction
+            # Normalize direction
                 dx /= length
                 dy /= length
-
-                # Extend line significantly beyond the two points
                 extend_factor = 2.0  # Extend line in both directions
+                
                 start_x = p1.x - dx * extend_factor
                 start_y = p1.y - dy * extend_factor
                 end_x = p2.x + dx * extend_factor
                 end_y = p2.y + dy * extend_factor
 
-                # Draw extended line with arrows
+
                 ax.plot([start_x, end_x], [start_y, end_y],
                        color='blue', linewidth=1.0, linestyle='-', alpha=0.6)
 
-                # Add arrow heads at both ends
                 arrow_size = 0.15
                 ax.annotate('', xy=(end_x, end_y), xytext=(end_x - dx * arrow_size, end_y - dy * arrow_size),
                            arrowprops=dict(arrowstyle='->', color='blue', lw=1.0, alpha=0.6))
                 ax.annotate('', xy=(start_x, start_y), xytext=(start_x + dx * arrow_size, start_y + dy * arrow_size),
                            arrowprops=dict(arrowstyle='->', color='blue', lw=1.0, alpha=0.6))
 
-        # Draw points and labels
+        # 6. Draw Points and Labels
         if self.diagram.points:
-            # Calculate centroid for label positioning
             cx = sum(p.x for p in self.diagram.points.values()) / len(self.diagram.points)
             cy = sum(p.y for p in self.diagram.points.values()) / len(self.diagram.points)
 
             for name, p in self.diagram.points.items():
                 ax.plot(p.x, p.y, 'ko', markersize=4)
 
-                # Position label away from centroid
                 dx, dy = p.x - cx, p.y - cy
                 dist = np.sqrt(dx**2 + dy**2)
 
@@ -344,18 +337,39 @@ class MatplotlibDiagramRenderer:
                         self._draw_angle_arc(ax, vertex, p1, bisector_point, num_arcs=1, radius=0.08)
                         self._draw_angle_arc(ax, vertex, bisector_point, p2, num_arcs=1, radius=0.08)
 
+        # Draw angle-equal assertions (angle ABC = angle DEF)
+        if hasattr(self.diagram, 'angle_equal_assertions') and self.diagram.angle_equal_assertions:
+            for assertion in self.diagram.angle_equal_assertions:
+                angle1 = assertion['angle1']
+                angle2 = assertion['angle2']
+                
+                # Draw arc for angle 1 (p1-vertex-p2)
+                self._draw_angle_arc(ax, angle1['vertex'], 
+                                   angle1['p1'], 
+                                   angle1['p2'], 
+                                   num_arcs=1, 
+                                   radius=0.12)
+                
+                # Draw arc for angle 2 
+                self._draw_angle_arc(ax, angle2['vertex'],
+                                   angle2['p1'],
+                                   angle2['p2'],
+                                   num_arcs=1,
+                                   radius=0.12)
+
         # Configure axes
         ax.set_aspect('equal')
         ax.axis('off')
 
         # Save if requested
+
         if save:
             output_path = Path(filename)
             output_path.parent.mkdir(parents=True, exist_ok=True)
             plt.savefig(str(output_path), bbox_inches='tight', dpi=150)
             logger.info(f"Diagram saved to: {output_path}")
 
-        # Show if requested
+
         if show:
             plt.show()
         elif not save:

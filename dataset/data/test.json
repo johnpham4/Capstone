@@ -1,6 +1,6 @@
 [
   {
-    "instruction": "Tam giác ABC, AD là đường phân giác, AM là trung tuyến của BC",
-    "answer": "(triangle (A B C))\n(define D point (bisector A B C))\n(segment A D)\n(define M point (midpoint B C))\n(segment A M)"
+    "instruction": "Hình vuông ABCD có đường tròn nội tiếp",
+    "answer": "(square (A B C D))\n(define O point (midpoint A C))\n(circle O (incircle A B C D))\n"
   }
 ]

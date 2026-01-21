@@ -18,9 +18,14 @@ zenml_status:
 ngrok_up:
 	- curl -s http://localhost:4040/api/tunnels | grep -o 'https://[^"]*'
 
-
 data:
 	uv run python -m tools.run --run-prepare-data --no-cache
+
+generation:
+	uv run python tools/run.py --run-generate-gmbl --no-cache
+
+upload:
+	uv run python -m tools.run --run-upload-dataset
 
 generation:
 	uv run python tools/run.py --run-generate-gmbl --no-cache
