@@ -16,8 +16,8 @@ def run_finetuning_on_sagemaker(
     per_device_train_batch_size: int = 2,
     learning_rate: float = 2e-4,
     dataset_huggingface_workspace: str = "minn4",
-    dataset_huggingface_repo_name: str = "gmbl",
-    model_name: str = "meta-llama/Llama-2-7b-hf",
+    dataset_huggingface_repo_name: str = "text2dsl",
+    model_name: str = "tiiuae/Falcon-H1R-7B",
 ) -> None:
     assert settings.HF_TOKEN, "Hugging Face access token is required. Set HF_TOKEN in .env"
     assert settings.AWS_ARN_ROLE, "AWS ARN role is required. Set AWS_ARN_ROLE in .env"
@@ -51,9 +51,6 @@ def run_finetuning_on_sagemaker(
         "model_name": model_name,
     }
 
-    # Use SageMaker pre-built HuggingFace container (PyTorch 2.1, transformers 4.36)
-    # Llama-2 works with transformers 4.36
-    logger.info(f"Using SageMaker pre-built container: PyTorch 2.1, transformers 4.36")
     logger.info(f"Training model: {model_name}")
 
     huggingface_estimator = HuggingFace(

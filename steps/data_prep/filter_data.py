@@ -11,7 +11,7 @@ from llm_engineering.applications.datasets.extraction import SynthGeoDatasetExtr
 def filter_triangle(
     diagram_texts: List[Dict],
     output_dir: str,
-    json_name: str = "triangle_diagrams.json",
+    json_name: str = "diagrams_filter.json",
 ) -> Annotated[bool, "status"]:
     logger.info(f"Filtering {len(diagram_texts)} diagrams")
 

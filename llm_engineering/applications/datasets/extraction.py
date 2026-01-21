@@ -112,7 +112,7 @@ class SynthGeoDatasetExtractor:
 
     @classmethod
     def filter_diagrams(cls, diagram_texts: List[Dict]) -> List[Dict]:
-        non_triangle_pattern = r"(quadrilateral|hexagon|polygon)"
+        non_triangle_pattern = r"(excircle|quadrilateral|hexagon|polygon)"
         # triangle_pattern = r"\btriangle\b"
 
         triangle_texts = []

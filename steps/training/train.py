@@ -9,7 +9,7 @@ def train(
     per_device_train_batch_size: int,
     learning_rate: float,
     dataset_huggingface_workspace: str = "minn04",
-    dataset_huggingface_repo_name: str = "gmbl",
+    dataset_huggingface_repo_name: str = "text2dsl",
     is_dummy: bool = False,
 ) -> None:
     run_finetuning_on_sagemaker(
