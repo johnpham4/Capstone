@@ -1,3 +1,0 @@
-"""
-Application diagram services package
-"""
