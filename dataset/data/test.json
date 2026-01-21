@@ -1,7 +1,52 @@
 [
   {
-    "image_dir": "images/img_210406.png",
-    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, M là trung điểm của AB, DM song song với AC.",
-    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(define D point (segment A B))\n(segment D M)\n(segment A C)\n(parallel (segment D M) (segment A C))"
+    "image_dir": "images/img_100430.png",
+    "instruction": "Tam giác ABC, tam giác DEF, tam giác ABC đồng dạng với tam giác DEF",
+    "answer": "(triangle (A B C))\n(triangle (D E F))"
+  },
+  {
+    "image_dir": "images/img_100294.png",
+    "instruction": "Tam giác ABC, AB = AC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, điểm N nằm trên đường tròn O",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment O (circumcircle A B C)))"
+  },
+  {
+    "image_dir": "images/img_100727.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment O (incircle A B C)))"
+  },
+  {
+    "image_dir": "images/img_100089.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_100617.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC, điểm O là trung điểm của đoạn thẳng AC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (midpoint A C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_100631.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, góc ADE = 90, đường tròn ngoại tiếp E của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_10046.png",
+    "instruction": "Tam giác ABC, điểm O là tâm đường tròn bàng tiếp của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_100305.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(angle-equal A D E C D E)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_100053.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(parallel (segment E F) (segment A B))"
+  },
+  {
+    "image_dir": "images/img_1.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn D với đường kính AB",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(angle-equal A D E B D E)\n(define O point (midpoint A B))\n(circle O (circumcircle A B D))"
   }
 ]

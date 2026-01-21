@@ -47,7 +47,7 @@ def test_single_problem(instruction, dsl_answer, output_path):
 
 
 def main():
-    path = "dataset/data/test.json"
+    path = "dataset/data/train.json"
     json_path = Path(path)
     output_dir = Path("output_fixed")
     output_dir.mkdir(parents=True, exist_ok=True)

@@ -13,10 +13,9 @@ def filter_triangle(
     output_dir: str,
     json_name: str = "triangle_diagrams.json",
 ) -> Annotated[bool, "status"]:
-    """Filter diagrams to keep only triangles (remove circles, quadrilaterals, etc.)"""
-    logger.info(f"Filtering {len(diagram_texts)} diagrams to keep only triangles")
+    logger.info(f"Filtering {len(diagram_texts)} diagrams")
 
-    filtered = SynthGeoDatasetExtractor.filter_triangles(diagram_texts)
+    filtered = SynthGeoDatasetExtractor.filter_diagrams(diagram_texts)
 
     logger.success(f"Filtered to {len(filtered)} triangle diagrams (removed {len(diagram_texts) - len(filtered)})")
 
