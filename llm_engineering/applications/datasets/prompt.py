@@ -160,4 +160,5 @@ Không markdown, không giải thích.
 
 ═══ INPUT ═══
 {{ extract }}
+
 """

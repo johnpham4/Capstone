@@ -62,7 +62,7 @@
   {
     "image_dir": "images/img_210022.png",
     "instruction": "Hình vuông ABCD có đường tròn nội tiếp",
-    "answer": "(square (A B C D))\n      (define O point (midpoint A C))\n      (circle O (incircle A B C D))\n"
+    "answer": "(square (A B C D))\n(define O point (midpoint A C))\n(circle O (incircle A B C D))\n"
   },
   {
     "image_dir": "images/img_210018.png",
