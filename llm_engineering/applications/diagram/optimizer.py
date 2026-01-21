@@ -1,16 +1,16 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-
+import random
+from loguru import logger
 from collections import namedtuple
 
-from llm_engineering.domains.geometry.instructions import Parameter
+from llm_engineering.domains.geometry.instructions import Parameter, Assertion
 from llm_engineering.domains.geometry.value_objects import Point, Line
 from llm_engineering.domains.geometry.entities import GeometricPoint, Diagram
 from llm_engineering.domains.geometry.types import QuadrilateralType, TriangleType, DiagramType
 from llm_engineering.applications.diagram.initializer import Initializer
 
-from loguru import logger
 
 TorchPoint = namedtuple("TorchPoint", ["x", "y"])
 LineSF = namedtuple("LineSF", ["a", "b", "c", "p1", "p2"])
@@ -80,6 +80,14 @@ class Optimizer:
     def norm(self, p: TorchPoint):
         return torch.sqrt(p.x**2 + p.y**2)
 
+    def _vector_from_points(self, pa: TorchPoint, pb: TorchPoint):
+        """Calculate vector from pb to pa: (pa - pb)"""
+        return (pa.x - pb.x, pa.y - pb.y)
+
+    def _vector_length(self, vx, vy):
+        """Calculate length of vector (vx, vy)"""
+        return torch.sqrt(vx**2 + vy**2 + 1e-8)
+
     def pp2lnf(self, p1: TorchPoint, p2: TorchPoint):
         # Direction vector
         dx = p2.x - p1.x
@@ -135,11 +143,32 @@ class Optimizer:
         return (cos1 - cos2)**2
 
     def _angle_bisector_ratio_loss(self, p_vertex: TorchPoint, p1: TorchPoint, p2: TorchPoint, p_bisector: TorchPoint):
-        """Loss for angle bisector theorem: BD/DA = BC/AC (D divides AB)"""
+        """Loss for angle bisector theorem"""
         # BD/DA = BC/AC (angle bisector theorem)
         ratio_bd_da = self.segment_ratio(p1, p_bisector, p_bisector, p2)
         ratio_bc_ac = self.segment_ratio(p_vertex, p1, p_vertex, p2)
         return (ratio_bd_da - ratio_bc_ac)**2
+
+    def _triangle_angle_difference_loss(self, pts: list, idx1: int, idx2: int):
+        """Calculate difference between two angles in a triangle at given indices."""
+        v1_prev = pts[(idx1-1)%3]
+        v1_curr = pts[idx1]
+        v1_next = pts[(idx1+1)%3]
+
+        v2_prev = pts[(idx2-1)%3]
+        v2_curr = pts[idx2]
+        v2_next = pts[(idx2+1)%3]
+
+        cos1 = self.angle_cosine(v1_prev, v1_curr, v1_next)
+        cos2 = self.angle_cosine(v2_prev, v2_curr, v2_next)
+        return cos1 - cos2
+
+    def _angle_diff_loss(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint,
+                                          p4: TorchPoint, p5: TorchPoint, p6: TorchPoint):
+        """Calculate squared difference between two angles: (cos(p1-p2-p3) - cos(p4-p5-p6))^2."""
+        cos1 = self.angle_cosine(p1, p2, p3)
+        cos2 = self.angle_cosine(p4, p5, p6)
+        return (cos1 - cos2)**2
 
     def dist_to_line(self, point: TorchPoint, p1: TorchPoint, p2: TorchPoint):
         """Distance from point to line defined by p1, p2"""
@@ -181,7 +210,6 @@ class Optimizer:
 
 
     def sample_uniform(self, p, lo=-1.0, hi=1.0, save_name=True, init_coords=None):
-
         if init_coords is not None:
             x = self.mkvar(f"{p.val}_x", lo, hi, init_value=init_coords[0])
             y = self.mkvar(f"{p.val}_y", lo, hi, init_value=init_coords[1])
@@ -194,21 +222,15 @@ class Optimizer:
 
     def _dot_product(self, pa: TorchPoint, pb: TorchPoint, pc: TorchPoint):
         """Calculate dot product of vectors (pa-pb) and (pc-pb)"""
-        v1x, v1y = pa.x - pb.x, pa.y - pb.y
-        v2x, v2y = pc.x - pb.x, pc.y - pb.y
+        v1x, v1y = self._vector_from_points(pa, pb)
+        v2x, v2y = self._vector_from_points(pc, pb)
         return v1x * v2x + v1y * v2y
 
     def _cross_product_area(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
         """Calculate cross product for area check (collinearity test)"""
-        v1x, v1y = p2.x - p1.x, p2.y - p1.y
-        v2x, v2y = p3.x - p1.x, p3.y - p1.y
+        v1x, v1y = self._vector_from_points(p2, p1)
+        v2x, v2y = self._vector_from_points(p3, p1)
         return v1x * v2y - v1y * v2x
-
-    def _dot_product_vectors(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint, p4: TorchPoint):
-        """Calculate dot product of vectors (p2-p1) and (p4-p3)"""
-        v1x, v1y = p2.x - p1.x, p2.y - p1.y
-        v2x, v2y = p4.x - p3.x, p4.y - p3.y
-        return v1x * v2x + v1y * v2y
 
     def perpendicular(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint, p4: TorchPoint):
         """Perpendicular constraint: (p1-p2) ⊥ (p3-p4). Returns 0 when perpendicular."""
@@ -224,28 +246,17 @@ class Optimizer:
 
     def vector_length(self, p1: TorchPoint, p2: TorchPoint):
         """Calculate length of vector from p1 to p2."""
-        dx = p2.x - p1.x
-        dy = p2.y - p1.y
-        return torch.sqrt(dx**2 + dy**2 + 1e-8)
-
-    def dot_product_at_vertex(self, p1: TorchPoint, vertex: TorchPoint, p2: TorchPoint):
-        """Calculate dot product of vectors (p1-vertex) and (p2-vertex)."""
-        v1_x = p1.x - vertex.x
-        v1_y = p1.y - vertex.y
-        v2_x = p2.x - vertex.x
-        v2_y = p2.y - vertex.y
-        return v1_x * v2_x + v1_y * v2_y
+        vx, vy = self._vector_from_points(p2, p1)
+        return torch.sqrt(vx**2 + vy**2 + 1e-8)
 
     def angle_cosine(self, p1: TorchPoint, vertex: TorchPoint, p2: TorchPoint):
         """Calculate cosine of angle p1-vertex-p2."""
-        v1_x = p1.x - vertex.x
-        v1_y = p1.y - vertex.y
-        v2_x = p2.x - vertex.x
-        v2_y = p2.y - vertex.y
-
-        dot = v1_x * v2_x + v1_y * v2_y
-        len1 = torch.sqrt(v1_x**2 + v1_y**2 + 1e-8)
-        len2 = torch.sqrt(v2_x**2 + v2_y**2 + 1e-8)
+        dot = self._dot_product(p1, vertex, p2)
+        v1_x, v1_y = self._vector_from_points(p1, vertex)
+        v2_x, v2_y = self._vector_from_points(p2, vertex)
+        
+        len1 = self._vector_length(v1_x, v1_y)
+        len2 = self._vector_length(v2_x, v2_y)
         return dot / (len1 * len2 + 1e-8)
 
     def segment_ratio(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint, p4: TorchPoint):
@@ -393,31 +404,16 @@ class Optimizer:
         if equal_angles:
             metadata['equal_angles'] = equal_angles
             for idx1, idx2 in equal_angles:
-                # Enforce angle equality using cosine similarity
-                def angle_loss(i1=idx1, i2=idx2):
-                    v1_prev = pts[(i1-1)%3]
-                    v1_curr = pts[i1]
-                    v1_next = pts[(i1+1)%3]
+                self.register_loss(
+                    f"equal_angle_{idx1}_{idx2}_{points[0].val}",
+                    lambda i1=idx1, i2=idx2, p=pts: self._triangle_angle_difference_loss(p, i1, i2),
+                    weight=10.0
+                )
 
-                    v2_prev = pts[(i2-1)%3]
-                    v2_curr = pts[i2]
-                    v2_next = pts[(i2+1)%3]
-
-                    cos1 = self.angle_cosine(v1_prev, v1_curr, v1_next)
-                    cos2 = self.angle_cosine(v2_prev, v2_curr, v2_next)
-                    return cos1 - cos2
-
-                self.register_loss(f"equal_angle_{idx1}_{idx2}_{points[0].val}",
-                                 angle_loss, weight=10.0)
-
-        # Non-degeneracy using primitive
         self.register_ndg(f"tri_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
                          lambda: self.collinear(p1, p2, p3), weight=1.0)
-
-        # Track metadata
         key = (points[0].val, points[1].val, points[2].val)
         self.triangles_metadata[key] = metadata
-
         return [p1, p2, p3]
     
     #tu giac
@@ -447,7 +443,6 @@ class Optimizer:
         
         metadata = {'type': quadri_type}
         if quadri_type in [QuadrilateralType.SQUARE, QuadrilateralType.RECTANGLE]:
-            # All 4 right angles using helper
             self.register_loss(f"angle_A", lambda: self._dot_product(pts[3], pts[0], pts[1]), weight=100.0)
             self.register_loss(f"angle_B", lambda: self._dot_product(pts[0], pts[1], pts[2]), weight=100.0)
             self.register_loss(f"angle_C", lambda: self._dot_product(pts[1], pts[2], pts[3]), weight=100.0)
@@ -479,8 +474,6 @@ class Optimizer:
                              lambda: sum((d - avg)**2 for d in dists), weight=10.0)
             self.register_ndg(f"rhombus_ndg", lambda: self.collinear(pts[0], pts[1], pts[2]), weight=1.0)
             metadata['equal_sides'] = [(0, 1), (1, 2), (2, 3), (3, 0)]
-
-        # Track metadata
         key = tuple(p.val for p in points)
         self.quadrilaterals_metadata[key] = metadata
         return [p1, p2, p3, p4]
@@ -527,15 +520,12 @@ class Optimizer:
         p2 = self.lookup_pt(triangle_points[1])
         p3 = self.lookup_pt(triangle_points[2])
 
-        # Create learnable point
         centroid = self.sample_uniform(point_name)
-
         # Constraint: must be at centroid position
         def centroid_loss():
             expected_x = (p1.x + p2.x + p3.x) / 3
             expected_y = (p1.y + p2.y + p3.y) / 3
             return (centroid.x - expected_x)**2 + (centroid.y - expected_y)**2
-
         self.register_loss(f"centroid_{point_name.val}", centroid_loss, weight=10.0)
         return centroid
 
@@ -547,12 +537,9 @@ class Optimizer:
         p2 = self.lookup_pt(triangle_points[1])
         p3 = self.lookup_pt(triangle_points[2])
 
-        # Create named point with smart init
         init_coords = Initializer.init_triangle_incircle()
         init_coords = Initializer.add_noise(init_coords)
         incenter = self.sample_uniform(point_name, init_coords=init_coords[3])
-
-        # Equal distance to all three sides
         self.register_loss(f"incenter_{point_name.val}",
                           lambda: (self.dist_to_line(incenter, p1, p2) - self.dist_to_line(incenter, p2, p3))**2 +
                                   (self.dist_to_line(incenter, p2, p3) - self.dist_to_line(incenter, p3, p1))**2,
@@ -567,12 +554,10 @@ class Optimizer:
         p2 = self.lookup_pt(triangle_points[1])
         p3 = self.lookup_pt(triangle_points[2])
 
-        # Create named point with smart init
         init_coords = Initializer.init_triangle_circumcircle(radius=1.0)
         init_coords = Initializer.add_noise(init_coords, noise_scale=0.02)
         circumcenter = self.sample_uniform(point_name, init_coords=init_coords[3])
 
-        # Equal distance to all three vertices
         self.register_loss(f"circumcenter_{point_name.val}",
                           lambda: (self.dist(circumcenter, p1) - self.dist(circumcenter, p2))**2 +
                                   (self.dist(circumcenter, p2) - self.dist(circumcenter, p3))**2,
@@ -594,8 +579,8 @@ class Optimizer:
 
         # Two altitudes perpendicular to opposite sides: AH ⊥ BC, BH ⊥ AC
         self.register_loss(f"orthocenter_{point_name.val}",
-                          lambda: self._dot_product_vectors(p1, orthocenter, p2, p3)**2 +
-                                  self._dot_product_vectors(p2, orthocenter, p1, p3)**2,
+                          lambda: self._dot_product(p1, orthocenter, p2, p3)**2 +
+                                  self._dot_product(p2, orthocenter, p1, p3)**2,
                           weight=10.0)
         return orthocenter
 
@@ -604,7 +589,6 @@ class Optimizer:
 
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
-
         midpoint = self.sample_uniform(point_name)
         
         # Constraint 1: Midpoint position (x,y coordinates)
@@ -656,10 +640,10 @@ class Optimizer:
     def _define_angle_bisector(self, point_name, angle_points):
         assert len(angle_points) >= 3, "angle_bisector requires 3 points [B, A, C] where A is vertex"
 
-        # DSL syntax: (bisector B A C) means angle BAC, bisector intersects BC at point
-        p1 = self.lookup_pt(angle_points[0])  # B (first ray point)
+        # DSL: (bisector B A C) 
+        p1 = self.lookup_pt(angle_points[0])  # B 
         vertex = self.lookup_pt(angle_points[1])  # A (vertex - đỉnh góc)
-        p2 = self.lookup_pt(angle_points[2])  # C (second ray point)
+        p2 = self.lookup_pt(angle_points[2])  # C 
 
         init_x = (vertex.x.item() + p1.x.item() + p2.x.item()) / 3
         init_y = (vertex.y.item() + p1.y.item() + p2.y.item()) / 3
@@ -674,9 +658,7 @@ class Optimizer:
             'bisector_point': point_name.val,
             'angle_points': [p.val for p in angle_points]
         })
-
         self._process_angle_bisector(angle_points[1], point_name, angle_points)
-
         return bisector_point
 
     def _define_perpendicular_bisector_point(self, point_name, segment_points):
@@ -685,8 +667,6 @@ class Optimizer:
 
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
-
-        # Create learnable point
         point = self.sample_uniform(point_name)
         self.register_loss(f"perp_bisector_{point_name.val}",
                           lambda: (self.dist(point, p1) - self.dist(point, p2))**2,
@@ -694,23 +674,17 @@ class Optimizer:
         return point
 
     def process_instruction(self, instr):
-        from llm_engineering.domains.geometry.instructions import Assertion
-
         if isinstance(instr, Parameter):
             self.process_parameter(instr)
         elif isinstance(instr, Assertion):
             self.process_assertion(instr)
 
-
     def process_parameter(self, instr):
-        
-
         diagram_type = instr.diagram_type
         param_type = instr.param_type
         objects = instr.objects
         args = instr.args
 
-        # Dispatch based on diagram type
         if diagram_type == DiagramType.TRIANGLE:
             self._process_triangle_parameter(param_type, objects, args)
         elif diagram_type == DiagramType.QUADRILATERAL:
@@ -735,15 +709,12 @@ class Optimizer:
         p_bisector = self.name2pt[bisector_point.val]  # M (điểm trên phân giác)
 
         key = f"{vertex.val}_{bisector_point.val}"
-        
         # Bisector constraint: Equal angles
-        # Need strong weight to balance with on-segment constraint (weight=150)
         self.register_loss(
             f"bisector_equal_angle_{key}",
             lambda pv=p_vertex, p_1=p1, p_2=p2, pb=p_bisector: self._angle_bisector_equal_loss(pv, p_1, p_2, pb),
-            weight=100.0  # Increased to match other constraints
+            weight=100.0  
         )
-
 
     def _process_triangle_parameter(self, param_type, objects, args):
         if isinstance(param_type, TriangleType):
@@ -751,9 +722,7 @@ class Optimizer:
         else:
             param_type_str = str(param_type).lower() if param_type else ""
 
-        # Build constraints dict
         constraints = {}
-
         if param_type_str == "isosceles":
             constraints['type'] = 'isosceles'
             if args:
@@ -782,7 +751,6 @@ class Optimizer:
                         break
         else:
             constraints['type'] = 'scalene'
-
         self.sample_triangle(objects, constraints)
         
     def _process_quadrilateral_parameter(self, param_type, objects, args):
@@ -814,7 +782,6 @@ class Optimizer:
         logger.info(f"Processed quadrilateral type: {param_type_str}")
 
     def _process_point_parameter(self, param_type, objects, args):
-
         param_type_str = str(param_type).lower() if param_type else ""
 
         if param_type_str == "centroid":
@@ -883,7 +850,6 @@ class Optimizer:
     def process_assertion(self, assertion):
         """Process assertion/constraint instructions"""
         # Assertions are handled separately - they add constraints to existing objects
-        # For now, we'll log them and handle common cases
         if self.verbosity:
             logger.info(f"Processing assertion: {assertion}")
 
@@ -902,7 +868,7 @@ class Optimizer:
 
     def _add_angle_measure(self, points: list):
         """Store angle measure for display: angle ABC = degrees"""
-        # Format: [p1, vertex, p2, degrees] - DSL: (angle-measure A C B 110) means angle ACB
+        # DSL: (angle-measure A C B 110) 
         if len(points) < 4:
             logger.warning(f"Angle-measure needs 4 values (3 points + degrees), got {len(points)}")
             return
@@ -928,10 +894,9 @@ class Optimizer:
         seg_p2 = self.lookup_pt(points[2])
         
         key = f"{points[0].val}_on_{points[1].val}{points[2].val}"
-        self.register_loss(
-            f"on_segment_{key}",
+        self.register_loss(f"on_segment_{key}",
             lambda pt=point, p1=seg_p1, p2=seg_p2: self._point_on_segment_loss(pt, p1, p2),
-            weight=150.0  # High weight for explicit constraint
+            weight=150.0  
         )
         if self.verbosity:
             logger.info(f"Added on-segment constraint: {points[0].val} on {points[1].val}{points[2].val}")
@@ -981,14 +946,13 @@ class Optimizer:
         p5 = self.lookup_pt(points[4])
         p6 = self.lookup_pt(points[5])
 
-        def angle_equal_loss():
-            cos1 = self.angle_cosine(p1, p2, p3)
-            cos2 = self.angle_cosine(p4, p5, p6)
-            return (cos1 - cos2)**2
-
         angle1_name = f"{points[0].val}_{points[1].val}_{points[2].val}"
         angle2_name = f"{points[3].val}_{points[4].val}_{points[5].val}"
-        self.register_loss(f"angle_equal_{angle1_name}_{angle2_name}", angle_equal_loss, weight=10.0)
+        self.register_loss(
+            f"angle_equal_{angle1_name}_{angle2_name}",
+            lambda: self._angle_diff_loss(p1, p2, p3, p4, p5, p6),
+            weight=10.0
+        )
 
         self.angle_equal_assertions.append({
             'angle1': (points[0].val, points[1].val, points[2].val),  # (B, A, D)
@@ -1018,7 +982,6 @@ class Optimizer:
         if len(pts) < 2:
             return
 
-        # Add small penalty for points being too close
         for i in range(len(pts)):
             for j in range(i+1, len(pts)):
                 # Encourage d > 0.1
@@ -1030,21 +993,17 @@ class Optimizer:
             return 0.0
 
         optimizer = optim.Adam(self.trainable_vars, lr=lr)
-
         if self.verbosity:
             logger.info(f"Optimization ({epochs}) Epochs")
 
         for i in range(epochs):
             optimizer.zero_grad()
-
             # Compute losses fresh at each iteration
             self.losses = {key: fn() for key, fn in self.loss_fns.items()}
             total_loss = sum(self.losses.values())
-
             total_loss.backward()
 
             optimizer.step()
-
             if self.verbosity and i % 100 == 0:
                 logger.info(f"Iteration {i:4d}: Loss = {total_loss.item():.6f}")
 
@@ -1055,21 +1014,17 @@ class Optimizer:
                 break
 
         final_loss = total_loss.item()
-
         if self.verbosity:
             logger.info(f"Final loss {final_loss:.6f}")
             self.log_losses()
-
         return final_loss
 
     def log_losses(self):
         if len(self.loss_fns) == 0:
             return
-
         # Recompute losses for logging
         if not self.losses:
             self.losses = {key: fn() for key, fn in self.loss_fns.items()}
-
         logger.info("\n Loss breakdown")
         for key, loss in self.losses.items():
             logger.info(f"{key:30s}: {loss.item():.6f}")
@@ -1091,9 +1046,6 @@ class Optimizer:
     
     def solve(self, n_tries=None):
         """Solve with multiple initialization attempts"""
-        import random
-
-        # Default to 1 try for backward compatibility
         if n_tries is None:
             n_tries = self.opts.get('n_tries', 1)
 
@@ -1105,14 +1057,12 @@ class Optimizer:
             if attempt > 0:
                 # Reset state for new attempt
                 self._init_state()
-
                 # Set different random seed for varied initialization
                 random.seed(self.opts.get('seed', 42) + attempt)
                 torch.manual_seed(self.opts.get('seed', 42) + attempt)
 
             if self.verbosity and n_tries > 1:
                 logger.info(f"\nAttempt {attempt + 1}/{n_tries}")
-
             try:
                 diagram, loss = self.solve_single(attempt_id=attempt)
 
@@ -1140,9 +1090,7 @@ class Optimizer:
         return best_diagram if best_diagram is not None else self.get_diagram()
 
     def get_diagram(self):
-
         diagram = Diagram()
-
         # Convert points
         for name, pt in self.name2pt.items():
             x = pt.x.detach().cpu().item()
@@ -1163,7 +1111,6 @@ class Optimizer:
                 equal_angles = metadata.get('equal_angles')
 
                 logger.info(f"Adding triangle {key} with equal_angles: {equal_angles}")
-
                 diagram.add_triangle(p1, p2, p3, equal_sides, right_angle_at, equal_angles)
 
         # Add quadrilaterals with metadata
