@@ -1,6 +1,7 @@
 [
   {
-    "instruction": "Tam giác ABC vuông tại A, CD là đường phân giác, AM là trung tuyến của BC",
-    "answer": "(triangle (A B C) (right A))\n(define D point (bisector C A B))\n(define M point (midpoint B C))\n(segment A M)\n(segment C D)"
+    "image_dir": "images/img_210406.png",
+    "instruction": "Tam giác ABC có góc BAD bằng góc CAD, M là trung điểm của AB, DM song song với AC.",
+    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(define D point (segment A B))\n(segment D M)\n(segment A C)\n(parallel (segment D M) (segment A C))"
   }
 ]
