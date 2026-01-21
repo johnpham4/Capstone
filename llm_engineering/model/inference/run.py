@@ -54,6 +54,7 @@ Bây giờ chuyển đổi:
                 "max_new_tokens": settings.MAX_NEW_TOKENS_INFERENCE,
                 "repetition_penalty": 1.1,
                 "temperature": settings.TEMPERATURE_INFERENCE,
+                "use_cache": settings.USE_CACHE_INFERENCE,
             },
         )
         answer = self.llm.inference()[0]["generated_text"]
