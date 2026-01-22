@@ -33,8 +33,11 @@ simple_finetune:
 option_finetune:
 	uv run python tools/run.py --run-finetune --num-epochs 1 --batch-size 2 --learning-rate 2e-4
 
-aws_roles:
+aws_excecution_roles:
 	uv run python llm_engineering/infrastructures/aws/roles/create_execution_role.py
+
+aws_sagemaker_roles:
+	uv run python llm_engineering/infrastructures/aws/roles/create_sagemaker_role.py
 
 deploy_endpoint:
 	uv run python llm_engineering/infrastructures/aws/deploy/huggingface/run.py
