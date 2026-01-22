@@ -34,16 +34,16 @@ option_finetune:
 	uv run python tools/run.py --run-finetune --num-epochs 1 --batch-size 2 --learning-rate 2e-4
 
 aws_excecution_roles:
-	uv run python llm_engineering/infrastructures/aws/roles/create_execution_role.py
+	uv run python llm_src/infrastructures/aws/roles/create_execution_role.py
 
 aws_sagemaker_roles:
-	uv run python llm_engineering/infrastructures/aws/roles/create_sagemaker_role.py
+	uv run python llm_src/infrastructures/aws/roles/create_sagemaker_role.py
 
 deploy_endpoint:
-	uv run python llm_engineering/infrastructures/aws/deploy/huggingface/run.py
+	uv run python llm_src/infrastructures/aws/deploy/huggingface/run.py
 
 del_endpoint:
-	uv run python llm_engineering/infrastructures/aws/deploy/delete_sagemaker_endpoint.py
+	uv run python llm_src/infrastructures/aws/deploy/delete_sagemaker_endpoint.py
 
 del_endpoint_config:
-	uv run python llm_engineering/infrastructures/aws/deploy/delete_sagemaker_endpoint_config.py
+	uv run python llm_src/infrastructures/aws/deploy/delete_sagemaker_endpoint_config.py

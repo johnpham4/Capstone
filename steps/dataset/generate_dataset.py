@@ -5,10 +5,10 @@ import json
 from zenml import step
 from loguru import logger
 
-from llm_engineering.applications.datasets.generation import InstructiveDatasetGenerator
-from llm_engineering.domains.documents import Document
-from llm_engineering.domains.prompt import GenerateDatasetSamplesPrompt
-from llm_engineering.domains.dataset import InstructTrainTestSplit
+from llm_src.applications.datasets.generation import InstructiveDatasetGenerator
+from llm_src.domains.documents import Document
+from llm_src.domains.prompt import GenerateDatasetSamplesPrompt
+from llm_src.domains.dataset import InstructTrainTestSplit
 
 @step
 def load_source_data(
@@ -87,11 +87,11 @@ def save_dataset_to_json(
     # Load existing data if file exists
     existing_train = []
     existing_test = []
-    
+
     if train_path.exists():
         with open(train_path, "r", encoding="utf-8") as f:
             existing_train = json.load(f)
-    
+
     if test_path.exists():
         with open(test_path, "r", encoding="utf-8") as f:
             existing_test = json.load(f)

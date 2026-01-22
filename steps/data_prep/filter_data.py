@@ -4,7 +4,7 @@ from loguru import logger
 from pathlib import Path
 import json
 
-from llm_engineering.applications.datasets.extraction import SynthGeoDatasetExtractor
+from llm_src.applications.datasets.extraction import SynthGeoDatasetExtractor
 
 
 @step
