@@ -1,4 +1,4 @@
 parameters:
-  source_json_path: "./dataset/data/triangle_diagrams.json"
+  source_json_path: "./dataset/data/diagrams_filter.json"
   test_size: 0.1
   output_dir: "./dataset/data"

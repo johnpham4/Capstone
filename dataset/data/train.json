@@ -1,18 +1,123 @@
 [
   {
-    "image_dir": "images/img_100231.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+    "image_dir": "images/img_1.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn D với đường kính AB",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(angle-equal A D E B C D)\n(define O point (midpoint A B))\n(circle O (circumcircle A B D))"
   },
   {
-    "image_dir": "images/img_100521.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)"
+    "image_dir": "images/img_10346.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn D với đường kính AB",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(angle-equal A D E B D E)\n(define O point (midpoint A B))\n(circle O (circumcircle A B D))"
   },
   {
-    "image_dir": "images/img_100339.png",
+    "image_dir": "images/img_102983.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define M point (midpoint A B))\n(line M (orthocenter A B C))"
+  },
+  {
+    "image_dir": "images/img_101237.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment O (circle O)))"
+  },
+  {
+    "image_dir": "images/img_102974.png",
+    "instruction": "Hình chữ nhật ABCD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng CD, đường thẳng PQ",
+    "answer": "(square (A B C D))\n(define P point (segment A B))\n(define Q point (segment C D))\n(segment P Q)"
+  },
+  {
+    "image_dir": "images/img_101961.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(line D (segment A B))"
+  },
+  {
+    "image_dir": "images/img_102995.png",
+    "instruction": "Tam giác ABC, AB = AC, đường tròn O với đường kính BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (midpoint B C))\n(circle O (circumcircle B C O))"
+  },
+  {
+    "image_dir": "images/img_103846.png",
+    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(angle-equal A C D D C B)\n(segment C D)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102438.png",
+    "instruction": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A",
+    "answer": "(define O_A point (circumcenter A))\n(circle O_A (circumcircle A))\n(define O_B point (circumcenter B))\n(circle O_B (circumcircle B))\n(touch (circle O_A) (circle O_B))"
+  },
+  {
+    "image_dir": "images/img_103830.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection D (segment A E)))\n(line B H)\n(perpendicular (segment D E) (segment A D))"
+  },
+  {
+    "image_dir": "images/img_103869.png",
     "instruction": "Hình chữ nhật ABCD, đường thẳng đi qua điểm A",
-    "answer": "(rectangle (A B C D))\n(segment A B)"
+    "answer": "(square (A B C D))\n(define E point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_102993.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_101854.png",
+    "instruction": "Hình vuông ABCD, điểm P nằm trên phần kéo dài đường thẳng của AB",
+    "answer": "(square (A B C D))\n(define P point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_100646.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(line B (segment D E))"
+  },
+  {
+    "image_dir": "images/img_100375.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, đường thẳng DF, BC song song với DE, AC song song với DF",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(define F point (segment B C))\n(segment D E)\n(segment D F)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(parallel (segment A C) (segment D F))"
+  },
+  {
+    "image_dir": "images/img_101746.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_1007.png",
+    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
+    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(line M (segment A B))\n(define N point (midpoint A C))\n(line N (segment A C))"
+  },
+  {
+    "image_dir": "images/img_100348.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(angle-equal A D E C A D)\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_104219.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment O (circle O (incircle A B C))))"
+  },
+  {
+    "image_dir": "images/img_100191.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(line B (segment D E))"
+  },
+  {
+    "image_dir": "images/img_101653.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB",
+    "answer": "(triangle (A B C) (right B))\n(define M point (midpoint A B))\n(line M (segment A B))"
+  },
+  {
+    "image_dir": "images/img_101896.png",
+    "instruction": "Đường tròn A, đường tròn B, đường tròn B cắt đường tròn A tại điểm C và điểm D",
+    "answer": "(define A point)\n(circle A)\n(define B point)\n(circle B)\n(define C point (segment A B))\n(define D point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_103765.png",
+    "instruction": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A, đường thẳng tiếp xúc với đường tròn A",
+    "answer": "(circle A)\n(circle B)\n(define O point (midpoint A B))\n(circle O (circumcircle A B))"
+  },
+  {
+    "image_dir": "images/img_102920.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
     "image_dir": "images/img_100161.png",
@@ -20,14 +125,139 @@
     "answer": "(triangle (A B C) (isosceles A))\n(define H point (projection C (segment A B)))\n(line C H)"
   },
   {
-    "image_dir": "images/img_10031.png",
+    "image_dir": "images/img_100401.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define H point (projection D (segment A E)))\n(line B H)\n(perpendicular (segment D E) (segment A D))"
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define H point (projection D (segment A E)))\n(line B H)\n(angle-equal A D E D H)"
+  },
+  {
+    "image_dir": "images/img_100705.png",
+    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB",
+    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(angle-equal A C D D C B)"
+  },
+  {
+    "image_dir": "images/img_101636.png",
+    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A B)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_100756.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A B)))\n(line C H)\n(angle-equal A D E D H)"
+  },
+  {
+    "image_dir": "images/img_100675.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A E)))\n(line C H)\n(angle-equal A D E C D E)"
+  },
+  {
+    "image_dir": "images/img_100491.png",
+    "instruction": "Đường tròn O, đường tròn B, đường tròn B tiếp xúc với đường tròn O, đường thẳng đi qua điểm O",
+    "answer": "(define O point (construction))\n(circle O (circumcircle))\n(define B point (construction))\n(circle B (circumcircle))\n(touch (circle B) (circle O))\n(define L point (line O B))"
+  },
+  {
+    "image_dir": "images/img_10106.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm O là tâm đường tròn nội tiếp của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_100173.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment O (circle O (incircle A B C))))"
+  },
+  {
+    "image_dir": "images/img_100115.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm P là trực tâm của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define P point (orthocenter A B C))"
+  },
+  {
+    "image_dir": "images/img_102587.png",
+    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A",
+    "answer": "(triangle (A B C) (isosceles A))\n(segment A B)\n(segment A C)\n(line A B)"
+  },
+  {
+    "image_dir": "images/img_104278.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(line A (segment B C))"
+  },
+  {
+    "image_dir": "images/img_100273.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define H point (projection C (segment A B)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_103063.png",
+    "instruction": "Đường tròn O, đường thẳng đi qua điểm O, đường thẳng tiếp xúc với đường tròn O",
+    "answer": "(define O point (point O))\n(circle O (circumcircle O O O O))\n(define A point (segment O O))\n(define B point (segment O O))"
+  },
+  {
+    "image_dir": "images/img_101660.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB, góc ADE = 90, góc CFE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(parallel (segment E F) (segment A B))\n(angle-equal A D E C F E)\n(angle-equal C F E A D E)"
+  },
+  {
+    "image_dir": "images/img_102194.png",
+    "instruction": "Tam giác ABC, đường tròn O với đường kính AB",
+    "answer": "(triangle (A B C))\n(define O point (midpoint A B))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102260.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment O (incircle A B C)))"
+  },
+  {
+    "image_dir": "images/img_102055.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm B",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(segment C D)\n(angle-equal A C D D C B)"
+  },
+  {
+    "image_dir": "images/img_102520.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng BC, đường thẳng DE, AC song song với DE",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint B C))\n(segment D E)\n(segment A C)\n(parallel (segment A C) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_100022.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua C là đường trung trực của đoạn thẳng AB",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define M point (midpoint A B))\n(line C M)"
+  },
+  {
+    "image_dir": "images/img_100396.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(angle-equal A D E C A D)"
+  },
+  {
+    "image_dir": "images/img_10264.png",
+    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(define H point (projection C (segment A B)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_103761.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102092.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_104049.png",
+    "instruction": "Tam giác ABC, điểm M là trung điểm của đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(segment A M)"
+  },
+  {
+    "image_dir": "images/img_104215.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(segment C D)\n(define M point (midpoint B C))\n(segment M D)\n(angle-equal A C D C D B)"
+  },
+  {
+    "image_dir": "images/img_103207.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, điểm O là trung điểm của đường kính AC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (midpoint A C))\n(circle O (circumcircle A B C))"
   },
   {
     "image_dir": "images/img_100011.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
-    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment O (circumcircle A B C)))"
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment O (circle O (incircle A B C))))"
   },
   {
     "image_dir": "images/img_100125.png",
@@ -35,14 +265,9 @@
     "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(angle-equal A C D D C B)\n(define M point (midpoint A C))\n(line M (segment A C))"
   },
   {
-    "image_dir": "images/img_100059.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\ncircle O (circumcircle A B C)\n(define F point (projection D (segment A E)))\n(angle-equal D A E F A D)"
-  },
-  {
-    "image_dir": "images/img_100675.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A B)))\n(line C H)\n(define F point (segment D E))\n(angle-equal A D E F D E)"
+    "image_dir": "images/img_102696.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (segment B C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(angle-equal B A F C A F)\n(perpendicular (segment A D) (segment D E))"
   },
   {
     "image_dir": "images/img_100518.png",
@@ -50,29 +275,84 @@
     "answer": "(square (A B C D))\n(define P point (segment A B))\n(define Q point (segment B C))\n(segment P Q)\n(parallel (segment A B) (segment C D))\n(perpendicular (segment A B) (segment A D))"
   },
   {
-    "image_dir": "images/img_100348.png",
+    "image_dir": "images/img_104123.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, đường thẳng AD, góc ACD = góc DCB, AB vuông góc với AD",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (segment A B))\n(segment A D)\n(angle-equal A C D D C B)\n(segment A B)\n(segment A D)\n(perpendicular (segment A B) (segment A D))"
+  },
+  {
+    "image_dir": "images/img_104319.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(segment C D)\n(define E point (segment C (line A B)))\n(angle-equal A C D D C E)"
+  },
+  {
+    "image_dir": "images/img_100526.png",
+    "instruction": "Hình bình hành ABCD, điểm P nằm trên đoạn thẳng AB",
+    "answer": "(parallelogram (A B C D))\n(define P point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_102799.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB",
+    "answer": "(triangle (A B C) (right B))\n(define M point (midpoint A B))\n(line M (segment A B))"
+  },
+  {
+    "image_dir": "images/img_10323.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm P là trọng tâm của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define P point (centroid A B C))"
+  },
+  {
+    "image_dir": "images/img_101127.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB, góc ADE = 90, góc CFE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(parallel (segment E F) (segment A B))\n(angle-equal A D E C F E)\n(angle-equal C F E A D E)"
+  },
+  {
+    "image_dir": "images/img_102680.png",
+    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB",
+    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(angle-equal A C D D C B)"
+  },
+  {
+    "image_dir": "images/img_103525.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
+    "answer": "(triangle (A B C) (right B))\n(define H point (projection C (segment A B)))\n(line C H)\n(define K point (projection B (segment A C)))\n(line B K)"
+  },
+  {
+    "image_dir": "images/img_104322.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_104134.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\ncircle O (circumcircle A B C)\n(define F point (projection D (segment A E)))\n(segment D F)"
+  },
+  {
+    "image_dir": "images/img_103804.png",
+    "instruction": "Điểm A",
+    "answer": "(define A point)"
+  },
+  {
+    "image_dir": "images/img_10136.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(angle-equal A D E C A D)\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
   },
   {
-    "image_dir": "images/img_100491.png",
-    "instruction": "Đường tròn O, đường tròn B, đường tròn B tiếp xúc với đường tròn O, đường thẳng đi qua điểm O",
-    "answer": "(define O point (point O))\n(circle O (circumcircle O))\n(define B point (point B))\n(circle B (circumcircle B))\n(touch (circle O) (circle B))\n(define H point (line O B))"
+    "image_dir": "images/img_102569.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
+    "answer": "(triangle (A B C) (right B))\n(define H point (projection B (segment A C)))\n(line B H)"
   },
   {
-    "image_dir": "images/img_100473.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(triangle (A B C))\n(segment B C)"
+    "image_dir": "images/img_101032.png",
+    "instruction": "Ngũ giác ABCDE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
+    "answer": "(square (A B C D E))\n(define H point (projection C (segment A B)))\n(line C H)"
   },
   {
-    "image_dir": "images/img_100070.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A (line A B))"
-  },
-  {
-    "image_dir": "images/img_100291.png",
+    "image_dir": "images/img_100984.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC, đường kính AC",
     "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define P point (circumcenter A B C))\n(circle P (circumcircle A B C))\n(segment A C)"
+  },
+  {
+    "image_dir": "images/img_102080.png",
+    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define H point (projection C (segment A B)))\n(line C H)"
   },
   {
     "image_dir": "images/img_100241.png",
@@ -80,9 +360,49 @@
     "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
   },
   {
-    "image_dir": "images/img_100046.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+    "image_dir": "images/img_103341.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn O với đường kính AB",
+    "answer": "(triangle (A B C) (right B))\n(define O point (midpoint A B))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_104069.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_103320.png",
+    "instruction": "Tam giác ABC, đường tròn O với đường kính AB",
+    "answer": "(triangle (A B C))\n(define O point (midpoint A B))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_101165.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn D với đường kính AB",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (midpoint A B))\n(circle O (circumcircle A B D))"
+  },
+  {
+    "image_dir": "images/img_102676.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(angle-equal A B C A D)"
+  },
+  {
+    "image_dir": "images/img_100666.png",
+    "instruction": "Hình vuông ABCD, đường thẳng AC là đường chéo của hình vuông ABCD",
+    "answer": "(square (A B C D))\n(segment A C)"
+  },
+  {
+    "image_dir": "images/img_10295.png",
+    "instruction": "Đường tròn O",
+    "answer": "(define O point)\n(circle O )"
+  },
+  {
+    "image_dir": "images/img_101569.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB, đường kính AC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A B))\n(segment A C)"
+  },
+  {
+    "image_dir": "images/img_100104.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(angle-equal A C D D C B)"
   },
   {
     "image_dir": "images/img_100572.png",
@@ -90,68 +410,188 @@
     "answer": "(triangle (A B C) (isosceles A))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A B)))\n(line C H)"
   },
   {
-    "image_dir": "images/img_100058.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define H point (projection C (segment A B)))\n(line C H)\n(define K point (projection B (segment A C)))\n(line B K)"
+    "image_dir": "images/img_103698.png",
+    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (incircle A B C))"
   },
   {
-    "image_dir": "images/img_100463.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(line A (segment B C))"
+    "image_dir": "images/img_100046.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "image_dir": "images/img_100724.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define H point (projection C (segment A B)))\n(line C H)"
+    "image_dir": "images/img_10209.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A C))\n(line C D)"
   },
   {
-    "image_dir": "images/img_100226.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn O với đường kính AB",
-    "answer": "(triangle (A B C) (right B))\n(define O point (midpoint A B))\n(circle O (circumcircle A B C))"
+    "image_dir": "images/img_10013.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (segment A B))\n(angle-equal A C D D C B)\n(segment C D)\n(define H point (projection C (segment A B)))\n(line C H)"
   },
   {
-    "image_dir": "images/img_100173.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
-    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment O (circle O)))"
+    "image_dir": "images/img_101862.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(segment C D)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(angle-equal A C D C D B)"
   },
   {
-    "image_dir": "images/img_100658.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+    "image_dir": "images/img_103889.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm P là trọng tâm của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define P point (centroid A B C))"
   },
   {
-    "image_dir": "images/img_10002.png",
+    "image_dir": "images/img_103317.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(line B (segment D E))"
+  },
+  {
+    "image_dir": "images/img_102134.png",
     "instruction": "Tam giác ABC, AB = AC, điểm O là tâm đường tròn bàng tiếp của tam giác ABC",
     "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "image_dir": "images/img_100315.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
+    "image_dir": "images/img_101551.png",
+    "instruction": "Hai đường tròn đồng tâm O, đường thẳng đi qua điểm O",
+    "answer": "(define O point (point))\n(circle O (circumcircle A B C))\n(circle O (circumcircle D E F))\n(line O A)"
+  },
+  {
+    "image_dir": "images/img_102918.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn nội tiếp O của tam giác ABC, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(angle-equal A D E C A D)"
+  },
+  {
+    "image_dir": "images/img_101038.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
     "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment O (circle O (incircle A B C))))"
   },
   {
-    "image_dir": "images/img_100486.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))\n"
+    "image_dir": "images/img_102190.png",
+    "instruction": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C",
+    "answer": "(triangle (A B C))\n(segment B C)"
   },
   {
-    "image_dir": "images/img_100255.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define H point (projection C (segment A B)))\n(segment C H)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment B C)"
+    "image_dir": "images/img_102105.png",
+    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "image_dir": "images/img_100081.png",
-    "instruction": "Tam giác ABC",
-    "answer": "(triangle (A B C))\n"
+    "image_dir": "images/img_10418.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(line A (segment B C))"
+  },
+  {
+    "image_dir": "images/img_102590.png",
+    "instruction": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, đường thẳng là đường trung trực của đoạn thẳng AB",
+    "answer": "(square (A B C D))\n(define M point (midpoint A B))\n(segment A M)\n(segment B M)\n(parallel (segment A B) (segment C D))\n(perpendicular (segment A B) (segment A D))"
+  },
+  {
+    "image_dir": "images/img_100763.png",
+    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_101785.png",
+    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint B C))\n(segment A M)\n(define H point (projection C (segment A B)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_103505.png",
+    "instruction": "Tam giác ABC, đường tròn O với đường kính AB",
+    "answer": "(triangle (A B C))\n(define O point (midpoint A B))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_100658.png",
+    "instruction": "Tam giác ABC, AB = AC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (incenter A B C))\ncircle O (incircle A B C)"
+  },
+  {
+    "image_dir": "images/img_104056.png",
+    "instruction": "Đường thẳng AB",
+    "answer": "(line A B)"
+  },
+  {
+    "image_dir": "images/img_101198.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
+    "answer": "(triangle (A B C) (right B))\n(define H point (projection C (segment A B)))\n(line C H)\n(define K point (projection B (segment A C)))\n(line B K)"
+  },
+  {
+    "image_dir": "images/img_102305.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)"
+  },
+  {
+    "image_dir": "images/img_102393.png",
+    "instruction": "Hình bình hành ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "image_dir": "images/img_101642.png",
+    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (incircle A B C))\n(segment A B)"
+  },
+  {
+    "image_dir": "images/img_101865.png",
+    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A",
+    "answer": "(triangle (A B C))\n(segment A B)"
+  },
+  {
+    "image_dir": "images/img_104071.png",
+    "instruction": "Hình vuông ABCD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD",
+    "answer": "(square (A B C D))\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment M N)"
+  },
+  {
+    "image_dir": "images/img_103927.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection D (segment A E)))\n(line B H)\n(perpendicular (segment A D) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_10031.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define H point (projection D (segment A E)))\n(line B H)\n(angle-equal A D E B H D)"
+  },
+  {
+    "image_dir": "images/img_101507.png",
+    "instruction": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, đường thẳng AC và đường thẳng BD cắt tại điểm O",
+    "answer": "(square (A B C D))\n(define O point (segment A C))\n(segment A B)\n(segment C D)\n(segment A D)\n(segment B C)\n(parallel (segment A B) (segment C D))\n(perpendicular (segment A B) (segment A D))"
+  },
+  {
+    "image_dir": "images/img_103632.png",
+    "instruction": "Tam giác ABC, AB = AC, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_101818.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
+    "answer": "(triangle (A B C) (right B))\n(define M point (midpoint A B))\n(line M (segment A B))\n(define N point (midpoint A C))\n(line N (segment A C))"
+  },
+  {
+    "image_dir": "images/img_102332.png",
+    "instruction": "Tam giác ABC, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_103589.png",
+    "instruction": "Ngũ giác ABCDE, đường thẳng là đường trung trực của đoạn thẳng AB",
+    "answer": "(polygon (A B C D E))\n(define M point (midpoint A B))\n(segment M A)\n(segment M B)"
   },
   {
     "image_dir": "images/img_100512.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB",
-    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(angle-equal A C D D C B)"
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(angle-equal A C D C D B)"
   },
   {
-    "image_dir": "images/img_100254.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm O là tâm đường tròn nội tiếp của tam giác ABC",
+    "image_dir": "images/img_101066.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
+    "answer": "(triangle (A B C) (right B))\n(define M point (midpoint B C))\n(line A M)"
+  },
+  {
+    "image_dir": "images/img_103070.png",
+    "instruction": "Tam giác ABC, AB = AC, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_103515.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
     "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
   },
   {
@@ -160,134 +600,39 @@
     "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (midpoint A B))\n(circle O (circumcircle A B C))\n(angle-equal A D E B C D)"
   },
   {
-    "image_dir": "images/img_100392.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB, đường kính AC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A B))\n(segment A C)"
-  },
-  {
-    "image_dir": "images/img_100170.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(line C (projection C (segment A C)))\n(line B (projection B (segment A C)))"
-  },
-  {
-    "image_dir": "images/img_100096.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define P point (circumcenter A B C))\n(circle P (circumcircle A B C))\n(segment B C)"
-  },
-  {
-    "image_dir": "images/img_100538.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đường tròn O, đường kính AC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A C))"
-  },
-  {
-    "image_dir": "images/img_100140.png",
-    "instruction": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
-  },
-  {
-    "image_dir": "images/img_100375.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, đường thẳng DF, BC song song với DE, AC song song với DF",
-    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(define F point (segment B C))\n(segment D E)\n(segment D F)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(parallel (segment A C) (segment D F))"
-  },
-  {
-    "image_dir": "images/img_10006.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC",
-    "answer": "(triangle (A B C) (right B))\n(define H point (projection C (segment B C)))\n(line C H)"
-  },
-  {
-    "image_dir": "images/img_10014.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
-  },
-  {
-    "image_dir": "images/img_100010.png",
-    "instruction": "Đường tròn O, điểm A nằm trên đường tròn O",
-    "answer": "(define O point (center))\n(circle O (circumcircle A))\n(segment A O)"
-  },
-  {
-    "image_dir": "images/img_100088.png",
-    "instruction": "Tam giác ABC, điểm M là trung điểm của đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(segment A M)"
-  },
-  {
-    "image_dir": "images/img_100290.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn O với đường kính BC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (midpoint B C))\n(circle O (circumcircle B C O))"
-  },
-  {
-    "image_dir": "images/img_100044.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(angle-equal A D E B C D)"
-  },
-  {
-    "image_dir": "images/img_100526.png",
-    "instruction": "Hình bình hành ABCD, điểm P nằm trên đoạn thẳng AB",
-    "answer": "(parallelogram (A B C D))\n(define P point (segment A B))"
-  },
-  {
-    "image_dir": "images/img_100022.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua C là đường trung trực của đoạn thẳng AB",
-    "answer": "(triangle (A B C) (isosceles A))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define M point (midpoint A B))\n(line C M)"
-  },
-  {
-    "image_dir": "images/img_100537.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC, đường kính AC",
+    "image_dir": "images/img_103258.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC, đường kính AC",
     "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define P point (circumcenter A B C))\n(circle P (circumcircle A B C))\n(segment A C)"
   },
   {
-    "image_dir": "images/img_100261.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE, đường thẳng DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
-  },
-  {
-    "image_dir": "images/img_100638.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng đi qua điểm B",
-    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(angle-equal A C D D C B)"
-  },
-  {
-    "image_dir": "images/img_100394.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)"
-  },
-  {
-    "image_dir": "images/img_100763.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
-  },
-  {
-    "image_dir": "images/img_100382.png",
-    "instruction": "Tam giác ABC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, điểm N nằm trên đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A B))"
-  },
-  {
-    "image_dir": "images/img_100307.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng BC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(segment C D)\n(define M point (midpoint B C))\n(line M (segment A C))\n(angle-equal A C D D C B)"
-  },
-  {
-    "image_dir": "images/img_100365.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define P point (circumcenter A B C))\n(circle P (circumcircle A B C))"
-  },
-  {
-    "image_dir": "images/img_100467.png",
-    "instruction": "Tam giác ABC, điểm O là tâm đường tròn bàng tiếp của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
-  },
-  {
-    "image_dir": "images/img_10033.png",
-    "instruction": "Tam giác ABC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng AC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define P point (circumcenter A B C))\n(circle P (circumcircle A B C))"
-  },
-  {
-    "image_dir": "images/img_10047.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
-  },
-  {
-    "image_dir": "images/img_100413.png",
+    "image_dir": "images/img_103095.png",
     "instruction": "Tam giác ABC, AB = AC, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\ncircle O (circumcircle A B C)"
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_101668.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn O với đường kính AB",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(angle-equal A D E B D E)\n(define O point (midpoint A B))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_101608.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (midpoint A B))\n(circle O (circumcircle A B C))\n(angle-equal A D E B C D)"
+  },
+  {
+    "image_dir": "images/img_100059.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(angle-equal A D E B C D)"
+  },
+  {
+    "image_dir": "images/img_103573.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm M là trung điểm của đoạn thẳng BC",
+    "answer": "(triangle (A B C) (right B))\n(define M point (midpoint B C))\n(segment A M)"
+  },
+  {
+    "image_dir": "images/img_100993.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng đi qua điểm B là đường trung trực của đoạn thẳng AC",
+    "answer": "(triangle (A B C) (right B))\n(define M point (midpoint A B))\n(line M (segment A B))\n(define N point (midpoint A C))\n(line B N)"
   },
   {
     "image_dir": "images/img_100739.png",
@@ -295,134 +640,509 @@
     "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(line A B)"
   },
   {
-    "image_dir": "images/img_100528.png",
-    "instruction": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define P point (incenter A B C))\n(circle P (incircle A B C))\n(segment B C)"
+    "image_dir": "images/img_103009.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))"
   },
   {
-    "image_dir": "images/img_100303.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm M là trung điểm của đoạn thẳng AB",
-    "answer": "(triangle (A B C) (right B))\n(define M point (midpoint A B))"
+    "image_dir": "images/img_102782.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
   },
   {
-    "image_dir": "images/img_100401.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define H point (projection D (segment A E)))\n(line B H)\n(angle-equal A D E D H)"
+    "image_dir": "images/img_101774.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))\n"
   },
   {
-    "image_dir": "images/img_100342.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn bàng tiếp O tiếp xúc với đoạn thẳng BC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\ncircle O (circumcircle A B C)"
+    "image_dir": "images/img_1041.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn O với đường kính AB",
+    "answer": "(triangle (A B C) (right B))\n(define O point (midpoint A B))\n(circle O (circumcircle A B C))"
   },
   {
-    "image_dir": "images/img_100635.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB, đường kính AC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A B))\n(segment A C)"
+    "image_dir": "images/img_102414.png",
+    "instruction": "Hình thang ABCD, AB song song với CD, BC = AD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD",
+    "answer": "(trapezoid (A B C D))\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment A B)\n(segment C D)\n(segment B C)\n(segment A D)\n(parallel (segment A B) (segment C D))\n(angle-equal B C D A N M)"
   },
   {
-    "image_dir": "images/img_100396.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\ncircle O (circumcircle A B C)\n(define F point (segment D E))\n(angle-equal A D E F D E)"
+    "image_dir": "images/img_102460.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment A B))"
   },
   {
-    "image_dir": "images/img_100240.png",
-    "instruction": "Hình chữ nhật ABCD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng BC, đường thẳng PQ",
-    "answer": "(square (A B C D))\n(define P point (segment A B))\n(define Q point (segment B C))\n(segment P Q)"
+    "image_dir": "images/img_101924.png",
+    "instruction": "Hình chữ nhật ABCD",
+    "answer": "(square (A B C D))\n"
   },
   {
-    "image_dir": "images/img_100756.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A B)))\n(line C H)\n(angle-equal A D E D H)"
+    "image_dir": "images/img_102450.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, đường thẳng DF, BC song song với DE, AC song song với DF",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(define F point (segment B C))\n(segment D E)\n(segment D F)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(parallel (segment A C) (segment D F))"
   },
   {
-    "image_dir": "images/img_100403.png",
-    "instruction": "Đường tròn O, đường thẳng tiếp xúc với đường tròn O",
-    "answer": "(define O point ...)\n(circle O ...)\n(line ... ...)\n(tangent (line ... ...) (circle O ...))"
+    "image_dir": "images/img_100849.png",
+    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(segment C D)\n(angle-equal A C D D C B)\n(define H point (projection C (segment A B)))\n(line C H)"
   },
   {
-    "image_dir": "images/img_100450.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB",
-    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(angle-equal A C D D C B)"
+    "image_dir": "images/img_104111.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(line A B)"
   },
   {
-    "image_dir": "images/img_1007.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(define N point (midpoint A C))\n(segment M N)"
+    "image_dir": "images/img_101716.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment O (circumcircle A B C)))"
   },
   {
-    "image_dir": "images/img_100273.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define H point (projection C (segment A B)))\n(line C H)"
+    "image_dir": "images/img_101567.png",
+    "instruction": "Hình bình hành ABCD, đường thẳng là đường trung trực của đoạn thẳng AB",
+    "answer": "(parallelogram (A B C D))\n(define M point (midpoint A B))\n(line M (segment A B))"
   },
   {
-    "image_dir": "images/img_100191.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B",
-    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(line B (segment D E))"
+    "image_dir": "images/img_102670.png",
+    "instruction": "Tam giác ABC, AB = AC, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "image_dir": "images/img_10000.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(angle-equal A D E B C D)"
+    "image_dir": "images/img_100878.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A C))\n(line C D)"
   },
   {
-    "image_dir": "images/img_100369.png",
-    "instruction": "Hình bình hành ABCD, điểm E nằm trên đoạn thẳng AB, góc BCE = góc DCE, đường thẳng EC",
-    "answer": "(parallelogram (A B C D))\n(define E point (segment A B))\n(angle-equal B C E D C E)\n(line E C)"
+    "image_dir": "images/img_100631.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, góc ADE = 90, đường tròn ngoại tiếp E của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "image_dir": "images/img_100115.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm P là trực tâm của tam giác ABC",
-    "answer": "(triangle (A B C) (isosceles A))\n(define P point (orthocenter A B C))"
+    "image_dir": "images/img_101233.png",
+    "instruction": "Hình chữ nhật ABCD",
+    "answer": "(square (A B C D))"
   },
   {
-    "image_dir": "images/img_100000.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(triangle (A B C) (right B))\n(segment B C)"
+    "image_dir": "images/img_100917.png",
+    "instruction": "Đường tròn O",
+    "answer": "(define O point (construction))\n(circle O <type>)"
   },
   {
-    "image_dir": "images/img_10013.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C) (isosceles A))\n(define D point (segment A B))\n(angle-equal A C D D C B)\n(segment C D)\n(define H point (projection C (segment A B)))\n(line C H)"
+    "image_dir": "images/img_101533.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define H point (projection D (segment A E)))\n(line B H)\n(angle-equal A D E C B H)"
   },
   {
-    "image_dir": "images/img_100646.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B",
-    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(line B D)"
+    "image_dir": "images/img_103864.png",
+    "instruction": "Đường tròn O, đường thẳng đi qua điểm O, đường thẳng tiếp xúc với đường tròn O",
+    "answer": "(define O point (center))\n(circle O (circumcircle))\n(define A point (segment O B))\n(define H point (projection A (segment O B)))\n(line O H)"
   },
   {
-    "image_dir": "images/img_100666.png",
-    "instruction": "Hình vuông ABCD, đường thẳng AC là đường chéo của hình vuông ABCD",
-    "answer": "(square (A B C D))\n(segment A C)"
+    "image_dir": "images/img_100924.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn O với đường kính AB",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(angle-equal A D E B D E)\n(define O point (midpoint A B))\n(circle O (circumcircle A B C))"
   },
   {
-    "image_dir": "images/img_10052.png",
-    "instruction": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A B))"
-  },
-  {
-    "image_dir": "images/img_100644.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30",
-    "answer": "(triangle (A B C) (right B))"
+    "image_dir": "images/img_102690.png",
+    "instruction": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A, điểm P nằm trên đường tròn A",
+    "answer": "(define O point (midpoint A B))\n(circle O (circumcircle A B))\n(define P point (segment O A))\n(circle P (incircle A B))"
   },
   {
     "image_dir": "images/img_100629.png",
     "instruction": "Hai đường tròn đồng tâm O, điểm A nằm trên đường tròn O",
-    "answer": "(define O point (center))\n(circle O (circumcircle A))\n(define A point (segment O A))"
+    "answer": "(define O point)\n(circle O (circumcircle O O O))\n(define A point (segment O O))"
   },
   {
-    "image_dir": "images/img_100104.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(angle-equal A C D C D)\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+    "image_dir": "images/img_100170.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
+    "answer": "(triangle (A B C) (right B))\n(define H point (projection C (segment A B)))\n(line C H)\n(define G point (projection B (segment A C)))\n(line B G)"
   },
   {
-    "image_dir": "images/img_100407.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB",
-    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(parallel (segment E F) (segment A B))"
+    "image_dir": "images/img_100315.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment O (circle O)))"
   },
   {
-    "image_dir": "images/img_100499.png",
-    "instruction": "Hình thang ABCD, AB song song với CD, BC = AD, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(square (A B C D))\n(define E point (segment C A))\n(segment A B)\n(segment C D)\n(segment B C)\n(segment A D)\n(parallel (segment A B) (segment C D))\n(perpendicular (line C E) (segment A B))"
+    "image_dir": "images/img_101547.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm B",
+    "answer": "(triangle (A B C) (right B))\n(segment B (segment A C))"
+  },
+  {
+    "image_dir": "images/img_101231.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102459.png",
+    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE",
+    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_101930.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB",
+    "answer": "(triangle (A B C) (right B))\n(define M point (midpoint A B))\n(line M (segment A B))"
+  },
+  {
+    "image_dir": "images/img_100617.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC, điểm O là trung điểm của đoạn thẳng AC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (midpoint A C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_103682.png",
+    "instruction": "Đường tròn O, đường thẳng đi qua điểm O, đường thẳng tiếp xúc với đường tròn O",
+    "answer": "(define O point (center))\n(circle O (circumcircle))\n(define A point (segment O B))\n(line A B)"
+  },
+  {
+    "image_dir": "images/img_102627.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define H point (projection C (segment B C)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_104166.png",
+    "instruction": "Đường tròn O, đường tròn B, đường tròn B tiếp xúc với đường tròn O, đường thẳng đi qua điểm O",
+    "answer": "(define O point (midpoint A C))\n(circle O <type>)\n(define B point (midpoint D E))\n(circle B <type>)\n(touch (circle O) (circle B))\n(line O H)"
+  },
+  {
+    "image_dir": "images/img_104061.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A B)))\n(line C H)\n(define F point (segment D E))\n(angle-equal A D E F D E)"
+  },
+  {
+    "image_dir": "images/img_103561.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P",
+    "answer": "(triangle (A B C) (right B))\n(define P point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_102316.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(angle-equal A C D D C B)"
+  },
+  {
+    "image_dir": "images/img_101242.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define H point (projection C (segment B C)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_101561.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(define H point (projection C (segment A E)))\n(line C H)\n(angle-equal D A E C A D)"
+  },
+  {
+    "image_dir": "images/img_103143.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_100796.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, góc ADE = 90, đường tròn ngoại tiếp E của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_104329.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn nội tiếp O của tam giác ABC, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(angle-equal A D E B C D)"
+  },
+  {
+    "image_dir": "images/img_102400.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define H point (projection C (segment A B)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_103787.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC, đường kính AC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define P point (circumcenter A B C))\n(circle P (circumcircle A B C))\n(segment A C)"
+  },
+  {
+    "image_dir": "images/img_103529.png",
+    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(line A (segment B C))"
+  },
+  {
+    "image_dir": "images/img_103840.png",
+    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(line (midpoint A B) (midpoint A B))"
+  },
+  {
+    "image_dir": "images/img_103433.png",
+    "instruction": "Tam giác ABC, AB = AC, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_101937.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102382.png",
+    "instruction": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_10320.png",
+    "instruction": "Hai đường tròn đồng tâm O, đường thẳng đi qua điểm O",
+    "answer": "(define O point (construction))\n(circle O (circumcircle A B C))\n(circle O (circumcircle D E F))\n(line O P)"
+  },
+  {
+    "image_dir": "images/img_103594.png",
+    "instruction": "Hình thang ABCD, AB song song với CD, BC = AD, điểm P nằm trong hình thang ABCD",
+    "answer": "(square (A B C D))\n(define P point (segment A B))\n(segment B C)\n(segment A D)\n(parallel (segment A B) (segment C D))"
+  },
+  {
+    "image_dir": "images/img_104146.png",
+    "instruction": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, đường thẳng đi qua điểm A",
+    "answer": "(square (A B C D))\n(segment A B)\n(segment A D)\n(parallel (segment A B) (segment C D))\n(perpendicular (segment A B) (segment A D))\n(line A B)"
+  },
+  {
+    "image_dir": "images/img_101329.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC, điểm O là trung điểm của đoạn thẳng AC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (midpoint A C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_100339.png",
+    "instruction": "Hình chữ nhật ABCD, đường thẳng đi qua điểm A",
+    "answer": "(rectangle (A B C D))\n(segment A B)"
+  },
+  {
+    "image_dir": "images/img_10006.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC",
+    "answer": "(triangle (A B C) (right B))\n(define H point (projection C (segment B C)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_103042.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(angle-equal A C D D C B)\n(line C D)"
+  },
+  {
+    "image_dir": "images/img_101979.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm M là trung điểm của đoạn thẳng AB",
+    "answer": "(triangle (A B C) (right B))\n(define M point (midpoint A B))"
+  },
+  {
+    "image_dir": "images/img_10305.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (midpoint A B))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_101099.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC, đường kính AC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define P point (circumcenter A B C))\n(circle P (circumcircle A B C))\n(segment A C)"
+  },
+  {
+    "image_dir": "images/img_101890.png",
+    "instruction": "Tam giác ABC, điểm O là tâm đường tròn bàng tiếp của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_103294.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
+    "answer": "(triangle (A B C) (right B))\n(define M point (midpoint B C))\n(line A M)"
+  },
+  {
+    "image_dir": "images/img_103883.png",
+    "instruction": "Tam giác ABC, AB = AC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment O (circumcircle A B C)))"
+  },
+  {
+    "image_dir": "images/img_103625.png",
+    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_101173.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm B",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(segment C D)\n(angle-equal A C D D C B)"
+  },
+  {
+    "image_dir": "images/img_10404.png",
+    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C",
+    "answer": "(triangle (A B C))\n(define H point (projection C (segment A B)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_103125.png",
+    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\ncircle O (circumcircle A B C)"
+  },
+  {
+    "image_dir": "images/img_104182.png",
+    "instruction": "Ngũ giác ABCDE, đường thẳng là đường trung trực của đoạn thẳng AB",
+    "answer": "(polygon (A B C D E))\n(define M point (midpoint A B))\n(segment M A)\n(segment M B)"
+  },
+  {
+    "image_dir": "images/img_103241.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102508.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, BC song song với DE, góc BAF = góc CAF, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(define F point (segment B C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(angle-equal B A F C A F)\n(define A point (segment A D))\n(angle-equal A D E C A D)"
+  },
+  {
+    "image_dir": "images/img_10396.png",
+    "instruction": "Hai đường tròn đồng tâm O, đường thẳng đi qua điểm O",
+    "answer": "(define O point (construction))\n(circle O (circumcircle A B C))\n(circle O (circumcircle D E F))\n(line O P)"
+  },
+  {
+    "image_dir": "images/img_102738.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45",
+    "answer": "(triangle (A B C) (right B))"
+  },
+  {
+    "image_dir": "images/img_10173.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB, đường kính AC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A B))\n(segment A C)"
+  },
+  {
+    "image_dir": "images/img_103820.png",
+    "instruction": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_101387.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm O là tâm đường tròn bàng tiếp của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_101645.png",
+    "instruction": "Đường tròn O, hai đường thẳng đi qua điểm O",
+    "answer": "(define O point (point O))\n(line O A)\n(line O B)"
+  },
+  {
+    "image_dir": "images/img_102140.png",
+    "instruction": "Tam giác ABC, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102113.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_10430.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, AF vuông góc với BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (segment B C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define A point (segment B F))\n(angle-equal B A F C A F)\n(segment A F)"
+  },
+  {
+    "image_dir": "images/img_100010.png",
+    "instruction": "Đường tròn O, điểm A nằm trên đường tròn O",
+    "answer": "(define O point (center))\n(circle O (circumcircle A))\n(segment A O)"
+  },
+  {
+    "image_dir": "images/img_102500.png",
+    "instruction": "Tam giác ABC, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102198.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, AF vuông góc với BC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (segment B C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define F point (segment B C))\n(angle-equal B A F C A F)\n(define H point (projection A (segment B C)))\n(segment A H)"
+  },
+  {
+    "image_dir": "images/img_101170.png",
+    "instruction": "Hai đường tròn đồng tâm O, điểm A nằm trên đường tròn O",
+    "answer": "(define O point (circumcenter A A A))\n(circle O (circumcircle A A A))"
+  },
+  {
+    "image_dir": "images/img_102724.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_103488.png",
+    "instruction": "Hình chữ nhật ABCD, điểm P nằm trên đoạn thẳng AB",
+    "answer": "(square (A B C D))\n(define P point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_100226.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn O với đường kính AB",
+    "answer": "(triangle (A B C) (right B))\n(define O point (midpoint A B))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_10120.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (segment B C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(angle-equal B A F C A F)\n(perpendicular (segment A D) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_103478.png",
+    "instruction": "Hai đường tròn đồng tâm O, đường thẳng đi qua điểm O",
+    "answer": "(define O point (point O))\n(circle O (circumcircle A B C))\n(circle O (circumcircle D E F))\n(line O G)"
+  },
+  {
+    "image_dir": "images/img_102432.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng BC, đường thẳng DE, AC song song với DE",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint B C))\n(segment D E)\n(segment A C)\n(parallel (segment A C) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_103599.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(line A (segment B C))"
+  },
+  {
+    "image_dir": "images/img_103006.png",
+    "instruction": "Hình chữ nhật ABCD, điểm E nằm trên đoạn thẳng AB, góc BCE = góc DCE, đường thẳng EC",
+    "answer": "(square (A B C D))\n(define E point (segment A B))\n(angle-equal B C E D C E)\n(segment E C)"
+  },
+  {
+    "image_dir": "images/img_101283.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(define O point (incenter A B C))\ncircle O (incircle A B C)"
+  },
+  {
+    "image_dir": "images/img_103706.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A B)))\n(line C H)\n(angle-equal A D E C D E)"
+  },
+  {
+    "image_dir": "images/img_101021.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
+    "answer": "(triangle (A B C) (right B))\n(define M point (midpoint B C))\n(line A M)"
+  },
+  {
+    "image_dir": "images/img_104167.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
+    "answer": "(triangle (A B C) (right B))\n(define M point (midpoint B C))\n(segment M A)"
+  },
+  {
+    "image_dir": "images/img_101361.png",
+    "instruction": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, điểm P nằm trong hình thang ABCD",
+    "answer": "(square (A B C D))\n(define P point (segment A B))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(perpendicular (segment A B) (segment A D))"
+  },
+  {
+    "image_dir": "images/img_1033.png",
+    "instruction": "Hình thang ABCD, AB song song với CD, điểm P nằm trên phần kéo dài đường thẳng của AB",
+    "answer": "(square (A B C D))\n(define P point (segment A B))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))"
+  },
+  {
+    "image_dir": "images/img_100394.png",
+    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(line (midpoint A B) (midpoint A B))"
+  },
+  {
+    "image_dir": "images/img_1040.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm B",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(segment C D)\n(angle-equal A C D D C B)"
+  },
+  {
+    "image_dir": "images/img_100538.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đường tròn O, đường kính AC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A C))"
+  },
+  {
+    "image_dir": "images/img_100778.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_10261.png",
+    "instruction": "Tam giác ABC, điểm P là trọng tâm của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define P point (centroid A B C))"
+  },
+  {
+    "image_dir": "images/img_101987.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A và điểm C",
+    "answer": "(triangle (A B C) (right B))\n(segment A C)"
+  },
+  {
+    "image_dir": "images/img_101673.png",
+    "instruction": "Tam giác ABC, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
   },
   {
     "image_dir": "images/img_100060.png",
@@ -430,13 +1150,713 @@
     "answer": "(triangle (A B C))\n(define D point (segment A B))\n(angle-equal A C D D C B)"
   },
   {
-    "image_dir": "images/img_100705.png",
+    "image_dir": "images/img_100307.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(segment C D)\n(define M point (midpoint B C))\n(segment M D)\n(angle-equal A C D C D B)"
+  },
+  {
+    "image_dir": "images/img_100240.png",
+    "instruction": "Hình chữ nhật ABCD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng BC, đường thẳng PQ",
+    "answer": "(square (A B C D))\n(define P point (segment A B))\n(define Q point (segment B C))\n(segment P Q)"
+  },
+  {
+    "image_dir": "images/img_101788.png",
+    "instruction": "Trianlge ABC, góc ABC = 90",
+    "answer": "(triangle (A B C) (right B))\n"
+  },
+  {
+    "image_dir": "images/img_101530.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (midpoint A B))\n(circle O (circumcircle A B))\n(angle-equal A D E B C D)"
+  },
+  {
+    "image_dir": "images/img_10427.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_103417.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102403.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_100897.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_100450.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(segment C D)\n(angle-equal A C D D C B)"
+  },
+  {
+    "image_dir": "images/img_102594.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB, góc ADE = 90, góc CFE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(parallel (segment E F) (segment A B))\n(angle-equal A D E C E D)\n(angle-equal C F E B E F)"
+  },
+  {
+    "image_dir": "images/img_103360.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (segment B C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(angle-equal B A F C A F)\n(define H point (projection D (segment A E)))\n(segment A H)"
+  },
+  {
+    "image_dir": "images/img_10345.png",
+    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
+    "answer": "(triangle (A B C) (isosceles A))\n(define H point (projection C (segment A B)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_101872.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A",
+    "answer": "(triangle (A B C) (right B))"
+  },
+  {
+    "image_dir": "images/img_100369.png",
+    "instruction": "Hình bình hành ABCD, điểm E nằm trên đoạn thẳng AB, góc BCE = góc DCE, đường thẳng EC",
+    "answer": "(square (A B C D))\n(define E point (segment A B))\n(angle-equal B C E D C E)\n(segment E C)"
+  },
+  {
+    "image_dir": "images/img_103502.png",
+    "instruction": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C",
+    "answer": "(triangle (A B C))\n(segment B C)"
+  },
+  {
+    "image_dir": "images/img_102251.png",
+    "instruction": "Tam giác ABC, AB = AC, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_103060.png",
+    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(line M (segment A B))"
+  },
+  {
+    "image_dir": "images/img_102727.png",
+    "instruction": "Đường tròn O, đường thẳng cắt đường tròn O tại điểm A và điểm B, đường thẳng tiếp xúc với đường tròn O",
+    "answer": "(define O point ...) \n(circle O ...) \n(define A point (segment ...)) \n(define B point (segment ...)) \n(line A B)"
+  },
+  {
+    "image_dir": "images/img_104149.png",
+    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm B",
+    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(segment C D)\n(angle-equal A C D D C B)"
+  },
+  {
+    "image_dir": "images/img_10002.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm O là tâm đường tròn bàng tiếp của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102751.png",
+    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P",
+    "answer": "(triangle (A B C))\n(define P point (line A B))"
+  },
+  {
+    "image_dir": "images/img_10391.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(line A B)"
+  },
+  {
+    "image_dir": "images/img_100971.png",
+    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, góc BAF = góc FAC, BC song song với DE, đường thẳng AF",
+    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(define F point (segment B C))\n(angle-equal B A F C A F)\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(segment A F)"
+  },
+  {
+    "image_dir": "images/img_10244.png",
+    "instruction": "Tam giác ABC, điểm O là tâm đường tròn bàng tiếp của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_103818.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))\n"
+  },
+  {
+    "image_dir": "images/img_102344.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_101794.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_100927.png",
+    "instruction": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_103162.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A B)))\n(line C H)\n(angle-equal A D E C D E)"
+  },
+  {
+    "image_dir": "images/img_102370.png",
+    "instruction": "Hình thang ABCD, AB song song với CD, BC = AD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD",
+    "answer": "(trapezoid (A B C D))\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment A B)\n(segment C D)\n(segment B C)\n(segment A D)\n(parallel (segment A B) (segment C D))\n(angle-equal B C D A N M)"
+  },
+  {
+    "image_dir": "images/img_10052.png",
+    "instruction": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_100403.png",
+    "instruction": "Đường tròn O, đường thẳng tiếp xúc với đường tròn O",
+    "answer": "(define O point ...)\n(circle O ...)\n(segment ... ...)\n(tangent (segment ... ...) (circle O ...))"
+  },
+  {
+    "image_dir": "images/img_100290.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn O với đường kính BC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (midpoint B C))\n(circle O (circumcircle B C O))"
+  },
+  {
+    "image_dir": "images/img_102936.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, và điểm F nằm trên đoạn thẳng BC, BC song song với DE, AC song song với DF, đường thẳng DF",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (segment A B))\n(define E point (segment A C))\n(define F point (segment B C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(parallel (segment A C) (segment D F))\n(line D F)"
+  },
+  {
+    "image_dir": "images/img_102170.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm E là đường trung trực của đoạn thẳng BC, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(line E (segment B C))\n(angle-equal A D E C A D)"
+  },
+  {
+    "image_dir": "images/img_1039.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_100231.png",
+    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_103510.png",
+    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102473.png",
+    "instruction": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C",
+    "answer": "(triangle (A B C))\n(line B C)"
+  },
+  {
+    "image_dir": "images/img_102788.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_103142.png",
+    "instruction": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_101689.png",
+    "instruction": "Hình bình hành ABCD",
+    "answer": "(square (A B C D))"
+  },
+  {
+    "image_dir": "images/img_1038.png",
+    "instruction": "Ngũ giác ABCDE, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng CD, đường thẳng PQ",
+    "answer": "(polygon (A B C D E))\n(define P point (segment A B))\n(define Q point (segment C D))\n(line P Q)"
+  },
+  {
+    "image_dir": "images/img_101452.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đường tròn O, đường kính AC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A C))"
+  },
+  {
+    "image_dir": "images/img_100521.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment D E)"
+  },
+  {
+    "image_dir": "images/img_101366.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (midpoint A B))\n(circle O (circumcircle A B C))\n(angle-equal A D E B D E)"
+  },
+  {
+    "image_dir": "images/img_101323.png",
     "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB",
     "answer": "(triangle (A B C))\n(define D point (segment A B))\n(angle-equal A C D D C B)"
+  },
+  {
+    "image_dir": "images/img_100053.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(parallel (segment E F) (segment A B))"
+  },
+  {
+    "image_dir": "images/img_100537.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC, đường kính AC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define P point (circumcenter A B C))\n(circle P (circumcircle A B C))\n(segment A C)"
+  },
+  {
+    "image_dir": "images/img_103273.png",
+    "instruction": "Hai đường tròn đồng tâm O, đường thẳng tiếp xúc với đường tròn O",
+    "answer": "(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(line D E)"
+  },
+  {
+    "image_dir": "images/img_100088.png",
+    "instruction": "Tam giác ABC, điểm M là trung điểm của đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(segment A M)"
+  },
+  {
+    "image_dir": "images/img_101659.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (segment A B))\n(segment C D)\n(angle-equal A C D D C B)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
     "image_dir": "images/img_100366.png",
     "instruction": "Hình bình hành ABCD, điểm P nằm trên phần kéo dài của đường thẳng AB",
     "answer": "(parallelogram (A B C D))\n(define P point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_104.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment O (circumcircle A B C)))"
+  },
+  {
+    "image_dir": "images/img_103606.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng BC, góc ACD = góc DCB, góc CAE = góc EAB, đường thẳng DE, đường thẳng AE",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment B C))\n(angle-equal A C D D C B)\n(angle-equal C A E E A B)\n(segment D E)\n(segment A E)"
+  },
+  {
+    "image_dir": "images/img_102371.png",
+    "instruction": "Tam giác ABC, AB = AC, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define M point (midpoint A B))\n(define N point (midpoint A C))\n(segment M N)"
+  },
+  {
+    "image_dir": "images/img_103020.png",
+    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P",
+    "answer": "(triangle (A B C))\n(define P point (line A B))"
+  },
+  {
+    "image_dir": "images/img_103843.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (segment A B))\n(segment C D)\n(angle-equal A C D D C B)\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102549.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A B)))\n(line C H)\n(define F point (segment D E))\n(angle-equal A D E C F D)"
+  },
+  {
+    "image_dir": "images/img_102258.png",
+    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(line M (segment A B))"
+  },
+  {
+    "image_dir": "images/img_102334.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(segment C D)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(angle-equal A C D D C B)"
+  },
+  {
+    "image_dir": "images/img_103206.png",
+    "instruction": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A",
+    "answer": "(define O_A point (circumcenter A))\n(circle O_A (circumcircle A))\n(define O_B point (circumcenter B))\n(circle O_B (circumcircle B))\n(tangent (circle O_A (circumcircle A)) (circle O_B (circumcircle B)))"
+  },
+  {
+    "image_dir": "images/img_103972.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm O là tâm đường tròn bàng tiếp của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102699.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))\n"
+  },
+  {
+    "image_dir": "images/img_104276.png",
+    "instruction": "Ngũ giác ABCDE, đường thẳng AC và đường thẳng BD cắt tại điểm O",
+    "answer": "(square (A B C D E))\n(define O point (segment A C))\n(define O point (segment B D))"
+  },
+  {
+    "image_dir": "images/img_10398.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm O là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n"
+  },
+  {
+    "image_dir": "images/img_103302.png",
+    "instruction": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_102953.png",
+    "instruction": "Tam giác ABC, điểm M là trung điểm của đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(segment A M)"
+  },
+  {
+    "image_dir": "images/img_102175.png",
+    "instruction": "Điểm A",
+    "answer": "(define A point)"
+  },
+  {
+    "image_dir": "images/img_101686.png",
+    "instruction": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, đường thẳng AC và đường thẳng BD cắt tại điểm O",
+    "answer": "(square (A B C D))\n(define O point (segment A C))\n(segment A B)\n(segment C D)\n(segment A D)\n(segment B C)\n(parallel (segment A B) (segment C D))\n(perpendicular (segment A B) (segment A D))"
+  },
+  {
+    "image_dir": "images/img_100392.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB, đường kính AC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A B))\n(segment A C)"
+  },
+  {
+    "image_dir": "images/img_102373.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng là đường trung trực của đoạn thẳng BC",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define M point (midpoint B C))\n(line M (segment B C))"
+  },
+  {
+    "image_dir": "images/img_102040.png",
+    "instruction": "Hình thang ABCD, AB song song với CD, BC = AD, điểm P nằm trong hình thang ABCD",
+    "answer": "(square (A B C D))\n(define P point (segment A B))\n(segment A B)\n(segment C D)\n(segment B C)\n(segment A D)\n(parallel (segment A B) (segment C D))\n(parallel (segment B C) (segment A D))"
+  },
+  {
+    "image_dir": "images/img_103356.png",
+    "instruction": "Đường tròn A, đường tròn B, đường tròn B cắt đường tròn A tại điểm C và điểm D",
+    "answer": "(define A point ...)\n(circle A ...)\n(define B point ...)\n(circle B ...)\n(define C point ...)\n(define D point ...)\n"
+  },
+  {
+    "image_dir": "images/img_102785.png",
+    "instruction": "Hình vuông ABCD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD",
+    "answer": "(square (A B C D))\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment M N)"
+  },
+  {
+    "image_dir": "images/img_101014.png",
+    "instruction": "Điểm A",
+    "answer": "(define A point)"
+  },
+  {
+    "image_dir": "images/img_100463.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(line A (segment B C))"
+  },
+  {
+    "image_dir": "images/img_100000.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm B và điểm C",
+    "answer": "(triangle (A B C) (right B))\n(segment B C)"
+  },
+  {
+    "image_dir": "images/img_100413.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_100727.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment O (circumcircle A B C)))"
+  },
+  {
+    "image_dir": "images/img_10222.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (midpoint A B))\n(circle O (circumcircle A B C))\n(angle-equal A D E B C D)"
+  },
+  {
+    "image_dir": "images/img_100303.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm M là trung điểm của đoạn thẳng AB",
+    "answer": "(triangle (A B C) (right B))\n(define M point (midpoint A B))"
+  },
+  {
+    "image_dir": "images/img_102867.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(parallel (segment E F) (segment A B))"
+  },
+  {
+    "image_dir": "images/img_100872.png",
+    "instruction": "Hình chữ nhật ABCD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng CD, đường thẳng PQ",
+    "answer": "(square (A B C D))\n(define P point (segment A B))\n(define Q point (segment C D))\n(segment P Q)"
+  },
+  {
+    "image_dir": "images/img_103677.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_10046.png",
+    "instruction": "Tam giác ABC, điểm O là tâm đường tròn bàng tiếp của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_103751.png",
+    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C",
+    "answer": "(triangle (A B C))\n(define H point (projection C (segment A B)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_102910.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng BC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(segment C D)\n(define M point (midpoint B C))\n(line M (segment A C))\n(angle-equal A C D D C B)"
+  },
+  {
+    "image_dir": "images/img_102607.png",
+    "instruction": "Hình thang ABCD, AB song song với CD, BC = AD, đường thẳng đi qua điểm A",
+    "answer": "(square (A B C D))\n(define E point (segment A B))\n(segment B C)\n(segment A D)\n(parallel (segment A B) (segment C D))"
+  },
+  {
+    "image_dir": "images/img_100081.png",
+    "instruction": "Tam giác ABC",
+    "answer": "(triangle (A B C))\n"
+  },
+  {
+    "image_dir": "images/img_103440.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(angle-equal A D E C A D)\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_100847.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102985.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(segment C D)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(angle-equal A C D C D B)"
+  },
+  {
+    "image_dir": "images/img_101766.png",
+    "instruction": "Đường tròn O",
+    "answer": "(define O point (point))\n(circle O (circumcircle))"
+  },
+  {
+    "image_dir": "images/img_103554.png",
+    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define H point (projection C (segment A B)))\n(line C H)\n(define K point (projection B (segment A C)))\n(line B K)"
+  },
+  {
+    "image_dir": "images/img_104300.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm P là trực tâm của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define P point (orthocenter A B C))"
+  },
+  {
+    "image_dir": "images/img_101365.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, đường thẳng DF, BC song song với DE, AC song song với DF",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(define F point (segment B C))\n(segment D E)\n(segment D F)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(parallel (segment A C) (segment D F))"
+  },
+  {
+    "image_dir": "images/img_10334.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB, góc ADE = 90, góc CFE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(parallel (segment E F) (segment A B))\n(angle-equal A D E C E D)\n(angle-equal C F E B E F)"
+  },
+  {
+    "image_dir": "images/img_104181.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (segment B C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(angle-equal B A F C A F)\n(define H point (projection D (segment A E)))\n(segment A H)"
+  },
+  {
+    "image_dir": "images/img_103479.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection D (segment A E)))\n(line B H)\n(perpendicular (segment D E) (segment A D))"
+  },
+  {
+    "image_dir": "images/img_102614.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A B)))\n(line C H)\n(define F point (segment D E))\n(angle-equal A D E C F D)"
+  },
+  {
+    "image_dir": "images/img_100467.png",
+    "instruction": "Tam giác ABC, điểm O là tâm đường tròn bàng tiếp của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_103866.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A và điểm C",
+    "answer": "(triangle (A B C) (right B))\n(segment A C)"
+  },
+  {
+    "image_dir": "images/img_100430.png",
+    "instruction": "Tam giác ABC, tam giác DEF, tam giác ABC đồng dạng với tam giác DEF",
+    "answer": "(triangle (A B C))\n(triangle (D E F))\n(angle-equal A B C D E F)"
+  },
+  {
+    "image_dir": "images/img_101840.png",
+    "instruction": "Ba đường tròn đồng tâm O",
+    "answer": "(define O point (midpoint A B))\n(circle O (circumcircle A B C))\n(circle O (circumcircle A B D))\n(circle O (circumcircle A C D))"
+  },
+  {
+    "image_dir": "images/img_102012.png",
+    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define H point (projection C (segment A B)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_104325.png",
+    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng BC, góc ACD = góc DCB, góc CAE = góc EAB, đường thẳng CD, đường thẳng AE",
+    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment B C))\n(segment C D)\n(segment A E)\n(angle-equal A C D D C B)\n(angle-equal C A E E A B)"
+  },
+  {
+    "image_dir": "images/img_101989.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm O là tâm đường tròn nội tiếp của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_101786.png",
+    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define H point (projection C (segment A B)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_100499.png",
+    "instruction": "Hình thang ABCD, AB song song với CD, BC = AD, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
+    "answer": "(square (A B C D))\n(define E point (segment C A))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(segment B C)\n(segment A D)\n(perpendicular (line C E) (segment A B))"
+  },
+  {
+    "image_dir": "images/img_100407.png",
+    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB",
+    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(define F point (midpoint B C))\n(segment D E)\n(segment E F)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(parallel (segment E F) (segment A B))"
+  },
+  {
+    "image_dir": "images/img_103738.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102538.png",
+    "instruction": "Hai đường tròn đồng tâm O, điểm A nằm trên đường tròn O",
+    "answer": "(define O point (circumcenter O O))\n(define A point (segment O O))\n(circle O (circumcircle O O))\n(circle O (circumcircle O O))"
+  },
+  {
+    "image_dir": "images/img_102706.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
+    "answer": "(triangle (A B C) (right B))\n(define M point (midpoint B C))\n(line A M)"
+  },
+  {
+    "image_dir": "images/img_100140.png",
+    "instruction": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_103420.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng BC, đường thẳng DE, AC song song với DE",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint B C))\n(segment D E)\n(segment A C)\n(parallel (segment A C) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_101682.png",
+    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(line M (segment A B))"
+  },
+  {
+    "image_dir": "images/img_102996.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define D point (segment A B))\n(segment C D)\n(angle-equal A C D D C B)\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102049.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm O là tâm đường tròn bàng tiếp của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
+  },
+  {
+    "image_dir": "images/img_104067.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(define H point (projection C (segment A E)))\n(line C H)\n(angle-equal A D E C D E)"
+  },
+  {
+    "image_dir": "images/img_103171.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn D với đường kính AB",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(angle-equal A D E B C D)\n(define O point (midpoint A B))\n(circle O (circumcircle A B D))"
+  },
+  {
+    "image_dir": "images/img_103728.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30",
+    "answer": "(triangle (A B C) (right B))"
+  },
+  {
+    "image_dir": "images/img_102777.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_103342.png",
+    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define H point (projection C (segment A B)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_10158.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm B",
+    "answer": "(triangle (A B C) (right B))\n(segment B (define D point (line B C)))"
+  },
+  {
+    "image_dir": "images/img_101330.png",
+    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB",
+    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(angle-equal A C D D C B)"
+  },
+  {
+    "image_dir": "images/img_101615.png",
+    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_103845.png",
+    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define H point (projection C (segment A B)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_100929.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
+    "answer": "(triangle (A B C) (right B))\n(define H point (projection C (segment B C)))\n(line C H)\n(define K point (projection B (segment A C)))\n(line B K)"
+  },
+  {
+    "image_dir": "images/img_103943.png",
+    "instruction": "Đường tròn A, đường tròn B, đường tròn B cắt đường tròn A tại điểm C và điểm D, điểm P nằm trên đường tròn A",
+    "answer": "(define O point (center A))\n(circle O (circumcircle A))\n(define O1 point (center B))\n(circle O1 (circumcircle B))\n(define C point (intersection A B))\n(define D point (intersection A B))\n(define P point (segment O))"
+  },
+  {
+    "image_dir": "images/img_100817.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm E là đường trung trực của đoạn thẳng BC, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(define H point (projection E (segment B C)))\n(segment E H)\n(angle-equal A D E C D H)"
+  },
+  {
+    "image_dir": "images/img_103572.png",
+    "instruction": "Hình thang ABCD, AB song song với CD, đường thẳng đi qua điểm vuông góc với đoạn thẳng AB",
+    "answer": "(square (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(define H point (projection C (segment A B)))\n(line C H)"
+  },
+  {
+    "image_dir": "images/img_102362.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))"
+  },
+  {
+    "image_dir": "images/img_101225.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_10435.png",
+    "instruction": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A, điểm P nằm trên đường tròn A",
+    "answer": "(define O point (circumcenter A B))\n(circle O (circumcircle A B))\n(define P point (segment O A))\n(circle O (circumcircle A))"
+  },
+  {
+    "image_dir": "images/img_10014.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_102002.png",
+    "instruction": "Hai đường tròn đồng tâm O, điểm A nằm trên đường tròn O",
+    "answer": "(define O point (circumcenter A A))\n(circle O (circumcircle A A))"
+  },
+  {
+    "image_dir": "images/img_100638.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng đi qua điểm B",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(angle-equal A C D C D B)"
+  },
+  {
+    "image_dir": "images/img_101015.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment A B))"
+  },
+  {
+    "image_dir": "images/img_102965.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))"
+  },
+  {
+    "image_dir": "images/img_103768.png",
+    "instruction": "Hai đường tròn đồng tâm với center O",
+    "answer": "(define O point (center))\n(circle O (circumcircle))\n(circle O (incircle))"
+  },
+  {
+    "image_dir": "images/img_100985.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90",
+    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (midpoint A B))\n(circle O (circumcircle A B C))\n(angle-equal A D E B C D)"
   }
 ]
