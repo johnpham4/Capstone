@@ -113,6 +113,36 @@ class Optimizer:
         # line in normal form: n · p - f = 0
         return line.n.x * p.x + line.n.y * p.y - line.f
 
+    def _point_on_segment_loss(self, point: TorchPoint, p1: TorchPoint, p2: TorchPoint):
+        """Loss for point lying on segment p1-p2 (between p1 and p2)"""
+        line = self.pp2lnf(p1, p2)
+        on_line_loss = self.on_line(point, line)**2
+
+        # Point between p1 and p2: point = p1 + t*(p2-p1) with 0 <= t <= 1
+        vec_x = p2.x - p1.x
+        vec_y = p2.y - p1.y
+        point_x = point.x - p1.x
+        point_y = point.y - p1.y
+
+        vec_len_sq = vec_x**2 + vec_y**2 + 1e-8
+        t = (point_x * vec_x + point_y * vec_y) / vec_len_sq
+
+        # Penalty if t < 0 or t > 1
+        between_penalty = torch.relu(-t) + torch.relu(t - 1)
+
+        return on_line_loss + 10.0 * between_penalty
+
+    def _angle_bisector_equal_loss(self, p_vertex: TorchPoint, p1: TorchPoint, p2: TorchPoint, p_bisector: TorchPoint):
+        """Loss for angle bisector: angle(p1, vertex, bisector) = angle(p2, vertex, bisector)"""
+        cos1 = self.angle_cosine(p1, p_vertex, p_bisector)
+        cos2 = self.angle_cosine(p2, p_vertex, p_bisector)
+        return (cos1 - cos2)**2
+
+    def _angle_bisector_ratio_loss(self, p_vertex: TorchPoint, p1: TorchPoint, p2: TorchPoint, p_bisector: TorchPoint):
+        """Loss for angle bisector theorem: BD/DC = AB/AC"""
+        ratio_bd_dc = self.segment_ratio(p1, p_bisector, p_bisector, p2)
+        ratio_ab_ac = self.segment_ratio(p_vertex, p1, p_vertex, p2)
+        return (ratio_bd_dc - ratio_ab_ac)**2
 
     def dist_to_line(self, point: TorchPoint, p1: TorchPoint, p2: TorchPoint):
         line = self.pp2lnf(p1, p2)
@@ -619,8 +649,6 @@ class Optimizer:
             'angle_points': [p.val for p in angle_points]
         })
 
-        # Apply constraints using existing _process_angle_bisector
-        # Pass Point objects for compatibility
         self._process_angle_bisector(angle_points[0], point_name, angle_points)
 
         return bisector_point
@@ -667,30 +695,34 @@ class Optimizer:
                 logger.warning(f"Unsupported diagram type: {diagram_type}")
 
     def _process_angle_bisector(self, vertex, bisector_point, angle_points):
-        # Trong tam giác ABC, AD là phân giác góc A
-        # vertex = A, bisector_point = D, angle_points = [A, B, C]
-
-        p_vertex = self.name2pt[vertex.val]  # A
-        p_bisector = self.name2pt[bisector_point.val]  # D
-
+        """Process angle bisector constraints using reusable helper methods"""
+        p_vertex = self.name2pt[vertex.val]  # A (đỉnh góc)
+        p_bisector = self.name2pt[bisector_point.val]  # D (điểm trên phân giác)
         p1 = self.name2pt[angle_points[1].val]  # B
         p2 = self.name2pt[angle_points[2].val]  # C
 
-        # constrain 2: goc BAD = goc CAD
-        def equal_angle_loss():
-            cos_bad = self.angle_cosine(p1, p_vertex, p_bisector)
-            cos_cad = self.angle_cosine(p2, p_vertex, p_bisector)
-            return (cos_bad - cos_cad)**2
-
-        #constraint 3: BD/DC = AB/AC (dinh ly phan giac)
-        def ratio_loss():
-            ratio_bd_dc = self.segment_ratio(p1, p_bisector, p_bisector, p2)
-            ratio_ab_ac = self.segment_ratio(p_vertex, p1, p_vertex, p2)
-            return (ratio_bd_dc - ratio_ab_ac)**2
-
         key = f"{vertex.val}_{bisector_point.val}"
-        self.register_loss(f"bisector_equal_angle_{key}", equal_angle_loss, weight=10.0)
-        self.register_loss(f"bisector_ratio_{key}", ratio_loss, weight=5.0)
+
+        # Constraint 1: D nằm trên đoạn BC
+        self.register_loss(
+            f"bisector_on_segment_{key}",
+            lambda: self._point_on_segment_loss(p_bisector, p1, p2),
+            weight=10.0
+        )
+
+        # Constraint 2: Góc BAD = góc CAD (tính chất phân giác)
+        self.register_loss(
+            f"bisector_equal_angle_{key}",
+            lambda: self._angle_bisector_equal_loss(p_vertex, p1, p2, p_bisector),
+            weight=10.0
+        )
+
+        # Constraint 3: BD/DC = AB/AC (định lý phân giác)
+        self.register_loss(
+            f"bisector_ratio_{key}",
+            lambda: self._angle_bisector_ratio_loss(p_vertex, p1, p2, p_bisector),
+            weight=5.0
+        )
 
     def _process_triangle_parameter(self, param_type, objects, args):
         if isinstance(param_type, TriangleType):
