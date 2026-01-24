@@ -10,14 +10,13 @@ from llm_src.settings import settings
 
 finetuning_dir = Path(__file__).resolve().parent
 
-
 def run_finetuning_on_sagemaker(
-    num_train_epochs: int = 1,
+    num_train_epochs: int = 3,
     per_device_train_batch_size: int = 2,
     learning_rate: float = 2e-4,
     dataset_huggingface_workspace: str = "minn4",
     dataset_huggingface_repo_name: str = "text2dsl",
-    model_name: str = "tiiuae/Falcon-H1R-7B",
+    model_name: str = "unsloth/Qwen2.5-7B-Instruct",
 ) -> None:
     assert settings.HF_TOKEN, "Hugging Face access token is required. Set HF_TOKEN in .env"
     assert settings.AWS_ARN_ROLE, "AWS ARN role is required. Set AWS_ARN_ROLE in .env"
@@ -53,11 +52,6 @@ def run_finetuning_on_sagemaker(
 
     logger.info(f"Training model: {model_name}")
 
-    # RESEARCH: SageMaker PyTorch 2.7 container có transformers 4.51 (Falcon-H1 support từ 4.46)
-    # Source: https://github.com/aws/deep-learning-containers/releases/tag/v1.28-pt-ec2-2.7.1-tr-py312
-    # - torch==2.7.1+cu128
-    # - transformers 4.51+ (Falcon-H1 architecture supported)
-    # requirements.txt sẽ upgrade lên 4.51+ và install mamba-ssm
     huggingface_estimator = HuggingFace(
         entry_point="finetune.py",
         source_dir=str(finetuning_dir),
@@ -65,10 +59,8 @@ def run_finetuning_on_sagemaker(
         instance_count=1,
         role=settings.AWS_ARN_ROLE,
         sagemaker_session=sagemaker_session,
-        # transformers_version="4.56.2",
-        # pytorch_version="2.8.0",
-        py_version="py312",
-        image_uri="763104351884.dkr.ecr.us-east-1.amazonaws.com/huggingface-pytorch-training:2.8.0-transformers4.56.2-gpu-py312-cu129-ubuntu22.04",
+        py_version="py311",
+        image_uri="763104351884.dkr.ecr.us-east-1.amazonaws.com/huggingface-pytorch-training:2.5.1-transformers4.49.0-gpu-py311-cu124-ubuntu22.04-v2.3",
         hyperparameters=hyperparameters,
         environment={
             "HUGGING_FACE_HUB_TOKEN": settings.HF_TOKEN,

@@ -8,8 +8,8 @@ class Settings(BaseSettings):
     DATABASE_NAME: str = "unigeo"
 
     # HuggingFace Model
-    BASE_LLM: str = "unsloth/Falcon-H1R-7B"
-    HF_MODEL_ID: str = f"minn4/text2diagram-Falcon-H1R-7B"
+    BASE_LLM: str = "unsloth/Falcon-unsloth/Qwen2.5-7B-Instruct-7B"
+    HF_MODEL_ID: str = f"minn4/text2diagram-Falcon-unsloth/Qwen2.5-7B-Instruct-7B"
     HF_TOKEN: str | None = None
 
     # AWS Credentials
