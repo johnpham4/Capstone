@@ -13,10 +13,16 @@ from llm_src.settings import settings
 hugging_face_deploy_config = {
     "SM_VLLM_MODEL": settings.HF_MODEL_ID,
     "SM_VLLM_HF_TOKEN": settings.HF_TOKEN,
-    "SM_VLLM_TENSOR_PARALLEL_SIZE": str(settings.SM_NUM_GPUS),
-    "SM_VLLM_MAX_MODEL_LEN": str(settings.MAX_TOTAL_TOKENS),
-    "SM_VLLM_MAX_NUM_SEQS": str(settings.MAX_CONCURRENT_REQUESTS),
-    "SM_VLLM_GPU_MEMORY_UTILIZATION": "0.9",
+
+    "SM_VLLM_TENSOR_PARALLEL_SIZE": "1",
+    "SM_VLLM_MAX_MODEL_LEN": "2048",
+    "SM_VLLM_MAX_NUM_SEQS": "16",
+    "SM_VLLM_MAX_BATCHED_TOKENS": "4096",
+
+    "SM_VLLM_GPU_MEMORY_UTILIZATION": "0.85",
+
+    "SM_VLLM_TRUST_REMOTE_CODE": "true",
+    "SM_VLLM_ENABLE_PREFIX_CACHING": "true",
 }
 
 # hugging_face_deploy_config = {

@@ -9,7 +9,7 @@ class Settings(BaseSettings):
 
     # HuggingFace Model
     BASE_LLM: str = "unsloth/Falcon-unsloth/Qwen2.5-7B-Instruct-7B"
-    HF_MODEL_ID: str = f"minn4/text2diagram-Falcon-unsloth/Qwen2.5-7B-Instruct-7B"
+    HF_MODEL_ID: str = f"minn4/text2diagram-Qwen2.5-7B-Instruct"
     HF_TOKEN: str | None = None
 
     # AWS Credentials

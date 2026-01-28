@@ -2,7 +2,7 @@ from loguru import logger
 
 try:
     from sagemaker.enums import EndpointType
-    from sagemaker.huggingface import get_huggingface_llm_image_uri
+    # from sagemaker.huggingface import get_huggingface_llm_image_uri
 except ModuleNotFoundError:
     logger.warning("Couldn't load SageMaker imports. Run 'poetry install --with aws' to support AWS.")
 
@@ -13,9 +13,7 @@ from config import hugging_face_deploy_config, model_resource_config
 from sagemaker_huggingface import DeploymentService, SagemakerHuggingfaceStrategy
 
 # AWS vLLM Documentation:
-# - Available images: https://github.com/aws/deep-learning-containers/blob/master/available_images.md
 # - Example deployment: https://github.com/aws/deep-learning-containers/blob/master/test/vllm/sagemaker/test_sm_endpoint.py
-# - Entrypoint script: https://github.com/aws/deep-learning-containers/blob/master/vllm/build_artifacts/sagemaker_entrypoint.sh
 
 # EndpointType.INFERENCE_MODEL_TYPE
 def create_endpoint(endpoint_type=EndpointType.MODEL_BASED) -> None:
@@ -27,7 +25,7 @@ def create_endpoint(endpoint_type=EndpointType.MODEL_BASED) -> None:
 
     # vLLM image from AWS Deep Learning Containers
     # See: https://github.com/aws/deep-learning-containers/blob/master/available_images.md
-    llm_image = f"763104351884.dkr.ecr.{settings.AWS_REGION}.amazonaws.com/vllm:0.13-gpu-py312"
+    llm_image = "637931482580.dkr.ecr.us-east-1.amazonaws.com/vllm:0.11.1"
 
     resource_manager = ResourceManager()
     deployment_service = DeploymentService(resource_manager=resource_manager)
