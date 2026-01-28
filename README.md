@@ -464,3 +464,47 @@ for name, pt in optimizer.name2pt.items():
 # M: (0.000, 0.000)
 ```
 
+```
+# Get the account ID
+aws sts get-caller-identity
+
+# login public ECR
+aws ecr-public get-login-password --region us-east-1 \
+| docker login --username AWS --password-stdin public.ecr.aws
+
+# pull image
+docker pull public.ecr.aws/deep-learning-containers/vllm:0.11.1-gpu-py312-cu129-ubuntu22.04-sagemaker
+
+# login private ECR
+aws ecr get-login-password --region us-east-1 \
+| docker login --username AWS --password-stdin 637931482580.dkr.ecr.us-east-1.amazonaws.com
+
+# tag + push
+docker tag public.ecr.aws/deep-learning-containers/vllm:0.11.1-gpu-py312-cu129-ubuntu22.04-sagemaker \
+637931482580.dkr.ecr.us-east-1.amazonaws.com/vllm:0.11.1
+
+aws ecr create-repository \
+  --repository-name vllm \
+  --region us-east-1
+
+docker push 637931482580.dkr.ecr.us-east-1.amazonaws.com/vllm:0.11.1
+
+if error:
+nano ~/.docker/config.json
+
+You will see:
+{
+  "credsStore": "desktop.exe"
+}
+ then delete to be {}
+or
+{
+  "auths": {}
+}
+then retry
+aws ecr-public get-login-password --region us-east-1 \
+| docker login --username AWS --password-stdin public.ecr.aws
+
+Note: after download complete, you should restore back what you deleted
+
+```

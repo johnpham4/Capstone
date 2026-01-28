@@ -49,24 +49,6 @@ class DiagramStatusResponse(BaseModel):
     completed_at: Optional[str] = None
 
 
-@app.on_event("startup")
-async def startup_event():
-    try:
-        publisher.connect()
-        publisher.declare_queue(INPUT_QUEUE)
-        logger.info("API server started successfully")
-    except Exception as e:
-        logger.exception(f"Failed to start API server: {e}")
-        raise
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Clean up on shutdown"""
-    publisher.close()
-    logger.info("API server shutdown")
-
-
 @app.post("/api/v1/diagrams", response_model=DiagramResponse, status_code=status.HTTP_202_ACCEPTED)
 async def create_diagram_request(request: DiagramRequest):
     """
