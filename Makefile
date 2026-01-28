@@ -1,6 +1,4 @@
-# LLM Engineering Makefile
-
-.PHONY: sync run-etl-maxime run-etl-paul lint format test clean
+.PHONY: 
 
 uv:
 	uv sync --all-groups

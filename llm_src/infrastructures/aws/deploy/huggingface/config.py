@@ -9,19 +9,29 @@ except ModuleNotFoundError:
 
 from llm_src.settings import settings
 
+
 hugging_face_deploy_config = {
-    "HF_MODEL_ID": settings.HF_MODEL_ID,
-    "HUGGING_FACE_HUB_TOKEN": settings.HF_TOKEN,
-    "SM_NUM_GPUS": json.dumps(settings.SM_NUM_GPUS),  # Number of GPU used per replica
-    "MAX_INPUT_LENGTH": json.dumps(settings.MAX_INPUT_LENGTH),  # Max length of input text
-    "MAX_TOTAL_TOKENS": json.dumps(settings.MAX_TOTAL_TOKENS),  # Max length of the generation (including input text)
-    "MAX_BATCH_TOTAL_TOKENS": json.dumps(settings.MAX_BATCH_TOTAL_TOKENS),
-    "MAX_BATCH_PREFILL_TOKENS": json.dumps(settings.MAX_BATCH_TOTAL_TOKENS),
-    "HF_MODEL_QUANTIZE": "bitsandbytes",
-    "USE_CACHE": json.dumps(settings.USE_CACHE_INFERENCE),  # Enable KV cache for autoregressive generation
-    "MAX_CONCURRENT_REQUESTS": json.dumps(settings.MAX_CONCURRENT_REQUESTS),  # Concurrent request handling
-    "MAX_WAITING_TOKENS": json.dumps(settings.MAX_WAITING_TOKENS),  # Token queue management
+    "SM_VLLM_MODEL": settings.HF_MODEL_ID,
+    "SM_VLLM_HF_TOKEN": settings.HF_TOKEN,
+    "SM_VLLM_TENSOR_PARALLEL_SIZE": str(settings.SM_NUM_GPUS),
+    "SM_VLLM_MAX_MODEL_LEN": str(settings.MAX_TOTAL_TOKENS),
+    "SM_VLLM_MAX_NUM_SEQS": str(settings.MAX_CONCURRENT_REQUESTS),
+    "SM_VLLM_GPU_MEMORY_UTILIZATION": "0.9",
 }
+
+# hugging_face_deploy_config = {
+#     "HF_MODEL_ID": settings.HF_MODEL_ID,
+#     "HUGGING_FACE_HUB_TOKEN": settings.HF_TOKEN,
+#     "SM_NUM_GPUS": json.dumps(settings.SM_NUM_GPUS),
+#     "MAX_INPUT_LENGTH": json.dumps(settings.MAX_INPUT_LENGTH),
+#     "MAX_TOTAL_TOKENS": json.dumps(settings.MAX_TOTAL_TOKENS),
+#     "MAX_BATCH_TOTAL_TOKENS": json.dumps(settings.MAX_BATCH_TOTAL_TOKENS),
+#     "MAX_BATCH_PREFILL_TOKENS": json.dumps(settings.MAX_BATCH_TOTAL_TOKENS),
+#     "HF_MODEL_QUANTIZE": "bitsandbytes",
+#     "USE_CACHE": json.dumps(settings.USE_CACHE_INFERENCE),
+#     "MAX_CONCURRENT_REQUESTS": json.dumps(settings.MAX_CONCURRENT_REQUESTS),
+#     "MAX_WAITING_TOKENS": json.dumps(settings.MAX_WAITING_TOKENS),
+# }
 
 
 model_resource_config = ResourceRequirements(

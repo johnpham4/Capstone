@@ -6,19 +6,28 @@ try:
 except ModuleNotFoundError:
     logger.warning("Couldn't load SageMaker imports. Run 'poetry install --with aws' to support AWS.")
 
-from llm_src.model.utils import ResourceManager
+from utils import ResourceManager
 from llm_src.settings import settings
 
 from config import hugging_face_deploy_config, model_resource_config
 from sagemaker_huggingface import DeploymentService, SagemakerHuggingfaceStrategy
 
+# AWS vLLM Documentation:
+# - Available images: https://github.com/aws/deep-learning-containers/blob/master/available_images.md
+# - Example deployment: https://github.com/aws/deep-learning-containers/blob/master/test/vllm/sagemaker/test_sm_endpoint.py
+# - Entrypoint script: https://github.com/aws/deep-learning-containers/blob/master/vllm/build_artifacts/sagemaker_entrypoint.sh
 
-def create_endpoint(endpoint_type=EndpointType.INFERENCE_COMPONENT_BASED) -> None:
+# EndpointType.INFERENCE_MODEL_TYPE
+def create_endpoint(endpoint_type=EndpointType.MODEL_BASED) -> None:
     assert settings.AWS_ARN_ROLE is not None, "AWS_ARN_ROLE is not set in the .env file."
+    assert settings.HF_TOKEN is not None, "HF_TOKEN is not set in the .env file."
 
-    logger.info(f"Creating endpoint with endpoint_type = {endpoint_type} and model_id = {settings.HF_MODEL_ID}")
+    logger.info(f"Creating vLLM endpoint: {settings.SAGEMAKER_ENDPOINT_INFERENCE}")
+    logger.info(f"Model: {settings.HF_MODEL_ID}, Instance: {settings.GPU_INSTANCE_TYPE}")
 
-    llm_image = get_huggingface_llm_image_uri("huggingface", version="2.2.0")
+    # vLLM image from AWS Deep Learning Containers
+    # See: https://github.com/aws/deep-learning-containers/blob/master/available_images.md
+    llm_image = f"763104351884.dkr.ecr.{settings.AWS_REGION}.amazonaws.com/vllm:0.13-gpu-py312"
 
     resource_manager = ResourceManager()
     deployment_service = DeploymentService(resource_manager=resource_manager)
@@ -33,6 +42,11 @@ def create_endpoint(endpoint_type=EndpointType.INFERENCE_COMPONENT_BASED) -> Non
         resources=model_resource_config,
         endpoint_type=endpoint_type,
     )
+
+    # Old code with HuggingFace TGI image (without vLLM)
+    # llm_image = get_huggingface_llm_image_uri("huggingface", version="2.2.0")
+    # OR
+    # llm_image = "763104351884.dkr.ecr.us-east-1.amazonaws.com/huggingface-pytorch-tgi-inference:2.2.0-tgi2.2.0-gpu-py310-cu121-ubuntu22.04"
 
 
 if __name__ == "__main__":
