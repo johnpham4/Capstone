@@ -17,7 +17,7 @@ dependencies = [
     "pydantic>=2.0.0",
     "pydantic-settings>=2.0.0",
     "loguru>=0.7.0",
-    "zenml[server]==0.91.2",
+    "zenml[server]==0.93.2",
     "click>=8.0.1",
     "dill>=0.3.8",
     "datasets>=4.4.1",

@@ -2,9 +2,9 @@ import json
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-from llm_src.applications.diagram.diagram_builder import DiagramBuilder
-from llm_src.applications.diagram.optimizer import Optimizer
-from llm_src.infrastructures.visualization.matplotlib_renderer import MatplotlibDiagramRenderer
+from src.services.diagram.diagram_builder import DiagramBuilder
+from src.services.diagram.optimizer import Optimizer
+from src.infrastructures.visualization.matplotlib_renderer import MatplotlibDiagramRenderer
 
 
 def test_single_problem(instruction, dsl_answer, output_path):
