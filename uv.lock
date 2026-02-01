@@ -1155,7 +1155,7 @@ requires-dist = [
     { name = "torchvision", specifier = "==0.20.1" },
     { name = "transformers", specifier = "==4.49.0" },
     { name = "vllm", specifier = ">=0.7.3" },
-    { name = "zenml", extras = ["server"], specifier = "==0.91.2" },
+    { name = "zenml", extras = ["server"], specifier = "==0.93.2" },
 ]
 
 [[package]]
@@ -2392,6 +2392,46 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/dd/5c/c139a7876099916879609372bfa513b7f1257f7f1a908b0bdc1c2328241b/opencv_python_headless-4.11.0.86-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0e0a27c19dd1f40ddff94976cfe43066fbbe9dfbb2ec1907d66c19caef42a57b", size = 49969856, upload-time = "2025-01-16T13:53:29.654Z" },
     { url = "https://files.pythonhosted.org/packages/95/dd/ed1191c9dc91abcc9f752b499b7928aacabf10567bb2c2535944d848af18/opencv_python_headless-4.11.0.86-cp37-abi3-win32.whl", hash = "sha256:f447d8acbb0b6f2808da71fddd29c1cdd448d2bc98f72d9bb78a7a898fc9621b", size = 29324425, upload-time = "2025-01-16T13:52:49.048Z" },
     { url = "https://files.pythonhosted.org/packages/86/8a/69176a64335aed183529207ba8bc3d329c2999d852b4f3818027203f50e6/opencv_python_headless-4.11.0.86-cp37-abi3-win_amd64.whl", hash = "sha256:6c304df9caa7a6a5710b91709dd4786bf20a74d57672b3c31f7033cc638174ca", size = 39402386, upload-time = "2025-01-16T13:52:56.418Z" },
+]
+
+[[package]]
+name = "opentelemetry-api"
+version = "1.38.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "importlib-metadata" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/08/d8/0f354c375628e048bd0570645b310797299754730079853095bf000fba69/opentelemetry_api-1.38.0.tar.gz", hash = "sha256:f4c193b5e8acb0912b06ac5b16321908dd0843d75049c091487322284a3eea12", size = 65242, upload-time = "2025-10-16T08:35:50.25Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ae/a2/d86e01c28300bd41bab8f18afd613676e2bd63515417b77636fc1add426f/opentelemetry_api-1.38.0-py3-none-any.whl", hash = "sha256:2891b0197f47124454ab9f0cf58f3be33faca394457ac3e09daba13ff50aa582", size = 65947, upload-time = "2025-10-16T08:35:30.23Z" },
+]
+
+[[package]]
+name = "opentelemetry-sdk"
+version = "1.38.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "opentelemetry-api" },
+    { name = "opentelemetry-semantic-conventions" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/85/cb/f0eee1445161faf4c9af3ba7b848cc22a50a3d3e2515051ad8628c35ff80/opentelemetry_sdk-1.38.0.tar.gz", hash = "sha256:93df5d4d871ed09cb4272305be4d996236eedb232253e3ab864c8620f051cebe", size = 171942, upload-time = "2025-10-16T08:36:02.257Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2f/2e/e93777a95d7d9c40d270a371392b6d6f1ff170c2a3cb32d6176741b5b723/opentelemetry_sdk-1.38.0-py3-none-any.whl", hash = "sha256:1c66af6564ecc1553d72d811a01df063ff097cdc82ce188da9951f93b8d10f6b", size = 132349, upload-time = "2025-10-16T08:35:46.995Z" },
+]
+
+[[package]]
+name = "opentelemetry-semantic-conventions"
+version = "0.59b0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "opentelemetry-api" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/40/bc/8b9ad3802cd8ac6583a4eb7de7e5d7db004e89cb7efe7008f9c8a537ee75/opentelemetry_semantic_conventions-0.59b0.tar.gz", hash = "sha256:7a6db3f30d70202d5bf9fa4b69bc866ca6a30437287de6c510fb594878aed6b0", size = 129861, upload-time = "2025-10-16T08:36:03.346Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/24/7d/c88d7b15ba8fe5c6b8f93be50fc11795e9fc05386c44afaf6b76fe191f9b/opentelemetry_semantic_conventions-0.59b0-py3-none-any.whl", hash = "sha256:35d3b8833ef97d614136e253c1da9342b4c3c083bbaf29ce31d572a1c3825eed", size = 207954, upload-time = "2025-10-16T08:35:48.054Z" },
 ]
 
 [[package]]
@@ -4690,7 +4730,7 @@ wheels = [
 
 [[package]]
 name = "zenml"
-version = "0.91.2"
+version = "0.93.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asgiref" },
@@ -4700,6 +4740,7 @@ dependencies = [
     { name = "docker" },
     { name = "gitpython" },
     { name = "jsonref" },
+    { name = "opentelemetry-sdk" },
     { name = "packaging" },
     { name = "psutil" },
     { name = "pydantic" },
@@ -4708,9 +4749,9 @@ dependencies = [
     { name = "rich" },
     { name = "setuptools" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8f/19/19a963cfac3dec345239a4c62127fdfa3ed9bc434b61935a4dc763fe3508/zenml-0.91.2.tar.gz", hash = "sha256:1af49d703dea54eacf90a89e3b0f9e3b2b36fabd5ab1b7257eac9c1f473bc275", size = 4925237, upload-time = "2025-11-19T06:16:48.201Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/eb/df/aba5577cc314e1e264c147299d8e4af4e78b15c43cd823b7999419f491f2/zenml-0.93.2.tar.gz", hash = "sha256:465bfec49f3971f325c042b61a30867513b5864c820b9e76b17cf79dfbfe61a2", size = 7006647, upload-time = "2026-01-29T22:14:10.833Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1a/54/da24e91b0f14f4beaec09b6e269d091596c632c409fac7ad82df5c0db6da/zenml-0.91.2-py3-none-any.whl", hash = "sha256:ee44a37daff1e17ce7ba52336b9a85c73c601acbeff90acaf542bb781e190728", size = 6019480, upload-time = "2025-11-19T06:16:45.111Z" },
+    { url = "https://files.pythonhosted.org/packages/06/ed/483fcdc23f5e9a4769cdebc6be8a3585e4b1af0115078d31db0635a345ac/zenml-0.93.2-py3-none-any.whl", hash = "sha256:95ca90c03188a3777f5433f36d47d126d7a9bcef6f0cbe857dd1f6ba1aaf6222", size = 8129867, upload-time = "2026-01-29T22:14:07.598Z" },
 ]
 
 [package.optional-dependencies]

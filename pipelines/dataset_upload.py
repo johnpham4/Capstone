@@ -2,7 +2,7 @@ from zenml import pipeline
 from loguru import logger
 
 from steps.upload import upload_to_huggingface
-from llm_src.settings import settings
+from src.config.settings.base import settings
 
 @pipeline
 def dataset_upload_pipeline(

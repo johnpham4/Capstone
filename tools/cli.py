@@ -7,10 +7,11 @@ import argparse
 import sys
 from pathlib import Path
 
-# Add parent directory to path to import llm_src
+# Add parent directory to path to import src
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from llm_src.applications.geo.solver import solve_geometry_problem
+# TODO: Implement geometry solver service
+# from src.services.geo.solver import solve_geometry_problem
 
 
 def main():
