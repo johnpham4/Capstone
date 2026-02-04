@@ -36,7 +36,6 @@ class CircleType(StrEnum):
 
 
 class ConstraintType(StrEnum):
-    """Types of geometric constraints"""
     EQUAL_LENGTH = auto()    # cong - độ dài bằng nhau
     EQUAL_ANGLE = auto()     # góc bằng nhau
     PERPENDICULAR = auto()   # perp - vuông góc

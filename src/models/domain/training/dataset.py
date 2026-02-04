@@ -10,19 +10,11 @@ except ImportError:
     logger.warning("Huggingface datasets not installed. Install with `pip install datasets`")
 
 class InstructDatasetSample(BaseModel):
-    """Single training sample with instruction and answer.
-    
-    Uses BaseModel for validation and serialization to HuggingFace format.
-    """
     image_dir: str
     instruction: str
     answer: str
 
 class InstructDataset(BaseModel):
-    """Collection of instruction dataset samples.
-    
-    Uses BaseModel for HuggingFace Dataset conversion.
-    """
     samples: list[InstructDatasetSample]
 
     @property
@@ -52,7 +44,6 @@ class InstructDataset(BaseModel):
 
 
 class TrainTestSplit(BaseModel):
-    """Train/test split of dataset."""
     train: InstructDataset
     test: InstructDataset
     test_split_size: float
@@ -69,7 +60,6 @@ class TrainTestSplit(BaseModel):
 
 
 class InstructTrainTestSplit(BaseModel):
-    """Train/test split for instruction datasets."""
     train: InstructDataset
     test: InstructDataset
     test_split_size: float

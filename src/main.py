@@ -1,36 +1,3 @@
-"""
-GeoUni Backend Application - Layered Architecture
-
-Main application entry point following clean architecture principles:
-- API Layer: HTTP endpoints and request/response handling
-- Service Layer: Business logic (agents, orchestrators, diagram processing)
-- Model Layer: Domain models and data schemas
-- Infrastructure Layer: External services (AWS, LLM, visualization)
-- Config Layer: Settings and configuration management
-
-Project structure:
-    backend/src/
-    ├── api/                # API Layer (Controllers)
-    │   ├── routes/         # HTTP endpoints
-    │   ├── dependencies/   # Dependency injection
-    │   └── endpoints.py    # Route registration
-    ├── services/           # Service Layer (Business Logic)
-    │   ├── agents/         # Intelligent agents
-    │   ├── orchestrators/  # Agent orchestration
-    │   ├── diagram/        # Diagram processing
-    │   ├── datasets/       # Dataset operations
-    │   └── ...
-    ├── models/             # Model Layer
-    │   ├── domain/         # Domain models
-    │   └── schemas/        # Pydantic schemas
-    ├── infrastructures/    # Infrastructure Layer
-    │   ├── llm/           # LLM integrations
-    │   ├── aws/           # AWS services
-    │   └── ...
-    ├── config/            # Configuration Layer
-    │   └── settings/      # Environment-based settings
-    └── utilities/         # Shared utilities
-"""
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger

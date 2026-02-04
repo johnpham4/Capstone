@@ -6,16 +6,13 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.exceptions import OutputParserException
 
 
-from src.services.datasets.output_parser import ListPydanticOutputParser
 from src.services.utils import misc
 from src.config.settings.base import settings
 from src.models.domain.training import Document
 from src.models.domain.training import GenerateDatasetSamplesPrompt, Prompt
 from src.models.domain.training import InstructDataset, InstructDatasetSample, InstructTrainTestSplit
-from src.services.networks.dsl_generator import DSLGenerator
 
 from . import utils as generation_utils
-from .output_parser import ListPydanticOutputParser
 from .prompt import prompt
 
 class DatasetGeneration(ABC):

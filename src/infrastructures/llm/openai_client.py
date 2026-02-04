@@ -1,5 +1,3 @@
-"""OpenAI client wrapper - infrastructure layer."""
-
 from typing import Dict, Any, Optional, List
 from loguru import logger
 import httpx
