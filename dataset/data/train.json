@@ -398,5 +398,40 @@
     "image_dir": "images/img_250007.png",
     "instruction": "Cho tam giác ABC có góc A bằng 70 độ và góc B bằng 50 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD.",
     "answer": "(triangle (A B C))\n(angle-measure B A C 70)\n(angle-measure A B C 50)\n(define D point (midpoint A B))\n(segment C D)\n(define M point (bisector B A C))\n(segment A M)"
+  },
+  {
+    "image_dir": "images/img_230106.png",
+    "instruction": "Cho đường tròn (O), dây AB. Gọi H là trung điểm của AB. Lấy điểm C nằm trên đường tròn sao cho CH vuông góc với AB.",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(define H point (midpoint A B))\n(define C point)\n(on-circle C O)\n(segment C H)\n(perpendicular (segment C H) (segment A B))"
+  },
+  {
+    "image_dir": "images/img_230101.png",
+    "instruction": "Cho đường tròn (O) có đường kính AB; C là điểm nằm trên đường tròn; H là hình chiếu của C trên AB. Trên đoạn OC lấy điểm M sao cho OM = OH.",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(on-segment O A B)\n(define C point)\n(on-circle C O)\n(define H point (projection C (segment A B)))\n(segment C H)\n(segment O C)\n(define M point)\n(on-segment M O C)\n(equal-distance O M O H)"
+  },
+  {
+    "image_dir": "images/img_230108.png",
+    "instruction": "Cho đường tròn (O), dây AB. Gọi H là hình chiếu của O trên AB. Lấy điểm C nằm trên đường tròn sao cho CH cắt AB tại D.",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(define H point (projection O (segment A B)))\n(define C point)\n(on-circle C O)\n(define D point (line C H))\n(on-segment D A B)"
+  },
+  {
+    "image_dir": "images/img_230103.png",
+    "instruction": "Cho đường tròn (O) có đường kính AB. Lấy điểm C nằm trên đường tròn. Từ C kẻ CD vuông góc với AB tại D. Gọi M là trung điểm của CD.",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(on-segment O A B)\n(define C point)\n(on-circle C O)\n(define D point (projection C (segment A B)))\n(segment C D)\n(define M point (midpoint C D))"
+  },
+  {
+    "image_dir": "images/img_230105.png",
+    "instruction": "Cho đường tròn (O) có đường kính AB; C là điểm nằm trên đường tròn; H là hình chiếu của C trên AB. Trên đoạn AC lấy điểm M sao cho CM = CH.",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(on-segment O A B)\n(define C point)\n(on-circle C O)\n(define H point (projection C (segment A B)))\n(segment C H)\n(segment A C)\n(define M point)\n(on-segment M A C)\n(equal-distance C M C H)"
+  },
+  {
+    "image_dir": "images/img_230104.png",
+    "instruction": "Cho đường tròn (O), dây AB. Lấy điểm C nằm trên đường tròn sao cho đường thẳng CO cắt AB tại H và AH = HB.",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(define C point)\n(on-circle C O)\n(define H point (midpoint A B))\n(segment C H)"
+  },
+  {
+    "image_dir": "images/img_230107.png",
+    "instruction": "Cho đường tròn (O) có đường kính AB. Lấy điểm C nằm trên đường tròn. Gọi D là trung điểm của AC, CD cắt AB tại H.",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(on-segment O A B)\n(define C point)\n(on-circle C O)\n(define D point (midpoint A C))\n(segment C D)\n(define H point (line C D))\n(on-segment H A B)"
   }
 ]

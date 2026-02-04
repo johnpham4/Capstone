@@ -178,7 +178,7 @@ class MatplotlibDiagramRenderer:
         text_y = vertex.y + text_radius * np.sin(mid_angle)
         
         ax.text(text_x, text_y, f"{int(angle_degrees)}°",
-               fontsize=8.3, ha='center', va='center',
+               fontsize=22, ha='center', va='center',
                color='red', fontweight='bold',
                bbox=dict(boxstyle='round,pad=0.15', facecolor='white', edgecolor='none', alpha=0.85))
 
@@ -196,7 +196,7 @@ class MatplotlibDiagramRenderer:
         if not self.diagram:
             raise ValueError("No diagram to render")
 
-        fig, ax = plt.subplots(figsize=(8, 8))
+        fig, ax = plt.subplots(figsize=(20, 20))
 
         # 1. Draw Triangles (Solid Lines)
         for tri in self.diagram.triangles:
@@ -304,32 +304,29 @@ class MatplotlibDiagramRenderer:
                         num_ticks = 1 if i % 2 == 0 else 2
                         self._draw_tick_marks(ax, p1, p2, num_ticks)
 
-        # Draw circles
+        # Draw circles (radius calculated in optimizer)
         for center, info in self.diagram.circles:
+            logger.info(f"Drawing circle at {center.name} ({center.x:.4f}, {center.y:.4f}), info: {info}")
             if isinstance(info, dict):
-                if info['type'] == 'incircle':
-                    # Calculate incircle radius from triangle
-                    tri_points = [self.diagram.points[name] for name in info['triangle'] if name in self.diagram.points]
-                    if len(tri_points) == 3:
-                        # Use distance from center to one side
-                        p1, p2 = tri_points[0], tri_points[1]
-                        # Distance formula from point to line
-
-                        num = abs((p2.y - p1.y) * center.x - (p2.x - p1.x) * center.y + p2.x * p1.y - p2.y * p1.x)
-                        den = np.sqrt((p2.y - p1.y)**2 + (p2.x - p1.x)**2)
-                        radius = num / den if den > 0 else 0.1
-                        circle = plt.Circle((center.x, center.y), radius, fill=False, edgecolor='blue', linewidth=1.0)
-                        ax.add_patch(circle)
-                elif info['type'] == 'circumcircle':
-
-                    tri_points = [self.diagram.points[name] for name in info['triangle'] if name in self.diagram.points]
-                    if len(tri_points) == 3:
-                        radius = center.distance_to(tri_points[0])
-                        circle = plt.Circle((center.x, center.y), radius, fill=False, edgecolor='green', linewidth=1.0)
-                        ax.add_patch(circle)
+                radius = info.get('radius', 0.5)  # Use calculated radius from optimizer
+                logger.info(f"  Radius: {radius}, Type: {info.get('type')}")
+                
+                # Color by circle type
+                color_map = {
+                    'incircle': 'blue',
+                    'circumcircle': 'green',
+                    'positioned': 'black'
+                }
+                color = color_map.get(info.get('type', 'positioned'), 'black')
+                
+                circle = plt.Circle((center.x, center.y), radius, fill=False, 
+                                  edgecolor=color, linewidth=1.0)  
+                ax.add_patch(circle)
+                logger.info(f"  Circle added to plot")
             else:
-
-                circle = plt.Circle((center.x, center.y), info, fill=False, edgecolor='black', linewidth=1.0)
+                # Fallback for old format 
+                circle = plt.Circle((center.x, center.y), info, fill=False, 
+                                  edgecolor='black', linewidth=1.0)
                 ax.add_patch(circle)
 
         # 4. Draw Segments (Auxiliary - Dashed)
@@ -384,7 +381,7 @@ class MatplotlibDiagramRenderer:
                     name, (p.x, p.y),
                     xytext=(ox, oy),
                     textcoords='offset points',
-                    fontsize=10,
+                    fontsize=24,
                     fontweight='bold'
                 )
                 
@@ -454,8 +451,28 @@ class MatplotlibDiagramRenderer:
                     radius=0.25  # Slightly further out than arcs
                 )
 
+
         # Configure axes
         ax.set_aspect('equal')
+        
+        # Zoom in to make circles appear larger - adjust axis limits based on circle size
+        if self.diagram.circles:
+            # Find the largest circle to set appropriate zoom
+            max_radius = 0
+            for center_name, info in self.diagram.circles:  # Fix: circles is a list, not dict
+                if isinstance(info, dict):
+                    radius = info.get('radius', 0.5)
+                    max_radius = max(max_radius, radius)
+                else:
+                    max_radius = max(max_radius, info)
+            
+            # Set axis limits to be 1.5x the largest circle radius (instead of default auto-scale)
+            zoom_factor = max(1.5, max_radius * 1.5)
+            
+            # CỐ ĐỊNH view ở (0, 0) - tâm đường tròn luôn ở giữa không gian
+            ax.set_xlim(-zoom_factor, zoom_factor)
+            ax.set_ylim(-zoom_factor, zoom_factor)
+        
         ax.axis('off')
 
         # Save if requested
