@@ -1,6 +1,8 @@
 import math
 from typing import List, Tuple
 
+from networkx import center
+
 
 class Initializer:
 
@@ -108,6 +110,27 @@ class Initializer:
             (0.0, 0.8 * scale),   # Top
             (-0.5 * scale, 0.0)   # Left
         ]
+        
+    @staticmethod
+    def init_circle_with_positioned_points(center: Tuple[float, float] = (0.0, 0.0),
+                                            radius: float = 0.4,
+                                            points_distances: List[Tuple[float, float]] = None
+                                        ) -> List[Tuple[float, float]]:
+        if points_distances is None:
+            points_distances = []
+        
+        result = [center]
+        for distance, angle_deg in points_distances:
+            angle_rad = math.radians(angle_deg)
+            point = (
+                center[0] + distance * math.cos(angle_rad),
+                center[1] + distance * math.sin(angle_rad)
+                )
+            result.append(point)
+        
+        return result
+        
+    
 
     @staticmethod
     def init_triangle_incircle(scale: float = 1.0) -> List[Tuple[float, float]]:
@@ -177,6 +200,63 @@ class Initializer:
         else:
             return [bisector_coords[2], bisector_coords[0], bisector_coords[1], bisector_coords[3]]
         
+    @staticmethod
+    def init_line_circle_intersection(center: Tuple[float, float],
+                                      radius: float,
+                                      line_point1: Tuple[float, float],
+                                      line_point2: Tuple[float, float]) -> List[Tuple[float, float]]:
+        """
+        Tính 2 giao điểm của đường thẳng qua line_point1, line_point2 với đường tròn (center, radius).
+        Trả về [intersection1, intersection2] hoặc [] nếu không có giao điểm.
+        """
+        cx, cy = center
+        x1, y1 = line_point1
+        x2, y2 = line_point2
+        
+        # Direction vector của đường thẳng
+        dx = x2 - x1
+        dy = y2 - y1
+        
+        # Tránh division by zero
+        if abs(dx) < 1e-10 and abs(dy) < 1e-10:
+            return []  # Line points trùng nhau
+        
+        # Vector từ line_point1 đến center
+        fx = x1 - cx
+        fy = y1 - cy
+        
+        # Giải phương trình bậc 2: a*t^2 + b*t + c = 0
+        # Điểm trên line: (x1 + t*dx, y1 + t*dy)
+        # Khoảng cách đến center = radius
+        a = dx*dx + dy*dy
+        b = 2*(fx*dx + fy*dy)
+        c = fx*fx + fy*fy - radius*radius
+        
+        discriminant = b*b - 4*a*c
+        
+        if discriminant < 0:
+            # Không có giao điểm, trả về 2 điểm gần nhất trên line
+            # Điểm gần nhất là khi đạo hàm = 0
+            t_closest = -b / (2*a)
+            closest_x = x1 + t_closest * dx
+            closest_y = y1 + t_closest * dy
+            # Trả về 2 điểm cách closest một chút
+            offset = 0.1
+            return [
+                (closest_x - offset*dx, closest_y - offset*dy),
+                (closest_x + offset*dx, closest_y + offset*dy)
+            ]
+        
+        # Có giao điểm
+        sqrt_d = math.sqrt(discriminant)
+        t1 = (-b - sqrt_d) / (2*a)
+        t2 = (-b + sqrt_d) / (2*a)
+        
+        p1 = (x1 + t1*dx, y1 + t1*dy)
+        p2 = (x1 + t2*dx, y1 + t2*dy)
+        
+        return [p1, p2]
+
     @staticmethod
     def init_obtuse_triangle(apex_idx: int = 0) -> List[Tuple[float, float]]:
         """Initialize an obtuse triangle"""

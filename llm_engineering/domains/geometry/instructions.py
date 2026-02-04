@@ -48,3 +48,12 @@ class Definition:
 
     def __str__(self) -> str:
         return f"define {self.obj_name} {self.obj_type} ({self.computation})"
+
+
+@dataclass
+class DistanceValue:
+    """Wrapper for distance value in constraints"""
+    val: float
+    
+    def __str__(self) -> str:
+        return str(self.val)

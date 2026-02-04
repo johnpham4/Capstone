@@ -1,0 +1,50 @@
+[
+  {
+    "image": "images/img_230101.png",
+    "caption": "circle (O) with diameter AB, point C on circle, H is projection of C onto AB, M on OC such that OM = OH",
+    "id": 230101,
+    "caption_vn": "Cho đường tròn (O) có đường kính AB; C là điểm nằm trên đường tròn; H là hình chiếu của C trên AB. Trên đoạn OC lấy điểm M sao cho OM = OH."
+  },
+  {
+    "image": "images/img_230102.png",
+    "caption": "circle (O) radius R, chord AB, C on circle, H midpoint of AB, CH intersects AB at D",
+    "id": 230102,
+    "caption_vn": "Cho đường tròn (O) bán kính R, dây AB. Gọi H là trung điểm của AB. Lấy điểm C nằm trên đường tròn sao cho CH cắt AB tại D."
+  },
+  {
+    "image": "images/img_230103.png",
+    "caption": "circle (O), diameter AB, point C on circle, CD perpendicular to AB at D, M midpoint of CD",
+    "id": 230103,
+    "caption_vn": "Cho đường tròn (O) có đường kính AB. Lấy điểm C nằm trên đường tròn. Từ C kẻ CD vuông góc với AB tại D. Gọi M là trung điểm của CD."
+  },
+  {
+    "image": "images/img_230104.png",
+    "caption": "circle (O), chord AB, point C on circle, CO intersects AB at H, AH = HB",
+    "id": 230104,
+    "caption_vn": "Cho đường tròn (O), dây AB. Lấy điểm C nằm trên đường tròn sao cho đường thẳng CO cắt AB tại H và AH = HB."
+  },
+  {
+    "image": "images/img_230105.png",
+    "caption": "circle (O), diameter AB, point C on circle, H projection of C on AB, M on AC such that CM = CH",
+    "id": 230105,
+    "caption_vn": "Cho đường tròn (O) có đường kính AB; C là điểm nằm trên đường tròn; H là hình chiếu của C trên AB. Trên đoạn AC lấy điểm M sao cho CM = CH."
+  },
+  {
+    "image": "images/img_230106.png",
+    "caption": "circle (O), chord AB, point C on circle, H midpoint of AB, CH perpendicular to AB",
+    "id": 230106,
+    "caption_vn": "Cho đường tròn (O), dây AB. Gọi H là trung điểm của AB. Lấy điểm C nằm trên đường tròn sao cho CH vuông góc với AB."
+  },
+  {
+    "image": "images/img_230107.png",
+    "caption": "circle (O), diameter AB, C on circle, D midpoint of AC, CD intersects AB at H",
+    "id": 230107,
+    "caption_vn": "Cho đường tròn (O) có đường kính AB. Lấy điểm C nằm trên đường tròn. Gọi D là trung điểm của AC, CD cắt AB tại H."
+  },
+  {
+    "image": "images/img_230108.png",
+    "caption": "circle (O), chord AB, C on circle, H projection of O on AB, CH intersects AB at D",
+    "id": 230108,
+    "caption_vn": "Cho đường tròn (O), dây AB. Gọi H là hình chiếu của O trên AB. Lấy điểm C nằm trên đường tròn sao cho CH cắt AB tại D."
+  }
+]

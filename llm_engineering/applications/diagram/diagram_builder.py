@@ -2,7 +2,7 @@ from typing import List, Tuple, Any
 
 from llm_engineering.applications.diagram.dsl_parser import DSLParser
 from llm_engineering.domains.geometry import Point
-from llm_engineering.domains.geometry.instructions import Parameter, Assertion
+from llm_engineering.domains.geometry.instructions import Parameter, Assertion, DistanceValue
 from llm_engineering.domains.geometry.types import DiagramType, QuadrilateralType, TriangleType
 
 class DiagramBuilder:
@@ -46,6 +46,12 @@ class DiagramBuilder:
             self.process_angle_measure(cmd)
         elif head == "on-segment":
             self.process_on_segment(cmd)
+        elif head == "distance":
+            self.process_distance(cmd)
+        elif head == "equal-distance":
+            self.process_equal_distance(cmd)
+        elif head == "on-circle":
+            self.process_on_circle(cmd)
         else:
             raise NotImplementedError(f"Command not supported: {head}")
 
@@ -119,16 +125,29 @@ class DiagramBuilder:
         self.instructions.append(instr)
 
     def process_define(self, cmd):
-        """Process: (define G point (centroid A B C))"""
-        if len(cmd) < 4:
+        """Process: (define G point (centroid A B C)) or (define O point)"""
+        if len(cmd) < 3:
             raise RuntimeError(f"Invalid define command: {cmd}")
 
         point_name = cmd[1]
         obj_type = cmd[2]
-        construction = cmd[3]
 
         if obj_type != "point":
             raise NotImplementedError(f"Only 'point' type supported, got: {obj_type}")
+
+        # Handle free point with no construction: (define O point)
+        if len(cmd) == 3:
+            instr = Parameter(
+                diagram_type=DiagramType.POINT,
+                objects=[Point(point_name)],
+                param_type="coords",  
+                args=()
+            )
+            self.instructions.append(instr)
+            return
+
+        # (define G point (centroid A B C))
+        construction = cmd[3]
 
         if not isinstance(construction, tuple):
             raise RuntimeError(f"Construction must be a tuple: {construction}")
@@ -136,12 +155,11 @@ class DiagramBuilder:
         construction_type = construction[0].lower()
         construction_args = construction[1:]
 
-        # Handle special cases where args contain nested structures
-        # e.g., (projection A (segment B C))
+        # (projection A (segment B C))
         processed_args = []
         for arg in construction_args:
             if isinstance(arg, tuple):
-                # Flatten nested structures like (segment B C) -> [B, C]
+                # (segment B C) -> [B, C]
                 processed_args.extend(arg[1:])
             else:
                 processed_args.append(arg)
@@ -156,25 +174,37 @@ class DiagramBuilder:
         self.instructions.append(instr)
 
     def process_circle(self, cmd):
-        """Process: (circle I (incircle A B C))"""
-        if len(cmd) < 3:
+        """
+        Process circle commands:
+        - (circle O) -> default radius 1.0
+        - (circle O (radius 0.5)) -> explicit radius
+        - (circle O (incircle A B C)) -> inscribed circle
+        """
+        if len(cmd) < 2:
             raise RuntimeError(f"Invalid circle command: {cmd}")
 
         center_name = cmd[1]
-        construction = cmd[2]
-
-        if not isinstance(construction, tuple):
-            raise RuntimeError(f"Circle construction must be a tuple: {construction}")
-
-        construction_type = construction[0].lower()
-        construction_args = construction[1:]
+        
+        # If only (circle O) - use default radius
+        if len(cmd) == 2:
+            construction = ('radius', 1.0)
+            construction_type = 'radius'
+            construction_args = (1.0,)
+        else:
+            construction = cmd[2]
+            
+            if not isinstance(construction, tuple):
+                raise RuntimeError(f"Circle construction must be a tuple: {construction}")
+            
+            construction_type = construction[0].lower()
+            construction_args = construction[1:]
 
         # Create Parameter instruction for circle
         instr = Parameter(
             diagram_type=DiagramType.CIRCLE,
             objects=[Point(center_name)],
             param_type=construction_type,
-            args=tuple(Point(p) for p in construction_args)
+            args=tuple(Point(p) if isinstance(p, str) else p for p in construction_args)
         )
         self.instructions.append(instr)
 
@@ -308,5 +338,51 @@ class DiagramBuilder:
         instr = Assertion(
             constraint_type='on_segment',
             objects=[point, seg_p1, seg_p2]
+        )
+        self.instructions.append(instr)
+
+    def process_distance(self, cmd):
+        """Process: (distance O A 0.03) -> Distance OA = 0.03"""
+        if len(cmd) != 4:
+            raise RuntimeError(f"distance requires 2 points and 1 value: {cmd}")
+        
+        p1 = Point(cmd[1])  # O
+        p2 = Point(cmd[2])  # A
+        distance_value = cmd[3]  # 0.03 (float or string)
+        
+        # Convert to DistanceValue wrapper
+        instr = Assertion(
+            constraint_type='distance',
+            objects=[p1, p2, DistanceValue(distance_value)]
+        )
+        self.instructions.append(instr)
+
+    def process_equal_distance(self, cmd):
+        """Process: (equal-distance O M O H) -> Distance OM = Distance OH"""
+        if len(cmd) != 5:
+            raise RuntimeError(f"equal-distance requires 4 points (p1 p2 p3 p4): {cmd}")
+        
+        p1 = Point(cmd[1])  # O
+        p2 = Point(cmd[2])  # M
+        p3 = Point(cmd[3])  # O
+        p4 = Point(cmd[4])  # H
+        
+        instr = Assertion(
+            constraint_type='equal_distance',
+            objects=[p1, p2, p3, p4]
+        )
+        self.instructions.append(instr)
+
+    def process_on_circle(self, cmd):
+        """Process: (on-circle B O) -> Point B lies on circle centered at O"""
+        if len(cmd) != 3:
+            raise RuntimeError(f"on-circle requires 2 points (point, center): {cmd}")
+        
+        point = Point(cmd[1])  # B
+        center = Point(cmd[2])  # O
+        
+        instr = Assertion(
+            constraint_type='on_circle',
+            objects=[point, center]
         )
         self.instructions.append(instr)

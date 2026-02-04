@@ -11,6 +11,9 @@ def test_single_problem(instruction, dsl_answer, output_path):
     print(f"Instruction: {instruction}")
     print(f"DSL: {dsl_answer}")
 
+    # Hot-fix: Thêm constraint để A và B ở 2 phía khác nhau
+    if "(on-segment A M O)" in dsl_answer and "(on-circle A O)" in dsl_answer and "(on-circle B O)" in dsl_answer:
+        dsl_answer += "\n(distance A B 1.0)"  # Diameter = 2*radius = 2*0.5 = 1.0
 
     try:
         dsl_lines = dsl_answer.split('\n') if '\n' in dsl_answer else [dsl_answer]
@@ -18,7 +21,7 @@ def test_single_problem(instruction, dsl_answer, output_path):
 
         print(f"Points: {[p.val for p in builder.points]}")
         # print(f"Instructions: {builder.instructions}")
-        opts = {'epochs': 3000, 'n_tries': 3, 'eps': 1e-6, 'seed': 42}
+        opts = {'epochs': 7000, 'n_tries': 3, 'eps': 1e-6, 'seed': 42, 'learning_rate': 0.02}
 
         optimizer = Optimizer(builder.instructions, opts, verbosity=False)
         diagram = optimizer.solve()
@@ -30,7 +33,7 @@ def test_single_problem(instruction, dsl_answer, output_path):
         renderer = MatplotlibDiagramRenderer()
         fig, ax = renderer.render(diagram, save=True, show=False, filename=str(output_path))
 
-        fig.suptitle(instruction, fontsize=10, wrap=True)
+        fig.suptitle(instruction, fontsize=23, wrap=True)
 
         plt.savefig(output_path, dpi=150, bbox_inches='tight')
         plt.close(fig)

@@ -1,7 +1,7 @@
 [
   {
-    "image_dir": "images/img_250008.png",
-    "instruction": "Cho tam giác ABC thường, có góc A bằng 80 độ, CD là trung tuyến của cạnh AB, AM là tia phân giác của góc A với M nằm trên CD.",
-    "answer": "(triangle (A B C))\n(angle-measure B A C 80)\n(define D point (midpoint A B))\n(segment C D)\n(define M point (bisector B A C))\n(on-segment M C D)\n(segment A M)"
+    "image_dir": "images/img_230107.png",
+    "instruction": "Cho đường tròn (O) có đường kính AB. Lấy điểm C nằm trên đường tròn. Gọi D là trung điểm của AC, CD cắt AB tại H.",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(on-segment O A B)\n(define C point)\n(on-circle C O)\n(define D point (midpoint A C))\n(segment C D)\n(define H point (line C D))\n(on-segment H A B)"
   }
 ]

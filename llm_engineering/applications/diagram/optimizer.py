@@ -1,3 +1,4 @@
+from networkx import center
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -11,7 +12,6 @@ from llm_engineering.domains.geometry.entities import GeometricPoint, Diagram
 from llm_engineering.domains.geometry.types import QuadrilateralType, TriangleType, DiagramType
 from llm_engineering.applications.diagram.initializer import Initializer
 
-
 TorchPoint = namedtuple("TorchPoint", ["x", "y"])
 LineSF = namedtuple("LineSF", ["a", "b", "c", "p1", "p2"])
 LineNF = namedtuple("LineNF", ["n", "f"])
@@ -21,9 +21,9 @@ class Optimizer:
         self.instructions = instructions
         self.opts = opts
         self.verbosity = verbosity
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self._init_state()  # Initialize all state variables
-    
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        
     def _init_state(self):
         """Reset state for new optimization attempt"""
         self.name2pt = {}
@@ -129,11 +129,9 @@ class Optimizer:
         point_y = point.y - p1.y
         
         vec_len_sq = vec_x**2 + vec_y**2 + 1e-8
-        t = (point_x * vec_x + point_y * vec_y) / vec_len_sq
-        
         # Penalty if t < 0 or t > 1
+        t = (point_x * vec_x + point_y * vec_y) / vec_len_sq
         between_penalty = torch.relu(-t) + torch.relu(t - 1)
-        
         return on_line_loss + 10.0 * between_penalty
 
     def _angle_bisector_equal_loss(self, p_vertex: TorchPoint, p1: TorchPoint, p2: TorchPoint, p_bisector: TorchPoint):
@@ -148,6 +146,13 @@ class Optimizer:
         ratio_bd_da = self.segment_ratio(p1, p_bisector, p_bisector, p2)
         ratio_bc_ac = self.segment_ratio(p_vertex, p1, p_vertex, p2)
         return (ratio_bd_da - ratio_bc_ac)**2
+    
+    def _angle_diff_loss(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint,
+                                          p4: TorchPoint, p5: TorchPoint, p6: TorchPoint):
+        """Calculate squared difference between two angles: (cos(p1-p2-p3) - cos(p4-p5-p6))^2."""
+        cos1 = self.angle_cosine(p1, p2, p3)
+        cos2 = self.angle_cosine(p4, p5, p6)
+        return (cos1 - cos2)**2
 
     def _triangle_angle_difference_loss(self, pts: list, idx1: int, idx2: int):
         """Calculate difference between two angles in a triangle at given indices."""
@@ -162,13 +167,6 @@ class Optimizer:
         cos1 = self.angle_cosine(v1_prev, v1_curr, v1_next)
         cos2 = self.angle_cosine(v2_prev, v2_curr, v2_next)
         return cos1 - cos2
-
-    def _angle_diff_loss(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint,
-                                          p4: TorchPoint, p5: TorchPoint, p6: TorchPoint):
-        """Calculate squared difference between two angles: (cos(p1-p2-p3) - cos(p4-p5-p6))^2."""
-        cos1 = self.angle_cosine(p1, p2, p3)
-        cos2 = self.angle_cosine(p4, p5, p6)
-        return (cos1 - cos2)**2
 
     def dist_to_line(self, point: TorchPoint, p1: TorchPoint, p2: TorchPoint):
         """Distance from point to line defined by p1, p2"""
@@ -219,7 +217,11 @@ class Optimizer:
         P = self.get_point(x, y)
         return self.register_pt(p, P, save_name)
 
-
+    def _calculate_distance_to_line(self, point, line_p1, line_p2):
+        """Calculate distance from point to line (for incircle radius)"""
+        line = self.pp2lnf(line_p1, line_p2)
+        return torch.abs(self.on_line(point, line))    
+    
     def _dot_product(self, pa: TorchPoint, pb: TorchPoint, pc: TorchPoint):
         """Calculate dot product of vectors (pa-pb) and (pc-pb)"""
         v1x, v1y = self._vector_from_points(pa, pb)
@@ -529,6 +531,46 @@ class Optimizer:
         self.register_loss(f"centroid_{point_name.val}", centroid_loss, weight=10.0)
         return centroid
 
+    def _define_circle_with_points(self, center_name, points_info, radius_value):
+        center_coords = Initializer.init_circle_with_positioned_points(radius_value, len(points_info))
+        center_coords = Initializer.add_noise(center_coords)
+        center = self.sample_uniform(center_name, init_coords=center_coords)
+        
+        for point_name, distance, constraint_type in points_info:
+            point = self.sample_uniform(point_name)
+            
+            if constraint_type == 'on_circle':
+                self.register_loss(f"on_circle_{point_name.val}",
+                lambda pt=point, c=center, r=radius_value: 
+                    (self.dist(pt, c) - r)**2, weight=200.0 
+            )
+                
+            elif constraint_type == 'inside':
+                self.register_loss(f"inside_circle_{point_name.val}",
+                lambda pt=point, c=center, d=distance:
+                    (self.dist(pt, c) - d)**2, weight=150.0
+            )
+                
+            elif constraint_type == 'outside':
+                self.register_loss(f"outside_circle_{point_name.val}",
+                lambda pt=point, c=center, d=distance:
+                    (self.dist(pt, c) - d)**2, weight=150.0
+            )
+            
+            else:
+                self.register_loss(
+                f"point_distance_{point_name.val}",
+                lambda pt=point, c=center, d=distance:
+                    (self.dist(pt, c) - d)**2, weight=100.0
+            )
+        self.circles.append((center_name.val, {
+        'type': 'positioned_points',
+        'radius': radius_value,
+        'points': [p[0].val for p in points_info]
+        }))
+    
+        return center
+    
     def _define_incenter(self, point_name, triangle_points):
         """Define incenter - equal distance to all sides"""
         assert len(triangle_points) == 3
@@ -616,11 +658,14 @@ class Optimizer:
         assert len(line_points) == 2
         p1 = self.lookup_pt(line_points[0])
         p2 = self.lookup_pt(line_points[1])
+        
+        # Simple initialization without analytical solution
         P = self.sample_uniform(p, save_name=False)
+        
         def on_line_loss():
             line = self.pp2lnf(p1, p2)
             return self.on_line(P, line)**2
-        self.register_loss(f"on_line_{p.val}", on_line_loss, weight=10.0)
+        self.register_loss(f"on_line_{p.val}", on_line_loss, weight=5.0)  # Giảm xuống 5
         return self.register_pt(p, P)
 
     def _define_line_intersection(self, point_name, line1_points, line2_points):
@@ -822,12 +867,40 @@ class Optimizer:
         param_type_str = str(param_type).lower() if param_type else ""
         center_name = objects[0].val if hasattr(objects[0], 'val') else str(objects[0])
 
+        logger.info(f"Processing circle: center={center_name}, param_type={param_type_str}, args={args}")
+        
+        # CỐ ĐỊNH tâm đường tròn ở (0, 0) để nằm giữa không gian - CHỈ 1 LẦN
+        try:
+            center = self.lookup_pt(objects[0])
+            self.register_loss(
+                f"center_at_origin_{center_name}",
+                lambda c=center: c.x**2 + c.y**2,
+                weight=50.0  # Moderate weight - không override constraints khác
+            )
+        except:
+            pass
+
         if param_type_str == "incircle":
             # Incircle defined by triangle points
             self.circles.append((center_name, {'type': 'incircle', 'triangle': [p.val for p in args]}))
         elif param_type_str == "circumcircle":
             # Circumcircle defined by triangle points
             self.circles.append((center_name, {'type': 'circumcircle', 'triangle': [p.val for p in args]}))
+        elif param_type_str == "radius":
+            # Circle with explicit radius: (circle O (radius 0.05))
+            radius = float(args[0].val) if args and hasattr(args[0], 'val') else float(args[0]) if args else 0.5
+            self.circles.append((center_name, {
+                'type': 'positioned',
+                'radius': radius
+            }))
+        elif param_type_str == "positioned" or param_type_str == "with_points":
+            radius = float(args[0].val) if args else 0.5
+            point_names = [p.val for p in args[1:]] if len(args) > 1 else []
+            self.circles.append((center_name, {
+            'type': 'positioned',
+            'radius': radius,
+            'points': point_names
+        }))
         else:
             if self.verbosity:
                 logger.warning(f"Unsupported circle type: {param_type_str}")
@@ -865,7 +938,16 @@ class Optimizer:
                 self._add_angle_measure(assertion.objects)
             elif assertion.constraint_type == 'on_segment':
                 self._add_on_segment_constraint(assertion.objects)
-
+            elif assertion.constraint_type == 'distance':
+                self._add_distance_constraint(assertion.objects)
+            elif assertion.constraint_type == 'equal_distance':
+                self._add_equal_distance_constraint(assertion.objects)
+            elif assertion.constraint_type == 'on_circle':
+                self._add_on_circle_constraint(assertion.objects)
+                # Sau khi thêm on-circle constraint, enforce góc tối thiểu
+                self._enforce_minimum_angle_between_circle_points()
+            
+            
     def _add_angle_measure(self, points: list):
         """Store angle measure for display: angle ABC = degrees"""
         # DSL: (angle-measure A C B 110) 
@@ -896,11 +978,156 @@ class Optimizer:
         key = f"{points[0].val}_on_{points[1].val}{points[2].val}"
         self.register_loss(f"on_segment_{key}",
             lambda pt=point, p1=seg_p1, p2=seg_p2: self._point_on_segment_loss(pt, p1, p2),
-            weight=150.0  
+            weight=20.0  
         )
         if self.verbosity:
             logger.info(f"Added on-segment constraint: {points[0].val} on {points[1].val}{points[2].val}")
 
+    def _add_distance_constraint(self, points: list):
+        if len(points) != 3:
+            logger.warning(f"Distance constraint needs 3 points (point1, point2, distance), got {len(points)}")
+            return
+        
+        p1 = self.lookup_pt(points[0])
+        p2 = self.lookup_pt(points[1])
+        distance_value = float(points[2].val) if hasattr(points[2], 'val') else float(points[2])
+        
+        self.register_loss(
+            f"distance_{points[0].val}_{points[1].val}",
+            lambda pt1=p1, pt2=p2, d=distance_value: (self.dist(pt1, pt2) - d)**2,
+            weight=100.0
+        )
+    
+    def _add_equal_distance_constraint(self, points: list):
+        """Add constraint that distance(p1, p2) = distance(p3, p4)"""
+        if len(points) != 4:
+            logger.warning(f"Equal-distance constraint needs 4 points (p1, p2, p3, p4), got {len(points)}")
+            return
+        
+        p1 = self.lookup_pt(points[0])
+        p2 = self.lookup_pt(points[1])
+        p3 = self.lookup_pt(points[2])
+        p4 = self.lookup_pt(points[3])
+        
+        self.register_loss(
+            f"equal_distance_{points[0].val}{points[1].val}_{points[2].val}{points[3].val}",
+            lambda pt1=p1, pt2=p2, pt3=p3, pt4=p4: (self.dist(pt1, pt2) - self.dist(pt3, pt4))**2,
+            weight=100.0
+        )
+        
+        if self.verbosity:
+            logger.info(f"Added equal-distance constraint: {points[0].val}{points[1].val} = {points[2].val}{points[3].val}")
+        
+    def _add_on_circle_constraint(self, points: list):
+        if len(points) != 2:
+            logger.warning(f"on-circle constraint needs 2 points (point, center), got {len(points)}")
+            return
+        
+        point = self.lookup_pt(points[0])
+        center_name = points[1].val
+        
+        logger.info(f"Adding on-circle constraint: point={points[0].val}, center={center_name}")
+        logger.info(f"Available circles: {self.circles}")
+        
+        # Find radius from circle metadata
+        radius = None
+        for circle_name, circle_info in self.circles:
+            if circle_name == center_name:
+                radius = circle_info.get('radius')
+                break
+        if radius is None:
+            logger.warning(f"Circle {center_name} not found or has no radius")
+            return
+        center = self.lookup_pt(points[1])
+        logger.info(f"Found radius={radius} for circle {center_name}")
+        
+        # Use const() to avoid lambda closure issues
+        radius_const = self.const(radius)
+        self.register_loss(
+            f"on_circle_{points[0].val}_{center_name}",
+            lambda pt=point, c=center, r=radius_const: (self.dist(pt, c) - r)**2,
+            weight=100000.0  
+        )
+    
+    def _enforce_minimum_angle_between_circle_points(self):
+        """
+        Enforce minimum angle (45 degrees) between points on the same circle.
+        This ensures chords are long enough and diagrams look good.
+        """
+        import math
+        
+        # Group points by circle
+        circle_points_map = {}  # {center_name: [point_objs]}
+        
+        for circle_name, circle_info in self.circles:
+            circle_points_map[circle_name] = []
+        
+        # Find all points with on_circle constraint
+        for loss_name in self.losses:
+            if loss_name.startswith("on_circle_"):
+                parts = loss_name.split("_")
+                if len(parts) >= 4:  # on_circle_PointName_CenterName
+                    point_name = parts[2]
+                    center_name = "_".join(parts[3:])
+                    
+                    if center_name in circle_points_map:
+                        try:
+                            pt_obj = self.lookup_pt_by_name(point_name)
+                            if pt_obj:
+                                circle_points_map[center_name].append((point_name, pt_obj))
+                        except:
+                            pass
+        
+        # For each circle with 2+ points, enforce minimum angle
+        min_angle_rad = math.radians(45)  # 45 degrees minimum
+        min_cos = self.const(math.cos(min_angle_rad))
+        
+        for center_name, points_list in circle_points_map.items():
+            if len(points_list) < 2:
+                continue
+            
+            try:
+                center = self.lookup_pt_by_name(center_name)
+                if not center:
+                    continue
+                
+                # For each pair of points on this circle
+                for i in range(len(points_list)):
+                    for j in range(i + 1, len(points_list)):
+                        name1, pt1 = points_list[i]
+                        name2, pt2 = points_list[j]
+                        
+                        # Use existing method to calculate angle penalty
+                        self.register_loss(
+                            f"min_angle_{center_name}_{name1}_{name2}",
+                            lambda p1=pt1, p2=pt2, c=center, mc=min_cos: self._circle_angle_penalty(p1, p2, c, mc),
+                            weight=50.0
+                        )
+            except Exception as e:
+                logger.warning(f"Failed to enforce min angle for circle {center_name}: {e}")
+    
+    def _circle_angle_penalty(self, p1: TorchPoint, p2: TorchPoint, center: TorchPoint, min_cos_value):
+        """
+        Calculate penalty if angle between two points on circle is too small.
+        Returns penalty^2 if cos(angle) > min_cos_value (angle < threshold), else 0.
+        Reuses existing vector operations.
+        """
+        # Calculate cos(angle) using existing angle_cosine method
+        cos_angle = self.angle_cosine(p1, center, p2)
+        
+        # Penalty if angle too small (cos too large)
+        # ReLU: max(0, cos_angle - min_cos)
+        penalty = cos_angle - min_cos_value
+        return torch.where(penalty > 0, penalty, torch.zeros_like(penalty))**2
+    
+    def lookup_pt_by_name(self, name: str):
+        """Helper to lookup point by string name"""
+        for pt_name, pt_obj in self.points.items():
+            if pt_name == name:
+                return pt_obj
+        return None
+        
+    
     def _add_parallel_constraint(self, points: list):
         """Add parallel constraint between two segments"""
         if len(points) != 4:
@@ -1129,6 +1356,25 @@ class Optimizer:
         for center_name, info in self.circles:
             if center_name in diagram.points:
                 center = diagram.points[center_name]
+                center_pt = self.name2pt[center_name]
+                
+                # Calculate radius based on circle type
+                if info['type'] == 'incircle':
+                    # Radius = distance from center to any triangle side
+                    triangle_points = info['triangle']
+                    p1 = self.name2pt[triangle_points[0]]
+                    p2 = self.name2pt[triangle_points[1]]
+                    radius = self.dist_to_line(center_pt, p1, p2).detach().cpu().item()
+                    info = {**info, 'radius': radius}
+                    
+                elif info['type'] == 'circumcircle':
+                    # Radius = distance from center to any triangle vertex
+                    triangle_points = info['triangle']
+                    p1 = self.name2pt[triangle_points[0]]
+                    radius = self.dist(center_pt, p1).detach().cpu().item()
+                    info = {**info, 'radius': radius}
+                # For 'positioned' type, radius is already in info
+                
                 diagram.add_circle(center, info)
 
         for p1_name, p2_name in self.segments:
