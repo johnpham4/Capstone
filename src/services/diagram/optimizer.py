@@ -18,13 +18,16 @@ LineSF = namedtuple("LineSF", ["a", "b", "c", "p1", "p2"])
 LineNF = namedtuple("LineNF", ["n", "f"])
 
 class Optimizer:
-    def __init__(self, instructions, opts, verbosity=False):
+    def __init__(self, instructions, epochs=1000, n_tries=1, learning_rate=0.01, eps=1e-6, seed=42, verbosity=False):
         self.instructions = instructions
-        self.opts = opts
+        self.epochs = epochs
+        self.n_tries = n_tries
+        self.learning_rate = learning_rate
+        self.eps = eps
+        self.seed = seed
         self.verbosity = verbosity
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-        # Initialize state
         self._init_state()
 
     def _init_state(self):
@@ -1036,31 +1039,24 @@ class Optimizer:
 
         loss = float('inf')
         if self.has_loss:
-            loss = self.train(epochs=self.opts.get('epochs', 1000),
-                            lr=self.opts.get('learning_rate', 0.01))
+            loss = self.train(epochs=self.epochs, lr=self.learning_rate)
 
         return self.get_diagram(), loss
 
     def solve(self, n_tries=None):
-        """Solve with multiple initialization attempts"""
         import random
 
-        # Default to 1 try for backward compatibility
         if n_tries is None:
-            n_tries = self.opts.get('n_tries', 1)
+            n_tries = self.n_tries
 
-        eps = self.opts.get('eps', 1e-6)
         best_loss = float('inf')
         best_diagram = None
 
         for attempt in range(n_tries):
             if attempt > 0:
-                # Reset state for new attempt
                 self._init_state()
-
-                # Set different random seed for varied initialization
-                random.seed(self.opts.get('seed', 42) + attempt)
-                torch.manual_seed(self.opts.get('seed', 42) + attempt)
+                random.seed(self.seed + attempt)
+                torch.manual_seed(self.seed + attempt)
 
             if self.verbosity and n_tries > 1:
                 logger.info(f"\nAttempt {attempt + 1}/{n_tries}")
@@ -1068,13 +1064,11 @@ class Optimizer:
             try:
                 diagram, loss = self.solve_single(attempt_id=attempt)
 
-                # Early stopping if converged
-                if loss < eps:
+                if loss < self.eps:
                     if self.verbosity and n_tries > 1:
                         logger.success(f"Converged at attempt {attempt + 1} with loss {loss:.6f}")
                     return diagram
 
-                # Track best result
                 if loss < best_loss:
                     best_loss = loss
                     best_diagram = diagram

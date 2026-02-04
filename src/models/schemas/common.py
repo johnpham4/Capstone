@@ -1,5 +1,3 @@
-"""Common API schemas used across endpoints."""
-
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime

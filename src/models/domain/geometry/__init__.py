@@ -9,9 +9,9 @@ from src.models.domain.geometry.types import (
     CircleType,
 )
 from src.models.domain.geometry.instructions import (
-    GeometryInstruction,
-    DefinePointInstruction,
-    AssertInstruction,
+    Parameter,
+    Assertion,
+    Definition,
 )
 
 __all__ = [
@@ -30,7 +30,7 @@ __all__ = [
     "QuadrilateralType",
     "CircleType",
     # Instructions
-    "GeometryInstruction",
-    "DefinePointInstruction",
-    "AssertInstruction",
+    "Parameter",
+    "Assertion",
+    "Definition",
 ]

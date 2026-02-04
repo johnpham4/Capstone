@@ -26,7 +26,6 @@ class Parameter:
 
 @dataclass
 class Assertion:
-    """Represents an assertion/constraint in DSL"""
     constraint_type: str = None
     objects: Tuple[Any, ...] = ()
     constraint: Any = None

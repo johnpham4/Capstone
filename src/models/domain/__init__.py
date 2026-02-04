@@ -24,9 +24,6 @@ from .geometry import (
     CircleType,
 )
 
-# Orchestration domain
-from .orchestration import AgentState, Intent, Message
-
 # Training domain
 from .training import (
     InstructDataset,

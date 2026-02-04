@@ -52,6 +52,9 @@ class Settings(BaseSettings):
     # RabbitMQ Configuration
     RABBITMQ_URL: str = "amqp://guest:guest@localhost:5672/"
 
+    # Redis Configuration
+    REDIS_URL: str = "redis://localhost:6379/0"
+
     # Diagram Generation
     OUTPUT_DIR: str = "./output/diagrams"
     DIAGRAM_OPTIMIZER_EPOCHS: int = 1000

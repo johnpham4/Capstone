@@ -7,10 +7,6 @@ from src.models.domain.training.documents import Document
 
 
 class Prompt(BaseModel):
-    """Prompt template for LLM generation.
-
-    Uses BaseModel for validation.
-    """
     template: str
     input_variables: dict
     content: str
@@ -18,7 +14,6 @@ class Prompt(BaseModel):
 
 
 class GenerateDatasetSamplesPrompt(Prompt):
-    """Prompt for generating dataset samples from documents."""
     document: Document
 
     class Config:
