@@ -1,3 +1,0 @@
-"""
-Infrastructure visualization package
-"""

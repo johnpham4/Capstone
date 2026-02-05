@@ -3,7 +3,7 @@ from zenml import step
 from loguru import logger
 from tqdm.auto import tqdm
 
-from llm_src.applications.preprocessing.translation import GeometryTranslator
+from src.services.preprocessing.translation import GeometryTranslator
 
 
 @step

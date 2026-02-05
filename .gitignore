@@ -32,7 +32,6 @@ images/
 **/.ipynb_checkpoints/
 
 outputs/
-models/
 *.pt
 *.pth
 *.ckpt

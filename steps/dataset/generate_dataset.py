@@ -5,10 +5,10 @@ import json
 from zenml import step
 from loguru import logger
 
-from llm_src.applications.datasets.generation import InstructiveDatasetGenerator
-from llm_src.domains.documents import Document
-from llm_src.domains.prompt import GenerateDatasetSamplesPrompt
-from llm_src.domains.dataset import InstructTrainTestSplit
+from src.services.datasets.generation import InstructiveDatasetGenerator
+from src.models.domain.documents import Document
+from src.models.domain.prompt import GenerateDatasetSamplesPrompt
+from src.models.domain.dataset import InstructTrainTestSplit
 
 @step
 def load_source_data(
