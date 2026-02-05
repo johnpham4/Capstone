@@ -1,6 +1,11 @@
 import json
 import matplotlib.pyplot as plt
 from pathlib import Path
+import sys
+import io
+
+# Fix encoding for Windows terminal
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 from src.services.diagram.diagram_builder import DiagramBuilder
 from src.services.diagram.optimizer import Optimizer
