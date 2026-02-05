@@ -1,6 +1,6 @@
 from zenml import step
 
-from llm_engineering.model.evaluation.sagemaker import run_evaluation_on_sagemaker
+from llm_src.model.evaluation.sagemaker import run_evaluation_on_sagemaker
 
 
 @step

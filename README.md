@@ -5,7 +5,7 @@
 ## 📁 Diagram Folder Structure
 
 ```
-llm_engineering/applications/diagram/
+llm_src/applications/diagram/
 ├── optimizer.py           # 875 lines - Core constraint solver
 ├── initializer.py         # 90 lines - Smart initialization strategies
 ├── services/
@@ -31,7 +31,7 @@ DSL Text → DSLParser → DiagramBuilder → Optimizer → Rendered Diagram
 
 ## 🔧 Service 1: DSL Parser
 
-**File:** [`services/dsl_parser.py`](llm_engineering/applications/diagram/services/dsl_parser.py)
+**File:** [`services/dsl_parser.py`](llm_src/applications/diagram/services/dsl_parser.py)
 
 ### Purpose
 Parse S-expression strings → Python tuples
@@ -76,7 +76,7 @@ result = ('triangle', 'A', 'B', 'C', 'isosceles', ('at', 'A'))
 
 ## 🔧 Service 2: Diagram Builder
 
-**File:** [`services/diagram_builder.py`](llm_engineering/applications/diagram/services/diagram_builder.py)
+**File:** [`services/diagram_builder.py`](llm_src/applications/diagram/services/diagram_builder.py)
 
 ### Purpose
 Convert parsed tuples → `Parameter` and `Assertion` instruction objects
@@ -183,7 +183,7 @@ print(builder.instructions)  # [Parameter(...), Parameter(...), Assertion(...)]
 
 ## 🔧 Service 3: Optimizer
 
-**File:** [`optimizer.py`](llm_engineering/applications/diagram/optimizer.py)
+**File:** [`optimizer.py`](llm_src/applications/diagram/optimizer.py)
 
 ### Purpose
 Solve geometric constraints bằng PyTorch gradient descent
@@ -422,7 +422,7 @@ WEIGHTS = {
 ## 🚀 Usage Template
 
 ```python
-from llm_engineering.applications.diagram.optimizer import Optimizer
+from llm_src.applications.diagram.optimizer import Optimizer
 
 # Step 1: Define DSL
 dsl_lines = [

@@ -1,5 +1,3007 @@
 [
   {
+    "image": "images/img_1.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, angle ADE = 90, circle D with diameter AB",
+    "id": 1,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn D với đường kính AB"
+  },
+  {
+    "image": "images/img_10000.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, point E is on segment AC, BC // DE, excircle O of triangle ABC is tangent to segment BC, angle ADE = 90",
+    "id": 10000,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_100000.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point B and point C",
+    "id": 100000,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm B và điểm C"
+  },
+  {
+    "image": "images/img_100010.png",
+    "caption": "circle O, point A is on circle O",
+    "id": 100010,
+    "caption_vn": "Đường tròn O, điểm A nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_100011.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, incircle O of triangle ABC, point N is on the circle O",
+    "id": 100011,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_10002.png",
+    "caption": "triangle ABC, AB = AC, point O is the excenter of triangle ABC",
+    "id": 10002,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm O là tâm đường tròn bàng tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_100022.png",
+    "caption": "triangle ABC, AB = AC, point D is on segment AB, point E is on segment AC, BC // DE, a line through C is the perpendicular bisector of segment AB",
+    "id": 100022,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua C là đường trung trực của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_100026.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, point E is on segment AC, BC // DE, circle O with diameter AB, angle ADE = 90",
+    "id": 100026,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90"
+  },
+  {
+    "image": "images/img_100044.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on segment AC, BC // DE, excircle O of triangle ABC is tangent to segment BC, angle ADE = 90",
+    "id": 100044,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_100046.png",
+    "caption": "triangle ABC, AB = AC, point D is on segment AB, point E is on segment AC, BC // DE, circumcircle O of triangle ABC",
+    "id": 100046,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100053.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is the midpoint of segment BC, line DE, line EF, BC // DE, EF // AB",
+    "id": 100053,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB"
+  },
+  {
+    "image": "images/img_100058.png",
+    "caption": "triangle ABC, AB = AC, a line through point C is perpendicular to segment AB, a line through point B is perpendicular to segment AC",
+    "id": 100058,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_100059.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, point E is on segment AC, BC // DE, circumcircle O of triangle ABC, angle ADE = 90",
+    "id": 100059,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_10006.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point C is perpendicular to segment BC",
+    "id": 10006,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_100060.png",
+    "caption": "triangle ABC, point D is on segment AB, angle ACD = angle DCB",
+    "id": 100060,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB"
+  },
+  {
+    "image": "images/img_100070.png",
+    "caption": "triangle ABC, a line through point A, excircle O of triangle ABC is tangent to segment BC",
+    "id": 100070,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_100081.png",
+    "caption": "triangle ABC",
+    "id": 100081,
+    "caption_vn": "Tam giác ABC"
+  },
+  {
+    "image": "images/img_100088.png",
+    "caption": "triangle ABC, point M is the midpoint of segment AB",
+    "id": 100088,
+    "caption_vn": "Tam giác ABC, điểm M là trung điểm của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_100089.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line through point A",
+    "id": 100089,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_100096.png",
+    "caption": "triangle ABC, angle ABC = 90, incircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC",
+    "id": 100096,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_100104.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, angle ACD = angle DCB, incircle O of triangle ABC",
+    "id": 100104,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100115.png",
+    "caption": "triangle ABC, AB = AC, point P is the orthocenter of triangle ABC",
+    "id": 100115,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm P là trực tâm của tam giác ABC"
+  },
+  {
+    "image": "images/img_100125.png",
+    "caption": "triangle ABC,  angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, angle ACD = angle DCB, a line is perpendicular bisector of segment AC",
+    "id": 100125,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_10013.png",
+    "caption": "triangle ABC, AB = AC, point D is on segment AB, angle ACD = angle DCB, line CD, a line through point C that is perpendicular to segment AB",
+    "id": 10013,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_10014.png",
+    "caption": "triangle ABC, angle ABC = 90, incircle O of triangle ABC",
+    "id": 10014,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100140.png",
+    "caption": "triangle ABC, circumcircle O of triangle ABC",
+    "id": 100140,
+    "caption_vn": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100161.png",
+    "caption": "triangle ABC, AB = AC, a line through point C is perpendicular to segment AB, a line through point C",
+    "id": 100161,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C"
+  },
+  {
+    "image": "images/img_100170.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point C is perpendicular to segment AC, a line through point B is perpendicular to segment AC",
+    "id": 100170,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_100173.png",
+    "caption": "triangle ABC, angle ABC = 90, incircle O of triangle ABC, point N is on the circle O",
+    "id": 100173,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_100191.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, a line through point B",
+    "id": 100191,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B"
+  },
+  {
+    "image": "images/img_100226.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, circle O with diameter AB",
+    "id": 100226,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn O với đường kính AB"
+  },
+  {
+    "image": "images/img_100231.png",
+    "caption": "triangle ABC, a line through point A, incircle O of triangle ABC",
+    "id": 100231,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100240.png",
+    "caption": "rectangle ABCD, point P is on segment AB, point Q is on segment BC, line PQ",
+    "id": 100240,
+    "caption_vn": "Hình chữ nhật ABCD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng BC, đường thẳng PQ"
+  },
+  {
+    "image": "images/img_100241.png",
+    "caption": "triangle ABC, incircle O of triangle ABC",
+    "id": 100241,
+    "caption_vn": "Tam giác ABC, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100254.png",
+    "caption": "triangle ABC, angle ABC = 90, point O is the incenter of triangle ABC",
+    "id": 100254,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm O là tâm đường tròn nội tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_100255.png",
+    "caption": "triangle ABC, AB = AC, a line through point C is perpendicular to segment AB, excircle O of triangle ABC is tangent to segment BC",
+    "id": 100255,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_100261.png",
+    "caption": "triangle ABC, AB = AC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, BC // DE, line DE, excircle O of triangle ABC is tangent to segment BC",
+    "id": 100261,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE, đường thẳng DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_100273.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point C is perpendicular to segment AC, incircle O of triangle ABC",
+    "id": 100273,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100290.png",
+    "caption": "triangle ABC, angle ABC = 90, circle O with diameter BC",
+    "id": 100290,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn O với đường kính BC"
+  },
+  {
+    "image": "images/img_100291.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, incircle O of triangle ABC, circumcircle P of triangle ABC, diameter AC",
+    "id": 100291,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC, đường kính AC"
+  },
+  {
+    "image": "images/img_100294.png",
+    "caption": "triangle ABC, AB = AC, excircle O of triangle ABC is tangent to segment BC, point N is on the circle O",
+    "id": 100294,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_100303.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point M is the midpoint of segment AB",
+    "id": 100303,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm M là trung điểm của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_100305.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, angle ADE = 90, excircle O of triangle ABC is tangent to segment BC",
+    "id": 100305,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_100307.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, line CD, angle ACD = angle DCB, a line is perpendicular bisector of segment BC",
+    "id": 100307,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_10031.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, a line through point B, angle ADE = 90",
+    "id": 10031,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90"
+  },
+  {
+    "image": "images/img_100315.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, incircle O of triangle ABC, point N is on the circle O",
+    "id": 100315,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_10033.png",
+    "caption": "triangle ABC, excircle O of triangle ABC is tangent to segment BC, excircle P of triangle ABC is tangent to segment AC",
+    "id": 10033,
+    "caption_vn": "Tam giác ABC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_100339.png",
+    "caption": "rectangle ABCD, a line through point A",
+    "id": 100339,
+    "caption_vn": "Hình chữ nhật ABCD, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_100342.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line is perpendicular bisector of segment AB, excircle O is tangent to segment BC",
+    "id": 100342,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn bàng tiếp O tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_100348.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, angle ADE = 90, incircle O of triangle ABC",
+    "id": 100348,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100365.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, excircle O of triangle ABC is tangent to segment BC, excircle P of triangle ABC is tangent to segment AC",
+    "id": 100365,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_100366.png",
+    "caption": "parallelogram ABCD, point P is on the extension of line AB",
+    "id": 100366,
+    "caption_vn": "Hình bình hành ABCD, điểm P nằm trên phần kéo dài của đường thẳng AB"
+  },
+  {
+    "image": "images/img_100369.png",
+    "caption": "parallelogram ABCD, point E is on segment AB, angle BCE = angle DCE, line EC",
+    "id": 100369,
+    "caption_vn": "Hình bình hành ABCD, điểm E nằm trên đoạn thẳng AB, góc BCE = góc DCE, đường thẳng EC"
+  },
+  {
+    "image": "images/img_100375.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, point E is on on segment AC, point F is on segment BC, line DE, line DF, BC // DE, AC // DF",
+    "id": 100375,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên on đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, đường thẳng DF, BC song song với DE, AC song song với DF"
+  },
+  {
+    "image": "images/img_100382.png",
+    "caption": "triangle ABC, excircle O of triangle ABC is tangent to segment BC, point N is on segment AB",
+    "id": 100382,
+    "caption_vn": "Tam giác ABC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_100392.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, circumcircle O of triangle ABC, point N is on segment AB, diameter AC",
+    "id": 100392,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB, đường kính AC"
+  },
+  {
+    "image": "images/img_100394.png",
+    "caption": "triangle ABC, a line is perpendicular bisector of segment AB, circumcircle O of triangle ABC",
+    "id": 100394,
+    "caption_vn": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100396.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, point E is on segment AC, BC // DE, circumcircle O of triangle ABC, angle ADE = 90",
+    "id": 100396,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_100401.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, a line through point B, angle ADE = 90",
+    "id": 100401,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90"
+  },
+  {
+    "image": "images/img_100403.png",
+    "caption": "circle O, a line is tangent to circle O",
+    "id": 100403,
+    "caption_vn": "Đường tròn O, đường thẳng tiếp xúc với đường tròn O"
+  },
+  {
+    "image": "images/img_100407.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is the midpoint of segment BC, line DE, line EF, BC // DE, EF // AB",
+    "id": 100407,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB"
+  },
+  {
+    "image": "images/img_100413.png",
+    "caption": "triangle ABC, AB = AC, point O is the circumcenter of triangle ABC",
+    "id": 100413,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_100415.png",
+    "caption": "quadrilateral ABCD, circumcircle O of quadrilateral ABCD, a line through point O",
+    "id": 100415,
+    "caption_vn": "Tứ giác ABCD, đường tròn ngoại tiếp O của tứ giác ABCD, đường thẳng đi qua điểm O"
+  },
+  {
+    "image": "images/img_100430.png",
+    "caption": "triangle ABC, triangle DEF, triangle ABC is similar to triangle DEF",
+    "id": 100430,
+    "caption_vn": "Tam giác ABC, tam giác DEF, tam giác ABC đồng dạng với tam giác DEF"
+  },
+  {
+    "image": "images/img_100450.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, line CD, angle ACD = angle DCB",
+    "id": 100450,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB"
+  },
+  {
+    "image": "images/img_10046.png",
+    "caption": "triangle ABC, point O is the excenter of triangle ABC",
+    "id": 10046,
+    "caption_vn": "Tam giác ABC, điểm O là tâm đường tròn bàng tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_100463.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point A, circumcircle O of triangle ABC",
+    "id": 100463,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100467.png",
+    "caption": "triangle ABC, point O is the excenter of triangle ABC",
+    "id": 100467,
+    "caption_vn": "Tam giác ABC, điểm O là tâm đường tròn bàng tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_10047.png",
+    "caption": "triangle ABC, angle ABC = 90, excircle O of triangle ABC is tangent to segment BC",
+    "id": 10047,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_100473.png",
+    "caption": "triangle ABC, a line through point B and point C",
+    "id": 100473,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C"
+  },
+  {
+    "image": "images/img_100486.png",
+    "caption": "triangle ABC",
+    "id": 100486,
+    "caption_vn": "Tam giác ABC"
+  },
+  {
+    "image": "images/img_100491.png",
+    "caption": "circle O, circle B, circle B is tangent to circle O, a line through point O",
+    "id": 100491,
+    "caption_vn": "Đường tròn O, đường tròn B, đường tròn B tiếp xúc với đường tròn O, đường thẳng đi qua điểm O"
+  },
+  {
+    "image": "images/img_100499.png",
+    "caption": "trapezoid ABCD, AB // CD, BC = AD, a line through point C that is perpendicular to segment AB",
+    "id": 100499,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, BC = AD, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_100512.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, line CD, angle ACD = angle DCB",
+    "id": 100512,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB"
+  },
+  {
+    "image": "images/img_100518.png",
+    "caption": "trapezoid ABCD, AB // CD, AB ⊥ AD, point P is on segment AB, point Q is on segment BC, line PQ",
+    "id": 100518,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng BC, đường thẳng PQ"
+  },
+  {
+    "image": "images/img_10052.png",
+    "caption": "triangle ABC, circumcircle O of triangle ABC, point N is on segment AB",
+    "id": 10052,
+    "caption_vn": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_100521.png",
+    "caption": "triangle ABC, angle ABC = 90, a line is perpendicular bisector of segment AB, incircle O of triangle ABC",
+    "id": 100521,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100526.png",
+    "caption": "parallelogram ABCD, point P is on segment AB",
+    "id": 100526,
+    "caption_vn": "Hình bình hành ABCD, điểm P nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_100528.png",
+    "caption": "triangle ABC, circumcircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC",
+    "id": 100528,
+    "caption_vn": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_100537.png",
+    "caption": "triangle ABC, angle ABC = 90, incircle O of triangle ABC, circumcircle P of triangle ABC, diameter AC",
+    "id": 100537,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC, đường kính AC"
+  },
+  {
+    "image": "images/img_100538.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, circumcircle O of triangle ABC, point N is on the circle O, diameter AC",
+    "id": 100538,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đường tròn O, đường kính AC"
+  },
+  {
+    "image": "images/img_100572.png",
+    "caption": "triangle ABC, AB = AC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, a line through point C is perpendicular bisector of segment AB",
+    "id": 100572,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_100617.png",
+    "caption": "triangle ABC, angle ABC = 90, point O is the circumcenter of triangle ABC, point O is the midpoint of segment AC",
+    "id": 100617,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC, điểm O là trung điểm của đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_100629.png",
+    "caption": "two concentric circles O, point A is on the circle O",
+    "id": 100629,
+    "caption_vn": "Hai đường tròn đồng tâm O, điểm A nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_100631.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, angle ADE = 90, circumcircle E of triangle ABC",
+    "id": 100631,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, góc ADE = 90, đường tròn ngoại tiếp E của tam giác ABC"
+  },
+  {
+    "image": "images/img_100635.png",
+    "caption": "triangle ABC, angle ABC = 90, circumcircle O of triangle ABC, point N is on segment AB, diameter AC",
+    "id": 100635,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB, đường kính AC"
+  },
+  {
+    "image": "images/img_100638.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, angle ACD = angle DCB, a line through point B",
+    "id": 100638,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng đi qua điểm B"
+  },
+  {
+    "image": "images/img_100644.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30",
+    "id": 100644,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30"
+  },
+  {
+    "image": "images/img_100646.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, a line through point B",
+    "id": 100646,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B"
+  },
+  {
+    "image": "images/img_100658.png",
+    "caption": "triangle ABC, AB = AC, a line is perpendicular bisector of segment AB, incircle O of triangle ABC",
+    "id": 100658,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100660.png",
+    "caption": "quadrilateral ABCD, circumcircle O of quadrilateral ABCD, point E is on segment AB",
+    "id": 100660,
+    "caption_vn": "Tứ giác ABCD, đường tròn ngoại tiếp O của tứ giác ABCD, điểm E nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_100666.png",
+    "caption": "square ABCD, line AC is the diagonal of square ABCD",
+    "id": 100666,
+    "caption_vn": "Hình vuông ABCD, đường thẳng AC là đường chéo của hình vuông ABCD"
+  },
+  {
+    "image": "images/img_100675.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on segment AC, BC // DE, a line through point C is perpendicular to segment AC, angle ADE = 90",
+    "id": 100675,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_1007.png",
+    "caption": "triangle ABC, a line is perpendicular bisector of segment AB, a line is perpendicular bisector of segment AC",
+    "id": 1007,
+    "caption_vn": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_100705.png",
+    "caption": "triangle ABC, point D is on segment AB, angle ACD = angle DCB",
+    "id": 100705,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB"
+  },
+  {
+    "image": "images/img_100724.png",
+    "caption": "triangle ABC, a line through point C is perpendicular to segment AB, circumcircle O of triangle ABC",
+    "id": 100724,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100727.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, incircle O of triangle ABC, point N is on the circle O",
+    "id": 100727,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_100739.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point A, circumcircle O of triangle ABC",
+    "id": 100739,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100756.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, a line through point C that is perpendicular to segment AB, angle ADE = 90",
+    "id": 100756,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, góc ADE = 90"
+  },
+  {
+    "image": "images/img_100763.png",
+    "caption": "triangle ABC, AB = AC, a line through point A, incircle O of triangle ABC",
+    "id": 100763,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100771.png",
+    "caption": "circle O, a line intersects circle O at point A and point B",
+    "id": 100771,
+    "caption_vn": "Đường tròn O, đường thẳng cắt đường tròn O tại điểm A và điểm B"
+  },
+  {
+    "image": "images/img_100778.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, incircle O of triangle ABC, point N is on segment AB",
+    "id": 100778,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_100796.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, angle ADE = 90, circumcircle E of triangle ABC",
+    "id": 100796,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, góc ADE = 90, đường tròn ngoại tiếp E của tam giác ABC"
+  },
+  {
+    "image": "images/img_1008.png",
+    "caption": "triangle ABC, excircle O of triangle ABC is tangent to segment BC, point N is on segment AB",
+    "id": 1008,
+    "caption_vn": "Tam giác ABC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_100802.png",
+    "caption": "triangle ABC, excircle O of triangle ABC is tangent to segment BC, excircle P of triangle ABC is tangent to segment AC",
+    "id": 100802,
+    "caption_vn": "Tam giác ABC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_100816.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, point E is on segment AC, BC // DE, excircle O of triangle ABC is tangent to segment BC, angle ADE = 90",
+    "id": 100816,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_100817.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, a line through point E is perpendicular bisector of segment BC, angle ADE = 90",
+    "id": 100817,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm E là đường trung trực của đoạn thẳng BC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_100847.png",
+    "caption": "triangle ABC, AB = AC, point D is on segment AB, point E is on segment AC, BC // DE, circumcircle O of triangle ABC",
+    "id": 100847,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_100849.png",
+    "caption": "triangle ABC, point D is on segment AB, line CD, angle ACD = angle DCB, a line through point C is perpendicular to segment AB",
+    "id": 100849,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_100850.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line is perpendicular bisector of segment BC, a line through point A",
+    "id": 100850,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_100872.png",
+    "caption": "rectangle ABCD, point P is on segment AB, point Q is on segment CD, line PQ",
+    "id": 100872,
+    "caption_vn": "Hình chữ nhật ABCD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng CD, đường thẳng PQ"
+  },
+  {
+    "image": "images/img_100878.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point C",
+    "id": 100878,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C"
+  },
+  {
+    "image": "images/img_100881.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, triangle DEF, angle DEF = 90, angle EDF = 60, angle EFD = 30, triangle ABC is similar to triangle DEF",
+    "id": 100881,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, tam giác DEF, góc DEF = 90, góc EDF = 60, góc EFD = 30, tam giác ABC đồng dạng với tam giác DEF"
+  },
+  {
+    "image": "images/img_100888.png",
+    "caption": "triangle ABC, AB = AC, circle O with diameter BC",
+    "id": 100888,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn O với đường kính BC"
+  },
+  {
+    "image": "images/img_100894.png",
+    "caption": "triangle ABC, circumcircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC",
+    "id": 100894,
+    "caption_vn": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_100897.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, BC // DE",
+    "id": 100897,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE"
+  },
+  {
+    "image": "images/img_100904.png",
+    "caption": "triangle ABC, AB = AC, excircle O of triangle ABC is tangent to segment BC, excircle P of triangle ABC is tangent to segment AC",
+    "id": 100904,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_100917.png",
+    "caption": "circle O",
+    "id": 100917,
+    "caption_vn": "Đường tròn O"
+  },
+  {
+    "image": "images/img_100924.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, angle ADE = 90, circle O with diameter AB",
+    "id": 100924,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn O với đường kính AB"
+  },
+  {
+    "image": "images/img_100927.png",
+    "caption": "triangle ABC, circumcircle O of triangle ABC, point N is on segment AB",
+    "id": 100927,
+    "caption_vn": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_100929.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line through point C is perpendicular to segment BC, a line through point B is perpendicular to segment AC",
+    "id": 100929,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_100956.png",
+    "caption": "triangle ABC, a line through point C is perpendicular to segment AB, excircle O of triangle ABC is tangent to segment BC",
+    "id": 100956,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_100971.png",
+    "caption": "triangle ABC, point D is on segment AB, point E is on segment AC, point F is on segment BC, angle BAF = angle FAC, BC // DE, line AF",
+    "id": 100971,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, góc BAF = góc FAC, BC song song với DE, đường thẳng AF"
+  },
+  {
+    "image": "images/img_100984.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, incircle O of triangle ABC, circumcircle P of triangle ABC, diameter AC",
+    "id": 100984,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC, đường kính AC"
+  },
+  {
+    "image": "images/img_100985.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on segment AC, BC // DE, circle O with diameter AB, angle ADE = 90",
+    "id": 100985,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90"
+  },
+  {
+    "image": "images/img_100993.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line is perpendicular bisector of segment AB,  a line through point B is perpendicular bisector of segment AC",
+    "id": 100993,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng đi qua điểm B là đường trung trực của đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_100998.png",
+    "caption": "triangle ABC, AB = AC, a line through point C is perpendicular to segment AB, excircle O of triangle ABC is tangent to segment BC",
+    "id": 100998,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_10101.png",
+    "caption": "triangle ABC,  angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is the midpoint of segment BC, line DE, line EF, BC // DE, EF // AB, angle ADE = 90, angle CFE = 90",
+    "id": 10101,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB, góc ADE = 90, góc CFE = 90"
+  },
+  {
+    "image": "images/img_101014.png",
+    "caption": "point A",
+    "id": 101014,
+    "caption_vn": "Điểm A"
+  },
+  {
+    "image": "images/img_101015.png",
+    "caption": "triangle ABC, angle ABC = 90, incircle O of triangle ABC, point N is on segment AB",
+    "id": 101015,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_101021.png",
+    "caption": "triangle ABC, angle ABC = 90, a line is perpendicular bisector of segment BC, a line through point A",
+    "id": 101021,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_101027.png",
+    "caption": "triangle ABC, AB = AC, point D is on segment AB, line CD, angle ACD = angle DCB, excircle O of triangle ABC is tangent to segment BC",
+    "id": 101027,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_101032.png",
+    "caption": "pentagon ABCDE, a line through point C that is perpendicular to segment AB",
+    "id": 101032,
+    "caption_vn": "Ngũ giác ABCDE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_101038.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, incircle O of triangle ABC, point N is on the circle O",
+    "id": 101038,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_10106.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point O is the incenter of triangle ABC",
+    "id": 10106,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm O là tâm đường tròn nội tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_101066.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line is perpendicular bisector of segment BC, a line through point A",
+    "id": 101066,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_101088.png",
+    "caption": "triangle ABC, angle ABC = 90, excircle O of triangle ABC is tangent to segment BC, point N is on segment AB",
+    "id": 101088,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_101099.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, incircle O of triangle ABC, circumcircle P of triangle ABC, diameter AC",
+    "id": 101099,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC, đường kính AC"
+  },
+  {
+    "image": "images/img_101108.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, angle ACD = angle DCB, excircle O of triangle ABC is tangent to segment BC",
+    "id": 101108,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_101123.png",
+    "caption": "triangle ABC, AB = AC, incircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC",
+    "id": 101123,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn nội tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_101127.png",
+    "caption": "triangle ABC,  angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is the midpoint of segment BC, line DE, line EF, BC // DE, EF // AB, angle ADE = 90, angle CFE = 90",
+    "id": 101127,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB, góc ADE = 90, góc CFE = 90"
+  },
+  {
+    "image": "images/img_101165.png",
+    "caption": "triangle ABC, AB = AC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, circle D with diameter AB",
+    "id": 101165,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn D với đường kính AB"
+  },
+  {
+    "image": "images/img_101170.png",
+    "caption": "two concentric circles O, point A is on the circle O",
+    "id": 101170,
+    "caption_vn": "Hai đường tròn đồng tâm O, điểm A nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_101171.png",
+    "caption": "triangle ABC, angle ABC = 90, circumcircle O of triangle ABC, point N is on segment AB, diameter AC",
+    "id": 101171,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB, đường kính AC"
+  },
+  {
+    "image": "images/img_101173.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, line CD, angle ACD = angle DCB, a line through point B",
+    "id": 101173,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm B"
+  },
+  {
+    "image": "images/img_10118.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, BC // DE",
+    "id": 10118,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE"
+  },
+  {
+    "image": "images/img_101195.png",
+    "caption": "triangle ABC, a line is perpendicular bisector of segment AB, excircle O is tangent to segment BC",
+    "id": 101195,
+    "caption_vn": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn bàng tiếp O tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_101198.png",
+    "caption": "triangle ABC, angle ABC = 90, a line through point C is perpendicular to segment AB, a line through point B is perpendicular to segment AC",
+    "id": 101198,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_10120.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is on segment BC, line DE, BC // DE, angle BAF = angle CAF, angle ADE = 90",
+    "id": 10120,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, góc ADE = 90"
+  },
+  {
+    "image": "images/img_101210.png",
+    "caption": "triangle ABC, a line is perpendicular bisector of segment AB, excircle O is tangent to segment BC",
+    "id": 101210,
+    "caption_vn": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn bàng tiếp O tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_101225.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, angle ADE = 90, incircle O of triangle ABC",
+    "id": 101225,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_101231.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point A, incircle O of triangle ABC",
+    "id": 101231,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_101233.png",
+    "caption": "rectangle ABCD",
+    "id": 101233,
+    "caption_vn": "Hình chữ nhật ABCD"
+  },
+  {
+    "image": "images/img_101237.png",
+    "caption": "triangle ABC, angle ABC = 90, incircle O of triangle ABC, point N is on the circle O",
+    "id": 101237,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_101239.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point C is perpendicular to segment AC, excircle O of triangle ABC is tangent to segment BC",
+    "id": 101239,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_101242.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line through point C is perpendicular to segment BC, incircle O of triangle ABC",
+    "id": 101242,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_101248.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, circumcircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC, diameter AC",
+    "id": 101248,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn ngoại tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC, đường kính AC"
+  },
+  {
+    "image": "images/img_101259.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, line CD, angle ACD = angle DCB, excircle O of triangle ABC is tangent to segment BC",
+    "id": 101259,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_101274.png",
+    "caption": "parallelogram ABCD, point P is inside parallelogram ABCD",
+    "id": 101274,
+    "caption_vn": "Hình bình hành ABCD, điểm P nằm trong hình bình hành ABCD"
+  },
+  {
+    "image": "images/img_101283.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, angle ADE = 90, incircle O of triangle ABC",
+    "id": 101283,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_101323.png",
+    "caption": "triangle ABC, point D is on segment AB, angle ACD = angle DCB",
+    "id": 101323,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB"
+  },
+  {
+    "image": "images/img_101328.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, angle ADE = 90, excircle O of triangle ABC is tangent to segment BC",
+    "id": 101328,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, góc ADE = 90, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_101329.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point O is the circumcenter of triangle ABC, point O is the midpoint of segment AC",
+    "id": 101329,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC, điểm O là trung điểm của đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_101330.png",
+    "caption": "triangle ABC, point D is on segment AB, angle ACD = angle DCB",
+    "id": 101330,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB"
+  },
+  {
+    "image": "images/img_101340.png",
+    "caption": "triangle ABC, a line through point C is perpendicular to segment AB, a line through point C",
+    "id": 101340,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C"
+  },
+  {
+    "image": "images/img_10136.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, angle ADE = 90, incircle O of triangle ABC",
+    "id": 10136,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_101361.png",
+    "caption": "trapezoid ABCD, AB // CD, AB ⊥ AD, point P is inside trapezoid ABCD",
+    "id": 101361,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, điểm P nằm trong hình thang ABCD"
+  },
+  {
+    "image": "images/img_101365.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on on segment AC, point F is on segment BC, line DE, line DF, BC // DE, AC // DF",
+    "id": 101365,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên on đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, đường thẳng DF, BC song song với DE, AC song song với DF"
+  },
+  {
+    "image": "images/img_101366.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on segment AC, BC // DE, circle O with diameter AB, angle ADE = 90",
+    "id": 101366,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90"
+  },
+  {
+    "image": "images/img_101373.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, point E is on segment AC, BC // DE, excircle O of triangle ABC is tangent to segment BC, angle ADE = 90",
+    "id": 101373,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_101387.png",
+    "caption": "triangle ABC, angle ABC = 90, point O is the excenter of triangle ABC",
+    "id": 101387,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm O là tâm đường tròn bàng tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_10139.png",
+    "caption": "triangle ABC, circumcircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC",
+    "id": 10139,
+    "caption_vn": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_101391.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line is perpendicular bisector of segment AB, excircle O is tangent to segment BC",
+    "id": 101391,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn bàng tiếp O tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_101408.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, excircle O of triangle ABC is tangent to segment BC, point N is on the circle O",
+    "id": 101408,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_101411.png",
+    "caption": "triangle ABC, excircle O of triangle ABC is tangent to segment BC, excircle P of triangle ABC is tangent to segment AC",
+    "id": 101411,
+    "caption_vn": "Tam giác ABC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_101417.png",
+    "caption": "triangle ABC",
+    "id": 101417,
+    "caption_vn": "Tam giác ABC"
+  },
+  {
+    "image": "images/img_101449.png",
+    "caption": "triangle ABC, AB = AC, excircle O of triangle ABC is tangent to segment BC, point N is on the circle O",
+    "id": 101449,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_101452.png",
+    "caption": "triangle ABC, angle ABC = 90, circumcircle O of triangle ABC, point N is on the circle O, diameter AC",
+    "id": 101452,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đường tròn O, đường kính AC"
+  },
+  {
+    "image": "images/img_101492.png",
+    "caption": "triangle ABC, a line through point A, excircle O of triangle ABC is tangent to segment BC",
+    "id": 101492,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_101507.png",
+    "caption": "trapezoid ABCD, AB // CD, AB ⊥ AD, line AC and line BD intersect at point O",
+    "id": 101507,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, đường thẳng AC và đường thẳng BD cắt tại điểm O"
+  },
+  {
+    "image": "images/img_101521.png",
+    "caption": "triangle ABC, angle ABC = 90, a line is perpendicular bisector of segment BC, a line through point C is perpendicular to segment AB",
+    "id": 101521,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_101527.png",
+    "caption": "triangle ABC, a line through point B and point C",
+    "id": 101527,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C"
+  },
+  {
+    "image": "images/img_101530.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, point E is on segment AC, BC // DE, circle O with diameter AB, angle ADE = 90",
+    "id": 101530,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90"
+  },
+  {
+    "image": "images/img_101533.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, a line through point B, angle ADE = 90",
+    "id": 101533,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90"
+  },
+  {
+    "image": "images/img_101547.png",
+    "caption": "triangle ABC, angle ABC = 90, a line through point B",
+    "id": 101547,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm B"
+  },
+  {
+    "image": "images/img_101551.png",
+    "caption": "two concentric circles O, a line through point O",
+    "id": 101551,
+    "caption_vn": "Hai đường tròn đồng tâm O, đường thẳng đi qua điểm O"
+  },
+  {
+    "image": "images/img_101561.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, a line through point C is perpendicular bisector of segment AC, angle ADE = 90",
+    "id": 101561,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_101567.png",
+    "caption": "parallelogram ABCD, a line is the perpendicular bisector of segment AB",
+    "id": 101567,
+    "caption_vn": "Hình bình hành ABCD, đường thẳng là đường trung trực của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_101569.png",
+    "caption": "triangle ABC, angle ABC = 90, circumcircle O of triangle ABC, point N is on segment AB, diameter AC",
+    "id": 101569,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB, đường kính AC"
+  },
+  {
+    "image": "images/img_10158.png",
+    "caption": "triangle ABC, angle ABC = 90, a line through point B",
+    "id": 10158,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm B"
+  },
+  {
+    "image": "images/img_101586.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line is perpendicular bisector of segment AB, excircle O is tangent to segment BC",
+    "id": 101586,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn bàng tiếp O tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_101608.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on segment AC, BC // DE, circle O with diameter AB, angle ADE = 90",
+    "id": 101608,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90"
+  },
+  {
+    "image": "images/img_101615.png",
+    "caption": "triangle ABC, a line through point A, incircle O of triangle ABC",
+    "id": 101615,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_101636.png",
+    "caption": "triangle ABC, point D is on segment AB, point E is on segment AC, BC // DE, a line through point C is perpendicular to segment AB",
+    "id": 101636,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_101641.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, point E is on segment AC, BC // DE, excircle O of triangle ABC is tangent to segment BC, angle ADE = 90",
+    "id": 101641,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_101642.png",
+    "caption": "triangle ABC, a line is perpendicular bisector of segment AB, incircle O of triangle ABC",
+    "id": 101642,
+    "caption_vn": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_101645.png",
+    "caption": "circle O, two lines through point O",
+    "id": 101645,
+    "caption_vn": "Đường tròn O, hai đường thẳng đi qua điểm O"
+  },
+  {
+    "image": "images/img_101653.png",
+    "caption": "triangle ABC, angle ABC = 90, a line is perpendicular bisector of segment AB",
+    "id": 101653,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_101659.png",
+    "caption": "triangle ABC, AB = AC, point D is on segment AB, line CD, angle ACD = angle DCB, circumcircle O of triangle ABC",
+    "id": 101659,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_101660.png",
+    "caption": "triangle ABC,  angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is the midpoint of segment BC, line DE, line EF, BC // DE, EF // AB, angle ADE = 90, angle CFE = 90",
+    "id": 101660,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB, góc ADE = 90, góc CFE = 90"
+  },
+  {
+    "image": "images/img_101668.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, angle ADE = 90, circle O with diameter AB",
+    "id": 101668,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn O với đường kính AB"
+  },
+  {
+    "image": "images/img_101673.png",
+    "caption": "triangle ABC, incircle O of triangle ABC",
+    "id": 101673,
+    "caption_vn": "Tam giác ABC, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_101682.png",
+    "caption": "triangle ABC, a line is perpendicular bisector of segment AB",
+    "id": 101682,
+    "caption_vn": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_101686.png",
+    "caption": "trapezoid ABCD, AB // CD, AB ⊥ AD, line AC and line BD intersect at point O",
+    "id": 101686,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, đường thẳng AC và đường thẳng BD cắt tại điểm O"
+  },
+  {
+    "image": "images/img_101689.png",
+    "caption": "parallelogram ABCD",
+    "id": 101689,
+    "caption_vn": "Hình bình hành ABCD"
+  },
+  {
+    "image": "images/img_101716.png",
+    "caption": "triangle ABC, angle ABC = 90, incircle O of triangle ABC, point N is on the circle O",
+    "id": 101716,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_10173.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, circumcircle O of triangle ABC, point N is on segment AB, diameter AC",
+    "id": 10173,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB, đường kính AC"
+  },
+  {
+    "image": "images/img_101746.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, BC // DE",
+    "id": 101746,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE"
+  },
+  {
+    "image": "images/img_101766.png",
+    "caption": "circle O",
+    "id": 101766,
+    "caption_vn": "Đường tròn O"
+  },
+  {
+    "image": "images/img_101774.png",
+    "caption": "triangle ABC",
+    "id": 101774,
+    "caption_vn": "Tam giác ABC"
+  },
+  {
+    "image": "images/img_101785.png",
+    "caption": "triangle ABC, AB = AC, a line through point A is perpendicular bisector of segment BC, a line through point C is perpendicular to segment AB",
+    "id": 101785,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_101786.png",
+    "caption": "triangle ABC, AB = AC, a line through point C is perpendicular to segment AB, circumcircle O of triangle ABC",
+    "id": 101786,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_101788.png",
+    "caption": "trianlge ABC, angle ABC = 90",
+    "id": 101788,
+    "caption_vn": "Trianlge ABC, góc ABC = 90"
+  },
+  {
+    "image": "images/img_101794.png",
+    "caption": "triangle ABC, AB = AC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, incircle O of triangle ABC",
+    "id": 101794,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_101803.png",
+    "caption": "triangle ABC, angle ABC = 90, circumcircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC, diameter AC",
+    "id": 101803,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC, đường kính AC"
+  },
+  {
+    "image": "images/img_101818.png",
+    "caption": "triangle ABC, angle ABC = 90, a line is perpendicular bisector of segment AB,  a line is perpendicular bisector of segment AC",
+    "id": 101818,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_101819.png",
+    "caption": "triangle ABC, excircle O of triangle ABC is tangent to segment BC",
+    "id": 101819,
+    "caption_vn": "Tam giác ABC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_101825.png",
+    "caption": "triangle ABC, a line through point C is perpendicular to segment AB, circumcircle O of triangle ABC",
+    "id": 101825,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_101840.png",
+    "caption": "three concentric circles O",
+    "id": 101840,
+    "caption_vn": "Ba đường tròn đồng tâm O"
+  },
+  {
+    "image": "images/img_101854.png",
+    "caption": "square ABCD, point P is on the extension line of AB",
+    "id": 101854,
+    "caption_vn": "Hình vuông ABCD, điểm P nằm trên phần kéo dài đường thẳng của AB"
+  },
+  {
+    "image": "images/img_101862.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, line CD, angle ACD = angle DCB, circumcircle O of triangle ABC",
+    "id": 101862,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_101865.png",
+    "caption": "triangle ABC, a line through point A",
+    "id": 101865,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_101872.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line through point A",
+    "id": 101872,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_101890.png",
+    "caption": "triangle ABC, point O is the excenter of triangle ABC",
+    "id": 101890,
+    "caption_vn": "Tam giác ABC, điểm O là tâm đường tròn bàng tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_101896.png",
+    "caption": "circle A, circle B, circle B intersects circle A at point C and  point D",
+    "id": 101896,
+    "caption_vn": "Đường tròn A, đường tròn B, đường tròn B cắt đường tròn A tại điểm C và điểm D"
+  },
+  {
+    "image": "images/img_101913.png",
+    "caption": "triangle ABC, AB = AC, excircle O of triangle ABC is tangent to segment BC, excircle P of triangle ABC is tangent to segment AC",
+    "id": 101913,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_101924.png",
+    "caption": "rectangle ABCD",
+    "id": 101924,
+    "caption_vn": "Hình chữ nhật ABCD"
+  },
+  {
+    "image": "images/img_101930.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line is perpendicular bisector of segment AB",
+    "id": 101930,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_101937.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line is perpendicular bisector of segment AB, circumcircle O of triangle ABC",
+    "id": 101937,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_101954.png",
+    "caption": "triangle ABC, a line through point A, excircle O of triangle ABC is tangent to segment BC",
+    "id": 101954,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_101961.png",
+    "caption": "triangle ABC, angle ABC = 90, a line is perpendicular bisector of segment AB",
+    "id": 101961,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_101979.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point M is the midpoint of segment AB",
+    "id": 101979,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm M là trung điểm của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_101987.png",
+    "caption": "triangle ABC, angle ABC = 90, a line through point A and point C",
+    "id": 101987,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A và điểm C"
+  },
+  {
+    "image": "images/img_101989.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point O is the incenter of triangle ABC",
+    "id": 101989,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm O là tâm đường tròn nội tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_102002.png",
+    "caption": "two concentric circles O, point A is on the circle O",
+    "id": 102002,
+    "caption_vn": "Hai đường tròn đồng tâm O, điểm A nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_102012.png",
+    "caption": "triangle ABC, a line through point C is perpendicular to segment AB, incircle O of triangle ABC",
+    "id": 102012,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102020.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, excircle O of triangle ABC is tangent to segment BC, excircle P of triangle ABC is tangent to segment AC",
+    "id": 102020,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_102040.png",
+    "caption": "trapezoid ABCD, AB // CD, BC = AD, point P is inside trapezoid ABCD",
+    "id": 102040,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, BC = AD, điểm P nằm trong hình thang ABCD"
+  },
+  {
+    "image": "images/img_102041.png",
+    "caption": "triangle ABC, AB = AC, incircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC",
+    "id": 102041,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn nội tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_102043.png",
+    "caption": "triangle ABC, AB = AC, a line through point C is perpendicular to segment AB, excircle O of triangle ABC is tangent to segment BC",
+    "id": 102043,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_102049.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point O is the excenter of triangle ABC",
+    "id": 102049,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm O là tâm đường tròn bàng tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_102055.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, line CD, angle ACD = angle DCB, a line through point B",
+    "id": 102055,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm B"
+  },
+  {
+    "image": "images/img_102079.png",
+    "caption": "triangle ABC, angle ABC = 90, circumcircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC, diameter AC",
+    "id": 102079,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC, đường kính AC"
+  },
+  {
+    "image": "images/img_102080.png",
+    "caption": "triangle ABC, a line through point C is perpendicular to segment AB, incircle O of triangle ABC",
+    "id": 102080,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_10209.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point C",
+    "id": 10209,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C"
+  },
+  {
+    "image": "images/img_102090.png",
+    "caption": "triangle ABC, AB = AC, excircle O of triangle ABC is tangent to segment BC, point N is on the circle O",
+    "id": 102090,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_102092.png",
+    "caption": "triangle ABC, AB = AC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, incircle O of triangle ABC",
+    "id": 102092,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102105.png",
+    "caption": "triangle ABC, point D is on segment AB, point E is on segment AC, BC // DE, circumcircle O of triangle ABC",
+    "id": 102105,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102113.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, incircle O of triangle ABC",
+    "id": 102113,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102134.png",
+    "caption": "triangle ABC, AB = AC, point O is the excenter of triangle ABC",
+    "id": 102134,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm O là tâm đường tròn bàng tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_102140.png",
+    "caption": "triangle ABC, incircle O of triangle ABC",
+    "id": 102140,
+    "caption_vn": "Tam giác ABC, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102170.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, a line through point E is perpendicular bisector of segment BC, angle ADE = 90",
+    "id": 102170,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm E là đường trung trực của đoạn thẳng BC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_102175.png",
+    "caption": "point A",
+    "id": 102175,
+    "caption_vn": "Điểm A"
+  },
+  {
+    "image": "images/img_102190.png",
+    "caption": "triangle ABC, a line through point B and point C",
+    "id": 102190,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C"
+  },
+  {
+    "image": "images/img_102194.png",
+    "caption": "triangle ABC, circle O with diameter AB",
+    "id": 102194,
+    "caption_vn": "Tam giác ABC, đường tròn O với đường kính AB"
+  },
+  {
+    "image": "images/img_102198.png",
+    "caption": "triangle ABC, AB = AC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is on segment BC, line DE, BC // DE, angle BAF = angle CAF, AF ⊥ BC",
+    "id": 102198,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, AF vuông góc với BC"
+  },
+  {
+    "image": "images/img_10222.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, point E is on segment AC, BC // DE, circle O with diameter AB, angle ADE = 90",
+    "id": 10222,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90"
+  },
+  {
+    "image": "images/img_102251.png",
+    "caption": "triangle ABC, AB = AC, incircle O of triangle ABC, point N is on segment AB",
+    "id": 102251,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_102258.png",
+    "caption": "triangle ABC, a line is perpendicular bisector of segment AB",
+    "id": 102258,
+    "caption_vn": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_102260.png",
+    "caption": "triangle ABC, angle ABC = 90, incircle O of triangle ABC, point N is on the circle O",
+    "id": 102260,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_102305.png",
+    "caption": "triangle ABC, angle ABC = 90, a line is perpendicular bisector of segment AB, incircle O of triangle ABC",
+    "id": 102305,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102316.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, line CD, angle ACD = angle DCB",
+    "id": 102316,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB"
+  },
+  {
+    "image": "images/img_102332.png",
+    "caption": "triangle ABC, incircle O of triangle ABC, point N is on segment AB",
+    "id": 102332,
+    "caption_vn": "Tam giác ABC, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_102334.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, line CD, angle ACD = angle DCB, circumcircle O of triangle ABC",
+    "id": 102334,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102344.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, BC // DE",
+    "id": 102344,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE"
+  },
+  {
+    "image": "images/img_102362.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on segment AC, BC // DE",
+    "id": 102362,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE"
+  },
+  {
+    "image": "images/img_102370.png",
+    "caption": "trapezoid ABCD, AB // CD, BC = AD, a line is perpendicular bisector of segment AB and segment CD",
+    "id": 102370,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, BC = AD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD"
+  },
+  {
+    "image": "images/img_102371.png",
+    "caption": "triangle ABC, AB = AC, a line is perpendicular bisector of segment AB, a line is perpendicular bisector of segment AC",
+    "id": 102371,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_102373.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, a line is perpendicular bisector of segment BC",
+    "id": 102373,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng là đường trung trực của đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_102382.png",
+    "caption": "triangle ABC, circumcircle O of triangle ABC",
+    "id": 102382,
+    "caption_vn": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102393.png",
+    "caption": "parallelogram ABCD",
+    "id": 102393,
+    "caption_vn": "Hình bình hành ABCD"
+  },
+  {
+    "image": "images/img_1024.png",
+    "caption": "triangle ABC, AB = AC, excircle O is tangent to segment B C",
+    "id": 1024,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn bàng tiếp O tiếp xúc với đoạn thẳng B C"
+  },
+  {
+    "image": "images/img_102400.png",
+    "caption": "triangle ABC, angle ABC = 90, a line through point C is perpendicular to segment AB, circumcircle O of triangle ABC",
+    "id": 102400,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102403.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, incircle O of triangle ABC",
+    "id": 102403,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102410.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, point E is on segment AC, BC // DE, incircle O of triangle ABC, angle ADE = 90",
+    "id": 102410,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn nội tiếp O của tam giác ABC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_102414.png",
+    "caption": "trapezoid ABCD, AB // CD, BC = AD, a line is perpendicular bisector of segment AB and segment CD",
+    "id": 102414,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, BC = AD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD"
+  },
+  {
+    "image": "images/img_102432.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment BC, line DE, AC // DE",
+    "id": 102432,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng BC, đường thẳng DE, AC song song với DE"
+  },
+  {
+    "image": "images/img_102438.png",
+    "caption": "circle A, circle B, circle B is tangent to circle A",
+    "id": 102438,
+    "caption_vn": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A"
+  },
+  {
+    "image": "images/img_10244.png",
+    "caption": "triangle ABC, point O is the excenter of triangle ABC",
+    "id": 10244,
+    "caption_vn": "Tam giác ABC, điểm O là tâm đường tròn bàng tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_102447.png",
+    "caption": "triangle ABC, AB = AC, circumcircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC",
+    "id": 102447,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn ngoại tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_102450.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, point E is on on segment AC, point F is on segment BC, line DE, line DF, BC // DE, AC // DF",
+    "id": 102450,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên on đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, đường thẳng DF, BC song song với DE, AC song song với DF"
+  },
+  {
+    "image": "images/img_102456.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, point E is on segment AC, BC // DE, excircle O of triangle ABC is tangent to segment BC, angle ADE = 90",
+    "id": 102456,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_102459.png",
+    "caption": "triangle ABC, point D is on segment AB, point E is on segment AC, BC // DE",
+    "id": 102459,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE"
+  },
+  {
+    "image": "images/img_102460.png",
+    "caption": "triangle ABC, angle ABC = 90, incircle O of triangle ABC, point N is on segment AB",
+    "id": 102460,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_102473.png",
+    "caption": "triangle ABC, a line through point B and point C",
+    "id": 102473,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C"
+  },
+  {
+    "image": "images/img_102499.png",
+    "caption": "triangle ABC, a line is perpendicular bisector of segment BC, a line through point C is perpendicular to segment AB",
+    "id": 102499,
+    "caption_vn": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_102500.png",
+    "caption": "triangle ABC, point O is the circumcenter of triangle ABC",
+    "id": 102500,
+    "caption_vn": "Tam giác ABC, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_102508.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on segment AC, point F is on segment BC, BC // DE, angle BAF = angle CAF, angle ADE = 90",
+    "id": 102508,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, BC song song với DE, góc BAF = góc CAF, góc ADE = 90"
+  },
+  {
+    "image": "images/img_102520.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment BC, line DE, AC // DE",
+    "id": 102520,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng BC, đường thẳng DE, AC song song với DE"
+  },
+  {
+    "image": "images/img_102538.png",
+    "caption": "two concentric circles O, point A is on the circle O",
+    "id": 102538,
+    "caption_vn": "Hai đường tròn đồng tâm O, điểm A nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_102549.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on segment AC, BC // DE, a line through point C is perpendicular to segment AC, angle ADE = 90",
+    "id": 102549,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_102569.png",
+    "caption": "triangle ABC, angle ABC = 90, a line through point B is perpendicular to segment AC",
+    "id": 102569,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_102587.png",
+    "caption": "triangle ABC, AB = AC, a line through point A",
+    "id": 102587,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_102590.png",
+    "caption": "trapezoid ABCD, AB // CD, AB ⊥ AD, a line is perpendicular bisector of segment AB",
+    "id": 102590,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, đường thẳng là đường trung trực của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_102594.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is the midpoint of segment BC, line DE, line EF, BC // DE, EF // AB, angle ADE = 90, angle CFE = 90",
+    "id": 102594,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB, góc ADE = 90, góc CFE = 90"
+  },
+  {
+    "image": "images/img_102607.png",
+    "caption": "trapezoid ABCD, AB // CD, BC = AD, a line through point A",
+    "id": 102607,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, BC = AD, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_10261.png",
+    "caption": "triangle ABC, point P is the centroid of triangle ABC",
+    "id": 10261,
+    "caption_vn": "Tam giác ABC, điểm P là trọng tâm của tam giác ABC"
+  },
+  {
+    "image": "images/img_102614.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, point E is on segment AC, BC // DE, a line through point C is perpendicular to segment AC, angle ADE = 90",
+    "id": 102614,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_102627.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line through point C is perpendicular to segment BC, circumcircle O of triangle ABC",
+    "id": 102627,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_10264.png",
+    "caption": "triangle ABC, a line through point C is perpendicular to segment AB",
+    "id": 10264,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_102670.png",
+    "caption": "triangle ABC, AB = AC, circumcircle O of triangle ABC",
+    "id": 102670,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102676.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line through point A",
+    "id": 102676,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_102680.png",
+    "caption": "triangle ABC, point D is on segment AB, angle ACD = angle DCB",
+    "id": 102680,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB"
+  },
+  {
+    "image": "images/img_102690.png",
+    "caption": "circle A, circle B, circle B is tangent to circle A, point P is on the circle A",
+    "id": 102690,
+    "caption_vn": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A, điểm P nằm trên đường tròn A"
+  },
+  {
+    "image": "images/img_102696.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is on segment BC, line DE, BC // DE, angle BAF = angle CAF, angle ADE = 90",
+    "id": 102696,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, góc ADE = 90"
+  },
+  {
+    "image": "images/img_102699.png",
+    "caption": "triangle ABC",
+    "id": 102699,
+    "caption_vn": "Tam giác ABC"
+  },
+  {
+    "image": "images/img_102706.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line is perpendicular bisector of segment BC, a line through point A",
+    "id": 102706,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_102724.png",
+    "caption": "triangle ABC, angle ABC = 90, a line through point A, incircle O of triangle ABC",
+    "id": 102724,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102727.png",
+    "caption": "circle O, a line intersects circle O at point A and point B, a line is tangent to circle O",
+    "id": 102727,
+    "caption_vn": "Đường tròn O, đường thẳng cắt đường tròn O tại điểm A và điểm B, đường thẳng tiếp xúc với đường tròn O"
+  },
+  {
+    "image": "images/img_102738.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45",
+    "id": 102738,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45"
+  },
+  {
+    "image": "images/img_102751.png",
+    "caption": "triangle ABC, a line through point A and a line through point B intersect at point P",
+    "id": 102751,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P"
+  },
+  {
+    "image": "images/img_102777.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on segment AC, BC // DE",
+    "id": 102777,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE"
+  },
+  {
+    "image": "images/img_102782.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, incircle O of triangle ABC",
+    "id": 102782,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102785.png",
+    "caption": "square ABCD, a line is perpendicular bisector of segment AB and segment CD",
+    "id": 102785,
+    "caption_vn": "Hình vuông ABCD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD"
+  },
+  {
+    "image": "images/img_102788.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, BC // DE",
+    "id": 102788,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE"
+  },
+  {
+    "image": "images/img_102799.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line is perpendicular bisector of segment AB",
+    "id": 102799,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_102819.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, a line through point E is perpendicular bisector of segment BC, angle ADE = 90",
+    "id": 102819,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm E là đường trung trực của đoạn thẳng BC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_102867.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is the midpoint of segment BC, line DE, line EF, BC // DE, EF // AB",
+    "id": 102867,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB"
+  },
+  {
+    "image": "images/img_102907.png",
+    "caption": "triangle ABC, angle ABC = 90, circumcircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC, diameter AC",
+    "id": 102907,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC, đường kính AC"
+  },
+  {
+    "image": "images/img_102910.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, line CD, angle ACD = angle DCB, a line is perpendicular bisector of segment BC",
+    "id": 102910,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_102918.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, point E is on segment AC, BC // DE, incircle O of triangle ABC, angle ADE = 90",
+    "id": 102918,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn nội tiếp O của tam giác ABC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_102920.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line through point A, circumcircle O of triangle ABC",
+    "id": 102920,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102936.png",
+    "caption": "triangle ABC, AB = AC, point D is on segment AB, point E is on segment AC, and point F is on segment BC, BC // DE, AC // DF, line DF",
+    "id": 102936,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, và điểm F nằm trên đoạn thẳng BC, BC song song với DE, AC song song với DF, đường thẳng DF"
+  },
+  {
+    "image": "images/img_10295.png",
+    "caption": "circle O",
+    "id": 10295,
+    "caption_vn": "Đường tròn O"
+  },
+  {
+    "image": "images/img_102953.png",
+    "caption": "triangle ABC, point M is the midpoint of segment AB",
+    "id": 102953,
+    "caption_vn": "Tam giác ABC, điểm M là trung điểm của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_102961.png",
+    "caption": "quadrilateral ABCD, circumcircle O of quadrilateral ABCD, circle P, circle P is tangent to circle O",
+    "id": 102961,
+    "caption_vn": "Tứ giác ABCD, đường tròn ngoại tiếp O của tứ giác ABCD, đường tròn P, đường tròn P tiếp xúc với đường tròn O"
+  },
+  {
+    "image": "images/img_102965.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, incircle O of triangle ABC",
+    "id": 102965,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102974.png",
+    "caption": "rectangle ABCD, point P is on segment AB, point Q is on segment CD, line PQ",
+    "id": 102974,
+    "caption_vn": "Hình chữ nhật ABCD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng CD, đường thẳng PQ"
+  },
+  {
+    "image": "images/img_102983.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line is perpendicular bisector of segment AB, incircle O of triangle ABC",
+    "id": 102983,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102985.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, line CD, angle ACD = angle DCB, circumcircle O of triangle ABC",
+    "id": 102985,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_102993.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, BC // DE",
+    "id": 102993,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE"
+  },
+  {
+    "image": "images/img_102995.png",
+    "caption": "triangle ABC, AB = AC, circle O with diameter BC",
+    "id": 102995,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn O với đường kính BC"
+  },
+  {
+    "image": "images/img_102996.png",
+    "caption": "triangle ABC, AB = AC, point D is on segment AB, line CD, angle ACD = angle DCB, incircle O of triangle ABC",
+    "id": 102996,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103006.png",
+    "caption": "rectangle ABCD, point E is on segment AB, angle BCE = angle DCE, line EC",
+    "id": 103006,
+    "caption_vn": "Hình chữ nhật ABCD, điểm E nằm trên đoạn thẳng AB, góc BCE = góc DCE, đường thẳng EC"
+  },
+  {
+    "image": "images/img_103009.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, point E is on segment AC, BC // DE",
+    "id": 103009,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE"
+  },
+  {
+    "image": "images/img_103019.png",
+    "caption": "quadrilateral ABCD, circumcircle O of quadrilateral ABCD, point E is on segment AB",
+    "id": 103019,
+    "caption_vn": "Tứ giác ABCD, đường tròn ngoại tiếp O của tứ giác ABCD, điểm E nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_103020.png",
+    "caption": "triangle ABC, a line through point A and a line through point B intersect at point P",
+    "id": 103020,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P"
+  },
+  {
+    "image": "images/img_103030.png",
+    "caption": "triangle ABC, angle ABC = 90, a line is perpendicular bisector of segment AB, excircle O is tangent to segment BC",
+    "id": 103030,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn bàng tiếp O tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_103042.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, angle ACD = angle DCB, line CD",
+    "id": 103042,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD"
+  },
+  {
+    "image": "images/img_10305.png",
+    "caption": "triangle ABC, AB = AC, point D is on segment AB, point E is on segment AC, BC // DE, circle O with diameter AB",
+    "id": 10305,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB"
+  },
+  {
+    "image": "images/img_103051.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, excircle O of triangle ABC is tangent to segment BC",
+    "id": 103051,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_103060.png",
+    "caption": "triangle ABC, a line is perpendicular bisector of segment AB",
+    "id": 103060,
+    "caption_vn": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_103063.png",
+    "caption": "circle O, a line through point O, a line is tangent to circle O",
+    "id": 103063,
+    "caption_vn": "Đường tròn O, đường thẳng đi qua điểm O, đường thẳng tiếp xúc với đường tròn O"
+  },
+  {
+    "image": "images/img_103070.png",
+    "caption": "triangle ABC, AB = AC, incircle O of triangle ABC",
+    "id": 103070,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103095.png",
+    "caption": "triangle ABC, AB = AC, point O is the circumcenter of triangle ABC",
+    "id": 103095,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_103096.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point B and point C",
+    "id": 103096,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm B và điểm C"
+  },
+  {
+    "image": "images/img_103125.png",
+    "caption": "triangle ABC, AB = AC, a line through point A, circumcircle O of triangle ABC",
+    "id": 103125,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103134.png",
+    "caption": "triangle ABC, AB = AC, point D is on segment AB, line CD, angle ACD = angle DCB, excircle O of triangle ABC is tangent to segment BC",
+    "id": 103134,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_103142.png",
+    "caption": "triangle ABC, circumcircle O of triangle ABC, point N is on segment AB",
+    "id": 103142,
+    "caption_vn": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_103143.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, incircle O of triangle ABC",
+    "id": 103143,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103148.png",
+    "caption": "triangle ABC, excircle O of triangle ABC is tangent to segment BC",
+    "id": 103148,
+    "caption_vn": "Tam giác ABC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_103151.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, point E is on segment AC, BC // DE, a line through point B, angle ADE = 90",
+    "id": 103151,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90"
+  },
+  {
+    "image": "images/img_103155.png",
+    "caption": "triangle ABC, AB = AC",
+    "id": 103155,
+    "caption_vn": "Tam giác ABC, AB = AC"
+  },
+  {
+    "image": "images/img_103162.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, point E is on segment AC, BC // DE, a line through point C is perpendicular to segment AB, angle ADE = 90",
+    "id": 103162,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, góc ADE = 90"
+  },
+  {
+    "image": "images/img_103171.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, angle ADE = 90, circle D with diameter AB",
+    "id": 103171,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn D với đường kính AB"
+  },
+  {
+    "image": "images/img_103193.png",
+    "caption": "triangle ABC, incircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC",
+    "id": 103193,
+    "caption_vn": "Tam giác ABC, đường tròn nội tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_10320.png",
+    "caption": "two concentric circles O, a line through point O",
+    "id": 10320,
+    "caption_vn": "Hai đường tròn đồng tâm O, đường thẳng đi qua điểm O"
+  },
+  {
+    "image": "images/img_103206.png",
+    "caption": "circle A, circle B, circle B is tangent to circle A",
+    "id": 103206,
+    "caption_vn": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A"
+  },
+  {
+    "image": "images/img_103207.png",
+    "caption": "triangle ABC, angle ABC = 90, circumcircle O of triangle ABC, point O is the midpoint of diameter AC",
+    "id": 103207,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, điểm O là trung điểm của đường kính AC"
+  },
+  {
+    "image": "images/img_10323.png",
+    "caption": "triangle ABC, AB = AC, point P is the centroid of triangle ABC",
+    "id": 10323,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm P là trọng tâm của tam giác ABC"
+  },
+  {
+    "image": "images/img_103231.png",
+    "caption": "triangle ABC, angle ABC = 90, circumcircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC, diameter AC",
+    "id": 103231,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC, đường kính AC"
+  },
+  {
+    "image": "images/img_103241.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, circumcircle O of triangle ABC",
+    "id": 103241,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103256.png",
+    "caption": "triangle ABC, angle ABC = 90, a line through point C is perpendicular to segment AB, excircle O of triangle ABC is tangent to segment BC",
+    "id": 103256,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_103258.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, incircle O of triangle ABC, circumcircle P of triangle ABC, diameter AC",
+    "id": 103258,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC, đường kính AC"
+  },
+  {
+    "image": "images/img_103273.png",
+    "caption": "two concentric circles O, a line is tangent to circle O",
+    "id": 103273,
+    "caption_vn": "Hai đường tròn đồng tâm O, đường thẳng tiếp xúc với đường tròn O"
+  },
+  {
+    "image": "images/img_103294.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line is perpendicular bisector of segment BC, a line through point A",
+    "id": 103294,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_1033.png",
+    "caption": "trapezoid ABCD, AB // CD, point P is on the extension line of AB",
+    "id": 1033,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, điểm P nằm trên phần kéo dài đường thẳng của AB"
+  },
+  {
+    "image": "images/img_103302.png",
+    "caption": "triangle ABC, circumcircle O of triangle ABC, point N is on segment AB",
+    "id": 103302,
+    "caption_vn": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_103317.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, a line through point B",
+    "id": 103317,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B"
+  },
+  {
+    "image": "images/img_10332.png",
+    "caption": "triangle ABC, AB = AC, a line through point A, excircle O of triangle ABC is tangent to segment BC",
+    "id": 10332,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_103320.png",
+    "caption": "triangle ABC, circle O with diameter AB",
+    "id": 103320,
+    "caption_vn": "Tam giác ABC, đường tròn O với đường kính AB"
+  },
+  {
+    "image": "images/img_10334.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is the midpoint of segment BC, line DE, line EF, BC // DE, EF // AB, angle ADE = 90, angle CFE = 90",
+    "id": 10334,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB, góc ADE = 90, góc CFE = 90"
+  },
+  {
+    "image": "images/img_103341.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, circle O with diameter AB",
+    "id": 103341,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn O với đường kính AB"
+  },
+  {
+    "image": "images/img_103342.png",
+    "caption": "triangle ABC, a line through point C is perpendicular to segment AB, incircle O of triangle ABC",
+    "id": 103342,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103356.png",
+    "caption": "circle A, circle B, circle B intersects circle A at point C and  point D",
+    "id": 103356,
+    "caption_vn": "Đường tròn A, đường tròn B, đường tròn B cắt đường tròn A tại điểm C và điểm D"
+  },
+  {
+    "image": "images/img_103360.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is on segment BC, line DE, BC // DE, angle BAF = angle CAF, angle ADE = 90",
+    "id": 103360,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, góc ADE = 90"
+  },
+  {
+    "image": "images/img_103386.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, line CD, angle ACD = angle DCB, excircle O of triangle ABC is tangent to segment BC",
+    "id": 103386,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_103391.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, circumcircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC, diameter AC",
+    "id": 103391,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn ngoại tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC, đường kính AC"
+  },
+  {
+    "image": "images/img_103395.png",
+    "caption": "trapezoid ABCD, AB // CD, BC = AD, point P is on segment AB, point Q is on segment CD, line PQ",
+    "id": 103395,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, BC = AD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng CD, đường thẳng PQ"
+  },
+  {
+    "image": "images/img_103417.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point O is the circumcenter of triangle ABC",
+    "id": 103417,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_103418.png",
+    "caption": "triangle ABC, point D is on segment AB, angle ACD = angle DCB, line CD, excircle O of triangle ABC is tangent to segment BC",
+    "id": 103418,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_103420.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment BC, line DE, AC // DE",
+    "id": 103420,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng BC, đường thẳng DE, AC song song với DE"
+  },
+  {
+    "image": "images/img_103433.png",
+    "caption": "triangle ABC, AB = AC, circumcircle O of triangle ABC",
+    "id": 103433,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103440.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, angle ADE = 90, incircle O of triangle ABC",
+    "id": 103440,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_10345.png",
+    "caption": "triangle ABC, AB = AC, a line through point C is perpendicular to segment AB",
+    "id": 10345,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_10346.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, angle ADE = 90, circle D with diameter AB",
+    "id": 10346,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn D với đường kính AB"
+  },
+  {
+    "image": "images/img_103460.png",
+    "caption": "triangle ABC, AB = AC, circumcircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC",
+    "id": 103460,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn ngoại tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_103469.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line through point C is perpendicular to segment BC, excircle O of triangle ABC is tangent to segment BC",
+    "id": 103469,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_103478.png",
+    "caption": "two concentric circles O, a line through point O",
+    "id": 103478,
+    "caption_vn": "Hai đường tròn đồng tâm O, đường thẳng đi qua điểm O"
+  },
+  {
+    "image": "images/img_103479.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, point E is on segment AC, BC // DE, a line through point B, angle ADE = 90",
+    "id": 103479,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90"
+  },
+  {
+    "image": "images/img_103482.png",
+    "caption": "triangle ABC, AB = AC, point D is on segment AB, point E is on segment AC, BC // DE, a line through point B",
+    "id": 103482,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B"
+  },
+  {
+    "image": "images/img_103488.png",
+    "caption": "rectangle ABCD, point P is on segment AB",
+    "id": 103488,
+    "caption_vn": "Hình chữ nhật ABCD, điểm P nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_103502.png",
+    "caption": "triangle ABC, a line through point B and point C",
+    "id": 103502,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C"
+  },
+  {
+    "image": "images/img_103505.png",
+    "caption": "triangle ABC, circle O with diameter AB",
+    "id": 103505,
+    "caption_vn": "Tam giác ABC, đường tròn O với đường kính AB"
+  },
+  {
+    "image": "images/img_103510.png",
+    "caption": "triangle ABC, point D is on segment AB, point E is on segment AC, BC // DE, incircle O of triangle ABC",
+    "id": 103510,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103515.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point A, incircle O of triangle ABC",
+    "id": 103515,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_10352.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, point E is on segment AC, BC // DE, excircle O of triangle ABC is tangent to segment BC, angle ADE = 90",
+    "id": 10352,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_103525.png",
+    "caption": "triangle ABC, angle ABC = 90, a line through point C is perpendicular to segment AB, a line through point B is perpendicular to segment AC",
+    "id": 103525,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_103529.png",
+    "caption": "triangle ABC, a line through point A, circumcircle O of triangle ABC",
+    "id": 103529,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103554.png",
+    "caption": "triangle ABC, AB = AC, a line through point C is perpendicular to segment AB, a line through point B is perpendicular to segment AC",
+    "id": 103554,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC"
+  },
+  {
+    "image": "images/img_103561.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point A and a line through point B intersect at point P",
+    "id": 103561,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P"
+  },
+  {
+    "image": "images/img_103572.png",
+    "caption": "trapezoid ABCD, AB // CD, a line through point is perpendicular to segment AB",
+    "id": 103572,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, đường thẳng đi qua điểm vuông góc với đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_103573.png",
+    "caption": "triangle ABC, angle ABC = 90, point M is the midpoint of segment BC",
+    "id": 103573,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm M là trung điểm của đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_103582.png",
+    "caption": "triangle ABC, angle ABC = 90, a line is perpendicular bisector of segment AB, excircle O is tangent to segment BC",
+    "id": 103582,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn bàng tiếp O tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_103589.png",
+    "caption": "pentagon ABCDE, a line is perpendicular bisector of segment AB",
+    "id": 103589,
+    "caption_vn": "Ngũ giác ABCDE, đường thẳng là đường trung trực của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_103594.png",
+    "caption": "trapezoid ABCD, AB // CD, BC = AD, point P is inside trapezoid ABCD",
+    "id": 103594,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, BC = AD, điểm P nằm trong hình thang ABCD"
+  },
+  {
+    "image": "images/img_103599.png",
+    "caption": "triangle ABC, angle ABC = 90, a line through point A, circumcircle O of triangle ABC",
+    "id": 103599,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103606.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on segment BC, angle ACD = angle DCB, angle CAE = angle EAB, line DE, line AE",
+    "id": 103606,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng BC, góc ACD = góc DCB, góc CAE = góc EAB, đường thẳng DE, đường thẳng AE"
+  },
+  {
+    "image": "images/img_10362.png",
+    "caption": "triangle ABC, angle ABC = 90, circle O with diameter BC",
+    "id": 10362,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn O với đường kính BC"
+  },
+  {
+    "image": "images/img_103625.png",
+    "caption": "triangle ABC, point D is on segment AB, point E is on segment AC, BC // DE, circumcircle O of triangle ABC",
+    "id": 103625,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103632.png",
+    "caption": "triangle ABC, AB = AC, incircle O of triangle ABC, point N is on segment AB",
+    "id": 103632,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_103677.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, BC // DE",
+    "id": 103677,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE"
+  },
+  {
+    "image": "images/img_10368.png",
+    "caption": "triangle ABC, angle ABC = 90, excircle O of triangle ABC is tangent to segment BC, point N is on the circle O",
+    "id": 10368,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_103682.png",
+    "caption": "circle O, a line through point O, a line is tangent to circle O",
+    "id": 103682,
+    "caption_vn": "Đường tròn O, đường thẳng đi qua điểm O, đường thẳng tiếp xúc với đường tròn O"
+  },
+  {
+    "image": "images/img_103685.png",
+    "caption": "triangle ABC, incircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC",
+    "id": 103685,
+    "caption_vn": "Tam giác ABC, đường tròn nội tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_103698.png",
+    "caption": "triangle ABC, a line is perpendicular bisector of segment AB, incircle O of triangle ABC",
+    "id": 103698,
+    "caption_vn": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103706.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, point E is on segment AC, BC // DE, a line through point C is perpendicular to segment AB, angle ADE = 90",
+    "id": 103706,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, góc ADE = 90"
+  },
+  {
+    "image": "images/img_103728.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30",
+    "id": 103728,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30"
+  },
+  {
+    "image": "images/img_103738.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, incircle O of triangle ABC",
+    "id": 103738,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103751.png",
+    "caption": "triangle ABC, a line through point C is perpendicular to segment AB, a line through point C",
+    "id": 103751,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C"
+  },
+  {
+    "image": "images/img_103761.png",
+    "caption": "triangle ABC, AB = AC, point O is the circumcenter of triangle ABC",
+    "id": 103761,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_103765.png",
+    "caption": "circle A, circle B, circle B is tangent to circle A, a line is tangent to circle A",
+    "id": 103765,
+    "caption_vn": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A, đường thẳng tiếp xúc với đường tròn A"
+  },
+  {
+    "image": "images/img_103768.png",
+    "caption": "two concentric circles with center O",
+    "id": 103768,
+    "caption_vn": "Hai đường tròn đồng tâm với center O"
+  },
+  {
+    "image": "images/img_103787.png",
+    "caption": "triangle ABC, angle ABC = 90, incircle O of triangle ABC, circumcircle P of triangle ABC, diameter AC",
+    "id": 103787,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC, đường kính AC"
+  },
+  {
+    "image": "images/img_103792.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line through point A",
+    "id": 103792,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_1038.png",
+    "caption": "pentagon ABCDE, point P is on segment AB, point Q is on segment CD, line PQ",
+    "id": 1038,
+    "caption_vn": "Ngũ giác ABCDE, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng CD, đường thẳng PQ"
+  },
+  {
+    "image": "images/img_103804.png",
+    "caption": "point A",
+    "id": 103804,
+    "caption_vn": "Điểm A"
+  },
+  {
+    "image": "images/img_103818.png",
+    "caption": "triangle ABC",
+    "id": 103818,
+    "caption_vn": "Tam giác ABC"
+  },
+  {
+    "image": "images/img_103820.png",
+    "caption": "triangle ABC, circumcircle O of triangle ABC, point N is on segment AB",
+    "id": 103820,
+    "caption_vn": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_103830.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, point E is on segment AC, BC // DE, a line through point B, angle ADE = 90",
+    "id": 103830,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90"
+  },
+  {
+    "image": "images/img_103840.png",
+    "caption": "triangle ABC, a line is perpendicular bisector of segment AB, circumcircle O of triangle ABC",
+    "id": 103840,
+    "caption_vn": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103842.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, line CD, angle ACD = angle DCB, excircle O of triangle ABC is tangent to segment BC",
+    "id": 103842,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_103843.png",
+    "caption": "triangle ABC, AB = AC, point D is on segment AB, line CD, angle ACD = angle DCB, incircle O of triangle ABC",
+    "id": 103843,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103844.png",
+    "caption": "triangle ABC, angle ABC = 90, a line is perpendicular bisector of segment BC, a line through point A",
+    "id": 103844,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_103845.png",
+    "caption": "triangle ABC, AB = AC, a line through point C is perpendicular to segment AB, circumcircle O of triangle ABC",
+    "id": 103845,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103846.png",
+    "caption": "triangle ABC, point D is on segment AB, angle ACD = angle DCB, line CD, circumcircle O of triangle ABC",
+    "id": 103846,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103857.png",
+    "caption": "triangle ABC, incircle O of triangle ABC, point N is on segment AB",
+    "id": 103857,
+    "caption_vn": "Tam giác ABC, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_103864.png",
+    "caption": "circle O, a line through point O, a line is tangent to circle O",
+    "id": 103864,
+    "caption_vn": "Đường tròn O, đường thẳng đi qua điểm O, đường thẳng tiếp xúc với đường tròn O"
+  },
+  {
+    "image": "images/img_103866.png",
+    "caption": "triangle ABC, angle ABC = 90, a line through point A and point C",
+    "id": 103866,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A và điểm C"
+  },
+  {
+    "image": "images/img_103869.png",
+    "caption": "rectangle ABCD, a line through point A",
+    "id": 103869,
+    "caption_vn": "Hình chữ nhật ABCD, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_103880.png",
+    "caption": "triangle ABC, angle ABC = 90, point O is the incenter of triangle ABC",
+    "id": 103880,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm O là tâm đường tròn nội tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_103883.png",
+    "caption": "triangle ABC, AB = AC, circumcircle O of triangle ABC, point N is on the circle O",
+    "id": 103883,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_103889.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point P is the centroid of triangle ABC",
+    "id": 103889,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm P là trọng tâm của tam giác ABC"
+  },
+  {
+    "image": "images/img_1039.png",
+    "caption": "triangle ABC, AB = AC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, incircle O of triangle ABC",
+    "id": 1039,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103901.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, angle ADE = 90, excircle O of triangle ABC is tangent to segment BC",
+    "id": 103901,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, góc ADE = 90, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_103902.png",
+    "caption": "triangle ABC, AB = AC, a line through point B and point C",
+    "id": 103902,
+    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm B và điểm C"
+  },
+  {
+    "image": "images/img_10391.png",
+    "caption": "triangle ABC, angle ABC = 90, a line through point A, incircle O of triangle ABC",
+    "id": 10391,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_103917.png",
+    "caption": "triangle ABC, angle ABC = 90, excircle O of triangle ABC is tangent to segment BC, point N is on the circle O",
+    "id": 103917,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_103927.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, point E is on segment AC, BC // DE, a line through point B, angle ADE = 90",
+    "id": 103927,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90"
+  },
+  {
+    "image": "images/img_103943.png",
+    "caption": "circle A, circle B, circle B intersects circle A at point C and point D, point P is on the circle A",
+    "id": 103943,
+    "caption_vn": "Đường tròn A, đường tròn B, đường tròn B cắt đường tròn A tại điểm C và điểm D, điểm P nằm trên đường tròn A"
+  },
+  {
+    "image": "images/img_103947.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on segment AC, BC // DE",
+    "id": 103947,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE"
+  },
+  {
+    "image": "images/img_10395.png",
+    "caption": "triangle ABC, AB = AC, excircle O is tangent to segment B C",
+    "id": 10395,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn bàng tiếp O tiếp xúc với đoạn thẳng B C"
+  },
+  {
+    "image": "images/img_103955.png",
+    "caption": "trapezoid ABCD, AB // CD, a line through point is perpendicular to segment AB",
+    "id": 103955,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, đường thẳng đi qua điểm vuông góc với đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_103957.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, angle ADE = 90, excircle O of triangle ABC is tangent to segment BC",
+    "id": 103957,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_10396.png",
+    "caption": "two concentric circles O, a line through point O",
+    "id": 10396,
+    "caption_vn": "Hai đường tròn đồng tâm O, đường thẳng đi qua điểm O"
+  },
+  {
+    "image": "images/img_103961.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, angle ADE = 90, circumcircle E of triangle ABC",
+    "id": 103961,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, góc ADE = 90, đường tròn ngoại tiếp E của tam giác ABC"
+  },
+  {
+    "image": "images/img_103972.png",
+    "caption": "triangle ABC, angle ABC = 90, point O is the excenter of triangle ABC",
+    "id": 103972,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm O là tâm đường tròn bàng tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_10398.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point O is perpendicular bisector of segment AB, circumcircle O of triangle ABC",
+    "id": 10398,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm O là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_104.png",
+    "caption": "triangle ABC, angle ABC = 90, incircle O of triangle ABC, point N is on the circle O",
+    "id": 104,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_1040.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, line CD, angle ACD = angle DCB, a line through point B",
+    "id": 1040,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm B"
+  },
+  {
+    "image": "images/img_104004.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, excircle O of triangle ABC is tangent to segment BC",
+    "id": 104004,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_10404.png",
+    "caption": "triangle ABC, a line through point C is perpendicular to segment AB, a line through point C",
+    "id": 10404,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C"
+  },
+  {
+    "image": "images/img_104049.png",
+    "caption": "triangle ABC, point M is the midpoint of segment AB",
+    "id": 104049,
+    "caption_vn": "Tam giác ABC, điểm M là trung điểm của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_104056.png",
+    "caption": "line AB",
+    "id": 104056,
+    "caption_vn": "Đường thẳng AB"
+  },
+  {
+    "image": "images/img_104058.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, excircle O of triangle ABC is tangent to segment BC, point N is on segment AB",
+    "id": 104058,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, điểm N nằm trên đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_104061.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, point E is on segment AC, BC // DE, a line through point C is perpendicular to segment AC, angle ADE = 90",
+    "id": 104061,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_104067.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, a line through point C is perpendicular bisector of segment AC, angle ADE = 90",
+    "id": 104067,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_104069.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, angle ADE = 90, incircle O of triangle ABC",
+    "id": 104069,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_104071.png",
+    "caption": "square ABCD, a line is perpendicular bisector of segment AB and segment CD",
+    "id": 104071,
+    "caption_vn": "Hình vuông ABCD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD"
+  },
+  {
+    "image": "images/img_1041.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, circle O with diameter AB",
+    "id": 1041,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn O với đường kính AB"
+  },
+  {
+    "image": "images/img_104111.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point A, circumcircle O of triangle ABC",
+    "id": 104111,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_104123.png",
+    "caption": "triangle ABC, AB = AC, point D is on segment AB, line AD, angle ACD = angle DCB, AB ⊥ AD",
+    "id": 104123,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, đường thẳng AD, góc ACD = góc DCB, AB vuông góc với AD"
+  },
+  {
+    "image": "images/img_104134.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on segment AC, BC // DE, circumcircle O of triangle ABC, angle ADE = 90",
+    "id": 104134,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_104146.png",
+    "caption": "trapezoid ABCD, AB // CD, AB ⊥ AD, a line through point A",
+    "id": 104146,
+    "caption_vn": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_104149.png",
+    "caption": "triangle ABC, point D is on segment AB, line CD, angle ACD = angle DCB, a line through point B",
+    "id": 104149,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm B"
+  },
+  {
+    "image": "images/img_104166.png",
+    "caption": "circle O, circle B, circle B is tangent to circle O, a line through point O",
+    "id": 104166,
+    "caption_vn": "Đường tròn O, đường tròn B, đường tròn B tiếp xúc với đường tròn O, đường thẳng đi qua điểm O"
+  },
+  {
+    "image": "images/img_104167.png",
+    "caption": "triangle ABC, angle ABC = 90, a line is perpendicular bisector of segment BC, a line through point A",
+    "id": 104167,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_10418.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line through point A, circumcircle O of triangle ABC",
+    "id": 10418,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_104181.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is on segment BC, line DE, BC // DE, angle BAF = angle CAF, angle ADE = 90",
+    "id": 104181,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, góc ADE = 90"
+  },
+  {
+    "image": "images/img_104182.png",
+    "caption": "pentagon ABCDE, a line is perpendicular bisector of segment AB",
+    "id": 104182,
+    "caption_vn": "Ngũ giác ABCDE, đường thẳng là đường trung trực của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_104192.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, incircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC",
+    "id": 104192,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_104193.png",
+    "caption": "triangle ABC, excircle O of triangle ABC is tangent to segment BC",
+    "id": 104193,
+    "caption_vn": "Tam giác ABC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_104201.png",
+    "caption": "triangle ABC, AB = AC, point M is the midpoint of segment AB",
+    "id": 104201,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm M là trung điểm của đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_104215.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, line CD, angle ACD = angle DCB, a line is perpendicular bisector of segment BC",
+    "id": 104215,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_104219.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, incircle O of triangle ABC, point N is on the circle O",
+    "id": 104219,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O"
+  },
+  {
+    "image": "images/img_104245.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point O is the incenter of triangle ABC",
+    "id": 104245,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm O là tâm đường tròn nội tiếp của tam giác ABC"
+  },
+  {
+    "image": "images/img_104251.png",
+    "caption": "triangle ABC, AB = AC, circumcircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC",
+    "id": 104251,
+    "caption_vn": "Tam giác ABC, AB = AC, đường tròn ngoại tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_104261.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point C is perpendicular to segment AC, excircle O of triangle ABC is tangent to segment BC",
+    "id": 104261,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_10427.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, BC // DE, incircle O of triangle ABC",
+    "id": 10427,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_104276.png",
+    "caption": "pentagon ABCDE, line AC and line BD intersect at point O",
+    "id": 104276,
+    "caption_vn": "Ngũ giác ABCDE, đường thẳng AC và đường thẳng BD cắt tại điểm O"
+  },
+  {
+    "image": "images/img_104278.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line through point A, circumcircle O of triangle ABC",
+    "id": 104278,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_10430.png",
+    "caption": "triangle ABC, AB = AC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is on segment BC, line DE, BC // DE, angle BAF = angle CAF, AF ⊥ BC",
+    "id": 10430,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, AF vuông góc với BC"
+  },
+  {
+    "image": "images/img_104300.png",
+    "caption": "triangle ABC, AB = AC, point P is the orthocenter of triangle ABC",
+    "id": 104300,
+    "caption_vn": "Tam giác ABC, AB = AC, điểm P là trực tâm của tam giác ABC"
+  },
+  {
+    "image": "images/img_104319.png",
+    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, line CD, angle ACD = angle DCB, a line through point C is perpendicular to segment AB",
+    "id": 104319,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB"
+  },
+  {
+    "image": "images/img_104320.png",
+    "caption": "circle A, circle B, circle B is tangent to circle A",
+    "id": 104320,
+    "caption_vn": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A"
+  },
+  {
+    "image": "images/img_104322.png",
+    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, BC // DE",
+    "id": 104322,
+    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE"
+  },
+  {
+    "image": "images/img_104325.png",
+    "caption": "triangle ABC, point D is on segment AB, point E is on segment BC, angle ACD = angle DCB, angle CAE = angle EAB, line CD, line AE",
+    "id": 104325,
+    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng BC, góc ACD = góc DCB, góc CAE = góc EAB, đường thẳng CD, đường thẳng AE"
+  },
+  {
+    "image": "images/img_104329.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on segment AC, BC // DE, incircle O of triangle ABC, angle ADE = 90",
+    "id": 104329,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn nội tiếp O của tam giác ABC, góc ADE = 90"
+  },
+  {
+    "image": "images/img_104345.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point O is perpendicular bisector of segment AB, circumcircle O of triangle ABC",
+    "id": 104345,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm O là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC"
+  },
+  {
+    "image": "images/img_10435.png",
+    "caption": "circle A, circle B, circle B is tangent to circle A, point P is on the circle A",
+    "id": 10435,
+    "caption_vn": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A, điểm P nằm trên đường tròn A"
+  }
+]
+[
+  {
     "image": "images/img_230101.png",
     "caption": "circle (O) with diameter AB, point C on circle, H is projection of C onto AB, M on OC such that OM = OH",
     "id": 230101,

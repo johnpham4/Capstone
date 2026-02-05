@@ -3,5 +3,5 @@ parameters:
   text_filename: "diagram_val.json"
   split: "validation"
 
-  limit: 200
+  limit: 500
 

@@ -9,7 +9,7 @@ def training(
     per_device_train_batch_size: int = 2,
     learning_rate: float = 3e-4,
     dataset_huggingface_workspace: str = "minn04",
-    dataset_huggingface_repo_name: str = "gmbl",
+    dataset_huggingface_repo_name: str = "text2dsl",
     is_dummy: bool = False,
 ) -> None:
     training_steps.train(
