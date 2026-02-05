@@ -1,6 +1,6 @@
 from zenml import step
 
-from llm_src.model.finetuning.sagemaker import run_finetuning_on_sagemaker
+from src.services.model.finetuning.sagemaker import run_finetuning_on_sagemaker
 
 
 @step

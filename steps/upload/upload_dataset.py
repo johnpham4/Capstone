@@ -6,7 +6,7 @@ from zenml import step
 from loguru import logger
 from datasets import Dataset, DatasetDict, Features, Value, Image as HFImage
 
-from llm_src.domains.dataset import TrainTestSplit
+from src.models.domain.dataset import TrainTestSplit
 
 @step
 def upload_to_huggingface(
