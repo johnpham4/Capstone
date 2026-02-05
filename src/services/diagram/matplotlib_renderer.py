@@ -486,23 +486,40 @@ class MatplotlibDiagramRenderer:
         # Configure axes
         ax.set_aspect('equal')
         
-        # Zoom in to make circles appear larger - adjust axis limits based on circle size
-        if self.diagram.circles:
-            # Find the largest circle to set appropriate zoom
-            max_radius = 0
-            for center_name, info in self.diagram.circles:  # Fix: circles is a list, not dict
-                if isinstance(info, dict):
-                    radius = info.get('radius', 0.5)
-                    max_radius = max(max_radius, radius)
-                else:
-                    max_radius = max(max_radius, info)
+        # Calculate centroid of all points to center the diagram
+        if self.diagram.points:
+            all_x = [p.x for p in self.diagram.points.values()]
+            all_y = [p.y for p in self.diagram.points.values()]
+            center_x = sum(all_x) / len(all_x)
+            center_y = sum(all_y) / len(all_y)
             
-            # Set axis limits to be 1.5x the largest circle radius (instead of default auto-scale)
-            zoom_factor = max(1.5, max_radius * 1.5)
+            # Calculate the range needed to fit all elements
+            max_range = 1.5  # Default range
             
-            # CỐ ĐỊNH view ở (0, 0) - tâm đường tròn luôn ở giữa không gian
-            ax.set_xlim(-zoom_factor, zoom_factor)
-            ax.set_ylim(-zoom_factor, zoom_factor)
+            # Consider points
+            if all_x and all_y:
+                x_range = max(all_x) - min(all_x)
+                y_range = max(all_y) - min(all_y)
+                max_range = max(x_range, y_range) * 0.6  # 20% padding
+            
+            # Consider circles
+            if self.diagram.circles:
+                for center, info in self.diagram.circles:
+                    if isinstance(info, dict):
+                        radius = info.get('radius', 0.5)
+                    else:
+                        radius = info
+                    # Ensure circle fits in view
+                    max_range = max(max_range, radius * 1.2)
+            
+            # Set limits centered on centroid
+            zoom_factor = max(1.5, max_range)
+            ax.set_xlim(center_x - zoom_factor, center_x + zoom_factor)
+            ax.set_ylim(center_y - zoom_factor, center_y + zoom_factor)
+        else:
+            # Fallback if no points
+            ax.set_xlim(-1.5, 1.5)
+            ax.set_ylim(-1.5, 1.5)
         
         ax.axis('off')
 
