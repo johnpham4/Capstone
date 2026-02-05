@@ -506,18 +506,28 @@ class Optimizer:
      
 
     def _define_projection(self, point_name, vertex_point, segment_points):
-        assert len(segment_points) == 2
+        # segment_points có thể là [(segment A B)] hoặc [A, B]
+        # Nếu là nested segment, extract points từ đó
+        if len(segment_points) == 1 and hasattr(segment_points[0], 'objects'):
+            # Nested segment: (segment A B)
+            actual_points = segment_points[0].objects
+        else:
+            # Direct points: A B
+            actual_points = segment_points
+        
+        assert len(actual_points) == 2
 
         foot = self.sample_uniform(point_name)
         vertex = self.lookup_pt(vertex_point)
-        p1 = self.lookup_pt(segment_points[0])
-        p2 = self.lookup_pt(segment_points[1])
+        p1 = self.lookup_pt(actual_points[0])
+        p2 = self.lookup_pt(actual_points[1])
 
         # Foot perpendicular to segment and lies on segment
         self.register_loss(f"perp_{point_name.val}",
                           lambda: self.perpendicular(vertex, foot, p1, p2), weight=10.0)
         self.register_loss(f"on_seg_{point_name.val}",
                           lambda: self.collinear(foot, p1, p2), weight=10.0)
+        
         return foot
 
     def _define_intersection(self, point_name, segment1_points, segment2_points):
@@ -537,6 +547,7 @@ class Optimizer:
                           lambda: self.collinear(intersection, p1, p2), weight=50.0)
         self.register_loss(f"on_line2_{point_name.val}",
                           lambda: self.collinear(intersection, p3, p4), weight=50.0)
+        
         return intersection
 
     def _define_centroid(self, point_name, triangle_points):
@@ -960,6 +971,21 @@ class Optimizer:
             p2_name = objects[1].val if hasattr(objects[1], 'val') else str(objects[1])
             self.lines.append((p1_name, p2_name))
 
+    def _make_distance_ndg_loss(self, point1, point2):
+        """Create a loss function that encourages two points to be far apart.
+        
+        Returns a lambda that computes negative squared distance (for NDG minimization).
+        Minimizing negative distance = maximizing distance (encourages separation).
+        
+        Args:
+            point1: First Point object
+            point2: Second Point object
+            
+        Returns:
+            Callable that returns -distance² between the two points
+        """
+        return lambda: -((point1.x - point2.x)**2 + (point1.y - point2.y)**2)
+
     def process_assertion(self, assertion):
         """Process assertion/constraint instructions"""
         # Assertions are handled separately - they add constraints to existing objects
@@ -1156,104 +1182,6 @@ class Optimizer:
             lambda pt=point, c=center, r=radius_const: (self.dist(pt, c) - r)**2,
             weight=100000.0  
         )
-        
-        # Check if this is NOT a diameter (no on-segment constraint with center)
-        # If there are 2 points on circle and they're not a diameter, prevent them from being collinear with center
-        self._prevent_chord_as_diameter(center_name)
-        
-        # Check ALL pairs of points on this circle for chord-diameter prevention
-        self._check_all_chord_pairs(center_name)
-    
-    def _prevent_chord_as_diameter(self, center_name):
-        """
-        Prevent 2 points on a circle from forming a diameter unless explicitly marked.
-        This adds NDG (non-degenerate geometry) constraint: center, pt1, pt2 should not be collinear.
-        """
-        # Find all points on this circle
-        circle_points = []
-        for loss_name in self.loss_fns:
-            if loss_name.startswith(f"on_circle_") and loss_name.endswith(f"_{center_name}"):
-                point_name = loss_name.split("_")[2]
-                circle_points.append(point_name)
-        
-        # Only apply if we have exactly 2 points
-        if len(circle_points) != 2:
-            return
-        
-        # Check if there's an on-segment constraint with center (indicating diameter)
-        # Format: "on_segment_O_on_AB" means O lies on segment AB
-        pt1_name, pt2_name = circle_points
-        
-        # Check all possible orderings since segment can be AB or BA
-        has_diameter_constraint = any(
-            loss_name == f"on_segment_{center_name}_on_{pt1_name}{pt2_name}" or
-            loss_name == f"on_segment_{center_name}_on_{pt2_name}{pt1_name}"
-            for loss_name in self.loss_fns
-        )
-        
-        if has_diameter_constraint:
-            # This IS a diameter - allow collinearity
-            return
-        
-        # This is NOT a diameter - prevent O, A, B from being collinear
-        center = self.lookup_pt_by_name(center_name)
-        pt1 = self.lookup_pt_by_name(pt1_name)
-        pt2 = self.lookup_pt_by_name(pt2_name)
-        
-        if center and pt1 and pt2:
-            # NDG: penalize collinearity (cross product should be non-zero)
-            self.register_ndg(
-                f"chord_not_diameter_{center_name}_{pt1_name}_{pt2_name}",
-                lambda c=center, p1=pt1, p2=pt2: self._cross_product_area(c, p1, p2)**2,
-                weight=10.0
-            )
-    
-    def _check_all_chord_pairs(self, center_name):
-        """
-        Check ALL pairs of points on a circle to prevent chords from becoming diameters.
-        This is called after each point is added, ensuring we catch cases like:
-        - MN is diameter (has on-segment)
-        - AB is chord (no on-segment) but might try to become diameter
-        """
-        # Find all points on this circle
-        circle_points = []
-        for loss_name in self.loss_fns:
-            if loss_name.startswith(f"on_circle_") and loss_name.endswith(f"_{center_name}"):
-                point_name = loss_name.split("_")[2]
-                circle_points.append(point_name)
-        
-        # Check all pairs
-        for i in range(len(circle_points)):
-            for j in range(i+1, len(circle_points)):
-                pt1_name = circle_points[i]
-                pt2_name = circle_points[j]
-                
-                # Check if this pair has on-segment constraint (is a diameter)
-                has_diameter_constraint = any(
-                    key.startswith("on_segment_") and (
-                        f"_{center_name}_on_{pt1_name}{pt2_name}" in key or
-                        f"_{center_name}_on_{pt2_name}{pt1_name}" in key
-                    )
-                    for key in self.loss_fns.keys()
-                )
-                
-                if has_diameter_constraint:
-                    continue  # This pair IS a diameter, skip
-                
-                # This pair is a chord - prevent it from becoming diameter
-                center = self.lookup_pt_by_name(center_name)
-                pt1 = self.lookup_pt_by_name(pt1_name)
-                pt2 = self.lookup_pt_by_name(pt2_name)
-                
-                if center and pt1 and pt2:
-                    ndg_key = f"chord_not_diameter_{center_name}_{pt1_name}_{pt2_name}"
-                    # Only add if not already exists
-                    if ndg_key not in self.ndg_fns:
-                        self.register_ndg(
-                            ndg_key,
-                            lambda c=center, p1=pt1, p2=pt2: self._cross_product_area(c, p1, p2)**2,
-                            weight=10.0
-                        )
     
     def _enforce_minimum_angle_between_circle_points(self):
         """
