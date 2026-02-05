@@ -498,8 +498,8 @@ TRƯỜNG HỢP KHÁC:
    [{"instruction": "Tiếng Việt", "answer": "DSL với \\n"}]
 
 2. TUYỆT ĐỐI KHÔNG được có comment # trong field "answer":
-   ❌ SAI: "(segment A B)                     # Dây AB"
-   ✅ ĐÚNG: "(segment A B)"
+   SAI: "(segment A B)                     # Dây AB"
+   ĐÚNG: "(segment A B)"
    
 3. Field "answer" CHỈ chứa DSL thuần túy, không giải thích, không comment
 

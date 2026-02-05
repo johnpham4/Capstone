@@ -109,7 +109,6 @@ class MatplotlibDiagramRenderer:
                              color='blue',
                              linewidth=1.2)
             ax.add_patch(arc)
-<<<<<<< HEAD:llm_engineering/infrastructures/visualization/matplotlib_renderer.py
         
         # Vẽ dấu gạch nhỏ ở giữa arc
         if draw_tick:
@@ -182,9 +181,7 @@ class MatplotlibDiagramRenderer:
                fontsize=22, ha='center', va='center',
                color='red', fontweight='bold',
                bbox=dict(boxstyle='round,pad=0.15', facecolor='white', edgecolor='none', alpha=0.85))
-=======
 
->>>>>>> origin/minh-dev:llm_src/infrastructures/visualization/matplotlib_renderer.py
 
     def render(
         self,
@@ -259,7 +256,6 @@ class MatplotlibDiagramRenderer:
             if equal_angles:
                 logger.info(f"Drawing equal angles arcs: {equal_angles}")
                 for idx1, idx2 in equal_angles:
-<<<<<<< HEAD:llm_engineering/infrastructures/visualization/matplotlib_renderer.py
                     # Vẽ arc ở góc idx1 với dấu gạch
                     self._draw_angle_arc(ax, pts[idx1], 
                                         pts[(idx1-1)%3],
@@ -268,7 +264,6 @@ class MatplotlibDiagramRenderer:
                                         draw_tick=True)
                     
                     # Vẽ arc ở góc idx2 (cùng số arc và dấu gạch)
-=======
                     # Vẽ arc ở góc idx1
                     self._draw_angle_arc(ax, pts[idx1],
                                         pts[(idx1-1)%3],
@@ -276,7 +271,6 @@ class MatplotlibDiagramRenderer:
                                         num_arcs=1)
 
                     # Vẽ arc ở góc idx2 (cùng số arc)
->>>>>>> origin/minh-dev:llm_src/infrastructures/visualization/matplotlib_renderer.py
                     self._draw_angle_arc(ax, pts[idx2],
                                         pts[(idx2-1)%3],
                                         pts[(idx2+1)%3],
@@ -398,9 +392,7 @@ class MatplotlibDiagramRenderer:
                     fontsize=24,
                     fontweight='bold'
                 )
-<<<<<<< HEAD:llm_engineering/infrastructures/visualization/matplotlib_renderer.py
                 
-=======
 
         # Draw angle bisectors
         if hasattr(self.diagram, 'angle_bisectors') and self.diagram.angle_bisectors:
@@ -424,14 +416,12 @@ class MatplotlibDiagramRenderer:
                         # Vẽ arc ở 2 bên của phân giác để chỉ 2 góc bằng nhau
                         self._draw_angle_arc(ax, vertex, p1, bisector_point, num_arcs=1, radius=0.08)
                         self._draw_angle_arc(ax, vertex, bisector_point, p2, num_arcs=1, radius=0.08)
->>>>>>> origin/minh-dev:llm_src/infrastructures/visualization/matplotlib_renderer.py
 
         # Draw angle-equal assertions (angle ABC = angle DEF)
         if hasattr(self.diagram, 'angle_equal_assertions') and self.diagram.angle_equal_assertions:
             for assertion in self.diagram.angle_equal_assertions:
                 angle1 = assertion['angle1']
                 angle2 = assertion['angle2']
-<<<<<<< HEAD:llm_engineering/infrastructures/visualization/matplotlib_renderer.py
                 
                 # Draw arc for angle 1 (p1-vertex-p2) với dấu gạch
                 self._draw_angle_arc(ax, angle1['vertex'], 
@@ -442,17 +432,6 @@ class MatplotlibDiagramRenderer:
                                    draw_tick=True)
                 
                 # Draw arc for angle 2 với dấu gạch
-=======
-
-                # Draw arc for angle 1 (p1-vertex-p2)
-                self._draw_angle_arc(ax, angle1['vertex'],
-                                   angle1['p1'],
-                                   angle1['p2'],
-                                   num_arcs=1,
-                                   radius=0.12)
-
-                # Draw arc for angle 2
->>>>>>> origin/minh-dev:llm_src/infrastructures/visualization/matplotlib_renderer.py
                 self._draw_angle_arc(ax, angle2['vertex'],
                                    angle2['p1'],
                                    angle2['p2'],

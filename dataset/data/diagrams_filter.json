@@ -6,6 +6,12 @@
     "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn D với đường kính AB"
   },
   {
+    "image": "images/img_10000.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, point E is on segment AC, BC // DE, excircle O of triangle ABC is tangent to segment BC, angle ADE = 90",
+    "id": 10000,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, góc ADE = 90"
+  },
+  {
     "image": "images/img_100000.png",
     "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point B and point C",
     "id": 100000,
@@ -40,6 +46,12 @@
     "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, point E is on segment AC, BC // DE, circle O with diameter AB, angle ADE = 90",
     "id": 100026,
     "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90"
+  },
+  {
+    "image": "images/img_100044.png",
+    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on segment AC, BC // DE, excircle O of triangle ABC is tangent to segment BC, angle ADE = 90",
+    "id": 100044,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, góc ADE = 90"
   },
   {
     "image": "images/img_100046.png",
@@ -78,6 +90,12 @@
     "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB"
   },
   {
+    "image": "images/img_100070.png",
+    "caption": "triangle ABC, a line through point A, excircle O of triangle ABC is tangent to segment BC",
+    "id": 100070,
+    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
     "image": "images/img_100081.png",
     "caption": "triangle ABC",
     "id": 100081,
@@ -94,5 +112,59 @@
     "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line through point A",
     "id": 100089,
     "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A"
+  },
+  {
+    "image": "images/img_100096.png",
+    "caption": "triangle ABC, angle ABC = 90, incircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC",
+    "id": 100096,
+    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC"
+  },
+  {
+    "image": "images/img_230101.png",
+    "caption": "circle (O) with diameter AB, point C on circle, H is projection of C onto AB, M on OC such that OM = OH",
+    "id": 230101,
+    "caption_vn": "Cho đường tròn (O) có đường kính AB; C là điểm nằm trên đường tròn; H là hình chiếu của C trên AB. Trên đoạn OC lấy điểm M sao cho OM = OH."
+  },
+  {
+    "image": "images/img_230102.png",
+    "caption": "circle (O) radius R, chord AB, C on circle, H midpoint of AB, CH intersects AB at D",
+    "id": 230102,
+    "caption_vn": "Cho đường tròn (O) bán kính R, dây AB. Gọi H là trung điểm của AB. Lấy điểm C nằm trên đường tròn sao cho CH cắt AB tại D."
+  },
+  {
+    "image": "images/img_230103.png",
+    "caption": "circle (O), diameter AB, point C on circle, CD perpendicular to AB at D, M midpoint of CD",
+    "id": 230103,
+    "caption_vn": "Cho đường tròn (O) có đường kính AB. Lấy điểm C nằm trên đường tròn. Từ C kẻ CD vuông góc với AB tại D. Gọi M là trung điểm của CD."
+  },
+  {
+    "image": "images/img_230104.png",
+    "caption": "circle (O), chord AB, point C on circle, CO intersects AB at H, AH = HB",
+    "id": 230104,
+    "caption_vn": "Cho đường tròn (O), dây AB. Lấy điểm C nằm trên đường tròn sao cho đường thẳng CO cắt AB tại H và AH = HB."
+  },
+  {
+    "image": "images/img_230105.png",
+    "caption": "circle (O), diameter AB, point C on circle, H projection of C on AB, M on AC such that CM = CH",
+    "id": 230105,
+    "caption_vn": "Cho đường tròn (O) có đường kính AB; C là điểm nằm trên đường tròn; H là hình chiếu của C trên AB. Trên đoạn AC lấy điểm M sao cho CM = CH."
+  },
+  {
+    "image": "images/img_230106.png",
+    "caption": "circle (O), chord AB, point C on circle, H midpoint of AB, CH perpendicular to AB",
+    "id": 230106,
+    "caption_vn": "Cho đường tròn (O), dây AB. Gọi H là trung điểm của AB. Lấy điểm C nằm trên đường tròn sao cho CH vuông góc với AB."
+  },
+  {
+    "image": "images/img_230107.png",
+    "caption": "circle (O), diameter AB, C on circle, D midpoint of AC, CD intersects AB at H",
+    "id": 230107,
+    "caption_vn": "Cho đường tròn (O) có đường kính AB. Lấy điểm C nằm trên đường tròn. Gọi D là trung điểm của AC, CD cắt AB tại H."
+  },
+  {
+    "image": "images/img_230108.png",
+    "caption": "circle (O), chord AB, C on circle, H projection of O on AB, CH intersects AB at D",
+    "id": 230108,
+    "caption_vn": "Cho đường tròn (O), dây AB. Gọi H là hình chiếu của O trên AB. Lấy điểm C nằm trên đường tròn sao cho CH cắt AB tại D."
   }
 ]
