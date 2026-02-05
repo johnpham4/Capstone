@@ -2,7 +2,7 @@ import click
 from pathlib import Path
 from loguru import logger
 from datetime import datetime as dt
-from llm_engineering.settings import settings
+from llm_src.settings import settings
 
 
 @click.command()
@@ -110,7 +110,7 @@ def main(
 
         logger.info(f"Configuration: epochs={num_epochs}, batch_size={batch_size}, lr={learning_rate}")
 
-        from llm_engineering.model.finetuning.sagemaker import run_finetuning_on_sagemaker
+        from llm_src.model.finetuning.sagemaker import run_finetuning_on_sagemaker
 
         run_finetuning_on_sagemaker(
             num_train_epochs=num_epochs,

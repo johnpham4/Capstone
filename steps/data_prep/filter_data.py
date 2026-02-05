@@ -4,19 +4,18 @@ from loguru import logger
 from pathlib import Path
 import json
 
-from llm_engineering.applications.datasets.extraction import SynthGeoDatasetExtractor
+from llm_src.applications.datasets.extraction import SynthGeoDatasetExtractor
 
 
 @step
 def filter_triangle(
     diagram_texts: List[Dict],
     output_dir: str,
-    json_name: str = "triangle_diagrams.json",
+    json_name: str = "diagrams_filter.json",
 ) -> Annotated[bool, "status"]:
-    """Filter diagrams to keep only triangles (remove circles, quadrilaterals, etc.)"""
-    logger.info(f"Filtering {len(diagram_texts)} diagrams to keep only triangles")
+    logger.info(f"Filtering {len(diagram_texts)} diagrams")
 
-    filtered = SynthGeoDatasetExtractor.filter_triangles(diagram_texts)
+    filtered = SynthGeoDatasetExtractor.filter_diagrams(diagram_texts)
 
     logger.success(f"Filtered to {len(filtered)} triangle diagrams (removed {len(diagram_texts) - len(filtered)})")
 

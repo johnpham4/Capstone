@@ -2,7 +2,7 @@ from typing import Annotated, Optional
 from zenml import step
 from loguru import logger
 
-from llm_engineering.applications.datasets.extraction import SynthGeoDatasetExtractor
+from llm_src.applications.datasets.extraction import SynthGeoDatasetExtractor
 
 
 @step
