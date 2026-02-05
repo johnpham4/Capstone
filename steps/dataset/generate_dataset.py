@@ -6,9 +6,9 @@ from zenml import step
 from loguru import logger
 
 from src.services.datasets.generation import InstructiveDatasetGenerator
-from src.models.domain.documents import Document
-from src.models.domain.prompt import GenerateDatasetSamplesPrompt
-from src.models.domain.dataset import InstructTrainTestSplit
+from src.models.domain.training.documents import Document
+from src.models.domain.training.prompt import GenerateDatasetSamplesPrompt
+from src.models.domain.training.dataset import InstructTrainTestSplit
 
 @step
 def load_source_data(

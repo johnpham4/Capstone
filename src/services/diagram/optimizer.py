@@ -11,7 +11,6 @@ from src.models.domain.geometry.entities import GeometricPoint, Diagram
 from src.models.domain.geometry.types import QuadrilateralType, TriangleType, DiagramType
 from src.services.diagram.initializer import Initializer
 
-
 from loguru import logger
 
 TorchPoint = namedtuple("TorchPoint", ["x", "y"])
@@ -27,10 +26,24 @@ class Optimizer:
         self.eps = eps
         self.seed = seed
         self.verbosity = verbosity
-        self._init_state()  # Initialize all state variables
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self._init_state()  # Initialize all state variables
 
-        self._init_state()
+    class CircleAngleConstraint:
+        """Reusable constraint for enforcing minimum angle between points on a circle."""
+        
+        def __init__(self, optimizer, pt1: TorchPoint, pt2: TorchPoint, center: TorchPoint, min_cos_value):
+            self.optimizer = optimizer
+            self.pt1 = pt1
+            self.pt2 = pt2
+            self.center = center
+            self.min_cos_value = min_cos_value
+        
+        def __call__(self):
+            """Compute constraint loss: penalty if angle < threshold."""
+            cos_angle = self.optimizer.angle_cosine(self.pt1, self.center, self.pt2)
+            diff = cos_angle - self.min_cos_value
+            return torch.where(diff > 0, diff, torch.zeros_like(diff))**2
 
     def _init_state(self):
         """Reset state for new optimization attempt"""
@@ -1005,7 +1018,7 @@ class Optimizer:
         key = f"{points[0].val}_on_{points[1].val}{points[2].val}"
         self.register_loss(f"on_segment_{key}",
             lambda pt=point, p1=seg_p1, p2=seg_p2: self._point_on_segment_loss(pt, p1, p2),
-            weight=20.0  
+            weight=10000.0  # Balanced weight - strong enough for diameter, not conflicting with on-circle
         )
         if self.verbosity:
             logger.info(f"Added on-segment constraint: {points[0].val} on {points[1].val}{points[2].val}")
@@ -1050,10 +1063,10 @@ class Optimizer:
             logger.warning(f"on-circle constraint needs 2 points (point, center), got {len(points)}")
             return
         
-        point = self.lookup_pt(points[0])
+        point_name = points[0]
         center_name = points[1].val
         
-        logger.info(f"Adding on-circle constraint: point={points[0].val}, center={center_name}")
+        logger.info(f"Adding on-circle constraint: point={point_name.val}, center={center_name}")
         logger.info(f"Available circles: {self.circles}")
         
         # Find radius from circle metadata
@@ -1065,16 +1078,182 @@ class Optimizer:
         if radius is None:
             logger.warning(f"Circle {center_name} not found or has no radius")
             return
+        
         center = self.lookup_pt(points[1])
         logger.info(f"Found radius={radius} for circle {center_name}")
+        
+        # Smart initialization: place point on circle far from existing points
+        point = self.lookup_pt(point_name)
+        logger.info(f"Smart init for {point_name.val}: point found={point is not None}")
+        if point is not None:
+            # Find existing points on same circle
+            existing_angles = []
+            logger.info(f"Current loss_fns keys: {list(self.loss_fns.keys())}")
+            for loss_name in self.loss_fns:
+                if loss_name.startswith(f"on_circle_") and loss_name.endswith(f"_{center_name}"):
+                    other_point_name = loss_name.split("_")[2]
+                    logger.info(f"Checking loss {loss_name}, extracted point name: {other_point_name}")
+                    if other_point_name != point_name.val:
+                        try:
+                            other_pt = self.lookup_pt_by_name(other_point_name)
+                            logger.info(f"  lookup_pt_by_name({other_point_name}) = {other_pt}")
+                            if other_pt:
+                                # Calculate angle from center
+                                dx = other_pt.x - center.x
+                                dy = other_pt.y - center.y
+                                angle = torch.atan2(dy, dx)
+                                existing_angles.append(angle.item())
+                                logger.info(f"  Added angle {angle.item():.3f} rad")
+                        except Exception as e:
+                            logger.warning(f"  Failed to get angle for {other_point_name}: {e}")
+                            pass
+            
+            # Choose angle in the largest gap between existing points
+            import math
+            logger.info(f"Found {len(existing_angles)} existing points on circle {center_name}: {existing_angles}")
+            if existing_angles:
+                # Normalize all angles to [0, 2π]
+                existing_angles = [(a + 2*math.pi) % (2*math.pi) for a in existing_angles]
+                existing_angles.sort()
+                logger.info(f"Normalized and sorted angles: {existing_angles}")
+                
+                # Calculate gaps between consecutive angles (wrapping around)
+                gaps = []
+                for i in range(len(existing_angles)):
+                    next_i = (i + 1) % len(existing_angles)
+                    start = existing_angles[i]
+                    end = existing_angles[next_i]
+                    
+                    if next_i == 0:  # Wrap around from last to first
+                        gap_size = (2*math.pi - start) + end
+                    else:
+                        gap_size = end - start
+                    
+                    gaps.append((gap_size, start))
+                
+                # Place new point in middle of largest gap
+                largest_gap = max(gaps, key=lambda x: x[0])
+                start_angle = largest_gap[1]
+                gap_size = largest_gap[0]
+                # Add small offset (10°) from middle to avoid perfect symmetry
+                offset = math.radians(10)  # 10 degrees offset
+                new_angle = (start_angle + gap_size / 2 + offset) % (2*math.pi)
+                logger.info(f"Largest gap: size={gap_size:.3f} rad, start={start_angle:.3f}, placing point at angle={new_angle:.3f} (with 10° offset)")
+            else:
+                # Random angle if no existing points
+                new_angle = random.uniform(0, 2 * math.pi)
+            
+            # Initialize on circle at this angle
+            init_x = center.x.item() + radius * math.cos(new_angle)
+            init_y = center.y.item() + radius * math.sin(new_angle)
+            point.x.data.fill_(init_x)
+            point.y.data.fill_(init_y)
         
         # Use const() to avoid lambda closure issues
         radius_const = self.const(radius)
         self.register_loss(
-            f"on_circle_{points[0].val}_{center_name}",
+            f"on_circle_{point_name.val}_{center_name}",
             lambda pt=point, c=center, r=radius_const: (self.dist(pt, c) - r)**2,
             weight=100000.0  
         )
+        
+        # Check if this is NOT a diameter (no on-segment constraint with center)
+        # If there are 2 points on circle and they're not a diameter, prevent them from being collinear with center
+        self._prevent_chord_as_diameter(center_name)
+        
+        # Check ALL pairs of points on this circle for chord-diameter prevention
+        self._check_all_chord_pairs(center_name)
+    
+    def _prevent_chord_as_diameter(self, center_name):
+        """
+        Prevent 2 points on a circle from forming a diameter unless explicitly marked.
+        This adds NDG (non-degenerate geometry) constraint: center, pt1, pt2 should not be collinear.
+        """
+        # Find all points on this circle
+        circle_points = []
+        for loss_name in self.loss_fns:
+            if loss_name.startswith(f"on_circle_") and loss_name.endswith(f"_{center_name}"):
+                point_name = loss_name.split("_")[2]
+                circle_points.append(point_name)
+        
+        # Only apply if we have exactly 2 points
+        if len(circle_points) != 2:
+            return
+        
+        # Check if there's an on-segment constraint with center (indicating diameter)
+        # Format: "on_segment_O_on_AB" means O lies on segment AB
+        pt1_name, pt2_name = circle_points
+        
+        # Check all possible orderings since segment can be AB or BA
+        has_diameter_constraint = any(
+            loss_name == f"on_segment_{center_name}_on_{pt1_name}{pt2_name}" or
+            loss_name == f"on_segment_{center_name}_on_{pt2_name}{pt1_name}"
+            for loss_name in self.loss_fns
+        )
+        
+        if has_diameter_constraint:
+            # This IS a diameter - allow collinearity
+            return
+        
+        # This is NOT a diameter - prevent O, A, B from being collinear
+        center = self.lookup_pt_by_name(center_name)
+        pt1 = self.lookup_pt_by_name(pt1_name)
+        pt2 = self.lookup_pt_by_name(pt2_name)
+        
+        if center and pt1 and pt2:
+            # NDG: penalize collinearity (cross product should be non-zero)
+            self.register_ndg(
+                f"chord_not_diameter_{center_name}_{pt1_name}_{pt2_name}",
+                lambda c=center, p1=pt1, p2=pt2: self._cross_product_area(c, p1, p2)**2,
+                weight=10.0
+            )
+    
+    def _check_all_chord_pairs(self, center_name):
+        """
+        Check ALL pairs of points on a circle to prevent chords from becoming diameters.
+        This is called after each point is added, ensuring we catch cases like:
+        - MN is diameter (has on-segment)
+        - AB is chord (no on-segment) but might try to become diameter
+        """
+        # Find all points on this circle
+        circle_points = []
+        for loss_name in self.loss_fns:
+            if loss_name.startswith(f"on_circle_") and loss_name.endswith(f"_{center_name}"):
+                point_name = loss_name.split("_")[2]
+                circle_points.append(point_name)
+        
+        # Check all pairs
+        for i in range(len(circle_points)):
+            for j in range(i+1, len(circle_points)):
+                pt1_name = circle_points[i]
+                pt2_name = circle_points[j]
+                
+                # Check if this pair has on-segment constraint (is a diameter)
+                has_diameter_constraint = any(
+                    key.startswith("on_segment_") and (
+                        f"_{center_name}_on_{pt1_name}{pt2_name}" in key or
+                        f"_{center_name}_on_{pt2_name}{pt1_name}" in key
+                    )
+                    for key in self.loss_fns.keys()
+                )
+                
+                if has_diameter_constraint:
+                    continue  # This pair IS a diameter, skip
+                
+                # This pair is a chord - prevent it from becoming diameter
+                center = self.lookup_pt_by_name(center_name)
+                pt1 = self.lookup_pt_by_name(pt1_name)
+                pt2 = self.lookup_pt_by_name(pt2_name)
+                
+                if center and pt1 and pt2:
+                    ndg_key = f"chord_not_diameter_{center_name}_{pt1_name}_{pt2_name}"
+                    # Only add if not already exists
+                    if ndg_key not in self.ndg_fns:
+                        self.register_ndg(
+                            ndg_key,
+                            lambda c=center, p1=pt1, p2=pt2: self._cross_product_area(c, p1, p2)**2,
+                            weight=10.0
+                        )
     
     def _enforce_minimum_angle_between_circle_points(self):
         """
@@ -1090,7 +1269,7 @@ class Optimizer:
             circle_points_map[circle_name] = []
         
         # Find all points with on_circle constraint
-        for loss_name in self.losses:
+        for loss_name in self.loss_fns:
             if loss_name.startswith("on_circle_"):
                 parts = loss_name.split("_")
                 if len(parts) >= 4:  # on_circle_PointName_CenterName
@@ -1102,11 +1281,11 @@ class Optimizer:
                             pt_obj = self.lookup_pt_by_name(point_name)
                             if pt_obj:
                                 circle_points_map[center_name].append((point_name, pt_obj))
-                        except:
-                            pass
+                        except Exception as ex:
+                            logger.warning(f"Failed to lookup point {point_name}: {ex}")
         
         # For each circle with 2+ points, enforce minimum angle
-        min_angle_rad = math.radians(45)  # 45 degrees minimum
+        min_angle_rad = math.radians(60)  # 60 degrees minimum for better separation
         min_cos = self.const(math.cos(min_angle_rad))
         
         for center_name, points_list in circle_points_map.items():
@@ -1118,40 +1297,45 @@ class Optimizer:
                 if not center:
                     continue
                 
-                # For each pair of points on this circle
-                for i in range(len(points_list)):
-                    for j in range(i + 1, len(points_list)):
-                        name1, pt1 = points_list[i]
-                        name2, pt2 = points_list[j]
-                        
-                        # Use existing method to calculate angle penalty
-                        self.register_loss(
-                            f"min_angle_{center_name}_{name1}_{name2}",
-                            lambda p1=pt1, p2=pt2, c=center, mc=min_cos: self._circle_angle_penalty(p1, p2, c, mc),
-                            weight=50.0
-                        )
+                # Only create constraints for the newly added point (last in list)
+                # to avoid re-creating constraints that already exist
+                new_point_idx = len(points_list) - 1
+                new_name, new_pt = points_list[new_point_idx]
+                
+                # Pair the new point with all existing points
+                for i in range(new_point_idx):
+                    name1, pt1 = points_list[i]
+                    
+                    constraint_name = f"min_angle_{center_name}_{name1}_{new_name}"
+                    
+                    # Register minimum angle constraint between existing point and new point
+                    self.register_loss(
+                        constraint_name,
+                        self._make_circle_angle_constraint(pt1, new_pt, center, min_cos),
+                        weight=10000.0  # Very high weight to prevent point overlap
+                    )
             except Exception as e:
+                import traceback
                 logger.warning(f"Failed to enforce min angle for circle {center_name}: {e}")
     
-    def _circle_angle_penalty(self, p1: TorchPoint, p2: TorchPoint, center: TorchPoint, min_cos_value):
+    def _make_circle_angle_constraint(self, pt1: TorchPoint, pt2: TorchPoint, center: TorchPoint, min_cos_value):
         """
-        Calculate penalty if angle between two points on circle is too small.
-        Returns penalty^2 if cos(angle) > min_cos_value (angle < threshold), else 0.
-        Reuses existing vector operations.
-        """
-        # Calculate cos(angle) using existing angle_cosine method
-        cos_angle = self.angle_cosine(p1, center, p2)
+        Factory method to create a reusable constraint object for minimum angle between circle points.
         
-        # Penalty if angle too small (cos too large)
-        # ReLU: max(0, cos_angle - min_cos)
-        penalty = cos_angle - min_cos_value
-        return torch.where(penalty > 0, penalty, torch.zeros_like(penalty))**2
+        Args:
+            pt1, pt2: The two points on the circle
+            center: Center of the circle
+            min_cos_value: Minimum allowed cosine value (higher cos = smaller angle)
+            
+        Returns:
+            CircleAngleConstraint: Callable object that can be reused
+        """
+        return self.CircleAngleConstraint(self, pt1, pt2, center, min_cos_value)
     
     def lookup_pt_by_name(self, name: str):
         """Helper to lookup point by string name"""
-        for pt_name, pt_obj in self.points.items():
-            if pt_name == name:
-                return pt_obj
+        if name in self.name2pt:
+            return self.name2pt[name]
         return None
         
     

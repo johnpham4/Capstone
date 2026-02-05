@@ -141,9 +141,11 @@ class DiagramBuilder:
 
         # Handle free point with no construction: (define O point)
         if len(cmd) == 3:
+            pt = Point(point_name)
+            self.register_pt(pt)
             instr = Parameter(
                 diagram_type=DiagramType.POINT,
-                objects=[Point(point_name)],
+                objects=[pt],
                 param_type="coords",  
                 args=()
             )
@@ -169,9 +171,11 @@ class DiagramBuilder:
                 processed_args.append(arg)
 
         # Create Parameter instruction for geometric construction
+        pt = Point(point_name)
+        self.register_pt(pt)
         instr = Parameter(
             diagram_type=DiagramType.POINT,
-            objects=[Point(point_name)],
+            objects=[pt],
             param_type=construction_type,
             args=tuple(Point(p) for p in processed_args)
         )
