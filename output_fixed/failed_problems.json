@@ -1,7 +1,0 @@
-[
-  {
-    "index": 123,
-    "instruction": "Cho đường tròn (O) bán kính R = 8 cm. Dây AB có độ dài 8√3 cm. Gọi H là hình chiếu của O lên AB. Tính ∠AOB và OH.",
-    "dsl": "(define O point)\n(circle O (radius 0.8))\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(define H point (projection O (segment A B)))\n(segment O H)"
-  }
-]

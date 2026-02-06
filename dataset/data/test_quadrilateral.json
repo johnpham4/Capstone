@@ -1,0 +1,26 @@
+[
+  {
+    "instruction": "Hình chữ nhật ABCD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng BC, đường thẳng PQ",
+    "answer": "(rectangle (A B C D))\n(define P point (segment A B))\n(define Q point (segment B C))\n(segment P Q)"
+  },
+  {
+    "instruction": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng BC, đường thẳng PQ",
+    "answer": "(trapezoid (A B C D))\n(parallel (segment A B) (segment C D))\n(perpendicular (segment A B) (segment A D))\n(define P point (segment A B))\n(define Q point (segment B C))\n(segment P Q)"
+  },
+  {
+    "instruction": "Hình vuông ABCD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD",
+    "answer": "(square (A B C D))\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment M N)"
+  },
+  {
+    "instruction": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, điểm P nằm trong hình thang ABCD",
+    "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(segment A D)\n(perpendicular (segment A B) (segment A D))\n(define P point (segment A B))"
+  },
+  {
+    "instruction": "Hình vuông ABCD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng BC, đường thẳng PQ",
+    "answer": "(square (A B C D))\n(define P point (segment A B))\n(define Q point (segment B C))\n(segment P Q)"
+  },
+  {
+    "instruction": "Hình vuông ABCD có đường tròn nội tiếp",
+    "answer": "(square (A B C D))\n(define O point (midpoint A C))\n(circle O (incircle A B C D))"
+  }
+]
