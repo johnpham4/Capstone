@@ -79,6 +79,16 @@ class Initializer:
 
 
     @staticmethod
+    def init_quadrilateral(scale: float = 1.0) -> List[Tuple[float, float]]:
+        """Generic quadrilateral with no special properties"""
+        return [
+            (-0.6 * scale, -0.3 * scale),    # Bottom left
+            (0.5 * scale, -0.2 * scale),     # Bottom right
+            (0.4 * scale, 0.7 * scale),      # Top right
+            (-0.4 * scale, 0.6 * scale)      # Top left
+        ]
+
+    @staticmethod
     def init_rectangle(width: float = 1.0, height: float = 0.7) -> List[Tuple[float, float]]:
         """Initialize coordinates for a rectangle"""
         return [
@@ -90,20 +100,32 @@ class Initializer:
 
     @staticmethod
     def init_square(side: float = 1.0) -> List[Tuple[float, float]]:
+        """Initialize coordinates for a square"""
         return Initializer.init_rectangle(side, side)
 
     @staticmethod
-    def init_scalene_quadrilateral(scale: float = 1.0) -> List[Tuple[float, float]]:
+    def init_trapezoid(scale: float = 1.0) -> List[Tuple[float, float]]:
+        """Initialize coordinates for a trapezoid (one pair of parallel sides)"""
+        return [
+            (-0.7 * scale, -0.4 * scale),    # Bottom left
+            (0.7 * scale, -0.4 * scale),     # Bottom right (longer base)
+            (0.4 * scale, 0.4 * scale),      # Top right
+            (-0.4 * scale, 0.4 * scale)      # Top left (shorter top)
+        ]
+
+    @staticmethod
+    def init_parallelogram(scale: float = 1.0) -> List[Tuple[float, float]]:
+        """Initialize coordinates for a parallelogram (opposite sides parallel)"""
         return [
             (-0.6 * scale, -0.3 * scale),    # Bottom left
-            (0.5 * scale, -0.2 * scale),     # Bottom right (shorter base)
-            (0.1 * scale, 0.7 * scale),      # Top right (offset to left)
-            (-0.4 * scale, 0.4 * scale)      # Top left
+            (0.6 * scale, -0.3 * scale),     # Bottom right
+            (0.8 * scale, 0.5 * scale),      # Top right (shifted)
+            (-0.4 * scale, 0.5 * scale)      # Top left (shifted)
         ]
 
     @staticmethod
     def init_rhombus(scale: float = 1.0) -> List[Tuple[float, float]]:
-        """Initialize rhombus (diamond shape)"""
+        """Initialize rhombus (diamond shape with all sides equal)"""
         return [
             (0.0, -0.8 * scale),  # Bottom
             (0.5 * scale, 0.0),   # Right
