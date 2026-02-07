@@ -40,23 +40,17 @@ del_endpoint_config:
 	PYTHONPATH=. uv run python src/infrastructures/aws/deploy/delete_sagemaker_endpoint_config.py
 
 endpoint:
-	uv run python -m src.main --timeout-keep-alive 60
+	uv run python -m src.main
 
 worker:
-	PYTHONPATH=. uv run celery -A src.infrastructures.celery.config worker --loglevel=info --concurrency=4
+	PYTHONPATH=. uv run python -m celery -A src.infrastructures.celery.config worker --loglevel=info --concurrency=4
 
 flower:
-	PYTHONPATH=. uv run celery -A src.infrastructures.celery.config flower --port=5555
-
-celery_status:
-	celery -A src.infrastructures.celery.config inspect active
-
-celery_stats:
-	uv run celery -A src.infrastructures.celery.config inspect stats
+	PYTHONPATH=. uv run python -m celery -A src.infrastructures.celery.config flower --port=5555
 
 rabbitmq_status:
 	docker exec rabbitmq rabbitmqctl list_queues
 
-# test_load:
-# wrk -t3 -c3 -d60s --timeout 180s -s post.lua \
-#   http://localhost:8000/api/v1/diagrams/render
+test_load:
+	wrk -t3 -c3 -d60s --timeout 180s -s post.lua \
+		http://localhost:8000/api/v1/diagrams/render

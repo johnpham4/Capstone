@@ -1,17 +1,17 @@
 from fastapi import APIRouter, HTTPException, status
+from fastapi.responses import StreamingResponse, Response
 from uuid import uuid4
 from loguru import logger
 import boto3
 import json
+import asyncio
 
 from .prompt import INSTRUCTION_PROMPT
 from src.config.settings.base import settings
-from src.models.schemas import DiagramRequest, DiagramResponse
 
 
 router = APIRouter()
 
-# Initialize boto3 client for SageMaker
 sagemaker_client = boto3.client(
     'sagemaker-runtime',
     region_name=settings.AWS_REGION,
@@ -20,194 +20,119 @@ sagemaker_client = boto3.client(
 )
 
 
-@router.post("/api/v1/diagrams/generate", response_model=DiagramResponse)
-async def generate_diagram(request: DiagramRequest):
-    """
-    Generate geometry diagram DSL from user input.
-    """
-    try:
-        request_id = str(uuid4())
-        logger.info(f"[{request_id}] Request: {request.user_input}")
-
-        # Payload cho vLLM endpoint (OpenAI-compatible format)
-        full_prompt = INSTRUCTION_PROMPT.format(query=request.user_input)
-        payload = {
-            "messages": [{"role": "user", "content": full_prompt}],
-            "max_tokens": request.max_tokens,
-            "temperature": request.temperature,
-            "top_p": 0.9,
-            "top_k": 50
+@router.options("/api/v1/diagrams/stream-pipeline")
+async def stream_pipeline_options():
+    """Handle CORS preflight request for SSE endpoint."""
+    return Response(
+        status_code=200,
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept, ngrok-skip-browser-warning",
         }
-
-        # Call SageMaker endpoint
-        response = sagemaker_client.invoke_endpoint(
-            EndpointName=settings.SAGEMAKER_ENDPOINT_INFERENCE,
-            ContentType='application/json',
-            Body=json.dumps(payload)
-        )
-
-        # Parse response (vLLM returns OpenAI-compatible format)
-        result = json.loads(response['Body'].read().decode('utf-8'))
-        # Extract content from choices array
-        if 'choices' in result and len(result['choices']) > 0:
-            choice = result['choices'][0]
-            if 'message' in choice:
-                model_output = choice['message'].get('content', '')
-            elif 'text' in choice:
-                model_output = choice['text']
-            else:
-                model_output = ''
-        else:
-            model_output = result.get("generated_text", result.get("text", ""))
-
-        logger.info(f"[{request_id}] Output: {model_output[:100]}...")
-
-        return DiagramResponse(
-            request_id=request_id,
-            user_input=request.user_input,
-            model_output=model_output,
-            status="completed"
-        )
-
-    except Exception as e:
-        logger.exception(f"Failed: {e}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(e)
-        )
+    )
 
 
-@router.post("/api/v1/chat", response_model=dict)
-async def chat(request: DiagramRequest):
+@router.get("/api/v1/diagrams/stream-pipeline")
+async def stream_pipeline(
+    user_input: str,
+    max_tokens: int = 1024,
+    temperature: float = 0.7,
+    language: str = "vi"
+):
     """
-    Simple chat endpoint for testing chatbot inference.
+    SSE (Server-Sent Events) streaming endpoint for real-time progress updates.
+
+    This endpoint streams progress updates while generating and rendering diagrams:
+    - Event 1: DSL generation started (33%)
+    - Event 2: DSL generated, rendering started (66%)
+    - Event 3: Rendering completed with image (100%)
+
+    Frontend should use EventSource API to receive these updates.
+
+    Note: EventSource only supports GET requests, so we use query parameters.
     """
-    try:
-        logger.info(f"Chat: {request.user_input}")
+    async def event_generator():
+        try:
+            request_id = str(uuid4())
 
-        # Payload cho vLLM endpoint (OpenAI-compatible format)
-        full_prompt = INSTRUCTION_PROMPT.format(query=request.user_input)
-        payload = {
-            "messages": [{"role": "user", "content": full_prompt}],
-            "max_tokens": request.max_tokens,
-            "temperature": request.temperature,
-            "top_p": 0.9,
-            "top_k": 50
-        }
+            # Event 1: Starting DSL generation
+            logger.info(f"[{request_id}] SSE: Starting DSL generation")
+            yield f"data: {json.dumps({'progress': 10, 'status': 'Generating diagram code...', 'request_id': request_id})}\n\n"
 
-        response = sagemaker_client.invoke_endpoint(
-            EndpointName=settings.SAGEMAKER_ENDPOINT_INFERENCE,
-            ContentType='application/json',
-            Body=json.dumps(payload)
-        )
+            # Step 1: Generate DSL via SageMaker
+            full_prompt = INSTRUCTION_PROMPT.format(query=user_input)
+            payload = {
+                "messages": [{"role": "user", "content": full_prompt}],
+                "max_tokens": max_tokens,
+                "temperature": temperature,
+                "top_p": 0.9,
+                "top_k": 50
+            }
 
-        result = json.loads(response['Body'].read().decode('utf-8'))
-
-        # Extract content from OpenAI-compatible response
-        output = ""
-        if 'choices' in result and len(result['choices']) > 0:
-            choice = result['choices'][0]
-            if 'message' in choice:
-                output = choice['message'].get('content', '')
-            elif 'text' in choice:
-                output = choice['text']
-        else:
-            output = result.get("generated_text", result.get("text", ""))
-
-        return {
-            "input": request.user_input,
-            "output": output,
-            "model": settings.HF_MODEL_ID
-        }
-
-    except Exception as e:
-        logger.exception(f"Chat failed: {e}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(e)
-        )
-
-
-@router.get("/api/v1/model/info")
-async def get_model_info():
-    """Get current model information"""
-    return {
-        "model_id": settings.HF_MODEL_ID,
-        "endpoint": settings.SAGEMAKER_ENDPOINT_INFERENCE,
-        "instance_type": settings.GPU_INSTANCE_TYPE,
-        "status": "ready"
-    }
-
-
-@router.post("/api/v1/diagrams/full-pipeline")
-async def full_pipeline(request: DiagramRequest):
-    try:
-        request_id = str(uuid4())
-        logger.info(f"[{request_id}] Full pipeline: {request.user_input[:50]}...")
-
-        # Step 1: Generate DSL via SageMaker (async I/O)
-        full_prompt = INSTRUCTION_PROMPT.format(query=request.user_input)
-        payload = {
-            "messages": [{"role": "user", "content": full_prompt}],
-            "max_tokens": request.max_tokens,
-            "temperature": request.temperature,
-            "top_p": 0.9,
-            "top_k": 50
-        }
-
-        response = sagemaker_client.invoke_endpoint(
-            EndpointName=settings.SAGEMAKER_ENDPOINT_INFERENCE,
-            ContentType='application/json',
-            Body=json.dumps(payload)
-        )
-
-        result = json.loads(response['Body'].read().decode('utf-8'))
-
-        dsl_output = ""
-        if 'choices' in result and len(result['choices']) > 0:
-            choice = result['choices'][0]
-            dsl_output = choice.get('message', {}).get('content', '') or choice.get('text', '')
-        else:
-            dsl_output = result.get("generated_text", result.get("text", ""))
-
-        logger.info(f"[{request_id}] DSL generated: {dsl_output[:100]}...")
-
-        if not dsl_output.strip():
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="LLM returned empty output"
+            response = sagemaker_client.invoke_endpoint(
+                EndpointName=settings.SAGEMAKER_ENDPOINT_INFERENCE,
+                ContentType='application/json',
+                Body=json.dumps(payload)
             )
 
-        # Step 2: Queue render task to Celery (CPU-intensive work)
-        from src.infrastructures.celery.tasks import render_diagram_task
+            result = json.loads(response['Body'].read().decode('utf-8'))
 
-        celery_task = render_diagram_task.apply_async(
-            kwargs={
-                "task_id": request_id,
-                "dsl": dsl_output,
-                "epochs": 500,
-                "n_tries": 1,
-                "dpi": 150
-            }
-        )
+            dsl_output = ""
+            if 'choices' in result and len(result['choices']) > 0:
+                choice = result['choices'][0]
+                dsl_output = choice.get('message', {}).get('content', '') or choice.get('text', '')
+            else:
+                dsl_output = result.get("generated_text", result.get("text", ""))
 
-        logger.info(f"[{request_id}] Queued render task: {celery_task.id}")
+            if not dsl_output.strip():
+                yield f"data: {json.dumps({'progress': 0, 'status': 'error', 'error': 'LLM returned empty output'})}\n\n"
+                return
 
-        return {
-            "request_id": request_id,
-            "user_input": request.user_input,
-            "dsl": dsl_output,
-            "celery_task_id": celery_task.id,
-            "status": "rendering",
-            "message": "DSL generated, image rendering in background. Poll /api/tasks/status/{celery_task_id}"
+            # Event 2: DSL generated, starting rendering
+            logger.info(f"[{request_id}] SSE: DSL generated, starting render")
+            yield f"data: {json.dumps({'progress': 40, 'status': 'Optimizing geometry...', 'dsl': dsl_output})}\n\n"
+
+            # Step 2: Render diagram (blocking, but we're in async generator)
+            from src.infrastructures.celery.tasks import render_diagram_task
+
+            # Run Celery task synchronously in executor to avoid blocking event loop
+            loop = asyncio.get_event_loop()
+            render_result = await loop.run_in_executor(
+                None,
+                lambda: render_diagram_task.apply(
+                    kwargs={
+                        "task_id": request_id,
+                        "dsl": dsl_output,
+                        "epochs": 500,
+                        "n_tries": 1,
+                        "dpi": 150
+                    }
+                ).result
+            )
+
+            # Event 3: Rendering completed
+            logger.info(f"[{request_id}] SSE: Render completed")
+
+            # Celery task returns {"image": "...", "status": "...", "task_id": "..."}
+            # Map to frontend expected format
+            image_data = render_result.get("image") if isinstance(render_result, dict) else None
+
+            yield f"data: {json.dumps({'progress': 100, 'status': 'completed', 'request_id': request_id, 'user_input': user_input, 'dsl': dsl_output, 'image_base64': image_data, 'svg_content': None})}\n\n"
+
+        except Exception as e:
+            logger.exception(f"SSE stream failed: {e}")
+            yield f"data: {json.dumps({'progress': 0, 'status': 'error', 'error': str(e)})}\n\n"
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",  # Disable nginx buffering
+            "Access-Control-Allow-Origin": "*",  # CORS for SSE
+            "Access-Control-Allow-Methods": "GET, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
         }
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.exception(f"Full pipeline failed: {e}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(e)
-        )
-
+    )

@@ -3,7 +3,9 @@ from typing import Optional, Literal
 
 
 class DiagramRequest(BaseModel):
-    problem: str = Field(..., description="Natural language geometry problem description")
+    user_input: str = Field(..., description="Natural language geometry problem description")
+    max_tokens: int = Field(default=1024, ge=100, le=4096, description="Maximum tokens for LLM")
+    temperature: float = Field(default=0.7, ge=0.0, le=2.0, description="LLM temperature")
     language: Literal["vi", "en"] = Field(default="vi", description="Problem language")
 
 
