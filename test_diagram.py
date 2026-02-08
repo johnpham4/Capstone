@@ -17,9 +17,6 @@ def test_single_problem(instruction, dsl_answer, output_path):
     print(f"Instruction: {instruction}")
     print(f"DSL: {dsl_answer}")
 
-    if "(on-segment A M O)" in dsl_answer and "(on-circle A O)" in dsl_answer and "(on-circle B O)" in dsl_answer:
-        dsl_answer += "\n(distance A B 1.0)"  # Diameter = 2*radius = 2*0.5 = 1.0
-
     try:
         dsl_lines = dsl_answer.split('\n') if '\n' in dsl_answer else [dsl_answer]
         dsl_lines = [line.strip() for line in dsl_lines if line.strip()]
