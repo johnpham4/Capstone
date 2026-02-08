@@ -5,12 +5,13 @@ import torch.optim as optim
 import random
 from loguru import logger
 from collections import namedtuple
+import math
 
-from llm_engineering.domains.geometry.instructions import Parameter, Assertion
-from llm_engineering.domains.geometry.value_objects import Point, Line
-from llm_engineering.domains.geometry.entities import GeometricPoint, Diagram
-from llm_engineering.domains.geometry.types import QuadrilateralType, TriangleType, DiagramType
-from llm_engineering.applications.diagram.initializer import Initializer
+from src.models.domain.geometry.instructions import Parameter, Assertion
+from src.models.domain.geometry.value_objects import Point, Line
+from src.models.domain.geometry.entities import GeometricPoint, Diagram
+from src.models.domain.geometry.types import QuadrilateralType, TriangleType, DiagramType
+from src.services.diagram.initializer import Initializer
 
 TorchPoint = namedtuple("TorchPoint", ["x", "y"])
 LineSF = namedtuple("LineSF", ["a", "b", "c", "p1", "p2"])
@@ -1044,14 +1045,63 @@ class Optimizer:
             lambda pt=point, c=center, r=radius_const: (self.dist(pt, c) - r)**2,
             weight=100000.0  # MAX WEIGHT - chạm chính xác!
         )
+        
+        # thêm NDG cho dây cung không đi qua tâm
+        # Tìm tất cả điểm khác cũng on-circle với cùng center
+        self._add_chord_ndg_for_circle_point(points[0].val, center_name)
+    
+    def _add_chord_ndg_for_circle_point(self, point_name, center_name):
+        """
+        Tự động thêm NDG (non-degeneracy) để ngăn dây cung đi qua tâm.
+        
+        Logic: Nếu có 2 điểm A, B cùng on-circle O và có segment AB,
+        thì thêm NDG để ngăn A-O-B thẳng hàng (đảm bảo AB là dây, không phải đường kính).
+        """
+        # Tìm tất cả điểm khác cũng on-circle với cùng center
+        other_circle_points = []
+        for loss_name in self.losses:
+            if loss_name.startswith(f"on_circle_") and center_name in loss_name:
+                parts = loss_name.split("_")
+                if len(parts) >= 4:
+                    other_point_name = parts[2]
+                    if other_point_name != point_name:
+                        other_circle_points.append(other_point_name)
+        
+        # Check xem có segment giữa point_name và các điểm khác không
+        center = self.lookup_pt_by_name(center_name)
+        if not center:
+            return
+        
+        for other_point in other_circle_points:
+            # Kiểm tra cả 2 chiều: (point_name, other_point) hoặc (other_point, point_name)
+            has_segment = (
+                (point_name, other_point) in self.segments or 
+                (other_point, point_name) in self.segments
+            )
+            
+            if has_segment:
+                # Thêm NDG: ngăn (point_name, center, other_point) thẳng hàng
+                try:
+                    p1 = self.lookup_pt_by_name(point_name)
+                    p2 = self.lookup_pt_by_name(other_point)
+                    
+                    if p1 and p2:
+                        ndg_key = f"chord_ndg_{point_name}_{center_name}_{other_point}"
+                        if ndg_key not in self.ndgs:  # Tránh duplicate
+                            self.register_ndg(
+                                ndg_key,
+                                lambda pt1=p1, c=center, pt2=p2: self.collinear(pt1, c, pt2),
+                                weight=50.0  # Weight cao để ưu tiên
+                            )
+                            logger.info(f"Added chord NDG: {point_name}-{center_name}-{other_point} must NOT be collinear")
+                except Exception as e:
+                    logger.warning(f"Failed to add chord NDG: {e}")
     
     def _enforce_minimum_angle_between_circle_points(self):
         """
         Enforce minimum angle (45 degrees) between points on the same circle.
         This ensures chords are long enough and diagrams look good.
-        """
-        import math
-        
+        """ 
         # Group points by circle
         circle_points_map = {}  # {center_name: [point_objs]}
         

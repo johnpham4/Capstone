@@ -1,12 +1,7 @@
 [
   {
-    "image_dir": "images/img_231209.png",
-    "instruction": "Cho đường tròn (O) có đường kính MN. Một dây AB cắt MN tại H. Chứng minh HM · HN = HA · HB.",
-    "answer": "(define O point)\n(circle O)\n(define M point)\n(define N point)\n(segment M N)\n(on-circle M O)\n(on-circle N O)\n(on-segment O M N)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(define H point (inter-ll A B M N))"
-  },
-  {
-    "image_dir": "images/img_231211.png",
-    "instruction": "Cho đường tròn (O) có đường kính AB. Lấy điểm C trên đường tròn. Gọi H là hình chiếu của C lên AB. Chứng minh CH² = AH · HB.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(on-segment O A B)\n(define C point)\n(on-circle C O)\n(define H point (projection C (segment A B)))\n(segment C H)"
+    "image_dir": "images/img_231213.png",
+    "instruction": "Cho đường tròn (O) bán kính R = 10 cm. Dây AB cố định. Lấy C là trung điểm cung nhỏ AB. Gọi H là hình chiếu của C lên AB. Tính độ dài AB và CH.",
+    "answer": "(define O point)\n(circle O (radius 1.0))\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(define C point)\n(on-circle C O)\n(define H point (projection C (segment A B)))\n(segment C H)"
   }
 ]

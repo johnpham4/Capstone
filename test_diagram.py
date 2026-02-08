@@ -12,39 +12,6 @@ from src.services.diagram.optimizer import Optimizer
 from src.services.diagram.matplotlib_renderer import MatplotlibDiagramRenderer
 
 
-def validate_diagram(diagram, optimizer, threshold_distance=0.003, max_loss=0.01):
-    """
-    Validate diagram to filter out invalid problems.
-    Returns (is_valid, error_message)
-    """
-    # Validation disabled - always return True to render all diagrams
-    return True, "Valid"
-    
-    # # Check 1: Final loss too high
-    # total_loss = sum(optimizer.losses.values())
-    # if total_loss > max_loss:
-    #     return False, f"Loss too high: {total_loss:.6f} > {max_loss}"
-    
-    # # Check 2: Points overlapping (distance < threshold)
-    # points = list(diagram.points.items())
-    # for i in range(len(points)):
-    #     for j in range(i + 1, len(points)):
-    #         name1, pt1 = points[i]
-    #         name2, pt2 = points[j]
-    #         dist = ((pt1.x - pt2.x)**2 + (pt1.y - pt2.y)**2)**0.5
-    #         if dist < threshold_distance:
-    #             return False, f"Points {name1} and {name2} overlap: distance={dist:.4f}"
-    
-    # # Check 3: Specific constraint violations (optional)
-    # for loss_name, loss_value in optimizer.losses.items():
-    #     # Skip regularization
-    #     if loss_name == 'regularization':
-    #         continue
-    #     if loss_value > 0.001:  
-    #         return False, f"Constraint '{loss_name}' violated: {loss_value:.6f}"
-    
-    # return True, "Valid"
-
 
 def test_single_problem(instruction, dsl_answer, output_path):
     print(f"Instruction: {instruction}")
@@ -76,13 +43,6 @@ def test_single_problem(instruction, dsl_answer, output_path):
         for name, point in diagram.points.items():
             print(f"  {name}: ({point.x:.4f}, {point.y:.4f})")
 
-        # Validate diagram
-        is_valid, error_msg = validate_diagram(diagram, optimizer)
-        if not is_valid:
-            print(f"\nINVALID PROBLEM: {error_msg}")
-            print(f"Skipping render for: {instruction[:50]}...")
-            return False
-
         renderer = MatplotlibDiagramRenderer()
         fig, ax = renderer.render(diagram, save=True, show=False, filename=str(output_path))
 
@@ -103,7 +63,7 @@ def test_single_problem(instruction, dsl_answer, output_path):
 
 
 def main():
-    path = "dataset/data/train.json"
+    path = "dataset/data/test.json"
     json_path = Path(path)
     output_dir = Path("output_fixed")
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -156,7 +116,7 @@ def main():
         failed_path = output_dir / "failed_problems.json"
         with open(failed_path, 'w', encoding='utf-8') as f:
             json.dump(failed_problems, f, ensure_ascii=False, indent=2)
-        print(f"\n⚠️  {len(failed_problems)} failed problems saved to: {failed_path}")
+        print(f"\n {len(failed_problems)} failed problems saved to: {failed_path}")
         print("Failed indices:", [p['index'] for p in failed_problems])
 
 if __name__ == "__main__":

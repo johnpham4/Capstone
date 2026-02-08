@@ -1186,7 +1186,7 @@ class Optimizer:
                             logger.warning(f"Failed to lookup point {point_name}: {ex}")
         
         # For each circle with 2+ points, enforce minimum angle
-        min_angle_rad = math.radians(60)  # 60 degrees minimum for better separation
+        min_angle_rad = math.radians(60)  # 60 degrees minimum 
         min_cos = self.const(math.cos(min_angle_rad))
         
         for center_name, points_list in circle_points_map.items():
