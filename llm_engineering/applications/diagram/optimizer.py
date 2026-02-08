@@ -1048,9 +1048,13 @@ class Optimizer:
     
     def _add_all_chord_ndgs(self):
         """
-        Thêm NDG cho TẤT CẢ chords sau khi đã xử lý hết assertions.
+        Thêm constraint HARD cho TẤT CẢ chords để ngăn đi qua tâm.
         Duyệt qua tất cả cặp (điểm, center) từ on-circle constraints.
         """
+        if self.verbosity:
+            logger.info(f"\n🔍 Checking for chords to add NDG...")
+            logger.info(f"Segments: {self.segments}")
+        
         # Thu thập tất cả điểm on-circle theo center
         circle_points = {}  # {center_name: [point_names]}
         
@@ -1064,6 +1068,9 @@ class Optimizer:
                     if center_name not in circle_points:
                         circle_points[center_name] = []
                     circle_points[center_name].append(point_name)
+        
+        if self.verbosity:
+            logger.info(f"Circle points: {circle_points}")
         
         # Với mỗi tâm, kiểm tra các cặp điểm có segment không
         for center_name, point_names in circle_points.items():
@@ -1084,24 +1091,32 @@ class Optimizer:
                     )
                     
                     if has_segment:
-                        # Thêm NDG: ngăn (p1, center, p2) thẳng hàng
                         try:
                             pt1 = self.lookup_pt_by_name(p1_name)
                             pt2 = self.lookup_pt_by_name(p2_name)
                             
                             if pt1 and pt2:
-                                ndg_key = f"chord_ndg_{p1_name}_{center_name}_{p2_name}"
-                                if ndg_key not in self.ndgs:
-                                    self.register_ndg(
-                                        ndg_key,
-                                        lambda pt1_=pt1, c=center, pt2_=pt2: self.collinear(pt1_, c, pt2_),
-                                        weight=100.0  # Weight CAO để ưu tiên tránh đường kính
+                                chord_key = f"chord_not_diameter_{p1_name}_{p2_name}"
+                                if chord_key not in self.loss_fns:
+                                    # Penalty lớn khi gần thẳng hàng (collinear → 0)
+                                    def chord_constraint(p1=pt1, c=center, p2=pt2):
+                                        cross = self.collinear(p1, c, p2)
+                                        # Penalty cao khi cross gần 0 (thẳng hàng)
+                                        return 1.0 / (cross**2 + 0.01)
+                                    
+                                    self.register_loss(
+                                        chord_key,
+                                        chord_constraint,
+                                        weight=50.0
                                     )
                                     if self.verbosity:
-                                        logger.info(f"🔥 Added chord NDG: {p1_name}-{center_name}-{p2_name} must NOT be collinear")
+                                        logger.info(f"Added HARD chord constraint: {p1_name}-{center_name}-{p2_name} MUST NOT be collinear")
                         except Exception as e:
                             if self.verbosity:
-                                logger.warning(f"Failed to add chord NDG: {e}")
+                                logger.warning(f"Failed to add chord constraint: {e}")
+                        except Exception as e:
+                            if self.verbosity:
+                                logger.warning(f"Failed to add chord constraint: {e}")
     
     def _enforce_minimum_angle_between_circle_points(self):
         """

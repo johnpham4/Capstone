@@ -7,11 +7,9 @@ import io
 # Fix encoding for Windows terminal
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-from src.services.diagram.diagram_builder import DiagramBuilder
-from src.services.diagram.optimizer import Optimizer
+from llm_engineering.applications.diagram.services.diagram_builder import DiagramBuilder
+from llm_engineering.applications.diagram.optimizer import Optimizer
 from src.services.diagram.matplotlib_renderer import MatplotlibDiagramRenderer
-
-
 
 def test_single_problem(instruction, dsl_answer, output_path):
     print(f"Instruction: {instruction}")

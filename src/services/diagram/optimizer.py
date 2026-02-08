@@ -1156,6 +1156,76 @@ class Optimizer:
             weight=100000.0  
         )
     
+    def _add_all_chord_ndgs(self):
+        """
+        Thêm constraint HARD cho TẤT CẢ chords để ngăn đi qua tâm.
+        Duyệt qua tất cả cặp (điểm, center) từ on-circle constraints.
+        """
+        if self.verbosity:
+            logger.info(f"\nChecking for chords to add NDG...")
+            logger.info(f"Segments: {self.segments}")
+        
+        # Thu thập tất cả điểm on-circle theo center
+        circle_points = {}  # {center_name: [point_names]}
+        
+        for loss_name in self.losses:
+            if loss_name.startswith("on_circle_"):
+                parts = loss_name.split("_")
+                if len(parts) >= 4:  # on_circle_PointName_CenterName
+                    point_name = parts[2]
+                    center_name = "_".join(parts[3:])
+                    
+                    if center_name not in circle_points:
+                        circle_points[center_name] = []
+                    circle_points[center_name].append(point_name)
+        
+        if self.verbosity:
+            logger.info(f"Circle points: {circle_points}")
+        
+        # Với mỗi tâm, kiểm tra các cặp điểm có segment không
+        for center_name, point_names in circle_points.items():
+            center = self.lookup_pt_by_name(center_name)
+            if not center:
+                continue
+            
+            # Kiểm tra tất cả cặp điểm
+            for i in range(len(point_names)):
+                for j in range(i + 1, len(point_names)):
+                    p1_name = point_names[i]
+                    p2_name = point_names[j]
+                    
+                    # Kiểm tra có segment giữa 2 điểm này không
+                    has_segment = (
+                        (p1_name, p2_name) in self.segments or 
+                        (p2_name, p1_name) in self.segments
+                    )
+                    
+                    if has_segment:
+                        # 🔥 THÊM HARD CONSTRAINT (không phải NDG) để BUỘC không thẳng hàng
+                        try:
+                            pt1 = self.lookup_pt_by_name(p1_name)
+                            pt2 = self.lookup_pt_by_name(p2_name)
+                            
+                            if pt1 and pt2:
+                                chord_key = f"chord_not_diameter_{p1_name}_{p2_name}"
+                                if chord_key not in self.loss_fns:
+                                    # Penalty lớn khi gần thẳng hàng (collinear → 0)
+                                    def chord_constraint(p1=pt1, c=center, p2=pt2):
+                                        cross = self.collinear(p1, c, p2)
+                                        # Penalty cao khi cross gần 0 (thẳng hàng)
+                                        return 1.0 / (cross**2 + 0.01)
+                                    
+                                    self.register_loss(
+                                        chord_key,
+                                        chord_constraint,
+                                        weight=50.0
+                                    )
+                                    if self.verbosity:
+                                        logger.info(f"🔥 Added HARD chord constraint: {p1_name}-{center_name}-{p2_name} MUST NOT be collinear")
+                        except Exception as e:
+                            if self.verbosity:
+                                logger.warning(f"Failed to add chord constraint: {e}")
+    
     def _enforce_minimum_angle_between_circle_points(self):
         """
         Enforce minimum angle (45 degrees) between points on the same circle.
@@ -1373,6 +1443,9 @@ class Optimizer:
     def solve_single(self, attempt_id=0):
         self.current_attempt = attempt_id
         self.preprocess()
+        
+        self._add_all_chord_ndgs()
+        
         self.regularize_points()
         # self.make_points_distinct()
 

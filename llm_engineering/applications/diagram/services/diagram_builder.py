@@ -1,9 +1,9 @@
 from typing import List, Tuple, Any
 
-from llm_engineering.applications.diagram.dsl_parser import DSLParser
-from llm_engineering.domains.geometry import Point
-from llm_engineering.domains.geometry.instructions import Parameter
-from llm_engineering.domains.geometry.types import DiagramType, TriangleType, QuadrilateralType
+from src.services.diagram.dsl_parser import DSLParser
+from src.models.domain.geometry.value_objects import Point
+from src.models.domain.geometry.instructions import Parameter
+from src.models.domain.geometry.types import DiagramType, TriangleType, QuadrilateralType
 
 
 class DiagramBuilder:
