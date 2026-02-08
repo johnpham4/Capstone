@@ -28,7 +28,6 @@ class RenderRequest(BaseModel):
 
 
 class RenderResponse(BaseModel):
-    """Response schema for diagram rendering."""
     request_id: str
     format: str
     success: bool

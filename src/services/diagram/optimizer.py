@@ -4,11 +4,11 @@ import torch.optim as optim
 import random
 
 from collections import namedtuple
-from src.models.domain.geometry.instructions import Parameter, Assertion
-from src.models.domain.geometry.value_objects import Point, Line
-from src.models.domain.geometry.entities import GeometricPoint, Diagram
-from src.models.domain.geometry.types import QuadrilateralType, TriangleType, DiagramType
-from src.services.diagram.initializer import Initializer
+from llm_engineering.domains.geometry.instructions import Parameter, Assertion
+from llm_engineering.domains.geometry.value_objects import Point, Line
+from llm_engineering.domains.geometry.entities import GeometricPoint, Diagram
+from llm_engineering.domains.geometry.types import QuadrilateralType, TriangleType, DiagramType
+from llm_engineering.applications.diagram.initializer import Initializer
 
 
 from loguru import logger
@@ -18,20 +18,16 @@ LineSF = namedtuple("LineSF", ["a", "b", "c", "p1", "p2"])
 LineNF = namedtuple("LineNF", ["n", "f"])
 
 class Optimizer:
-    def __init__(self, instructions, epochs=1000, n_tries=1, learning_rate=0.01, eps=1e-6, seed=42, verbosity=False):
+    def __init__(self, instructions, opts, verbosity=False):
         self.instructions = instructions
-        self.epochs = epochs
-        self.n_tries = n_tries
-        self.learning_rate = learning_rate
-        self.eps = eps
-        self.seed = seed
+        self.opts = opts
         self.verbosity = verbosity
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+        # Initialize state
         self._init_state()
 
     def _init_state(self):
-        """Initialize/reset optimizer state for new attempt"""
         self.name2pt = {}  # Point name -> TorchPoint (with tensors)
         self.name2line = {}  # Line name -> LineNF
         self.all_points = []  # All points for visualization
@@ -56,6 +52,8 @@ class Optimizer:
         self.has_loss = False
         self.trainable_vars = []  # List of nn.Parameter objects
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+
 
     def get_point(self, x, y):
         if not isinstance(x, torch.Tensor):
@@ -116,50 +114,46 @@ class Optimizer:
         # line in normal form: n · p - f = 0
         return line.n.x * p.x + line.n.y * p.y - line.f
 
-    def _point_on_segment_loss(self, point: TorchPoint, p1: TorchPoint, p2: TorchPoint):
-        """Loss for point lying on segment p1-p2 (between p1 and p2)"""
-        line = self.pp2lnf(p1, p2)
-        on_line_loss = self.on_line(point, line)**2
-
-        # Point between p1 and p2: point = p1 + t*(p2-p1) with 0 <= t <= 1
-        vec_x = p2.x - p1.x
-        vec_y = p2.y - p1.y
-        point_x = point.x - p1.x
-        point_y = point.y - p1.y
-
-        vec_len_sq = vec_x**2 + vec_y**2 + 1e-8
-        t = (point_x * vec_x + point_y * vec_y) / vec_len_sq
-
-        # Penalty if t < 0 or t > 1
-        between_penalty = torch.relu(-t) + torch.relu(t - 1)
-
-        return on_line_loss + 10.0 * between_penalty
-
-    def _angle_bisector_equal_loss(self, p_vertex: TorchPoint, p1: TorchPoint, p2: TorchPoint, p_bisector: TorchPoint):
-        """Loss for angle bisector: angle(p1, vertex, bisector) = angle(p2, vertex, bisector)"""
-        cos1 = self.angle_cosine(p1, p_vertex, p_bisector)
-        cos2 = self.angle_cosine(p2, p_vertex, p_bisector)
-        return (cos1 - cos2)**2
-
-    def _angle_bisector_ratio_loss(self, p_vertex: TorchPoint, p1: TorchPoint, p2: TorchPoint, p_bisector: TorchPoint):
-        """Loss for angle bisector theorem: BD/DC = AB/AC"""
-        ratio_bd_dc = self.segment_ratio(p1, p_bisector, p_bisector, p2)
-        ratio_ab_ac = self.segment_ratio(p_vertex, p1, p_vertex, p2)
-        return (ratio_bd_dc - ratio_ab_ac)**2
+    def collinear(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
+        v1x = p2.x - p1.x
+        v1y = p2.y - p1.y
+        v2x = p3.x - p1.x
+        v2y = p3.y - p1.y
+        return v1x * v2y - v1y * v2x
 
     def dist_to_line(self, point: TorchPoint, p1: TorchPoint, p2: TorchPoint):
         line = self.pp2lnf(p1, p2)
         return torch.abs(self.on_line(point, line))
 
-    def centroid_loss(self, centroid: TorchPoint, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
+    def perpendicular_loss(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint, p4: TorchPoint):
+        vec_vf_x = p2.x - p1.x
+        vec_vf_y = p2.y - p1.y
+        vec_seg_x = p3.x - p4.x
+        vec_seg_y = p3.y - p4.y
+        dot = vec_vf_x * vec_seg_x + vec_vf_y * vec_seg_y
+        return dot
+
+    def intersection_loss(self, intersection: TorchPoint, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint, p4: TorchPoint):
+        line1 = self.pp2lnf(p1, p2)
+        line2 = self.pp2lnf(p3, p4)
+        dist1 = self.on_line(intersection, line1)
+        dist2 = self.on_line(intersection, line2)
+        return dist1**2 + dist2**2
+
+    def centroid_loss(sef, centroid: TorchPoint, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
         expected_x = (p1.x + p2.x + p3.x) / 3
         expected_y = (p1.y + p2.y + p3.y) / 3
         return (centroid.x - expected_x)**2 + (centroid.y - expected_y)**2
 
     def register_pt(self, p: TorchPoint, P, save_name=True):
         if save_name:
-            assert p.val not in self.name2pt, f"Point {p.val} already registered"
+            assert p.val not in self.name2pt
             self.name2pt[p.val] = P
+
+            if p.val not in self.name2pt:
+                self.name2pt[p.val] = P
+            else:
+                self.name2pt[p.val] = P
         self.all_points.append(P)
         return P
 
@@ -198,142 +192,173 @@ class Optimizer:
         return self.register_pt(p, P, save_name)
 
 
-    def _dot_product(self, pa: TorchPoint, pb: TorchPoint, pc: TorchPoint):
-        """Calculate dot product of vectors (pa-pb) and (pc-pb)"""
-        v1x, v1y = pa.x - pb.x, pa.y - pb.y
-        v2x, v2y = pc.x - pb.x, pc.y - pb.y
-        return v1x * v2x + v1y * v2y
-
-    def _cross_product_area(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
-        """Calculate cross product for area check (collinearity test)"""
-        v1x, v1y = p2.x - p1.x, p2.y - p1.y
-        v2x, v2y = p3.x - p1.x, p3.y - p1.y
-        return v1x * v2y - v1y * v2x
-
-    def _dot_product_vectors(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint, p4: TorchPoint):
-        """Calculate dot product of vectors (p2-p1) and (p4-p3)"""
-        v1x, v1y = p2.x - p1.x, p2.y - p1.y
-        v2x, v2y = p4.x - p3.x, p4.y - p3.y
-        return v1x * v2x + v1y * v2y
-
-    def perpendicular(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint, p4: TorchPoint):
-        """Perpendicular constraint: (p1-p2) ⊥ (p3-p4). Returns 0 when perpendicular."""
-        return (p1.x - p2.x) * (p3.x - p4.x) + (p1.y - p2.y) * (p3.y - p4.y)
-
-    def parallel(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint, p4: TorchPoint):
-        """Parallel constraint: (p1-p2) ∥ (p3-p4). Returns 0 when parallel."""
-        return (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x)
-
-    def collinear(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
-        """Collinearity constraint. Returns 0 when p1, p2, p3 are collinear."""
-        return p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y)
-
-    def vector_length(self, p1: TorchPoint, p2: TorchPoint):
-        """Calculate length of vector from p1 to p2."""
-        dx = p2.x - p1.x
-        dy = p2.y - p1.y
-        return torch.sqrt(dx**2 + dy**2 + 1e-8)
-
-    def dot_product_at_vertex(self, p1: TorchPoint, vertex: TorchPoint, p2: TorchPoint):
-        """Calculate dot product of vectors (p1-vertex) and (p2-vertex)."""
-        v1_x = p1.x - vertex.x
-        v1_y = p1.y - vertex.y
-        v2_x = p2.x - vertex.x
-        v2_y = p2.y - vertex.y
-        return v1_x * v2_x + v1_y * v2_y
-
-    def angle_cosine(self, p1: TorchPoint, vertex: TorchPoint, p2: TorchPoint):
-        """Calculate cosine of angle p1-vertex-p2."""
-        v1_x = p1.x - vertex.x
-        v1_y = p1.y - vertex.y
-        v2_x = p2.x - vertex.x
-        v2_y = p2.y - vertex.y
-
-        dot = v1_x * v2_x + v1_y * v2_y
-        len1 = torch.sqrt(v1_x**2 + v1_y**2 + 1e-8)
-        len2 = torch.sqrt(v2_x**2 + v2_y**2 + 1e-8)
-        return dot / (len1 * len2 + 1e-8)
-
-    def segment_ratio(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint, p4: TorchPoint):
-        """Calculate ratio of segment lengths: |p1-p2| / |p3-p4|."""
-        len1 = self.vector_length(p1, p2)
-        len2 = self.vector_length(p3, p4)
-        return len1 / (len2 + 1e-8)
-
-    def _sample_quadrilateral_with_init(self, points: list, init_method, *args, noise: float = 0.05):
-        """Generic quadrilateral sampler using Initializer methods"""
-        assert len(points) == 4
-        init_coords = init_method(*args)
-        init_coords = Initializer.add_noise(init_coords, noise)
-
-        pt_objs = [self.sample_uniform(p, init_coords=init_coords[i]) for i, p in enumerate(points)]
-        names = [p.val for p in points]
-        self.quadrilaterals.append(tuple(names))
-        return pt_objs, names
-
     def sample_square(self, points: list):
         assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_square, 1.0)
-        p1, p2, p3, p4 = pt_objs
+        noise = 0.05
+        init_positions = [(-0.5, -0.5), (0.5, -0.5), (0.5, 0.5), (-0.5, 0.5)]
+        pt_objs = []
+        for i, p_def in enumerate(points):
+            ix, iy = init_positions[i]
+            nx = ix + random.uniform(-noise, noise)
+            ny = iy + random.uniform(-noise, noise)
+            p_obj = self.sample_uniform(p_def, init_coords=(nx, ny))
+            pt_objs.append(p_obj)
+        p1, p2, p3, p4 = pt_objs[0], pt_objs[1], pt_objs[2], pt_objs[3]
+        names = [p.val for p in points]
+        self.quadrilaterals.append(tuple(names))
 
-        # All sides equal + right angle
         self.register_loss(f"sq_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
         self.register_loss(f"sq_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
         self.register_loss(f"sq_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
-        self.register_loss(f"sq_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
-        self.register_ndg(f"sq_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+
+        def dot_product(pa, pb, pc):
+            v1x, v1y = pa.x - pb.x, pa.y - pb.y
+            v2x, v2y = pc.x - pb.x, pc.y - pb.y
+            return v1x * v2x + v1y * v2y
+        self.register_loss(f"sq_right_B_{names[0]}", lambda: dot_product(p1, p2, p3), weight=10.0)
+
+        def area_check():
+             v1x, v1y = p2.x - p1.x, p2.y - p1.y
+             v2x, v2y = p3.x - p1.x, p3.y - p1.y
+             return v1x * v2y - v1y * v2x
+        self.register_ndg(f"sq_area_{names[0]}", area_check, weight=20.0)
         return pt_objs
 
     def sample_rectangle(self, points: list):
         assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_rectangle, 1.6, 1.0)
-        p1, p2, p3, p4 = pt_objs
+        noise = 0.05
+        init_positions = [(-0.8, -0.5), (0.8, -0.5), (0.8, 0.5), (-0.8, 0.5)]
+        pt_objs = []
+        for i, p_def in enumerate(points):
+            ix, iy = init_positions[i]
+            nx = ix + random.uniform(-noise, noise)
+            ny = iy + random.uniform(-noise, noise)
+            p_obj = self.sample_uniform(p_def, init_coords=(nx, ny))
+            pt_objs.append(p_obj)
+        p1, p2, p3, p4 = pt_objs[0], pt_objs[1], pt_objs[2], pt_objs[3]
+        names = [p.val for p in points]
+        self.quadrilaterals.append(tuple(names))
 
-        # Three right angles
-        self.register_loss(f"rect_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
-        self.register_loss(f"rect_right_C_{names[0]}", lambda: self._dot_product(p2, p3, p4), weight=10.0)
-        self.register_loss(f"rect_right_D_{names[0]}", lambda: self._dot_product(p3, p4, p1), weight=10.0)
-        self.register_ndg(f"rect_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+        def dot_product(pa, pb, pc):
+            v1x, v1y = pa.x - pb.x, pa.y - pb.y
+            v2x, v2y = pc.x - pb.x, pc.y - pb.y
+            return v1x * v2x + v1y * v2y
+        self.register_loss(f"rect_right_B_{names[0]}", lambda: dot_product(p1, p2, p3), weight=10.0)
+        self.register_loss(f"rect_right_C_{names[0]}", lambda: dot_product(p2, p3, p4), weight=10.0)
+        self.register_loss(f"rect_right_D_{names[0]}", lambda: dot_product(p3, p4, p1), weight=10.0)
+
+        def area_check():
+             v1x, v1y = p2.x - p1.x, p2.y - p1.y
+             v2x, v2y = p3.x - p1.x, p3.y - p1.y
+             return v1x * v2y - v1y * v2x
+        self.register_ndg(f"rect_area_{names[0]}", area_check, weight=20.0)
         return pt_objs
 
     def sample_parallelogram(self, points: list):
         assert len(points) == 4
-        # Use scalene quad init for parallelogram (more general shape)
-        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_scalene_quadrilateral, 1.5)
-        p1, p2, p3, p4 = pt_objs
+        noise = 0.05
+        init_positions = [(-1.5, -0.5), (0.5, -0.5), (1.5, 0.5), (-0.5, 0.5)]
+        pt_objs = []
+        for i, p_def in enumerate(points):
+            ix, iy = init_positions[i]
+            nx = ix + random.uniform(-noise, noise)
+            ny = iy + random.uniform(-noise, noise)
+            p_obj = self.sample_uniform(p_def, init_coords=(nx, ny))
+            pt_objs.append(p_obj)
+        p1, p2, p3, p4 = pt_objs[0], pt_objs[1], pt_objs[2], pt_objs[3]
+        names = [p.val for p in points]
+        self.quadrilaterals.append(tuple(names))
 
-        # Opposite sides parallel
-        self.register_loss(f"para_vec_x_{names[0]}", lambda: (p2.x - p1.x) - (p3.x - p4.x), weight=10.0)
-        self.register_loss(f"para_vec_y_{names[0]}", lambda: (p2.y - p1.y) - (p3.y - p4.y), weight=10.0)
-        self.register_ndg(f"para_area_{names[0]}", lambda: self._cross_product_area(p2, p1, p3), weight=20.0)
+        def vec_diff_x():
+            v_ab_x = p2.x - p1.x
+            v_dc_x = p3.x - p4.x
+            return v_ab_x - v_dc_x
+        def vec_diff_y():
+            v_ab_y = p2.y - p1.y
+            v_dc_y = p3.y - p4.y
+            return v_ab_y - v_dc_y
+        self.register_loss(f"para_vec_x_{names[0]}", vec_diff_x, weight=10.0)
+        self.register_loss(f"para_vec_y_{names[0]}", vec_diff_y, weight=10.0)
+
+        def area_check():
+             v1x, v1y = p1.x - p2.x, p1.y - p2.y
+             v2x, v2y = p3.x - p2.x, p3.y - p2.y
+             return v1x * v2y - v1y * v2x
+        self.register_ndg(f"para_area_{names[0]}", area_check, weight=20.0)
         return pt_objs
 
     def sample_trapezoid(self, points: list):
         assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_scalene_quadrilateral, 1.2)
-        p1, p2, p3, p4 = pt_objs
+        noise = 0.05
+        init_positions = [(-1.0, -0.5), (1.0, -0.5), (0.5, 0.5), (-0.5, 0.5)]
+        pt_objs = []
+        for i, p_def in enumerate(points):
+            ix, iy = init_positions[i]
+            nx = ix + random.uniform(-noise, noise)
+            ny = iy + random.uniform(-noise, noise)
+            p_obj = self.sample_uniform(p_def, init_coords=(nx, ny))
+            pt_objs.append(p_obj)
+        p1, p2, p3, p4 = pt_objs[0], pt_objs[1], pt_objs[2], pt_objs[3]
+        names = [p.val for p in points]
+        self.quadrilaterals.append(tuple(names))
 
-        # One pair parallel
-        self.register_loss(f"trap_para_{names[0]}",
-                          lambda: (p2.x - p1.x) * (p3.y - p4.y) - (p2.y - p1.y) * (p3.x - p4.x), weight=10.0)
-        self.register_ndg(f"trap_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+        def parallel_loss():
+            v_ab_x = p2.x - p1.x
+            v_ab_y = p2.y - p1.y
+            v_dc_x = p3.x - p4.x
+            v_dc_y = p3.y - p4.y
+            return v_ab_x * v_dc_y - v_ab_y * v_dc_x
+        self.register_loss(f"trap_para_{names[0]}", parallel_loss, weight=10.0)
+
+        def area_check():
+             v1x, v1y = p2.x - p1.x, p2.y - p1.y
+             v2x, v2y = p3.x - p2.x, p3.y - p2.y
+             return v1x * v2y - v1y * v2x
+        self.register_ndg(f"trap_area_{names[0]}", area_check, weight=20.0)
         self.register_ndg(f"trap_ndg_top_{names[0]}", lambda: self.dist(p3, p4), weight=10.0)
         self.register_ndg(f"trap_ndg_bottom_{names[0]}", lambda: self.dist(p1, p2), weight=10.0)
         return pt_objs
 
     def sample_rhombus(self, points: list):
-        assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_rhombus, 1.0)
-        p1, p2, p3, p4 = pt_objs
+        assert len(points) == 4, "Rhombus must have 4 points"
+        noise = 0.05
+        # Khởi tạo hình thoi (dạng Diamond)
+        init_positions = [(0.0, -0.8), (0.5, 0.0), (0.0, 0.8), (-0.5, 0.0)]
 
-        # All sides equal + diagonals perpendicular
+        pt_objs = []
+        for i, p_def in enumerate(points):
+            ix, iy = init_positions[i]
+            nx = ix + random.uniform(-noise, noise)
+            ny = iy + random.uniform(-noise, noise)
+            p_obj = self.sample_uniform(p_def, init_coords=(nx, ny))
+            pt_objs.append(p_obj)
+
+        p1, p2, p3, p4 = pt_objs[0], pt_objs[1], pt_objs[2], pt_objs[3]
+        names = [p.val for p in points]
+        self.quadrilaterals.append(tuple(names))
+
+        # 4 cạnh bằng nhau
         self.register_loss(f"rhombus_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
         self.register_loss(f"rhombus_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
         self.register_loss(f"rhombus_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
-        self.register_loss(f"rhombus_diag_perp_{names[0]}",
-                          lambda: (p3.x - p1.x) * (p4.x - p2.x) + (p3.y - p1.y) * (p4.y - p2.y), weight=10.0)
-        self.register_ndg(f"rhombus_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+
+        # Hai đường chéo vuông góc: AC vuông góc BD
+        def diagonals_perp():
+            v_ac_x = p3.x - p1.x
+            v_ac_y = p3.y - p1.y
+            v_bd_x = p4.x - p2.x
+            v_bd_y = p4.y - p2.y
+            return v_ac_x * v_bd_x + v_ac_y * v_bd_y
+        self.register_loss(f"rhombus_diag_perp_{names[0]}", diagonals_perp, weight=10.0)
+
+        # Chống bẹt
+        def area_check():
+             v1x, v1y = p2.x - p1.x, p2.y - p1.y
+             v2x, v2y = p3.x - p2.x, p3.y - p2.y
+             return v1x * v2y - v1y * v2x
+        self.register_ndg(f"rhombus_area_{names[0]}", area_check, weight=20.0)
         self.register_ndg(f"rhombus_diag_ac_{names[0]}", lambda: self.dist(p1, p3), weight=10.0)
+
         return pt_objs
 
 
@@ -385,8 +410,14 @@ class Optimizer:
         if tri_type == 'right' or tri_type == 'right_isosceles':
             right_pt = pts[right_idx]
             other_pts = [pts[i] for i in range(3) if i != right_idx]
+            def right_loss():
+                vec1_x = other_pts[0].x - right_pt.x
+                vec1_y = other_pts[0].y - right_pt.y
+                vec2_x = other_pts[1].x - right_pt.x
+                vec2_y = other_pts[1].y - right_pt.y
+                return vec1_x * vec2_x + vec1_y * vec2_y
             self.register_loss(f"right_{points[0].val}_{points[1].val}_{points[2].val}",
-                              lambda: self._dot_product(other_pts[0], right_pt, other_pts[1]), weight=10.0)
+                              right_loss, weight=10.0)
             metadata['right_angle_at'] = right_idx
 
         if tri_type == 'equilateral':
@@ -402,24 +433,46 @@ class Optimizer:
             for idx1, idx2 in equal_angles:
                 # Enforce angle equality using cosine similarity
                 def angle_loss(i1=idx1, i2=idx2):
+                    # Angle at vertex i1
                     v1_prev = pts[(i1-1)%3]
                     v1_curr = pts[i1]
                     v1_next = pts[(i1+1)%3]
 
+                    # Angle at vertex i2
                     v2_prev = pts[(i2-1)%3]
                     v2_curr = pts[i2]
                     v2_next = pts[(i2+1)%3]
 
-                    cos1 = self.angle_cosine(v1_prev, v1_curr, v1_next)
-                    cos2 = self.angle_cosine(v2_prev, v2_curr, v2_next)
+                    # Cosine of angle at i1
+                    vec1a_x = v1_prev.x - v1_curr.x
+                    vec1a_y = v1_prev.y - v1_curr.y
+                    vec1b_x = v1_next.x - v1_curr.x
+                    vec1b_y = v1_next.y - v1_curr.y
+
+                    dot1 = vec1a_x * vec1b_x + vec1a_y * vec1b_y
+                    norm1a = torch.sqrt(vec1a_x**2 + vec1a_y**2 + 1e-8)
+                    norm1b = torch.sqrt(vec1b_x**2 + vec1b_y**2 + 1e-8)
+                    cos1 = dot1 / (norm1a * norm1b + 1e-8)
+
+                    # Cosine of angle at i2
+                    vec2a_x = v2_prev.x - v2_curr.x
+                    vec2a_y = v2_prev.y - v2_curr.y
+                    vec2b_x = v2_next.x - v2_curr.x
+                    vec2b_y = v2_next.y - v2_curr.y
+
+                    dot2 = vec2a_x * vec2b_x + vec2a_y * vec2b_y
+                    norm2a = torch.sqrt(vec2a_x**2 + vec2a_y**2 + 1e-8)
+                    norm2b = torch.sqrt(vec2b_x**2 + vec2b_y**2 + 1e-8)
+                    cos2 = dot2 / (norm2a * norm2b + 1e-8)
+
                     return cos1 - cos2
 
                 self.register_loss(f"equal_angle_{idx1}_{idx2}_{points[0].val}",
                                  angle_loss, weight=10.0)
 
-        # Non-degeneracy using primitive
+        # Non-degeneracy
         self.register_ndg(f"tri_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
-                         lambda: self.collinear(p1, p2, p3), weight=1.0)
+                         lambda a=p1, b=p2, c=p3: self.collinear(a, b, c), weight=1.0)
 
         # Track metadata
         key = (points[0].val, points[1].val, points[2].val)
@@ -455,38 +508,89 @@ class Optimizer:
 
         metadata = {'type': quadri_type}
         if quadri_type in [QuadrilateralType.SQUARE, QuadrilateralType.RECTANGLE]:
-            # All 4 right angles using helper
-            self.register_loss(f"angle_A", lambda: self._dot_product(pts[3], pts[0], pts[1]), weight=100.0)
-            self.register_loss(f"angle_B", lambda: self._dot_product(pts[0], pts[1], pts[2]), weight=100.0)
-            self.register_loss(f"angle_C", lambda: self._dot_product(pts[1], pts[2], pts[3]), weight=100.0)
-            self.register_loss(f"angle_D", lambda: self._dot_product(pts[2], pts[3], pts[0]), weight=100.0)
+
+        # Constraint: 4 goc vuong
+            def angle_at_A():
+                v1x = pts[3].x - pts[0].x # DA
+                v1y = pts[3].y - pts[0].y
+                v2x = pts[1].x - pts[0].x # AB
+                v2y = pts[1].y - pts[0].y
+                return v1x * v2x + v1y * v2y # tich vo huong = 0
+
+            def angle_at_B():
+                v1x = pts[0].x - pts[1].x # BA
+                v1y = pts[0].y - pts[1].y
+                v2x = pts[2].x - pts[1].x # BC
+                v2y = pts[2].y - pts[1].y
+                return v1x * v2x + v1y * v2y
+
+            def angle_at_C():
+                v1x = pts[1].x - pts[2].x # CB
+                v1y = pts[1].y - pts[2].y
+                v2x = pts[3].x - pts[2].x # CD
+                v2y = pts[3].y - pts[2].y
+                return v1x * v2x + v1y * v2y
+
+            def angle_at_D():
+                v1x = pts[2].x - pts[3].x # DC
+                v1y = pts[2].y - pts[3].y
+                v2x = pts[0].x - pts[3].x # DA
+                v2y = pts[0].y - pts[3].y
+                return v1x * v2x + v1y * v2y
+
+            self.register_loss(f"angle_A", angle_at_A, weight=100.0)
+            self.register_loss(f"angle_B", angle_at_B, weight=100.0)
+            self.register_loss(f"angle_C", angle_at_C, weight=100.0)
+            self.register_loss(f"angle_D", angle_at_D, weight=100.0)
 
         if quadri_type == QuadrilateralType.SQUARE:
-            # All 4 sides equal
-            dists = [self.dist(pts[i], pts[(i+1)%4]) for i in range(4)]
-            avg = sum(dists) / 4.0
-            self.register_loss(f"square_equal_sides",
-                             lambda: sum((d - avg)**2 for d in dists), weight=100.0)
-            self.register_ndg(f"square_ndg", lambda: self.collinear(pts[0], pts[1], pts[2]), weight=1.0)
+            # constraint: 4 canh bang nhau
+            def equal_sides_constraint():
+                d01 = self.dist(pts[0], pts[1]) # AB
+                d12 = self.dist(pts[1], pts[2]) # BC
+                d23 = self.dist(pts[2], pts[3]) # CD
+                d30 = self.dist(pts[3], pts[0]) # DA
+                avg=(d01 + d12 + d23 + d30) / 4.0
+                return (d01 - avg)**2 + (d12 - avg)**2 + (d23 - avg)**2 + (d30 - avg)**2
+
+            self.register_loss(f"square_equal_sides", equal_sides_constraint, weight=100.0)
+            self.register_ndg(f"square_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
+                         lambda a=pts[0], b=pts[1], c=pts[2]: self.collinear(a, b, c),
+                         weight=1.0)
             metadata['equal_sides'] = [(0, 1), (1, 2), (2, 3), (3, 0)]
 
         elif quadri_type == QuadrilateralType.RECTANGLE:
-            # Opposite sides equal
-            self.register_loss(f"rect_opposite_sides",
-                             lambda: (self.dist(pts[0], pts[1]) - self.dist(pts[2], pts[3]))**2 +
-                                     (self.dist(pts[1], pts[2]) - self.dist(pts[3], pts[0]))**2,
-                             weight=10.0)
-            self.register_ndg(f"rect_ndg", lambda: self.collinear(pts[0], pts[1], pts[2]), weight=1.0)
+            # constraint: canh doi bang nhau
+            def equal_opposite_sides_constraint():
+                d01 = self.dist(pts[0], pts[1]) # AB
+                d12 = self.dist(pts[1], pts[2]) # BC
+                d23 = self.dist(pts[2], pts[3]) # CD
+                d30 = self.dist(pts[3], pts[0]) # DA
+                return (d01 - d23)**2 + (d12 - d30)**2
+
+            self.register_loss(f"rect_opposite_sides_{points[0].val}_{points[1].val}_{points[2].val}_{points[3].val}",
+            equal_opposite_sides_constraint,weight=10.0)
             metadata['equal_sides'] = [(0, 2), (1, 3)]
 
+            self.register_ndg(f"rect_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
+                     lambda a=pts[0], b=pts[1], c=pts[2]: self.collinear(a, b, c),
+                     weight=1.0)
+
         elif quadri_type == QuadrilateralType.RHOMBUS:
-            # All 4 sides equal (same as square)
-            dists = [self.dist(pts[i], pts[(i+1)%4]) for i in range(4)]
-            avg = sum(dists) / 4.0
-            self.register_loss(f"rhombus_equal_sides",
-                             lambda: sum((d - avg)**2 for d in dists), weight=10.0)
-            self.register_ndg(f"rhombus_ndg", lambda: self.collinear(pts[0], pts[1], pts[2]), weight=1.0)
+            def equal_all_sides_constraint():
+                d01 = self.dist(pts[0], pts[1])
+                d12 = self.dist(pts[1], pts[2])
+                d23 = self.dist(pts[2], pts[3])
+                d30 = self.dist(pts[3], pts[0])
+                avg = (d01 + d12 + d23 + d30) / 4.0
+                return (d01 - avg)**2 + (d12 - avg)**2 + (d23 - avg)**2 + (d30 - avg)**2
+
+            self.register_loss(f"rhombus_equal_sides_{points[0].val}", equal_all_sides_constraint, weight=10.0)
             metadata['equal_sides'] = [(0, 1), (1, 2), (2, 3), (3, 0)]
+
+            self.register_ndg(f"rhombus_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
+                     lambda a=pts[0], b=pts[1], c=pts[2]: self.collinear(a, b, c),
+                     weight=1.0)
 
         # Track metadata
         key = tuple(p.val for p in points)
@@ -495,6 +599,7 @@ class Optimizer:
 
 
     def _define_projection(self, point_name, vertex_point, segment_points):
+
         assert len(segment_points) == 2
 
         foot = self.sample_uniform(point_name)
@@ -502,11 +607,10 @@ class Optimizer:
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
 
-        # Foot perpendicular to segment and lies on segment
-        self.register_loss(f"perp_{point_name.val}",
-                          lambda: self.perpendicular(vertex, foot, p1, p2), weight=10.0)
-        self.register_loss(f"on_seg_{point_name.val}",
-                          lambda: self.collinear(foot, p1, p2), weight=10.0)
+        # perpendicular loss
+        self.register_loss(f"perpendicular_{point_name.val}", self.perpendicular_loss(vertex, foot, p1, p2), weight=10.0)
+        self.register_loss(f"on_segment_{point_name.val}", lambda: self.collinear(foot, p1, p2), weight=10.0)
+
         return foot
 
     def _define_intersection(self, point_name, segment1_points, segment2_points):
@@ -521,12 +625,11 @@ class Optimizer:
         init_y = (p1.y.item() + p2.y.item() + p3.y.item() + p4.y.item()) / 4
         intersection = self.sample_uniform(point_name, init_coords=(init_x, init_y))
 
-        # Intersection lies on both lines
-        self.register_loss(f"on_line1_{point_name.val}",
-                          lambda: self.collinear(intersection, p1, p2), weight=50.0)
-        self.register_loss(f"on_line2_{point_name.val}",
-                          lambda: self.collinear(intersection, p3, p4), weight=50.0)
-        return intersection
+        self.register_loss(f"intersection_{point_name.val}", self.intersection_loss, weight=50.0)
+        # Add collinear constraints to ensure point lies on both lines
+        self.register_loss(f"collinear_line1_{point_name.val}", lambda: self.collinear(intersection, p1, p2), weight=50.0)
+        self.register_loss(f"collinear_line2_{point_name.val}", lambda: self.collinear(intersection, p3, p4), weight=50.0)
+        return
 
     def _define_centroid(self, point_name, triangle_points):
         assert len(triangle_points) == 3
@@ -545,12 +648,12 @@ class Optimizer:
         init_coords = Initializer.init_triangle_incircle()
         init_coords = Initializer.add_noise(init_coords)
         incenter = self.sample_uniform(point_name, init_coords=init_coords[3])
-
-        # Equal distance to all three sides
-        self.register_loss(f"incenter_{point_name.val}",
-                          lambda: (self.dist_to_line(incenter, p1, p2) - self.dist_to_line(incenter, p2, p3))**2 +
-                                  (self.dist_to_line(incenter, p2, p3) - self.dist_to_line(incenter, p3, p1))**2,
-                          weight=10.0)
+        def incircle_loss():
+            d1 = self.dist_to_line(incenter, p1, p2)
+            d2 = self.dist_to_line(incenter, p2, p3)
+            d3 = self.dist_to_line(incenter, p3, p1)
+            return (d1 - d2)**2 + (d2 - d3)**2
+        self.register_loss(f"incenter_{point_name.val}", incircle_loss, weight=10.0)
         return incenter
 
     def _define_circumcenter(self, point_name, triangle_points):
@@ -561,12 +664,12 @@ class Optimizer:
         init_coords = Initializer.init_triangle_circumcircle(radius=1.0)
         init_coords = Initializer.add_noise(init_coords, noise_scale=0.02)
         circumcenter = self.sample_uniform(point_name, init_coords=init_coords[3])
-
-        # Equal distance to all three vertices
-        self.register_loss(f"circumcenter_{point_name.val}",
-                          lambda: (self.dist(circumcenter, p1) - self.dist(circumcenter, p2))**2 +
-                                  (self.dist(circumcenter, p2) - self.dist(circumcenter, p3))**2,
-                          weight=10.0)
+        def circumcircle_loss():
+            d1 = self.dist(circumcenter, p1)
+            d2 = self.dist(circumcenter, p2)
+            d3 = self.dist(circumcenter, p3)
+            return (d1 - d2)**2 + (d2 - d3)**2
+        self.register_loss(f"circumcenter_{point_name.val}", circumcircle_loss, weight=10.0)
         return circumcenter
 
     def _define_orthocenter(self, point_name, triangle_points):
@@ -577,12 +680,19 @@ class Optimizer:
         init_coords = Initializer.init_right_triangle_with_orthocenter()
         init_coords = Initializer.add_noise(init_coords)
         orthocenter = self.sample_uniform(point_name, init_coords=init_coords[3])
-
-        # Two altitudes perpendicular to opposite sides: AH ⊥ BC, BH ⊥ AC
-        self.register_loss(f"orthocenter_{point_name.val}",
-                          lambda: self._dot_product_vectors(p1, orthocenter, p2, p3)**2 +
-                                  self._dot_product_vectors(p2, orthocenter, p1, p3)**2,
-                          weight=10.0)
+        def orthocenter_loss():
+            vec_h1_x = p1.x - orthocenter.x
+            vec_h1_y = p1.y - orthocenter.y
+            vec_23_x = p3.x - p2.x
+            vec_23_y = p3.y - p2.y
+            perp1 = vec_h1_x * vec_23_x + vec_h1_y * vec_23_y
+            vec_h2_x = p2.x - orthocenter.x
+            vec_h2_y = p2.y - orthocenter.y
+            vec_13_x = p3.x - p1.x
+            vec_13_y = p3.y - p1.y
+            perp2 = vec_h2_x * vec_13_x + vec_h2_y * vec_13_y
+            return perp1**2 + perp2**2
+        self.register_loss(f"orthocenter_{point_name.val}", orthocenter_loss, weight=10.0)
         return orthocenter
 
     def _define_midpoint(self, point_name, segment_points):
@@ -590,10 +700,12 @@ class Optimizer:
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
         midpoint = self.sample_uniform(point_name)
-        # Midpoint formula already enforces exact position - no need for collinear constraint
-        self.register_loss(f"midpoint_{point_name.val}",
-                          lambda: (midpoint.x - (p1.x + p2.x)/2)**2 + (midpoint.y - (p1.y + p2.y)/2)**2,
-                          weight=50.0)
+        def midpoint_loss():
+            expected_x = (p1.x + p2.x) / 2
+            expected_y = (p1.y + p2.y) / 2
+            return (midpoint.x - expected_x)**2 + (midpoint.y - expected_y)**2
+        self.register_loss(f"midpoint_{point_name.val}", midpoint_loss, weight=5.0)
+        self.register_loss(f"on_segment_mid_{point_name.val}", lambda: self.collinear(midpoint, p1, p2), weight=10.0)
         return midpoint
 
     def parameter_on_seg(self, p, segment_points: list):
@@ -601,8 +713,7 @@ class Optimizer:
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
         P = self.sample_uniform(p)
-        self.register_loss(f"on_seg_{p.val}",
-                          lambda: self.collinear(P, p1, p2), weight=50.0)
+        self.register_loss(f"on_seg_{p.val}", lambda: self.collinear(P, p1, p2), weight=10.0)
         return P
 
     def parameter_on_line(self, p, line_points):
@@ -624,10 +735,7 @@ class Optimizer:
         p4 = self.lookup_pt(line2_points[1])
         intersection = self.sample_uniform(point_name)
 
-        self.register_loss(f"on_line1_{point_name.val}",
-                          lambda: self.collinear(intersection, p1, p2), weight=10.0)
-        self.register_loss(f"on_line2_{point_name.val}",
-                          lambda: self.collinear(intersection, p3, p4), weight=10.0)
+        self.register_loss(f"intersection_{point_name.val}", self.intersection_loss(intersection, p1, p2, p3, p4), weight=10.0)
         return intersection
 
     def _define_angle_bisector(self, point_name, angle_points):
@@ -652,9 +760,41 @@ class Optimizer:
             'angle_points': [p.val for p in angle_points]
         })
 
+        # Apply constraints using existing _process_angle_bisector
+        # Pass Point objects for compatibility
         self._process_angle_bisector(angle_points[0], point_name, angle_points)
 
         return bisector_point
+
+    def parameter_on_seg(self, p, segment_points: list):
+        assert len(segment_points) == 2
+
+        p1 = self.lookup_pt(segment_points[0])
+        p2 = self.lookup_pt(segment_points[1])
+
+        P = self.sample_uniform(p)
+
+        self.register_loss(f"on_seg_{p.val}", lambda: self.collinear(P, p1, p2), weight=10.0)
+
+        return P
+
+    def parameter_on_line(self, p, line_points):
+        assert len(line_points) == 2
+
+        p1 = self.lookup_pt(line_points[0])
+        p2 = self.lookup_pt(line_points[1])
+
+        # Create a free point
+        P = self.sample_uniform(p, save_name=False)
+
+        # Constrain it to be on the line - recompute line each iteration
+        def on_line_loss():
+            line = self.pp2lnf(p1, p2)
+            return self.on_line(P, line)**2
+
+        self.register_loss(f"on_line_{p.val}", on_line_loss, weight=10.0)
+
+        return self.register_pt(p, P)
 
 
     def _define_perpendicular_bisector_point(self, point_name, segment_points):
@@ -662,13 +802,15 @@ class Optimizer:
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
         point = self.sample_uniform(point_name)
-        self.register_loss(f"perp_bisector_{point_name.val}",
-                          lambda: (self.dist(point, p1) - self.dist(point, p2))**2,
-                          weight=10.0)
+        def perp_bisector_loss():
+            d1 = self.dist(point, p1)
+            d2 = self.dist(point, p2)
+            return (d1 - d2)**2
+        self.register_loss(f"perp_bisector_{point_name.val}", perp_bisector_loss, weight=10.0)
         return point
 
     def process_instruction(self, instr):
-        from src.models.domain.geometry.instructions import Assertion
+        from llm_engineering.domains.geometry.instructions import Assertion
         if isinstance(instr, Parameter):
             self.process_parameter(instr)
         elif isinstance(instr, Assertion):
@@ -684,7 +826,17 @@ class Optimizer:
         if diagram_type == DiagramType.TRIANGLE:
             self._process_triangle_parameter(param_type, objects, args)
         elif diagram_type == DiagramType.QUADRILATERAL:
-            self._process_quadrilateral_parameter(param_type, objects, args)
+             p_type_str = str(param_type).split('.')[-1].lower()
+             if p_type_str == "square":
+                 self.sample_square(objects)
+             elif p_type_str == "rectangle":
+                 self.sample_rectangle(objects)
+             elif p_type_str == "parallelogram":
+                 self.sample_parallelogram(objects)
+             elif p_type_str == "trapezoid":
+                 self.sample_trapezoid(objects)
+             elif p_type_str == "rhombus": # [NEW]
+                 self.sample_rhombus(objects)
         elif diagram_type == DiagramType.POINT:
             self._process_point_parameter(param_type, objects, args)
         elif diagram_type == DiagramType.CIRCLE:
@@ -698,34 +850,87 @@ class Optimizer:
                 logger.warning(f"Unsupported diagram type: {diagram_type}")
 
     def _process_angle_bisector(self, vertex, bisector_point, angle_points):
-        """Process angle bisector constraints using reusable helper methods"""
-        p_vertex = self.name2pt[vertex.val]  # A (đỉnh góc)
-        p_bisector = self.name2pt[bisector_point.val]  # D (điểm trên phân giác)
+        # Trong tam giác ABC, AD là phân giác góc A
+        # vertex = A, bisector_point = D, angle_points = [A, B, C]
+
+        p_vertex = self.name2pt[vertex.val]  # A
+        p_bisector = self.name2pt[bisector_point.val]  # D
+
         p1 = self.name2pt[angle_points[1].val]  # B
         p2 = self.name2pt[angle_points[2].val]  # C
 
+        # constraint 1: D nam tren canh BC
+        def on_segment_loss():
+            # Vector BD và BC cùng phương (D nằm trên đường thẳng BC)
+            bd_x = p_bisector.x - p1.x
+            bd_y = p_bisector.y - p1.y
+            bc_x = p2.x - p1.x
+            bc_y = p2.y - p1.y
+            cross = bd_x * bc_y - bd_y * bc_x  # Cross product = 0 → cùng phương
+
+            # D nằm giữa B và C: BD = t * BC với 0 <= t <= 1
+            bc_len_sq = bc_x**2 + bc_y**2
+            t = (bd_x * bc_x + bd_y * bc_y) / (bc_len_sq + 1e-8)
+
+            # Phạt nếu t < 0 hoặc t > 1
+            between_penalty = torch.relu(-t) + torch.relu(t - 1)
+
+            return cross**2 + 10.0 * between_penalty
+
+        # constrain 2: goc BAD = goc CAD
+        def equal_angle_loss():
+            # Cosine of angle BAD
+            ab_x = p1.x - p_vertex.x # vector AB
+            ab_y = p1.y - p_vertex.y
+            ad_x = p_bisector.x - p_vertex.x # vector AD
+            ad_y = p_bisector.y - p_vertex.y
+            dot1 = ab_x * ad_x + ab_y * ad_y # tich vo huong
+
+            ab_norm = torch.sqrt(ab_x**2 + ab_y**2 + 1e-8)
+            ad_norm = torch.sqrt(ad_x**2 + ad_y**2 + 1e-8)
+            cos_bad = dot1 / (ab_norm * ad_norm + 1e-8)
+
+            # Cosine of angle CAD
+            ac_x = p2.x - p_vertex.x # vector AC
+            ac_y = p2.y - p_vertex.y
+            dot2 = ac_x * ad_x + ac_y * ad_y
+
+            ac_norm = torch.sqrt(ac_x**2 + ac_y**2 + 1e-8)
+            cos_cad = dot2 / (ac_norm * ad_norm + 1e-8)
+            return (cos_bad - cos_cad)**2
+
+        #constraint 3: BD/DC = AB/AC (dinh ly phan giac)
+        def ratio_loss():
+            # bd length
+            bd_x = p_bisector.x - p1.x
+            bd_y = p_bisector.y - p1.y
+            bd_len = torch.sqrt(bd_x**2 + bd_y**2 + 1e-8)
+
+            # dc length
+            dc_x = p2.x - p_bisector.x
+            dc_y = p2.y - p_bisector.y
+            dc_len = torch.sqrt(dc_x**2 + dc_y**2 + 1e-8)
+
+            # ab length
+            ab_x = p1.x - p_vertex.x
+            ab_y = p1.y - p_vertex.y
+            ab_len = torch.sqrt(ab_x**2 + ab_y**2 + 1e-8)
+
+            # ac length
+            ac_x = p2.x - p_vertex.x
+            ac_y = p2.y - p_vertex.y
+            ac_len = torch.sqrt(ac_x**2 + ac_y**2 + 1e-8)
+
+            # bd/dc - ab/ac = 0
+            ratio_bd_dc = bd_len / (dc_len + 1e-8)
+            ratio_ab_ac = ab_len / (ac_len + 1e-8)
+            return (ratio_bd_dc - ratio_ab_ac)**2
+
         key = f"{vertex.val}_{bisector_point.val}"
+        self.register_loss(f"bisector_on_segment_{key}", on_segment_loss, weight=10.0)
+        self.register_loss(f"bisector_equal_angle_{key}", equal_angle_loss, weight=10.0)
+        self.register_loss(f"bisector_ratio_{key}", ratio_loss, weight=5.0)
 
-        # Constraint 1: D nằm trên đoạn BC
-        self.register_loss(
-            f"bisector_on_segment_{key}",
-            lambda: self._point_on_segment_loss(p_bisector, p1, p2),
-            weight=10.0
-        )
-
-        # Constraint 2: Góc BAD = góc CAD (tính chất phân giác)
-        self.register_loss(
-            f"bisector_equal_angle_{key}",
-            lambda: self._angle_bisector_equal_loss(p_vertex, p1, p2, p_bisector),
-            weight=10.0
-        )
-
-        # Constraint 3: BD/DC = AB/AC (định lý phân giác)
-        self.register_loss(
-            f"bisector_ratio_{key}",
-            lambda: self._angle_bisector_ratio_loss(p_vertex, p1, p2, p_bisector),
-            weight=5.0
-        )
 
     def _process_triangle_parameter(self, param_type, objects, args):
         if isinstance(param_type, TriangleType):
@@ -775,35 +980,22 @@ class Optimizer:
         self.sample_triangle(objects, constraints)
 
     def _process_quadrilateral_parameter(self, param_type, objects, args):
-        """Process quadrilateral parameters - unified handler for all quadrilateral types"""
-        # Extract type string
+        """Process quadrilateral parameters"""
+        # Convert param_type to QuadrilateralType enum
         if param_type:
-            param_type_str = str(param_type).split('.')[-1].lower()
-        else:
-            param_type_str = "general"
-
-        # Map to appropriate sample function
-        quad_samplers = {
-            "square": self.sample_square,
-            "rectangle": self.sample_rectangle,
-            "parallelogram": self.sample_parallelogram,
-            "trapezoid": self.sample_trapezoid,
-            "rhombus": self.sample_rhombus,
-        }
-
-        sampler = quad_samplers.get(param_type_str)
-        if sampler:
-            sampler(objects)
-        else:
-            # Default to general quadrilateral via sample_quadrilateral
+            param_type_str = str(param_type).upper()
             try:
-                quadri_type = QuadrilateralType[param_type_str.upper()]
-            except (KeyError, AttributeError):
+                quadri_type = QuadrilateralType[param_type_str]
+            except KeyError:
                 quadri_type = QuadrilateralType.GENERAL
-            constraints = {'type': quadri_type}
-            self.sample_quadrilateral(objects, constraints)
+        else:
+            quadri_type = QuadrilateralType.GENERAL
 
-        logger.info(f"Processed quadrilateral type: {param_type_str}")
+        logger.info(f"Quadrilateral type: {quadri_type}")
+
+        constraints = {'type': quadri_type}
+
+        self.sample_quadrilateral(objects, constraints)
 
     def _process_point_parameter(self, param_type, objects, args):
 
@@ -899,7 +1091,7 @@ class Optimizer:
 
     def _add_parallel_constraint(self, points: list):
         """Add parallel constraint between two segments"""
-        if len(points) != 4:
+        if len(points) != 4:  # Need 4 points for 2 points
             logger.warning(f"Parallel constraint needs 4 points (2 points), got {len(points)}")
             return
 
@@ -908,10 +1100,35 @@ class Optimizer:
         p3 = self.lookup_pt(points[2])
         p4 = self.lookup_pt(points[3])
 
+        def parallel_loss():
+            # Direction vector 1
+            dx1 = p2.x - p1.x
+            dy1 = p2.y - p1.y
+            len1 = torch.sqrt(dx1**2 + dy1**2) + 1e-8
+
+            # Direction vector 2
+            dx2 = p4.x - p3.x
+            dy2 = p4.y - p3.y
+            len2 = torch.sqrt(dx2**2 + dy2**2) + 1e-8
+
+            # Normalize
+            dx1_norm = dx1 / len1
+            dy1_norm = dy1 / len1
+            dx2_norm = dx2 / len2
+            dy2_norm = dy2 / len2
+
+            # Cross product of normalized vectors should be zero
+            cross = dx1_norm * dy2_norm - dy1_norm * dx2_norm
+
+            # Also check dot product is close to ±1 (same or opposite direction)
+            dot = dx1_norm * dx2_norm + dy1_norm * dy2_norm
+            angle_error = 1 - torch.abs(dot)  # Should be 0 if parallel
+
+            return cross + angle_error
+
         seg1_name = f"{points[0].val}_{points[1].val}"
         seg2_name = f"{points[2].val}_{points[3].val}"
-        self.register_loss(f"parallel_{seg1_name}_{seg2_name}",
-                          lambda: self.parallel(p1, p2, p3, p4), weight=10.0)
+        self.register_loss(f"parallel_{seg1_name}_{seg2_name}", parallel_loss, weight=50.0)  # Increased from 10.0
 
     def _add_perpendicular_constraint(self, segments):
         """Add perpendicular constraint between two segments"""
@@ -924,12 +1141,19 @@ class Optimizer:
         p3 = self.lookup_pt(segments[2])
         p4 = self.lookup_pt(segments[3])
 
+        def perpendicular_loss():
+            dx1 = p2.x - p1.x
+            dy1 = p2.y - p1.y
+            dx2 = p4.x - p3.x
+            dy2 = p4.y - p3.y
+            dot = dx1 * dx2 + dy1 * dy2
+            return dot
+
         seg1_name = f"{segments[0].val}_{segments[1].val}"
         seg2_name = f"{segments[2].val}_{segments[3].val}"
-        self.register_loss(f"perpendicular_{seg1_name}_{seg2_name}",
-                          lambda: self.perpendicular(p1, p2, p3, p4), weight=10.0)
+        self.register_loss(f"perpendicular_{seg1_name}_{seg2_name}", perpendicular_loss, weight=10.0)
 
-    def _add_angle_equal_constraint(self, points: list):
+    def _add_angle_equal_constraint(self, points):
         """Add angle equality constraint: angle ABC = angle DEF"""
         if len(points) != 6:
             logger.warning(f"Angle-equal constraint needs 6 points, got {len(points)}")
@@ -943,8 +1167,22 @@ class Optimizer:
         p6 = self.lookup_pt(points[5])
 
         def angle_equal_loss():
-            cos1 = self.angle_cosine(p1, p2, p3)
-            cos2 = self.angle_cosine(p4, p5, p6)
+            v1_1x = p1.x - p2.x
+            v1_1y = p1.y - p2.y
+            v1_2x = p3.x - p2.x
+            v1_2y = p3.y - p2.y
+            len1_1 = torch.sqrt(v1_1x**2 + v1_1y**2 + 1e-8)
+            len1_2 = torch.sqrt(v1_2x**2 + v1_2y**2 + 1e-8)
+            cos1 = (v1_1x * v1_2x + v1_1y * v1_2y) / (len1_1 * len1_2)
+
+            v2_1x = p4.x - p5.x
+            v2_1y = p4.y - p5.y
+            v2_2x = p6.x - p5.x
+            v2_2y = p6.y - p5.y
+            len2_1 = torch.sqrt(v2_1x**2 + v2_1y**2 + 1e-8)
+            len2_2 = torch.sqrt(v2_2x**2 + v2_2y**2 + 1e-8)
+            cos2 = (v2_1x * v2_2x + v2_1y * v2_2y) / (len2_1 * len2_2)
+
             return (cos1 - cos2)**2
 
         angle1_name = f"{points[0].val}_{points[1].val}_{points[2].val}"
@@ -990,6 +1228,18 @@ class Optimizer:
             return 0.0
 
         optimizer = optim.Adam(self.trainable_vars, lr=lr)
+        scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode='min',
+            factor=0.5,
+            patience=20,
+            min_lr=1e-4,
+        )
+
+        best_loss = float('inf')
+        patience_counter = 0
+        patience = 30
+        early_stop_threshold = 1e-6
 
         if self.verbosity:
             logger.info(f"Optimization ({epochs}) Epochs")
@@ -1003,17 +1253,33 @@ class Optimizer:
 
             total_loss.backward()
 
+            # Clip gradients
+            torch.nn.utils.clip_grad_norm_(self.trainable_vars, max_norm=1.0)
+
             optimizer.step()
+
+            # Update scheduler
+            scheduler.step(total_loss.item())
 
             if self.verbosity and i % 100 == 0:
                 # Log loss breakdown
                 breakdown = ", ".join([f"{k}: {v.item():.6f}" for k, v in self.losses.items()])
                 logger.info(f"Iteration {i:4d}: Total = {total_loss.item():.6f} | {breakdown}")
 
-            # Early stopping - stricter threshold
-            if total_loss.item() < 1e-8:  # Reduced from 1e-6
+            current_loss = total_loss.item()
+            if current_loss < early_stop_threshold:
                 if self.verbosity >= 0:
-                    logger.info(f"Converged at iteration {i} with loss {total_loss.item():.6f}")
+                    logger.info(f"Coverged at epoch {i}")
+
+            if current_loss < best_loss - 1e-7:
+                best_loss = current_loss
+                patience_counter = 0 # Reset coutner
+            else:
+                patience_counter += 1
+
+            if patience_counter >= patience:
+                if self.verbosity >= 0:
+                    logger.info(f"Early stop at epoch {i} (no improvement for {patience} epochs)")
                 break
 
         final_loss = total_loss.item()
@@ -1033,30 +1299,43 @@ class Optimizer:
             logger.info(f"{key:30s}: {loss.item():.6f}")
 
     def solve_single(self, attempt_id=0):
+        """Solve with single initialization attempt"""
         self.current_attempt = attempt_id
+
+        # Preprocess instructions
         self.preprocess()
+
+        # Add regularization
         self.regularize_points()
 
+        # Optimize
         loss = float('inf')
         if self.has_loss:
-            loss = self.train(epochs=self.epochs, lr=self.learning_rate)
+            loss = self.train(epochs=self.opts.get('epochs', 1000),
+                            lr=self.opts.get('learning_rate', 0.01))
 
         return self.get_diagram(), loss
 
     def solve(self, n_tries=None):
+        """Solve with multiple initialization attempts"""
         import random
 
+        # Default to 1 try for backward compatibility
         if n_tries is None:
-            n_tries = self.n_tries
+            n_tries = self.opts.get('n_tries', 1)
 
+        eps = self.opts.get('eps', 1e-6)
         best_loss = float('inf')
         best_diagram = None
 
         for attempt in range(n_tries):
             if attempt > 0:
+                # Reset state for new attempt
                 self._init_state()
-                random.seed(self.seed + attempt)
-                torch.manual_seed(self.seed + attempt)
+
+                # Set different random seed for varied initialization
+                random.seed(self.opts.get('seed', 42) + attempt)
+                torch.manual_seed(self.opts.get('seed', 42) + attempt)
 
             if self.verbosity and n_tries > 1:
                 logger.info(f"\nAttempt {attempt + 1}/{n_tries}")
@@ -1064,11 +1343,13 @@ class Optimizer:
             try:
                 diagram, loss = self.solve_single(attempt_id=attempt)
 
-                if loss < self.eps:
+                # Early stopping if converged
+                if loss < eps:
                     if self.verbosity and n_tries > 1:
                         logger.success(f"Converged at attempt {attempt + 1} with loss {loss:.6f}")
                     return diagram
 
+                # Track best result
                 if loss < best_loss:
                     best_loss = loss
                     best_diagram = diagram

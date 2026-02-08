@@ -1,18 +1,28 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+# from contextlib import asynccontextmanager
 from loguru import logger
 
 from src.api.endpoints import register_routes
 from src.config.settings.base import settings
+# from src.core.database import init_db
 
-# Create FastAPI application
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     logger.info("Initializing database...")
+#     await init_db()
+#     logger.info("Database initialized successfully")
+#     yield
+#     logger.info("Application shutdown")
+
 app = FastAPI(
     title="GeoUni Backend API",
     description="Geometry problem solving platform with AI-powered agents",
     version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
-    openapi_url="/openapi.json"
+    openapi_url="/openapi.json",
+    # lifespan=lifespan
 )
 
 # Configure CORS

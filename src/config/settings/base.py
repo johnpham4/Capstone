@@ -7,6 +7,16 @@ class Settings(BaseSettings):
     DATABASE_HOST: str = "mongodb://geo_engineering:geo_engineering@127.0.0.1:27017"
     DATABASE_NAME: str = "unigeo"
 
+    POSTGRES_USER: str = "postgres"
+    POSTGRES_PASSWORD: str = "postgres"
+    POSTGRES_HOST: str = "localhost"
+    POSTGRES_PORT: int = 5432
+    POSTGRES_DB: str = "geouni_auth"
+
+    @property
+    def DATABASE_URL(self) -> str:
+        return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+
     # HuggingFace Model
     BASE_LLM: str = "unsloth/Falcon-unsloth/Qwen2.5-7B-Instruct-7B"
     HF_MODEL_ID: str = f"minn4/text2diagram-Qwen2.5-7B-Instruct"
@@ -48,6 +58,10 @@ class Settings(BaseSettings):
 
     OPENAI_MODEL_ID: str = "gpt-4o-mini"
     OPENAI_API_KEY: str | None = None
+
+    JWT_SECRET_KEY: str = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+    JWT_ALGORITHM: str = "HS256"
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     # RabbitMQ Configuration
     RABBITMQ_URL: str = "amqp://guest:guest@localhost:5672/"

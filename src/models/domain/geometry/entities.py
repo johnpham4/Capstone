@@ -29,10 +29,6 @@ class GeometricPoint:
 
 @dataclass
 class Diagram:
-    """
-    Entity/Aggregate Root: Represents a complete geometric diagram
-    Manages all geometric objects and their relationships
-    """
     points: Dict[str, GeometricPoint] = field(default_factory=dict)
     triangles: List[tuple] = field(default_factory=list)
     quadrilaterals: List[List[GeometricPoint]] = field(default_factory=list)
@@ -52,7 +48,7 @@ class Diagram:
         self.points[name] = point
 
     def add_triangle(self, p1: GeometricPoint, p2: GeometricPoint, p3: GeometricPoint,
-                    equal_sides: Optional[List[tuple]] = None, 
+                    equal_sides: Optional[List[tuple]] = None,
                     right_angle_at: Optional[int] = None,
                     equal_angles: Optional[List[tuple]] = None) -> None:
         """
@@ -72,7 +68,7 @@ class Diagram:
         if not hasattr(self, 'quadrilaterals'):
             self.quadrilaterals = []
         self.quadrilaterals.append(quadrilateral)
-        
+
 
     def add_circle(self, center: GeometricPoint, info: Any) -> None:
         """Add a circle to the diagram"""
