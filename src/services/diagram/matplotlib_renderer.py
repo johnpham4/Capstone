@@ -52,8 +52,8 @@ class MatplotlibDiagramRenderer:
         v1x, v1y = v1x / len1, v1y / len1
         v2x, v2y = v2x / len2, v2y / len2
 
-        # Size of right angle symbol (10% of shortest leg)
-        size = min(len1, len2) * 0.1
+        # Size of right angle symbol 
+        size = min(len1, len2) * 0.4
 
         # Draw small square
         corner1 = (vertex.x + v1x * size, vertex.y + v1y * size)
@@ -62,7 +62,35 @@ class MatplotlibDiagramRenderer:
 
         ax.plot([corner1[0], corner2[0], corner3[0]],
                 [corner1[1], corner2[1], corner3[1]],
-                'k-', linewidth=1.0)
+                color='green', linewidth=1.5)
+
+    def _find_segment_intersection(self, p1: GeometricPoint, p2: GeometricPoint, 
+                                    p3: GeometricPoint, p4: GeometricPoint):
+        """
+        Tìm giao điểm của 2 đoạn thẳng: seg1=(p1,p2) và seg2=(p3,p4)
+        Trả về (x, y) nếu có giao điểm, None nếu không giao nhau
+        """
+        x1, y1 = p1.x, p1.y
+        x2, y2 = p2.x, p2.y
+        x3, y3 = p3.x, p3.y
+        x4, y4 = p4.x, p4.y
+        
+        denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+        
+        # Kiểm tra song song
+        if abs(denom) < 1e-10:
+            return None
+            
+        t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom
+        u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denom
+        
+        # Kiểm tra giao điểm có nằm trên cả 2 đoạn thẳng không
+        if 0 <= t <= 1 and 0 <= u <= 1:
+            x = x1 + t * (x2 - x1)
+            y = y1 + t * (y2 - y1)
+            return (x, y)
+        
+        return None
 
     def _draw_angle_arc(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, num_arcs: int = 1, radius: float = 0.12, draw_tick: bool = False):
         """
@@ -384,6 +412,28 @@ class MatplotlibDiagramRenderer:
         for p1, p2, color in self.diagram.segments:
             ax.plot([p1.x, p2.x], [p1.y, p2.y], color=color, linewidth=1.0, linestyle='--', alpha=0.7)
 
+        # 4.5. Draw Perpendicular Markers
+        if hasattr(self.diagram, 'perpendiculars') and self.diagram.perpendiculars:
+            for perp_tuple in self.diagram.perpendiculars:
+                # perp_tuple = (p1, p2, p3, p4) - 2 đoạn thẳng seg1=(p1,p2) và seg2=(p3,p4)
+                if len(perp_tuple) == 4:
+                    p1, p2, p3, p4 = perp_tuple
+                    
+                    # Tìm giao điểm
+                    intersection = self._find_segment_intersection(p1, p2, p3, p4)
+                    
+                    if intersection:
+                        # Tạo temporary point cho giao điểm
+                        class TempPoint:
+                            def __init__(self, x, y):
+                                self.x = x
+                                self.y = y
+                        
+                        intersection_pt = TempPoint(intersection[0], intersection[1])
+                        
+                        # Sử dụng 2 điểm trên mỗi đoạn thẳng để xác định hướng
+                        self._draw_right_angle_symbol(ax, intersection_pt, p1, p3)
+
         # 5. Draw Lines
         for line_name, line_data in self.diagram.lines.items():
             p1, p2 = line_data
@@ -512,7 +562,7 @@ class MatplotlibDiagramRenderer:
                     angle_data['p1'],
                     angle_data['p2'],
                     num_arcs=1,
-                    radius=0.15,
+                    radius=0.18,  
                     draw_tick=False
                 )
                 # Draw the degree text
@@ -522,7 +572,7 @@ class MatplotlibDiagramRenderer:
                     angle_data['p1'],
                     angle_data['p2'],
                     angle_data['degrees'],
-                    radius=0.25  # Slightly further out than arcs
+                    radius=0.32  
                 )
 
 

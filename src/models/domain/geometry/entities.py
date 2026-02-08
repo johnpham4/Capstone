@@ -42,6 +42,7 @@ class Diagram:
     angle_bisectors: List[Dict] = field(default_factory=list)
     angle_equal_assertions: List[Dict] = field(default_factory=list)  # Store angle-equal constraints
     angle_measures: List[Dict] = field(default_factory=list)  # Store angles with measure values to display
+    perpendiculars: List[tuple] = field(default_factory=list)  # Store perpendicular segments: [(seg1_p1, seg1_p2, seg2_p1, seg2_p2)]
 
     # Tick marks for equal segments
     tick_styles: List[str] = field(default_factory=lambda: ["k-", "k--", "kx", "kxx", "kg", "k---"])

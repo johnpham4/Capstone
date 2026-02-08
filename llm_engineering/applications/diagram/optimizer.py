@@ -41,6 +41,7 @@ class Optimizer:
         self.line_objects = {}
         self.angle_equal_assertions = []
         self.angle_measures = []  # Store angles with measure values: [(vertex, p1, p2, degrees)]
+        self.perpendiculars = []  # Store perpendicular segments for rendering
         self.unnamed_point_counter = 0
         self.has_loss = False
         self.trainable_vars = []
@@ -1331,6 +1332,9 @@ class Optimizer:
         seg2_name = f"{segments[2].val}_{segments[3].val}"
         self.register_loss(f"perpendicular_{seg1_name}_{seg2_name}",
                           lambda: self.perpendicular(p1, p2, p3, p4), weight=10.0)
+        
+        # Lưu thông tin perpendicular để renderer vẽ dấu vuông góc
+        self.perpendiculars.append((segments[0].val, segments[1].val, segments[2].val, segments[3].val))
 
     def _add_angle_equal_constraint(self, points: list):
         """Add angle equality constraint: angle ABC = angle DEF"""
@@ -1628,5 +1632,15 @@ class Optimizer:
                     diagram.points[p2_name],
                     degrees
                 )
+        
+        # Add perpendicular constraints for rendering perpendicular markers
+        for p1_name, p2_name, p3_name, p4_name in self.perpendiculars:
+            if all(pname in diagram.points for pname in [p1_name, p2_name, p3_name, p4_name]):
+                diagram.perpendiculars.append((
+                    diagram.points[p1_name],
+                    diagram.points[p2_name],
+                    diagram.points[p3_name],
+                    diagram.points[p4_name]
+                ))
         
         return diagram
