@@ -1045,57 +1045,63 @@ class Optimizer:
             lambda pt=point, c=center, r=radius_const: (self.dist(pt, c) - r)**2,
             weight=100000.0  # MAX WEIGHT - chạm chính xác!
         )
-        
-        # thêm NDG cho dây cung không đi qua tâm
-        # Tìm tất cả điểm khác cũng on-circle với cùng center
-        self._add_chord_ndg_for_circle_point(points[0].val, center_name)
     
-    def _add_chord_ndg_for_circle_point(self, point_name, center_name):
+    def _add_all_chord_ndgs(self):
         """
-        Tự động thêm NDG (non-degeneracy) để ngăn dây cung đi qua tâm.
+        Thêm NDG cho TẤT CẢ chords sau khi đã xử lý hết assertions.
+        Duyệt qua tất cả cặp (điểm, center) từ on-circle constraints.
+        """
+        # Thu thập tất cả điểm on-circle theo center
+        circle_points = {}  # {center_name: [point_names]}
         
-        Logic: Nếu có 2 điểm A, B cùng on-circle O và có segment AB,
-        thì thêm NDG để ngăn A-O-B thẳng hàng (đảm bảo AB là dây, không phải đường kính).
-        """
-        # Tìm tất cả điểm khác cũng on-circle với cùng center
-        other_circle_points = []
         for loss_name in self.losses:
-            if loss_name.startswith(f"on_circle_") and center_name in loss_name:
+            if loss_name.startswith("on_circle_"):
                 parts = loss_name.split("_")
-                if len(parts) >= 4:
-                    other_point_name = parts[2]
-                    if other_point_name != point_name:
-                        other_circle_points.append(other_point_name)
-        
-        # Check xem có segment giữa point_name và các điểm khác không
-        center = self.lookup_pt_by_name(center_name)
-        if not center:
-            return
-        
-        for other_point in other_circle_points:
-            # Kiểm tra cả 2 chiều: (point_name, other_point) hoặc (other_point, point_name)
-            has_segment = (
-                (point_name, other_point) in self.segments or 
-                (other_point, point_name) in self.segments
-            )
-            
-            if has_segment:
-                # Thêm NDG: ngăn (point_name, center, other_point) thẳng hàng
-                try:
-                    p1 = self.lookup_pt_by_name(point_name)
-                    p2 = self.lookup_pt_by_name(other_point)
+                if len(parts) >= 4:  # on_circle_PointName_CenterName
+                    point_name = parts[2]
+                    center_name = "_".join(parts[3:])
                     
-                    if p1 and p2:
-                        ndg_key = f"chord_ndg_{point_name}_{center_name}_{other_point}"
-                        if ndg_key not in self.ndgs:  # Tránh duplicate
-                            self.register_ndg(
-                                ndg_key,
-                                lambda pt1=p1, c=center, pt2=p2: self.collinear(pt1, c, pt2),
-                                weight=50.0  # Weight cao để ưu tiên
-                            )
-                            logger.info(f"Added chord NDG: {point_name}-{center_name}-{other_point} must NOT be collinear")
-                except Exception as e:
-                    logger.warning(f"Failed to add chord NDG: {e}")
+                    if center_name not in circle_points:
+                        circle_points[center_name] = []
+                    circle_points[center_name].append(point_name)
+        
+        # Với mỗi tâm, kiểm tra các cặp điểm có segment không
+        for center_name, point_names in circle_points.items():
+            center = self.lookup_pt_by_name(center_name)
+            if not center:
+                continue
+            
+            # Kiểm tra tất cả cặp điểm
+            for i in range(len(point_names)):
+                for j in range(i + 1, len(point_names)):
+                    p1_name = point_names[i]
+                    p2_name = point_names[j]
+                    
+                    # Kiểm tra có segment giữa 2 điểm này không
+                    has_segment = (
+                        (p1_name, p2_name) in self.segments or 
+                        (p2_name, p1_name) in self.segments
+                    )
+                    
+                    if has_segment:
+                        # Thêm NDG: ngăn (p1, center, p2) thẳng hàng
+                        try:
+                            pt1 = self.lookup_pt_by_name(p1_name)
+                            pt2 = self.lookup_pt_by_name(p2_name)
+                            
+                            if pt1 and pt2:
+                                ndg_key = f"chord_ndg_{p1_name}_{center_name}_{p2_name}"
+                                if ndg_key not in self.ndgs:
+                                    self.register_ndg(
+                                        ndg_key,
+                                        lambda pt1_=pt1, c=center, pt2_=pt2: self.collinear(pt1_, c, pt2_),
+                                        weight=100.0  # Weight CAO để ưu tiên tránh đường kính
+                                    )
+                                    if self.verbosity:
+                                        logger.info(f"🔥 Added chord NDG: {p1_name}-{center_name}-{p2_name} must NOT be collinear")
+                        except Exception as e:
+                            if self.verbosity:
+                                logger.warning(f"Failed to add chord NDG: {e}")
     
     def _enforce_minimum_angle_between_circle_points(self):
         """
@@ -1315,6 +1321,9 @@ class Optimizer:
     def solve_single(self, attempt_id=0):
         self.current_attempt = attempt_id
         self.preprocess()
+        
+        self._add_all_chord_ndgs()
+        
         self.regularize_points()
         # self.make_points_distinct()
 
