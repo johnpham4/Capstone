@@ -29,10 +29,27 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
      → C là điểm TỰ DO trên đường tròn, KHÔNG dùng midpoint!
    • "C là trung điểm đoạn AB" → (define C point (midpoint A B))
    
-   ⚠️ CHỨNG MINH vs CHO SẴN:
+   CHỨNG MINH vs CHO SẴN:
    • Đề bảo "Chứng minh góc A = 60°" / "Tính góc A" → KHÔNG thêm (angle-measure B A C 60)
    • Đề bảo "Chứng minh OC ⟂ AB" → KHÔNG thêm (perpendicular ...)
    • CHỈ thêm constraint khi đề BÀI CHO SẴN, không phải chứng minh
+   
+   ĐIỂM NẰM TRÊN ĐƯỜNG TRÒN - CỰC KỲ QUAN TRỌNG:
+   • Khi đề bài nói "điểm M ∈ (O)" / "M nằm trên (O)" / "M thuộc đường tròn (O)"
+     → LUÔN LUÔN thêm (on-circle M O) NGAY SAU khi define M
+   • Khi đề bài viết (D ∈ (O)) / (E ∈ (O)) trong ngoặc đơn
+     → D và E PHẢI có (on-circle D O) và (on-circle E O)
+   • VÍ DỤ: "Vẽ dây CD vuông góc với AB (D ∈ (O)) và dây DE song song với AB (E ∈ (O))"
+     (define C point)
+     (on-circle C O)  ← C nằm trên đường tròn
+     (define D point)
+     (on-circle D O)  ← THIẾU DÒNG NÀY = SAI HOÀN TOÀN!
+     (segment C D)
+     (perpendicular (segment A B) (segment C D))
+     (define E point)
+     (on-circle E O)  ← THIẾU DÒNG NÀY = SAI HOÀN TOÀN!
+     (segment D E)
+     (parallel (segment A B) (segment D E))
 
 3. ĐOẠN/ĐƯỜNG
    • (segment A B) - đoạn thẳng
@@ -45,7 +62,7 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
    • LUÔN: (define O point) TRƯỚC → (circle O) SAU
    • Scale: **1 cm = 0.1 đơn vị** (5cm → 0.5, 10cm → 1.0)
    
-   ⚠️⚠️⚠️ ĐƯỜNG KÍNH vs DÂY - CỰC KỲ QUAN TRỌNG:
+   ĐƯỜNG KÍNH vs DÂY - CỰC KỲ QUAN TRỌNG:
    
    **ĐƯỜNG KÍNH** (đi qua tâm O):
    • "đường kính AB" / "đường kính MN" / "có đường kính AB" → BẮT BUỘC 4 thành phần:
@@ -110,12 +127,54 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
    • (on-segment M C D) - M nằm trên đoạn CD
    • (on-circle A O) - A trên đường tròn tâm O
    • (distance O A 0.5), (equal-distance O M O H)
+   
+   GÓC Ở TÂM ĐƯỜNG TRÒN - CỰC KỲ QUAN TRỌNG:
+   
+   ĐỊNH NGHĨA: Góc có đỉnh trùng với tâm đường tròn được gọi là GÓC Ở TÂM.
+   
+   QUY TẮC VẼ GÓC Ở TÂM:
+   1. Kiểm tra xem các điểm đã được nối với tâm O chưa
+   2. CHỈ vẽ bán kính CHƯA CÓ (tránh trùng lặp)
+   3. Kê khai góc: (angle-measure A O C 50)
+   
+   ⚠️ LƯU Ý ĐẶC BIỆT - ĐƯỜNG KÍNH:
+   • Nếu AB là ĐƯỜNG KÍNH [(segment A B) + (on-segment O A B)]
+     → O ĐÃ NỐI với A và B rồi
+     → KHÔNG vẽ lại (segment O A) hay (segment O B) - bị TRÙNG!
+   • CHỈ vẽ bán kính MỚI đến điểm chưa nối
+   
+   VÍ DỤ: "AB là đường kính, C trên đường tròn, góc AOC = 50°"
+   (segment A B)        ← Đường kính
+   (on-segment O A B)   ← O nằm giữa → O đã nối A và B
+   (define C point)
+   (on-circle C O)
+   (segment O C)        ← CHỈ vẽ bán kính mới OC, KHÔNG vẽ OA (đã có)!
+   (angle-measure A O C 50)
+   
+   VÍ DỤ: "Dây AB (không phải đường kính), góc AOB = 120°"
+   (segment A B)        ← Dây thường (không có on-segment)
+   (segment O A)        ← CẦN vẽ bán kính
+   (segment O B)        ← CẦN vẽ bán kính  
+   (angle-measure A O B 120)
+   
+   NHẬN BIẾT: Nếu đỉnh góc (chữ ở giữa) là tên tâm đường tròn → GÓC Ở TÂM → CẦN BÁN KÍNH!
 
 ═══ QUY TẮC ═══
 
 1. THỨ TỰ: Hình → Define points → Segments/Lines → Circles → Constraints
 
 2. GÓC: "góc A = 60°" → (angle-measure B A C 60) [A ở GIỮA]
+   
+   GÓC Ở TÂM: Nếu đỉnh góc là tâm đường tròn (góc có đỉnh trùng với tâm)
+   → PHẢI vẽ bán kính đến các điểm CHƯA NỐI với tâm
+   • Nếu AB là ĐƯỜNG KÍNH: O đã nối A, B → CHỈ vẽ bán kính mới
+   • Nếu A, B là điểm tự do: CẦN vẽ cả 2 bán kính O-A và O-B
+   
+   VÍ DỤ 1: AB đường kính, góc AOC = 50°
+   → (segment O C) + (angle-measure A O C 50)  [OA đã có từ đường kính]
+   
+   VÍ DỤ 2: Dây AB, góc AOB = 120°
+   → (segment O A) + (segment O B) + (angle-measure A O B 120)
 
 3. ĐƯỜNG ĐẶC BIỆT:
    • Đường cao AH: (define H point (projection A (segment B C))) + (segment A H)
@@ -213,6 +272,44 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
    (define D point)
    (segment O D)
    (distance O D 0.5)
+
+8. "Cho đường tròn (O) có đường kính AB. Lấy điểm C nằm trên (O) sao cho ∠AOC = 50°. Vẽ dây CD vuông góc với AB (D ∈ (O))"
+   (define O point)
+   (circle O)
+   (define A point)
+   (define B point)
+   (segment A B)
+   (on-circle A O)
+   (on-circle B O)
+   (on-segment O A B)  ← AB là đường kính → O đã nối với A và B!
+   (define C point)
+   (on-circle C O)  ← C nằm trên (O)
+   (segment O C)  ← CHỈ vẽ bán kính OC (bán kính mới), KHÔNG vẽ OA (đã có từ đường kính AB)!
+   (angle-measure A O C 50)
+   (define D point)
+   (on-circle D O)  ← D ∈ (O) - BẮT BUỘC phải có!
+   (segment C D)
+   (perpendicular (segment A B) (segment C D))
+
+9. "Cho đường tròn (O) có đường kính AB. Vẽ dây CD vuông góc với AB (D ∈ (O)) và dây DE song song với AB (E ∈ (O))"
+   (define O point)
+   (circle O)
+   (define A point)
+   (define B point)
+   (segment A B)
+   (on-circle A O)
+   (on-circle B O)
+   (on-segment O A B)  ← AB là đường kính
+   (define C point)
+   (on-circle C O)  ← C ∈ (O)
+   (define D point)
+   (on-circle D O)  ← D ∈ (O) - BẮT BUỘC!
+   (segment C D)
+   (perpendicular (segment A B) (segment C D))
+   (define E point)
+   (on-circle E O)  ← E ∈ (O) - BẮT BUỘC!
+   (segment D E)
+   (parallel (segment A B) (segment D E))
 
 ═══ OUTPUT FORMAT ═══
 ⚠️ TUYỆT ĐỐI QUAN TRỌNG:

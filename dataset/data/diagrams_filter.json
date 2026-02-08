@@ -9,18 +9,36 @@
     "image": "images/img_231302.png",
     "caption": "circle (I), chords AB and CD pass through center I, chord EF does not pass through I",
     "id": 231302,
-    "caption_vn": "Cho đường tròn (I) có các dây cung AB, CD, EF. Biết rằng AB và CD đi qua tâm I, còn EF không đi qua I. Hãy so sánh độ dài AB, CD và EF."
+    "caption_vn": "Cho đường tròn (I) có các dây cung AB, CD, EF. Biết rằng AB và CD đi qua tâm I, EF không đi qua I. Hãy so sánh độ dài AB, CD và EF."
   },
   {
     "image": "images/img_231303.png",
     "caption": "circle (O), distance from center to chord AB is 3 cm, minor arc AB measures 100 degrees",
     "id": 231303,
-    "caption_vn": "Tâm O của một đường tròn cách dây AB của nó một khoảng 3 cm. Biết dây cung nhỏ AB chắn cung 100°. Tính bán kính của đường tròn (O) (làm tròn kết quả đến hàng phần mười)."
+    "caption_vn": "Tâm O của một đường tròn cách dây AB của nó một khoảng 3 cm. Tính bán kính của đường tròn (O), biết rằng dây cung nhỏ AB có số đo bằng 100° (làm tròn kết quả đến hàng phần mười)."
   },
   {
     "image": "images/img_231304.png",
-    "caption": "circle (O), radius 5 cm, points A, B, C, D with given distances from O",
+    "caption": "circle (O), radius 5 cm, points A, B, C, D at given distances from O",
     "id": 231304,
-    "caption_vn": "Cho đường tròn (O) bán kính 5 cm và bốn điểm A, B, C, D sao cho OA = 3 cm, OB = 4 cm, OC = 7 cm, OD = 5 cm. Hãy cho biết mỗi điểm A, B, C, D nằm trong, nằm trên hay nằm ngoài đường tròn (O)."
+    "caption_vn": "Cho đường tròn (O) bán kính 5 cm và bốn điểm A, B, C, D thoả mãn OA = 3 cm, OB = 4 cm, OC = 7 cm, OD = 5 cm. Hãy cho biết mỗi điểm A, B, C, D nằm trong, nằm trên hay nằm ngoài đường tròn (O)."
+  },
+  {
+    "image": "images/img_231305.png",
+    "caption": "circle (O; R), chords AB and CD, perpendiculars OH and OK from O to the chords",
+    "id": 231305,
+    "caption_vn": "Cho AB và CD là hai dây của đường tròn (O; R). Kẻ OH, OK lần lượt vuông góc với AB và CD. Kết luận nào sau đây đúng?"
+  },
+  {
+    "image": "images/img_231306.png",
+    "caption": "circle (O; R), chords AB and CD perpendicular at an interior point",
+    "id": 231306,
+    "caption_vn": "Cho đường tròn (O; R). Vẽ hai dây AB và CD vuông góc với nhau tại một điểm nằm trong đường tròn. Chứng minh rằng diện tích tứ giác ACBD không vượt quá 2R²."
+  },
+  {
+    "image": "images/img_231307.png",
+    "caption": "circle (O), diameter AB, point C on circle, CD perpendicular to AB, DE parallel to AB",
+    "id": 231307,
+    "caption_vn": "Cho đường tròn (O) có đường kính AB. Lấy điểm C nằm trên (O) sao cho ∠AOC = 50°. Vẽ dây CD vuông góc với AB (D ∈ (O)) và dây DE song song với AB (E ∈ (O))."
   }
 ]
