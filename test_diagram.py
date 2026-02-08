@@ -30,7 +30,7 @@ def test_single_problem(instruction, dsl_answer, output_path):
         # print(f"Instructions: {builder.instructions}")
         opts = {'epochs': 1000, 'n_tries': 3, 'eps': 1e-6, 'seed': 42, 'learning_rate': 0.02}
 
-        optimizer = Optimizer(builder.instructions, **opts, verbosity=True)
+        optimizer = Optimizer(builder.instructions, opts, verbosity=True)
         diagram = optimizer.solve()
 
         print(f"\nFinal loss: {optimizer.losses}")
@@ -63,7 +63,6 @@ def main():
     output_dir = Path("output_fixed")
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Find existing diagram files to determine starting index
     existing_files = list(output_dir.glob("diagram_*.png"))
     if existing_files:
         numbers = []

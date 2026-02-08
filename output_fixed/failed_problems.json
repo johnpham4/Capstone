@@ -1,0 +1,7 @@
+[
+  {
+    "index": 34,
+    "instruction": "Cho đường tròn (O) với ∠AOB = 120°. Lấy điểm C là trung điểm cung nhỏ AB. Chứng minh OC ⟂ AB và tính số đo ∠ACB.",
+    "dsl": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment O A)\n(segment O B)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(angle-measure A O B 120)\n(define C point)\n(on-circle C O)\n(segment A C)\n(segment B C)"
+  }
+]

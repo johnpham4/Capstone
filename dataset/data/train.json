@@ -25,11 +25,6 @@
     "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(on-segment O A B)\n(define C point)\n(on-circle C O)\n(define H point (projection C (segment A B)))\n(segment C H)"
   },
   {
-    "image_dir": "images/img_231213.png",
-    "instruction": "Cho đường tròn (O) bán kính R = 10 cm. Dây AB cố định. Lấy C là trung điểm cung nhỏ AB. Gọi H là hình chiếu của C lên AB. Tính độ dài AB và CH.",
-    "answer": "(define O point)\n(circle O (radius 1.0))\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(define C point)\n(on-circle C O)\n(define H point (projection C (segment A B)))\n(segment C H)"
-  },
-  {
     "image_dir": "images/img_231212.png",
     "instruction": "Cho đường tròn (O) với ∠AOB = 120°. Lấy điểm C là trung điểm cung nhỏ AB. Chứng minh OC ⟂ AB và tính số đo ∠ACB.",
     "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment O A)\n(segment O B)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(angle-measure A O B 120)\n(define C point)\n(on-circle C O)\n(segment A C)\n(segment B C)"
@@ -38,5 +33,20 @@
     "image_dir": "images/img_231215.png",
     "instruction": "Cho đường tròn (O). Hai dây AB và CD cắt nhau tại E bên trong đường tròn sao cho AE = CE và ∠AEC = ∠BEC. Chứng minh AB = CD.",
     "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(define C point)\n(define D point)\n(segment A B)\n(segment C D)\n(on-circle A O)\n(on-circle B O)\n(on-circle C O)\n(on-circle D O)\n(define E point (inter-ll A B C D))\n(define M point (midpoint A E))\n(define N point (midpoint C E))\n(segment A M)\n(segment C N)"
+  },
+  {
+    "image_dir": "images/img_231304.png",
+    "instruction": "Cho đường tròn (O) bán kính 5 cm và bốn điểm A, B, C, D sao cho OA = 3 cm, OB = 4 cm, OC = 7 cm, OD = 5 cm. Hãy cho biết mỗi điểm A, B, C, D nằm trong, nằm trên hay nằm ngoài đường tròn (O).",
+    "answer": "(define O point)\n(circle O (radius 0.5))\n(define A point)\n(segment O A)\n(distance O A 0.3)\n(define B point)\n(segment O B)\n(distance O B 0.4)\n(define C point)\n(segment O C)\n(distance O C 0.7)\n(define D point)\n(segment O D)\n(distance O D 0.5)"
+  },
+  {
+    "image_dir": "images/img_231301.png",
+    "instruction": "Trên đường tròn (O; R), lấy bốn điểm A, B, M, N sao cho AB đi qua O và MN không đi qua O. So sánh độ dài AB và MN.",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(on-segment O A B)\n(define M point)\n(define N point)\n(segment M N)\n(on-circle M O)\n(on-circle N O)"
+  },
+  {
+    "image_dir": "images/img_231303.png",
+    "instruction": "Tâm O của một đường tròn cách dây AB của nó một khoảng 3 cm. Biết dây cung nhỏ AB chắn cung 100°. Tính bán kính của đường tròn (O) (làm tròn kết quả đến hàng phần mười).",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(distance O A 0.3)\n(angle-measure A O B 100)"
   }
 ]

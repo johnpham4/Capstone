@@ -133,7 +133,7 @@ class Optimizer:
         # Penalty if t < 0 or t > 1
         t = (point_x * vec_x + point_y * vec_y) / vec_len_sq
         between_penalty = torch.relu(-t) + torch.relu(t - 1)
-        return on_line_loss + 10.0 * between_penalty
+        return on_line_loss + 100.0 * between_penalty  
 
     def _angle_bisector_equal_loss(self, p_vertex: TorchPoint, p1: TorchPoint, p2: TorchPoint, p_bisector: TorchPoint):
         """Loss for angle bisector: angle(p1, vertex, bisector) = angle(p2, vertex, bisector)"""
@@ -968,7 +968,7 @@ class Optimizer:
         key = f"{points[0].val}_on_{points[1].val}{points[2].val}"
         self.register_loss(f"on_segment_{key}",
             lambda pt=point, p1=seg_p1, p2=seg_p2: self._point_on_segment_loss(pt, p1, p2),
-            weight=20.0  
+            weight=50000.0  
         )
         if self.verbosity:
             logger.info(f"Added on-segment constraint: {points[0].val} on {points[1].val}{points[2].val}")
@@ -1031,12 +1031,14 @@ class Optimizer:
         center = self.lookup_pt(points[1])
         logger.info(f"Found radius={radius} for circle {center_name}")
         
-        # CỐ ĐỊNH tâm đường tròn ở (0, 0) để nằm giữa không gian
-        self.register_loss(
-            f"center_at_origin_{center_name}",
-            lambda c=center: c.x**2 + c.y**2,
-            weight=100000.0
-        )
+        # CỐ ĐỊNH tâm đường tròn ở (0, 0) để nằm giữa không gian 
+        center_key = f"center_at_origin_{center_name}"
+        if center_key not in self.loss_fns:
+            self.register_loss(
+                center_key,
+                lambda c=center: c.x**2 + c.y**2,
+                weight=100000.0
+            )
         
         # Use const() to avoid lambda closure issues
         radius_const = self.const(radius)
@@ -1052,7 +1054,7 @@ class Optimizer:
         Duyệt qua tất cả cặp (điểm, center) từ on-circle constraints.
         """
         if self.verbosity:
-            logger.info(f"\n🔍 Checking for chords to add NDG...")
+            logger.info(f"\nChecking for chords to add NDG...")
             logger.info(f"Segments: {self.segments}")
         
         # Thu thập tất cả điểm on-circle theo center
@@ -1331,10 +1333,28 @@ class Optimizer:
         for key, loss in self.losses.items():
             logger.info(f"{key:30s}: {loss.item():.6f}")
 
-    
+    def regularize_points(self):
+        """Add regularization to keep points near origin"""
+        if len(self.name2pt) > 0:
+            def compute_reg():
+                norms = [self.norm(p) for p in self.name2pt.values()]
+                return torch.stack(norms).mean()
+            self.register_loss("regularization", compute_reg, weight=0.01)
+
+    def make_points_distinct(self):
+        pts = list(self.name2pt.values())
+        if len(pts) < 2:
+            return
+
+        for i in range(len(pts)):
+            for j in range(i+1, len(pts)):
+                # Encourage d > 0.1
+                self.register_ndg(f"distinct_{i}_{j}",
+                                 lambda pi=pts[i], pj=pts[j]: self.dist(pi, pj), weight=0.1)
 
     def solve_single(self, attempt_id=0):
         self.current_attempt = attempt_id
+        self._init_state()  
         self.preprocess()
         
         self._add_all_chord_ndgs()
@@ -1386,7 +1406,8 @@ class Optimizer:
 
             except Exception as e:
                 if self.verbosity:
-                    logger.error(f"Attempt {attempt + 1} failed: {e}")
+                    logger.error(f"Attempt {attempt + 1} failed:")
+                    logger.exception(e)  
                 continue
 
         if self.verbosity and n_tries > 1:

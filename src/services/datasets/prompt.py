@@ -162,6 +162,58 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
    (on-circle B O)
    (angle-measure A O B 120)
 
+5. "Trên đường tròn (O; R), lấy bốn điểm A, B, M, N sao cho AB đi qua O và MN không đi qua O"
+   (define O point)
+   (circle O)
+   (define A point)
+   (define B point)
+   (segment A B)
+   (on-circle A O)
+   (on-circle B O)
+   (on-segment O A B)  ← AB đi qua O (đường kính)
+   (define M point)
+   (define N point)
+   (segment M N)
+   (on-circle M O)
+   (on-circle N O)  ← MN không qua O (dây thường, KHÔNG có on-segment)
+
+6. "Cho đường tròn (I) có các dây cung AB, CD, EF. Biết rằng AB và CD đi qua tâm I, còn EF không đi qua I"
+   (define I point)
+   (circle I)
+   (define A point)
+   (define B point)
+   (segment A B)
+   (on-circle A I)
+   (on-circle B I)
+   (on-segment I A B)  ← AB đi qua I (đường kính)
+   (define C point)
+   (define D point)
+   (segment C D)
+   (on-circle C I)
+   (on-circle D I)
+   (on-segment I C D)  ← CD đi qua I (đường kính)
+   (define E point)
+   (define F point)
+   (segment E F)
+   (on-circle E I)
+   (on-circle F I)  ← EF không qua I (dây thường)
+
+7. "Cho đường tròn (O) bán kính 5 cm và bốn điểm A, B, C, D sao cho OA = 3 cm, OB = 4 cm, OC = 7 cm, OD = 5 cm"
+   (define O point)
+   (circle O (radius 0.5))
+   (define A point)
+   (segment O A)
+   (distance O A 0.3)
+   (define B point)
+   (segment O B)
+   (distance O B 0.4)
+   (define C point)
+   (segment O C)
+   (distance O C 0.7)
+   (define D point)
+   (segment O D)
+   (distance O D 0.5)
+
 ═══ OUTPUT FORMAT ═══
 ⚠️ TUYỆT ĐỐI QUAN TRỌNG:
 

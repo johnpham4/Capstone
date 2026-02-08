@@ -1,50 +1,26 @@
 [
   {
-    "image": "images/img_231209.png",
-    "caption": "circle (O), diameter MN, chord AB intersects MN",
-    "id": 231209,
-    "caption_vn": "Cho đường tròn (O) có đường kính MN. Một dây AB cắt MN tại H. Chứng minh HM · HN = HA · HB."
+    "image": "images/img_231301.png",
+    "caption": "circle (O; R), diameter AB passes through O, chord MN does not pass through O",
+    "id": 231301,
+    "caption_vn": "Trên đường tròn (O; R), lấy bốn điểm A, B, M, N sao cho AB đi qua O và MN không đi qua O. So sánh độ dài AB và MN."
   },
   {
-    "image": "images/img_231210.png",
-    "caption": "circle (O), radius R=6, chord AB, foot H of O onto AB",
-    "id": 231210,
-    "caption_vn": "Cho đường tròn (O) bán kính R = 6 cm. Dây AB sao cho ∠AOB = 120°. Gọi H là hình chiếu của O lên AB. Tính độ dài AB và OH."
+    "image": "images/img_231302.png",
+    "caption": "circle (I), chords AB and CD pass through center I, chord EF does not pass through I",
+    "id": 231302,
+    "caption_vn": "Cho đường tròn (I) có các dây cung AB, CD, EF. Biết rằng AB và CD đi qua tâm I, còn EF không đi qua I. Hãy so sánh độ dài AB, CD và EF."
   },
   {
-    "image": "images/img_231211.png",
-    "caption": "circle (O), diameter AB, point C on circle, projection H of C onto AB",
-    "id": 231211,
-    "caption_vn": "Cho đường tròn (O) có đường kính AB. Lấy điểm C trên đường tròn. Gọi H là hình chiếu của C lên AB. Chứng minh CH² = AH · HB."
+    "image": "images/img_231303.png",
+    "caption": "circle (O), distance from center to chord AB is 3 cm, minor arc AB measures 100 degrees",
+    "id": 231303,
+    "caption_vn": "Tâm O của một đường tròn cách dây AB của nó một khoảng 3 cm. Biết dây cung nhỏ AB chắn cung 100°. Tính bán kính của đường tròn (O) (làm tròn kết quả đến hàng phần mười)."
   },
   {
-    "image": "images/img_231212.png",
-    "caption": "circle (O), chord AB, central angle AOB = 120°, point C midpoint of minor arc AB",
-    "id": 231212,
-    "caption_vn": "Cho đường tròn (O) với ∠AOB = 120°. Lấy điểm C là trung điểm cung nhỏ AB. Chứng minh OC ⟂ AB và tính số đo ∠ACB."
-  },
-  {
-    "image": "images/img_231213.png",
-    "caption": "circle (O), radius R=10, chord AB, point C midpoint of minor arc AB, projection H of C onto AB",
-    "id": 231213,
-    "caption_vn": "Cho đường tròn (O) bán kính R = 10 cm. Dây AB cố định. Lấy C là trung điểm cung nhỏ AB. Gọi H là hình chiếu của C lên AB. Tính độ dài AB và CH."
-  },
-  {
-    "image": "images/img_231214.png",
-    "caption": "circle (O), chord AB, point C on circle such that AC = √2BC",
-    "id": 231214,
-    "caption_vn": "Cho đường tròn (O). Một dây AB và điểm C trên đường tròn sao cho AC = √2BC. Chứng minh ∠ACB = 45°."
-  },
-  {
-    "image": "images/img_231215.png",
-    "caption": "circle (O), two chords AB and CD intersect at E, AE = CE, ∠AEC = ∠BEC",
-    "id": 231215,
-    "caption_vn": "Cho đường tròn (O). Hai dây AB và CD cắt nhau tại E bên trong đường tròn sao cho AE = CE và ∠AEC = ∠BEC. Chứng minh AB = CD."
-  },
-  {
-    "image": "images/img_231216.png",
-    "caption": "circle (O), radius R=8, chord AB length 8√3, foot H of O onto AB",
-    "id": 231216,
-    "caption_vn": "Cho đường tròn (O) bán kính R = 8 cm. Dây AB có độ dài 8√3 cm. Gọi H là hình chiếu của O lên AB. Tính ∠AOB và OH."
+    "image": "images/img_231304.png",
+    "caption": "circle (O), radius 5 cm, points A, B, C, D with given distances from O",
+    "id": 231304,
+    "caption_vn": "Cho đường tròn (O) bán kính 5 cm và bốn điểm A, B, C, D sao cho OA = 3 cm, OB = 4 cm, OC = 7 cm, OD = 5 cm. Hãy cho biết mỗi điểm A, B, C, D nằm trong, nằm trên hay nằm ngoài đường tròn (O)."
   }
 ]
