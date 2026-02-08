@@ -133,7 +133,7 @@ class Optimizer:
         # Penalty if t < 0 or t > 1
         t = (point_x * vec_x + point_y * vec_y) / vec_len_sq
         between_penalty = torch.relu(-t) + torch.relu(t - 1)
-        return on_line_loss + 100.0 * between_penalty  
+        return on_line_loss + 1000.0 * between_penalty  
 
     def _angle_bisector_equal_loss(self, p_vertex: TorchPoint, p1: TorchPoint, p2: TorchPoint, p_bisector: TorchPoint):
         """Loss for angle bisector: angle(p1, vertex, bisector) = angle(p2, vertex, bisector)"""
@@ -965,13 +965,46 @@ class Optimizer:
         seg_p1 = self.lookup_pt(points[1])
         seg_p2 = self.lookup_pt(points[2])
         
-        key = f"{points[0].val}_on_{points[1].val}{points[2].val}"
-        self.register_loss(f"on_segment_{key}",
-            lambda pt=point, p1=seg_p1, p2=seg_p2: self._point_on_segment_loss(pt, p1, p2),
-            weight=50000.0  
-        )
+        point_name = points[0].val
+        p1_name = points[1].val
+        p2_name = points[2].val
+        
+        # Check if this is a center-on-diameter case (center on chord of its own circle)
+        is_diameter = False
+        for circle_name, circle_info in self.circles:
+            if circle_name == point_name:
+                # Check if both p1 and p2 are on this circle
+                p1_on_circle = any(f"on_circle_{p1_name}_{circle_name}" in key for key in self.loss_fns.keys())
+                p2_on_circle = any(f"on_circle_{p2_name}_{circle_name}" in key for key in self.loss_fns.keys())
+                
+                if p1_on_circle and p2_on_circle:
+                    is_diameter = True
+                    if self.verbosity:
+                        logger.info(f"Detected DIAMETER: {p1_name}{p2_name} passes through center {point_name}")
+                    break
+        
+        if is_diameter:
+            # For diameter: center MUST be midpoint
+            self.register_loss(f"diameter_midpoint_{point_name}_{p1_name}_{p2_name}",
+                lambda pt=point, p1=seg_p1, p2=seg_p2: 
+                    (pt.x - (p1.x + p2.x)/2)**2 + (pt.y - (p1.y + p2.y)/2)**2,
+                weight=1000000.0  
+            )
+            # Ensure collinearity
+            self.register_loss(f"diameter_collinear_{point_name}_{p1_name}_{p2_name}",
+                lambda pt=point, p1=seg_p1, p2=seg_p2: self.collinear(pt, p1, p2)**2,
+                weight=1000000.0
+            )
+        else:
+            # Normal on-segment constraint
+            key = f"{point_name}_on_{p1_name}{p2_name}"
+            self.register_loss(f"on_segment_{key}",
+                lambda pt=point, p1=seg_p1, p2=seg_p2: self._point_on_segment_loss(pt, p1, p2),
+                weight=50000.0  
+            )
+            
         if self.verbosity:
-            logger.info(f"Added on-segment constraint: {points[0].val} on {points[1].val}{points[2].val}")
+            logger.info(f"Added on-segment constraint: {point_name} on {p1_name}{p2_name} (diameter={is_diameter})")
 
     def _add_distance_constraint(self, points: list):
         if len(points) != 3:
