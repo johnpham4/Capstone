@@ -916,7 +916,6 @@ class Optimizer:
         if self.verbosity:
             logger.info(f"Processing assertion: {assertion}")
 
-        # Parse assertion type and apply constraints
         if hasattr(assertion, 'constraint_type'):
             if assertion.constraint_type == 'parallel':
                 self._add_parallel_constraint(assertion.objects)
@@ -1070,7 +1069,7 @@ class Optimizer:
             self.register_loss(
                 center_key,
                 lambda c=center: c.x**2 + c.y**2,
-                weight=100000.0
+                weight=10000000.0  # Phải ngang bằng on_circle để không conflict
             )
         
         # Use const() to avoid lambda closure issues
@@ -1078,8 +1077,62 @@ class Optimizer:
         self.register_loss(
             f"on_circle_{points[0].val}_{center_name}",
             lambda pt=point, c=center, r=radius_const: (self.dist(pt, c) - r)**2,
-            weight=100000.0  # MAX WEIGHT - chạm chính xác!
+            weight=10000000.0  # ULTRA ULTRA MAX - ưu tiên tuyệt đối điểm phải nằm trên đường tròn!
         )
+    
+    def _enforce_chord_length(self):
+        """
+        Enforce độ dài dây cung không qua tâm để hình vẽ đẹp.
+        Tự động phát hiện các dây cung (2 điểm cùng trên 1 circle) không qua tâm
+        và enforce độ dài ≈ 0.75-0.8 × đường kính.
+        """
+        if self.verbosity:
+            logger.info("\n=== Enforcing chord lengths ===")
+            logger.info(f"Total segments: {len(self.segments)}")
+            logger.info(f"Total circles: {len(self.circles)}")
+        
+        for seg in self.segments:
+            p1_name, p2_name = seg
+            
+            # Kiểm tra xem cả 2 điểm có cùng nằm trên 1 đường tròn không
+            for circle_name, circle_info in self.circles:
+                p1_on_this_circle = any(f"on_circle_{p1_name}_{circle_name}" in key for key in self.loss_fns.keys())
+                p2_on_this_circle = any(f"on_circle_{p2_name}_{circle_name}" in key for key in self.loss_fns.keys())
+                
+                if p1_on_this_circle and p2_on_this_circle:
+                    if self.verbosity:
+                        logger.info(f"Segment {p1_name}{p2_name} has both points on circle {circle_name}")
+                    
+                    # CRITICAL: Kiểm tra xem có phải đường kính không 
+                    is_diameter = any(
+                        f"diameter_midpoint_{circle_name}_{p1_name}_{p2_name}" in key or
+                        f"diameter_midpoint_{circle_name}_{p2_name}_{p1_name}" in key
+                        for key in self.loss_fns.keys()
+                    )
+                    
+                    if is_diameter:
+                        if self.verbosity:
+                            logger.info(f"  -> DIAMETER detected! Skipping chord length enforcement.")
+                        break  # Skip to next segment
+                    
+                    # Đây là dây cung KHÔNG qua tâm - enforce độ dài ≈ 0.8 × đường kính
+                    radius = circle_info.get('radius')
+                    if radius is not None:
+                        # Độ dài mục tiêu: 0.8 × đường kính = 1.6 × radius
+                        target_length = 1.6 * radius
+                        p1 = self.lookup_pt(Parameter(p1_name))
+                        p2 = self.lookup_pt(Parameter(p2_name))
+                        target_const = self.const(target_length)
+                        
+                        self.register_loss(
+                            f"chord_length_{p1_name}_{p2_name}_{circle_name}",
+                            lambda pt1=p1, pt2=p2, target=target_const: (self.dist(pt1, pt2) - target)**2,
+                            weight=100.0  # RẤT NHẸ - chỉ là gợi ý, KHÔNG được override on_circle!
+                        )
+                        
+                        if self.verbosity:
+                            logger.info(f"  -> Enforcing chord length: {p1_name}{p2_name} ≈ {target_length:.4f} (0.8 × diameter)")
+                    break  # Đã tìm thấy circle chứa cả 2 điểm
     
     def _add_all_chord_ndgs(self):
         """
@@ -1126,6 +1179,18 @@ class Optimizer:
                     )
                     
                     if has_segment:
+                        # Check if this is a DIAMETER before adding NDG
+                        is_diameter = any(
+                            f"diameter_midpoint_{center_name}_{p1_name}_{p2_name}" in key or
+                            f"diameter_midpoint_{center_name}_{p2_name}_{p1_name}" in key
+                            for key in self.loss_fns.keys()
+                        )
+                        
+                        if is_diameter:
+                            if self.verbosity:
+                                logger.info(f"SKIPPING chord NDG for DIAMETER: {p1_name}{p2_name} through {center_name}")
+                            continue  # Skip diameter - it MUST go through center!
+                        
                         try:
                             pt1 = self.lookup_pt_by_name(p1_name)
                             pt2 = self.lookup_pt_by_name(p2_name)
@@ -1146,9 +1211,6 @@ class Optimizer:
                                     )
                                     if self.verbosity:
                                         logger.info(f"Added HARD chord constraint: {p1_name}-{center_name}-{p2_name} MUST NOT be collinear")
-                        except Exception as e:
-                            if self.verbosity:
-                                logger.warning(f"Failed to add chord constraint: {e}")
                         except Exception as e:
                             if self.verbosity:
                                 logger.warning(f"Failed to add chord constraint: {e}")
@@ -1391,6 +1453,7 @@ class Optimizer:
         self.preprocess()
         
         self._add_all_chord_ndgs()
+        # self._enforce_chord_length()  # TẠM THỜI TẮT để test
         
         self.regularize_points()
         # self.make_points_distinct()

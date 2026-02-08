@@ -1,0 +1,17 @@
+[
+    {
+    "image_dir": "images/img_231304.png",
+    "instruction": "Cho đường tròn (O) bán kính 5 cm và bốn điểm A, B, C, D sao cho OA = 3 cm, OB = 4 cm, OC = 7 cm, OD = 5 cm. Hãy cho biết mỗi điểm A, B, C, D nằm trong, nằm trên hay nằm ngoài đường tròn (O).",
+    "answer": "(define O point)\n(circle O (radius 0.5))\n(define A point)\n(segment O A)\n(distance O A 0.3)\n(define B point)\n(segment O B)\n(distance O B 0.4)\n(define C point)\n(segment O C)\n(distance O C 0.7)\n(define D point)\n(segment O D)\n(distance O D 0.5)"
+    },
+    {
+    "image_dir": "images/img_231301.png",
+    "instruction": "Trên đường tròn (O; R), lấy bốn điểm A, B, M, N sao cho AB đi qua O và MN không đi qua O. So sánh độ dài AB và MN.",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(on-segment O A B)\n(define M point)\n(define N point)\n(segment M N)\n(on-circle M O)\n(on-circle N O)"
+    },
+    {
+    "image_dir": "images/img_231303.png",
+    "instruction": "Tâm O của một đường tròn cách dây AB của nó một khoảng 3 cm. Biết dây cung nhỏ AB chắn cung 100°. Tính bán kính của đường tròn (O) (làm tròn kết quả đến hàng phần mười).",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(distance O A 0.3)\n(angle-measure A O B 100)"
+    }
+]
