@@ -6,6 +6,8 @@ import random
 from loguru import logger
 from collections import namedtuple
 import math
+import traceback
+
 
 from src.models.domain.geometry.instructions import Parameter, Assertion
 from src.models.domain.geometry.value_objects import Point, Line
@@ -247,6 +249,15 @@ class Optimizer:
     def collinear(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
         """Collinearity constraint. Returns 0 when p1, p2, p3 are collinear."""
         return p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y)
+    
+    def tangent_line_circle(self, p1: TorchPoint, p2: TorchPoint, center: TorchPoint, radius: float):
+        """
+        Tangent constraint: line (p1-p2) is tangent to circle (center, radius).
+        Returns 0 when the distance from center to line equals radius.
+        """
+        # Distance from center to line p1-p2 should equal radius
+        dist_to_line = self.dist_to_line(center, p1, p2)
+        return dist_to_line - radius
 
     def vector_length(self, p1: TorchPoint, p2: TorchPoint):
         """Calculate length of vector from p1 to p2."""
@@ -491,11 +502,15 @@ class Optimizer:
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
 
-        # Foot perpendicular to segment and lies on segment
+        # Foot perpendicular to segment
         self.register_loss(f"perp_{point_name.val}",
-                          lambda: self.perpendicular(vertex, foot, p1, p2), weight=10.0)
+                          lambda v=vertex, f=foot, a=p1, b=p2: self.perpendicular(v, f, a, b)**2, 
+                          weight=1000.0)  # TĂNG weight để đảm bảo vuông góc
+        
+        # Foot lies ON SEGMENT (not just collinear on the line)
         self.register_loss(f"on_seg_{point_name.val}",
-                          lambda: self.collinear(foot, p1, p2), weight=10.0)
+                          lambda f=foot, a=p1, b=p2: self._point_on_segment_loss(f, a, b), 
+                          weight=5000.0)  # CỰC MẠNH - foot phải nằm trên đoạn thẳng
         return foot
 
     def _define_intersection(self, point_name, segment1_points, segment2_points):
@@ -936,6 +951,9 @@ class Optimizer:
                 self._add_on_circle_constraint(assertion.objects)
                 # Sau khi thêm on-circle constraint, enforce góc tối thiểu
                 self._enforce_minimum_angle_between_circle_points()
+            elif assertion.constraint_type == 'tangent':
+                self._add_tangent_constraint(assertion.objects)
+
             
             
     def _add_angle_measure(self, points: list):
@@ -1081,6 +1099,261 @@ class Optimizer:
             weight=10000000.0  # ULTRA ULTRA MAX - ưu tiên tuyệt đối điểm phải nằm trên đường tròn!
         )
     
+    def _add_tangent_constraint(self, objects: list):
+        """
+        Add tangent constraint for line to circle.
+        
+        Supported formats:
+        1. (tangent A B O) - line AB tangent to circle O (legacy) - 3 objects
+        2. (tangent M O A B) - line AB tangent to circle O at point M - 4 objects (from parser)
+        
+        Args:
+            objects: Can be:
+                - [A, B, O] where AB is line and O is circle center (legacy)
+                - [M, O, A, B] where M is tangent point, O is center, AB is line (from parser)
+        """
+        if len(objects) == 4:
+            # Format from parser: [tangent_point_M, circle_center_O, line_point_A, line_point_B]
+            tangent_point_obj = objects[0]
+            center_obj = objects[1]
+            p1_obj = objects[2]
+            p2_obj = objects[3]
+            
+            self._add_line_circle_tangent_with_parsed_points(tangent_point_obj, center_obj, p1_obj, p2_obj)
+            
+        elif len(objects) == 3:
+            # Check if second object is a circle specification
+            obj2 = objects[1]
+            
+            if hasattr(obj2, '__iter__') and not isinstance(obj2, str):
+                # format [A, (circle_type, O), segment_identifier]
+                tangent_point = objects[0]
+                circle_center = obj2[1] if len(obj2) > 1 else obj2[0]
+                self._add_line_circle_tangent_with_tangent_point(tangent_point, circle_center, objects[2])
+            else:
+                # Legacy format: (tangent A B O)
+                p1 = objects[0]
+                p2 = objects[1]
+                center_obj = objects[2]
+                self._add_line_circle_tangent_by_points(p1, p2, center_obj)
+        else:
+            logger.warning(f"Tangent constraint needs 3 or 4 objects, got {len(objects)}")
+    
+    def _add_line_circle_tangent_by_points(self, p1_obj, p2_obj, center_obj):
+        """Add tangent constraint for line (p1, p2) to circle with center"""
+        try:
+            p1 = self.lookup_pt(p1_obj)
+            p2 = self.lookup_pt(p2_obj)
+            center = self.lookup_pt(center_obj)
+            center_name = center_obj.val
+            
+            # Find radius
+            radius = None
+            for circle_name, circle_info in self.circles:
+                if circle_name == center_name:
+                    radius = circle_info.get('radius')
+                    break
+            
+            if radius is None:
+                logger.warning(f"Circle {center_name} not found or has no radius")
+                return
+            
+            radius_const = self.const(radius)
+            self.register_loss(
+                f"tangent_line_{p1_obj.val}{p2_obj.val}_circle_{center_name}",
+                lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
+                weight=100.0
+            )
+            
+            if self.verbosity:
+                logger.info(f"Added line-circle tangent: line {p1_obj.val}{p2_obj.val} tangent to circle {center_name}")
+        except Exception as e:
+            logger.warning(f"Failed to add line-circle tangent: {e}")
+    
+    def _add_line_circle_tangent_with_parsed_points(self, tangent_point_obj, center_obj, p1_obj, p2_obj):
+        """
+        Add tangent constraint from parser format: [M, O, A, B]
+        Format: (tangent M (circle O) AB) parsed as 4 separate objects
+        
+        Args:
+            tangent_point_obj: Point M where line touches circle
+            center_obj: Circle center O
+            p1_obj: Line point A
+            p2_obj: Line point B
+        """
+        try:
+            tangent_point = self.lookup_pt(tangent_point_obj)
+            center = self.lookup_pt(center_obj)
+            p1 = self.lookup_pt(p1_obj)
+            p2 = self.lookup_pt(p2_obj)
+            
+            center_name = center_obj.val
+            tangent_pt_name = tangent_point_obj.val
+            p1_name = p1_obj.val
+            p2_name = p2_obj.val
+            
+            # Find radius
+            radius = None
+            for circle_name, circle_info in self.circles:
+                if circle_name == center_name:
+                    radius = circle_info.get('radius')
+                    break
+            
+            if radius is None:
+                logger.warning(f"Circle {center_name} not found or has no radius")
+                return
+            
+            radius_const = self.const(radius)
+            
+            # CONSTRAINT 1: Khoảng cách từ tâm đến đường thẳng = bán kính
+            self.register_loss(
+                f"tangent_line_{p1_name}{p2_name}_circle_{center_name}_at_{tangent_pt_name}",
+                lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
+                weight=100.0
+            )
+            
+            # CONSTRAINT 2: OM vuông góc với AB (tính chất tiếp tuyến)
+            self.register_loss(
+                f"tangent_perpendicular_{tangent_pt_name}_{center_name}_{p1_name}{p2_name}",
+                lambda m=tangent_point, o=center, a=p1, b=p2: self.perpendicular(o, m, a, b)**2,
+                weight=1000.0  # RẤT QUAN TRỌNG - đảm bảo vuông góc
+            )
+            
+            # CONSTRAINT 3: M nằm trên đoạn AB (không nằm ngoài)
+            self.register_loss(
+                f"tangent_point_on_segment_{tangent_pt_name}_{p1_name}{p2_name}",
+                lambda m=tangent_point, a=p1, b=p2: self._point_on_segment_loss(m, a, b),
+                weight=5000.0  # CỰC KỲ QUAN TRỌNG - M phải nằm trên AB
+            )
+            
+            # CONSTRAINT 4: Auto-ensure A, B không nằm TRONG đường tròn
+            for pt_name, pt in [(p1_name, p1), (p2_name, p2)]:
+                if pt_name != tangent_pt_name:
+                    # Điểm này phải nằm NGOÀI đường tròn rõ ràng
+                    # Nếu chỉ > radius một chút, line vẫn có thể cắt circle
+                    # Cần >= radius * 1.3 để chắc chắn line không cắt
+                    min_dist = radius * 1.3  # Phải cách tâm ít nhất 1.3x bán kính
+                    
+                    # Kiểm tra xem constraint đã tồn tại chưa (tránh duplicate khi có nhiều tiếp tuyến)
+                    constraint_key = f"outside_circle_{pt_name}_{center_name}"
+                    if constraint_key not in self.loss_fns:
+                        self.register_loss(
+                            constraint_key,
+                            lambda c=center, pt=pt, r_val=min_dist: torch.relu(r_val - self.dist(c, pt))**2,
+                            weight=10000.0  # TĂNG CỰC MẠNH - ưu tiên cao hơn để không cắt circle
+                        )
+                        if self.verbosity:
+                            logger.info(f"Auto-added constraint: {pt_name} must be >= {min_dist:.2f} away from {center_name}")
+                    else:
+                        if self.verbosity:
+                            logger.info(f"Constraint {constraint_key} already exists, skipping")
+            
+            if self.verbosity:
+                logger.info(f"Added line-circle tangent: line {p1_name}{p2_name} tangent to circle {center_name} at {tangent_pt_name}")
+                
+        except Exception as e:
+            logger.warning(f"Failed to add line-circle tangent with parsed points: {e}")
+            logger.warning(f"Traceback: {traceback.format_exc()}")
+    
+    def _add_line_circle_tangent_with_tangent_point(self, tangent_point_obj, center_obj, segment_identifier):
+        """
+        Add tangent constraint with explicit tangent point.
+        Format: (tangent M (circle O) AB)
+        
+        Args:
+            tangent_point_obj: Point M where line touches circle
+            center_obj: Circle center O
+            segment_identifier: Segment name or identifier (e.g., "AB" or list of points)
+        """
+        try:
+            tangent_point = self.lookup_pt(tangent_point_obj)
+            center = self.lookup_pt(center_obj)
+            center_name = center_obj.val
+            
+            # Find radius
+            radius = None
+            for circle_name, circle_info in self.circles:
+                if circle_name == center_name:
+                    radius = circle_info.get('radius')
+                    break
+            
+            if radius is None:
+                logger.warning(f"Circle {center_name} not found or has no radius")
+                return
+            
+            # Parse segment identifier to get line points
+            # segment_identifier could be a string "AB" or a Point object
+            if hasattr(segment_identifier, 'val'):
+                # It's a point-like object with a name like "AB"
+                seg_name = segment_identifier.val
+                # Extract point names (assuming format like "AB" means points A and B)
+                if len(seg_name) >= 2:
+                    p1_name = seg_name[0]
+                    p2_name = seg_name[1]
+                    
+                    # Look up the actual points
+                    try:
+                        p1 = self.name2pt[p1_name]
+                        p2 = self.name2pt[p2_name]
+                    except KeyError:
+                        logger.warning(f"Could not find points {p1_name} or {p2_name} for segment {seg_name}")
+                        return
+                    
+                    radius_const = self.const(radius)
+                    
+                    # CONSTRAINT 1: Khoảng cách từ tâm đến đường thẳng = bán kính
+                    self.register_loss(
+                        f"tangent_line_{p1_name}{p2_name}_circle_{center_name}_at_{tangent_point_obj.val}",
+                        lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
+                        weight=100.0
+                    )
+                    
+                    # CONSTRAINT 2: OM vuông góc với AB (tính chất tiếp tuyến)
+                    self.register_loss(
+                        f"tangent_perpendicular_{tangent_point_obj.val}_{center_name}_{p1_name}{p2_name}",
+                        lambda m=tangent_point, o=center, a=p1, b=p2: self.perpendicular(o, m, a, b)**2,
+                        weight=1000.0  # RẤT QUAN TRỌNG - đảm bảo vuông góc
+                    )
+                    
+                    # CONSTRAINT 3: M nằm trên đoạn AB (không nằm ngoài)
+                    self.register_loss(
+                        f"tangent_point_on_segment_{tangent_point_obj.val}_{p1_name}{p2_name}",
+                        lambda m=tangent_point, a=p1, b=p2: self._point_on_segment_loss(m, a, b),
+                        weight=5000.0  # CỰC KỲ QUAN TRỌNG - M phải nằm trên AB
+                    )
+                    
+                    # CONSTRAINT 4: Auto-ensure A, B không nằm TRONG đường tròn
+                    tangent_pt_name = tangent_point_obj.val
+                    for pt_name, pt in [(p1_name, p1), (p2_name, p2)]:
+                        if pt_name != tangent_pt_name:
+                            # Điểm này phải nằm NGOÀI đường tròn rõ ràng
+                            # Nếu chỉ > radius một chút, line vẫn có thể cắt circle
+                            # Cần >= radius * 1.3 để chắc chắn line không cắt
+                            min_dist = radius * 1.3  # Phải cách tâm ít nhất 1.3x bán kính
+                            
+                            # Check duplicate constraint trước khi register
+                            constraint_key = f"outside_circle_{pt_name}_{center_name}"
+                            if constraint_key not in self.loss_fns:
+                                self.register_loss(
+                                    constraint_key,
+                                    lambda c=center, pt=pt, r_val=min_dist: torch.relu(r_val - self.dist(c, pt))**2,
+                                    weight=10000.0  # TĂNG CỰC MẠNH - ưu tiên cao hơn để không cắt circle
+                                )
+                                if self.verbosity:
+                                    logger.info(f"Auto-added constraint: {pt_name} must be >= {min_dist:.2f} away from {center_name}")
+                            else:
+                                if self.verbosity:
+                                    logger.info(f"Constraint {constraint_key} already exists, skipping")
+                    
+                    if self.verbosity:
+                        logger.info(f"Added line-circle tangent with tangent point: line {p1_name}{p2_name} tangent to circle {center_name} at {tangent_point_obj.val}")
+                else:
+                    logger.warning(f"Segment identifier {seg_name} does not have at least 2 characters")
+            else:
+                logger.warning(f"Segment identifier is not a point-like object with .val attribute")
+        except Exception as e:
+            logger.warning(f"Failed to add line-circle tangent with tangent point: {e}")
+    
     def _enforce_chord_length(self):
         """
         Enforce độ dài dây cung không qua tâm để hình vẽ đẹp.
@@ -1116,11 +1389,11 @@ class Optimizer:
                             logger.info(f"  -> DIAMETER detected! Skipping chord length enforcement.")
                         break  # Skip to next segment
                     
-                    # Đây là dây cung KHÔNG qua tâm - enforce độ dài ≈ 0.8 × đường kính
+                    # Đây là dây cung KHÔNG qua tâm - enforce độ dài ≈ 0.75 × đường kính
                     radius = circle_info.get('radius')
                     if radius is not None:
-                        # Độ dài mục tiêu: 0.8 × đường kính = 1.6 × radius
-                        target_length = 1.6 * radius
+                        # Độ dài mục tiêu: 0.75 × đường kính = 1.5 × radius
+                        target_length = 1.5 * radius
                         p1 = self.lookup_pt(Parameter(p1_name))
                         p2 = self.lookup_pt(Parameter(p2_name))
                         target_const = self.const(target_length)
@@ -1128,12 +1401,12 @@ class Optimizer:
                         self.register_loss(
                             f"chord_length_{p1_name}_{p2_name}_{circle_name}",
                             lambda pt1=p1, pt2=p2, target=target_const: (self.dist(pt1, pt2) - target)**2,
-                            weight=100.0  # RẤT NHẸ - chỉ là gợi ý, KHÔNG được override on_circle!
+                            weight=100.0  
                         )
                         
                         if self.verbosity:
-                            logger.info(f"  -> Enforcing chord length: {p1_name}{p2_name} ≈ {target_length:.4f} (0.8 × diameter)")
-                    break  # Đã tìm thấy circle chứa cả 2 điểm
+                            logger.info(f"  -> Enforcing chord length: {p1_name}{p2_name} ≈ {target_length:.4f} (0.75 × diameter)")
+                    break  
     
     def _add_all_chord_ndgs(self):
         """

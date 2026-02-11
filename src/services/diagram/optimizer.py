@@ -265,6 +265,15 @@ class Optimizer:
     def parallel(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint, p4: TorchPoint):
         """Parallel constraint: (p1-p2) ∥ (p3-p4). Returns 0 when parallel."""
         return (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x)
+    
+    def tangent_line_circle(self, p1: TorchPoint, p2: TorchPoint, center: TorchPoint, radius: float):
+        """
+        Tangent constraint: line (p1-p2) is tangent to circle (center, radius).
+        Returns 0 when the distance from center to line equals radius.
+        """
+        # Distance from center to line p1-p2 should equal radius
+        dist_to_line = self.dist_to_line(center, p1, p2)
+        return dist_to_line - radius
 
     def collinear(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
         """Collinearity constraint. Returns 0 when p1, p2, p3 are collinear."""
@@ -985,6 +994,8 @@ class Optimizer:
                 self._add_on_circle_constraint(assertion.objects)
                 # Sau khi thêm on-circle constraint, enforce góc tối thiểu
                 self._enforce_minimum_angle_between_circle_points()
+            elif assertion.constraint_type == 'tangent':
+                self._add_tangent_constraint(assertion.objects)
             
             
     def _add_angle_measure(self, points: list):
@@ -1368,6 +1379,152 @@ class Optimizer:
             'angle2': (points[3].val, points[4].val, points[5].val)   # (C, A, D)
         })
 
+    def _add_tangent_constraint(self, objects: list):
+        """
+        Add tangent constraint for line to circle.
+        
+        Supported formats:
+        1. (tangent A B O) - line AB tangent to circle O (legacy)
+        2. (tangent A (circle O) AB) - at point A, circle O, tangent line AB
+        
+        Args:
+            objects: Can be:
+                - [A, B, O] where AB is line and O is circle center (legacy)
+                - [A, circle_spec, segment_name] where A is tangent point (new format)
+        """
+        if len(objects) == 3:
+            # Check if second object is a circle specification
+            obj2 = objects[1]
+            
+            # New format: (tangent A (circle O) AB)
+            
+            if hasattr(obj2, '__iter__') and not isinstance(obj2, str):
+                # format [A, (circle_type, O), segment_identifier]
+                # A is tangent point, O is center, third arg identifies the line
+                tangent_point = objects[0]
+                circle_center = obj2[1] if len(obj2) > 1 else obj2[0]  # Extract O from (circle O)
+                
+                # The line goes through tangent_point
+                # We need to find the actual line segment points
+                # For now, use tangent point and derive constraint
+                logger.info(f"New tangent format: point {tangent_point.val}, circle {circle_center.val}")
+                
+                # Add constraint that uses tangent point
+                self._add_line_circle_tangent_with_tangent_point(tangent_point, circle_center, objects[2])
+            else:
+                # Legacy format: (tangent A B O)
+                p1 = objects[0]
+                p2 = objects[1]
+                center_obj = objects[2]
+                self._add_line_circle_tangent_by_points(p1, p2, center_obj)
+        else:
+            logger.warning(f"Tangent constraint needs 3 objects, got {len(objects)}")
+    
+    def _add_line_circle_tangent_by_points(self, p1_obj, p2_obj, center_obj):
+        """Add tangent constraint for line (p1, p2) to circle with center"""
+        try:
+            p1 = self.lookup_pt(p1_obj)
+            p2 = self.lookup_pt(p2_obj)
+            center = self.lookup_pt(center_obj)
+            center_name = center_obj.val
+            
+            # Find radius
+            radius = None
+            for circle_name, circle_info in self.circles:
+                if circle_name == center_name:
+                    radius = circle_info.get('radius')
+                    break
+            
+            if radius is None:
+                logger.warning(f"Circle {center_name} not found or has no radius")
+                return
+            
+            radius_const = self.const(radius)
+            self.register_loss(
+                f"tangent_line_{p1_obj.val}{p2_obj.val}_circle_{center_name}",
+                lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
+                weight=100.0
+            )
+            
+            if self.verbosity:
+                logger.info(f"Added line-circle tangent: line {p1_obj.val}{p2_obj.val} tangent to circle {center_name}")
+        except Exception as e:
+            logger.warning(f"Failed to add line-circle tangent: {e}")
+    
+    def _add_line_circle_tangent_with_tangent_point(self, tangent_point_obj, center_obj, segment_identifier):
+        """
+        Add tangent constraint with explicit tangent point.
+        Format: (tangent M (circle O) AB)
+        
+        Args:
+            tangent_point_obj: Point M where line touches circle
+            center_obj: Circle center O
+            segment_identifier: Segment name or identifier (e.g., "AB" or list of points)
+        """
+        try:
+            tangent_point = self.lookup_pt(tangent_point_obj)
+            center = self.lookup_pt(center_obj)
+            center_name = center_obj.val
+            
+            # Find radius
+            radius = None
+            for circle_name, circle_info in self.circles:
+                if circle_name == center_name:
+                    radius = circle_info.get('radius')
+                    break
+            
+            if radius is None:
+                logger.warning(f"Circle {center_name} not found or has no radius")
+                return
+            
+            # Parse segment identifier to get line points
+            # segment_identifier could be a string "AB" or a Point object
+            if hasattr(segment_identifier, 'val'):
+                # It's a point-like object with a name like "AB"
+                seg_name = segment_identifier.val
+                # Extract point names (assuming format like "AB" means points A and B)
+                if len(seg_name) >= 2:
+                    p1_name = seg_name[0]
+                    p2_name = seg_name[1]
+                    
+                    # Look up the actual points
+                    try:
+                        p1 = self.name2pt[p1_name]
+                        p2 = self.name2pt[p2_name]
+                    except KeyError:
+                        logger.warning(f"Could not find points {p1_name} or {p2_name} for segment {seg_name}")
+                        return
+                    
+                    radius_const = self.const(radius)
+                    self.register_loss(
+                        f"tangent_line_{p1_name}{p2_name}_circle_{center_name}_at_{tangent_point_obj.val}",
+                        lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
+                        weight=100.0
+                    )
+                    
+                    # Auto-ensure points on tangent line (except tangent point) are outside circle
+                    tangent_pt_name = tangent_point_obj.val
+                    for pt_name, pt in [(p1_name, p1), (p2_name, p2)]:
+                        if pt_name != tangent_pt_name:
+                            # This point should be outside the circle
+                            # Add constraint: distance(center, point) > radius * 1.2
+                            min_dist = radius * 1.5  # At least 1.5x radius away
+                            self.register_ndg(
+                                f"outside_circle_{pt_name}_{center_name}",
+                                lambda c=center, pt=pt, r_val=min_dist: self.dist(c, pt) - r_val,
+                                weight=10.0
+                            )
+                            if self.verbosity:
+                                logger.info(f"Auto-added constraint: {pt_name} should be outside circle {center_name}")
+                    
+                    if self.verbosity:
+                        logger.info(f"Added tangent: line {p1_name}{p2_name} tangent to circle {center_name} at {tangent_point_obj.val}")
+                else:
+                    logger.warning(f"Invalid segment identifier: {seg_name}")
+            else:
+                logger.warning(f"Unexpected segment_identifier format: {type(segment_identifier)}")
+        except Exception as e:
+            logger.warning(f"Failed to add tangent with tangent point: {e}")
 
     def preprocess(self):
         if self.verbosity:

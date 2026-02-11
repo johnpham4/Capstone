@@ -53,6 +53,8 @@ class DiagramBuilder:
             self.process_equal_distance(cmd)
         elif head == "on-circle":
             self.process_on_circle(cmd)
+        elif head == "tangent":
+            self.process_tangent(cmd)
         else:
             raise NotImplementedError(f"Command not supported: {head}")
 
@@ -415,5 +417,33 @@ class DiagramBuilder:
         instr = Assertion(
             constraint_type='on_circle',
             objects=[point, center]
+        )
+        self.instructions.append(instr)
+
+    def process_tangent(self, cmd):
+        """Process: (tangent M (circle O) AB) -> Line AB is tangent to circle O at point M"""
+        if len(cmd) != 4:
+            raise RuntimeError(f"tangent requires 3 arguments (tangent-point, circle, line-points): {cmd}")
+        
+        # Extract tangent point M
+        tangent_point = Point(cmd[1])
+        
+        # Extract circle center O from nested tuple (circle O)
+        circle_spec = cmd[2]
+        if not isinstance(circle_spec, tuple) or circle_spec[0] != "circle":
+            raise RuntimeError(f"tangent requires (circle O) as second argument: {cmd}")
+        circle_center = Point(circle_spec[1])
+        
+        # Extract line points from AB (two-character string)
+        line_points_str = cmd[3]
+        if not isinstance(line_points_str, str) or len(line_points_str) != 2:
+            raise RuntimeError(f"tangent requires two-character line points (e.g., 'AB'): {cmd}")
+        point_a = Point(line_points_str[0])
+        point_b = Point(line_points_str[1])
+        
+        # Create assertion: [tangent_point, circle_center, line_point_a, line_point_b]
+        instr = Assertion(
+            constraint_type='tangent',
+            objects=[tangent_point, circle_center, point_a, point_b]
         )
         self.instructions.append(instr)

@@ -1,7 +1,7 @@
 [
   {
-    "image_dir": "images/img_231307.png",
-    "instruction": "Cho đường tròn (O) có đường kính AB. Lấy điểm C nằm trên (O) sao cho ∠AOC = 50°. Vẽ dây CD vuông góc với AB (D ∈ (O)) và dây DE song song với AB (E ∈ (O)).",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(on-circle B O)\n(on-segment O A B)\n(define C point)\n(on-circle C O)\n(segment O C)\n(angle-measure A O C 50)\n(define D point)\n(on-circle D O)\n(segment C D)\n(perpendicular (segment A B) (segment C D))\n(define E point)\n(on-circle E O)\n(segment D E)\n(parallel (segment A B) (segment D E))"
+    "image_dir": "images/img_231409.png",
+    "instruction": "Cho đường tròn (O). Từ điểm A nằm ngoài (O) kẻ hai tiếp tuyến AB và AC. Chứng minh rằng AB = AC.",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(distance O A 1.5)\n(define B point)\n(on-circle B O)\n(segment A B)\n(tangent B (circle O) AB)\n(define C point)\n(on-circle C O)\n(segment A C)\n(tangent C (circle O) AC)"
   }
 ]
