@@ -19,7 +19,14 @@ def render_diagram_task(self, task_id: str, dsl: str, epochs: int = 500, n_tries
         dsl_lines = [line.strip() for line in dsl_lines if line.strip()]
 
         builder = DiagramBuilder(dsl_lines)
-        optimizer = Optimizer(builder.instructions, epochs=epochs, n_tries=n_tries, verbosity=False)
+        opts = {
+            'epochs': epochs,
+            'n_tries': n_tries,
+            'learning_rate': 0.01,
+            'eps': 1e-6,
+            'seed': 42
+        }
+        optimizer = Optimizer(builder.instructions, opts, verbosity=False)
         diagram = optimizer.solve()
 
         renderer = MatplotlibDiagramRenderer()

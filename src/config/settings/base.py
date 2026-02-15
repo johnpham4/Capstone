@@ -59,9 +59,15 @@ class Settings(BaseSettings):
     OPENAI_MODEL_ID: str = "gpt-4o-mini"
     OPENAI_API_KEY: str | None = None
 
-    JWT_SECRET_KEY: str = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+    APP_ENV: str = "development"
+    JWT_SECRET_KEY: str = "change-me-in-env"
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
+    CORS_ALLOW_ORIGINS: str = "*"
+    CORS_ALLOW_CREDENTIALS: bool = False
+
+    INIT_DB_ON_STARTUP: bool = True
 
     # RabbitMQ Configuration
     RABBITMQ_URL: str = "amqp://guest:guest@localhost:5672/"
@@ -86,5 +92,12 @@ class Settings(BaseSettings):
         max_token_window = int(official_max_token_window * 0.90)
 
         return max_token_window
+
+    @property
+    def cors_origins(self) -> list[str]:
+        raw = (self.CORS_ALLOW_ORIGINS or "").strip()
+        if not raw or raw == "*":
+            return ["*"]
+        return [origin.strip() for origin in raw.split(",") if origin.strip()]
 
 settings = Settings()

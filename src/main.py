@@ -1,19 +1,22 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-# from contextlib import asynccontextmanager
 from loguru import logger
 
 from src.api.endpoints import register_routes
 from src.config.settings.base import settings
-# from src.core.database import init_db
+from src.core.database import init_db
 
-# @asynccontextmanager
-# async def lifespan(app: FastAPI):
-#     logger.info("Initializing database...")
-#     await init_db()
-#     logger.info("Database initialized successfully")
-#     yield
-#     logger.info("Application shutdown")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    if settings.INIT_DB_ON_STARTUP:
+        logger.info("Initializing database...")
+        await init_db()
+        logger.info("Database initialized successfully")
+    yield
+    logger.info("Application shutdown")
 
 app = FastAPI(
     title="GeoUni Backend API",
@@ -22,14 +25,14 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url="/openapi.json",
-    # lifespan=lifespan
+    lifespan=lifespan
 )
 
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins (Vercel URL changes on deploy)
-    allow_credentials=False,  # Must be False when allow_origins=["*"]
+    allow_origins=settings.cors_origins,
+    allow_credentials=settings.CORS_ALLOW_CREDENTIALS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
