@@ -19,6 +19,7 @@ class OrchestratorState(TypedDict):
     problem_statement: str
     diagram: dict
     solution: dict
+    llm_mock: bool
 
 class Orchestrator:
     def __init__(self, diagram_prompt: str):
@@ -78,7 +79,9 @@ class Orchestrator:
         return state["resolved_mode"]
 
     def _diagram_node(self, state: OrchestratorState) -> OrchestratorState:
-        state["diagram"] = self.diagram_agent.execute(state["problem_statement"], self.diagram_prompt)
+        state["diagram"] = self.diagram_agent.execute(
+            state["problem_statement"], self.diagram_prompt, llm_mock=state.get("llm_mock", False),
+        )
         return state
 
     def _solve_node(self, state: OrchestratorState) -> OrchestratorState:
@@ -88,7 +91,7 @@ class Orchestrator:
         state["solution"] = self.solver_agent.execute(solve_input)
         return state
 
-    async def execute(self, user_input: str, mode: Mode = "auto") -> dict:
+    async def execute(self, user_input: str, mode: Mode = "auto", llm_mock: bool = False) -> dict:
         initial_state: OrchestratorState = {
             "user_input": user_input,
             "mode": mode,
@@ -97,6 +100,7 @@ class Orchestrator:
             "problem_statement": "",
             "diagram": {},
             "solution": {},
+            "llm_mock": llm_mock,
         }
 
         final_state = await asyncio.to_thread(self.workflow.invoke, initial_state)

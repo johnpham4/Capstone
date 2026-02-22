@@ -1,6 +1,6 @@
 from loguru import logger
 
-from src.services.diagram.diagram_generation_service import DiagramService
+from src.services.diagram.generation import DiagramService
 
 
 class DiagramAgent:
@@ -8,7 +8,7 @@ class DiagramAgent:
     def __init__(self):
         self.diagram_service = DiagramService()
 
-    def execute(self, user_input: str, dsl_prompt: str) -> dict:
+    def execute(self, user_input: str, dsl_prompt: str, llm_mock: bool = False) -> dict:
         """Generate DSL and trigger Celery task for CPU-intensive rendering"""
         try:
             return self.diagram_service.generate_and_render(
@@ -21,6 +21,7 @@ class DiagramAgent:
                 n_tries=1,
                 dpi=150,
                 timeout=30,
+                llm_mock=llm_mock,
             )
 
         except Exception as e:

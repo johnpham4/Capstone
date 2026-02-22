@@ -5,8 +5,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 
 from src.api.endpoints import register_routes
+from src.api.middleware.error_handler import register_error_handlers
 from src.config.settings.base import settings
-from src.core.database import init_db
+from src.infrastructures.database.session import init_db
 
 
 @asynccontextmanager
@@ -39,6 +40,9 @@ app.add_middleware(
 
 # Register all API routes
 register_routes(app)
+
+# Register global error handlers (AppError, validation, unhandled)
+register_error_handlers(app)
 
 logger.info("GeoUni Backend Application initialized")
 

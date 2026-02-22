@@ -1,3 +1,3 @@
-from .task_queue_service import TaskQueueService
+from .queue import TaskQueueService
 
 __all__ = ["TaskQueueService"]

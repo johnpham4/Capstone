@@ -4,8 +4,8 @@ from pathlib import Path
 from loguru import logger
 import matplotlib.patches as patches
 
-from src.models.domain.geometry import Diagram, GeometricPoint
-from src.models.domain.geometry.types import QuadrilateralType
+from src.services.diagram.models import Diagram, GeometricPoint
+from src.services.diagram.models.types import QuadrilateralType
 
 
 class MatplotlibDiagramRenderer:

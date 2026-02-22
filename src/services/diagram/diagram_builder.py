@@ -1,9 +1,9 @@
 from typing import List, Tuple, Any
 
 from src.services.diagram.dsl_parser import DSLParser
-from src.models.domain.geometry import Point
-from src.models.domain.geometry.instructions import Parameter
-from src.models.domain.geometry.types import DiagramType, QuadrilateralType, TriangleType
+from src.services.diagram.models import Point
+from src.services.diagram.models.instructions import Parameter
+from src.services.diagram.models.types import DiagramType, QuadrilateralType, TriangleType
 
 
 class DiagramBuilder:
@@ -230,7 +230,7 @@ class DiagramBuilder:
         p3 = Point(seg2[1])
         p4 = Point(seg2[2])
 
-        from src.models.domain.geometry.instructions import Assertion
+        from src.services.diagram.models.instructions import Assertion
         instr = Assertion(
             constraint_type='parallel',
             objects=[p1, p2, p3, p4]
@@ -257,7 +257,7 @@ class DiagramBuilder:
         p3 = Point(seg2[1])
         p4 = Point(seg2[2])
 
-        from src.models.domain.geometry.instructions import Assertion
+        from src.services.diagram.models.instructions import Assertion
         instr = Assertion(
             constraint_type='perpendicular',
             objects=[p1, p2, p3, p4]
@@ -272,7 +272,7 @@ class DiagramBuilder:
         # Extract 6 points for two angles
         points = [Point(cmd[i]) for i in range(1, 7)]
 
-        from src.models.domain.geometry.instructions import Assertion
+        from src.services.diagram.models.instructions import Assertion
         instr = Assertion(
             constraint_type='angle_equal',
             objects=points
