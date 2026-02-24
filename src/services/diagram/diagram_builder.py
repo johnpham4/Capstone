@@ -1,9 +1,9 @@
 from typing import List, Tuple, Any
 
 from src.services.diagram.dsl_parser import DSLParser
-from src.models.domain.geometry import Point
-from src.models.domain.geometry.instructions import Parameter, DistanceValue, Assertion
-from src.models.domain.geometry.types import DiagramType, QuadrilateralType, TriangleType
+from src.models.domain.geometry.value_objects import Point
+from src.models.domain.geometry.instructions import Parameter, Assertion, DistanceValue
+from src.models.domain.geometry.types import DiagramType, TriangleType, QuadrilateralType
 
 
 class DiagramBuilder:
@@ -16,8 +16,8 @@ class DiagramBuilder:
         for cmd in cmds:
             try:
                 self.process_command(cmd)
-            except:
-                raise RuntimeError(f"Invalid command: {cmd}")
+            except Exception as e:
+                raise RuntimeError(f"Invalid command: {cmd}. Error: {e}")
 
     def process_command(self, cmd: Tuple):
         if not isinstance(cmd[0], str):
@@ -27,8 +27,16 @@ class DiagramBuilder:
 
         if head == "triangle":
             self.process_triangle(cmd)
-        elif head in ["quadrilateral", "square", "rectangle", "trapezoid", "parallelogram", "rhombus"]:
-            self.process_quadrilateral(cmd)
+        elif head == "square":
+            self.process_square(cmd)
+        elif head == "rectangle":
+            self.process_rectangle(cmd)
+        elif head == "parallelogram":
+            self.process_parallelogram(cmd)
+        elif head == "trapezoid":
+            self.process_trapezoid(cmd)
+        elif head == "rhombus":  
+            self.process_rhombus(cmd)
         elif head == "define":
             self.process_define(cmd)
         elif head == "circle":
@@ -37,6 +45,14 @@ class DiagramBuilder:
             self.process_segment(cmd)
         elif head == "line":
             self.process_line(cmd)
+        elif head == "on-circle":
+            self.process_on_circle(cmd)
+        elif head == "on-segment":
+            self.process_on_segment(cmd)
+        elif head == "distance":
+            self.process_distance(cmd)
+        elif head == "equal-distance":
+            self.process_equal_distance(cmd)
         elif head == "parallel":
             self.process_parallel(cmd)
         elif head == "perpendicular":
@@ -45,23 +61,18 @@ class DiagramBuilder:
             self.process_angle_equal(cmd)
         elif head == "angle-measure":
             self.process_angle_measure(cmd)
-        elif head == "on-segment":
-            self.process_on_segment(cmd)
-        elif head == "distance":
-            self.process_distance(cmd)
-        elif head == "equal-distance":
-            self.process_equal_distance(cmd)
-        elif head == "on-circle":
-            self.process_on_circle(cmd)
         elif head == "tangent":
             self.process_tangent(cmd)
+        elif head == "diameter":
+            self.process_diameter(cmd)
         else:
             raise NotImplementedError(f"Command not supported: {head}")
 
     def register_pt(self, p: Point):
         if p in self.points:
-            raise RuntimeError(f"Same point declared twice: {p}")
-        self.points.append(p)
+            pass
+        else:
+            self.points.append(p)
 
     def process_triangle(self, cmd):
         ps = [Point(p) for p in cmd[1]]
@@ -87,73 +98,95 @@ class DiagramBuilder:
             self.instructions.append(instr)
             return
 
-        # Two or more parameters: type + arguments
         type_str = param_method[0].upper().replace('-', '_')
-
-        # Handle different parameter types
-        param_type_lower = param_method[0].lower()
-        if param_type_lower in ['equal_angles', 'equal-angles']:
-            # For equal_angles, args are indices (integers), not Points
-            args = tuple(param_method[1:])
-        else:
-            # For other types (isosceles, right, etc.), args are Points
-            args = tuple(Point(p) for p in param_method[1:])
+        special_p = Point(param_method[1])
 
         try:
             head = TriangleType[type_str]
-            instr = Parameter(DiagramType.TRIANGLE, ps, head, args)
+            instr = Parameter(DiagramType.TRIANGLE, ps, head, (special_p,))
         except KeyError:
-            instr = Parameter(DiagramType.TRIANGLE, ps, param_type_lower, args)
+            instr = Parameter(DiagramType.TRIANGLE, ps, param_method[0].lower(), (special_p,))
 
         self.instructions.append(instr)
 
-    def process_quadrilateral(self, cmd):
-        """Process quadrilateral commands: (quadrilateral (A B C D)), (square (A B C D)), (rectangle (A B C D)), etc."""
+    def process_square(self, cmd):
         if len(cmd) < 2:
-            raise RuntimeError(f"Invalid quadrilateral command: {cmd}")
-
-        # Determine quadrilateral type from command name
-        quad_type_str = cmd[0].upper()
+            raise RuntimeError(f"Invalid square command: {cmd}")
         
-        # Generic quadrilateral has no specific type
-        if quad_type_str == "QUADRILATERAL":
-            quad_type = None
-        else:
-            try:
-                quad_type = QuadrilateralType[quad_type_str]
-            except KeyError:
-                raise RuntimeError(f"Unknown quadrilateral type: {cmd[0]}")
+        points_data = cmd[1]
+        if len(points_data) != 4:
+            raise RuntimeError(f"Square requires exactly 4 points, got: {len(points_data)}")
 
-        ps = [Point(p) for p in cmd[1]]
-
-        if len(ps) != 4:
-            raise ValueError(f"Quadrilateral must have 4 vertices, got {len(ps)}")
-
-        # Register all 4 points
+        ps = [Point(p) for p in points_data]
         for p in ps:
             self.register_pt(p)
 
-        # If no additional parameters
-        if len(cmd) == 2:
-            instr = Parameter(DiagramType.QUADRILATERAL, ps, quad_type)
-            self.instructions.append(instr)
-            return
+        instr = Parameter(DiagramType.QUADRILATERAL, ps, QuadrilateralType.SQUARE)
+        self.instructions.append(instr)
 
-        # With additional parameters: (square (A B C D) (param_type args...))
-        param_method = cmd[2]
+    def process_rectangle(self, cmd):
+        if len(cmd) < 2:
+            raise RuntimeError(f"Invalid rectangle command: {cmd}")
+        
+        points_data = cmd[1]
+        if len(points_data) != 4:
+            raise RuntimeError(f"Rectangle requires exactly 4 points, got: {len(points_data)}")
 
-        if isinstance(param_method, tuple) and len(param_method) > 0:
-            param_type_lower = param_method[0].lower()
-            # Process arguments - convert to Points if they are strings
-            args = tuple(Point(p) if isinstance(p, str) else p for p in param_method[1:])
-            instr = Parameter(DiagramType.QUADRILATERAL, ps, quad_type, args)
-        else:
-            instr = Parameter(DiagramType.QUADRILATERAL, ps, quad_type)
+        ps = [Point(p) for p in points_data]
+        for p in ps:
+            self.register_pt(p)
 
+        instr = Parameter(DiagramType.QUADRILATERAL, ps, QuadrilateralType.RECTANGLE)
+        self.instructions.append(instr)
+
+    def process_parallelogram(self, cmd):
+        if len(cmd) < 2:
+            raise RuntimeError(f"Invalid parallelogram command: {cmd}")
+        
+        points_data = cmd[1]
+        if len(points_data) != 4:
+            raise RuntimeError(f"Parallelogram requires exactly 4 points, got: {len(points_data)}")
+
+        ps = [Point(p) for p in points_data]
+        for p in ps:
+            self.register_pt(p)
+
+        instr = Parameter(DiagramType.QUADRILATERAL, ps, QuadrilateralType.PARALLELOGRAM)
+        self.instructions.append(instr)
+
+    def process_trapezoid(self, cmd):
+        if len(cmd) < 2:
+            raise RuntimeError(f"Invalid trapezoid command: {cmd}")
+        
+        points_data = cmd[1]
+        if len(points_data) != 4:
+            raise RuntimeError(f"Trapezoid requires exactly 4 points, got: {len(points_data)}")
+
+        ps = [Point(p) for p in points_data]
+        for p in ps:
+            self.register_pt(p)
+
+        instr = Parameter(DiagramType.QUADRILATERAL, ps, QuadrilateralType.TRAPEZOID)
+        self.instructions.append(instr)
+
+    def process_rhombus(self, cmd):
+        """[NEW] Process DSL: (rhombus (A B C D))"""
+        if len(cmd) < 2:
+            raise RuntimeError(f"Invalid rhombus command: {cmd}")
+        
+        points_data = cmd[1]
+        if len(points_data) != 4:
+            raise RuntimeError(f"Rhombus requires exactly 4 points, got: {len(points_data)}")
+
+        ps = [Point(p) for p in points_data]
+        for p in ps:
+            self.register_pt(p)
+
+        # Mapping sang kiểu RHOMBUS
+        instr = Parameter(DiagramType.QUADRILATERAL, ps, QuadrilateralType.RHOMBUS)
         self.instructions.append(instr)
 
     def process_define(self, cmd):
-        """Process: (define G point (centroid A B C)) or (define O point)"""
         if len(cmd) < 3:
             raise RuntimeError(f"Invalid define command: {cmd}")
 
@@ -163,43 +196,38 @@ class DiagramBuilder:
         if obj_type != "point":
             raise NotImplementedError(f"Only 'point' type supported, got: {obj_type}")
 
-        # Handle free point with no construction: (define O point)
+        # Simple point definition: (define O point)
         if len(cmd) == 3:
-            pt = Point(point_name)
-            self.register_pt(pt)
+            p = Point(point_name)
+            self.register_pt(p)
+            # Create simple coords parameter
             instr = Parameter(
                 diagram_type=DiagramType.POINT,
-                objects=[pt],
-                param_type="coords",  
+                objects=[p],
+                param_type="coords",
                 args=()
             )
             self.instructions.append(instr)
             return
 
-        # (define G point (centroid A B C))
+        # Point with construction: (define H point (projection C (segment A B)))
         construction = cmd[3]
-
         if not isinstance(construction, tuple):
             raise RuntimeError(f"Construction must be a tuple: {construction}")
 
         construction_type = construction[0].lower()
         construction_args = construction[1:]
 
-        # (projection A (segment B C))
         processed_args = []
         for arg in construction_args:
             if isinstance(arg, tuple):
-                # (segment B C) -> [B, C]
                 processed_args.extend(arg[1:])
             else:
                 processed_args.append(arg)
 
-        # Create Parameter instruction for geometric construction
-        pt = Point(point_name)
-        self.register_pt(pt)
         instr = Parameter(
             diagram_type=DiagramType.POINT,
-            objects=[pt],
+            objects=[Point(point_name)],
             param_type=construction_type,
             args=tuple(Point(p) for p in processed_args)
         )
@@ -219,7 +247,6 @@ class DiagramBuilder:
         
         # If only (circle O) - use default radius
         if len(cmd) == 2:
-            construction = ('radius', 1.0)
             construction_type = 'radius'
             construction_args = (1.0,)
         else:
@@ -241,7 +268,6 @@ class DiagramBuilder:
         self.instructions.append(instr)
 
     def process_segment(self, cmd):
-        """Process: (segment A M)"""
         if len(cmd) != 3:
             raise RuntimeError(f"Segment requires 2 points: {cmd}")
 
@@ -257,10 +283,9 @@ class DiagramBuilder:
         self.instructions.append(instr)
 
     def process_line(self, cmd):
-        """Process: (line A B)"""
         if len(cmd) != 3:
             raise RuntimeError(f"Line requires 2 points: {cmd}")
-        
+
         p1 = Point(cmd[1])
         p2 = Point(cmd[2])
 
@@ -269,140 +294,6 @@ class DiagramBuilder:
             objects=[p1, p2],
             param_type="line",
             args=()
-        )
-        self.instructions.append(instr)
-
-    def process_parallel(self, cmd):
-        """Process: (parallel (segment B C) (segment D E))"""
-        if len(cmd) != 3:
-            raise RuntimeError(f"Parallel requires 2 segments: {cmd}")
-
-        seg1 = cmd[1]
-        seg2 = cmd[2]
-
-        if not (isinstance(seg1, tuple) and isinstance(seg2, tuple)):
-            raise RuntimeError(f"Parallel arguments must be segments: {cmd}")
-
-        if seg1[0] != "segment" or seg2[0] != "segment":
-            raise RuntimeError(f"Parallel requires segments: {cmd}")
-
-        # Extract 4 points: B, C, D, E
-        p1 = Point(seg1[1])
-        p2 = Point(seg1[2])
-        p3 = Point(seg2[1])
-        p4 = Point(seg2[2])
-
-        instr = Assertion(
-            constraint_type='parallel',
-            objects=[p1, p2, p3, p4]
-        )
-        self.instructions.append(instr)
-
-    def process_perpendicular(self, cmd):
-        """Process: (perpendicular (segment A B) (segment C D))"""
-        if len(cmd) != 3:
-            raise RuntimeError(f"Perpendicular requires 2 segments: {cmd}")
-
-        seg1 = cmd[1]
-        seg2 = cmd[2]
-
-        if not (isinstance(seg1, tuple) and isinstance(seg2, tuple)):
-            raise RuntimeError(f"Perpendicular arguments must be segments: {cmd}")
-
-        if seg1[0] != "segment" or seg2[0] != "segment":
-            raise RuntimeError(f"Perpendicular requires segments: {cmd}")
-
-        p1 = Point(seg1[1])
-        p2 = Point(seg1[2])
-        p3 = Point(seg2[1])
-        p4 = Point(seg2[2])
-
-        instr = Assertion(
-            constraint_type='perpendicular',
-            objects=[p1, p2, p3, p4]
-        )
-        self.instructions.append(instr)
-
-    def process_angle_equal(self, cmd):
-        """Process: (angle-equal A B C D E F) -> ∠ABC = ∠DEF"""
-        if len(cmd) != 7:
-            raise RuntimeError(f"angle-equal requires 6 points: {cmd}")
-
-        # Extract 6 points for two angles
-        points = [Point(cmd[i]) for i in range(1, 7)]
-
-        instr = Assertion(
-            constraint_type='angle_equal',
-            objects=points
-        )
-        self.instructions.append(instr)
-
-    def process_angle_measure(self, cmd):
-        """Process: (angle-measure A B C 120) -> ∠ABC = 120°"""
-        if len(cmd) != 5:
-            raise RuntimeError(f"angle-measure requires 3 points + 1 degree value: {cmd}")
-
-        # DSL format: (angle-measure A C B 110)
-        # Order: p1=A, vertex=C, p2=B
-        points = [Point(cmd[i]) for i in range(1, 4)]
-        degrees = cmd[4]  
-        
-        # Create a Point-like object for the degree value to fit into objects list
-        class DegreeValue:
-            def __init__(self, value):
-                self.val = str(value)
-        
-        instr = Assertion(
-            constraint_type='angle_measure',
-            objects=points + [DegreeValue(degrees)]
-        )
-        self.instructions.append(instr)
-
-    def process_on_segment(self, cmd):
-        """Process: (on-segment M C D) -> M lies on segment CD"""
-        if len(cmd) != 4:
-            raise RuntimeError(f"on-segment requires 3 points (point, seg_p1, seg_p2): {cmd}")
-        
-        # DSL format: (on-segment M C D) means M lies on segment CD
-        point = Point(cmd[1])  # M
-        seg_p1 = Point(cmd[2])  # C
-        seg_p2 = Point(cmd[3])  # D
-        
-        instr = Assertion(
-            constraint_type='on_segment',
-            objects=[point, seg_p1, seg_p2]
-        )
-        self.instructions.append(instr)
-
-    def process_distance(self, cmd):
-        """Process: (distance O A 0.03) -> Distance OA = 0.03"""
-        if len(cmd) != 4:
-            raise RuntimeError(f"distance requires 2 points and 1 value: {cmd}")
-        
-        p1 = Point(cmd[1])  # O
-        p2 = Point(cmd[2])  # A
-        distance_value = cmd[3]  # 0.03 (float or string)
-        
-        # Convert to DistanceValue wrapper
-        instr = Assertion(
-            constraint_type='distance',
-            objects=[p1, p2, DistanceValue(distance_value)]
-        )
-        self.instructions.append(instr)
-
-    def process_equal_distance(self, cmd):
-        """Process: (equal-distance O M O H) -> Distance OM = Distance OH"""
-        if len(cmd) != 5:
-            raise RuntimeError(f"equal-distance requires 4 points (p1 p2 p3 p4): {cmd}")
-        
-        p1 = Point(cmd[1])  # O
-        p2 = Point(cmd[2])  # M
-        p3 = Point(cmd[3])  # O
-        p4 = Point(cmd[4])  # H
-        
-        instr = Assertion(
-            constraint_type='equal_distance',
-            objects=[p1, p2, p3, p4]
         )
         self.instructions.append(instr)
 
@@ -445,5 +336,151 @@ class DiagramBuilder:
         instr = Assertion(
             constraint_type='tangent',
             objects=[tangent_point, circle_center, point_a, point_b]
+        )
+        self.instructions.append(instr)
+
+    def process_diameter(self, cmd):
+        """Process: (diameter M N O) -> MN is diameter of circle O"""
+        if len(cmd) != 4:
+            raise RuntimeError(f"diameter requires 3 points (p1, p2, center): {cmd}")
+        
+        p1 = Point(cmd[1])  # M
+        p2 = Point(cmd[2])  # N
+        center = Point(cmd[3])  # O
+        
+        # Diameter constraint: MN is diameter of circle O
+        # - M and N both on circle O
+        # - O is midpoint of M and N
+        # - M-O-N are collinear
+        instr = Assertion(
+            constraint_type='diameter',
+            objects=[p1, p2, center]
+        )
+        self.instructions.append(instr)
+
+    def process_on_segment(self, cmd):
+        """Process: (on-segment M C D) -> M lies on segment CD"""
+        if len(cmd) != 4:
+            raise RuntimeError(f"on-segment requires 3 points (point, seg_p1, seg_p2): {cmd}")
+        
+        point = Point(cmd[1])  # M
+        seg_p1 = Point(cmd[2])  # C
+        seg_p2 = Point(cmd[3])  # D
+        
+        instr = Assertion(
+            constraint_type='on_segment',
+            objects=[point, seg_p1, seg_p2]
+        )
+        self.instructions.append(instr)
+
+    def process_distance(self, cmd):
+        """Process: (distance O A 0.03) -> Distance OA = 0.03"""
+        if len(cmd) != 4:
+            raise RuntimeError(f"distance requires 2 points and 1 value: {cmd}")
+        
+        p1 = Point(cmd[1])  # O
+        p2 = Point(cmd[2])  # A
+        distance_value = cmd[3]  # 0.03
+        
+        instr = Assertion(
+            constraint_type='distance',
+            objects=[p1, p2, DistanceValue(distance_value)]
+        )
+        self.instructions.append(instr)
+
+    def process_equal_distance(self, cmd):
+        """Process: (equal-distance O M O H) -> Distance OM = Distance OH"""
+        if len(cmd) != 5:
+            raise RuntimeError(f"equal-distance requires 4 points (p1 p2 p3 p4): {cmd}")
+        
+        p1 = Point(cmd[1])
+        p2 = Point(cmd[2])
+        p3 = Point(cmd[3])
+        p4 = Point(cmd[4])
+        
+        instr = Assertion(
+            constraint_type='equal_distance',
+            objects=[p1, p2, p3, p4]
+        )
+        self.instructions.append(instr)
+
+    def process_parallel(self, cmd):
+        """Process: (parallel (segment B C) (segment D E))"""
+        if len(cmd) != 3:
+            raise RuntimeError(f"Parallel requires 2 segments: {cmd}")
+
+        seg1 = cmd[1]
+        seg2 = cmd[2]
+
+        if not (isinstance(seg1, tuple) and isinstance(seg2, tuple)):
+            raise RuntimeError(f"Parallel arguments must be segments: {cmd}")
+
+        if seg1[0] != "segment" or seg2[0] != "segment":
+            raise RuntimeError(f"Parallel requires segments: {cmd}")
+
+        p1 = Point(seg1[1])
+        p2 = Point(seg1[2])
+        p3 = Point(seg2[1])
+        p4 = Point(seg2[2])
+
+        instr = Assertion(
+            constraint_type='parallel',
+            objects=[p1, p2, p3, p4]
+        )
+        self.instructions.append(instr)
+
+    def process_perpendicular(self, cmd):
+        """Process: (perpendicular (segment A B) (segment C D))"""
+        if len(cmd) != 3:
+            raise RuntimeError(f"Perpendicular requires 2 segments: {cmd}")
+
+        seg1 = cmd[1]
+        seg2 = cmd[2]
+
+        if not (isinstance(seg1, tuple) and isinstance(seg2, tuple)):
+            raise RuntimeError(f"Perpendicular arguments must be segments: {cmd}")
+
+        if seg1[0] != "segment" or seg2[0] != "segment":
+            raise RuntimeError(f"Perpendicular requires segments: {cmd}")
+
+        p1 = Point(seg1[1])
+        p2 = Point(seg1[2])
+        p3 = Point(seg2[1])
+        p4 = Point(seg2[2])
+
+        instr = Assertion(
+            constraint_type='perpendicular',
+            objects=[p1, p2, p3, p4]
+        )
+        self.instructions.append(instr)
+
+    def process_angle_equal(self, cmd):
+        """Process: (angle-equal A B C D E F) -> ∠ABC = ∠DEF"""
+        if len(cmd) != 7:
+            raise RuntimeError(f"angle-equal requires 6 points: {cmd}")
+
+        points = [Point(cmd[i]) for i in range(1, 7)]
+
+        instr = Assertion(
+            constraint_type='angle_equal',
+            objects=points
+        )
+        self.instructions.append(instr)
+
+    def process_angle_measure(self, cmd):
+        """Process: (angle-measure A B C 120) -> ∠ABC = 120°"""
+        if len(cmd) != 5:
+            raise RuntimeError(f"angle-measure requires 3 points + 1 degree value: {cmd}")
+
+        points = [Point(cmd[i]) for i in range(1, 4)]
+        degrees = cmd[4]
+        
+        class DegreeValue:
+            def __init__(self, value):
+                self.val = str(value)
+        
+        instr = Assertion(
+            constraint_type='angle_measure',
+            objects=points + [DegreeValue(degrees)]
         )
         self.instructions.append(instr)

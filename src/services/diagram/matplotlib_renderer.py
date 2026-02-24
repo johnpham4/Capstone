@@ -53,7 +53,7 @@ class MatplotlibDiagramRenderer:
         v2x, v2y = v2x / len2, v2y / len2
 
         # Size of right angle symbol 
-        size = min(len1, len2) * 0.4
+        size = min(len1, len2) * 0.15
 
         # Draw small square
         corner1 = (vertex.x + v1x * size, vertex.y + v1y * size)
@@ -464,8 +464,9 @@ class MatplotlibDiagramRenderer:
 
         # 6. Draw Points and Labels
         if self.diagram.points:
-            cx = sum(p.x for p in self.diagram.points.values()) / len(self.diagram.points)
-            cy = sum(p.y for p in self.diagram.points.values()) / len(self.diagram.points)
+            # Đồng bộ với optimizer: sử dụng (0, 0) làm tâm
+            cx = 0.0
+            cy = 0.0
 
             for name, p in self.diagram.points.items():
                 ax.plot(p.x, p.y, 'ko', markersize=4)
@@ -579,15 +580,17 @@ class MatplotlibDiagramRenderer:
         # Configure axes
         ax.set_aspect('equal')
         
-        # Calculate centroid of all points to center the diagram
+        # Đồng bộ với optimizer: optimizer đã dịch chuyển tất cả điểm về tâm (0, 0)
+        # Nên renderer cũng sử dụng (0, 0) làm tâm của khung hình
+        center_x = 0.0
+        center_y = 0.0
+        
+        # Calculate the range needed to fit all elements
+        max_range = 1.5  # Default range
+        
         if self.diagram.points:
             all_x = [p.x for p in self.diagram.points.values()]
             all_y = [p.y for p in self.diagram.points.values()]
-            center_x = sum(all_x) / len(all_x)
-            center_y = sum(all_y) / len(all_y)
-            
-            # Calculate the range needed to fit all elements
-            max_range = 1.5  # Default range
             
             # Consider points
             if all_x and all_y:
@@ -604,15 +607,11 @@ class MatplotlibDiagramRenderer:
                         radius = info
                     # Ensure circle fits in view
                     max_range = max(max_range, radius * 1.2)
-            
-            # Set limits centered on centroid
-            zoom_factor = max(1.5, max_range)
-            ax.set_xlim(center_x - zoom_factor, center_x + zoom_factor)
-            ax.set_ylim(center_y - zoom_factor, center_y + zoom_factor)
-        else:
-            # Fallback if no points
-            ax.set_xlim(-1.5, 1.5)
-            ax.set_ylim(-1.5, 1.5)
+        
+        # Set limits centered on (0, 0) to match optimizer's centering
+        zoom_factor = max(1.5, max_range)
+        ax.set_xlim(center_x - zoom_factor, center_x + zoom_factor)
+        ax.set_ylim(center_y - zoom_factor, center_y + zoom_factor)
         
         ax.axis('off')
 

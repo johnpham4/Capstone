@@ -3,7 +3,7 @@
     "image": "images/img_231401.png",
     "caption": "circle (O), tangent AB at point A",
     "id": 231401,
-    "caption_vn": "Cho đường tròn (O). Đường thẳng AB là tiếp tuyến của đường tròn tại A. Chứng minh rằng OA ⟂ AB."
+    "caption_vn": "Cho đường tròn (O). Đường thẳng AB là tiếp tuyến của đường tròn tại A. Chứng minh rằng OA vuông góc AB."
   },
   {
     "image": "images/img_231409.png",
@@ -33,13 +33,13 @@
     "image": "images/img_231413.png",
     "caption": "circle (O), tangent AB, chord AC, OH perpendicular AC",
     "id": 231413,
-    "caption_vn": "Cho đường tròn (O). AB là tiếp tuyến tại A, AC là dây của đường tròn. Kẻ OH ⟂ AC (H ∈ AC). Chứng minh rằng H là trung điểm của AC."
+    "caption_vn": "Cho đường tròn (O). AB là tiếp tuyến tại A, AC là dây của đường tròn. Kẻ OH vuông góc AC (H ∈ AC). Chứng minh rằng H là trung điểm của AC."
   },
   {
     "image": "images/img_231414.png",
     "caption": "circle (O), tangents AB AC, midpoint M of BC",
     "id": 231414,
-    "caption_vn": "Cho đường tròn (O). Từ điểm A nằm ngoài (O) kẻ hai tiếp tuyến AB và AC. Gọi M là trung điểm của BC. Chứng minh rằng AM ⟂ BC."
+    "caption_vn": "Cho đường tròn (O). Từ điểm A nằm ngoài (O) kẻ hai tiếp tuyến AB và AC. Gọi M là trung điểm của BC. Chứng minh rằng AM vuông góc BC."
   },
   {
     "image": "images/img_231415.png",

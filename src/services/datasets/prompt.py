@@ -1,7 +1,7 @@
 prompt: str = """
 Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
 
-⚠️⚠️⚠️ 5 LỖI CẤM TUYỆT ĐỐI - ĐỌC TRƯỚC KHI LÀM ⚠️⚠️⚠️
+5 LỖI CẤM TUYỆT ĐỐI - ĐỌC TRƯỚC KHI LÀM 
 
 1. ❌ (on-segment A B) - CHỈ 2 ĐIỂM → SAI!
    ✅ (on-segment M A B) - CẦN ĐÚNG 3 ĐIỂM
@@ -30,11 +30,32 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
    (on-circle D O)  ← BẮT BUỘC!
    (segment C D)
 
-5. ❌ Thêm constraint cho YÊU CẦU CHỨNG MINH → SAI!
-   ✅ CHỈ thêm constraint khi đề bài CHO SẴN
-   • Đề: "Chứng minh AB = AC" → KHÔNG thêm (equal-distance ...)
-   • Đề: "Chứng minh góc A = 60°" → KHÔNG thêm (angle-measure ...)
-   • Đề: "Cho góc A = 60°" → ĐƯỢC thêm (angle-measure B A C 60)
+5. ✅ VẼ TẤT CẢ MÔ TẢ HÌNH HỌC TRONG ĐỀ BÀI!
+   • Đề: "Chứng minh AB = AC" → VÉ cả AB và AC bằng nhau → THÊM (equal-distance A B A C)
+   • Đề: "Chứng minh góc A = 60°" → VẼ góc A = 60° → THÊM (angle-measure B A C 60)
+   • Đề: "Chứng minh AB ⊥ CD" → VẼ AB vuông góc CD → THÊM (perpendicular (segment A B) (segment C D))
+   • Đề: "Chứng minh ∠BAC = ∠OCA" → VẼ cả 2 góc bằng nhau → THÊM (angle-equal B A C O C A)
+   • NGUYÊN TẮC: Miễn đề BÀI MÔ TẢ quan hệ hình học → VẼ LUÔN, không phân biệt "cho" hay "chứng minh"
+
+🔥 QUY TẮC VÀNG - VẼ SEGMENT KHI ĐỀ NHẮC ĐẾN:
+
+⚠️ ĐỌC KỸ ĐỀ BÀI - TÌM TẤT CẢ CẠNH/ĐOẠN THẲNG ĐƯỢC NHẮC ĐẾN
+• "AC = AD" → nhắc AC, AD
+• "AB ⊥ CD" → nhắc AB, CD
+• "AO là đường trung trực BC" → nhắc AO, BC
+• "AM vuông góc BC" → nhắc AM, BC
+• "kẻ OH", "nối AC" → nhắc OH, AC
+• "đường kính MN" → nhắc MN
+
+✅ VỚI MỖI CẠNH ĐƯỢC NHẮC (ví dụ AC):
+1. Kiểm tra DSL đã có (segment A C) chưa?
+2. Nếu CHƯA → THÊM NGAY (segment A C)
+3. Nếu ĐÃ CÓ → Bỏ qua
+
+📌 ĐẶC BIỆT:
+• Tiếp tuyến AB → đã có (segment A B) rồi
+• Dây CD → đã có (segment C D) rồi
+• Đường kính MN → PHẢI THÊM (segment M N) - vì (diameter M N O) không tự vẽ!
 
 ═══ CÚ PHÁP DSL ═══
 
@@ -50,19 +71,24 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
    • Tự do: (segment A B), (line A B)
    
    ⚠️ HÌNH CHIẾU + VUÔNG GÓC - CỰC QUAN TRỌNG:
-   Khi đề nói: "Kẻ OH ⊥ AC (H ∈ AC)" hoặc "H là hình chiếu O lên AC"
+   Khi đề nói: "Kẻ OH vuông góc AC (H ∈ AC)" hoặc "H là hình chiếu O lên AC"
    → DÙNG PROJECTION, KHÔNG define H riêng + perpendicular
    
    SAI: (define H point) + (segment O H) + (on-segment H A C) + (perpendicular (segment O H) (segment A C))
    ĐÚNG: (define H point (projection O (segment A C))) + (segment O H)
    
-   VÍ DỤ: "Kẻ OH ⊥ AC (H ∈ AC)"
+   VÍ DỤ: "Kẻ OH vuông góc AC (H ∈ AC)"
    (segment A C)        ← Phải có segment trước!
    (define H point (projection O (segment A C)))
-   (segment O H)
+   (segment O H)        ← BẮT BUỘC: Vẽ từ ĐIỂM GỐC (O) đến HÌNH CHIẾU (H)!
    
-   ⚠️ HÌNH CHIẾU: LUÔN vẽ segment từ điểm xuống hình chiếu
-   "H là hình chiếu B lên AC" → (define H point (projection B (segment A C))) + (segment B H)
+   ⚠️ HÌNH CHIẾU: LUÔN vẽ segment từ ĐIỂM GỐC đến HÌNH CHIẾU
+   "H là hình chiếu B lên AC" → (define H point (projection B (segment A C))) + (segment B H) ← Từ B đến H!
+   "H là hình chiếu O lên AC" → (define H point (projection O (segment A C))) + (segment O H) ← Từ O đến H!
+   
+   ⚠️ TUYỆT ĐỐI KHÔNG vẽ segment từ điểm khác:
+   • SAI: (projection O (segment A C)) + (segment A H) - SAI HOÀN TOÀN!
+   • ĐÚNG: (projection O (segment A C)) + (segment O H) - từ O đến H!
    
    ⚠️ GIAO ĐIỂM: "CD cắt AB tại H" → (define H point (inter-ll C D A B))
    
@@ -76,10 +102,11 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
      → C là điểm TỰ DO trên đường tròn, KHÔNG dùng midpoint!
    • "C là trung điểm đoạn AB" → (define C point (midpoint A B))
    
-   CHỨNG MINH vs CHO SẴN:
-   • Đề bảo "Chứng minh góc A = 60°" / "Tính góc A" → KHÔNG thêm (angle-measure B A C 60)
-   • Đề bảo "Chứng minh OC ⟂ AB" → KHÔNG thêm (perpendicular ...)
-   • CHỈ thêm constraint khi đề BÀI CHO SẴN, không phải chứng minh
+   VẼ TẤT CẢ MÔ TẢ HÌNH HỌC:
+   • Đề bảo "Chứng minh góc A = 60°" → THÊM (angle-measure B A C 60) để vẽ góc 60°
+   • Đề bảo "Chứng minh OC vuông góc AB" → THÊM (perpendicular (segment O C) (segment A B))
+   • Đề bảo "Cho góc A = 60°" → THÊM (angle-measure B A C 60)
+   • NGUYÊN TẮC: Miễn đề mô tả quan hệ hình học (góc, vuông góc, bằng nhau, ...) → VẼ LUÔN!
    
    ĐIỂM NẰM TRÊN ĐƯỜNG TRÒN - CỰC KỲ QUAN TRỌNG:
    • Khi đề bài nói "điểm M ∈ (O)" / "M nằm trên (O)" / "M thuộc đường tròn (O)"
@@ -112,11 +139,17 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
    ĐƯỜNG KÍNH vs DÂY - CỰC KỲ QUAN TRỌNG:
    
    **ĐƯỜNG KÍNH** (đi qua tâm O):
-   • "đường kính AB" / "đường kính MN" / "có đường kính AB" → BẮT BUỘC 4 thành phần:
-     1. (segment A B)
-     2. (on-circle A O)
-     3. (on-circle B O)
-     4. (on-segment O A B) ← TÂM O NẰM GIỮA - TUYỆT ĐỐI KHÔNG THIẾU!
+   • "đường kính AB" / "đường kính MN" / "có đường kính AB" → CÚ PHÁP MỚI:
+     (diameter A B O)
+   • A, B là 2 điểm đầu mút của đường kính
+   • O là tâm đường tròn (nằm giữa A và B)
+   • Tự động tạo: on-circle A O, on-circle B O, on-segment O A B
+   
+   ⚠️ QUAN TRỌNG - ĐƯỜNG KÍNH VÀ SEGMENT:
+   • (diameter M N O) CHỈ là CONSTRAINT - KHÔNG tự động vẽ segment!
+   • Nếu đề đề cập đến đường kính như một ĐƯỜNG THẲNG → PHẢI thêm (segment M N)
+   •Ví dụ: "tiếp tuyến vuông góc với MN" → cần (segment M N)
+   •Ví dụ: "dây AB cắt MN tại H" → cần (segment M N) để có giao điểm
    
    **DÂY THƯỜNG** (không qua tâm):
    • "dây AB" / "dây CD" / "lấy dây CD" → CHỈ 3 thành phần:
@@ -144,25 +177,19 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
       (circle O)
       (define M point)
       (define N point)
-      (segment M N)
-      (on-circle M O)
-      (on-circle N O)
-      (on-segment O M N)  ← BẮT BUỘC!
+      (diameter M N O)  ← CÚ PHÁP MỚI - Gọn gàng hơn!
    
    b) "Cho đường tròn (O) có đường kính MN. Một dây AB cắt MN tại H"
       (define O point)
       (circle O)
       (define M point)
       (define N point)
-      (segment M N)
-      (on-circle M O)
-      (on-circle N O)
-      (on-segment O M N)  ← Đường kính MN
+      (diameter M N O)  ← Đường kính MN
       (define A point)
       (define B point)
-      (segment A B)
       (on-circle A O)
-      (on-circle B O)  ← Dây AB - KHÔNG có on-segment
+      (on-circle B O)
+      (segment A B)  ← Dây AB - KHÔNG có on-segment
       (define H point (inter-ll A B M N))
    
    c) "đường tròn (O) đường kính AB, C trên đường tròn, H là hình chiếu C lên AB"
@@ -170,10 +197,7 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
       (circle O)
       (define A point)
       (define B point)
-      (segment A B)
-      (on-circle A O)
-      (on-circle B O)
-      (on-segment O A B)  ← Đường kính
+      (diameter A B O)  ← Đường kính
       (define C point)
       (on-circle C O)
       (define H point (projection C (segment A B)))
@@ -183,16 +207,12 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
       (define O point)
       (circle O)
       (define M point)
-      (on-circle M O)
       (define N point)
-      (on-circle N O)
-      (segment M N)
-      (on-segment O M N)  ← Đường kính MN
-      (define A point)    ← Điểm trên tiếp tuyến
-      (define B point)    ← Điểm trên tiếp tuyến
-      (segment A B)
-      (on-segment M A B)  ← M nằm GIỮA A và B
-      (tangent M (circle O) AB)  ← Tiếp tuyến tại M
+      (diameter M N O)  ← Đường kính MN
+      (segment M N)     ← BẮT BUỘC: Vẽ đường kính như một đường thẳng!
+      (define A point)  ← Điểm trên tiếp tuyến
+      (segment M A)     ← Tiếp tuyến MA - M là endpoint
+      (tangent M (circle O) MA)  ← Tiếp tuyến tại M
 
 5. RÀNG BUỘC
    • (parallel (segment B C) (segment D E))
@@ -228,8 +248,8 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
    
    CÚ PHÁP: (tangent M (circle O) AB)
    • M = tiếp điểm (tangent point) - điểm duy nhất mà tiếp tuyến chạm đường tròn
-   • (circle O) = đường tròn tâm O (nested structure)
-   • AB = chuỗi 2 ký tự chỉ đường thẳng tiếp tuyến (ví dụ: "AB", "MN")
+   • (circle O) = đường tròn tâm O
+   • AB = chuỗi 2 ký tự - hai điểm tạo đường thẳng tiếp tuyến
    
    ĐẶC ĐIỂM TIẾP ĐIỂM:
    • M phải nằm trên đường tròn: (on-circle M O) ← BẮT BUỘC!
@@ -240,7 +260,7 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
    • M ĐÃ LÀ endpoint của segment → KHÔNG CẦN on-segment
    • Chỉ cần: (segment A M) + (tangent M (circle O) AM)
    
-   TRƯỜNG HỢP 2: Tiếp điểm M NẰM GIỮA 2 endpoint của segment
+   TRƯỚNG HỢP 2: Tiếp điểm M NẰM GIỮA 2 endpoint của segment
    • Ví dụ: "Đường thẳng AB tiếp xúc tại M" - M nằm giữa A và B
    • M không phải endpoint → CẦN on-segment M A B
    • Cần: (segment A B) + (on-segment M A B) + (tangent M (circle O) AB)
@@ -255,42 +275,7 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
    5. Vẽ segment tiếp tuyến: (segment A M) hoặc (segment A B)
    6. CHỈ khi M NẰM GIỮA: (on-segment M A B)
    7. Khai báo tiếp tuyến: (tangent M (circle O) AM) hoặc (tangent M (circle O) AB)
-   
-   VÍ DỤ 1: "Đường tròn (O) bán kính 5cm, đường thẳng AB tiếp xúc với (O) tại M (M nằm giữa A và B)"
-   (define O point)
-   (circle O (radius 0.5))
-   (define M point)           ← Tiếp điểm
-   (on-circle M O)            ← M nằm trên đường tròn (O)
-   (define A point)           ← Điểm A trên tiếp tuyến
-   (define B point)           ← Điểm B trên tiếp tuyến
-   (segment A B)              ← Vẽ segment AB
-   (on-segment M A B)         ← M nằm GIỮA A và B - BẮT BUỘC!
-   (tangent M (circle O) AB)  ← AB tiếp xúc (O) tại M
-   
-   VÍ DỤ 2: "Cho đường tròn (O). Từ điểm A ngoài đường tròn, kẻ tiếp tuyến AM đến (O) (M là tiếp điểm)"
-   (define O point)
-   (circle O)
-   (define A point)           ← A ngoài đường tròn
-   (distance O A 1.5)         ← ĐẢM BẢO A nằm ngoài (O) - BẮT BUỘC khi đề nói "ngoài"!
-   (define M point)           ← M là tiếp điểm
-   (on-circle M O)            ← M nằm trên (O) - BẮT BUỘC
-   (segment A M)              ← AM là tiếp tuyến (M là endpoint)
-   (tangent M (circle O) AM)  ← AM tiếp xúc (O) tại M - KHÔNG CẦN on-segment!
-   
-   VÍ DỤ 3: "Đường tròn (O; 6cm). Vẽ tiếp tuyến tại điểm T, tiếp tuyến cắt đường thẳng xy tại H"
-   (define O point)
-   (circle O (radius 0.6))
-   (define T point)           ← T là tiếp điểm
-   (on-circle T O)            ← T nằm trên (O)
-   (define P point)           ← P trên tiếp tuyến
-   (define Q point)           ← Q trên tiếp tuyến
-   (segment P Q)              ← PQ là tiếp tuyến
-   (on-segment T P Q)         ← T nằm GIỮA P và Q - BẮT BUỘC!
-   (tangent T (circle O) PQ)  ← PQ tiếp xúc (O) tại T
-   (define x point)
-   (define y point)
-   (segment x y)
-   (define H point (inter-ll P Q x y))
+   8. 🔥 VẼ BÁN KÍNH: (segment O M) NGAY SAU (tangent ...)
    
    VÍ DỤ 4: "Từ điểm A ngoài (O) kẻ hai tiếp tuyến AB, AC. Gọi M là trung điểm BC. Chứng minh AM ⊥ BC"
    (define O point)
@@ -301,138 +286,91 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
    (on-circle B O)
    (segment A B)
    (tangent B (circle O) AB)
+   (segment O B)              ← Vẽ bán kính OB
    (define C point)           ← C là tiếp điểm thứ hai
    (on-circle C O)
    (segment A C)
    (tangent C (circle O) AC)
+   (segment O C)              ← Vẽ bán kính OC
    (segment B C)              ← BẮT BUỘC trước midpoint!
    (define M point (midpoint B C))
-   (segment A M)              ← Không constraint vuông góc vì đề yêu cầu CHỨNG MINH
+   (segment A M)
+   (perpendicular (segment A M) (segment B C))  ← VẼ AM ⊥ BC theo đề bài
+
+VÍ DỤ 4b: "AB là tiếp tuyến tại A, AC là dây. Chứng minh ∠BAC = ∠OCA"
+   (define O point)
+   (circle O)
+   (define A point)
+   (on-circle A O)            ← A là tiếp điểm
+   (define B point)
+   (segment A B)
+   (tangent A (circle O) AB)
+   (segment O A)              ← BẮT BUỘC: Vẽ bán kính OA
+   (define C point)
+   (on-circle C O)            ← C trên đường tròn
+   (segment A C)              ← Vẽ dây AC
+   (segment O C)              ← BẮT BUỘC: Vẽ bán kính OC để có tam giác OAC
+   (angle-equal B A C O C A)  ← VẼ ∠BAC = ∠OCA theo đề bài
+   
+   ⚠️ LƯU Ý VỀ GÓC:
+   • ∠BAC: đỉnh A → (angle-measure B A C ...) hoặc dùng trong (angle-equal B A C ...)
+   • ∠OCA: đỉnh C → (angle-measure O C A ...) hoặc dùng trong (angle-equal ... O C A)
+   • ∠AOC: đỉnh O → (angle-measure A O C ...)
+   • "Chứng minh ∠BAC = ∠OCA" → THÊM (angle-equal B A C O C A)
+   • "Cho ∠BAC = 30°" → THÊM (angle-measure B A C 30)
+   
+VÍ DỤ 4c: "AB là tiếp tuyến tại A, lấy dây CD song song với AB. Chứng minh AC = AD"
+   (define O point)
+   (circle O)
+   (define A point)
+   (on-circle A O)            ← A là tiếp điểm
+   (define B point)
+   (segment A B)
+   (tangent A (circle O) AB)
+   (segment O A)              ← BẮT BUỘC: Vẽ bán kính từ tâm đến tiếp điểm
+   (define C point)
+   (on-circle C O)            ← C trên đường tròn
+   (define D point)
+   (on-circle D O)            ← D trên đường tròn
+   (segment C D)              ← Dây CD
+   (parallel (segment A B) (segment C D))
+   (segment A C)              ← BẮT BUỘC: Vẽ segment AC để thấy độ dài AC
+   (segment A D)              ← BẮT BUỘC: Vẽ segment AD để thấy độ dài AD
+   
+   ⚠️ LƯU Ý QUAN TRỌNG:
+   • Khi đề yêu cầu chứng minh AC = AD → CẦN vẽ segment AC và AD
+   • Khi có tiếp tuyến tại A → CẦN vẽ bán kính OA
+   • "Chứng minh AC = AD" → THÊM (equal-distance A C A D) để vẽ AC = AD
    
    VÍ DỤ 5: "Đường tròn (O) có đường kính MN. Vẽ tiếp tuyến tại M. Chứng minh tiếp tuyến vuông góc MN"
    (define O point)
    (circle O)
    (define M point)           ← M chỉ define MỘT LẦN!
-   (on-circle M O)
    (define N point)
-   (on-circle N O)
-   (segment M N)
-   (on-segment O M N)         ← Đường kính MN - tâm O nằm giữa
-   (define A point)           ← Điểm trên tiếp tuyến
-   (define B point)           ← Điểm trên tiếp tuyến
-   (segment A B)
-   (on-segment M A B)         ← M nằm GIỮA A và B trên tiếp tuyến
-   (tangent M (circle O) AB)  ← Tiếp tuyến AB tại M
+   (diameter M N O)           ← Đường kính MN - tâm O nằm giữa
+   (segment M N)              ← BẮT BUỘC: Vẽ đường kính như đường thẳng!
+   (define A point)           ← Điểm trên tiếp tuyến (M là endpoint của MA)
+   (segment M A)              ← MA là tiếp tuyến - M là endpoint, KHÔNG cần segment AB!
+   (tangent M (circle O) MA)  ← Tiếp tuyến MA tại M
    
-   ⚠️ CÁC LỖI SAI PHỔ BIẾN VỀ TIẾP TUYẾN - TUYỆT ĐỐI TRÁNH:
-   
-   LỖI 1a: "AB là tiếp tuyến tại A" → THÊM (on-segment A B) - SAI 100%! ⚠️⚠️⚠️
-   • Đề bài: "AB là tiếp tuyến tại A" / "AB tiếp xúc (O) tại A"
-   • A là tiếp điểm VÀ A là endpoint của AB → TUYỆT ĐỐI KHÔNG DÙNG on-segment
-   
-   ❌ SAI (LỖI CỰC KỲ PHỔ BIẾN):
-   (define A point)
-   (on-circle A O)
-   (define B point)
-   (segment A B)
-   (on-segment A B)           ← SAI VÌ CHỈ CÓ 2 ĐIỂM!
-   (tangent A (circle O) AB)
-   
-   ✅ ĐÚNG:
-   (define A point)
-   (on-circle A O)
-   (define B point)
-   (segment A B)              ← A và B là 2 endpoint
-   (tangent A (circle O) AB)  ← A là tiếp điểm - KHÔNG CẦN on-segment!
-   
-   LỖI 1b: (on-segment M A M) - SAI HOÀN TOÀN!
-   • Không thể có 3 điểm mà 2 điểm giống nhau (M A M)
-   • Nếu M là endpoint của segment AM → KHÔNG CẦN on-segment
-   • ĐÚNG: Chỉ cần (segment A M) + (tangent M (circle O) AM)
-   
-   LỖI 2: (on-segment A B) - THIẾU ĐIỂM THỨ 3! ⚠️ CỰC KỲ NGHIÊM TRỌNG
-   • on-segment CẦN ĐÚNG 3 điểm: (on-segment <điểm-giữa> <endpoint1> <endpoint2>)
-   • ❌ SAI: (on-segment A B) - chỉ có 2 điểm
-   • ❌ SAI: (on-segment M A M) - điểm trùng nhau
-   • ❌ SAI: (on-segment O A O) - điểm trùng nhau
-   • ✅ ĐÚNG: (on-segment M A B) - M nằm giữa A và B
-   • ✅ ĐÚNG: (on-segment O M N) - O nằm giữa M và N (đường kính)
-   • ✅ ĐÚNG: (on-segment H A C) - H nằm giữa A và C
+   LỖI 6: Thiếu constraint khi đề bài mô tả quan hệ hình học ⚠️ CỰC KỲ QUAN TRỌNG
+   • ✅ ĐÚNG: "Chứng minh AB = AC" → THÊM (equal-distance A B A C) để vẽ AB = AC
+   • ✅ ĐÚNG: "Chứng minh AB ⟂ CD" → THÊM (perpendicular (segment A B) (segment C D))
+   • ✅ ĐÚNG: "Chứng minh góc AOC = góc BAC" → THÊM (angle-equal A O C B A C)
+   • ✅ ĐÚNG: "Tính góc A" (nếu đề cho kết quả 60°) → THÊM (angle-measure B A C 60)
+   • ✅ ĐÚNG: "Cho góc A = 60°" → THÊM (angle-measure B A C 60)
+   • NGUYÊN TẮC: VẼ TẤT CẢ quan hệ hình học được mô tả, không phân biệt "cho" hay "chứng minh"
    
    VÍ DỤ CHI TIẾT:
-   • "M nằm trên đoạn AB" → (on-segment M A B)
-   • "Đường kính MN" → (on-segment O M N) - O là tâm nằm giữa M và N
-   • "H là hình chiếu O lên AC" → DÙNG (projection O (segment A C)) - TỰ ĐỘNG on-segment
+   ✅ ĐÚNG: "Chứng minh rằng góc AOC = góc BAC"
+   (angle-equal A O C B A C)  ← ĐÚNG - vẽ 2 góc bằng nhau!
    
-   ⚠️ KHI NÀO KHÔNG CẦN on-segment?
-   • Khi điểm là ENDPOINT của segment → KHÔNG CẦN
-   • Ví dụ: (segment A M) - M là đầu mút → không cần (on-segment M A M)
+   ✅ ĐÚNG: "Chứng minh AB = AC"
+   (equal-distance A B A C)  ← ĐÚNG - vẽ AB và AC bằng nhau!
    
-   LỖI 3: Define điểm trùng lặp ⚠️ CỰC KỲ NGHIÊM TRỌNG
-   • ❌ SAI: (define M point) ... (define M point) - M bị định nghĩa 2 lần
-   • ✅ MỖI ĐIỂM CHỈ DEFINE 1 LẦN DUY NHẤT trong toàn bộ DSL
-   
-   VÍ DỤ SAI THƯỜNG GẶP: "Đường kính MN, tiếp tuyến AB tại M"
-   ❌ SAI:
-   (define M point)   ← Lần 1
-   (on-circle M O)
-   (define N point)
-   (on-circle N O)
-   (segment M N)
-   (on-segment O M N)
-   (define M point)   ← LẦN 2 - SAI!!! M đã được define ở trên rồi
-   (define A point)
-   ...
-   
-   ✅ ĐÚNG:
-   (define M point)   ← CHỈ define M MỘT LẦN
-   (on-circle M O)
-   (define N point)
-   (on-circle N O)
-   (segment M N)
-   (on-segment O M N)
-   (define A point)   ← Define A - KHÔNG define M lại
-   (define B point)
-   (segment A B)
-   (on-segment M A B)
-   (tangent M (circle O) AB)
-   
-   ⚠️ CÁCH PHÁT HIỆN:
-   • Trước khi viết (define X point), search toàn bộ DSL đã có X chưa
-   • Nếu X đã tồn tại → CHỈ SỬ DỤNG, KHÔNG define lại
-   • Thường gặp với tiếp điểm M, N, P khi có nhiều tiếp tuyến
-   
-   LỖI 4: Thiếu on-circle cho tiếp điểm
-   • SAI: (define M point) + (tangent M (circle O) AM) - THIẾU on-circle
-   • Tiếp điểm PHẢI nằm trên đường tròn
-   • ĐÚNG: (define M point) + (on-circle M O) + (tangent M (circle O) AM)
-   
-   LỖI 5: Thiếu distance khi đề nói "điểm nằm ngoài đường tròn"
-   • SAI: "Từ A nằm ngoài (O)" → chỉ có (define A point) - A có thể trùng O!
-   • Không có constraint → optimizer có thể đặt A bất kỳ đâu, kể cả trùng tâm O
-   • ĐÚNG: (define A point) + (distance O A 1.5) - đảm bảo A xa O hơn bán kính
-   • Nguyên tắc: Với bán kính R, chọn khoảng cách > R (ví dụ: R=0.5 → dùng 1.0 hoặc 1.5)
-   
-   LỖI 6: Thêm constraint khi đề bài yêu cầu CHỨNG MINH ⚠️ CỰC KỲ NGHIÊM TRỌNG
-   • ❌ SAI: "Chứng minh AB = AC" → KHÔNG ĐƯỢC thêm (equal-distance A B A C)
-   • ❌ SAI: "Chứng minh AB ⟂ CD" → KHÔNG ĐƯỢC thêm (perpendicular ...)
-   • ❌ SAI: "Chứng minh góc AOC = góc BAC" → KHÔNG ĐƯỢC thêm (angle-equal ...)
-   • ❌ SAI: "Tính góc A" → KHÔNG ĐƯỢC thêm (angle-measure ...)
-   • ❌ SAI: "Tìm độ dài AB" → KHÔNG ĐƯỢC thêm (distance-formula ...)
-   • ✅ CHỈ thêm constraint khi đề bài CHO SẴN, không phải yêu cầu chứng minh
-   
-   VÍ DỤ CHI TIẾT:
-   ❌ SAI: "Chứng minh rằng góc AOC = góc BAC"
-   (angle-equal A O C B A C)  ← SAI - đây là điều cần chứng minh!
-   
-   ✅ ĐÚNG: Chỉ vẽ hình, KHÔNG thêm (angle-equal ...)
-   
-   ✅ ĐÚNG: "Cho góc A = 60°" → ĐƯỢC phép thêm
-   (angle-measure B A C 60)  ← ĐÚNG - đề bài CHO SẴN
-   
-   ⚠️ PHÂN BIỆT:
-   • "Cho ..." / "Biết ..." / "Với ..." → CHO SẴN → THÊM constraint
-   • "Chứng minh ..." / "Tính ..." / "Tìm ..." → YÊU CẦU → KHÔNG thêm constraint
+   ⚠️ NGUYÊN TẮC MỚI:
+   • "Cho ..." / "Biết ..." / "Với ..." → THÊM constraint
+   • "Chứng minh ..." / "Tính ..." / "Tìm ..." → VẪN THÊM constraint để VẼ đúng hình!
    
    LỖI 7: Thiếu segment trước khi dùng midpoint/projection
    • SAI: (define M point (midpoint B C)) - khi B C CHƯA ĐƯỢC NỐI
@@ -551,67 +489,12 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
    (on-circle B O)
    (angle-measure A O B 120)
 
-5. "Trên đường tròn (O; R), lấy bốn điểm A, B, M, N sao cho AB đi qua O và MN không đi qua O"
+5. "Cho đường tròn (O) có đường kính AB. Lấy điểm C nằm trên (O) sao cho ∠AOC = 50°. Vẽ dây CD vuông góc với AB (D ∈ (O))"
    (define O point)
    (circle O)
    (define A point)
    (define B point)
-   (segment A B)
-   (on-circle A O)
-   (on-circle B O)
-   (on-segment O A B)  ← AB đi qua O (đường kính)
-   (define M point)
-   (define N point)
-   (segment M N)
-   (on-circle M O)
-   (on-circle N O)  ← MN không qua O (dây thường, KHÔNG có on-segment)
-
-6. "Cho đường tròn (I) có các dây cung AB, CD, EF. Biết rằng AB và CD đi qua tâm I, còn EF không đi qua I"
-   (define I point)
-   (circle I)
-   (define A point)
-   (define B point)
-   (segment A B)
-   (on-circle A I)
-   (on-circle B I)
-   (on-segment I A B)  ← AB đi qua I (đường kính)
-   (define C point)
-   (define D point)
-   (segment C D)
-   (on-circle C I)
-   (on-circle D I)
-   (on-segment I C D)  ← CD đi qua I (đường kính)
-   (define E point)
-   (define F point)
-   (segment E F)
-   (on-circle E I)
-   (on-circle F I)  ← EF không qua I (dây thường)
-
-7. "Cho đường tròn (O) bán kính 5 cm và bốn điểm A, B, C, D sao cho OA = 3 cm, OB = 4 cm, OC = 7 cm, OD = 5 cm"
-   (define O point)
-   (circle O (radius 0.5))
-   (define A point)
-   (segment O A)
-   (distance O A 0.3)
-   (define B point)
-   (segment O B)
-   (distance O B 0.4)
-   (define C point)
-   (segment O C)
-   (distance O C 0.7)
-   (define D point)
-   (segment O D)
-   (distance O D 0.5)
-
-8. "Cho đường tròn (O) có đường kính AB. Lấy điểm C nằm trên (O) sao cho ∠AOC = 50°. Vẽ dây CD vuông góc với AB (D ∈ (O))"
-   (define O point)
-   (circle O)
-   (define A point)
-   (define B point)
-   (segment A B)
-   (on-circle A O)
-   (on-circle B O)
-   (on-segment O A B)  ← AB là đường kính → O đã nối với A và B!
+   (diameter A B O)  ← AB là đường kính → O đã nối với A và B!
    (define C point)
    (on-circle C O)  ← C nằm trên (O)
    (segment O C)  ← CHỈ vẽ bán kính OC (bán kính mới), KHÔNG vẽ OA (đã có từ đường kính AB)!
@@ -621,15 +504,12 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
    (segment C D)
    (perpendicular (segment A B) (segment C D))
 
-9. "Cho đường tròn (O) có đường kính AB. Vẽ dây CD vuông góc với AB (D ∈ (O)) và dây DE song song với AB (E ∈ (O))"
+6. "Cho đường tròn (O) có đường kính AB. Vẽ dây CD vuông góc với AB (D ∈ (O)) và dây DE song song với AB (E ∈ (O))"
    (define O point)
    (circle O)
    (define A point)
    (define B point)
-   (segment A B)
-   (on-circle A O)
-   (on-circle B O)
-   (on-segment O A B)  ← AB là đường kính
+   (diameter A B O)  ← AB là đường kính
    (define C point)
    (on-circle C O)  ← C ∈ (O)
    (define D point)
@@ -641,63 +521,12 @@ Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL.
    (segment D E)
    (parallel (segment A B) (segment D E))
 
-10. "Cho đường tròn (O) bán kính 6cm. Đường thẳng AB tiếp xúc với (O) tại điểm M (M nằm giữa A và B)"
-   (define O point)
-   (circle O (radius 0.6))
-   (define M point)
-   (on-circle M O)
-   (define A point)
-   (define B point)
-   (segment A B)
-   (on-segment M A B)  ← M nằm GIỮA A và B - CẦN on-segment
-   (tangent M (circle O) AB)
-
-10b. ⚠️ "Cho đường tròn (O). AB là tiếp tuyến tại A" (A LÀ ENDPOINT - KHÔNG CẦN on-segment)
-   (define O point)
-   (circle O)
-   (define A point)
-   (on-circle A O)          ← A là tiếp điểm
-   (define B point)
-   (segment A B)            ← A và B là 2 endpoint - KHÔNG CẦN on-segment!
-   (tangent A (circle O) AB)
-   
-   ⚠️ SAI: (on-segment A B) - vì chỉ có 2 điểm!
-   ⚠️ SAI: (on-segment A A B) - vì điểm trùng!
-
-10c. ⚠️ "Cho đường tròn (O). Từ A ngoài (O) kẻ tiếp tuyến AM" (M LÀ ENDPOINT - KHÔNG CẦN on-segment)
-   (define O point)
-   (circle O)
-   (define A point)
-   (distance O A 1.5)       ← A nằm ngoài
-   (define M point)
-   (on-circle M O)          ← M là tiếp điểm
-   (segment A M)            ← A và M là 2 endpoint - KHÔNG CẦN on-segment!
-   (tangent M (circle O) AM)
-   
-   ⚠️ SAI: (on-segment M A M) - điểm trùng!
-   ⚠️ SAI: (on-segment A M) - thiếu điểm thứ 3!
-
-
-11. "Cho đường tròn (O) bán kính 5cm. Từ điểm A ngoài đường tròn, kẻ hai tiếp tuyến AM và AN đến (O) (M, N là các tiếp điểm)"
-   (define O point)
-   (circle O (radius 0.5))
-   (define A point)           ← Điểm ngoài đường tròn
-   (distance O A 1.0)         ← ĐẢM BẢO A nằm ngoài (radius=0.5 → chọn 1.0 > 0.5)
-   (define M point)           ← Tiếp điểm thứ nhất
-   (on-circle M O)            ← M nằm trên (O) - BẮT BUỘC
-   (segment A M)              ← Vẽ tiếp tuyến AM (M là endpoint)
-   (tangent M (circle O) AM)  ← AM tiếp xúc (O) tại M - KHÔNG CẦN on-segment
-   (define N point)           ← Tiếp điểm thứ hai
-   (on-circle N O)            ← N nằm trên (O) - BẮT BUỘC
-   (segment A N)              ← Vẽ tiếp tuyến AN (N là endpoint)
-   (tangent N (circle O) AN)  ← AN tiếp xúc (O) tại N - KHÔNG CẦN on-segment
-   
-   ⚠️ LƯU Ý VỀ NHIỀU TIẾP TUYẾN:
-   • Mỗi tiếp tuyến cần có TIẾP ĐIỂM RIÊNG (M, N, P,...)
-   • Mỗi tiếp tuyến cần KHAI BÁO RIÊNG: (tangent ...), (tangent ...)
-   • Hệ thống HỖ TRỢ vẽ NHIỀU tiếp tuyến cùng lúc, không giới hạn số lượng
-
 ═══ MẪU DSL CHO CÁC DẠNG BÀI TIẾP TUYẾN PHỔ BIẾN ═══
+
+🔥🔥🔥 QUY TẮC VÀNG - TUYỆT ĐỐI KHÔNG ĐƯỢC VI PHẠM 🔥🔥🔥
+SAU MỖI (tangent <tiếp-điểm> (circle O) ...) PHẢI CÓ (segment O <tiếp-điểm>) NGAY SAU!
+→ Nếu thiếu bán kính này, hình sẽ KHÔNG VẼ ĐƯỢC!
+→ Ngoại lệ duy nhất: tiếp điểm đã nằm trên đường kính được vẽ sẵn
 
 DẠNG 1: "AB là tiếp tuyến tại A" - A VỪA LÀ TIẾP ĐIỂM VỪA LÀ ENDPOINT
 (define O point)
@@ -707,6 +536,7 @@ DẠNG 1: "AB là tiếp tuyến tại A" - A VỪA LÀ TIẾP ĐIỂM VỪA LÀ
 (define B point)
 (segment A B)
 (tangent A (circle O) AB)
+(segment O A)               ← 🔥 BẮT BUỘC: VẼ BÁN KÍNH từ tâm đến tiếp điểm NGAY SAU TANGENT!
 ⚠️ KHÔNG DÙNG (on-segment A B) - chỉ có 2 điểm!
 
 DẠNG 2: "Từ A ngoài (O) kẻ tiếp tuyến AB và AC (B, C tiếp điểm)" - HAI TIẾP TUYẾN
@@ -718,28 +548,29 @@ DẠNG 2: "Từ A ngoài (O) kẻ tiếp tuyến AB và AC (B, C tiếp điểm)
 (on-circle B O)
 (segment A B)
 (tangent B (circle O) AB)   ← Tiếp tuyến thứ nhất
+(segment O B)               ← 🔥 BÁN KÍNH OB - BẮT BUỘC NGAY SAU TANGENT!
 (define C point)
 (on-circle C O)
 (segment A C)
 (tangent C (circle O) AC)   ← Tiếp tuyến thứ hai
+(segment O C)               ← 🔥 BÁN KÍNH OC - BẮT BUỘC NGAY SAU TANGENT!
+⚠️ CẢ HAI BÁN KÍNH ĐỀU PHẢI VẼ!
 ⚠️ KHÔNG DÙNG (on-segment ...) - B và C đều là endpoint!
 
-DẠNG 3: "Đường kính MN, tiếp tuyến AB tại M" - TIẾP ĐIỂM TRÙNG ĐIỂM ĐƯỜNG KÍNH
+DẠNG 3: "Đường kính MN, vẽ tiếp tuyến tại M" - TIẾP ĐIỂM TRÙNG ĐIỂM ĐƯỜNG KÍNH
 (define O point)
 (circle O)
-(define M point)            ← CHỈ define M MỘT LẦN!
-(on-circle M O)
+(define M point)
 (define N point)
-(on-circle N O)
-(segment M N)
-(on-segment O M N)          ← Đường kính
+(diameter M N O)          ← Đường kính
+(segment M N)               ← BẮT BUỘC: Vẽ đường kính!
 (define A point)            ← KHÔNG define M lại!
-(define B point)
-(segment A B)
-(on-segment M A B)          ← M nằm GIỮA A và B → CẦN on-segment
-(tangent M (circle O) AB)
+(segment M A)               ← MA là tiếp tuyến - M là endpoint
+(tangent M (circle O) MA)   ← Tiếp tuyến MA tại M - KHÔNG CẦN on-segment vì M là endpoint
 ⚠️ KHÔNG define M 2 lần!
-⚠️ M nằm giữa A và B → CẦN (on-segment M A B)
+⚠️ "Vẽ tiếp tuyến tại M" = tiếp tuyến MA → M là ENDPOINT → KHÔNG CẦN on-segment
+⚠️ Bán kính OM ĐÃ CÓ từ (diameter M N O) → KHÔNG vẽ lại (segment O M)
+⚠️ Nếu đề bài nói "tiếp tuyến AB đi qua M" (M GIỮA A và B) → CẦN (segment A B) + (on-segment M A B)
 
 DẠNG 4: "AB tiếp xúc tại M (M nằm giữa A và B)" - M NẰM GIỮA 2 ENDPOINT
 (define O point)
@@ -760,9 +591,11 @@ DẠNG 5: "AB là tiếp tuyến, AC là dây" - KẾT HỢP TIẾP TUYẾN VÀ 
 (define B point)
 (segment A B)
 (tangent A (circle O) AB)   ← A là endpoint - KHÔNG CẦN on-segment
+(segment O A)               ← 🔥 BÁN KÍNH từ tâm đến tiếp điểm - BẮT BUỘC NGAY SAU TANGENT!
 (define C point)
 (on-circle C O)             ← C là đầu kia của dây - BẮT BUỘC on-circle
-(segment A C)
+(segment A C)               ← Vẽ dây AC
+(segment O C)               ← BÁN KÍNH OC cần vẽ nếu đề nhắc (ví dụ: góc OCA, tam giác OAC,...)
 
 ═══ OUTPUT FORMAT ═══
 ⚠️ TUYỆT ĐỐI QUAN TRỌNG:
@@ -801,9 +634,11 @@ DẠNG 5: "AB là tiếp tuyến, AC là dây" - KẾT HỢP TIẾP TUYẾN VÀ 
 5. ✓ Đề nói "nằm ngoài đường tròn" → PHẢI có (distance O A <value>)
    → Value > bán kính (radius 0.5 → dùng 1.0 hoặc 1.5)
 
-6. ✓ KHÔNG thêm constraint cho yêu cầu CHỨNG MINH
-   → "Chứng minh ..." / "Tính ..." / "Tìm ..." → KHÔNG thêm constraint
-   → "Cho ..." / "Biết ..." → ĐƯỢC thêm constraint
+6. ✓ VẼ TẤT CẢ MÔ TẢ HÌNH HỌC TRONG ĐỀ BÀI
+   → "Chứng minh AB = AC" → THÊM (equal-distance A B A C) để vẽ AB = AC
+   → "Chứng minh ∠BAC = 60°" → THÊM (angle-measure B A C 60) để vẽ góc 60°
+   → "Chứng minh AB ⊥ CD" → THÊM (perpendicular (segment A B) (segment C D))
+   → NGUYÊN TẮC: Vẽ LUÔN mọi quan hệ hình học được mô tả, không phân biệt "cho" hay "chứng minh"
 
 7. ✓ Điểm trên đường tròn đều có (on-circle ... O)
    → Tìm tất cả điểm nằm trên đường tròn trong đề bài
@@ -813,27 +648,60 @@ DẠNG 5: "AB là tiếp tuyến, AC là dây" - KẾT HỢP TIẾP TUYẾN VÀ 
    → Có (segment B C) hoặc (triangle (... B C)) trước đó
 
 9. ✓ DÂY CUNG: "lấy dây CD" → CẢ C và D đều PHẢI có (on-circle C O) + (on-circle D O)
-   → Kiểm tra: (define C point)? (on-circle C O)? (define D point)? (on-circle D O)? ✓
+   → Kiểm tra: (define C point)? (on-circle C O)? (define D point)? (on-circl e D O)? ✓
 
-10. ✓ ĐƯỜNG KÍNH: "đường kính MN" → PHẢI có (on-segment O M N) để tâm nằm giữa
-    → Đường kính = segment qua tâm: (segment M N) + (on-circle M O) + (on-circle N O) + (on-segment O M N)
+10. ✓ ĐƯỜNG KÍNH: "đường kính MN" → PHẢI có (diameter M N O)
+    → Đường kính = (diameter M N O) - gọn gàng hơn!
 
 11. ✓ H ∈ AC và OH ⊥ AC → dùng (projection O (segment A C)), KHÔNG define H riêng + perpendicular
     → SAI: (define H point) + (perpendicular ...) + (on-segment H A C)
     → ĐÚNG: (define H point (projection O (segment A C)))
 
-12. ✓ Tiếp tuyến: Kiểm tra format (tangent <tiếp-điểm> (circle <tâm>) <segment>)
-    → (tangent M (circle O) AB) - M là tiếp điểm, O là tâm, AB là segment
+11b. ✓ 🔥 HÌNH CHIẾU = TRUNG ĐIỂM - TUYỆT ĐỐI KHÔNG DEFINE 2 LẦN!
+    → "Kẻ OH ⊥ AC (H ∈ AC). Chứng minh H là trung điểm AC"
+    → H ĐÃ LÀ hình chiếu → H CHÍNH LÀ trung điểm (do tính chất hình học)
+    → CHỈ DÙNG: (define H point (projection O (segment A C)))
+    → KHÔNG ĐƯỢC thêm: (define M point (midpoint A C)) ← LỖI trùng điểm!
+    → Khi đề yêu cầu "chứng minh H là trung điểm" → H đã được xác định bởi projection, không cần midpoint riêng
 
-13. ✓ Không có comment # trong DSL output
-    → Chỉ có DSL thuần túy với \n
+12. ✓ Tiếp tuyến: Kiểm tra format (tangent M (circle O) AB)
+   → M là tiếp điểm, O là tâm, AB là chuỗi 2 ký tự tạo đường thẳng
+   → 🔥 PHẢI có (segment O M) NGAY SAU (tangent ...) - bán kính từ tâm đến tiếp điểm!
+   → Ngoại lệ duy nhất: M đã nằm trên đường kính đã được vẽ sẵn
 
-14. ✓ Field "instruction" là bài toán gốc tiếng Việt, KHÔNG được thay đổi
-    → Copy nguyên văn đề bài, không dịch sang tiếng Anh
+13. ✓ Hình chiếu: Kiểm tra segment được vẽ từ ĐIỂM GỐC đến HÌNH CHIẾU
+   → (projection O (segment A C)) → PHẢI có (segment O H) - TỪ O ĐẾN H!
+   → KHÔNG ĐƯỢC (segment A H) - SAI!
 
-15. ✓ Kiểm tra lại lần cuối: Có điểm nào được define 2 lần không?
-    → Ctrl+F search "(define A point)", "(define B point)", ... trong DSL của bạn
+14. ✓ Khi có yêu cầu chứng minh về độ dài: PHẢI vẽ các segment tương ứng
+   → "Chứng minh AC = AD" → PHẢI có (segment A C) và (segment A D)
+   → "Chứng minh AB = CD" → PHẢI có (segment A B) và (segment C D)
 
+15. ✓ 🔥 QUY TẮC VÀNG - VẼ SEGMENT KHI ĐỀ NHẮC ĐẾN:
+   → TÌM TẤT CẢ CẠNH/ĐOẠN THẲNG trong đề bài (AC, AM, BC, AO, OH, MN, ...)
+   → VỚI MỖI cạnh được nhắc đến: KIỂM TRA xem đã có (segment ...) chưa?
+   → Nếu CHƯA CÓ → THÊM NGAY (segment X Y)
+   • Ví dụ: "đề nhắc AO" → cần (segment A O)
+   • Ví dụ: "đề nhắc AM vuông góc BC" → cần (segment A M) và (segment B C)
+   • Ví dụ: "AO là đường trung trực BC" → cần (segment A O) và (segment B C)
+   • Ví dụ: "kẻ OH", "nối AC" → cần (segment O H), (segment A C)
+
+16. ✓ ĐƯỜNG KÍNH: (diameter M N O) + PHẢI có (segment M N)
+   → (diameter M N O) chỉ là constraint, KHÔNG tự động vẽ
+   → Nếu đề đề cập đến đường kính → PHẢI thêm (segment M N)
+   → Ví dụ: "tiếp tuyến vuông góc MN" → cần cả (diameter M N O) và (segment M N)
+
+17. ✓ Không có comment # trong DSL output
+   → Chỉ có DSL thuần túy với \n
+
+18. ✓ Field "instruction" là bài toán gốc tiếng Việt, KHÔNG được thay đổi
+   → Copy nguyên văn đề bài, không dịch sang tiếng Anh
+
+19. ✓ Kiểm tra lại lần cuối: Có điểm nào được define 2 lần không?
+
+20. ✓ 🔥 SAU MỌI (tangent ...) → KIỂM TRA CÓ (segment O <tiếp-điểm>) NGAY SAU KHÔNG?
+   → Nếu KHÔNG CÓ và tiếp điểm KHÔNG nằm trên đường kính → THÊM NGAY!
+   → Đây là lỗi PHỔ BIẾN NHẤT - hình sẽ KHÔNG VẼ ĐƯỢC nếu thiếu!
 ═══ BƯỚC CUỐI CÙNG - XÁC MINH DSL ═══
 
 ⚠️ TRƯỚC KHI OUTPUT, PHÂN TÍCH ĐỀ BÀI VỀ TIẾP TUYẾN:
@@ -858,6 +726,91 @@ Bước 4: Kiểm tra DSL
 • Tìm (on-segment A B) - chỉ 2 điểm → XÓA ngay!
 • Tìm (on-segment M A M) - điểm trùng → XÓA ngay!
 • Đếm define cho mỗi điểm → nếu > 1 → XÓA các lần define thừa
+
+⚠️ TRƯỚC KHI OUTPUT, KIỂM TRA HÌNH CHIẾU VÀ VUÔNG GÓC:
+
+Bước 1: Tìm từ khóa hình chiếu/vuông góc trong đề
+• "Kẻ OH vuông góc AC (H ∈ AC)"
+• "H là hình chiếu O lên AC"
+• "OH ⊥ AC"
+
+Bước 2: Kiểm tra cách xử lý
+• PHẢI dùng: (define H point (projection O (segment A C)))
+• KHÔNG dùng: (define H point) + (perpendicular ...) + (on-segment ...)
+
+Bước 3: Kiểm tra segment được vẽ ĐÚNG
+• PHẢI có: (segment O H) - từ ĐIỂM GỐC (O) đến HÌNH CHIẾU (H)
+• TUYỆT ĐỐI KHÔNG: (segment A H) - SAI HOÀN TOÀN!
+
+⚠️ TRƯỚC KHI OUTPUT, KIỂM tra SEGMENT CẦN THIẾT:
+
+Bước 1: ĐỌC KỸ ĐỀ BÀI - Liệt kê TẤT CẢ cạnh/đoạn thẳng được nhắc đến
+• "AC = AD" → cạnh AC, AD
+• "AB ⊥ CD" → cạnh AB, CD
+• "AO là đường trung trực BC" → cạnh AO, BC
+• "AM vuông góc BC" → cạnh AM, BC
+• "kẻ OH", "nối AC" → cạnh OH, AC
+• "đường kính MN" → cạnh MN
+
+Bước 2: KIỂM TRA TỪNG CẠNH - Đã có (segment ...) chưa?
+VÍ DỤ: Đề nhắc "AC", "AD", "AO"
+• Tìm (segment A C) trong DSL → Nếu CHƯA có → THÊM ngay!
+• Tìm (segment A D) trong DSL → Nếu CHƯA có → THÊM ngay!
+• Tìm (segment A O) trong DSL → Nếu CHƯA có → THÊM ngay!
+
+Bước 3: ĐẶC BIỆT QUAN TRỌNG
+• Tiếp tuyến AB → segment A B đã có rồi
+• Dây CD → segment C D đã có rồi
+• Đường kính MN → PHẢI THÊM (segment M N) - vì (diameter M N O) KHÔNG tự vẽ!
+• Triangle ABC → segment A B, B C, C A đã có rồi
+
+⚠️ TRƯỚC KHI OUTPUT, KIỂM TRA ĐƯỜNG KÍNH VÀ SEGMENT:
+
+Bước 1: Tìm tất cả quan hệ hình học được mô tả
+• "Chứng minh AC = AD" → Vẽ AC = AD → Cần (equal-distance A C A D)
+• "Chứng minh AB ⊥ CD" → Vẽ AB ⊥ CD → Cần (perpendicular (segment A B) (segment C D))
+• "Chứng minh H là trung điểm AC" → Vẽ H ở giữa AC → Cần (define H point (midpoint A C))
+
+Bước 2: Kiểm tra các segment cần vẽ
+• "AC = AD" → CẦN (segment A C) và (segment A D)
+• "AB ⊥ CD" → CẦN (segment A B) và (segment C D)
+• "AB ⊥ CD" → CẦN (segment A B) và (segment C D) - KHÔNG thêm perpendicular!
+• "H là trung điểm" → CẦN segment trước midpoint
+
+⚠️ TRƯỚC KHI OUTPUT, KIỂM TRA ĐƯỜNG KÍNH VÀ SEGMENT:
+
+Bước 1: Tìm từ khóa đường kính trong đề
+• "có đường kính MN"
+• "đường kính AB"
+• "tiếp tuyến vuông góc với MN"
+
+Bước 2: Kiểm tra DSL
+• PHẢI có: (diameter M N O) - constraint
+• PHẢI có: (segment M N) - vẽ đường kính như đoạn thẳng
+• KHÔNG ĐƯỢC thiếu (segment M N)!
+
+BưỚC 3: Kiểm tra các đoạn thẳng được đề cập
+• ĐỌC KỸ ĐỀ BÀI - tìm TẤT CẢ các cạnh/đoạn thẳng được nhắc đến:
+  - "AC = AD" → nhắc AC, AD
+  - "AB ⊥ CD" → nhắc AB, CD  
+  - "AO là đường trung trực BC" → nhắc AO, BC
+  - "AM vuông góc BC" → nhắc AM, BC
+  - "kẻ OH", "nối AC" → nhắc OH, AC
+  - "đường kính MN" → nhắc MN
+
+• VỚI MỔI cạnh được nhắc (ví dụ AC):
+  - Kiểm tra DSL đã có (segment A C) chưa?
+  - Nếu CHƯẢ → THÊM NGAY (segment A C)
+  - Nếu ĐÃ CÓ → Bỏ QUA
+
+• ĐẶC BIỆT:
+  - Tiếp tuyến AB → đã có (segment A B) rồi
+  - Dây CD → đã có (segment C D) rồi
+  - Đường kính MN → PHẢI THÊM (segment M N)
+
+Bước 3: Kiểm tra bán kính cho tiếp tuyến
+• Tiếp tuyến tại A → CẦN (segment O A) - bán kính từ tâm đến tiếp điểm
+• Trừ khi A nằm trên đường kính → bán kính đã có sẵn
 
 ⚠️ TRƯỚC KHI OUTPUT, KIỂM TRA TỪNG DÒNG DSL:
 
@@ -885,10 +838,11 @@ Bước 4: Kiểm tra DSL
    • "Dây CD" → Cần (on-circle C O) VÀ (on-circle D O)
    • Thiếu 1 trong 2 → THÊM vào
 
-5. Tìm yêu cầu "Chứng minh" / "Tính" / "Tìm" → Kiểm tra có thêm constraint không?
-   • "Chứng minh AB = AC" → KHÔNG được có (equal-distance ...)
-   • "Chứng minh góc AOC = góc BAC" → KHÔNG được có (angle-equal ...)
-   • Nếu có → XÓA constraint đó đi
+5. Tìm quan hệ hình học trong đề bài → Kiểm tra có thêm constraint chưa?
+   • "Chứng minh AB = AC" → PHẢI có (equal-distance A B A C) hoặc (segment A B) và (segment A C) với giá trị bằng nhau
+   • "Chứng minh góc AOC = góc BAC" → PHẢI có (angle-equal A O C B A C)
+   • "Chứng minh AB ⊥ CD" → PHẢI có (perpendicular (segment A B) (segment C D))
+   • Nếu thiếu → THÊM constraint tương ứng
 
 ═══ INPUT ═══
 {{ extract }}
