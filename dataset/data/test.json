@@ -2,41 +2,11 @@
   {
     "image_dir": "images/img_231413.png",
     "instruction": "Cho đường tròn (O). AB là tiếp tuyến tại A, AC là dây của đường tròn. Kẻ OH vuông góc AC (H ∈ AC). Chứng minh rằng H là trung điểm của AC.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(segment A B)\n(tangent A (circle O) AB)\n(segment O A)\n(define C point)\n(on-circle C O)\n(segment A C)\n(segment O C)\n(define H point (projection O (segment A C)))\n(segment O H)\n(segment A H)\n(segment C H)"
-  },
-  {
-    "image_dir": "images/img_231401.png",
-    "instruction": "Cho đường tròn (O). Đường thẳng AB là tiếp tuyến của đường tròn tại A. Chứng minh rằng OA vuông góc AB.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(segment A B)\n(tangent A (circle O) AB)\n(segment O A)\n(perpendicular (segment O A) (segment A B))\n"
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(equal-distance A B 1.0)\n(segment A B)\n(tangent A (circle O) AB)\n(define C point)\n(on-circle C O)\n(segment A C)\n(segment O A)\n(define H point (projection O (segment A C)))\n(segment O H)\n(perpendicular (segment O H) (segment A C))\n(segment A C)"
   },
   {
     "image_dir": "images/img_231415.png",
     "instruction": "Cho đường tròn (O). AB là tiếp tuyến tại A. Lấy dây CD song song với AB. Chứng minh rằng AC = AD.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(segment A B)\n(tangent A (circle O) AB)\n(segment O A)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(segment A C)\n(segment A D)\n(equal-distance A C A D)"
-  },
-  {
-    "image_dir": "images/img_231410.png",
-    "instruction": "Cho đường tròn (O). Từ điểm A nằm ngoài (O) kẻ hai tiếp tuyến AB và AC (B, C là các tiếp điểm). Chứng minh rằng AO là đường trung trực của BC.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(distance O A 1.5)\n(define B point)\n(on-circle B O)\n(segment A B)\n(tangent B (circle O) AB)\n(segment O B)\n(define C point)\n(on-circle C O)\n(segment A C)\n(tangent C (circle O) AC)\n(segment O C)\n(segment B C)\n(define M point (midpoint B C))\n(segment A M)\n(perpendicular (segment A M) (segment B C))"
-  },
-  {
-    "image_dir": "images/img_231412.png",
-    "instruction": "Cho đường tròn (O) có đường kính MN. Vẽ tiếp tuyến tại M. Chứng minh rằng tiếp tuyến tại M vuông góc với MN.",
-    "answer": "(define O point)\n(circle O)\n(define M point)\n(define N point)\n(diameter M N O)\n(segment M N)\n(define A point)\n(segment M A)\n(tangent M (circle O) MA)\n(segment O M)\n(perpendicular (segment M N) (segment M A))\n"
-  },
-  {
-    "image_dir": "images/img_231411.png",
-    "instruction": "Cho đường tròn (O). AB là tiếp tuyến tại A, AC là một dây của đường tròn. Chứng minh rằng ∠BAC = ∠OCA.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(segment A B)\n(tangent A (circle O) AB)\n(segment O A)\n(define C point)\n(on-circle C O)\n(segment A C)\n(segment O C)\n(angle-equal B A C O C A)"
-  },
-  {
-    "image_dir": "images/img_231414.png",
-    "instruction": "Cho đường tròn (O). Từ điểm A nằm ngoài (O) kẻ hai tiếp tuyến AB và AC. Gọi M là trung điểm của BC. Chứng minh rằng AM vuông góc BC.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(distance O A 1.5)\n(define B point)\n(on-circle B O)\n(segment A B)\n(tangent B (circle O) AB)\n(segment O B)\n(define C point)\n(on-circle C O)\n(segment A C)\n(tangent C (circle O) AC)\n(segment O C)\n(segment B C)\n(define M point (midpoint B C))\n(segment A M)\n(perpendicular (segment A M) (segment B C))\n"
-  },
-  {
-    "image_dir": "images/img_231409.png",
-    "instruction": "Cho đường tròn (O). Từ điểm A nằm ngoài (O) kẻ hai tiếp tuyến AB và AC. Chứng minh rằng AB = AC.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(distance O A 1.5)\n(define B point)\n(on-circle B O)\n(segment A B)\n(tangent B (circle O) AB)\n(segment O B)\n(define C point)\n(on-circle C O)\n(segment A C)\n(tangent C (circle O) AC)\n(segment O C)\n(equal-distance A B A C)"
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(equal-distance A B 1.0)\n(segment A B)\n(tangent A (circle O) AB)\n(segment O A)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(segment A C)\n(segment A D)\n(equal-distance A C A D)"
   }
 ]

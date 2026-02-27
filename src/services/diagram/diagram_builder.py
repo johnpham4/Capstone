@@ -1,4 +1,5 @@
 from typing import List, Tuple, Any
+from loguru import logger
 
 from src.services.diagram.dsl_parser import DSLParser
 from src.models.domain.geometry.value_objects import Point
@@ -11,13 +12,17 @@ class DiagramBuilder:
         self.points: List[Point] = []
         self.instructions: List[Any] = []
         self.problem_lines = problem_lines
+        self.warnings: List[str] = []  # Track skipped commands
 
         cmds = DSLParser.parse_sexprs(self.problem_lines)
-        for cmd in cmds:
+        for idx, cmd in enumerate(cmds):
             try:
                 self.process_command(cmd)
             except Exception as e:
-                raise RuntimeError(f"Invalid command: {cmd}. Error: {e}")
+                # Log warning but continue processing
+                warning_msg = f"Line {idx+1}: {cmd} - Error: {str(e)}"
+                self.warnings.append(warning_msg)
+                logger.warning(f"SKIPPED {warning_msg}")
 
     def process_command(self, cmd: Tuple):
         if not isinstance(cmd[0], str):
@@ -389,20 +394,43 @@ class DiagramBuilder:
         self.instructions.append(instr)
 
     def process_equal_distance(self, cmd):
-        """Process: (equal-distance O M O H) -> Distance OM = Distance OH"""
-        if len(cmd) != 5:
-            raise RuntimeError(f"equal-distance requires 4 points (p1 p2 p3 p4): {cmd}")
+        """
+        Process equal-distance constraint:
+        - (equal-distance A B C D) -> Distance AB = Distance CD (4 points)
+        - (equal-distance A B 1.0) -> Distance AB = 1.0 (2 points + fixed value)
+        """
+        if len(cmd) == 4:
+            # Format: (equal-distance A B 1.0) - fixed distance
+            try:
+                p1 = Point(cmd[1])
+                p2 = Point(cmd[2])
+                distance_value = float(cmd[3])
+                
+                instr = Assertion(
+                    constraint_type='fixed_distance',
+                    objects=[p1, p2],
+                    distance=DistanceValue(distance_value)
+                )
+                self.instructions.append(instr)
+                
+            except (ValueError, TypeError):
+                raise RuntimeError(f"equal-distance with 3 params requires (point point number): {cmd}")
         
-        p1 = Point(cmd[1])
-        p2 = Point(cmd[2])
-        p3 = Point(cmd[3])
-        p4 = Point(cmd[4])
+        elif len(cmd) == 5:
+            # Format: (equal-distance A B C D) - equal distance between two segments
+            p1 = Point(cmd[1])
+            p2 = Point(cmd[2])
+            p3 = Point(cmd[3])
+            p4 = Point(cmd[4])
+            
+            instr = Assertion(
+                constraint_type='equal_distance',
+                objects=[p1, p2, p3, p4]
+            )
+            self.instructions.append(instr)
         
-        instr = Assertion(
-            constraint_type='equal_distance',
-            objects=[p1, p2, p3, p4]
-        )
-        self.instructions.append(instr)
+        else:
+            raise RuntimeError(f"equal-distance requires either 3 params (p1 p2 distance) or 4 points (p1 p2 p3 p4): {cmd}")
 
     def process_parallel(self, cmd):
         """Process: (parallel (segment B C) (segment D E))"""

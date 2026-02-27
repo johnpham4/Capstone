@@ -223,7 +223,26 @@ class MatplotlibDiagramRenderer:
             self.diagram = diagram
 
         if not self.diagram:
-            raise ValueError("No diagram to render")
+            logger.warning("No diagram provided, creating empty figure")
+            # Create empty figure instead of raising error
+            fig, ax = plt.subplots(figsize=(20, 20))
+            ax.text(0.5, 0.5, 'No diagram data', 
+                   horizontalalignment='center',
+                   verticalalignment='center',
+                   transform=ax.transAxes,
+                   fontsize=20,
+                   color='gray')
+            ax.set_xlim(-1, 1)
+            ax.set_ylim(-1, 1)
+            ax.set_aspect('equal', 'box')
+            ax.axis('off')
+            
+            if save:
+                plt.savefig(save_path, dpi=dpi, bbox_inches='tight')
+                logger.info(f"Saved empty diagram to {save_path}")
+            if show:
+                plt.show()
+            return fig, ax
 
         fig, ax = plt.subplots(figsize=(20, 20))
 
@@ -415,24 +434,31 @@ class MatplotlibDiagramRenderer:
         # 4.5. Draw Perpendicular Markers
         if hasattr(self.diagram, 'perpendiculars') and self.diagram.perpendiculars:
             for perp_tuple in self.diagram.perpendiculars:
-                # perp_tuple = (p1, p2, p3, p4) - 2 đoạn thẳng seg1=(p1,p2) và seg2=(p3,p4)
+                # perp_tuple = (name1, name2, name3, name4) - string names from optimizer
                 if len(perp_tuple) == 4:
-                    p1, p2, p3, p4 = perp_tuple
+                    name1, name2, name3, name4 = perp_tuple
                     
-                    # Tìm giao điểm
-                    intersection = self._find_segment_intersection(p1, p2, p3, p4)
-                    
-                    if intersection:
-                        # Tạo temporary point cho giao điểm
-                        class TempPoint:
-                            def __init__(self, x, y):
-                                self.x = x
-                                self.y = y
+                    # Convert names to GeometricPoint objects
+                    if all(name in self.diagram.points for name in [name1, name2, name3, name4]):
+                        p1 = self.diagram.points[name1]
+                        p2 = self.diagram.points[name2]
+                        p3 = self.diagram.points[name3]
+                        p4 = self.diagram.points[name4]
                         
-                        intersection_pt = TempPoint(intersection[0], intersection[1])
+                        # Tìm giao điểm
+                        intersection = self._find_segment_intersection(p1, p2, p3, p4)
                         
-                        # Sử dụng 2 điểm trên mỗi đoạn thẳng để xác định hướng
-                        self._draw_right_angle_symbol(ax, intersection_pt, p1, p3)
+                        if intersection:
+                            # Tạo temporary point cho giao điểm
+                            class TempPoint:
+                                def __init__(self, x, y):
+                                    self.x = x
+                                    self.y = y
+                            
+                            intersection_pt = TempPoint(intersection[0], intersection[1])
+                            
+                            # Sử dụng 2 điểm trên mỗi đoạn thẳng để xác định hướng
+                            self._draw_right_angle_symbol(ax, intersection_pt, p1, p3)
 
         # 5. Draw Lines
         for line_name, line_data in self.diagram.lines.items():
@@ -580,43 +606,48 @@ class MatplotlibDiagramRenderer:
         # Configure axes
         ax.set_aspect('equal')
         
-        # Đồng bộ với optimizer: optimizer đã dịch chuyển tất cả điểm về tâm (0, 0)
-        # Nên renderer cũng sử dụng (0, 0) làm tâm của khung hình
-        center_x = 0.0
-        center_y = 0.0
-        
-        # Calculate the range needed to fit all elements
-        max_range = 1.5  # Default range
-        
+        # Calculate bounding box for ALL elements (points + circles)
         if self.diagram.points:
             all_x = [p.x for p in self.diagram.points.values()]
             all_y = [p.y for p in self.diagram.points.values()]
             
-            # Consider points
-            if all_x and all_y:
-                x_range = max(all_x) - min(all_x)
-                y_range = max(all_y) - min(all_y)
-                max_range = max(x_range, y_range) * 0.6  # 20% padding
+            min_x, max_x = min(all_x), max(all_x)
+            min_y, max_y = min(all_y), max(all_y)
             
-            # Consider circles
+            # Extend bounding box to include circles
             if self.diagram.circles:
                 for center, info in self.diagram.circles:
                     if isinstance(info, dict):
                         radius = info.get('radius', 0.5)
                     else:
                         radius = info
-                    # Ensure circle fits in view
-                    max_range = max(max_range, radius * 1.2)
-        
-        # Set limits centered on (0, 0) to match optimizer's centering
-        zoom_factor = max(1.5, max_range)
-        ax.set_xlim(center_x - zoom_factor, center_x + zoom_factor)
-        ax.set_ylim(center_y - zoom_factor, center_y + zoom_factor)
+                        
+                    min_x = min(min_x, center.x - radius)
+                    max_x = max(max_x, center.x + radius)
+                    min_y = min(min_y, center.y - radius)
+                    max_y = max(max_y, center.y + radius)
+            
+            # Calculate true center of the entire diagram
+            actual_center_x = (min_x + max_x) / 2
+            actual_center_y = (min_y + max_y) / 2
+            
+            # Calculate zoom factor with padding
+            x_range = max_x - min_x
+            y_range = max_y - min_y
+            max_range = max(x_range, y_range) / 2 * 1.3  # 30% padding
+            zoom_factor = max(1.5, max_range)
+            
+            # Center the view on the actual center of all elements
+            ax.set_xlim(actual_center_x - zoom_factor, actual_center_x + zoom_factor)
+            ax.set_ylim(actual_center_y - zoom_factor, actual_center_y + zoom_factor)
+        else:
+            # Fallback if no points
+            ax.set_xlim(-1.5, 1.5)
+            ax.set_ylim(-1.5, 1.5)
         
         ax.axis('off')
 
         # Save if requested
-
         if save:
             output_path = Path(filename)
             output_path.parent.mkdir(parents=True, exist_ok=True)

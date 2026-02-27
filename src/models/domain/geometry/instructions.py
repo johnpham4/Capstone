@@ -30,6 +30,7 @@ class Assertion:
     objects: Tuple[Any, ...] = ()
     value: float = None
     constraint: Any = None
+    distance: Any = None  
 
     def __str__(self) -> str:
         if self.constraint_type:

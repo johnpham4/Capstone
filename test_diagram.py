@@ -24,6 +24,13 @@ def test_single_problem(instruction, dsl_answer, output_path):
             print(f"  {i}. {line}")
         
         builder = DiagramBuilder(dsl_lines)
+        
+        # Print warnings if any commands were skipped
+        if builder.warnings:
+            print(f"\n⚠️  {len(builder.warnings)} WARNINGS (commands skipped):")
+            for warning in builder.warnings:
+                print(f"  {warning}")
+            print()
 
         print(f"Points: {[p.val for p in builder.points]}")
         print(f"Instructions count: {len(builder.instructions)}")

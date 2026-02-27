@@ -947,6 +947,9 @@ class Optimizer:
                 self._add_distance_constraint(assertion.objects)
             elif assertion.constraint_type == 'equal_distance':
                 self._add_equal_distance_constraint(assertion.objects)
+            elif assertion.constraint_type == 'fixed_distance':
+                # fixed distance constraint (A B distance_value)
+                self._add_fixed_distance_constraint(assertion.objects, assertion.distance)
             elif assertion.constraint_type == 'on_circle':
                 self._add_on_circle_constraint(assertion.objects)
                 # Sau khi thêm on-circle constraint, enforce góc tối thiểu
@@ -972,28 +975,28 @@ class Optimizer:
             p2_name = p2_obj.val
             center_name = center_obj.val
             
-            # 1. Both points on circle
+            # 1. Both points on circle - EXTREMELY HIGH PRIORITY
             self.register_loss(f"diameter_on_circle_{p1_name}_{center_name}",
                 lambda pt=p1, c=center, r=self._get_circle_radius(center_name): 
                     (self.dist(pt, c) - r)**2,
-                weight=100.0)
+                weight=10000000.0)
             
             self.register_loss(f"diameter_on_circle_{p2_name}_{center_name}",
                 lambda pt=p2, c=center, r=self._get_circle_radius(center_name): 
                     (self.dist(pt, c) - r)**2,
-                weight=100.0)
+                weight=10000000.0)
             
-            # 2. Center is midpoint
+            # 2. Center is midpoint - EXTREMELY HIGH PRIORITY
             self.register_loss(f"diameter_midpoint_{center_name}_{p1_name}_{p2_name}",
                 lambda c=center, pt1=p1, pt2=p2: 
                     (c.x - (pt1.x + pt2.x)/2)**2 + (c.y - (pt1.y + pt2.y)/2)**2,
-                weight=100.0)
+                weight=10000000.0)
             
-            # 3. Collinear
+            # 3. Collinear - EXTREMELY HIGH PRIORITY
             self.register_loss(f"diameter_collinear_{center_name}_{p1_name}_{p2_name}",
                 lambda c=center, pt1=p1, pt2=p2: 
                     self.collinear(c, pt1, pt2),
-                weight=100.0)
+                weight=10000000.0)
             
             logger.info(f"Added diameter constraint: {p1_name}{p2_name} diameter of circle {center_name}")
         except Exception as e:
@@ -1104,11 +1107,48 @@ class Optimizer:
         self.register_loss(
             f"equal_distance_{points[0].val}{points[1].val}_{points[2].val}{points[3].val}",
             lambda pt1=p1, pt2=p2, pt3=p3, pt4=p4: (self.dist(pt1, pt2) - self.dist(pt3, pt4))**2,
-            weight=1000.0  # Ngang bằng on_circle 
+            weight=3000.0  # Tăng lên để đảm bảo AC = AD chính xác hơn
+        )
+        
+        # Add non-degeneracy constraints: ensure segments are not degenerate (points not coincident)
+        # This prevents solutions where p1=p2 or p3=p4
+        min_segment_length = 0.15  # Minimum segment length
+        
+        self.register_ndg(
+            f"ndg_segment_{points[0].val}{points[1].val}",
+            lambda pt1=p1, pt2=p2: self.dist(pt1, pt2),
+            weight=10.0
+        )
+        
+        self.register_ndg(
+            f"ndg_segment_{points[2].val}{points[3].val}",
+            lambda pt3=p3, pt4=p4: self.dist(pt3, pt4),
+            weight=10.0
         )
         
         if self.verbosity:
-            logger.info(f"Added equal-distance constraint: {points[0].val}{points[1].val} = {points[2].val}{points[3].val}")
+            logger.info(f"Added equal-distance constraint: {points[0].val}{points[1].val} = {points[2].val}{points[3].val} with NDG")
+    
+    def _add_fixed_distance_constraint(self, points: list, distance):
+        """Add constraint that distance(p1, p2) = fixed_value"""
+        if len(points) != 2:
+            logger.warning(f"Fixed-distance constraint needs 2 points, got {len(points)}")
+            return
+        
+        p1 = self.lookup_pt(points[0])
+        p2 = self.lookup_pt(points[1])
+        
+        # Get the fixed distance value
+        target_distance = distance.val if hasattr(distance, 'val') else float(distance)
+        
+        self.register_loss(
+            f"fixed_distance_{points[0].val}{points[1].val}_{target_distance}",
+            lambda pt1=p1, pt2=p2, target=target_distance: (self.dist(pt1, pt2) - target)**2,
+            weight=50.0  # Giảm xuống - chỉ để constraint nhẹ, không quá quan trọng
+        )
+        
+        if self.verbosity:
+            logger.info(f"Added fixed-distance constraint: {points[0].val}{points[1].val} = {target_distance}")
         
     def _add_on_circle_constraint(self, points: list):
         if len(points) != 2:
@@ -1133,13 +1173,12 @@ class Optimizer:
         center = self.lookup_pt(points[1])
         logger.info(f"Found radius={radius} for circle {center_name}")
         
-        # CỐ ĐỊNH tâm đường tròn ở (0, 0) để nằm giữa không gian 
         center_key = f"center_at_origin_{center_name}"
         if center_key not in self.loss_fns:
             self.register_loss(
                 center_key,
                 lambda c=center: c.x**2 + c.y**2,
-                weight=10000.0  # Cao để đảm bảo center luôn nằm chính giữa (0, 0)
+                weight=10000.0  
             )
         
         # Use const() to avoid lambda closure issues
@@ -1147,7 +1186,7 @@ class Optimizer:
         self.register_loss(
             f"on_circle_{points[0].val}_{center_name}",
             lambda pt=point, c=center, r=radius_const: (self.dist(pt, c) - r)**2,
-            weight=1000.0  
+            weight=100000.0  
         )
     
     def _add_tangent_constraint(self, objects: list):
@@ -1213,7 +1252,7 @@ class Optimizer:
             self.register_loss(
                 f"tangent_line_{p1_obj.val}{p2_obj.val}_circle_{center_name}",
                 lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
-                weight=100.0
+                weight=5000.0  # Tăng mạnh - tiếp tuyến là constraint quan trọng
             )
             
             if self.verbosity:
@@ -1260,14 +1299,14 @@ class Optimizer:
             self.register_loss(
                 f"tangent_line_{p1_name}{p2_name}_circle_{center_name}_at_{tangent_pt_name}",
                 lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
-                weight=100.0
+                weight=5000.0  
             )
             
             # CONSTRAINT 2: OM vuông góc với AB (tính chất tiếp tuyến)
             self.register_loss(
                 f"tangent_perpendicular_{tangent_pt_name}_{center_name}_{p1_name}{p2_name}",
                 lambda m=tangent_point, o=center, a=p1, b=p2: self.perpendicular(o, m, a, b)**2,
-                weight=1000.0  # RẤT QUAN TRỌNG - đảm bảo vuông góc
+                weight=3000.0  
             )
             
             # CONSTRAINT 3: M nằm trên đoạn AB (không nằm ngoài)
@@ -1363,7 +1402,7 @@ class Optimizer:
                     self.register_loss(
                         f"tangent_perpendicular_{tangent_point_obj.val}_{center_name}_{p1_name}{p2_name}",
                         lambda m=tangent_point, o=center, a=p1, b=p2: self.perpendicular(o, m, a, b)**2,
-                        weight=1000.0  # RẤT QUAN TRỌNG - đảm bảo vuông góc
+                        weight=3000.0  # Tăng lên để đồng bộ với tangent_line_circle
                     )
                     
                     # CONSTRAINT 3: M nằm trên đoạn AB (không nằm ngoài)
@@ -1552,78 +1591,65 @@ class Optimizer:
             circle_points_map[circle_name] = []
         
         # Find all points with on_circle constraint
-        for loss_name in self.losses:
+        for loss_name in self.loss_fns.keys():  # Changed from self.losses to self.loss_fns.keys()
             if loss_name.startswith("on_circle_"):
                 parts = loss_name.split("_")
                 if len(parts) >= 4:  # on_circle_PointName_CenterName
                     point_name = parts[2]
                     center_name = "_".join(parts[3:])
                     
-                    if center_name in circle_points_map:
-                        try:
-                            pt_obj = self.lookup_pt_by_name(point_name)
-                            if pt_obj:
-                                circle_points_map[center_name].append((point_name, pt_obj))
-                        except:
-                            pass
+                    if center_name in circle_points_map and point_name in self.name2pt:
+                        pt_obj = self.name2pt[point_name]
+                        circle_points_map[center_name].append((point_name, pt_obj))
         
         # For each circle with 2+ points, enforce minimum angle
-        min_angle_rad = math.radians(45)  # 45 degrees minimum
+        min_angle_rad = math.radians(30)  # Reduced from 45 to 30 degrees for more flexibility
         
         for center_name, points_list in circle_points_map.items():
             if len(points_list) < 2:
                 continue
             
-            try:
-                center = self.lookup_pt_by_name(center_name)
-                if not center:
-                    continue
+            if center_name not in self.name2pt:
+                continue
                 
-                # For each pair of points on this circle
-                for i in range(len(points_list)):
-                    for j in range(i + 1, len(points_list)):
-                        name1, pt1 = points_list[i]
-                        name2, pt2 = points_list[j]
+            center = self.name2pt[center_name]
+            
+            # For each pair of points on this circle
+            for i in range(len(points_list)):
+                for j in range(i + 1, len(points_list)):
+                    name1, pt1 = points_list[i]
+                    name2, pt2 = points_list[j]
+                    
+                    # Use NDG constraint to softly enforce minimum angle
+                    # This prevents points from being too close but allows optimization flexibility
+                    def angle_ndg(p1=pt1, p2=pt2, c=center, min_cos=math.cos(min_angle_rad)):
+                        # Vectors from center to points
+                        v1_x = p1.x - c.x
+                        v1_y = p1.y - c.y
+                        v2_x = p2.x - c.x
+                        v2_y = p2.y - c.y
                         
-                        # Calculate angle using dot product
-                        # cos(angle) = (v1 · v2) / (|v1| |v2|)
-                        # We want angle >= min_angle_rad
-                        # cos(angle) <= cos(min_angle_rad) (because cos is decreasing)
+                        # Dot product and magnitudes
+                        dot = v1_x * v2_x + v1_y * v2_y
+                        mag1 = torch.sqrt(v1_x**2 + v1_y**2 + 1e-8)
+                        mag2 = torch.sqrt(v2_x**2 + v2_y**2 + 1e-8)
                         
-                        def angle_constraint(p1=pt1, p2=pt2, c=center, min_cos=math.cos(min_angle_rad)):
-                            # Vectors from center to points
-                            v1_x = p1.x - c.x
-                            v1_y = p1.y - c.y
-                            v2_x = p2.x - c.x
-                            v2_y = p2.y - c.y
-                            
-                            # Dot product and magnitudes
-                            dot = v1_x * v2_x + v1_y * v2_y
-                            mag1 = (v1_x**2 + v1_y**2)**0.5 + 1e-8
-                            mag2 = (v2_x**2 + v2_y**2)**0.5 + 1e-8
-                            
-                            cos_angle = dot / (mag1 * mag2)
-                            
-                            # Penalty if angle too small (cos too large)
-                            # ReLU: max(0, cos_angle - min_cos)
-                            penalty = cos_angle - min_cos
-                            return (penalty if penalty > 0 else 0)**2
+                        cos_angle = dot / (mag1 * mag2)
                         
-                        self.register_loss(
-                            f"min_angle_{center_name}_{name1}_{name2}",
-                            angle_constraint,
-                            weight=50.0  # Moderate weight - don't override other constraints
+                        # Return value that decreases as angle increases (good for NDG)
+                        # We want large angles, so return (1 - cos_angle) which is small when angle is small
+                        return 1.0 - cos_angle  # Large when angle small, small when angle large
+                    
+                    # Use register_ndg for soft constraint
+                    ndg_key = f"min_angle_{center_name}_{name1}_{name2}"
+                    
+                    # Check if this constraint already exists
+                    if ndg_key not in self.ndgs:
+                        self.register_ndg(
+                            ndg_key,
+                            angle_ndg,
+                            weight=50.0 
                         )
-            except Exception as e:
-                logger.warning(f"Failed to enforce min angle for circle {center_name}: {e}")
-    
-    def lookup_pt_by_name(self, name: str):
-        """Helper to lookup point by string name"""
-        for pt_name, pt_obj in self.points.items():
-            if pt_name == name:
-                return pt_obj
-        return None
-        
     
     def _add_parallel_constraint(self, points: list):
         """Add parallel constraint between two segments"""

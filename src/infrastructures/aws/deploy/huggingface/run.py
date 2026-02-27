@@ -1,11 +1,19 @@
 from sagemaker.model import Model
 from sagemaker.session import Session
 from loguru import logger
+import boto3
 
 from src.config.settings.base import settings
 
 def create_endpoint():
-    session = Session()
+    # Create boto3 session with credentials from settings
+    boto_session = boto3.Session(
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        region_name=settings.AWS_REGION
+    )
+    
+    session = Session(boto_session=boto_session)
 
     logger.info(f"Creating vLLM endpoint: {settings.SAGEMAKER_ENDPOINT_INFERENCE}")
     logger.info(f"Model: {settings.HF_MODEL_ID}")
