@@ -27,7 +27,7 @@ def test_single_problem(instruction, dsl_answer, output_path):
         
         # Print warnings if any commands were skipped
         if builder.warnings:
-            print(f"\n⚠️  {len(builder.warnings)} WARNINGS (commands skipped):")
+            print(f"\n  {len(builder.warnings)} WARNINGS (commands skipped):")
             for warning in builder.warnings:
                 print(f"  {warning}")
             print()
@@ -35,7 +35,7 @@ def test_single_problem(instruction, dsl_answer, output_path):
         print(f"Points: {[p.val for p in builder.points]}")
         print(f"Instructions count: {len(builder.instructions)}")
         # print(f"Instructions: {builder.instructions}")
-        opts = {'epochs': 1000, 'n_tries': 3, 'eps': 1e-6, 'seed': 42, 'learning_rate': 0.02}
+        opts = {'epochs': 2000, 'n_tries': 3, 'eps': 1e-6, 'seed': 42, 'learning_rate': 0.02}
 
         optimizer = Optimizer(builder.instructions, opts, verbosity=True)
         diagram = optimizer.solve()

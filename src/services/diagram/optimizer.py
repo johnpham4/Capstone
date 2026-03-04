@@ -301,6 +301,12 @@ class Optimizer:
         names = [p.val for p in points]
         self.quadrilaterals.append(tuple(names))
         key = tuple(names)
+        # Mild non-degeneracy: keep adjacent vertices distinct to avoid overlaps
+        p1, p2, p3, p4 = pt_objs
+        self.register_ndg(f"quad_edge_{names[0]}_{names[1]}", lambda: self.dist(p1, p2), weight=2.0)
+        self.register_ndg(f"quad_edge_{names[1]}_{names[2]}", lambda: self.dist(p2, p3), weight=2.0)
+        self.register_ndg(f"quad_edge_{names[2]}_{names[3]}", lambda: self.dist(p3, p4), weight=2.0)
+        self.register_ndg(f"quad_edge_{names[3]}_{names[0]}", lambda: self.dist(p4, p1), weight=2.0)
         # NOTE: Rendering uses Diagram.quadrilaterals which is populated from
         # self.quadrilaterals_metadata in get_diagram(). If we don't register
         # metadata here, the outline won't be drawn even though points exist.
@@ -1686,6 +1692,7 @@ class Optimizer:
         """
         Enforce minimum angle (45 degrees) between points on the same circle.
         This ensures chords are long enough and diagrams look good.
+        Also enforce minimum distance to avoid coincident points.
         """ 
         # Group points by circle
         circle_points_map = {}  # {center_name: [point_objs]}
@@ -1722,6 +1729,23 @@ class Optimizer:
                 for j in range(i + 1, len(points_list)):
                     name1, pt1 = points_list[i]
                     name2, pt2 = points_list[j]
+
+                    # Soft minimum distance: only penalize if points are too close
+                    # This avoids coincident points without distorting other constraints.
+                    dist_key = f"min_dist_circle_{center_name}_{name1}_{name2}"
+                    if dist_key not in self.loss_fns:
+                        # Get radius for scaling (fallback to 1.0)
+                        radius = 1.0
+                        for circle_name, circle_info in self.circles:
+                            if circle_name == center_name:
+                                radius = circle_info.get('radius', 1.0)
+                                break
+                        min_dist = 0.25 * radius
+                        self.register_loss(
+                            dist_key,
+                            lambda p1=pt1, p2=pt2, md=min_dist: torch.relu(md - self.dist(p1, p2)),
+                            weight=200.0
+                        )
                     
                     # Use NDG constraint to softly enforce minimum angle
                     # This prevents points from being too close but allows optimization flexibility

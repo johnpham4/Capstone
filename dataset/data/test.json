@@ -1,41 +1,7 @@
 [
   {
-    "image_dir": "images/img_231413.png",
-    "instruction": "Cho đường tròn (O). AB là tiếp tuyến tại A, AC là dây của đường tròn. Kẻ OH vuông góc AC (H ∈ AC). Chứng minh rằng H là trung điểm của AC.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(equal-distance A B 1.0)\n(segment A B)\n(tangent A (circle O) AB)\n(define C point)\n(on-circle C O)\n(segment A C)\n(segment O A)\n(define H point (projection O (segment A C)))\n(segment O H)\n(perpendicular (segment O H) (segment A C))\n(segment A C)"
-  },
-  {
     "image_dir": "images/img_231415.png",
     "instruction": "Cho đường tròn (O). AB là tiếp tuyến tại A. Lấy dây CD song song với AB. Chứng minh rằng AC = AD.",
     "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(equal-distance A B 1.0)\n(segment A B)\n(tangent A (circle O) AB)\n(segment O A)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(segment A C)\n(segment A D)\n(equal-distance A C A D)"
-  },
-  {
-    "instruction": "Hình chữ nhật ABCD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng BC, đường thẳng PQ",
-    "answer": "(rectangle (A B C D))\n(define P point (segment A B))\n(define Q point (segment B C))\n(segment P Q)"
-  },
-  {
-    "instruction": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng BC, đường thẳng PQ",
-    "answer": "(trapezoid (A B C D))\n(parallel (segment A B) (segment C D))\n(perpendicular (segment A B) (segment A D))\n(define P point (segment A B))\n(define Q point (segment B C))\n(segment P Q)"
-  },
-  {
-    "instruction": "Hình vuông ABCD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD",
-    "answer": "(square (A B C D))\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment M N)"
-  },
-  {
-    "instruction": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, điểm P nằm trong hình thang ABCD",
-    "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(segment A D)\n(perpendicular (segment A B) (segment A D))\n(define P point (segment A B))"
-  },
-  {
-    "instruction": "Hình vuông ABCD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng BC, đường thẳng PQ",
-    "answer": "(square (A B C D))\n(define P point (segment A B))\n(define Q point (segment B C))\n(segment P Q)"
-  },
-  {
-    "instruction": "Hình vuông ABCD có đường tròn nội tiếp",
-    "answer": "(square (A B C D))\n(define O point (midpoint A C))\n(circle O (incircle A B C D))"
-  },
-  {
-    "image_dir": "images/img_231409.png",
-    "instruction": "Cho đường tròn (O). Từ điểm A nằm ngoài (O) kẻ hai tiếp tuyến AB và AC. Chứng minh rằng AB = AC.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(distance O A 1.5)\n(define B point)\n(on-circle B O)\n(segment A B)\n(tangent B (circle O) AB)\n(segment O B)\n(define C point)\n(on-circle C O)\n(segment A C)\n(tangent C (circle O) AC)\n(segment O C)\n(equal-distance A B A C)"
   }
 ]
