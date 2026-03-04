@@ -32,16 +32,8 @@ class DiagramBuilder:
 
         if head == "triangle":
             self.process_triangle(cmd)
-        elif head == "square":
-            self.process_square(cmd)
-        elif head == "rectangle":
-            self.process_rectangle(cmd)
-        elif head == "parallelogram":
-            self.process_parallelogram(cmd)
-        elif head == "trapezoid":
-            self.process_trapezoid(cmd)
-        elif head == "rhombus":  
-            self.process_rhombus(cmd)
+        elif head in ["quadrilateral", "square", "rectangle", "trapezoid", "parallelogram", "rhombus"]:
+            self.process_quadrilateral(cmd)
         elif head == "define":
             self.process_define(cmd)
         elif head == "circle":
@@ -190,6 +182,54 @@ class DiagramBuilder:
         # Mapping sang kiểu RHOMBUS
         instr = Parameter(DiagramType.QUADRILATERAL, ps, QuadrilateralType.RHOMBUS)
         self.instructions.append(instr)
+
+
+    def process_quadrilateral(self, cmd):
+        """Process quadrilateral commands: (quadrilateral (A B C D)), (square (A B C D)), (rectangle (A B C D)), etc."""
+        if len(cmd) < 2:
+            raise RuntimeError(f"Invalid quadrilateral command: {cmd}")
+
+        # Determine quadrilateral type from command name
+        quad_type_str = cmd[0].upper()
+        
+        # Generic quadrilateral has no specific type
+        if quad_type_str == "QUADRILATERAL":
+            quad_type = None
+        else:
+            try:
+                quad_type = QuadrilateralType[quad_type_str]
+            except KeyError:
+                raise RuntimeError(f"Unknown quadrilateral type: {cmd[0]}")
+
+        ps = [Point(p) for p in cmd[1]]
+
+        if len(ps) != 4:
+            raise ValueError(f"Quadrilateral must have 4 vertices, got {len(ps)}")
+
+        # Register all 4 points
+        for p in ps:
+            self.register_pt(p)
+
+        # If no additional parameters
+        if len(cmd) == 2:
+            instr = Parameter(DiagramType.QUADRILATERAL, ps, quad_type)
+            self.instructions.append(instr)
+            return
+
+        # With additional parameters: (square (A B C D) (param_type args...))
+        param_method = cmd[2]
+
+        if isinstance(param_method, tuple) and len(param_method) > 0:
+            param_type_lower = param_method[0].lower()
+            # Process arguments - convert to Points if they are strings
+            args = tuple(Point(p) if isinstance(p, str) else p for p in param_method[1:])
+            instr = Parameter(DiagramType.QUADRILATERAL, ps, quad_type, args)
+        else:
+            instr = Parameter(DiagramType.QUADRILATERAL, ps, quad_type)
+
+        self.instructions.append(instr)
+
+
 
     def process_define(self, cmd):
         if len(cmd) < 3:

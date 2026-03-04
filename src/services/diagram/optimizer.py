@@ -37,6 +37,7 @@ class Optimizer:
         self.ndgs = {}
         self.triangles_metadata = {}
         self.circles = []
+        self.quadrilaterals = []
         self.quadrilaterals_metadata = {}
         self.segments = []
         self.lines = []
@@ -125,18 +126,20 @@ class Optimizer:
         """Loss for point lying on segment p1-p2 (between p1 and p2)"""
         line = self.pp2lnf(p1, p2)
         on_line_loss = self.on_line(point, line)**2
-        
+
         # Point between p1 and p2: point = p1 + t*(p2-p1) with 0 <= t <= 1
         vec_x = p2.x - p1.x
         vec_y = p2.y - p1.y
         point_x = point.x - p1.x
         point_y = point.y - p1.y
-        
+
         vec_len_sq = vec_x**2 + vec_y**2 + 1e-8
-        # Penalty if t < 0 or t > 1
         t = (point_x * vec_x + point_y * vec_y) / vec_len_sq
+
+        # Strong penalty if t < 0 or t > 1 to keep point strictly between endpoints
         between_penalty = torch.relu(-t) + torch.relu(t - 1)
-        return on_line_loss + 1000.0 * between_penalty  
+
+        return 100.0 * on_line_loss + 50.0 * between_penalty
 
     def _angle_bisector_equal_loss(self, p_vertex: TorchPoint, p1: TorchPoint, p2: TorchPoint, p_bisector: TorchPoint):
         """Loss for angle bisector: angle(p1, vertex, bisector) = angle(p2, vertex, bisector)"""
@@ -280,7 +283,15 @@ class Optimizer:
         len2 = self.vector_length(p3, p4)
         return len1 / (len2 + 1e-8)
 
-    def _sample_quadrilateral_with_init(self, points: list, init_method, *args, noise: float = 0.05):
+    def _sample_quadrilateral_with_init(
+        self,
+        points: list,
+        init_method,
+        *args,
+        noise: float = 0.05,
+        quad_type: QuadrilateralType = QuadrilateralType.GENERAL,
+        metadata: dict | None = None,
+    ):
         """Generic quadrilateral sampler using Initializer methods"""
         assert len(points) == 4
         init_coords = init_method(*args)
@@ -289,11 +300,19 @@ class Optimizer:
         pt_objs = [self.sample_uniform(p, init_coords=init_coords[i]) for i, p in enumerate(points)]
         names = [p.val for p in points]
         self.quadrilaterals.append(tuple(names))
+        key = tuple(names)
+        # NOTE: Rendering uses Diagram.quadrilaterals which is populated from
+        # self.quadrilaterals_metadata in get_diagram(). If we don't register
+        # metadata here, the outline won't be drawn even though points exist.
+        if key not in self.quadrilaterals_metadata:
+            self.quadrilaterals_metadata[key] = metadata if metadata is not None else {'type': quad_type}
         return pt_objs, names
 
     def sample_square(self, points: list):
         assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_square, 1.0)
+        pt_objs, names = self._sample_quadrilateral_with_init(
+            points, Initializer.init_square, 1.0, quad_type=QuadrilateralType.SQUARE
+        )
         p1, p2, p3, p4 = pt_objs
 
         # All sides equal + right angle
@@ -306,20 +325,32 @@ class Optimizer:
 
     def sample_rectangle(self, points: list):
         assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_rectangle, 1.6, 1.0)
+        rect_w, rect_h = 1.6, 1.0
+        pt_objs, names = self._sample_quadrilateral_with_init(
+            points, Initializer.init_rectangle, rect_w, rect_h, quad_type=QuadrilateralType.RECTANGLE
+        )
         p1, p2, p3, p4 = pt_objs
 
         # Three right angles
         self.register_loss(f"rect_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
         self.register_loss(f"rect_right_C_{names[0]}", lambda: self._dot_product(p2, p3, p4), weight=10.0)
         self.register_loss(f"rect_right_D_{names[0]}", lambda: self._dot_product(p3, p4, p1), weight=10.0)
+        # Encourage a non-square rectangle by keeping the aspect ratio close to the initializer.
+        target_ratio = rect_w / rect_h
+        self.register_loss(
+            f"rect_aspect_{names[0]}",
+            lambda: self.dist(p1, p2) / (self.dist(p2, p3) + 1e-8) - target_ratio,
+            weight=5.0,
+        )
         self.register_ndg(f"rect_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
         return pt_objs
 
     def sample_parallelogram(self, points: list):
         assert len(points) == 4
         # Use scalene quad init for parallelogram (more general shape)
-        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_scalene_quadrilateral, 1.5)
+        pt_objs, names = self._sample_quadrilateral_with_init(
+            points, Initializer.init_quadrilateral, 1.5, quad_type=QuadrilateralType.PARALLELOGRAM
+        )
         p1, p2, p3, p4 = pt_objs
 
         # Opposite sides parallel
@@ -330,7 +361,9 @@ class Optimizer:
 
     def sample_trapezoid(self, points: list):
         assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_scalene_quadrilateral, 1.2)
+        pt_objs, names = self._sample_quadrilateral_with_init(
+            points, Initializer.init_quadrilateral, 1.2, quad_type=QuadrilateralType.TRAPEZOID
+        )
         p1, p2, p3, p4 = pt_objs
 
         # One pair parallel
@@ -343,7 +376,9 @@ class Optimizer:
 
     def sample_rhombus(self, points: list):
         assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_rhombus, 1.0)
+        pt_objs, names = self._sample_quadrilateral_with_init(
+            points, Initializer.init_rhombus, 1.0, quad_type=QuadrilateralType.RHOMBUS
+        )
         p1, p2, p3, p4 = pt_objs
 
         # All sides equal + diagonals perpendicular
@@ -432,66 +467,124 @@ class Optimizer:
         return [p1, p2, p3]
     
     #tu giac
-    def sample_quadrilateral(self, points, corner_point, constraints=None, init_coords=None):
-        assert len(points) == 4
+    def sample_quadrilateral(self, points: list, quad_type: str = 'quadrilateral'):
+        """Unified function to sample all types of quadrilaterals
         
-        constraints = constraints or {}
-        quadri_type = constraints.get('type', QuadrilateralType.GENERAL)
-        corner_idx = points.index(corner_point)
+        Args:
+            points: List of 4 Point objects
+            quad_type: Type of quadrilateral - 'square', 'rectangle', 'parallelogram', 
+                      'trapezoid', 'rhombus', or 'quadrilateral' (generic)
         
-        if quadri_type == QuadrilateralType.SQUARE:
-            init_coords = Initializer.init_square(corner_idx)
-        elif quadri_type == QuadrilateralType.RECTANGLE:
-            init_coords = Initializer.init_rectangle(corner_idx)
-        elif quadri_type == QuadrilateralType.RHOMBUS:
-            init_coords = Initializer.init_rhombus(corner_idx)
-        else:
-            init_coords = Initializer.init_scalene_quadrilateral(corner_idx)
-        init_coords = Initializer.add_noise(init_coords)
+        Returns:
+            List of 4 TorchPoint objects
+        """
+        assert len(points) == 4, "Quadrilateral must have exactly 4 points"
         
-        #create points
-        p1 = self.sample_uniform(points[0], init_coords=init_coords[0])
-        p2 = self.sample_uniform(points[1], init_coords=init_coords[1])
-        p3 = self.sample_uniform(points[2], init_coords=init_coords[2])
-        p4 = self.sample_uniform(points[3], init_coords=init_coords[3])
-        pts = [p1, p2, p3, p4]
+        quad_type = quad_type.lower()
         
-        metadata = {'type': quadri_type}
-        if quadri_type in [QuadrilateralType.SQUARE, QuadrilateralType.RECTANGLE]:
-            self.register_loss(f"angle_A", lambda: self._dot_product(pts[3], pts[0], pts[1]), weight=100.0)
-            self.register_loss(f"angle_B", lambda: self._dot_product(pts[0], pts[1], pts[2]), weight=100.0)
-            self.register_loss(f"angle_C", lambda: self._dot_product(pts[1], pts[2], pts[3]), weight=100.0)
-            self.register_loss(f"angle_D", lambda: self._dot_product(pts[2], pts[3], pts[0]), weight=100.0)
-
-        if quadri_type == QuadrilateralType.SQUARE:
-            # All 4 sides equal
-            dists = [self.dist(pts[i], pts[(i+1)%4]) for i in range(4)]
-            avg = sum(dists) / 4.0
-            self.register_loss(f"square_equal_sides",
-                             lambda: sum((d - avg)**2 for d in dists), weight=100.0)
-            self.register_ndg(f"square_ndg", lambda: self.collinear(pts[0], pts[1], pts[2]), weight=1.0)
-            metadata['equal_sides'] = [(0, 1), (1, 2), (2, 3), (3, 0)]
-
-        elif quadri_type == QuadrilateralType.RECTANGLE:
-            # Opposite sides equal
-            self.register_loss(f"rect_opposite_sides",
-                             lambda: (self.dist(pts[0], pts[1]) - self.dist(pts[2], pts[3]))**2 +
-                                     (self.dist(pts[1], pts[2]) - self.dist(pts[3], pts[0]))**2,
-                             weight=10.0)
-            self.register_ndg(f"rect_ndg", lambda: self.collinear(pts[0], pts[1], pts[2]), weight=1.0)
-            metadata['equal_sides'] = [(0, 2), (1, 3)]
-
-        elif quadri_type == QuadrilateralType.RHOMBUS:
-            # All 4 sides equal (same as square)
-            dists = [self.dist(pts[i], pts[(i+1)%4]) for i in range(4)]
-            avg = sum(dists) / 4.0
-            self.register_loss(f"rhombus_equal_sides",
-                             lambda: sum((d - avg)**2 for d in dists), weight=10.0)
-            self.register_ndg(f"rhombus_ndg", lambda: self.collinear(pts[0], pts[1], pts[2]), weight=1.0)
-            metadata['equal_sides'] = [(0, 1), (1, 2), (2, 3), (3, 0)]
-        key = tuple(p.val for p in points)
-        self.quadrilaterals_metadata[key] = metadata
-        return [p1, p2, p3, p4]
+        # Initialize coordinates based on quad type
+        if quad_type == 'square':
+            init_coords = Initializer.init_square(1.0)
+        elif quad_type == 'rectangle':
+            init_coords = Initializer.init_rectangle(1.6, 1.0)
+        elif quad_type == 'parallelogram':
+            init_coords = Initializer.init_parallelogram(1.0)
+        elif quad_type == 'trapezoid':
+            init_coords = Initializer.init_trapezoid(1.0)
+        elif quad_type == 'rhombus':
+            init_coords = Initializer.init_rhombus(1.0)
+        else:  # generic quadrilateral
+            init_coords = Initializer.init_quadrilateral(1.0)
+        
+        # Add noise to avoid perfect initialization
+        init_coords = Initializer.add_noise(init_coords, noise_scale=0.05)
+        
+        # Create points with initial coordinates
+        pt_objs = [self.sample_uniform(p, init_coords=init_coords[i]) for i, p in enumerate(points)]
+        names = [p.val for p in points]
+        self.quadrilaterals.append(tuple(names))
+        
+        p1, p2, p3, p4 = pt_objs
+        key = tuple(names)
+        
+        # Apply constraints based on quad type
+        if quad_type == 'square':
+            # All sides equal + right angle
+            self.register_loss(f"sq_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
+            self.register_loss(f"sq_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
+            self.register_loss(f"sq_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
+            self.register_loss(f"sq_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
+            self.register_ndg(f"sq_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            
+            self.quadrilaterals_metadata[key] = {
+                'type': QuadrilateralType.SQUARE,
+                'equal_sides': [(0, 1), (1, 2), (2, 3), (3, 0)]
+            }
+            
+        elif quad_type == 'rectangle':
+            # Three right angles
+            self.register_loss(f"rect_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
+            self.register_loss(f"rect_right_C_{names[0]}", lambda: self._dot_product(p2, p3, p4), weight=10.0)
+            self.register_loss(f"rect_right_D_{names[0]}", lambda: self._dot_product(p3, p4, p1), weight=10.0)
+            # Keep a stable aspect ratio (default initializer: 1.6 x 1.0) so it doesn't converge to a square.
+            target_ratio = 1.6 / 1.0
+            self.register_loss(
+                f"rect_aspect_{names[0]}",
+                lambda: self.dist(p1, p2) / (self.dist(p2, p3) + 1e-8) - target_ratio,
+                weight=5.0,
+            )
+            self.register_ndg(f"rect_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            
+            self.quadrilaterals_metadata[key] = {
+                'type': QuadrilateralType.RECTANGLE,
+                'equal_sides': [(0, 2), (1, 3)]  # Opposite sides equal
+            }
+            
+        elif quad_type == 'parallelogram':
+            # Opposite sides parallel
+            self.register_loss(f"para_parallel_12_34_{names[0]}", 
+                              lambda: self.parallel(p1, p2, p4, p3), weight=10.0)
+            self.register_loss(f"para_parallel_23_41_{names[0]}", 
+                              lambda: self.parallel(p2, p3, p1, p4), weight=10.0)
+            # Opposite sides equal (helps convergence)
+            self.register_loss(f"para_eq_12_34_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p4, p3), weight=5.0)
+            self.register_loss(f"para_eq_23_41_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p1, p4), weight=5.0)
+            self.register_ndg(f"para_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            
+            self.quadrilaterals_metadata[key] = {'type': 'parallelogram', 'opposite_parallel': True}
+            
+        elif quad_type == 'trapezoid':
+            # One pair parallel: AB || CD
+            self.register_loss(f"trap_parallel_12_43_{names[0]}",
+                              lambda: self.parallel(p1, p2, p4, p3), weight=10.0)
+            self.register_ndg(f"trap_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            # Ensure bases have reasonable lengths
+            self.register_ndg(f"trap_ndg_base1_{names[0]}", lambda: self.dist(p1, p2), weight=10.0)
+            self.register_ndg(f"trap_ndg_base2_{names[0]}", lambda: self.dist(p3, p4), weight=10.0)
+            
+            self.quadrilaterals_metadata[key] = {'type': 'trapezoid', 'parallel_sides': [(0, 1), (3, 2)]}
+            
+        elif quad_type == 'rhombus':
+            # All sides equal
+            self.register_loss(f"rhombus_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
+            self.register_loss(f"rhombus_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
+            self.register_loss(f"rhombus_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
+            # Diagonals perpendicular: AC ⊥ BD
+            self.register_loss(f"rhombus_diag_perp_{names[0]}",
+                              lambda: self.perpendicular(p1, p3, p2, p4), weight=10.0)
+            self.register_ndg(f"rhombus_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            # Ensure diagonals have reasonable lengths
+            self.register_ndg(f"rhombus_diag_ac_{names[0]}", lambda: self.dist(p1, p3), weight=10.0)
+            self.register_ndg(f"rhombus_diag_bd_{names[0]}", lambda: self.dist(p2, p4), weight=10.0)
+            
+            self.quadrilaterals_metadata[key] = {'type': 'rhombus', 'equal_sides': [(0, 1), (1, 2), (2, 3), (3, 0)]}
+            
+        else:  # generic quadrilateral
+            # Only non-degeneracy constraint
+            self.register_ndg(f"quad_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            self.quadrilaterals_metadata[key] = {'type': 'quadrilateral'}
+        
+        return pt_objs
      
 
     def _define_projection(self, point_name, vertex_point, segment_points):
@@ -666,9 +759,19 @@ class Optimizer:
         assert len(segment_points) == 2
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
-        P = self.sample_uniform(p)
-        self.register_loss(f"on_seg_{p.val}",
-                          lambda: self.collinear(P, p1, p2), weight=50.0)
+        # Initialize near the midpoint to help convergence
+        init_x = (p1.x.detach().cpu().item() + p2.x.detach().cpu().item()) / 2
+        init_y = (p1.y.detach().cpu().item() + p2.y.detach().cpu().item()) / 2
+        P = self.sample_uniform(p, init_coords=(init_x, init_y))
+
+        # IMPORTANT: Must lie on the finite segment (not just the infinite line)
+        # `_point_on_segment_loss` already includes an on-line term and a strong
+        # penalty for t<0 or t>1.
+        self.register_loss(
+            f"on_seg_{p.val}",
+            lambda pt=P, a=p1, b=p2: self._point_on_segment_loss(pt, a, b),
+            weight=500.0,
+        )
         return P
 
     def parameter_on_line(self, p, line_points):
@@ -838,8 +941,8 @@ class Optimizer:
                 quadri_type = QuadrilateralType[param_type_str.upper()]
             except (KeyError, AttributeError):
                 quadri_type = QuadrilateralType.GENERAL
-            constraints = {'type': quadri_type}
-            self.sample_quadrilateral(objects, constraints)
+            # sample_quadrilateral expects a string type (e.g., 'rectangle', 'square', 'general')
+            self.sample_quadrilateral(objects, quad_type=str(quadri_type))
 
         logger.info(f"Processed quadrilateral type: {param_type_str}")
 
