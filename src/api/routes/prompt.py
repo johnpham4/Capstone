@@ -12,6 +12,14 @@ INSTRUCTION_PROMPT = """Chuyển đổi bài toán hình học tiếng Việt sa
 
    • Hình vuông: (square (A B C D))
    CHỈ khai báo (square ...), KHÔNG assert thuộc tính tự nhiên (cạnh bằng nhau, góc vuông, song song)
+   • Hình chữ nhật: (rectangle (A B C D))
+   CHỈ khai báo (rectangle ...), KHÔNG assert thuộc tính tự nhiên (cạnh bằng nhau, góc vuông, song song)
+   • Hình thang: (trapezoid (A B C D))
+   CHỈ khai báo (trapezoid ...), KHÔNG assert thuộc tính tự nhiên (cạnh bằng nhau, góc vuông, song song)
+   • Hình bình hành: (parallelogram (A B C D))
+   CHỈ khai báo (parallelogram ...), KHÔNG assert thuộc tính tự nhiên (cạnh bằng nhau, góc vuông, song song)
+   • Hình thoi: (rhombus (A B C D))
+   CHỈ khai báo (rhombus ...), KHÔNG assert thuộc tính tự nhiên (cạnh bằng nhau, góc vuông, song song)
 
 2. ĐIỂM (POINTS): (define <name> point <construction>)
    - (midpoint B C) - trung điểm
@@ -143,7 +151,7 @@ TRƯỜNG HỢP KHÁC:
    "Hình vuông ABCD nội tiếp đường tròn"
    → (square (A B C D))
 (define O point (midpoint A C))
-(circle O (circumcircle A B C D))
+(circle O (incircle A B C D))
 
 9. Tam giác với góc bằng nhau:
    "Tam giác ABC có góc BAD bằng góc CAD"

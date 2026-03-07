@@ -71,6 +71,10 @@ VỚI MỖI CẠNH ĐƯỢC NHẮC (ví dụ AC):
 1. HÌNH
    • (triangle (A B C)) / (triangle (A B C) (isosceles A)) / (triangle (A B C) (right B)) / (triangle (A B C) (equilateral))
    • (square (A B C D))
+   • (rectangle (A B C D))
+   • (trapezoid (A B C D))
+   • (parallelogram (A B C D))
+   • (rhombus (A B C D))
 
 2. ĐIỂM: (define <name> point <construction>)
    • Đặc biệt: (midpoint B C), (centroid A B C), (incenter A B C), (circumcenter A B C), (orthocenter A B C)
