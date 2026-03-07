@@ -26,7 +26,6 @@ class UserRepository(AbstractRepository[UserModel]):
             id=user.id,
             username=user.username,
             email=user.email,
-            full_name=user.full_name,
             hashed_password=user.hashed_password,
             disabled=user.disabled,
         )

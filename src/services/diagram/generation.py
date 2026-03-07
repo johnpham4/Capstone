@@ -7,7 +7,6 @@ from loguru import logger
 
 from src.config.settings.base import settings
 from src.infrastructures.celery.tasks import render_diagram_task
-from src.infrastructures.redis.cache import render_cache
 from src.services.mock_responses import MOCK_DSL
 
 
@@ -87,23 +86,11 @@ class DiagramService:
         dpi: int = 150,
         timeout: int = 30,
     ) -> dict:
-        # Check cache
-        cached_image = render_cache.get(dsl, epochs=epochs, dpi=dpi)
-        if cached_image is not None:
-            logger.info("Render cache HIT – skipping Celery render")
-            return {"image": cached_image, "status": "completed", "cache_hit": True}
-
         task = render_diagram_task.apply_async(
             args=[task_id, dsl],
             kwargs={"epochs": epochs, "n_tries": n_tries, "dpi": dpi},
         )
         result = task.get(timeout=timeout)
-
-        if isinstance(result, dict) and result.get("status") == "completed":
-            image = result.get("image")
-            if image:
-                render_cache.set(dsl, image, epochs=epochs, dpi=dpi)
-
         return result
 
     def generate_and_render(
@@ -189,25 +176,16 @@ class DiagramService:
             "dsl": dsl_output,
         }
 
-        # ── Check render cache first ────────────────────────
-        cached_image = render_cache.get(dsl_output, epochs=epochs, dpi=dpi)
-        if cached_image is not None:
-            logger.info("Render cache HIT in SSE stream")
-            image_data = cached_image
-        else:
-            render_result = await self.render_sync(
-                task_id=request_id,
-                dsl=dsl_output,
-                epochs=epochs,
-                n_tries=n_tries,
-                dpi=dpi,
-                timeout=30,
-            )
-            image_data = render_result.get("image") if isinstance(render_result, dict) else None
-
-            # Cache successful render
-            if image_data:
-                render_cache.set(dsl_output, image_data, epochs=epochs, dpi=dpi)
+        # ── Render diagram ─────────────────────────────────
+        render_result = await self.render_sync(
+            task_id=request_id,
+            dsl=dsl_output,
+            epochs=epochs,
+            n_tries=n_tries,
+            dpi=dpi,
+            timeout=30,
+        )
+        image_data = render_result.get("image") if isinstance(render_result, dict) else None
 
         yield {
             "progress": 100,

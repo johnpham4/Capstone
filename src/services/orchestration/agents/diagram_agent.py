@@ -9,7 +9,6 @@ class DiagramAgent:
         self.diagram_service = DiagramService()
 
     def execute(self, user_input: str, dsl_prompt: str, llm_mock: bool = False) -> dict:
-        """Generate DSL and trigger Celery task for CPU-intensive rendering"""
         try:
             return self.diagram_service.generate_and_render(
                 task_id=f"orchestrator_{id(self)}",
@@ -20,7 +19,7 @@ class DiagramAgent:
                 epochs=500,
                 n_tries=1,
                 dpi=150,
-                timeout=30,
+                timeout=60,
                 llm_mock=llm_mock,
             )
 

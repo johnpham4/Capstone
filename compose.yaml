@@ -64,14 +64,13 @@ services:
     networks:
       - geo
 
-  # ─── Databases ─────────────────────────────────────────────
   postgres:
     image: postgres:16-alpine
     container_name: geouni-postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: geouni_auth
+      POSTGRES_DB: capstone
     ports:
       - "5432:5432"
     volumes:
@@ -85,7 +84,6 @@ services:
     networks:
       - geo
 
-  # ─── Message Broker & Cache ────────────────────────────────
   rabbitmq:
     image: rabbitmq:3.13-management
     container_name: geouni-rabbitmq

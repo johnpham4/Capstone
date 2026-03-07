@@ -1,56 +1,33 @@
-import re
-from typing import Any
+from loguru import logger
+from langchain_core.output_parsers import PydanticOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI
+
+from src.config.settings.base import settings
+from src.models.dto.orchestration import RewriteResponse
+from src.prompts.rewriter import REWRITER_SYSTEM_PROMPT
 
 
-class ProblemParser:
-    def execute(self, user_input: str) -> dict[str, Any]:
-        normalized = (user_input or "").strip()
-        requirements = self._extract_requirements(normalized)
+class RewriterAgent:
+    def __init__(self) -> None:
+        self.llm = ChatOpenAI(
+            model=settings.OPENAI_MODEL_ID,
+            api_key=settings.OPENAI_API_KEY,
+            temperature=0,
+            max_tokens=256,
+            timeout=30,
+        )
+        self.parser = PydanticOutputParser(pydantic_object=RewriteResponse)
+        self.prompt = ChatPromptTemplate.from_messages([
+            ("system", REWRITER_SYSTEM_PROMPT),
+            ("human", "{user_input}"),
+        ]).partial(format_instructions=self.parser.get_format_instructions())
+        self.chain = self.prompt | self.llm | self.parser
 
-        return {
-            "status": "success",
-            "problem_statement": normalized,
-            "requirements": requirements,
-        }
-
-    def infer_intent(self, requirements: list[str]) -> str:
-        requirement_set = set(requirements)
-        has_diagram = "diagram" in requirement_set
-        has_solve = "solve" in requirement_set
-
-        if has_diagram and has_solve:
-            return "BOTH"
-        if has_diagram:
-            return "DIAGRAM_ONLY"
-        if has_solve:
-            return "SOLVE_ONLY"
-        return "UNCLEAR"
-
-    def _extract_requirements(self, user_input: str) -> list[str]:
-        text = user_input.lower()
-
-        diagram_patterns = [
-            r"\bvẽ\b",
-            r"\bhình\b",
-            r"\bdiagram\b",
-            r"\bvisual\b",
-            r"\bminh họa\b",
-        ]
-        solve_patterns = [
-            r"\bgiải\b",
-            r"\btính\b",
-            r"\bchứng minh\b",
-            r"\bfind\b",
-            r"\bsolve\b",
-        ]
-
-        requirements: list[str] = []
-        if any(re.search(pattern, text) for pattern in diagram_patterns):
-            requirements.append("diagram")
-        if any(re.search(pattern, text) for pattern in solve_patterns):
-            requirements.append("solve")
-
-        if not requirements:
-            requirements = ["diagram", "solve"]
-
-        return requirements
+    def execute(self, user_input: str) -> RewriteResponse:
+        user_input = (user_input or "").strip()
+        try:
+            return self.chain.invoke({"user_input": user_input})
+        except Exception as e:
+            logger.warning(f"RewriterAgent LLM failed, using fallback: {e}")
+            return RewriteResponse(problem_statement=user_input, mode="diagram")

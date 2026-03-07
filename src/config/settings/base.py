@@ -3,13 +3,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="allow")
 
-    DATABASE_NAME: str = "unigeo"
-
     POSTGRES_USER: str = "postgres"
     POSTGRES_PASSWORD: str = "postgres"
     POSTGRES_HOST: str = "localhost"
     POSTGRES_PORT: int = 5432
-    POSTGRES_DB: str = "geouni_auth"
+    POSTGRES_DB: str = "capstone"
 
     @property
     def DATABASE_URL(self) -> str:

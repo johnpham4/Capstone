@@ -16,11 +16,10 @@ async def seed_demo_user():
         await repo.create({
             "username": "johndoe",
             "email": "johndoe@example.com",
-            "full_name": "John Doe",
             "hashed_password": get_password_hash("secret"),
             "disabled": False,
         })
-        print("✅ Demo user created: username=johndoe, password=secret")
+        print("Demo user created: username=johndoe, password=secret")
 
 async def main():
     from src.infrastructures.database.session import init_db

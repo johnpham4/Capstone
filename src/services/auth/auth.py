@@ -1,9 +1,11 @@
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 
+import jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.config.settings.base import settings
 from src.core.security import verify_password, get_password_hash, create_access_token
+from src.infrastructures.redis.cache import token_blacklist
 from src.models.dto.auth import Token
 from src.models.dto.user import User, UserInDB, UserCreate
 from src.repositories.user import UserRepository
@@ -55,17 +57,37 @@ class AuthService:
         user_model = await self._repo.create({
             "username": data.username,
             "email": data.email,
-            "full_name": data.full_name,
             "hashed_password": get_password_hash(data.password),
             "disabled": False,
         })
 
         return User(
+            id=user_model.id,
             username=user_model.username,
             email=user_model.email,
-            full_name=user_model.full_name,
             disabled=user_model.disabled,
         )
+
+    async def logout(self, token: str) -> None:
+        """Thu hồi JWT token bằng cách đưa jti vào Redis blacklist.
+
+        TTL của entry bằng đúng thời gian còn lại của token để tránh
+        Redis giữ rác sau khi token đã tự hết hạn.
+        """
+        try:
+            payload = jwt.decode(
+                token,
+                settings.JWT_SECRET_KEY,
+                algorithms=[settings.JWT_ALGORITHM],
+            )
+            jti: str | None = payload.get("jti")
+            exp: int | None = payload.get("exp")
+            if jti and exp:
+                ttl = int(exp - datetime.now(timezone.utc).timestamp())
+                await token_blacklist.revoke(jti, ttl)
+        except jwt.PyJWTError:
+            # Token đã invalid/hết hạn → không cần blacklist
+            pass
 
     async def authenticate(self, username: str, password: str) -> UserInDB | None:
         """Xác thực username + password, trả UserInDB hoặc None.

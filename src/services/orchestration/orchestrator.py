@@ -1,20 +1,21 @@
 import asyncio
-from typing import Literal
+from collections.abc import AsyncGenerator
+from typing import Any, Literal
 from typing_extensions import TypedDict
 
 from langgraph.graph import StateGraph, END
+from loguru import logger
 
-from .agents import DiagramAgent, SolverAgent, ProblemParser
+from .agents import DiagramAgent, SolverAgent, RewriterAgent
 
 
-Mode = Literal["auto", "diagram", "solve", "both"]
-Intent = Literal["DIAGRAM_ONLY", "SOLVE_ONLY", "BOTH", "UNCLEAR"]
+Mode = Literal["diagram", "both"]
 
 
 class OrchestratorState(TypedDict):
     user_input: str
     mode: Mode
-    resolved_mode: Literal["diagram", "solve", "both"]
+    resolved_mode: Mode
     parsed: dict
     problem_statement: str
     diagram: dict
@@ -26,7 +27,7 @@ class Orchestrator:
         self.diagram_prompt = diagram_prompt
         self.diagram_agent = DiagramAgent()
         self.solver_agent = SolverAgent()
-        self.parser = ProblemParser()
+        self.rewriter = RewriterAgent()
         self.workflow = self._build_workflow()
 
     def _build_workflow(self):
@@ -41,7 +42,6 @@ class Orchestrator:
             self._route_from_parse,
             {
                 "diagram": "diagram",
-                "solve": "solve",
                 "both": "diagram",
             },
         )
@@ -57,25 +57,20 @@ class Orchestrator:
         return workflow.compile()
 
     def _parse_node(self, state: OrchestratorState) -> OrchestratorState:
-        parsed = self.parser.execute(state["user_input"])
-        problem_statement = parsed.get("problem_statement") or state["user_input"]
-
-        resolved_mode = state["mode"]
-        if state["mode"] == "auto":
-            intent: Intent = self.parser.infer_intent(parsed.get("requirements", []))
-            resolved_mode = self._intent_to_mode(intent)
+        result = self.rewriter.execute(user_input=state["user_input"])
+        problem_statement = result.problem_statement or state["user_input"]
 
         state["parsed"] = {
             "problem_statement": problem_statement,
-            "requirements": parsed.get("requirements", []),
-            "status": parsed.get("status", "success"),
+            "mode": result.mode,
+            "status": "success",
         }
         state["problem_statement"] = problem_statement
-        state["resolved_mode"] = resolved_mode
+        state["resolved_mode"] = result.mode
         return state
 
     @staticmethod
-    def _route_from_parse(state: OrchestratorState) -> Literal["diagram", "solve", "both"]:
+    def _route_from_parse(state: OrchestratorState) -> str:
         return state["resolved_mode"]
 
     def _diagram_node(self, state: OrchestratorState) -> OrchestratorState:
@@ -91,11 +86,16 @@ class Orchestrator:
         state["solution"] = self.solver_agent.execute(solve_input)
         return state
 
-    async def execute(self, user_input: str, mode: Mode = "auto", llm_mock: bool = False) -> dict:
+    async def execute(
+        self,
+        user_input: str,
+        mode: Mode = "diagram",
+        llm_mock: bool = False,
+    ) -> dict:
         initial_state: OrchestratorState = {
             "user_input": user_input,
             "mode": mode,
-            "resolved_mode": "both",
+            "resolved_mode": "diagram",
             "parsed": {},
             "problem_statement": "",
             "diagram": {},
@@ -116,10 +116,83 @@ class Orchestrator:
 
         return result
 
-    @staticmethod
-    def _intent_to_mode(intent: Intent) -> Literal["diagram", "solve", "both"]:
-        if intent == "DIAGRAM_ONLY":
-            return "diagram"
-        if intent == "SOLVE_ONLY":
-            return "solve"
-        return "both"
+
+    async def stream_execute(
+        self,
+        user_input: str,
+        mode: Mode = "diagram",
+        llm_mock: bool = False,
+    ) -> AsyncGenerator[dict[str, Any], None]:
+
+        try:
+            result = await asyncio.to_thread(
+                self.rewriter.execute, user_input,
+            )
+            problem = result.problem_statement or user_input
+            resolved_mode = result.mode if mode == "diagram" or mode == "both" else result.mode
+            resolved_mode = result.mode
+        except Exception as e:
+            logger.error(f"Rewriter failed: {e}")
+            yield {"event": "error", "stage": "rewrite", "error": str(e)}
+            return
+
+        yield {
+            "event": "rewrite",
+            "problem_statement": problem,
+            "mode": resolved_mode,
+        }
+
+        diagram_result: dict = {}
+
+        yield {"event": "diagram", "status": "generating_dsl"}
+
+        try:
+            diagram_result = await asyncio.to_thread(
+                self.diagram_agent.execute,
+                problem,
+                self.diagram_prompt,
+                llm_mock,
+            )
+        except Exception as e:
+            logger.error(f"Diagram failed: {e}")
+            diagram_result = {"error": str(e), "status": "failed"}
+
+        if diagram_result.get("status") == "failed":
+            yield {"event": "diagram", "status": "failed", "error": diagram_result.get("error", "unknown")}
+        else:
+            yield {
+                "event": "diagram",
+                "status": "completed",
+                "dsl": diagram_result.get("dsl"),
+                "image_base64": diagram_result.get("image"),
+            }
+
+        if resolved_mode == "both":
+            yield {"event": "solver", "status": "generating"}
+
+            solve_input = problem
+            dsl = diagram_result.get("dsl")
+            if dsl:
+                solve_input += f"\n\n[Diagram DSL: {dsl}]"
+
+            full_solution: list[str] = []
+            try:
+                for token in self.solver_agent.stream_solve(solve_input):
+                    full_solution.append(token)
+                    yield {"event": "solver", "status": "streaming", "chunk": token}
+
+                yield {
+                    "event": "solver",
+                    "status": "completed",
+                    "solution": "".join(full_solution),
+                }
+            except Exception as e:
+                logger.error(f"Solver streaming failed: {e}")
+                yield {"event": "solver", "status": "failed", "error": str(e)}
+
+        yield {
+            "event": "done",
+            "mode": resolved_mode,
+            "has_diagram": diagram_result.get("status") != "failed",
+            "has_solution": resolved_mode == "both",
+        }

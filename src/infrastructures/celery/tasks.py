@@ -2,7 +2,7 @@ from loguru import logger
 from src.infrastructures.celery.config import celery_app
 
 
-@celery_app.task(bind=True, name="render_diagram")
+@celery_app.task(bind=True, name="render_diagram", store_errors_even_if_ignored=True)
 def render_diagram_task(self, task_id: str, dsl: str, epochs: int = 500, n_tries: int = 1, dpi: int = 150):
     """Worker task: Render diagram from DSL (CPU-intensive)"""
     logger.info(f"[Worker] Rendering diagram for task {task_id}")

@@ -10,7 +10,6 @@ class SolutionRepository(AbstractRepository[SolutionModel]):
     model = SolutionModel
 
     async def get_by_request_id(self, request_id: str) -> SolutionModel | None:
-        """Tìm solution theo request_id (1-1 relationship)."""
         stmt = select(SolutionModel).where(
             SolutionModel.request_id == request_id
         )

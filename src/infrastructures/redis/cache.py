@@ -1,87 +1,36 @@
-import hashlib
-import json
-from typing import Optional
-
-import redis
+import redis.asyncio as aioredis
 from loguru import logger
 
-from src.config.settings.base import settings
+from src.infrastructures.redis.connection import RedisConnector
 
 
-class RenderCache:
-    _PREFIX = "render:cache:"
-    _DEFAULT_TTL = 60 * 60 * 24 * 7  # 7 days — images are deterministic
+class TokenBlacklist:
+    _PREFIX = "token:blacklist:"
 
-    def __init__(self, ttl: int = _DEFAULT_TTL):
-        self.ttl = ttl
-        try:
-            self._client = redis.Redis.from_url(
-                settings.REDIS_URL,
-                decode_responses=True,
-                socket_connect_timeout=3,
-            )
-            self._client.ping()
-            self._available = True
-            logger.info("Render cache connected to Redis")
-        except (redis.ConnectionError, redis.TimeoutError) as exc:
-            logger.warning(f"Redis unavailable – render cache disabled: {exc}")
-            self._available = False
+    @staticmethod
+    async def _client() -> aioredis.Redis | None:
+        return await RedisConnector.get()
 
-    def get(self, dsl: str, **kwargs) -> Optional[str]:
-        if not self._available:
-            return None
-        key = self._make_key(dsl, **kwargs)
-        try:
-            cached = self._client.get(key)
-            if cached is not None:
-                logger.debug(f"Render cache HIT  [{key[:40]}…]")
-                return cached
-            logger.debug(f"Render cache MISS [{key[:40]}…]")
-            return None
-        except redis.RedisError as exc:
-            logger.warning(f"Redis read error – skipping cache: {exc}")
-            return None
-
-    def set(self, dsl: str, image_base64: str, **kwargs) -> None:
-        """Store rendered image_base64 keyed by DSL."""
-        if not self._available:
+    async def revoke(self, jti: str, ttl_seconds: int) -> None:
+        client = await self._client()
+        if client is None or ttl_seconds <= 0:
             return
-        key = self._make_key(dsl, **kwargs)
         try:
-            self._client.setex(key, self.ttl, image_base64)
-            logger.debug(f"Render cache SET  [{key[:40]}…]  ttl={self.ttl}s")
-        except redis.RedisError as exc:
-            logger.warning(f"Redis write error – image not cached: {exc}")
+            await client.setex(f"{self._PREFIX}{jti}", ttl_seconds, "1")
+            logger.debug(f"Token revoked: jti={jti} ttl={ttl_seconds}s")
+        except aioredis.RedisError as exc:
+            logger.warning(f"Redis write error – token not blacklisted: {exc}")
 
-    def invalidate(self, dsl: str, **kwargs) -> None:
-        if not self._available:
-            return
-        key = self._make_key(dsl, **kwargs)
+    async def is_revoked(self, jti: str) -> bool:
+        client = await self._client()
+        if client is None:
+            return False
         try:
-            self._client.delete(key)
-        except redis.RedisError:
-            pass
-
-    def flush_all(self) -> int:
-        """Delete all render cache entries.  Returns count deleted."""
-        if not self._available:
-            return 0
-        try:
-            keys = self._client.keys(f"{self._PREFIX}*")
-            if keys:
-                return self._client.delete(*keys)
-            return 0
-        except redis.RedisError:
-            return 0
-
-    @classmethod
-    def _make_key(cls, dsl: str, **kwargs) -> str:
-        """Deterministic cache key: hash(normalised_dsl + render params)."""
-        normalised = dsl.strip()
-        raw = json.dumps({"dsl": normalised, **kwargs}, sort_keys=True)
-        digest = hashlib.sha256(raw.encode()).hexdigest()[:32]
-        return f"{cls._PREFIX}{digest}"
+            return await client.exists(f"{self._PREFIX}{jti}") == 1
+        except aioredis.RedisError as exc:
+            logger.warning(f"Redis read error – assuming token valid: {exc}")
+            return False
 
 
 # Singleton
-render_cache = RenderCache()
+token_blacklist = TokenBlacklist()

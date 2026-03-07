@@ -13,8 +13,6 @@ class AppError(Exception):
         super().__init__(message)
 
 
-# ── 4xx Client errors ────────────────────────────────────────────────
-
 class ValidationError(AppError):
     """Input validation failed (400)."""
 
@@ -42,7 +40,6 @@ class ForbiddenError(AppError):
 
 class RateLimitError(AppError):
     """Too many requests (429)."""
-
     def __init__(self, message: str = "Rate limit exceeded") -> None:
         super().__init__(message, status_code=429, error_code="RATE_LIMITED")
 

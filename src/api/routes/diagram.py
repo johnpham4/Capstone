@@ -8,7 +8,7 @@ from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dependencies.auth import get_current_user
-from src.api.middleware.rate_limiter import rate_limit_diagram
+from src.api.dependencies.rate_limiter import rate_limit_diagram
 from src.infrastructures.database.session import get_db
 from src.models.dto.user import User
 from src.prompts import DSL_INFERENCE_INSTRUCTION
@@ -18,19 +18,6 @@ from src.services.history import HistoryService
 
 router = APIRouter()
 diagram_service = DiagramService()
-
-
-@router.options("/api/v1/diagrams/stream-pipeline")
-async def stream_pipeline_options():
-    """Handle CORS preflight request for SSE endpoint."""
-    return Response(
-        status_code=200,
-        headers={
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Accept, ngrok-skip-browser-warning",
-        }
-    )
 
 
 @router.get("/api/v1/diagrams/stream-pipeline")
@@ -83,7 +70,6 @@ async def stream_pipeline(
                     request_id=record.id,
                     dsl=collected_dsl,
                     image_base64=collected_image,
-                    model_used="sagemaker",
                     generation_time_ms=latency_ms,
                 )
             await history.complete_request(record.id, latency_ms=latency_ms)

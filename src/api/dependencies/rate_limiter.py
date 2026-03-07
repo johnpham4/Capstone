@@ -1,4 +1,3 @@
-
 import time
 
 from fastapi import Depends, Request
@@ -7,14 +6,11 @@ from typing import Annotated
 
 from src.api.dependencies.auth import get_current_user
 from src.api.exceptions import RateLimitError
+from src.infrastructures.redis.connection import RedisConnector
 from src.models.dto.user import User
 
 
 class RateLimiter:
-    """Sliding-window rate limiter backed by Redis sorted sets.
-
-    Falls back to no-op if Redis is unavailable (graceful degradation).
-    """
 
     def __init__(self, max_requests: int = 10, window_seconds: int = 60) -> None:
         self.max_requests = max_requests
@@ -27,29 +23,22 @@ class RateLimiter:
     ) -> None:
         """FastAPI Depends entry point — raises RateLimitError if exceeded."""
         try:
-            import redis.asyncio as aioredis
-            from src.config.settings.base import settings
-
-            client = aioredis.from_url(settings.REDIS_URL, decode_responses=True)
+            client = await RedisConnector.get()
+            if client is None:
+                return  # Redis down → degrade gracefully
 
             key = f"rate_limit:{current_user.username}:{request.url.path}"
             now = time.time()
             window_start = now - self.window_seconds
 
             pipe = client.pipeline()
-            # Remove expired entries
-            pipe.zremrangebyscore(key, 0, window_start)
-            # Count remaining entries in the window
-            pipe.zcard(key)
-            # Add current request
-            pipe.zadd(key, {str(now): now})
-            # Set TTL so keys auto-expire
-            pipe.expire(key, self.window_seconds + 1)
+            pipe.zremrangebyscore(key, 0, window_start)   # Remove expired entries
+            pipe.zcard(key)                                 # Count in window
+            pipe.zadd(key, {str(now): now})                 # Add current request
+            pipe.expire(key, self.window_seconds + 1)       # Auto-expire key
             results = await pipe.execute()
 
             request_count = results[1]  # zcard result
-
-            await client.aclose()
 
             if request_count >= self.max_requests:
                 raise RateLimitError(

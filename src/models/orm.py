@@ -16,8 +16,6 @@ from src.infrastructures.database.base import Base
 
 
 class TimestampMixin:
-    """Mixin thêm created_at / updated_at tự động cho mọi table."""
-
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -45,7 +43,6 @@ class UserModel(Base, TimestampMixin):
         String(50), unique=True, index=True, nullable=False
     )
     email: Mapped[str] = mapped_column(String(255), nullable=False)
-    full_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
     hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
     disabled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
@@ -64,12 +61,8 @@ class RequestModel(Base, TimestampMixin):
         String(36), ForeignKey("users.id", ondelete="SET NULL"), nullable=True
     )
     input_text: Mapped[str] = mapped_column(Text, nullable=False)
-    mode: Mapped[str] = mapped_column(
-        String(20), nullable=False, default="auto"
-    )  # auto / diagram / solve / both
-    status: Mapped[str] = mapped_column(
-        String(20), nullable=False, default="pending"
-    )  # pending / processing / completed / failed
+    mode: Mapped[str] = mapped_column(String(20), nullable=False, default="auto")  # auto / diagram / solve / both
+    status: Mapped[str] = mapped_column(String(20), nullable=False, default="pending")  # pending / processing / completed / failed
     latency_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
     # Relationships
@@ -96,12 +89,8 @@ class DiagramModel(Base, TimestampMixin):
     )
     dsl: Mapped[str] = mapped_column(Text, nullable=False)
     image_base64: Mapped[str | None] = mapped_column(Text, nullable=True)
-    model_used: Mapped[str | None] = mapped_column(String(100), nullable=True)
     generation_time_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
     render_time_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    cache_hit: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
-
-    # Relationships
     request: Mapped["RequestModel"] = relationship(back_populates="diagram")
 
 
@@ -118,9 +107,4 @@ class SolutionModel(Base, TimestampMixin):
         nullable=False,
     )
     content: Mapped[str] = mapped_column(Text, nullable=False)
-    model_used: Mapped[str | None] = mapped_column(String(100), nullable=True)
-    token_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    generation_time_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    cache_hit: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
-
     request: Mapped["RequestModel"] = relationship(back_populates="solution")

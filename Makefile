@@ -61,18 +61,18 @@ test_load:
 	wrk -t3 -c3 -d60s --timeout 180s -s post.lua \
 		http://localhost:8000/api/v1/diagrams/render
 
-# ─── Docker ──────────────────────────────────────────────────
 docker_up:
 	docker compose up -d
 
-docker_up_build:
-	docker compose up -d --build
-
-docker_down:
-	docker compose down
-
-docker_logs:
-	docker compose logs -f api worker
-
 docker_infra:
 	docker compose up -d postgres rabbitmq redis
+
+migrate:
+	uv run alembic revision --autogenerate -m "upgrade tables" && \
+	uv run alembic upgrade head
+
+
+mock:
+	curl -X POST https://victoria-communicable-sometimes.ngrok-free.dev/generate \
+	-H "Content-Type: application/json" \
+	-d '{"prompt":"Cho tam giác ABC vuông tại A, có góc B bằng 30 độ"}'

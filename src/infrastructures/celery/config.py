@@ -21,4 +21,6 @@ celery_app.conf.update(
     result_expires=3600,
     task_acks_late=True,
     worker_pool="prefork",
+    worker_redirect_stdouts_level="WARNING",
+    result_extended=False,
 )

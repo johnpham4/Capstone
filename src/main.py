@@ -5,9 +5,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 
 from src.api.endpoints import register_routes
-from src.api.middleware.error_handler import register_error_handlers
+from src.api.error_handler import register_error_handlers
 from src.config.settings.base import settings
 from src.infrastructures.database.session import init_db
+from src.infrastructures.redis.connection import RedisConnector
 
 
 @asynccontextmanager
@@ -17,6 +18,7 @@ async def lifespan(app: FastAPI):
         await init_db()
         logger.info("Database initialized successfully")
     yield
+    await RedisConnector.close()
     logger.info("Application shutdown")
 
 app = FastAPI(
@@ -40,33 +42,8 @@ app.add_middleware(
 
 # Register all API routes
 register_routes(app)
-
-# Register global error handlers (AppError, validation, unhandled)
 register_error_handlers(app)
 
-logger.info("GeoUni Backend Application initialized")
-
-
-@app.get("/")
-async def root():
-    """Root endpoint with API information."""
-    return {
-        "service": "GeoUni Backend API",
-        "version": "2.0.0",
-        "architecture": "Layered Architecture",
-        "docs": "/docs",
-        "health": "/health"
-    }
-
-
-@app.get("/health")
-async def health():
-    """Global health check endpoint."""
-    return {
-        "status": "healthy",
-        "service": "GeoUni Backend",
-        "version": "2.0.0"
-    }
 
 
 if __name__ == "__main__":
