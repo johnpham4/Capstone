@@ -5,7 +5,7 @@ from steps.data_prep import (
     download_synthgeo_dataset,
     translate_captions_to_vietnamese,
     save_prepared_dataset,
-    filter_triangle
+    #filter_triangle
 )
 
 @pipeline
@@ -17,10 +17,10 @@ def data_preparation_pipeline(
 ):
     local_dir = "./dataset/data"
     output_dir = "./dataset/data"
-    output_filename = "diagrams_filter.json"
+    output_filename = "diagrams.json"
     logger.info("Starting data preparation pipeline")
 
-    diagram_texts = download_synthgeo_dataset(
+    diagram_texts, start_index = download_synthgeo_dataset(
         repo_id=repo_id,
         text_filename=text_filename,
         split=split,
@@ -34,6 +34,7 @@ def data_preparation_pipeline(
 
     output_path = save_prepared_dataset(
         diagram_texts=diagram_texts_translated,
+        start_index=start_index,
         output_dir=output_dir,
         output_filename=output_filename,
         image_split=split,
@@ -41,6 +42,6 @@ def data_preparation_pipeline(
     )
     logger.success(f"Data preparation pipeline completed. Dataset saved to: {output_path}")
 
-    filter_triangle(diagram_texts=diagram_texts_translated, output_dir=output_dir)
+    #filter_triangle(diagram_texts=diagram_texts_translated, output_dir=output_dir)
 
     return output_path

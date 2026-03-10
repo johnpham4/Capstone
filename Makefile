@@ -12,6 +12,10 @@ zenml_status:
 data:
 	PYTHONPATH=. uv run python -m tools.run --run-prepare-data --no-cache
 
+data_and_split:
+	PYTHONPATH=. uv run python -m tools.run --run-prepare-data --no-cache
+	PYTHONPATH=. uv run python split_dataset.py
+
 generation:
 	PYTHONPATH=. uv run python tools/run.py --run-generate-gmbl --no-cache
 
