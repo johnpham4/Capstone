@@ -108,3 +108,15 @@ class SolutionModel(Base, TimestampMixin):
     )
     content: Mapped[str] = mapped_column(Text, nullable=False)
     request: Mapped["RequestModel"] = relationship(back_populates="solution")
+
+
+class RegistryModel(Base, TimestampMixin):
+    __table__ = "registry"
+
+    id: Mapped[str] = mapped_column(
+        String(36), primary_key=True, default=_generate_uuid
+    )
+    name_hf: Mapped[str] = mapped_column()
+    version: Mapped[int] = mapped_column()
+    alias: Mapped[str] = mapped_column()
+    prompt: Mapped[str] = mapped_column()

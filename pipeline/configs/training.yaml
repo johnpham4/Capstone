@@ -4,5 +4,9 @@ parameters:
   learning_rate: 2.0e-4
   dataset_huggingface_workspace: "minn4"
   dataset_huggingface_repo_name: "text2dsl"
+  model_name: str,
+  prompt: str,
+  version: str,
+  alias: str = ""
 
 

@@ -17,17 +17,6 @@ class AuthService:
         self._repo = UserRepository(db)
 
     async def login(self, username: str, password: str) -> Token:
-        """Xác thực user, trả JWT token.
-
-        Flow:
-            1. Tìm user trong DB theo username
-            2. So sánh password (argon2 hash)
-            3. Nếu đúng → tạo JWT token chứa username + thời hạn
-            4. Trả Token object
-
-        Raises:
-            ValueError: Sai username hoặc password.
-        """
         user = await self.authenticate(username, password)
         if not user:
             raise ValueError("Incorrect username or password")
@@ -39,17 +28,6 @@ class AuthService:
         return Token(access_token=access_token, token_type="bearer")
 
     async def register(self, data: UserCreate) -> User:
-        """Tạo user mới.
-
-        Flow:
-            1. Check username đã tồn tại chưa
-            2. Hash password (argon2)
-            3. Lưu vào DB
-            4. Trả User schema (không có password)
-
-        Raises:
-            ValueError: Username đã tồn tại.
-        """
         existing = await self._repo.get_by_username(data.username)
         if existing:
             raise ValueError("Username already registered")
@@ -69,11 +47,6 @@ class AuthService:
         )
 
     async def logout(self, token: str) -> None:
-        """Thu hồi JWT token bằng cách đưa jti vào Redis blacklist.
-
-        TTL của entry bằng đúng thời gian còn lại của token để tránh
-        Redis giữ rác sau khi token đã tự hết hạn.
-        """
         try:
             payload = jwt.decode(
                 token,
@@ -90,10 +63,6 @@ class AuthService:
             pass
 
     async def authenticate(self, username: str, password: str) -> UserInDB | None:
-        """Xác thực username + password, trả UserInDB hoặc None.
-
-        Dùng bởi: login(), và có thể dùng bởi bất kỳ flow nào cần verify credentials.
-        """
         user = await self.get_user_by_username(username)
         if user is None:
             return None
@@ -102,7 +71,6 @@ class AuthService:
         return user
 
     async def get_user_by_username(self, username: str) -> UserInDB | None:
-        """Tìm user theo username, trả Pydantic schema."""
         user_model = await self._repo.get_by_username(username)
         if user_model is None:
             return None

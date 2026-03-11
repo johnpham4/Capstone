@@ -32,7 +32,6 @@ def load_model(
         load_in_4bit=load_in_4bit,
     )
 
-
     # Add LoRA adapters
     model = FastLanguageModel.get_peft_model(
         model,
