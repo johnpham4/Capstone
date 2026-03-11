@@ -1,3 +1,0 @@
-# ví dụ:
-# ngrok_token_that_was_leaked==>REMOVED_NGROK_TOKEN
-# hf_token_that_was_leaked==>REMOVED_HF_TOKEN
