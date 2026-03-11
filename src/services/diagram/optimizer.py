@@ -1,17 +1,23 @@
+from networkx import center
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import random
 from loguru import logger
+from collections import namedtuple
 import math
+import traceback
 
-from src.services.diagram.models.instructions import Parameter, Assertion
-from src.services.diagram.models.value_objects import Point
-from src.services.diagram.models.types import QuadrilateralType, TriangleType, DiagramType
+
+from src.models.domain.geometry.instructions import Parameter, Assertion
+from src.models.domain.geometry.value_objects import Point, Line
+from src.models.domain.geometry.entities import GeometricPoint, Diagram
+from src.models.domain.geometry.types import QuadrilateralType, TriangleType, DiagramType
 from src.services.diagram.initializer import Initializer
-from src.services.diagram import geometry as geo
-from src.services.diagram.geometry import TorchPoint
-from src.services.diagram.converter import build_diagram
+
+TorchPoint = namedtuple("TorchPoint", ["x", "y"])
+LineSF = namedtuple("LineSF", ["a", "b", "c", "p1", "p2"])
+LineNF = namedtuple("LineNF", ["n", "f"])
 
 class Optimizer:
     def __init__(self, instructions, opts, verbosity=False):
@@ -20,8 +26,9 @@ class Optimizer:
         self.verbosity = verbosity
         self._init_state()  # Initialize all state variables
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
+        
     def _init_state(self):
+        """Reset state for new optimization attempt"""
         self.name2pt = {}
         self.name2line = {}
         self.all_points = []
@@ -30,12 +37,15 @@ class Optimizer:
         self.ndgs = {}
         self.triangles_metadata = {}
         self.circles = []
+        self.quadrilaterals = []
         self.quadrilaterals_metadata = {}
         self.segments = []
         self.lines = []
+        self.line_objects = {}
         self.angle_equal_assertions = []
-        self.angle_measures = []
-        self.angle_bisectors_metadata = []
+        self.angle_measures = []  # Store angles with measure values: [(vertex, p1, p2, degrees)]
+        self.perpendiculars = []  # Store perpendicular segments for rendering
+        self.unnamed_point_counter = 0
         self.has_loss = False
         self.trainable_vars = []
 
@@ -55,8 +65,125 @@ class Optimizer:
         self.trainable_vars.append(param)
         return param.squeeze()
 
+    def generate_unnamed_point_name(self):
+        """Generate sequential unnamed point names: P, P1, P2, P3..."""
+        if self.unnamed_point_counter == 0:
+            name = "P"
+        else:
+            name = f"P{self.unnamed_point_counter}"
+        self.unnamed_point_counter += 1
+        return name
+
     def const(self, x):
         return torch.tensor(x, dtype=torch.float64, device=self.device)
+
+    def dist(self, p1: TorchPoint, p2: TorchPoint):
+        dx = p1.x - p2.x
+        dy = p1.y - p2.y
+        return torch.sqrt(dx**2 + dy**2)
+
+    def norm(self, p: TorchPoint):
+        return torch.sqrt(p.x**2 + p.y**2)
+
+    def _vector_from_points(self, pa: TorchPoint, pb: TorchPoint):
+        """Calculate vector from pb to pa: (pa - pb)"""
+        return (pa.x - pb.x, pa.y - pb.y)
+
+    def _vector_length(self, vx, vy):
+        """Calculate length of vector (vx, vy)"""
+        return torch.sqrt(vx**2 + vy**2 + 1e-8)
+
+    def pp2lnf(self, p1: TorchPoint, p2: TorchPoint):
+        # Direction vector
+        dx = p2.x - p1.x
+        dy = p2.y - p1.y
+
+        # Normal vector (perpendicular)
+        n_x = -dy
+        n_y = dx
+
+        # Normalize
+        n_norm = torch.sqrt(n_x**2 + n_y**2)
+        n_x = n_x / n_norm
+        n_y = n_y / n_norm
+
+        # Make sure normal points to upper half-plane
+        if n_y < 0:
+            n_x = -n_x
+            n_y = -n_y
+
+        # Distance from origin
+        r = n_x * p1.x + n_y * p1.y
+
+        n = self.get_point(n_x, n_y)
+        return LineNF(n, r)
+
+    def on_line(self, p: TorchPoint, line: LineNF):
+        # line in normal form: n · p - f = 0
+        return line.n.x * p.x + line.n.y * p.y - line.f
+
+    def _point_on_segment_loss(self, point: TorchPoint, p1: TorchPoint, p2: TorchPoint):
+        """Loss for point lying on segment p1-p2 (between p1 and p2)"""
+        line = self.pp2lnf(p1, p2)
+        on_line_loss = self.on_line(point, line)**2
+
+        # Point between p1 and p2: point = p1 + t*(p2-p1) with 0 <= t <= 1
+        vec_x = p2.x - p1.x
+        vec_y = p2.y - p1.y
+        point_x = point.x - p1.x
+        point_y = point.y - p1.y
+
+        vec_len_sq = vec_x**2 + vec_y**2 + 1e-8
+        t = (point_x * vec_x + point_y * vec_y) / vec_len_sq
+
+        # Strong penalty if t < 0 or t > 1 to keep point strictly between endpoints
+        between_penalty = torch.relu(-t) + torch.relu(t - 1)
+
+        return 100.0 * on_line_loss + 50.0 * between_penalty
+
+    def _angle_bisector_equal_loss(self, p_vertex: TorchPoint, p1: TorchPoint, p2: TorchPoint, p_bisector: TorchPoint):
+        """Loss for angle bisector: angle(p1, vertex, bisector) = angle(p2, vertex, bisector)"""
+        cos1 = self.angle_cosine(p1, p_vertex, p_bisector)
+        cos2 = self.angle_cosine(p2, p_vertex, p_bisector)
+        return (cos1 - cos2)**2
+
+    def _angle_bisector_ratio_loss(self, p_vertex: TorchPoint, p1: TorchPoint, p2: TorchPoint, p_bisector: TorchPoint):
+        """Loss for angle bisector theorem"""
+        # BD/DA = BC/AC (angle bisector theorem)
+        ratio_bd_da = self.segment_ratio(p1, p_bisector, p_bisector, p2)
+        ratio_bc_ac = self.segment_ratio(p_vertex, p1, p_vertex, p2)
+        return (ratio_bd_da - ratio_bc_ac)**2
+    
+    def _angle_diff_loss(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint,
+                                          p4: TorchPoint, p5: TorchPoint, p6: TorchPoint):
+        """Calculate squared difference between two angles: (cos(p1-p2-p3) - cos(p4-p5-p6))^2."""
+        cos1 = self.angle_cosine(p1, p2, p3)
+        cos2 = self.angle_cosine(p4, p5, p6)
+        return (cos1 - cos2)**2
+
+    def _triangle_angle_difference_loss(self, pts: list, idx1: int, idx2: int):
+        """Calculate difference between two angles in a triangle at given indices."""
+        v1_prev = pts[(idx1-1)%3]
+        v1_curr = pts[idx1]
+        v1_next = pts[(idx1+1)%3]
+
+        v2_prev = pts[(idx2-1)%3]
+        v2_curr = pts[idx2]
+        v2_next = pts[(idx2+1)%3]
+
+        cos1 = self.angle_cosine(v1_prev, v1_curr, v1_next)
+        cos2 = self.angle_cosine(v2_prev, v2_curr, v2_next)
+        return cos1 - cos2
+
+    def dist_to_line(self, point: TorchPoint, p1: TorchPoint, p2: TorchPoint):
+        """Distance from point to line defined by p1, p2"""
+        line = self.pp2lnf(p1, p2)
+        return torch.abs(self.on_line(point, line))
+
+    def centroid_loss(self, centroid: TorchPoint, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
+        expected_x = (p1.x + p2.x + p3.x) / 3
+        expected_y = (p1.y + p2.y + p3.y) / 3
+        return (centroid.x - expected_x)**2 + (centroid.y - expected_y)**2
 
     def register_pt(self, p: TorchPoint, P, save_name=True):
         if save_name:
@@ -97,7 +224,74 @@ class Optimizer:
         P = self.get_point(x, y)
         return self.register_pt(p, P, save_name)
 
-    def _sample_quadrilateral_with_init(self, points: list, init_method, *args, noise: float = 0.05):
+    def _calculate_distance_to_line(self, point, line_p1, line_p2):
+        """Calculate distance from point to line (for incircle radius)"""
+        line = self.pp2lnf(line_p1, line_p2)
+        return torch.abs(self.on_line(point, line))    
+    
+    def _dot_product(self, pa: TorchPoint, pb: TorchPoint, pc: TorchPoint):
+        """Calculate dot product of vectors (pa-pb) and (pc-pb)"""
+        v1x, v1y = self._vector_from_points(pa, pb)
+        v2x, v2y = self._vector_from_points(pc, pb)
+        return v1x * v2x + v1y * v2y
+
+    def _cross_product_area(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
+        """Calculate cross product for area check (collinearity test)"""
+        v1x, v1y = self._vector_from_points(p2, p1)
+        v2x, v2y = self._vector_from_points(p3, p1)
+        return v1x * v2y - v1y * v2x
+
+    def perpendicular(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint, p4: TorchPoint):
+        """Perpendicular constraint: (p1-p2) ⊥ (p3-p4). Returns 0 when perpendicular."""
+        return (p1.x - p2.x) * (p3.x - p4.x) + (p1.y - p2.y) * (p3.y - p4.y)
+
+    def parallel(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint, p4: TorchPoint):
+        """Parallel constraint: (p1-p2) ∥ (p3-p4). Returns 0 when parallel."""
+        return (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x)
+
+    def collinear(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
+        """Collinearity constraint. Returns 0 when p1, p2, p3 are collinear."""
+        return p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y)
+    
+    def tangent_line_circle(self, p1: TorchPoint, p2: TorchPoint, center: TorchPoint, radius: float):
+        """
+        Tangent constraint: line (p1-p2) is tangent to circle (center, radius).
+        Returns 0 when the distance from center to line equals radius.
+        """
+        # Distance from center to line p1-p2 should equal radius
+        dist_to_line = self.dist_to_line(center, p1, p2)
+        return dist_to_line - radius
+
+    def vector_length(self, p1: TorchPoint, p2: TorchPoint):
+        """Calculate length of vector from p1 to p2."""
+        vx, vy = self._vector_from_points(p2, p1)
+        return torch.sqrt(vx**2 + vy**2 + 1e-8)
+
+    def angle_cosine(self, p1: TorchPoint, vertex: TorchPoint, p2: TorchPoint):
+        """Calculate cosine of angle p1-vertex-p2."""
+        dot = self._dot_product(p1, vertex, p2)
+        v1_x, v1_y = self._vector_from_points(p1, vertex)
+        v2_x, v2_y = self._vector_from_points(p2, vertex)
+        
+        len1 = self._vector_length(v1_x, v1_y)
+        len2 = self._vector_length(v2_x, v2_y)
+        return dot / (len1 * len2 + 1e-8)
+
+    def segment_ratio(self, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint, p4: TorchPoint):
+        """Calculate ratio of segment lengths: |p1-p2| / |p3-p4|."""
+        len1 = self.vector_length(p1, p2)
+        len2 = self.vector_length(p3, p4)
+        return len1 / (len2 + 1e-8)
+
+    def _sample_quadrilateral_with_init(
+        self,
+        points: list,
+        init_method,
+        *args,
+        noise: float = 0.05,
+        quad_type: QuadrilateralType = QuadrilateralType.GENERAL,
+        metadata: dict | None = None,
+    ):
         """Generic quadrilateral sampler using Initializer methods"""
         assert len(points) == 4
         init_coords = init_method(*args)
@@ -105,81 +299,102 @@ class Optimizer:
 
         pt_objs = [self.sample_uniform(p, init_coords=init_coords[i]) for i, p in enumerate(points)]
         names = [p.val for p in points]
+        self.quadrilaterals.append(tuple(names))
+        key = tuple(names)
+        # Mild non-degeneracy: keep adjacent vertices distinct to avoid overlaps
+        p1, p2, p3, p4 = pt_objs
+        self.register_ndg(f"quad_edge_{names[0]}_{names[1]}", lambda: self.dist(p1, p2), weight=2.0)
+        self.register_ndg(f"quad_edge_{names[1]}_{names[2]}", lambda: self.dist(p2, p3), weight=2.0)
+        self.register_ndg(f"quad_edge_{names[2]}_{names[3]}", lambda: self.dist(p3, p4), weight=2.0)
+        self.register_ndg(f"quad_edge_{names[3]}_{names[0]}", lambda: self.dist(p4, p1), weight=2.0)
+        # NOTE: Rendering uses Diagram.quadrilaterals which is populated from
+        # self.quadrilaterals_metadata in get_diagram(). If we don't register
+        # metadata here, the outline won't be drawn even though points exist.
+        if key not in self.quadrilaterals_metadata:
+            self.quadrilaterals_metadata[key] = metadata if metadata is not None else {'type': quad_type}
         return pt_objs, names
 
     def sample_square(self, points: list):
         assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_square, 1.0)
+        pt_objs, names = self._sample_quadrilateral_with_init(
+            points, Initializer.init_square, 1.0, quad_type=QuadrilateralType.SQUARE
+        )
         p1, p2, p3, p4 = pt_objs
 
         # All sides equal + right angle
-        self.register_loss(f"sq_eq_12_23_{names[0]}", lambda: geo.dist(p1, p2) - geo.dist(p2, p3), weight=10.0)
-        self.register_loss(f"sq_eq_23_34_{names[0]}", lambda: geo.dist(p2, p3) - geo.dist(p3, p4), weight=10.0)
-        self.register_loss(f"sq_eq_34_41_{names[0]}", lambda: geo.dist(p3, p4) - geo.dist(p4, p1), weight=10.0)
-        self.register_loss(f"sq_right_B_{names[0]}", lambda: geo.dot_product(p1, p2, p3), weight=10.0)
-        self.register_ndg(f"sq_area_{names[0]}", lambda: geo.cross_product_area(p1, p2, p3), weight=20.0)
-        key = tuple(names)
-        self.quadrilaterals_metadata[key] = {'type': QuadrilateralType.SQUARE, 'equal_sides': [(0,1),(1,2),(2,3),(3,0)]}
+        self.register_loss(f"sq_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
+        self.register_loss(f"sq_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
+        self.register_loss(f"sq_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
+        self.register_loss(f"sq_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
+        self.register_ndg(f"sq_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
         return pt_objs
 
     def sample_rectangle(self, points: list):
         assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_rectangle, 1.6, 1.0)
+        rect_w, rect_h = 1.6, 1.0
+        pt_objs, names = self._sample_quadrilateral_with_init(
+            points, Initializer.init_rectangle, rect_w, rect_h, quad_type=QuadrilateralType.RECTANGLE
+        )
         p1, p2, p3, p4 = pt_objs
 
         # Three right angles
-        self.register_loss(f"rect_right_B_{names[0]}", lambda: geo.dot_product(p1, p2, p3), weight=10.0)
-        self.register_loss(f"rect_right_C_{names[0]}", lambda: geo.dot_product(p2, p3, p4), weight=10.0)
-        self.register_loss(f"rect_right_D_{names[0]}", lambda: geo.dot_product(p3, p4, p1), weight=10.0)
-        self.register_ndg(f"rect_area_{names[0]}", lambda: geo.cross_product_area(p1, p2, p3), weight=20.0)
-        key = tuple(names)
-        self.quadrilaterals_metadata[key] = {'type': QuadrilateralType.RECTANGLE, 'equal_sides': [(0,2),(1,3)]}
+        self.register_loss(f"rect_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
+        self.register_loss(f"rect_right_C_{names[0]}", lambda: self._dot_product(p2, p3, p4), weight=10.0)
+        self.register_loss(f"rect_right_D_{names[0]}", lambda: self._dot_product(p3, p4, p1), weight=10.0)
+        # Encourage a non-square rectangle by keeping the aspect ratio close to the initializer.
+        target_ratio = rect_w / rect_h
+        self.register_loss(
+            f"rect_aspect_{names[0]}",
+            lambda: self.dist(p1, p2) / (self.dist(p2, p3) + 1e-8) - target_ratio,
+            weight=5.0,
+        )
+        self.register_ndg(f"rect_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
         return pt_objs
 
     def sample_parallelogram(self, points: list):
         assert len(points) == 4
         # Use scalene quad init for parallelogram (more general shape)
-        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_scalene_quadrilateral, 1.5)
+        pt_objs, names = self._sample_quadrilateral_with_init(
+            points, Initializer.init_quadrilateral, 1.5, quad_type=QuadrilateralType.PARALLELOGRAM
+        )
         p1, p2, p3, p4 = pt_objs
 
         # Opposite sides parallel
         self.register_loss(f"para_vec_x_{names[0]}", lambda: (p2.x - p1.x) - (p3.x - p4.x), weight=10.0)
         self.register_loss(f"para_vec_y_{names[0]}", lambda: (p2.y - p1.y) - (p3.y - p4.y), weight=10.0)
-        self.register_ndg(f"para_area_{names[0]}", lambda: geo.cross_product_area(p2, p1, p3), weight=20.0)
-        key = tuple(names)
-        self.quadrilaterals_metadata[key] = {'type': QuadrilateralType.PARALLELOGRAM}
+        self.register_ndg(f"para_area_{names[0]}", lambda: self._cross_product_area(p2, p1, p3), weight=20.0)
         return pt_objs
 
     def sample_trapezoid(self, points: list):
         assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_scalene_quadrilateral, 1.2)
+        pt_objs, names = self._sample_quadrilateral_with_init(
+            points, Initializer.init_quadrilateral, 1.2, quad_type=QuadrilateralType.TRAPEZOID
+        )
         p1, p2, p3, p4 = pt_objs
 
         # One pair parallel
         self.register_loss(f"trap_para_{names[0]}",
                           lambda: (p2.x - p1.x) * (p3.y - p4.y) - (p2.y - p1.y) * (p3.x - p4.x), weight=10.0)
-        self.register_ndg(f"trap_area_{names[0]}", lambda: geo.cross_product_area(p1, p2, p3), weight=20.0)
-        self.register_ndg(f"trap_ndg_top_{names[0]}", lambda: geo.dist(p3, p4), weight=10.0)
-        self.register_ndg(f"trap_ndg_bottom_{names[0]}", lambda: geo.dist(p1, p2), weight=10.0)
-        key = tuple(names)
-        self.quadrilaterals_metadata[key] = {'type': QuadrilateralType.TRAPEZOID}
+        self.register_ndg(f"trap_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+        self.register_ndg(f"trap_ndg_top_{names[0]}", lambda: self.dist(p3, p4), weight=10.0)
+        self.register_ndg(f"trap_ndg_bottom_{names[0]}", lambda: self.dist(p1, p2), weight=10.0)
         return pt_objs
 
     def sample_rhombus(self, points: list):
         assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(points, Initializer.init_rhombus, 1.0)
+        pt_objs, names = self._sample_quadrilateral_with_init(
+            points, Initializer.init_rhombus, 1.0, quad_type=QuadrilateralType.RHOMBUS
+        )
         p1, p2, p3, p4 = pt_objs
 
         # All sides equal + diagonals perpendicular
-        self.register_loss(f"rhombus_eq_12_23_{names[0]}", lambda: geo.dist(p1, p2) - geo.dist(p2, p3), weight=10.0)
-        self.register_loss(f"rhombus_eq_23_34_{names[0]}", lambda: geo.dist(p2, p3) - geo.dist(p3, p4), weight=10.0)
-        self.register_loss(f"rhombus_eq_34_41_{names[0]}", lambda: geo.dist(p3, p4) - geo.dist(p4, p1), weight=10.0)
+        self.register_loss(f"rhombus_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
+        self.register_loss(f"rhombus_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
+        self.register_loss(f"rhombus_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
         self.register_loss(f"rhombus_diag_perp_{names[0]}",
                           lambda: (p3.x - p1.x) * (p4.x - p2.x) + (p3.y - p1.y) * (p4.y - p2.y), weight=10.0)
-        self.register_ndg(f"rhombus_area_{names[0]}", lambda: geo.cross_product_area(p1, p2, p3), weight=20.0)
-        self.register_ndg(f"rhombus_diag_ac_{names[0]}", lambda: geo.dist(p1, p3), weight=10.0)
-        key = tuple(names)
-        self.quadrilaterals_metadata[key] = {'type': QuadrilateralType.RHOMBUS, 'equal_sides': [(0,1),(1,2),(2,3),(3,0)]}
+        self.register_ndg(f"rhombus_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+        self.register_ndg(f"rhombus_diag_ac_{names[0]}", lambda: self.dist(p1, p3), weight=10.0)
         return pt_objs
 
 
@@ -190,7 +405,7 @@ class Optimizer:
         tri_type = constraints.get('type', 'scalene')
         apex_idx = constraints.get('apex_idx', 0)
         right_idx = constraints.get('right_idx', 0)
-        equal_angles = constraints.get('equal_angles')
+        equal_angles = constraints.get('equal_angles')  
 
         # Smart initialization based on type
         if tri_type == 'isosceles':
@@ -201,7 +416,10 @@ class Optimizer:
             init_coords = Initializer.init_equilateral_triangle()
         elif tri_type == 'right_isosceles':
             init_coords = Initializer.init_right_isoceles_triangle(right_idx)
+        elif tri_type == 'obtuse':
+            init_coords = Initializer.init_obtuse_triangle(apex_idx)
         else:
+            # Scalene triangle init
             init_coords = Initializer.init_scalene_triangle()
 
         init_coords = Initializer.add_noise(init_coords)
@@ -219,7 +437,7 @@ class Optimizer:
             apex_pt = pts[apex_idx]
             other_pts = [pts[i] for i in range(3) if i != apex_idx]
             self.register_loss(f"iso_{points[0].val}_{points[1].val}_{points[2].val}",
-                              lambda ap=apex_pt, o0=other_pts[0], o1=other_pts[1]: geo.dist(ap, o0) - geo.dist(ap, o1),
+                              lambda ap=apex_pt, o0=other_pts[0], o1=other_pts[1]: self.dist(ap, o0) - self.dist(ap, o1),
                               weight=10.0)
             others = [i for i in range(3) if i != apex_idx]
             metadata['equal_sides'] = [(apex_idx, others[0]), (apex_idx, others[1])]
@@ -228,14 +446,14 @@ class Optimizer:
             right_pt = pts[right_idx]
             other_pts = [pts[i] for i in range(3) if i != right_idx]
             self.register_loss(f"right_{points[0].val}_{points[1].val}_{points[2].val}",
-                              lambda: geo.dot_product(other_pts[0], right_pt, other_pts[1]), weight=10.0)
+                              lambda: self._dot_product(other_pts[0], right_pt, other_pts[1]), weight=10.0)
             metadata['right_angle_at'] = right_idx
 
         if tri_type == 'equilateral':
             self.register_loss(f"equi_12_23_{points[0].val}",
-                              lambda: geo.dist(p1, p2) - geo.dist(p2, p3), weight=10.0)
+                              lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
             self.register_loss(f"equi_23_31_{points[0].val}",
-                              lambda: geo.dist(p2, p3) - geo.dist(p3, p1), weight=10.0)
+                              lambda: self.dist(p2, p3) - self.dist(p3, p1), weight=10.0)
             metadata['equal_sides'] = [(0, 1), (1, 2), (2, 0)]
 
         # Handle equal_angles constraint
@@ -244,29 +462,136 @@ class Optimizer:
             for idx1, idx2 in equal_angles:
                 self.register_loss(
                     f"equal_angle_{idx1}_{idx2}_{points[0].val}",
-                    lambda i1=idx1, i2=idx2, p=pts: geo.triangle_angle_difference_loss(p, i1, i2),
+                    lambda i1=idx1, i2=idx2, p=pts: self._triangle_angle_difference_loss(p, i1, i2),
                     weight=10.0
                 )
 
         self.register_ndg(f"tri_ndg_{points[0].val}_{points[1].val}_{points[2].val}",
-                         lambda: geo.collinear(p1, p2, p3), weight=1.0)
+                         lambda: self.collinear(p1, p2, p3), weight=1.0)
         key = (points[0].val, points[1].val, points[2].val)
         self.triangles_metadata[key] = metadata
         return [p1, p2, p3]
-
-    def _sample_general_quadrilateral(self, points: list):
-        assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(
-            points, Initializer.init_scalene_quadrilateral, 1.0
-        )
-        self.register_ndg(
-            f"quad_area_{names[0]}",
-            lambda: geo.cross_product_area(pt_objs[0], pt_objs[1], pt_objs[2]),
-            weight=20.0,
-        )
+    
+    #tu giac
+    def sample_quadrilateral(self, points: list, quad_type: str = 'quadrilateral'):
+        """Unified function to sample all types of quadrilaterals
+        
+        Args:
+            points: List of 4 Point objects
+            quad_type: Type of quadrilateral - 'square', 'rectangle', 'parallelogram', 
+                      'trapezoid', 'rhombus', or 'quadrilateral' (generic)
+        
+        Returns:
+            List of 4 TorchPoint objects
+        """
+        assert len(points) == 4, "Quadrilateral must have exactly 4 points"
+        
+        quad_type = quad_type.lower()
+        
+        # Initialize coordinates based on quad type
+        if quad_type == 'square':
+            init_coords = Initializer.init_square(1.0)
+        elif quad_type == 'rectangle':
+            init_coords = Initializer.init_rectangle(1.6, 1.0)
+        elif quad_type == 'parallelogram':
+            init_coords = Initializer.init_parallelogram(1.0)
+        elif quad_type == 'trapezoid':
+            init_coords = Initializer.init_trapezoid(1.0)
+        elif quad_type == 'rhombus':
+            init_coords = Initializer.init_rhombus(1.0)
+        else:  # generic quadrilateral
+            init_coords = Initializer.init_quadrilateral(1.0)
+        
+        # Add noise to avoid perfect initialization
+        init_coords = Initializer.add_noise(init_coords, noise_scale=0.05)
+        
+        # Create points with initial coordinates
+        pt_objs = [self.sample_uniform(p, init_coords=init_coords[i]) for i, p in enumerate(points)]
+        names = [p.val for p in points]
+        self.quadrilaterals.append(tuple(names))
+        
+        p1, p2, p3, p4 = pt_objs
         key = tuple(names)
-        self.quadrilaterals_metadata[key] = {'type': QuadrilateralType.GENERAL}
+        
+        # Apply constraints based on quad type
+        if quad_type == 'square':
+            # All sides equal + right angle
+            self.register_loss(f"sq_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
+            self.register_loss(f"sq_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
+            self.register_loss(f"sq_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
+            self.register_loss(f"sq_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
+            self.register_ndg(f"sq_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            
+            self.quadrilaterals_metadata[key] = {
+                'type': QuadrilateralType.SQUARE,
+                'equal_sides': [(0, 1), (1, 2), (2, 3), (3, 0)]
+            }
+            
+        elif quad_type == 'rectangle':
+            # Three right angles
+            self.register_loss(f"rect_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
+            self.register_loss(f"rect_right_C_{names[0]}", lambda: self._dot_product(p2, p3, p4), weight=10.0)
+            self.register_loss(f"rect_right_D_{names[0]}", lambda: self._dot_product(p3, p4, p1), weight=10.0)
+            # Keep a stable aspect ratio (default initializer: 1.6 x 1.0) so it doesn't converge to a square.
+            target_ratio = 1.6 / 1.0
+            self.register_loss(
+                f"rect_aspect_{names[0]}",
+                lambda: self.dist(p1, p2) / (self.dist(p2, p3) + 1e-8) - target_ratio,
+                weight=5.0,
+            )
+            self.register_ndg(f"rect_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            
+            self.quadrilaterals_metadata[key] = {
+                'type': QuadrilateralType.RECTANGLE,
+                'equal_sides': [(0, 2), (1, 3)]  # Opposite sides equal
+            }
+            
+        elif quad_type == 'parallelogram':
+            # Opposite sides parallel
+            self.register_loss(f"para_parallel_12_34_{names[0]}", 
+                              lambda: self.parallel(p1, p2, p4, p3), weight=10.0)
+            self.register_loss(f"para_parallel_23_41_{names[0]}", 
+                              lambda: self.parallel(p2, p3, p1, p4), weight=10.0)
+            # Opposite sides equal (helps convergence)
+            self.register_loss(f"para_eq_12_34_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p4, p3), weight=5.0)
+            self.register_loss(f"para_eq_23_41_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p1, p4), weight=5.0)
+            self.register_ndg(f"para_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            
+            self.quadrilaterals_metadata[key] = {'type': 'parallelogram', 'opposite_parallel': True}
+            
+        elif quad_type == 'trapezoid':
+            # One pair parallel: AB || CD
+            self.register_loss(f"trap_parallel_12_43_{names[0]}",
+                              lambda: self.parallel(p1, p2, p4, p3), weight=10.0)
+            self.register_ndg(f"trap_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            # Ensure bases have reasonable lengths
+            self.register_ndg(f"trap_ndg_base1_{names[0]}", lambda: self.dist(p1, p2), weight=10.0)
+            self.register_ndg(f"trap_ndg_base2_{names[0]}", lambda: self.dist(p3, p4), weight=10.0)
+            
+            self.quadrilaterals_metadata[key] = {'type': 'trapezoid', 'parallel_sides': [(0, 1), (3, 2)]}
+            
+        elif quad_type == 'rhombus':
+            # All sides equal
+            self.register_loss(f"rhombus_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
+            self.register_loss(f"rhombus_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
+            self.register_loss(f"rhombus_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
+            # Diagonals perpendicular: AC ⊥ BD
+            self.register_loss(f"rhombus_diag_perp_{names[0]}",
+                              lambda: self.perpendicular(p1, p3, p2, p4), weight=10.0)
+            self.register_ndg(f"rhombus_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            # Ensure diagonals have reasonable lengths
+            self.register_ndg(f"rhombus_diag_ac_{names[0]}", lambda: self.dist(p1, p3), weight=10.0)
+            self.register_ndg(f"rhombus_diag_bd_{names[0]}", lambda: self.dist(p2, p4), weight=10.0)
+            
+            self.quadrilaterals_metadata[key] = {'type': 'rhombus', 'equal_sides': [(0, 1), (1, 2), (2, 3), (3, 0)]}
+            
+        else:  # generic quadrilateral
+            # Only non-degeneracy constraint
+            self.register_ndg(f"quad_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            self.quadrilaterals_metadata[key] = {'type': 'quadrilateral'}
+        
         return pt_objs
+     
 
     def _define_projection(self, point_name, vertex_point, segment_points):
         assert len(segment_points) == 2
@@ -276,12 +601,35 @@ class Optimizer:
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
 
-        # Foot perpendicular to segment and lies on segment
+        # Foot perpendicular to segment
         self.register_loss(f"perp_{point_name.val}",
-                          lambda: geo.perpendicular(vertex, foot, p1, p2), weight=10.0)
+                          lambda v=vertex, f=foot, a=p1, b=p2: self.perpendicular(v, f, a, b)**2, 
+                          weight=1000.0)  # TĂNG weight để đảm bảo vuông góc
+        
+        # Foot lies ON SEGMENT (not just collinear on the line)
         self.register_loss(f"on_seg_{point_name.val}",
-                          lambda: geo.collinear(foot, p1, p2), weight=10.0)
+                          lambda f=foot, a=p1, b=p2: self._point_on_segment_loss(f, a, b), 
+                          weight=5000.0)  # CỰC MẠNH - foot phải nằm trên đoạn thẳng
         return foot
+
+    def _define_intersection(self, point_name, segment1_points, segment2_points):
+        assert len(segment1_points) == 2 and len(segment2_points) == 2
+
+        p1 = self.lookup_pt(segment1_points[0])
+        p2 = self.lookup_pt(segment1_points[1])
+        p3 = self.lookup_pt(segment2_points[0])
+        p4 = self.lookup_pt(segment2_points[1])
+
+        init_x = (p1.x.item() + p2.x.item() + p3.x.item() + p4.x.item()) / 4
+        init_y = (p1.y.item() + p2.y.item() + p3.y.item() + p4.y.item()) / 4
+        intersection = self.sample_uniform(point_name, init_coords=(init_x, init_y))
+
+        # Intersection lies on both lines
+        self.register_loss(f"on_line1_{point_name.val}",
+                          lambda: self.collinear(intersection, p1, p2), weight=50.0)
+        self.register_loss(f"on_line2_{point_name.val}",
+                          lambda: self.collinear(intersection, p3, p4), weight=50.0)
+        return intersection
 
     def _define_centroid(self, point_name, triangle_points):
         assert len(triangle_points) == 3
@@ -299,6 +647,46 @@ class Optimizer:
         self.register_loss(f"centroid_{point_name.val}", centroid_loss, weight=10.0)
         return centroid
 
+    def _define_circle_with_points(self, center_name, points_info, radius_value):
+        center_coords = Initializer.init_circle_with_positioned_points(radius_value, len(points_info))
+        center_coords = Initializer.add_noise(center_coords)
+        center = self.sample_uniform(center_name, init_coords=center_coords)
+        
+        for point_name, distance, constraint_type in points_info:
+            point = self.sample_uniform(point_name)
+            
+            if constraint_type == 'on_circle':
+                self.register_loss(f"on_circle_{point_name.val}",
+                lambda pt=point, c=center, r=radius_value: 
+                    (self.dist(pt, c) - r)**2, weight=200.0 
+            )
+                
+            elif constraint_type == 'inside':
+                self.register_loss(f"inside_circle_{point_name.val}",
+                lambda pt=point, c=center, d=distance:
+                    (self.dist(pt, c) - d)**2, weight=150.0
+            )
+                
+            elif constraint_type == 'outside':
+                self.register_loss(f"outside_circle_{point_name.val}",
+                lambda pt=point, c=center, d=distance:
+                    (self.dist(pt, c) - d)**2, weight=150.0
+            )
+            
+            else:
+                self.register_loss(
+                f"point_distance_{point_name.val}",
+                lambda pt=point, c=center, d=distance:
+                    (self.dist(pt, c) - d)**2, weight=100.0
+            )
+        self.circles.append((center_name.val, {
+        'type': 'positioned_points',
+        'radius': radius_value,
+        'points': [p[0].val for p in points_info]
+        }))
+    
+        return center
+    
     def _define_incenter(self, point_name, triangle_points):
         """Define incenter - equal distance to all sides"""
         assert len(triangle_points) == 3
@@ -311,8 +699,8 @@ class Optimizer:
         init_coords = Initializer.add_noise(init_coords)
         incenter = self.sample_uniform(point_name, init_coords=init_coords[3])
         self.register_loss(f"incenter_{point_name.val}",
-                          lambda: (geo.dist_to_line(incenter, p1, p2) - geo.dist_to_line(incenter, p2, p3))**2 +
-                                  (geo.dist_to_line(incenter, p2, p3) - geo.dist_to_line(incenter, p3, p1))**2,
+                          lambda: (self.dist_to_line(incenter, p1, p2) - self.dist_to_line(incenter, p2, p3))**2 +
+                                  (self.dist_to_line(incenter, p2, p3) - self.dist_to_line(incenter, p3, p1))**2,
                           weight=10.0)
         return incenter
 
@@ -329,8 +717,8 @@ class Optimizer:
         circumcenter = self.sample_uniform(point_name, init_coords=init_coords[3])
 
         self.register_loss(f"circumcenter_{point_name.val}",
-                          lambda: (geo.dist(circumcenter, p1) - geo.dist(circumcenter, p2))**2 +
-                                  (geo.dist(circumcenter, p2) - geo.dist(circumcenter, p3))**2,
+                          lambda: (self.dist(circumcenter, p1) - self.dist(circumcenter, p2))**2 +
+                                  (self.dist(circumcenter, p2) - self.dist(circumcenter, p3))**2,
                           weight=10.0)
         return circumcenter
 
@@ -349,8 +737,8 @@ class Optimizer:
 
         # Two altitudes perpendicular to opposite sides: AH ⊥ BC, BH ⊥ AC
         self.register_loss(f"orthocenter_{point_name.val}",
-                          lambda: geo.perpendicular(p1, orthocenter, p2, p3)**2 +
-                                  geo.perpendicular(p2, orthocenter, p1, p3)**2,
+                          lambda: self._dot_product(p1, orthocenter, p2, p3)**2 +
+                                  self._dot_product(p2, orthocenter, p1, p3)**2,
                           weight=10.0)
         return orthocenter
 
@@ -360,40 +748,50 @@ class Optimizer:
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
         midpoint = self.sample_uniform(point_name)
-
+        
         # Constraint 1: Midpoint position (x,y coordinates)
         self.register_loss(f"midpoint_pos_{point_name.val}",
                           lambda: (midpoint.x - (p1.x + p2.x)/2)**2 + (midpoint.y - (p1.y + p2.y)/2)**2,
                           weight=100.0)
-
-        # Constraint 2: Collinearity
+        
+        # Constraint 2: Collinearity 
         self.register_loss(f"midpoint_collinear_{point_name.val}",
-                          lambda: geo.collinear(midpoint, p1, p2),
+                          lambda: self.collinear(midpoint, p1, p2),
                           weight=100.0)
-
+        
         return midpoint
 
     def parameter_on_seg(self, p, segment_points: list):
         assert len(segment_points) == 2
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
-        P = self.sample_uniform(p)
-        self.register_loss(f"on_seg_{p.val}",
-                          lambda: geo.collinear(P, p1, p2), weight=50.0)
+        # Initialize near the midpoint to help convergence
+        init_x = (p1.x.detach().cpu().item() + p2.x.detach().cpu().item()) / 2
+        init_y = (p1.y.detach().cpu().item() + p2.y.detach().cpu().item()) / 2
+        P = self.sample_uniform(p, init_coords=(init_x, init_y))
+
+        # IMPORTANT: Must lie on the finite segment (not just the infinite line)
+        # `_point_on_segment_loss` already includes an on-line term and a strong
+        # penalty for t<0 or t>1.
+        self.register_loss(
+            f"on_seg_{p.val}",
+            lambda pt=P, a=p1, b=p2: self._point_on_segment_loss(pt, a, b),
+            weight=500.0,
+        )
         return P
 
     def parameter_on_line(self, p, line_points):
         assert len(line_points) == 2
         p1 = self.lookup_pt(line_points[0])
         p2 = self.lookup_pt(line_points[1])
-
+        
         # Simple initialization without analytical solution
         P = self.sample_uniform(p, save_name=False)
-
+        
         def on_line_loss():
-            line = geo.pp2lnf(p1, p2)
-            return geo.on_line(P, line)**2
-        self.register_loss(f"on_line_{p.val}", on_line_loss, weight=5.0)
+            line = self.pp2lnf(p1, p2)
+            return self.on_line(P, line)**2
+        self.register_loss(f"on_line_{p.val}", on_line_loss, weight=5.0)  # Giảm xuống 5
         return self.register_pt(p, P)
 
     def _define_line_intersection(self, point_name, line1_points, line2_points):
@@ -405,24 +803,29 @@ class Optimizer:
         intersection = self.sample_uniform(point_name)
 
         self.register_loss(f"on_line1_{point_name.val}",
-                          lambda: geo.collinear(intersection, p1, p2), weight=10.0)
+                          lambda: self.collinear(intersection, p1, p2), weight=10.0)
         self.register_loss(f"on_line2_{point_name.val}",
-                          lambda: geo.collinear(intersection, p3, p4), weight=10.0)
+                          lambda: self.collinear(intersection, p3, p4), weight=10.0)
         return intersection
 
     def _define_angle_bisector(self, point_name, angle_points):
         assert len(angle_points) >= 3, "angle_bisector requires 3 points [B, A, C] where A is vertex"
 
-        p1 = self.lookup_pt(angle_points[0])
-        vertex = self.lookup_pt(angle_points[1])
-        p2 = self.lookup_pt(angle_points[2])
+        # DSL: (bisector B A C) 
+        p1 = self.lookup_pt(angle_points[0])  # B 
+        vertex = self.lookup_pt(angle_points[1])  # A (vertex - đỉnh góc)
+        p2 = self.lookup_pt(angle_points[2])  # C 
 
         init_x = (vertex.x.item() + p1.x.item() + p2.x.item()) / 3
         init_y = (vertex.y.item() + p1.y.item() + p2.y.item()) / 3
         bisector_point = self.sample_uniform(point_name, init_coords=(init_x, init_y))
 
+        # Save metadata for rendering
+        if not hasattr(self, 'angle_bisectors_metadata'):
+            self.angle_bisectors_metadata = []
+
         self.angle_bisectors_metadata.append({
-            'vertex': angle_points[1].val,
+            'vertex': angle_points[1].val,  # A is the vertex
             'bisector_point': point_name.val,
             'angle_points': [p.val for p in angle_points]
         })
@@ -437,7 +840,7 @@ class Optimizer:
         p2 = self.lookup_pt(segment_points[1])
         point = self.sample_uniform(point_name)
         self.register_loss(f"perp_bisector_{point_name.val}",
-                          lambda: (geo.dist(point, p1) - geo.dist(point, p2))**2,
+                          lambda: (self.dist(point, p1) - self.dist(point, p2))**2,
                           weight=10.0)
         return point
 
@@ -471,17 +874,17 @@ class Optimizer:
 
     def _process_angle_bisector(self, vertex, bisector_point, angle_points):
         # angle_points = [B, A, C]
-        p1 = self.name2pt[angle_points[0].val]
-        p_vertex = self.name2pt[vertex.val]
-        p2 = self.name2pt[angle_points[2].val]
-        p_bisector = self.name2pt[bisector_point.val]
+        p1 = self.name2pt[angle_points[0].val]  # B
+        p_vertex = self.name2pt[vertex.val]  # A (đỉnh)
+        p2 = self.name2pt[angle_points[2].val]  # C
+        p_bisector = self.name2pt[bisector_point.val]  # M (điểm trên phân giác)
 
         key = f"{vertex.val}_{bisector_point.val}"
         # Bisector constraint: Equal angles
         self.register_loss(
             f"bisector_equal_angle_{key}",
-            lambda pv=p_vertex, p_1=p1, p_2=p2, pb=p_bisector: geo.angle_bisector_equal_loss(pv, p_1, p_2, pb),
-            weight=100.0
+            lambda pv=p_vertex, p_1=p1, p_2=p2, pb=p_bisector: self._angle_bisector_equal_loss(pv, p_1, p_2, pb),
+            weight=100.0  
         )
 
     def _process_triangle_parameter(self, param_type, objects, args):
@@ -520,7 +923,7 @@ class Optimizer:
         else:
             constraints['type'] = 'scalene'
         self.sample_triangle(objects, constraints)
-
+        
     def _process_quadrilateral_parameter(self, param_type, objects, args):
         """Process quadrilateral parameters - unified handler for all quadrilateral types"""
         if param_type:
@@ -544,8 +947,10 @@ class Optimizer:
                 quadri_type = QuadrilateralType[param_type_str.upper()]
             except (KeyError, AttributeError):
                 quadri_type = QuadrilateralType.GENERAL
-            constraints = {'type': quadri_type}
-            self._sample_general_quadrilateral(objects)
+            # sample_quadrilateral expects a string type (e.g., 'rectangle', 'square', 'general')
+            self.sample_quadrilateral(objects, quad_type=str(quadri_type))
+
+        logger.info(f"Processed quadrilateral type: {param_type_str}")
 
     def _process_point_parameter(self, param_type, objects, args):
         param_type_str = str(param_type).lower() if param_type else ""
@@ -636,7 +1041,6 @@ class Optimizer:
         if self.verbosity:
             logger.info(f"Processing assertion: {assertion}")
 
-        # Parse assertion type and apply constraints
         if hasattr(assertion, 'constraint_type'):
             if assertion.constraint_type == 'parallel':
                 self._add_parallel_constraint(assertion.objects)
@@ -652,23 +1056,82 @@ class Optimizer:
                 self._add_distance_constraint(assertion.objects)
             elif assertion.constraint_type == 'equal_distance':
                 self._add_equal_distance_constraint(assertion.objects)
+            elif assertion.constraint_type == 'fixed_distance':
+                # fixed distance constraint (A B distance_value)
+                self._add_fixed_distance_constraint(assertion.objects, assertion.distance)
             elif assertion.constraint_type == 'on_circle':
                 self._add_on_circle_constraint(assertion.objects)
+                # Sau khi thêm on-circle constraint, enforce góc tối thiểu
                 self._enforce_minimum_angle_between_circle_points()
+            elif assertion.constraint_type == 'diameter':
+                self._add_diameter_constraint(assertion.objects)
+            elif assertion.constraint_type == 'tangent':
+                self._add_tangent_constraint(assertion.objects)
 
-
+    def _add_diameter_constraint(self, objects: list):
+        assert len(objects) == 3, "Diameter constraint requires 3 points: center, endpoint1, endpoint2"
+        
+        p1_obj = objects[0]
+        p2_obj = objects[1]
+        center_obj = objects[2]
+        
+        try:
+            p1 = self.lookup_pt(p1_obj)
+            p2 = self.lookup_pt(p2_obj)
+            center = self.lookup_pt(center_obj)
+            
+            p1_name = p1_obj.val
+            p2_name = p2_obj.val
+            center_name = center_obj.val
+            
+            # 1. Both points on circle - EXTREMELY HIGH PRIORITY
+            self.register_loss(f"diameter_on_circle_{p1_name}_{center_name}",
+                lambda pt=p1, c=center, r=self._get_circle_radius(center_name): 
+                    (self.dist(pt, c) - r)**2,
+                weight=10000000.0)
+            
+            self.register_loss(f"diameter_on_circle_{p2_name}_{center_name}",
+                lambda pt=p2, c=center, r=self._get_circle_radius(center_name): 
+                    (self.dist(pt, c) - r)**2,
+                weight=10000000.0)
+            
+            # 2. Center is midpoint - EXTREMELY HIGH PRIORITY
+            self.register_loss(f"diameter_midpoint_{center_name}_{p1_name}_{p2_name}",
+                lambda c=center, pt1=p1, pt2=p2: 
+                    (c.x - (pt1.x + pt2.x)/2)**2 + (c.y - (pt1.y + pt2.y)/2)**2,
+                weight=10000000.0)
+            
+            # 3. Collinear - EXTREMELY HIGH PRIORITY
+            self.register_loss(f"diameter_collinear_{center_name}_{p1_name}_{p2_name}",
+                lambda c=center, pt1=p1, pt2=p2: 
+                    self.collinear(c, pt1, pt2),
+                weight=10000000.0)
+            
+            logger.info(f"Added diameter constraint: {p1_name}{p2_name} diameter of circle {center_name}")
+        except Exception as e:
+            logger.warning(f"Failed to add diameter constraint: {e}")
+    
+    def _get_circle_radius(self, center_name):
+        """Get radius of circle by center name"""
+        for circle_name, circle_info in self.circles:
+            if circle_name == center_name:
+                return self.const(circle_info.get('radius', 1.0))
+        return self.const(1.0)
+    
+            
     def _add_angle_measure(self, points: list):
         """Store angle measure for display: angle ABC = degrees"""
-        # DSL: (angle-measure A C B 110)
+        # DSL: (angle-measure A C B 110) 
         if len(points) < 4:
             logger.warning(f"Angle-measure needs 4 values (3 points + degrees), got {len(points)}")
             return
-
-        p1_name = points[0].val
-        vertex_name = points[1].val
-        p2_name = points[2].val
-        degrees = float(points[3].val) if hasattr(points[3], 'val') else float(points[3])
-
+        
+        p1_name = points[0].val  # A
+        vertex_name = points[1].val  # C (đỉnh góc)
+        p2_name = points[2].val  # B
+        degrees = float(points[3].val) if hasattr(points[3], 'val') else float(points[3])  # 110
+        
+        # Store for later rendering
         self.angle_measures.append((vertex_name, p1_name, p2_name, degrees))
         if self.verbosity:
             logger.info(f"Added angle measure: angle {p1_name}{vertex_name}{p2_name} = {degrees}°")
@@ -678,65 +1141,135 @@ class Optimizer:
         if len(points) != 3:
             logger.warning(f"on_segment constraint needs 3 points (point, seg_p1, seg_p2), got {len(points)}")
             return
-
+        
         point = self.lookup_pt(points[0])
         seg_p1 = self.lookup_pt(points[1])
         seg_p2 = self.lookup_pt(points[2])
-
-        key = f"{points[0].val}_on_{points[1].val}{points[2].val}"
-        self.register_loss(f"on_segment_{key}",
-            lambda pt=point, p1=seg_p1, p2=seg_p2: geo.point_on_segment_loss(pt, p1, p2),
-            weight=20.0
-        )
+        
+        point_name = points[0].val
+        p1_name = points[1].val
+        p2_name = points[2].val
+        
+        # Check if this is a center-on-diameter case (center on chord of its own circle)
+        is_diameter = False
+        for circle_name, circle_info in self.circles:
+            if circle_name == point_name:
+                # Check if both p1 and p2 are on this circle
+                p1_on_circle = any(f"on_circle_{p1_name}_{circle_name}" in key for key in self.loss_fns.keys())
+                p2_on_circle = any(f"on_circle_{p2_name}_{circle_name}" in key for key in self.loss_fns.keys())
+                
+                if p1_on_circle and p2_on_circle:
+                    is_diameter = True
+                    if self.verbosity:
+                        logger.info(f"Detected DIAMETER: {p1_name}{p2_name} passes through center {point_name}")
+                    break
+        
+        if is_diameter:
+            # For diameter: center MUST be midpoint
+            self.register_loss(f"diameter_midpoint_{point_name}_{p1_name}_{p2_name}",
+                lambda pt=point, p1=seg_p1, p2=seg_p2: 
+                    (pt.x - (p1.x + p2.x)/2)**2 + (pt.y - (p1.y + p2.y)/2)**2,
+                weight=1000000.0  
+            )
+            # Ensure collinearity
+            self.register_loss(f"diameter_collinear_{point_name}_{p1_name}_{p2_name}",
+                lambda pt=point, p1=seg_p1, p2=seg_p2: self.collinear(pt, p1, p2)**2,
+                weight=1000000.0
+            )
+        else:
+            # Normal on-segment constraint
+            key = f"{point_name}_on_{p1_name}{p2_name}"
+            self.register_loss(f"on_segment_{key}",
+                lambda pt=point, p1=seg_p1, p2=seg_p2: self._point_on_segment_loss(pt, p1, p2),
+                weight=50000.0  
+            )
+            
         if self.verbosity:
-            logger.info(f"Added on-segment constraint: {points[0].val} on {points[1].val}{points[2].val}")
+            logger.info(f"Added on-segment constraint: {point_name} on {p1_name}{p2_name} (diameter={is_diameter})")
 
     def _add_distance_constraint(self, points: list):
         if len(points) != 3:
             logger.warning(f"Distance constraint needs 3 points (point1, point2, distance), got {len(points)}")
             return
-
+        
         p1 = self.lookup_pt(points[0])
         p2 = self.lookup_pt(points[1])
         distance_value = float(points[2].val) if hasattr(points[2], 'val') else float(points[2])
-
+        
         self.register_loss(
             f"distance_{points[0].val}_{points[1].val}",
-            lambda pt1=p1, pt2=p2, d=distance_value: (geo.dist(pt1, pt2) - d)**2,
+            lambda pt1=p1, pt2=p2, d=distance_value: (self.dist(pt1, pt2) - d)**2,
             weight=100.0
         )
-
+    
     def _add_equal_distance_constraint(self, points: list):
         """Add constraint that distance(p1, p2) = distance(p3, p4)"""
         if len(points) != 4:
             logger.warning(f"Equal-distance constraint needs 4 points (p1, p2, p3, p4), got {len(points)}")
             return
-
+        
         p1 = self.lookup_pt(points[0])
         p2 = self.lookup_pt(points[1])
         p3 = self.lookup_pt(points[2])
         p4 = self.lookup_pt(points[3])
-
+        
         self.register_loss(
             f"equal_distance_{points[0].val}{points[1].val}_{points[2].val}{points[3].val}",
-            lambda pt1=p1, pt2=p2, pt3=p3, pt4=p4: (geo.dist(pt1, pt2) - geo.dist(pt3, pt4))**2,
-            weight=100.0
+            lambda pt1=p1, pt2=p2, pt3=p3, pt4=p4: (self.dist(pt1, pt2) - self.dist(pt3, pt4))**2,
+            weight=3000.0  # Tăng lên để đảm bảo AC = AD chính xác hơn
         )
-
+        
+        # Add non-degeneracy constraints: ensure segments are not degenerate (points not coincident)
+        # This prevents solutions where p1=p2 or p3=p4
+        min_segment_length = 0.15  # Minimum segment length
+        
+        self.register_ndg(
+            f"ndg_segment_{points[0].val}{points[1].val}",
+            lambda pt1=p1, pt2=p2: self.dist(pt1, pt2),
+            weight=10.0
+        )
+        
+        self.register_ndg(
+            f"ndg_segment_{points[2].val}{points[3].val}",
+            lambda pt3=p3, pt4=p4: self.dist(pt3, pt4),
+            weight=10.0
+        )
+        
         if self.verbosity:
-            logger.info(f"Added equal-distance constraint: {points[0].val}{points[1].val} = {points[2].val}{points[3].val}")
-
+            logger.info(f"Added equal-distance constraint: {points[0].val}{points[1].val} = {points[2].val}{points[3].val} with NDG")
+    
+    def _add_fixed_distance_constraint(self, points: list, distance):
+        """Add constraint that distance(p1, p2) = fixed_value"""
+        if len(points) != 2:
+            logger.warning(f"Fixed-distance constraint needs 2 points, got {len(points)}")
+            return
+        
+        p1 = self.lookup_pt(points[0])
+        p2 = self.lookup_pt(points[1])
+        
+        # Get the fixed distance value
+        target_distance = distance.val if hasattr(distance, 'val') else float(distance)
+        
+        self.register_loss(
+            f"fixed_distance_{points[0].val}{points[1].val}_{target_distance}",
+            lambda pt1=p1, pt2=p2, target=target_distance: (self.dist(pt1, pt2) - target)**2,
+            weight=50.0  # Giảm xuống - chỉ để constraint nhẹ, không quá quan trọng
+        )
+        
+        if self.verbosity:
+            logger.info(f"Added fixed-distance constraint: {points[0].val}{points[1].val} = {target_distance}")
+        
     def _add_on_circle_constraint(self, points: list):
         if len(points) != 2:
             logger.warning(f"on-circle constraint needs 2 points (point, center), got {len(points)}")
             return
-
+        
         point = self.lookup_pt(points[0])
         center_name = points[1].val
-
+        
         logger.info(f"Adding on-circle constraint: point={points[0].val}, center={center_name}")
         logger.info(f"Available circles: {self.circles}")
-
+        
         # Find radius from circle metadata
         radius = None
         for circle_name, circle_info in self.circles:
@@ -748,116 +1281,503 @@ class Optimizer:
             return
         center = self.lookup_pt(points[1])
         logger.info(f"Found radius={radius} for circle {center_name}")
-
-        self.register_loss(
-            f"center_at_origin_{center_name}",
-            lambda c=center: c.x**2 + c.y**2,
-            weight=100000.0,
-        )
-
+        
+        center_key = f"center_at_origin_{center_name}"
+        if center_key not in self.loss_fns:
+            self.register_loss(
+                center_key,
+                lambda c=center: c.x**2 + c.y**2,
+                weight=10000.0  
+            )
+        
+        # Use const() to avoid lambda closure issues
         radius_const = self.const(radius)
         self.register_loss(
             f"on_circle_{points[0].val}_{center_name}",
-            lambda pt=point, c=center, r=radius_const: (geo.dist(pt, c) - r)**2,
-            weight=100000.0,
+            lambda pt=point, c=center, r=radius_const: (self.dist(pt, c) - r)**2,
+            weight=100000.0  
         )
-
+    
+    def _add_tangent_constraint(self, objects: list):
+        """
+        Add tangent constraint for line to circle.
+        
+        Supported formats:
+        1. (tangent A B O) - line AB tangent to circle O (legacy) - 3 objects
+        2. (tangent M O A B) - line AB tangent to circle O at point M - 4 objects (from parser)
+        
+        Args:
+            objects: Can be:
+                - [A, B, O] where AB is line and O is circle center (legacy)
+                - [M, O, A, B] where M is tangent point, O is center, AB is line (from parser)
+        """
+        if len(objects) == 4:
+            # Format from parser: [tangent_point_M, circle_center_O, line_point_A, line_point_B]
+            tangent_point_obj = objects[0]
+            center_obj = objects[1]
+            p1_obj = objects[2]
+            p2_obj = objects[3]
+            
+            self._add_line_circle_tangent_with_parsed_points(tangent_point_obj, center_obj, p1_obj, p2_obj)
+            
+        elif len(objects) == 3:
+            # Check if second object is a circle specification
+            obj2 = objects[1]
+            
+            if hasattr(obj2, '__iter__') and not isinstance(obj2, str):
+                # format [A, (circle_type, O), segment_identifier]
+                tangent_point = objects[0]
+                circle_center = obj2[1] if len(obj2) > 1 else obj2[0]
+                self._add_line_circle_tangent_with_tangent_point(tangent_point, circle_center, objects[2])
+            else:
+                # Legacy format: (tangent A B O)
+                p1 = objects[0]
+                p2 = objects[1]
+                center_obj = objects[2]
+                self._add_line_circle_tangent_by_points(p1, p2, center_obj)
+        else:
+            logger.warning(f"Tangent constraint needs 3 or 4 objects, got {len(objects)}")
+    
+    def _add_line_circle_tangent_by_points(self, p1_obj, p2_obj, center_obj):
+        """Add tangent constraint for line (p1, p2) to circle with center"""
+        try:
+            p1 = self.lookup_pt(p1_obj)
+            p2 = self.lookup_pt(p2_obj)
+            center = self.lookup_pt(center_obj)
+            center_name = center_obj.val
+            
+            # Find radius
+            radius = None
+            for circle_name, circle_info in self.circles:
+                if circle_name == center_name:
+                    radius = circle_info.get('radius')
+                    break
+            
+            if radius is None:
+                logger.warning(f"Circle {center_name} not found or has no radius")
+                return
+            
+            radius_const = self.const(radius)
+            self.register_loss(
+                f"tangent_line_{p1_obj.val}{p2_obj.val}_circle_{center_name}",
+                lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
+                weight=5000.0  # Tăng mạnh - tiếp tuyến là constraint quan trọng
+            )
+            
+            if self.verbosity:
+                logger.info(f"Added line-circle tangent: line {p1_obj.val}{p2_obj.val} tangent to circle {center_name}")
+        except Exception as e:
+            logger.warning(f"Failed to add line-circle tangent: {e}")
+    
+    def _add_line_circle_tangent_with_parsed_points(self, tangent_point_obj, center_obj, p1_obj, p2_obj):
+        """
+        Add tangent constraint from parser format: [M, O, A, B]
+        Format: (tangent M (circle O) AB) parsed as 4 separate objects
+        
+        Args:
+            tangent_point_obj: Point M where line touches circle
+            center_obj: Circle center O
+            p1_obj: Line point A
+            p2_obj: Line point B
+        """
+        try:
+            tangent_point = self.lookup_pt(tangent_point_obj)
+            center = self.lookup_pt(center_obj)
+            p1 = self.lookup_pt(p1_obj)
+            p2 = self.lookup_pt(p2_obj)
+            
+            center_name = center_obj.val
+            tangent_pt_name = tangent_point_obj.val
+            p1_name = p1_obj.val
+            p2_name = p2_obj.val
+            
+            # Find radius
+            radius = None
+            for circle_name, circle_info in self.circles:
+                if circle_name == center_name:
+                    radius = circle_info.get('radius')
+                    break
+            
+            if radius is None:
+                logger.warning(f"Circle {center_name} not found or has no radius")
+                return
+            
+            radius_const = self.const(radius)
+            
+            # CONSTRAINT 1: Khoảng cách từ tâm đến đường thẳng = bán kính
+            self.register_loss(
+                f"tangent_line_{p1_name}{p2_name}_circle_{center_name}_at_{tangent_pt_name}",
+                lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
+                weight=5000.0  
+            )
+            
+            # CONSTRAINT 2: OM vuông góc với AB (tính chất tiếp tuyến)
+            self.register_loss(
+                f"tangent_perpendicular_{tangent_pt_name}_{center_name}_{p1_name}{p2_name}",
+                lambda m=tangent_point, o=center, a=p1, b=p2: self.perpendicular(o, m, a, b)**2,
+                weight=3000.0  
+            )
+            
+            # CONSTRAINT 3: M nằm trên đoạn AB (không nằm ngoài)
+            self.register_loss(
+                f"tangent_point_on_segment_{tangent_pt_name}_{p1_name}{p2_name}",
+                lambda m=tangent_point, a=p1, b=p2: self._point_on_segment_loss(m, a, b),
+                weight=5000.0  # CỰC KỲ QUAN TRỌNG - M phải nằm trên AB
+            )
+            
+            # CONSTRAINT 4: Auto-ensure A, B không nằm TRONG đường tròn
+            for pt_name, pt in [(p1_name, p1), (p2_name, p2)]:
+                if pt_name != tangent_pt_name:
+                    # Điểm này phải nằm NGOÀI đường tròn rõ ràng
+                    # Nếu chỉ > radius một chút, line vẫn có thể cắt circle
+                    # Cần >= radius * 1.3 để chắc chắn line không cắt
+                    min_dist = radius * 1.3  # Phải cách tâm ít nhất 1.3x bán kính
+                    
+                    # Kiểm tra xem constraint đã tồn tại chưa (tránh duplicate khi có nhiều tiếp tuyến)
+                    constraint_key = f"outside_circle_{pt_name}_{center_name}"
+                    if constraint_key not in self.loss_fns:
+                        self.register_loss(
+                            constraint_key,
+                            lambda c=center, pt=pt, r_val=min_dist: torch.relu(r_val - self.dist(c, pt))**2,
+                            weight=10000.0  # TĂNG CỰC MẠNH - ưu tiên cao hơn để không cắt circle
+                        )
+                        if self.verbosity:
+                            logger.info(f"Auto-added constraint: {pt_name} must be >= {min_dist:.2f} away from {center_name}")
+                    else:
+                        if self.verbosity:
+                            logger.info(f"Constraint {constraint_key} already exists, skipping")
+            
+            if self.verbosity:
+                logger.info(f"Added line-circle tangent: line {p1_name}{p2_name} tangent to circle {center_name} at {tangent_pt_name}")
+                
+        except Exception as e:
+            logger.warning(f"Failed to add line-circle tangent with parsed points: {e}")
+            logger.warning(f"Traceback: {traceback.format_exc()}")
+    
+    def _add_line_circle_tangent_with_tangent_point(self, tangent_point_obj, center_obj, segment_identifier):
+        """
+        Add tangent constraint with explicit tangent point.
+        Format: (tangent M (circle O) AB)
+        
+        Args:
+            tangent_point_obj: Point M where line touches circle
+            center_obj: Circle center O
+            segment_identifier: Segment name or identifier (e.g., "AB" or list of points)
+        """
+        try:
+            tangent_point = self.lookup_pt(tangent_point_obj)
+            center = self.lookup_pt(center_obj)
+            center_name = center_obj.val
+            
+            # Find radius
+            radius = None
+            for circle_name, circle_info in self.circles:
+                if circle_name == center_name:
+                    radius = circle_info.get('radius')
+                    break
+            
+            if radius is None:
+                logger.warning(f"Circle {center_name} not found or has no radius")
+                return
+            
+            # Parse segment identifier to get line points
+            # segment_identifier could be a string "AB" or a Point object
+            if hasattr(segment_identifier, 'val'):
+                # It's a point-like object with a name like "AB"
+                seg_name = segment_identifier.val
+                # Extract point names (assuming format like "AB" means points A and B)
+                if len(seg_name) >= 2:
+                    p1_name = seg_name[0]
+                    p2_name = seg_name[1]
+                    
+                    # Look up the actual points
+                    try:
+                        p1 = self.name2pt[p1_name]
+                        p2 = self.name2pt[p2_name]
+                    except KeyError:
+                        logger.warning(f"Could not find points {p1_name} or {p2_name} for segment {seg_name}")
+                        return
+                    
+                    radius_const = self.const(radius)
+                    
+                    # CONSTRAINT 1: Khoảng cách từ tâm đến đường thẳng = bán kính
+                    self.register_loss(
+                        f"tangent_line_{p1_name}{p2_name}_circle_{center_name}_at_{tangent_point_obj.val}",
+                        lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
+                        weight=100.0
+                    )
+                    
+                    # CONSTRAINT 2: OM vuông góc với AB (tính chất tiếp tuyến)
+                    self.register_loss(
+                        f"tangent_perpendicular_{tangent_point_obj.val}_{center_name}_{p1_name}{p2_name}",
+                        lambda m=tangent_point, o=center, a=p1, b=p2: self.perpendicular(o, m, a, b)**2,
+                        weight=3000.0  # Tăng lên để đồng bộ với tangent_line_circle
+                    )
+                    
+                    # CONSTRAINT 3: M nằm trên đoạn AB (không nằm ngoài)
+                    self.register_loss(
+                        f"tangent_point_on_segment_{tangent_point_obj.val}_{p1_name}{p2_name}",
+                        lambda m=tangent_point, a=p1, b=p2: self._point_on_segment_loss(m, a, b),
+                        weight=5000.0  # CỰC KỲ QUAN TRỌNG - M phải nằm trên AB
+                    )
+                    
+                    # CONSTRAINT 4: Auto-ensure A, B không nằm TRONG đường tròn
+                    tangent_pt_name = tangent_point_obj.val
+                    for pt_name, pt in [(p1_name, p1), (p2_name, p2)]:
+                        if pt_name != tangent_pt_name:
+                            # Điểm này phải nằm NGOÀI đường tròn rõ ràng
+                            # Nếu chỉ > radius một chút, line vẫn có thể cắt circle
+                            # Cần >= radius * 1.3 để chắc chắn line không cắt
+                            min_dist = radius * 1.3  # Phải cách tâm ít nhất 1.3x bán kính
+                            
+                            # Check duplicate constraint trước khi register
+                            constraint_key = f"outside_circle_{pt_name}_{center_name}"
+                            if constraint_key not in self.loss_fns:
+                                self.register_loss(
+                                    constraint_key,
+                                    lambda c=center, pt=pt, r_val=min_dist: torch.relu(r_val - self.dist(c, pt))**2,
+                                    weight=10000.0  # TĂNG CỰC MẠNH - ưu tiên cao hơn để không cắt circle
+                                )
+                                if self.verbosity:
+                                    logger.info(f"Auto-added constraint: {pt_name} must be >= {min_dist:.2f} away from {center_name}")
+                            else:
+                                if self.verbosity:
+                                    logger.info(f"Constraint {constraint_key} already exists, skipping")
+                    
+                    if self.verbosity:
+                        logger.info(f"Added line-circle tangent with tangent point: line {p1_name}{p2_name} tangent to circle {center_name} at {tangent_point_obj.val}")
+                else:
+                    logger.warning(f"Segment identifier {seg_name} does not have at least 2 characters")
+            else:
+                logger.warning(f"Segment identifier is not a point-like object with .val attribute")
+        except Exception as e:
+            logger.warning(f"Failed to add line-circle tangent with tangent point: {e}")
+    
+    def _enforce_chord_length(self):
+        """
+        Enforce độ dài dây cung không qua tâm để hình vẽ đẹp.
+        Tự động phát hiện các dây cung (2 điểm cùng trên 1 circle) không qua tâm
+        và enforce độ dài ≈ 0.75-0.8 × đường kính.
+        """
+        if self.verbosity:
+            logger.info("\n=== Enforcing chord lengths ===")
+            logger.info(f"Total segments: {len(self.segments)}")
+            logger.info(f"Total circles: {len(self.circles)}")
+        
+        for seg in self.segments:
+            p1_name, p2_name = seg
+            
+            # Kiểm tra xem cả 2 điểm có cùng nằm trên 1 đường tròn không
+            for circle_name, circle_info in self.circles:
+                p1_on_this_circle = any(f"on_circle_{p1_name}_{circle_name}" in key for key in self.loss_fns.keys())
+                p2_on_this_circle = any(f"on_circle_{p2_name}_{circle_name}" in key for key in self.loss_fns.keys())
+                
+                if p1_on_this_circle and p2_on_this_circle:
+                    if self.verbosity:
+                        logger.info(f"Segment {p1_name}{p2_name} has both points on circle {circle_name}")
+                    
+                    # CRITICAL: Kiểm tra xem có phải đường kính không 
+                    is_diameter = any(
+                        f"diameter_midpoint_{circle_name}_{p1_name}_{p2_name}" in key or
+                        f"diameter_midpoint_{circle_name}_{p2_name}_{p1_name}" in key
+                        for key in self.loss_fns.keys()
+                    )
+                    
+                    if is_diameter:
+                        if self.verbosity:
+                            logger.info(f"  -> DIAMETER detected! Skipping chord length enforcement.")
+                        break  # Skip to next segment
+                    
+                    # Đây là dây cung KHÔNG qua tâm - enforce độ dài ≈ 0.75 × đường kính
+                    radius = circle_info.get('radius')
+                    if radius is not None:
+                        # Độ dài mục tiêu: 0.75 × đường kính = 1.5 × radius
+                        target_length = 1.5 * radius
+                        p1 = self.lookup_pt(Parameter(p1_name))
+                        p2 = self.lookup_pt(Parameter(p2_name))
+                        target_const = self.const(target_length)
+                        
+                        self.register_loss(
+                            f"chord_length_{p1_name}_{p2_name}_{circle_name}",
+                            lambda pt1=p1, pt2=p2, target=target_const: (self.dist(pt1, pt2) - target)**2,
+                            weight=100.0  
+                        )
+                        
+                        if self.verbosity:
+                            logger.info(f"  -> Enforcing chord length: {p1_name}{p2_name} ≈ {target_length:.4f} (0.75 × diameter)")
+                    break  
+    
     def _add_all_chord_ndgs(self):
-        """Add NDG constraints for all chords to prevent degenerate diameters."""
-        circle_points: dict[str, list[str]] = {}
-
-        for loss_name in self.loss_fns:
+        """
+        Thêm constraint HARD cho TẤT CẢ chords để ngăn đi qua tâm.
+        Duyệt qua tất cả cặp (điểm, center) từ on-circle constraints.
+        """
+        if self.verbosity:
+            logger.info(f"\nChecking for chords to add NDG...")
+            logger.info(f"Segments: {self.segments}")
+        
+        # Thu thập tất cả điểm on-circle theo center
+        circle_points = {}  # {center_name: [point_names]}
+        
+        for loss_name in self.losses:
             if loss_name.startswith("on_circle_"):
                 parts = loss_name.split("_")
-                if len(parts) >= 4:
+                if len(parts) >= 4:  # on_circle_PointName_CenterName
                     point_name = parts[2]
                     center_name = "_".join(parts[3:])
-                    circle_points.setdefault(center_name, []).append(point_name)
-
+                    
+                    if center_name not in circle_points:
+                        circle_points[center_name] = []
+                    circle_points[center_name].append(point_name)
+        
+        if self.verbosity:
+            logger.info(f"Circle points: {circle_points}")
+        
+        # Với mỗi tâm, kiểm tra các cặp điểm có segment không
         for center_name, point_names in circle_points.items():
             center = self.lookup_pt_by_name(center_name)
             if not center:
                 continue
-
+            
+            # Kiểm tra tất cả cặp điểm
             for i in range(len(point_names)):
                 for j in range(i + 1, len(point_names)):
                     p1_name = point_names[i]
                     p2_name = point_names[j]
-
+                    
+                    # Kiểm tra có segment giữa 2 điểm này không
                     has_segment = (
-                        (p1_name, p2_name) in self.segments or
+                        (p1_name, p2_name) in self.segments or 
                         (p2_name, p1_name) in self.segments
                     )
-                    if not has_segment:
-                        continue
-
-                    pt1 = self.lookup_pt_by_name(p1_name)
-                    pt2 = self.lookup_pt_by_name(p2_name)
-                    if not pt1 or not pt2:
-                        continue
-
-                    ndg_key = f"chord_ndg_{p1_name}_{center_name}_{p2_name}"
-                    if ndg_key not in self.ndgs:
-                        self.register_ndg(
-                            ndg_key,
-                            lambda pt1_=pt1, c=center, pt2_=pt2: geo.collinear(pt1_, c, pt2_),
-                            weight=100.0,
+                    
+                    if has_segment:
+                        # Check if this is a DIAMETER before adding NDG
+                        is_diameter = any(
+                            f"diameter_midpoint_{center_name}_{p1_name}_{p2_name}" in key or
+                            f"diameter_midpoint_{center_name}_{p2_name}_{p1_name}" in key
+                            for key in self.loss_fns.keys()
                         )
-
+                        
+                        if is_diameter:
+                            if self.verbosity:
+                                logger.info(f"SKIPPING chord NDG for DIAMETER: {p1_name}{p2_name} through {center_name}")
+                            continue  # Skip diameter - it MUST go through center!
+                        
+                        try:
+                            pt1 = self.lookup_pt_by_name(p1_name)
+                            pt2 = self.lookup_pt_by_name(p2_name)
+                            
+                            if pt1 and pt2:
+                                chord_key = f"chord_not_diameter_{p1_name}_{p2_name}"
+                                if chord_key not in self.loss_fns:
+                                    # Penalty lớn khi gần thẳng hàng (collinear → 0)
+                                    def chord_constraint(p1=pt1, c=center, p2=pt2):
+                                        cross = self.collinear(p1, c, p2)
+                                        # Penalty cao khi cross gần 0 (thẳng hàng)
+                                        return 1.0 / (cross**2 + 0.01)
+                                    
+                                    self.register_loss(
+                                        chord_key,
+                                        chord_constraint,
+                                        weight=50.0
+                                    )
+                                    if self.verbosity:
+                                        logger.info(f"Added HARD chord constraint: {p1_name}-{center_name}-{p2_name} MUST NOT be collinear")
+                        except Exception as e:
+                            if self.verbosity:
+                                logger.warning(f"Failed to add chord constraint: {e}")
+    
     def _enforce_minimum_angle_between_circle_points(self):
-        """Penalise pairs of on-circle points whose central angle < 45°."""
-        circle_points_map: dict[str, list[tuple]] = {
-            name: [] for name, _ in self.circles
-        }
-
-        for loss_name in self.loss_fns:
+        """
+        Enforce minimum angle (45 degrees) between points on the same circle.
+        This ensures chords are long enough and diagrams look good.
+        Also enforce minimum distance to avoid coincident points.
+        """ 
+        # Group points by circle
+        circle_points_map = {}  # {center_name: [point_objs]}
+        
+        for circle_name, circle_info in self.circles:
+            circle_points_map[circle_name] = []
+        
+        # Find all points with on_circle constraint
+        for loss_name in self.loss_fns.keys():  # Changed from self.losses to self.loss_fns.keys()
             if loss_name.startswith("on_circle_"):
                 parts = loss_name.split("_")
-                if len(parts) >= 4:
+                if len(parts) >= 4:  # on_circle_PointName_CenterName
                     point_name = parts[2]
                     center_name = "_".join(parts[3:])
-                    if center_name in circle_points_map:
-                        pt_obj = self.lookup_pt_by_name(point_name)
-                        if pt_obj:
-                            circle_points_map[center_name].append((point_name, pt_obj))
-
-        min_cos = math.cos(math.radians(45))
-
+                    
+                    if center_name in circle_points_map and point_name in self.name2pt:
+                        pt_obj = self.name2pt[point_name]
+                        circle_points_map[center_name].append((point_name, pt_obj))
+        
+        # For each circle with 2+ points, enforce minimum angle
+        min_angle_rad = math.radians(30)  # Reduced from 45 to 30 degrees for more flexibility
+        
         for center_name, points_list in circle_points_map.items():
             if len(points_list) < 2:
                 continue
-            center = self.lookup_pt_by_name(center_name)
-            if not center:
+            
+            if center_name not in self.name2pt:
                 continue
-
+                
+            center = self.name2pt[center_name]
+            
+            # For each pair of points on this circle
             for i in range(len(points_list)):
                 for j in range(i + 1, len(points_list)):
                     name1, pt1 = points_list[i]
                     name2, pt2 = points_list[j]
 
-                    def angle_constraint(p1=pt1, p2=pt2, c=center, mc=min_cos):
+                    # Soft minimum distance: only penalize if points are too close
+                    # This avoids coincident points without distorting other constraints.
+                    dist_key = f"min_dist_circle_{center_name}_{name1}_{name2}"
+                    if dist_key not in self.loss_fns:
+                        # Get radius for scaling (fallback to 1.0)
+                        radius = 1.0
+                        for circle_name, circle_info in self.circles:
+                            if circle_name == center_name:
+                                radius = circle_info.get('radius', 1.0)
+                                break
+                        min_dist = 0.25 * radius
+                        self.register_loss(
+                            dist_key,
+                            lambda p1=pt1, p2=pt2, md=min_dist: torch.relu(md - self.dist(p1, p2)),
+                            weight=200.0
+                        )
+                    
+                    # Use NDG constraint to softly enforce minimum angle
+                    # This prevents points from being too close but allows optimization flexibility
+                    def angle_ndg(p1=pt1, p2=pt2, c=center, min_cos=math.cos(min_angle_rad)):
+                        # Vectors from center to points
                         v1_x = p1.x - c.x
                         v1_y = p1.y - c.y
                         v2_x = p2.x - c.x
                         v2_y = p2.y - c.y
+                        
+                        # Dot product and magnitudes
                         dot = v1_x * v2_x + v1_y * v2_y
-                        mag1 = (v1_x**2 + v1_y**2)**0.5 + 1e-8
-                        mag2 = (v2_x**2 + v2_y**2)**0.5 + 1e-8
+                        mag1 = torch.sqrt(v1_x**2 + v1_y**2 + 1e-8)
+                        mag2 = torch.sqrt(v2_x**2 + v2_y**2 + 1e-8)
+                        
                         cos_angle = dot / (mag1 * mag2)
-                        penalty = cos_angle - mc
-                        return (penalty if penalty > 0 else 0)**2
-
-                    self.register_loss(
-                        f"min_angle_{center_name}_{name1}_{name2}",
-                        angle_constraint,
-                        weight=50.0,
-                    )
-
-    def lookup_pt_by_name(self, name: str):
-        """Helper to lookup point by string name"""
-        return self.name2pt.get(name)
-
-
+                        
+                        # Return value that decreases as angle increases (good for NDG)
+                        # We want large angles, so return (1 - cos_angle) which is small when angle is small
+                        return 1.0 - cos_angle  # Large when angle small, small when angle large
+                    
+                    # Use register_ndg for soft constraint
+                    ndg_key = f"min_angle_{center_name}_{name1}_{name2}"
+                    
+                    # Check if this constraint already exists
+                    if ndg_key not in self.ndgs:
+                        self.register_ndg(
+                            ndg_key,
+                            angle_ndg,
+                            weight=50.0 
+                        )
+    
     def _add_parallel_constraint(self, points: list):
         """Add parallel constraint between two segments"""
         if len(points) != 4:
@@ -872,7 +1792,7 @@ class Optimizer:
         seg1_name = f"{points[0].val}_{points[1].val}"
         seg2_name = f"{points[2].val}_{points[3].val}"
         self.register_loss(f"parallel_{seg1_name}_{seg2_name}",
-                          lambda: geo.parallel(p1, p2, p3, p4), weight=10.0)
+                          lambda: self.parallel(p1, p2, p3, p4), weight=1000.0)
 
     def _add_perpendicular_constraint(self, segments):
         """Add perpendicular constraint between two segments"""
@@ -888,7 +1808,10 @@ class Optimizer:
         seg1_name = f"{segments[0].val}_{segments[1].val}"
         seg2_name = f"{segments[2].val}_{segments[3].val}"
         self.register_loss(f"perpendicular_{seg1_name}_{seg2_name}",
-                          lambda: geo.perpendicular(p1, p2, p3, p4), weight=10.0)
+                          lambda: self.perpendicular(p1, p2, p3, p4), weight=1000.0)
+        
+        # Lưu thông tin perpendicular để renderer vẽ dấu vuông góc
+        self.perpendiculars.append((segments[0].val, segments[1].val, segments[2].val, segments[3].val))
 
     def _add_angle_equal_constraint(self, points: list):
         """Add angle equality constraint: angle ABC = angle DEF"""
@@ -907,8 +1830,8 @@ class Optimizer:
         angle2_name = f"{points[3].val}_{points[4].val}_{points[5].val}"
         self.register_loss(
             f"angle_equal_{angle1_name}_{angle2_name}",
-            lambda: geo.angle_diff_loss(p1, p2, p3, p4, p5, p6),
-            weight=10.0
+            lambda: self._angle_diff_loss(p1, p2, p3, p4, p5, p6),
+            weight=1000.0
         )
 
         self.angle_equal_assertions.append({
@@ -925,14 +1848,6 @@ class Optimizer:
             if self.verbosity:
                 logger.info(f" {instr}")
             self.process_instruction(instr)
-
-    def regularize_points(self):
-        """Add regularization to keep points near origin"""
-        if len(self.name2pt) > 0:
-            def compute_reg():
-                norms = [geo.norm(p) for p in self.name2pt.values()]
-                return torch.stack(norms).mean()
-            self.register_loss("regularization", compute_reg, weight=0.01)
 
     def train(self, epochs: int = 1000, lr: float = 0.01):
         if not self.has_loss:
@@ -955,7 +1870,7 @@ class Optimizer:
 
             # Early stopping
             if total_loss.item() < 1e-6:
-                if self.verbosity:
+                if self.verbosity >= 0:
                     logger.info(f"Converged at iteration {i} with loss {total_loss.item():.6f}")
                 break
 
@@ -975,15 +1890,35 @@ class Optimizer:
         for key, loss in self.losses.items():
             logger.info(f"{key:30s}: {loss.item():.6f}")
 
+    def regularize_points(self):
+        """Add regularization to keep points near origin"""
+        if len(self.name2pt) > 0:
+            def compute_reg():
+                norms = [self.norm(p) for p in self.name2pt.values()]
+                return torch.stack(norms).mean()
+            self.register_loss("regularization", compute_reg, weight=0.05)
 
+    def make_points_distinct(self):
+        pts = list(self.name2pt.values())
+        if len(pts) < 2:
+            return
+
+        for i in range(len(pts)):
+            for j in range(i+1, len(pts)):
+                # Encourage d > 0.1
+                self.register_ndg(f"distinct_{i}_{j}",
+                                 lambda pi=pts[i], pj=pts[j]: self.dist(pi, pj), weight=0.1)
 
     def solve_single(self, attempt_id=0):
         self.current_attempt = attempt_id
+        self._init_state()  
         self.preprocess()
-
+        
         self._add_all_chord_ndgs()
-
-        self.regularize_points()
+        # self._enforce_chord_length()  # TẠM THỜI TẮT để test
+        
+        self.regularize_points()  # Giữ các điểm gần gốc tọa độ
+        # self.make_points_distinct()
 
         loss = float('inf')
         if self.has_loss:
@@ -991,7 +1926,7 @@ class Optimizer:
                       lr=self.opts.get('learning_rate', 0.01))
 
         return self.get_diagram(), loss
-
+    
     def solve(self, n_tries=None):
         """Solve with multiple initialization attempts"""
         if n_tries is None:
@@ -1029,7 +1964,8 @@ class Optimizer:
 
             except Exception as e:
                 if self.verbosity:
-                    logger.error(f"Attempt {attempt + 1} failed: {e}")
+                    logger.error(f"Attempt {attempt + 1} failed:")
+                    logger.exception(e)  
                 continue
 
         if self.verbosity and n_tries > 1:
@@ -1038,4 +1974,142 @@ class Optimizer:
         return best_diagram if best_diagram is not None else self.get_diagram()
 
     def get_diagram(self):
-        return build_diagram(self)
+        diagram = Diagram()
+        
+        # BƯỚC 1: Tính centroid của tất cả điểm
+        if len(self.name2pt) > 0:
+            all_x = [pt.x.detach().cpu().item() for pt in self.name2pt.values()]
+            all_y = [pt.y.detach().cpu().item() for pt in self.name2pt.values()]
+            centroid_x = sum(all_x) / len(all_x)
+            centroid_y = sum(all_y) / len(all_y)
+        else:
+            centroid_x = 0.0
+            centroid_y = 0.0
+        
+        # BƯỚC 2: Dịch chuyển tất cả điểm về (0, 0) - CỐ ĐỊNH CHÍNH GIỮA
+        for name, pt in self.name2pt.items():
+            x = pt.x.detach().cpu().item() - centroid_x  # Dịch về (0, 0)
+            y = pt.y.detach().cpu().item() - centroid_y
+            geo_pt = GeometricPoint(x, y, name)
+            diagram.add_point(name, geo_pt)
+
+        # Add triangles with metadata
+        for key, metadata in self.triangles_metadata.items():
+            p1_name, p2_name, p3_name = key
+            if p1_name in diagram.points and p2_name in diagram.points and p3_name in diagram.points:
+                p1 = diagram.points[p1_name]
+                p2 = diagram.points[p2_name]
+                p3 = diagram.points[p3_name]
+
+                equal_sides = metadata.get('equal_sides')
+                right_angle_at = metadata.get('right_angle_at')
+                equal_angles = metadata.get('equal_angles')
+
+                logger.info(f"Adding triangle {key} with equal_angles: {equal_angles}")
+                diagram.add_triangle(p1, p2, p3, equal_sides, right_angle_at, equal_angles)
+
+        # Add quadrilaterals with metadata
+        for key, metadata in self.quadrilaterals_metadata.items():
+            p1_name, p2_name, p3_name, p4_name = key
+            if all(name in diagram.points for name in [p1_name, p2_name, p3_name, p4_name]):
+                diagram.add_quadrilateral(
+                    diagram.points[p1_name],
+                    diagram.points[p2_name],
+                    diagram.points[p3_name],
+                    diagram.points[p4_name],
+                    metadata
+                )
+
+        # Add circles
+        for center_name, info in self.circles:
+            if center_name in diagram.points:
+                center = diagram.points[center_name]
+                center_pt = self.name2pt[center_name]
+                
+                # Calculate radius based on circle type
+                if info['type'] == 'incircle':
+                    # Radius = distance from center to any triangle side
+                    triangle_points = info['triangle']
+                    p1 = self.name2pt[triangle_points[0]]
+                    p2 = self.name2pt[triangle_points[1]]
+                    radius = self.dist_to_line(center_pt, p1, p2).detach().cpu().item()
+                    info = {**info, 'radius': radius}
+                    
+                elif info['type'] == 'circumcircle':
+                    # Radius = distance from center to any triangle vertex
+                    triangle_points = info['triangle']
+                    p1 = self.name2pt[triangle_points[0]]
+                    radius = self.dist(center_pt, p1).detach().cpu().item()
+                    info = {**info, 'radius': radius}
+                # For 'positioned' type, radius is already in info
+                
+                diagram.add_circle(center, info)
+
+        for p1_name, p2_name in self.segments:
+            if p1_name in diagram.points and p2_name in diagram.points:
+                p1 = diagram.points[p1_name]
+                p2 = diagram.points[p2_name]
+                diagram.add_segment(p1, p2)
+
+        for p1_name, p2_name in self.lines:
+            if p1_name in diagram.points and p2_name in diagram.points:
+                p1 = diagram.points[p1_name]
+                p2 = diagram.points[p2_name]
+                # Store line as tuple for rendering
+                line_name = f"line_{p1_name}_{p2_name}"
+                diagram.add_line(line_name, (p1, p2))
+
+        # Add angle bisectors
+        if hasattr(self, 'angle_bisectors_metadata'):
+            for bisector_data in self.angle_bisectors_metadata:
+                # Convert point names to GeometricPoint objects
+                vertex_name = bisector_data['vertex']
+                bisector_point_name = bisector_data['bisector_point']
+
+                if vertex_name in diagram.points and bisector_point_name in diagram.points:
+                    diagram.angle_bisectors.append({
+                        'vertex': diagram.points[vertex_name],
+                        'point': diagram.points[bisector_point_name],
+                        'angle_points': bisector_data.get('angle_points', [])
+                    })
+
+        # Add angle-equal assertions
+        for assertion in self.angle_equal_assertions:
+            angle1 = assertion['angle1']  # (p1, p2, p3)
+            angle2 = assertion['angle2']  # (p4, p5, p6)
+
+            if all(pname in diagram.points for pname in angle1 + angle2):
+                diagram.angle_equal_assertions.append({
+                    'angle1': {
+                        'p1': diagram.points[angle1[0]],
+                        'vertex': diagram.points[angle1[1]],
+                        'p2': diagram.points[angle1[2]]
+                    },
+                    'angle2': {
+                        'p1': diagram.points[angle2[0]],
+                        'vertex': diagram.points[angle2[1]],
+                        'p2': diagram.points[angle2[2]]
+                    }
+                })
+        
+        # Add angle measures for display
+        for vertex_name, p1_name, p2_name, degrees in self.angle_measures:
+            if all(pname in diagram.points for pname in [vertex_name, p1_name, p2_name]):
+                diagram.add_angle_measure(
+                    diagram.points[vertex_name],
+                    diagram.points[p1_name],
+                    diagram.points[p2_name],
+                    degrees
+                )
+        
+        # Add perpendicular constraints for rendering perpendicular markers
+        for p1_name, p2_name, p3_name, p4_name in self.perpendiculars:
+            if all(pname in diagram.points for pname in [p1_name, p2_name, p3_name, p4_name]):
+                diagram.perpendiculars.append((
+                    diagram.points[p1_name],
+                    diagram.points[p2_name],
+                    diagram.points[p3_name],
+                    diagram.points[p4_name]
+                ))
+        
+        return diagram
