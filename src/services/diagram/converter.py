@@ -8,7 +8,7 @@ from src.services.diagram import geometry as geo
 from src.services.diagram.models.entities import GeometricPoint, Diagram
 
 if TYPE_CHECKING:
-    from src.services.diagram.optimizer import Optimizer
+    from src.services.diagram.optimizer_old import Optimizer
 
 
 def build_diagram(opt: Optimizer) -> Diagram:

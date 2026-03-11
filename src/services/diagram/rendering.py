@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from loguru import logger
 
 from src.services.diagram.diagram_builder import DiagramBuilder
-from src.services.diagram.optimizer import Optimizer
+from src.services.diagram.optimizer_old import Optimizer
 from src.services.diagram.matplotlib_renderer import MatplotlibDiagramRenderer
 
 

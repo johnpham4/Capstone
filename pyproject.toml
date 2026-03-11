@@ -30,6 +30,7 @@ dependencies = [
     "python-multipart>=0.0.22",
     "uvicorn>=0.40.0",
     "pyjwt>=2.7.0",
+    "gradio>=6.9.0",
 ]
 
 [project.optional-dependencies]

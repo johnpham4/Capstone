@@ -76,3 +76,7 @@ mock:
 	curl -X POST https://victoria-communicable-sometimes.ngrok-free.dev/generate \
 	-H "Content-Type: application/json" \
 	-d '{"prompt":"Cho tam giác ABC vuông tại A, có góc B bằng 30 độ"}'
+
+
+ui:
+	uv run python -m ui.py
