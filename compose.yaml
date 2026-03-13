@@ -1,5 +1,4 @@
 services:
-  # ─── Application Services ──────────────────────────────────
   api:
     build:
       context: .
@@ -120,7 +119,6 @@ services:
     networks:
       - geo
 
-  # ─── ML Ops ───────────────────────────────────────────────
   mysql:
     image: mysql:8.0
     container_name: zenml-mysql
