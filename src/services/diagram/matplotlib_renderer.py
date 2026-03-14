@@ -163,52 +163,46 @@ class MatplotlibDiagramRenderer:
                 linewidth=1.5
             )
     
-    def _draw_angle_measure(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, angle_degrees: float, radius: float = 0.2):
-        """
-        Vẽ số đo góc
-        vertex: đỉnh góc
-        p1, p2: 2 điểm tạo thành góc
-        angle_degrees: số đo góc (độ)
-        radius: khoảng cách từ đỉnh đến text
-        """
-        # Vector từ vertex đến 2 điểm
+    def _draw_angle_measure(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, angle_degrees: float, radius: float = 0.16):
+        """Vẽ số đo góc tại đỉnh giữa hai tia p1-vertex và p2-vertex."""
         v1x = p1.x - vertex.x
         v1y = p1.y - vertex.y
         v2x = p2.x - vertex.x
         v2y = p2.y - vertex.y
-        
+
         v1_norm = np.sqrt(v1x**2 + v1y**2)
         v2_norm = np.sqrt(v2x**2 + v2y**2)
-        
         if v1_norm < 1e-8 or v2_norm < 1e-8:
             return
-        
+
         v1x, v1y = v1x / v1_norm, v1y / v1_norm
         v2x, v2y = v2x / v2_norm, v2y / v2_norm
-        
-        # Tính góc giữa (hướng đặt text)
+
         angle1 = np.arctan2(v1y, v1x)
         angle2 = np.arctan2(v2y, v2x)
-        
-        # Góc giữa (radian)
         mid_angle = (angle1 + angle2) / 2
-        
-        # Điều chỉnh nếu góc vượt 180 độ
+
         angle_diff = angle2 - angle1
         if angle_diff > np.pi:
             mid_angle += np.pi
         elif angle_diff < -np.pi:
             mid_angle -= np.pi
-        
-        # Text nằm bên trong arc, tại khoảng 60-65% radius của arc
-        text_radius = radius * 0.85 
+
+        text_radius = radius * 0.85
         text_x = vertex.x + text_radius * np.cos(mid_angle)
         text_y = vertex.y + text_radius * np.sin(mid_angle)
-        
-        ax.text(text_x, text_y, f"{int(angle_degrees)}°",
-               fontsize=22, ha='center', va='center',
-               color='red', fontweight='bold',
-               bbox=dict(boxstyle='round,pad=0.15', facecolor='white', edgecolor='none', alpha=0.85))
+
+        ax.text(
+            text_x,
+            text_y,
+            f"{int(angle_degrees)}°",
+            fontsize=16,
+            ha='center',
+            va='center',
+            color='red',
+            fontweight='bold',
+            bbox=dict(boxstyle='round,pad=0.1', facecolor='white', edgecolor='none', alpha=0.8),
+        )
 
 
     def render(
@@ -238,8 +232,10 @@ class MatplotlibDiagramRenderer:
             ax.axis('off')
             
             if save:
-                plt.savefig(save_path, dpi=dpi, bbox_inches='tight')
-                logger.info(f"Saved empty diagram to {save_path}")
+                output_path = Path(filename)
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+                plt.savefig(str(output_path), dpi=150, bbox_inches='tight')
+                logger.info(f"Saved empty diagram to {output_path}")
             if show:
                 plt.show()
             return fig, ax
@@ -589,7 +585,7 @@ class MatplotlibDiagramRenderer:
                     angle_data['p1'],
                     angle_data['p2'],
                     num_arcs=1,
-                    radius=0.18,  
+                    radius=0.12,
                     draw_tick=False
                 )
                 # Draw the degree text
@@ -599,7 +595,7 @@ class MatplotlibDiagramRenderer:
                     angle_data['p1'],
                     angle_data['p2'],
                     angle_data['degrees'],
-                    radius=0.32  
+                    radius=0.22
                 )
 
 
@@ -631,19 +627,19 @@ class MatplotlibDiagramRenderer:
             actual_center_x = (min_x + max_x) / 2
             actual_center_y = (min_y + max_y) / 2
             
-            # Calculate zoom factor with padding
+            # Calculate zoom factor with tighter padding to avoid tiny rendered shapes
             x_range = max_x - min_x
             y_range = max_y - min_y
-            max_range = max(x_range, y_range) / 2 * 1.3  # 30% padding
-            zoom_factor = max(1.5, max_range)
+            max_range = max(x_range, y_range) / 2
+            zoom_factor = max(0.55, max_range * 1.15)
             
             # Center the view on the actual center of all elements
             ax.set_xlim(actual_center_x - zoom_factor, actual_center_x + zoom_factor)
             ax.set_ylim(actual_center_y - zoom_factor, actual_center_y + zoom_factor)
         else:
             # Fallback if no points
-            ax.set_xlim(-1.5, 1.5)
-            ax.set_ylim(-1.5, 1.5)
+            ax.set_xlim(-1.0, 1.0)
+            ax.set_ylim(-1.0, 1.0)
         
         ax.axis('off')
 

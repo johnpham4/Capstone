@@ -1,4 +1,7 @@
 import click
+import subprocess
+import sys
+from importlib import import_module
 from pathlib import Path
 from loguru import logger
 from datetime import datetime as dt
@@ -37,6 +40,12 @@ from src.config.settings.base import settings
     help="Run finetuning on AWS SageMaker"
 )
 @click.option(
+    "--run-render-diagram",
+    is_flag=True,
+    default=False,
+    help="Render diagram images from generated DSL dataset"
+)
+@click.option(
     "--num-epochs",
     type=int,
     default=1,
@@ -66,12 +75,19 @@ def main(
     run_upload_dataset: bool = False,
     run_generate_gmbl: bool = False,
     run_finetune: bool = False,
+    run_render_diagram: bool = False,
     num_epochs: int = 1,
     batch_size: int = 2,
     learning_rate: float = 2e-4,
     dataset_workspace: str = "minn4",
 ) -> None:
-    assert run_prepare_data or run_upload_dataset or run_generate_gmbl or run_finetune, "Please use one of the options"
+    assert (
+        run_prepare_data
+        or run_upload_dataset
+        or run_generate_gmbl
+        or run_finetune
+        or run_render_diagram
+    ), "Please use one of the options"
 
     pipeline_args = {"enable_cache": not no_cache}
     root_dir = Path(__file__).resolve().parent.parent
@@ -104,13 +120,30 @@ def main(
         from pipelines.dataset_generation import dataset_generation_pipeline
         dataset_generation_pipeline.with_options(**pipeline_args)()
 
+    if run_render_diagram:
+        logger.info("Starting diagram rendering script")
+        subprocess.run([sys.executable, str(root_dir / "test_diagram.py")], check=True)
+
     if run_finetune:
         assert settings.HF_TOKEN, "HF_TOKEN required. Set it in .env file"
         assert settings.AWS_ARN_ROLE, "AWS_ARN_ROLE required. Set it in .env file"
 
         logger.info(f"Configuration: epochs={num_epochs}, batch_size={batch_size}, lr={learning_rate}")
 
-        from src.services.model.finetuning.sagemaker import run_finetuning_on_sagemaker
+        try:
+            sagemaker_module = import_module("src.services.model.finetuning.sagemaker")
+        except ModuleNotFoundError as exc:
+            raise RuntimeError(
+                "Missing SageMaker finetuning module: src.services.model.finetuning.sagemaker. "
+                "Please restore this module or update --run-finetune to use the current training entrypoint."
+            ) from exc
+
+        run_finetuning_on_sagemaker = getattr(sagemaker_module, "run_finetuning_on_sagemaker", None)
+        if run_finetuning_on_sagemaker is None:
+            raise RuntimeError(
+                "Function run_finetuning_on_sagemaker was not found in "
+                "src.services.model.finetuning.sagemaker."
+            )
 
         run_finetuning_on_sagemaker(
             num_train_epochs=num_epochs,

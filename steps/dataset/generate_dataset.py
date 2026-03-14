@@ -10,11 +10,21 @@ from src.models.domain.training.documents import Document
 from src.models.domain.training.prompt import GenerateDatasetSamplesPrompt
 from src.models.domain.training.dataset import InstructTrainTestSplit
 
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _resolve_path(path_like: str) -> Path:
+    path = Path(path_like)
+    if path.is_absolute():
+        return path
+    return (PROJECT_ROOT / path).resolve()
+
 @step
 def load_source_data(
     source_json_path: str,
 ) -> Annotated[list[Document], "documents"]:
-    source_path = Path(source_json_path)
+    source_path = _resolve_path(source_json_path)
 
     if not source_path.exists():
         raise FileNotFoundError(f"Source data not found: {source_json_path}")
@@ -25,8 +35,11 @@ def load_source_data(
     documents = []
     for item in data:
         if "caption_vn" in item:
+            raw_caption = item.get("caption", "")
+            caption = raw_caption[0] if isinstance(raw_caption, list) else raw_caption
+
             doc = Document(
-                caption=item.get("caption", [""])[0],
+                caption=caption,
                 image_dir=item.get("image", ""),
                 caption_vn=item["caption_vn"]
             )
@@ -78,7 +91,7 @@ def save_dataset_to_json(
     output_dir: str
 ) -> Annotated[str, "output_path"]:
 
-    output_path = Path(output_dir)
+    output_path = _resolve_path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
     train_path = output_path / "train.json"

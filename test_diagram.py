@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import sys
 import io
+import argparse
+import yaml
 
 # Fix encoding for Windows terminal
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -10,6 +12,29 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 from src.services.diagram.diagram_builder import DiagramBuilder
 from src.services.diagram.optimizer import Optimizer
 from src.services.diagram.matplotlib_renderer import MatplotlibDiagramRenderer
+
+
+def _resolve_path(project_root: Path, raw_path: str) -> Path:
+    path = Path(raw_path)
+    if path.is_absolute():
+        return path
+    return (project_root / path).resolve()
+
+
+def _load_render_config(project_root: Path, config_path: str) -> dict:
+    resolved_config_path = _resolve_path(project_root, config_path)
+
+    if not resolved_config_path.exists():
+        return {}
+
+    with open(resolved_config_path, "r", encoding="utf-8") as f:
+        parsed = yaml.safe_load(f) or {}
+
+    if not isinstance(parsed, dict):
+        return {}
+
+    parameters = parsed.get("parameters", {})
+    return parameters if isinstance(parameters, dict) else {}
 
 def test_single_problem(instruction, dsl_answer, output_path):
     print(f"Instruction: {instruction}")
@@ -35,7 +60,14 @@ def test_single_problem(instruction, dsl_answer, output_path):
         print(f"Points: {[p.val for p in builder.points]}")
         print(f"Instructions count: {len(builder.instructions)}")
         # print(f"Instructions: {builder.instructions}")
-        opts = {'epochs': 1000, 'n_tries': 3, 'eps': 1e-6, 'seed': 42, 'learning_rate': 0.02}
+        opts = {
+            'epochs': 1000,
+            'n_tries': 3,
+            'eps': 1e-6,
+            'seed': 42,
+            'learning_rate': 0.01,
+            'enable_chord_ndg': False,
+        }
 
         optimizer = Optimizer(builder.instructions, opts, verbosity=True)
         diagram = optimizer.solve()
@@ -65,9 +97,25 @@ def test_single_problem(instruction, dsl_answer, output_path):
 
 
 def main():
-    path = "dataset/data/test.json"
-    json_path = Path(path)
-    output_dir = Path("output_fixed")
+    parser = argparse.ArgumentParser(description="Render diagrams from DSL dataset")
+    parser.add_argument("--config", default="configs/diagram_render.yaml", help="YAML config path")
+    parser.add_argument("--input", default=None, help="Input JSON path")
+    parser.add_argument("--output-dir", default=None, help="Directory to save rendered images")
+    args = parser.parse_args()
+
+    project_root = Path(__file__).resolve().parent
+    config = _load_render_config(project_root, args.config)
+
+    configured_input = config.get("input_json_path", "dataset/data/train.json")
+    configured_output_dir = config.get("output_dir", "output_fixed")
+
+    input_path_raw = args.input or configured_input
+    output_dir_raw = args.output_dir or configured_output_dir
+
+    json_path = _resolve_path(project_root, input_path_raw)
+
+    output_dir = _resolve_path(project_root, output_dir_raw)
+
     output_dir.mkdir(parents=True, exist_ok=True)
 
     existing_files = list(output_dir.glob("diagram_*.png"))
@@ -94,8 +142,17 @@ def main():
     
     for idx, problem in enumerate(problems, start_idx):
 
-        instruction = problem['instruction']
-        answer = problem['answer']
+        instruction = problem.get('instruction', '')
+        answer = problem.get('answer') or problem.get('dsl')
+
+        if not answer:
+            print(f"Skipping index {idx}: missing 'answer' or 'dsl' field")
+            failed_problems.append({
+                'index': idx,
+                'instruction': instruction,
+                'dsl': ''
+            })
+            continue
 
         output_filename = f"diagram_{idx:02d}.png"
         output_path = output_dir / output_filename

@@ -7,7 +7,7 @@ from networkx import center
 class Initializer:
 
     @staticmethod
-    def init_isoceles_triangle(apex_idx: int = 0, scale: float = 1.0) -> List[Tuple[float, float]]:
+    def init_isoceles_triangle(apex_idx: int = 0, scale: float = 1.35) -> List[Tuple[float, float]]:
         # Base configuration: apex at top, base at bottom
         base_coords = [
             (0.0, 0.8 * scale),      # Apex
@@ -24,15 +24,16 @@ class Initializer:
             return [base_coords[1], base_coords[2], base_coords[0]]
 
     @staticmethod
-    def init_right_triangle(right_angle_idx: int = 0, scale: float = 1.0) -> List[Tuple[float, float]]:
-        a = 0.9 * scale
-        b = 0.6 * scale
+    def init_right_triangle(right_angle_idx: int = 0, scale: float = 1.35) -> List[Tuple[float, float]]:
+        # Axis-aligned template (like a corner of a rectangle) to keep right triangles readable.
+        leg_x = 1.2 * scale
+        leg_y = 0.95 * scale
 
-        # Right angle at first point
+        # Right angle at first point.
         base_coords = [
-            (-a / 2, -b / 2),   # Right angle
-            ( a / 2, -b / 2),   # Leg 1
-            (-a / 2,  b / 2)    # Leg 2
+            (-leg_x / 2, -leg_y / 2),  # Right angle
+            ( leg_x / 2, -leg_y / 2),  # Horizontal leg endpoint
+            (-leg_x / 2,  leg_y / 2)   # Vertical leg endpoint
         ]
 
         if right_angle_idx == 0:
@@ -43,7 +44,7 @@ class Initializer:
             return [base_coords[1], base_coords[2], base_coords[0]]
 
     @staticmethod
-    def init_equilateral_triangle(scale: float = 1.0) -> List[Tuple[float, float]]:
+    def init_equilateral_triangle(scale: float = 1.35) -> List[Tuple[float, float]]:
         height = math.sqrt(3) / 2 * scale
         return [
             (0.0, 2 * height / 3),           # Top
@@ -53,7 +54,7 @@ class Initializer:
 
     @staticmethod
 
-    def init_scalene_triangle(scale: float = 1.0) -> List[Tuple[float, float]]:
+    def init_scalene_triangle(scale: float = 1.35) -> List[Tuple[float, float]]:
         """Scalene triangle with all sides different"""
         return [
             (-0.7 * scale, -0.4 * scale),   # A
@@ -62,12 +63,13 @@ class Initializer:
         ]
 
     @staticmethod
-    def init_right_isoceles_triangle(right_angle_idx: int = 0, scale: float = 1.0) -> List[Tuple[float, float]]:
-        leg_length = 0.7 * scale
+    def init_right_isoceles_triangle(right_angle_idx: int = 0, scale: float = 1.35) -> List[Tuple[float, float]]:
+        # Centered square-corner layout: equal legs and clear diagonal hypotenuse.
+        leg_length = 1.1 * scale
         base_coords = [
-            (0.0, 0.0),                    # Right angle
-            (leg_length, 0.0),             # Horizontal leg
-            (0.0, leg_length)              # Vertical leg
+            (-leg_length / 2, -leg_length / 2),  # Right angle
+            ( leg_length / 2, -leg_length / 2),  # Horizontal leg
+            (-leg_length / 2,  leg_length / 2)   # Vertical leg
         ]
 
         if right_angle_idx == 0:
@@ -198,7 +200,7 @@ class Initializer:
         ]
 
     @staticmethod
-    def init_triangle_with_angle_bisector(apex_idx: int = 0, scale: float = 1.0) -> List[Tuple[float, float]]:
+    def init_triangle_with_angle_bisector(apex_idx: int = 0, scale: float = 1.35) -> List[Tuple[float, float]]:
         """
         Initialize triangle with angle bisector from apex
         """
@@ -280,9 +282,13 @@ class Initializer:
         return [p1, p2]
 
     @staticmethod
-    def init_obtuse_triangle(apex_idx: int = 0) -> List[Tuple[float, float]]:
+    def init_obtuse_triangle(apex_idx: int = 0, scale: float = 1.35) -> List[Tuple[float, float]]:
         """Initialize an obtuse triangle"""
-        coords = [(0.0, 0.0), (1.0, 0.0), (-0.3, 0.5)]
+        coords = [
+            (0.0 * scale, 0.0 * scale),
+            (1.0 * scale, 0.0 * scale),
+            (-0.3 * scale, 0.5 * scale),
+        ]
         if apex_idx != 0:
             coords = [coords[apex_idx]] + [coords[i] for i in range(3) if i != apex_idx]
         return coords

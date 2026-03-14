@@ -19,6 +19,9 @@ data_and_split:
 generation:
 	PYTHONPATH=. uv run python tools/run.py --run-generate-gmbl --no-cache
 
+render_diagram:
+	PYTHONPATH=. uv run python tools/run.py --run-render-diagram --no-cache
+
 upload:
 	PYTHONPATH=. uv run python -m tools.run --run-upload-dataset
 

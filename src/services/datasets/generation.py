@@ -14,6 +14,7 @@ from src.models.domain.training import InstructDataset, InstructDatasetSample, I
 
 from . import utils as generation_utils
 from .prompt import prompt
+import time
 
 class DatasetGeneration(ABC):
 
@@ -89,11 +90,24 @@ Any violation is considered an error.
         for batch_idx, batch in enumerate(batches):
             # Add delay between batches to avoid rate limit
             if batch_idx > 0:
-                import time
-                time.sleep(2)  # 2 seconds delay
+                time.sleep(10)
+
+            logger.info(f"Processing batch {batch_idx + 1}/{len(batches)}...")
 
             try:
-                raw_outputs = chain.batch(batch, stop=None)
+                for attempt in range(5):
+                    try:
+                        raw_outputs = chain.batch(batch, stop=None, config={"max_concurrency": 1})
+                        break
+                    except Exception as rate_err:
+                        if "429" in str(rate_err) or "rate_limit" in str(rate_err).lower():
+                            wait = 2 ** attempt * 10
+                            logger.warning(f"Rate limit hit on batch {batch_idx}, retrying in {wait}s (attempt {attempt+1}/5)")
+                            time.sleep(wait)
+                            if attempt == 4:
+                                raise
+                        else:
+                            raise
 
                 for idx, raw_output in enumerate(raw_outputs):
                     prompt_idx = batch_idx * batch_size + idx

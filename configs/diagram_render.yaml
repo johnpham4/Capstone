@@ -1,0 +1,3 @@
+parameters:
+  input_json_path: "./dataset/data/test.json"
+  output_dir: "./output_fixed"

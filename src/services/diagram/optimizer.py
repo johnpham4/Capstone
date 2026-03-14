@@ -45,6 +45,8 @@ class Optimizer:
         self.angle_equal_assertions = []
         self.angle_measures = []  # Store angles with measure values: [(vertex, p1, p2, degrees)]
         self.perpendiculars = []  # Store perpendicular segments for rendering
+        self.tangent_specs = []  # Store tangent declarations for post-solve geometric correction
+        self._tangent_spec_keys = set()
         self.unnamed_point_counter = 0
         self.has_loss = False
         self.trainable_vars = []
@@ -212,6 +214,10 @@ class Optimizer:
                 raise RuntimeError(f"Point {p.val} not found")
         else:
             raise RuntimeError(f"Invalid point type: {type(p)}")
+
+    def lookup_pt_by_name(self, name: str):
+        """Lookup a point by raw point name; returns None if not found."""
+        return self.name2pt.get(name)
 
 
     def sample_uniform(self, p, lo=-1.0, hi=1.0, save_name=True, init_coords=None):
@@ -610,6 +616,12 @@ class Optimizer:
         self.register_loss(f"on_seg_{point_name.val}",
                           lambda f=foot, a=p1, b=p2: self._point_on_segment_loss(f, a, b), 
                           weight=5000.0)  # CỰC MẠNH - foot phải nằm trên đoạn thẳng
+
+        # Draw helper segment from projection source to the foot (e.g., OH).
+        helper_segment = (vertex_point.val, point_name.val)
+        reverse_helper_segment = (point_name.val, vertex_point.val)
+        if helper_segment not in self.segments and reverse_helper_segment not in self.segments:
+            self.segments.append(helper_segment)
         return foot
 
     def _define_intersection(self, point_name, segment1_points, segment2_points):
@@ -747,17 +759,26 @@ class Optimizer:
 
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
-        midpoint = self.sample_uniform(point_name)
+        init_x = (p1.x.detach().cpu().item() + p2.x.detach().cpu().item()) / 2
+        init_y = (p1.y.detach().cpu().item() + p2.y.detach().cpu().item()) / 2
+        midpoint = self.sample_uniform(point_name, init_coords=(init_x, init_y))
         
         # Constraint 1: Midpoint position (x,y coordinates)
         self.register_loss(f"midpoint_pos_{point_name.val}",
                           lambda: (midpoint.x - (p1.x + p2.x)/2)**2 + (midpoint.y - (p1.y + p2.y)/2)**2,
-                          weight=100.0)
+                          weight=5000.0)
         
         # Constraint 2: Collinearity 
         self.register_loss(f"midpoint_collinear_{point_name.val}",
                           lambda: self.collinear(midpoint, p1, p2),
-                          weight=100.0)
+                          weight=1000.0)
+
+        # Constraint 3: Equal halves (|MP1| = |MP2|)
+        self.register_loss(
+            f"midpoint_equal_halves_{point_name.val}",
+            lambda: self.dist(midpoint, p1) - self.dist(midpoint, p2),
+            weight=2000.0,
+        )
         
         return midpoint
 
@@ -1120,7 +1141,7 @@ class Optimizer:
     
             
     def _add_angle_measure(self, points: list):
-        """Store angle measure for display: angle ABC = degrees"""
+        """Store angle measure for display and enforce geometric angle value."""
         # DSL: (angle-measure A C B 110) 
         if len(points) < 4:
             logger.warning(f"Angle-measure needs 4 values (3 points + degrees), got {len(points)}")
@@ -1130,6 +1151,17 @@ class Optimizer:
         vertex_name = points[1].val  # C (đỉnh góc)
         p2_name = points[2].val  # B
         degrees = float(points[3].val) if hasattr(points[3], 'val') else float(points[3])  # 110
+
+        # Enforce angle value using cosine target.
+        p1 = self.lookup_pt(points[0])
+        vertex = self.lookup_pt(points[1])
+        p2 = self.lookup_pt(points[2])
+        target_cos = math.cos(math.radians(degrees))
+        self.register_loss(
+            f"angle_measure_{p1_name}_{vertex_name}_{p2_name}_{int(round(degrees))}",
+            lambda pa=p1, pv=vertex, pb=p2, t=target_cos: self.angle_cosine(pa, pv, pb) - t,
+            weight=5000.0,
+        )
         
         # Store for later rendering
         self.angle_measures.append((vertex_name, p1_name, p2_name, degrees))
@@ -1215,7 +1247,7 @@ class Optimizer:
         
         self.register_loss(
             f"equal_distance_{points[0].val}{points[1].val}_{points[2].val}{points[3].val}",
-            lambda pt1=p1, pt2=p2, pt3=p3, pt4=p4: (self.dist(pt1, pt2) - self.dist(pt3, pt4))**2,
+            lambda pt1=p1, pt2=p2, pt3=p3, pt4=p4: self.dist(pt1, pt2) - self.dist(pt3, pt4),
             weight=3000.0  # Tăng lên để đảm bảo AC = AD chính xác hơn
         )
         
@@ -1252,7 +1284,7 @@ class Optimizer:
         
         self.register_loss(
             f"fixed_distance_{points[0].val}{points[1].val}_{target_distance}",
-            lambda pt1=p1, pt2=p2, target=target_distance: (self.dist(pt1, pt2) - target)**2,
+            lambda pt1=p1, pt2=p2, target=target_distance: self.dist(pt1, pt2) - target,
             weight=50.0  # Giảm xuống - chỉ để constraint nhẹ, không quá quan trọng
         )
         
@@ -1287,14 +1319,14 @@ class Optimizer:
             self.register_loss(
                 center_key,
                 lambda c=center: c.x**2 + c.y**2,
-                weight=10000.0  
+                weight=100.0
             )
         
         # Use const() to avoid lambda closure issues
         radius_const = self.const(radius)
         self.register_loss(
             f"on_circle_{points[0].val}_{center_name}",
-            lambda pt=point, c=center, r=radius_const: (self.dist(pt, c) - r)**2,
+            lambda pt=point, c=center, r=radius_const: self.dist(pt, c) - r,
             weight=100000.0  
         )
     
@@ -1337,6 +1369,21 @@ class Optimizer:
                 self._add_line_circle_tangent_by_points(p1, p2, center_obj)
         else:
             logger.warning(f"Tangent constraint needs 3 or 4 objects, got {len(objects)}")
+
+    def _record_tangent_spec(self, tangent_point_name, center_name, p1_name, p2_name):
+        """Store unique tangent declarations for deterministic post-solve correction."""
+        key = (tangent_point_name, center_name, p1_name, p2_name)
+        if key in self._tangent_spec_keys:
+            return
+        self._tangent_spec_keys.add(key)
+        self.tangent_specs.append(
+            {
+                'tangent_point': tangent_point_name,
+                'center': center_name,
+                'p1': p1_name,
+                'p2': p2_name,
+            }
+        )
     
     def _add_line_circle_tangent_by_points(self, p1_obj, p2_obj, center_obj):
         """Add tangent constraint for line (p1, p2) to circle with center"""
@@ -1361,8 +1408,17 @@ class Optimizer:
             self.register_loss(
                 f"tangent_line_{p1_obj.val}{p2_obj.val}_circle_{center_name}",
                 lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
-                weight=5000.0  # Tăng mạnh - tiếp tuyến là constraint quan trọng
+                weight=20000.0  # Strongly enforce line-circle tangency
             )
+
+            # If one endpoint is intended as tangent point, force it on the circle.
+            self.register_loss(
+                f"tangent_endpoint_on_circle_{p1_obj.val}_{center_name}",
+                lambda pt=p1, c=center, r=radius_const: self.dist(pt, c) - r,
+                weight=30000.0,
+            )
+
+            self._record_tangent_spec(p1_obj.val, center_name, p1_obj.val, p2_obj.val)
             
             if self.verbosity:
                 logger.info(f"Added line-circle tangent: line {p1_obj.val}{p2_obj.val} tangent to circle {center_name}")
@@ -1408,14 +1464,21 @@ class Optimizer:
             self.register_loss(
                 f"tangent_line_{p1_name}{p2_name}_circle_{center_name}_at_{tangent_pt_name}",
                 lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
-                weight=5000.0  
+                weight=20000.0
+            )
+
+            # CONSTRAINT 1.1: Điểm tiếp xúc phải nằm trên đường tròn.
+            self.register_loss(
+                f"tangent_point_on_circle_{tangent_pt_name}_{center_name}",
+                lambda m=tangent_point, c=center, r=radius_const: self.dist(m, c) - r,
+                weight=30000.0,
             )
             
             # CONSTRAINT 2: OM vuông góc với AB (tính chất tiếp tuyến)
             self.register_loss(
                 f"tangent_perpendicular_{tangent_pt_name}_{center_name}_{p1_name}{p2_name}",
                 lambda m=tangent_point, o=center, a=p1, b=p2: self.perpendicular(o, m, a, b)**2,
-                weight=3000.0  
+                weight=20000.0
             )
             
             # CONSTRAINT 3: M nằm trên đoạn AB (không nằm ngoài)
@@ -1446,6 +1509,8 @@ class Optimizer:
                     else:
                         if self.verbosity:
                             logger.info(f"Constraint {constraint_key} already exists, skipping")
+
+            self._record_tangent_spec(tangent_pt_name, center_name, p1_name, p2_name)
             
             if self.verbosity:
                 logger.info(f"Added line-circle tangent: line {p1_name}{p2_name} tangent to circle {center_name} at {tangent_pt_name}")
@@ -1504,14 +1569,20 @@ class Optimizer:
                     self.register_loss(
                         f"tangent_line_{p1_name}{p2_name}_circle_{center_name}_at_{tangent_point_obj.val}",
                         lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
-                        weight=100.0
+                        weight=20000.0
+                    )
+
+                    self.register_loss(
+                        f"tangent_point_on_circle_{tangent_point_obj.val}_{center_name}",
+                        lambda m=tangent_point, c=center, r=radius_const: self.dist(m, c) - r,
+                        weight=30000.0,
                     )
                     
                     # CONSTRAINT 2: OM vuông góc với AB (tính chất tiếp tuyến)
                     self.register_loss(
                         f"tangent_perpendicular_{tangent_point_obj.val}_{center_name}_{p1_name}{p2_name}",
                         lambda m=tangent_point, o=center, a=p1, b=p2: self.perpendicular(o, m, a, b)**2,
-                        weight=3000.0  # Tăng lên để đồng bộ với tangent_line_circle
+                        weight=20000.0
                     )
                     
                     # CONSTRAINT 3: M nằm trên đoạn AB (không nằm ngoài)
@@ -1543,6 +1614,8 @@ class Optimizer:
                             else:
                                 if self.verbosity:
                                     logger.info(f"Constraint {constraint_key} already exists, skipping")
+
+                    self._record_tangent_spec(tangent_point_obj.val, center_name, p1_name, p2_name)
                     
                     if self.verbosity:
                         logger.info(f"Added line-circle tangent with tangent point: line {p1_name}{p2_name} tangent to circle {center_name} at {tangent_point_obj.val}")
@@ -1619,7 +1692,7 @@ class Optimizer:
         # Thu thập tất cả điểm on-circle theo center
         circle_points = {}  # {center_name: [point_names]}
         
-        for loss_name in self.losses:
+        for loss_name in self.loss_fns.keys():
             if loss_name.startswith("on_circle_"):
                 parts = loss_name.split("_")
                 if len(parts) >= 4:  # on_circle_PointName_CenterName
@@ -1792,7 +1865,7 @@ class Optimizer:
         seg1_name = f"{points[0].val}_{points[1].val}"
         seg2_name = f"{points[2].val}_{points[3].val}"
         self.register_loss(f"parallel_{seg1_name}_{seg2_name}",
-                          lambda: self.parallel(p1, p2, p3, p4), weight=1000.0)
+                          lambda: self.parallel(p1, p2, p3, p4), weight=4000.0)
 
     def _add_perpendicular_constraint(self, segments):
         """Add perpendicular constraint between two segments"""
@@ -1808,7 +1881,7 @@ class Optimizer:
         seg1_name = f"{segments[0].val}_{segments[1].val}"
         seg2_name = f"{segments[2].val}_{segments[3].val}"
         self.register_loss(f"perpendicular_{seg1_name}_{seg2_name}",
-                          lambda: self.perpendicular(p1, p2, p3, p4), weight=1000.0)
+                          lambda: self.perpendicular(p1, p2, p3, p4), weight=5000.0)
         
         # Lưu thông tin perpendicular để renderer vẽ dấu vuông góc
         self.perpendiculars.append((segments[0].val, segments[1].val, segments[2].val, segments[3].val))
@@ -1913,8 +1986,10 @@ class Optimizer:
         self.current_attempt = attempt_id
         self._init_state()  
         self.preprocess()
-        
-        self._add_all_chord_ndgs()
+
+        # Optional anti-diameter NDG for chords; disabled by default because it can over-constrain circle problems.
+        if self.opts.get('enable_chord_ndg', False):
+            self._add_all_chord_ndgs()
         # self._enforce_chord_length()  # TẠM THỜI TẮT để test
         
         self.regularize_points()  # Giữ các điểm gần gốc tọa độ
@@ -1992,6 +2067,8 @@ class Optimizer:
             y = pt.y.detach().cpu().item() - centroid_y
             geo_pt = GeometricPoint(x, y, name)
             diagram.add_point(name, geo_pt)
+
+        self._apply_tangent_post_correction(diagram)
 
         # Add triangles with metadata
         for key, metadata in self.triangles_metadata.items():
@@ -2113,3 +2190,115 @@ class Optimizer:
                 ))
         
         return diagram
+
+    def _get_circle_radius_by_center(self, center_name: str):
+        """Resolve circle radius by center name from parsed circle metadata."""
+        for circle_center_name, info in self.circles:
+            if circle_center_name != center_name:
+                continue
+
+            circle_type = info.get('type')
+            if circle_type == 'positioned':
+                radius = info.get('radius')
+                return float(radius) if radius is not None else None
+
+            if circle_type == 'incircle':
+                triangle_points = info.get('triangle', [])
+                if len(triangle_points) < 2:
+                    return None
+                center_pt = self.lookup_pt_by_name(center_name)
+                p1 = self.lookup_pt_by_name(triangle_points[0])
+                p2 = self.lookup_pt_by_name(triangle_points[1])
+                if center_pt is None or p1 is None or p2 is None:
+                    return None
+                return float(self.dist_to_line(center_pt, p1, p2).detach().cpu().item())
+
+            if circle_type == 'circumcircle':
+                triangle_points = info.get('triangle', [])
+                if len(triangle_points) < 1:
+                    return None
+                center_pt = self.lookup_pt_by_name(center_name)
+                p1 = self.lookup_pt_by_name(triangle_points[0])
+                if center_pt is None or p1 is None:
+                    return None
+                return float(self.dist(center_pt, p1).detach().cpu().item())
+
+            radius = info.get('radius')
+            return float(radius) if radius is not None else None
+
+        return None
+
+    def _apply_tangent_post_correction(self, diagram: Diagram):
+        """Deterministically project tangent geometry so rendered tangent does not cut circle."""
+        for spec in self.tangent_specs:
+            center_name = spec['center']
+            p1_name = spec['p1']
+            p2_name = spec['p2']
+            tangent_name = spec['tangent_point']
+
+            if center_name not in diagram.points:
+                continue
+            if p1_name not in diagram.points or p2_name not in diagram.points:
+                continue
+            if tangent_name not in diagram.points:
+                continue
+
+            radius = self._get_circle_radius_by_center(center_name)
+            if radius is None or radius <= 1e-8:
+                continue
+
+            center_pt = diagram.points[center_name]
+            tangent_pt = diagram.points[tangent_name]
+            p1 = diagram.points[p1_name]
+            p2 = diagram.points[p2_name]
+
+            vx = tangent_pt.x - center_pt.x
+            vy = tangent_pt.y - center_pt.y
+            norm_v = math.hypot(vx, vy)
+            if norm_v < 1e-8:
+                fallback = p1 if tangent_name != p1_name else p2
+                vx = fallback.x - center_pt.x
+                vy = fallback.y - center_pt.y
+                norm_v = math.hypot(vx, vy)
+            if norm_v < 1e-8:
+                vx, vy = 1.0, 0.0
+                norm_v = 1.0
+
+            ux = vx / norm_v
+            uy = vy / norm_v
+
+            # Move tangent point exactly onto circle.
+            tangent_pt.x = center_pt.x + radius * ux
+            tangent_pt.y = center_pt.y + radius * uy
+
+            # Tangent direction is perpendicular to radius OM.
+            tx = -uy
+            ty = ux
+
+            if tangent_name in (p1_name, p2_name):
+                other = p2 if tangent_name == p1_name else p1
+                sx = other.x - tangent_pt.x
+                sy = other.y - tangent_pt.y
+                proj = sx * tx + sy * ty
+                if abs(proj) < radius * 0.8:
+                    proj = radius * 1.2 if proj >= 0 else -radius * 1.2
+                other.x = tangent_pt.x + proj * tx
+                other.y = tangent_pt.y + proj * ty
+                continue
+
+            # If tangent point is separate from line endpoints, project both endpoints onto tangent line.
+            s1 = (p1.x - tangent_pt.x) * tx + (p1.y - tangent_pt.y) * ty
+            s2 = (p2.x - tangent_pt.x) * tx + (p2.y - tangent_pt.y) * ty
+
+            if abs(s1) < radius * 0.6 and abs(s2) < radius * 0.6:
+                s1 = -radius * 1.1
+                s2 = radius * 1.1
+            elif abs(s1) < radius * 0.6:
+                s1 = -radius * 1.1 if s2 >= 0 else radius * 1.1
+            elif abs(s2) < radius * 0.6:
+                s2 = radius * 1.1 if s1 >= 0 else -radius * 1.1
+
+            p1.x = tangent_pt.x + s1 * tx
+            p1.y = tangent_pt.y + s1 * ty
+            p2.x = tangent_pt.x + s2 * tx
+            p2.y = tangent_pt.y + s2 * ty
