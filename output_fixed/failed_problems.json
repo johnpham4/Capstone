@@ -1,12 +1,7 @@
 [
   {
-    "index": 33,
-    "instruction": "Cho đường tròn (O). AB là tiếp tuyến tại A, AC là dây của đường tròn. Kẻ OH vuông góc AC (H ∈ AC). Chứng minh rằng H là trung điểm của AC.",
-    "dsl": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(equal-distance A B 1.0)\n(segment A B)\n(tangent A (circle O) AB)\n(define C point)\n(on-circle C O)\n(segment A C)\n(segment O A)\n(define H point (projection O (segment A C)))\n(segment O H)\n(perpendicular (segment O H) (segment A C))\n(segment A C)"
-  },
-  {
-    "index": 34,
-    "instruction": "Cho đường tròn (O). AB là tiếp tuyến tại A. Lấy dây CD song song với AB. Chứng minh rằng AC = AD.",
-    "dsl": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(equal-distance A B 1.0)\n(segment A B)\n(tangent A (circle O) AB)\n(segment O A)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(segment A C)\n(segment A D)\n(equal-distance A C A D)"
+    "index": 8,
+    "instruction": "Cho tam giác ABC vuông tại A. M là trung điểm của BC. Chứng minh rằng MA = MB = MC.",
+    "dsl": "(triangle (A B C) (right A)\n(define M point (midpoint B C))\n(segment A B)\n(segment A C)\n(segment B C)\nequal-distance A M M B)\nequal-distance A M M C)"
   }
 ]

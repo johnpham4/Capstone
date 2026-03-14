@@ -1,7 +1,7 @@
 [
   {
-    "image_dir": "images/img_231413.png",
-    "instruction": "Cho đường tròn (O). AB là tiếp tuyến tại A, AC là dây của đường tròn. Kẻ OH vuông góc AC (H ∈ AC). Chứng minh rằng H là trung điểm của AC.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(equal-distance A B 1.0)\n(segment A B)\n(tangent A (circle O) AB)\n(segment O A)\n(define C point)\n(on-circle C O)\n(segment A C)\n(define H point (projection O (segment A C)))\n(segment O H)\n(equal-distance A H H C)"
+    "image_dir": "images/img_231510.png",
+    "instruction": "Cho tam giác ABC có đường tròn nội tiếp tâm I. Đường tròn tiếp xúc với BC tại D, tiếp xúc với CA tại E và tiếp xúc với AB tại F. Chứng minh rằng ID bằng IE và IE bằng IF.",
+    "answer": "(triangle (A B C))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment B C)\n(segment C A)\n(segment A B)\n(define D point (segment B C))\n(on-circle D I)\n(define E point (segment C A))\n(on-circle E I)\n(define F point (segment A B))\n(on-circle F I)\n(equal-distance I D I E)\n(equal-distance I E I F)"
   }
 ]

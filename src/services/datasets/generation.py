@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import re
 from langchain_openai import ChatOpenAI
 from loguru import logger
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
@@ -7,6 +8,7 @@ from langchain_core.exceptions import OutputParserException
 
 
 from src.services.utils import misc
+from src.services.diagram.dsl_parser import DSLParser
 from src.config.settings.base import settings
 from src.models.domain.training import Document
 from src.models.domain.training import GenerateDatasetSamplesPrompt, Prompt
@@ -61,6 +63,92 @@ Any violation is considered an error.
             content=prompt_text,
             document=document
         )
+
+    @classmethod
+    def _normalize_and_validate_dsl(cls, answer: str) -> tuple[str, bool]:
+        """Best-effort normalize DSL line parentheses and validate parseability."""
+        if not isinstance(answer, str):
+            return "", False
+
+        raw_lines = [ln.strip() for ln in answer.splitlines() if ln.strip()]
+        if not raw_lines:
+            return "", False
+
+        def _clean_prefix(line: str) -> str:
+            # Remove common markdown/list prefixes from model outputs.
+            line = line.strip().strip('"')
+            if line.startswith("```"):
+                return ""
+            line = re.sub(r"^[-*•]\s+", "", line)
+            line = re.sub(r"^\d+[\.)]\s+", "", line)
+            line = re.sub(r"^→\s*", "", line)
+            return line.strip()
+
+        def _balance_line_parens(line: str) -> str:
+            fixed = line
+            # Ensure it is wrapped as one s-expression line.
+            if not fixed.startswith("("):
+                fixed = "(" + fixed
+            if not fixed.endswith(")"):
+                fixed = fixed + ")"
+
+            # Prefer trimming extra closing parens at line end over rejecting.
+            open_count = fixed.count("(")
+            close_count = fixed.count(")")
+            if close_count > open_count:
+                extra = close_count - open_count
+                while extra > 0 and fixed.endswith(")"):
+                    fixed = fixed[:-1]
+                    extra -= 1
+
+            # Add missing closing parens when line is short by opens.
+            open_count = fixed.count("(")
+            close_count = fixed.count(")")
+            if open_count > close_count:
+                fixed = fixed + (")" * (open_count - close_count))
+
+            return fixed
+
+        normalized_lines: list[str] = []
+        for line in raw_lines:
+            cleaned = _clean_prefix(line)
+            if not cleaned:
+                continue
+            fixed = _balance_line_parens(cleaned)
+            normalized_lines.append(fixed)
+
+        if not normalized_lines:
+            return "", False
+
+        # Global balance: trim extra trailing ')' first, then add missing ones.
+        joined = "\n".join(normalized_lines)
+        open_count = joined.count("(")
+        close_count = joined.count(")")
+        if close_count > open_count:
+            extra = close_count - open_count
+            while extra > 0 and joined.endswith(")"):
+                joined = joined[:-1]
+                extra -= 1
+            # If still over-closed, it's likely malformed in the middle.
+            if joined.count(")") > joined.count("("):
+                return joined, False
+        if open_count > close_count:
+            joined = joined + (")" * (open_count - close_count))
+            normalized_lines = [ln for ln in joined.splitlines() if ln.strip()]
+        else:
+            normalized_lines = [ln for ln in joined.splitlines() if ln.strip()]
+
+        # Parse each line as an s-expression.
+        parser = DSLParser()
+        try:
+            for line in normalized_lines:
+                parsed = parser.parse_sexpr(line)
+                if parsed is None:
+                    return "\n".join(normalized_lines), False
+        except Exception:
+            return "\n".join(normalized_lines), False
+
+        return "\n".join(normalized_lines), True
 
     @classmethod
     def generate(cls, prompts: list[GenerateDatasetSamplesPrompt], test_size: float = 0.2, batch_size: int = 4) -> InstructTrainTestSplit:
@@ -132,6 +220,18 @@ Any violation is considered an error.
                         # Now convert to Pydantic model
                         if isinstance(sample_dict.get("answer"), list):
                             sample_dict["answer"] = "\n".join(sample_dict["answer"])
+
+                        normalized_answer, is_valid_dsl = cls._normalize_and_validate_dsl(
+                            sample_dict.get("answer", "")
+                        )
+                        if not is_valid_dsl:
+                            logger.warning(
+                                "Skipping sample due to invalid DSL syntax after normalization. "
+                                f"instruction={sample_dict.get('instruction', '')[:120]}"
+                            )
+                            logger.debug(f"Invalid DSL: {sample_dict.get('answer', '')}")
+                            continue
+                        sample_dict["answer"] = normalized_answer
 
                         try:
                             sample = InstructDatasetSample(**sample_dict)

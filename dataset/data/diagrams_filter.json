@@ -1,14 +1,8 @@
 [
-  {
-    "image": "images/img_231413.png",
-    "caption": "circle (O), tangent AB, chord AC, OH perpendicular AC",
-    "id": 231413,
-    "caption_vn": "Cho đường tròn (O). AB là tiếp tuyến tại A, AC là dây của đường tròn. Kẻ OH vuông góc AC (H ∈ AC). Chứng minh rằng H là trung điểm của AC."
-  },
-  {
-    "image": "images/img_11951.png",
-    "caption": "triangle ABC,  angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is the midpoint of segment BC, line DE, line EF, BC // DE, EF // AB, angle ADE = 90, angle CFE = 90",
-    "id": 11951,
-    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB, góc ADE = 90, góc CFE = 90"
-  }
+{
+  "image": "images/img_231510.png",
+  "caption": "triangle ABC with incircle touching BC CA AB",
+  "id": 231510,
+  "caption_vn": "Cho tam giác ABC có đường tròn nội tiếp tâm I. Đường tròn tiếp xúc với BC tại D, tiếp xúc với CA tại E và tiếp xúc với AB tại F. Chứng minh rằng ID bằng IE và IE bằng IF."
+}
 ]

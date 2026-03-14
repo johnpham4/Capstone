@@ -25,6 +25,27 @@ LƯU Ý: Tên điểm trong ví dụ (A, B, C, M, O...) chỉ minh họa. PHẢI
    • "H là trung điểm của AC" → (equal-distance A H H C)
    • CẤM: (equal-distance A H A C)  ← SAI nghĩa
 
+7. Hình thoi bắt buộc dùng rhombus:
+   • ĐÚNG: (rhombus (A B C D))
+   • CẤM: (diamond (A B C D))
+
+8. CẤM ký hiệu toán học trong DSL output:
+   • CẤM: ⟂, ∥, //, ∠, =
+   • PHẢI dùng từ khóa DSL chữ: perpendicular, parallel, angle-measure/angle-equal, equal-distance
+
+9. CẤM dùng equal-distance sai arity:
+   • ĐÚNG: (equal-distance A C B D) hoặc (equal-distance A B 1.0)
+   • SAI:  (equal-distance A C O D B)
+
+10. "Tam giác ... là tam giác vuông" KHÔNG nêu đỉnh vuông:
+   • KHÔNG tự ý thêm (angle-measure ... 90)
+   • CHỈ dùng (angle-measure ... 90) khi đề ghi rõ "vuông tại <điểm>"
+
+11. "Đường tròn nội tiếp tâm I" bắt buộc có đủ 2 dòng:
+   • (define I point (incenter A B C))
+   • (circle I (incircle A B C))
+   • CẤM: chỉ (define I point) + (on-circle D I) khi chưa có (circle I ...)
+
 ═══ QUY TẮC VÀNG - VẼ SEGMENT KHI ĐỀ NHẮC ═══
 
 Đọc kỹ đề → tìm TẤT CẢ cạnh/đoạn được nhắc → kiểm tra đã có segment chưa → thêm nếu thiếu
@@ -45,6 +66,9 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
 • Cần cho góc ở tâm (∠AOB → cần OA và OB)
 • Ngay sau (tangent X ...) → yêu cầu kỹ thuật optimizer
 • X nằm trên đường kính đã vẽ → KHÔNG vẽ thêm
+
+ƯU TIÊN QUY TẮC:
+• Nếu có (tangent X ...) thì quy tắc "vẽ (segment O X) ngay sau tangent" được ưu tiên cao hơn quy tắc "không tự vẽ bán kính".
 
 ═══ CÚ PHÁP DSL ═══
 
@@ -229,6 +253,13 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
    • Tâm hình vuông O: (define O point (midpoint A C))
    • Đường chéo hình vuông: (segment A C) và/hoặc (segment B D)
 
+    • "Qua M kẻ đường thẳng song song với AB cắt AC tại D":
+       - D phải nằm trên AC: (define D point (segment A C))
+       - Đường qua M là MD nên song song phải là:
+          (parallel (segment M D) (segment A B))
+       - CẤM dùng MA để song song trong mẫu này:
+          (parallel (segment M A) (segment M D))  ← SAI ngữ nghĩa
+
 3. HÌNH VUÔNG:
    • "Hình vuông ABCD" → CHỈ (square (A B C D))
    • CHỈ thêm khai báo khi đề yêu cầu: tâm, đường chéo, trung điểm, đường tròn
@@ -252,7 +283,29 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
    • "Chứng minh AB ⊥ CD" → (perpendicular (segment A B) (segment C D))
    • "Chứng minh ∠AOC = ∠BAC" → (angle-equal A O C B A C)
 
+7. MỆNH ĐỀ "THẲNG HÀNG":
+   • KHÔNG được chuyển thành equal-distance tùy tiện
+   • CẤM: (equal-distance A H H M) để thay cho "A,H,M thẳng hàng"
+   • DSL hiện tại KHÔNG có lệnh collinear trực tiếp.
+   • Chỉ encode gián tiếp khi có cấu hình chắc chắn (midpoint/projection/inter-ll...); nếu không, giữ mô tả hình học gốc và tránh bịa ràng buộc sai
+
+8. CASE CẤM SAI - tam giác cân tại A, đường cao AH xuống BC, M là trung điểm BC:
+   • CẤM sinh: (equal-distance A H H M)
+   • Nếu cần encode kết luận để ổn định hình, dùng trên đáy BC:
+     (equal-distance B H H C)
+   • KHÔNG dùng quan hệ độ dài giữa A-H-M để biểu diễn "thẳng hàng"
+
 ═══ MẪU DSL TIẾP TUYẾN ═══
+
+MẪU 0: "Qua M kẻ đường thẳng song song với AB cắt AC tại D"
+(triangle (A B C))
+(define M point (midpoint B C))
+(segment A B)
+(segment A C)
+(define D point (segment A C))
+(segment M D)
+(parallel (segment M D) (segment A B))
+(equal-distance A D D C)
 
 DẠNG 1: "AB là tiếp tuyến tại A" (A là endpoint)
 (define O point)
@@ -519,12 +572,69 @@ DẠNG 5: "AB là tiếp tuyến tại A, AC là dây"
 (segment O H)
 (equal-distance A H H C)
 
+14. Đường tròn đường kính AB, C trên đường tròn, chứng minh tam giác ACB vuông (không nêu đỉnh):
+   "Cho đường tròn tâm O có đường kính AB. Lấy điểm C nằm trên đường tròn. Chứng minh rằng tam giác ACB là tam giác vuông."
+   → (define O point)
+(circle O)
+(define A point)
+(define B point)
+(diameter A B O)
+(segment A B)
+(define C point)
+(on-circle C O)
+(segment A C)
+(segment B C)
+   KHÔNG thêm (angle-measure ... 90) vì đề không nêu "vuông tại ..."
+
+15. Tam giác có đường tròn nội tiếp tâm I, tiếp xúc BC/CA/AB tại D/E/F:
+   "Cho tam giác ABC có đường tròn nội tiếp tâm I. Đường tròn tiếp xúc với BC tại D, CA tại E, AB tại F."
+   → (triangle (A B C))
+(define I point (incenter A B C))
+(circle I (incircle A B C))
+(segment B C)
+(segment C A)
+(segment A B)
+(define D point (segment B C))
+(on-circle D I)
+(define E point (segment C A))
+(on-circle E I)
+(define F point (segment A B))
+(on-circle F I)
+
+16. Hình vuông ABCD, chứng minh AC = BD:
+   → (square (A B C D))
+(segment A C)
+(segment B D)
+(define O point (inter-ll A C B D))
+(equal-distance A C B D)
+
+17. Tam giác cân tại A, AH là đường cao xuống BC, M là trung điểm BC:
+   "Cho tam giác ABC cân tại A. Kẻ đường cao AH xuống BC. Gọi M là trung điểm của BC. Chứng minh rằng A, H, M thẳng hàng."
+   → (triangle (A B C) (isosceles A))
+(segment B C)
+(define H point (projection A (segment B C)))
+(define M point (midpoint B C))
+(segment A H)
+   Tùy chọn để ổn định: (equal-distance B H H C)
+   CẤM: (equal-distance A H H M)
+
 ═══ OUTPUT FORMAT ═══
 
 1. CHỈ trả về JSON: [{"instruction": "...", "answer": "DSL với \\n"}]
 2. Field "instruction" PHẢI là bài toán tiếng Việt gốc, KHÔNG thay đổi
 3. Field "answer" CHỈ chứa DSL thuần túy (KHÔNG comment #, KHÔNG giải thích)
 4. KHÔNG markdown, KHÔNG giải thích bên ngoài JSON
+
+5. MỖI dòng DSL phải là 1 S-expression hoàn chỉnh:
+   • BẮT ĐẦU bằng "(" và KẾT THÚC bằng ")"
+   • Ví dụ đúng: (equal-distance A M M B)
+   • Ví dụ sai: equal-distance A M M B)
+
+6. Kiểm tra ngoặc toàn cục trước khi trả output:
+   • Số lượng "(" phải bằng số lượng ")"
+   • Không được thiếu ngoặc ở shape line
+     - ĐÚNG: (triangle (A B C) (right A))
+     - SAI:  (triangle (A B C) (right A)
 
 ═══ CHECKLIST TRƯỚC KHI OUTPUT ═══
 
@@ -551,6 +661,8 @@ DẠNG 5: "AB là tiếp tuyến tại A, AC là dây"
 21. Field "instruction" là tiếng Việt gốc, không thay đổi
 22. KHÔNG vẽ (segment O X) khi đề không nhắc - chỉ vẽ khi cần cho góc ở tâm hoặc sau tangent
 23. "H là trung điểm của AC" bắt buộc là (equal-distance A H H C), không phải AH = AC
+24. Mọi dòng answer đều phải bắt đầu bằng "(" và kết thúc bằng ")"
+25. Tổng số ngoặc mở/đóng trong toàn bộ answer phải cân bằng
 
 ═══ INPUT ═══
 {{ extract }}

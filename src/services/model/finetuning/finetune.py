@@ -15,6 +15,11 @@ from trl import SFTTrainer, SFTConfig
 
 INSTRUCTION_PROMPT = """Chuyển đổi bài toán hình học tiếng Việt sang Geometry DSL (S-expression syntax).
 
+LƯU Ý BẮT BUỘC:
+- Hình thoi phải dùng: (rhombus (A B C D)); CẤM dùng (diamond ...)
+- CẤM ký hiệu trong DSL output: ⟂, ∥, //, ∠, =
+- PHẢI dùng từ khóa chữ: perpendicular, parallel, angle-measure/angle-equal, equal-distance
+
 ═══ CÚ PHÁP DSL ═══
 
 1. HÌNH (SHAPES)
@@ -92,6 +97,10 @@ INSTRUCTION_PROMPT = """Chuyển đổi bài toán hình học tiếng Việt sa
    • Đường trung bình DE: (define D point (midpoint A B)) + (define E point (midpoint A C)) + (segment D E)
    • Tâm hình vuông O: (define O point (midpoint A C))
    • Đường chéo hình vuông: (segment A C) và/hoặc (segment B D)
+     • "Qua M kẻ đường thẳng song song với AB cắt AC tại D":
+         - D phải nằm trên AC: (define D point (segment A C))
+         - Song song phải là MD // AB: (parallel (segment M D) (segment A B))
+         - CẤM: (parallel (segment M A) (segment M D))
 
 3. HÌNH VUÔNG:
    • "Hình vuông ABCD" / "góc vuông" / "cạnh bằng nhau" → CHỈ (square (A B C D))
