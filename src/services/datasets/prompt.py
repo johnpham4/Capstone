@@ -29,6 +29,17 @@ LƯU Ý: Tên điểm trong ví dụ (A, B, C, M, O...) chỉ minh họa. PHẢI
 
 2. Define trùng → SAI! Mỗi điểm CHỈ define MỘT LẦN duy nhất
 
+2.1. Điểm đã define bằng construction thì CẤM define lại dạng tự do:
+   • Nếu đã có (define O point (inter-ll A C B D)) thì CẤM thêm (define O point)
+   • Nếu đã có (define M point (midpoint B C)) thì CẤM thêm (define M point)
+   • Nếu cần dùng lại điểm đã define, chỉ thêm segment/constraint, KHÔNG define lại
+
+2.2. Đỉnh đã có từ shape thì CẤM define lại:
+    • Sau (triangle (A B C)) hoặc (square/rectangle/trapezoid/parallelogram/rhombus ...),
+       các đỉnh A/B/C/D đã tồn tại ngầm.
+    • CẤM thêm (define A point), (define B point), (define C point), (define D point)
+       trừ khi đề thật sự giới thiệu điểm mới khác tên đỉnh.
+
 3. Tiếp điểm thiếu on-circle → SAI!
    Phải: (define T point) → (on-circle T O) → (tangent T (circle O) AB)
 
@@ -65,6 +76,11 @@ LƯU Ý: Tên điểm trong ví dụ (A, B, C, M, O...) chỉ minh họa. PHẢI
    thì PHẢI có dòng (segment ...) tương ứng trong DSL.
    Quy tắc tổng quát: bất kỳ đoạn XY nào được nêu trong đề (giả thiết/hỏi/chứng minh)
    đều phải có (segment X Y), không phụ thuộc tên chữ cái cụ thể.
+    NGOẠI LỆ CHỐNG VẼ CHỒNG:
+    • Nếu O đã được define là giao điểm 2 đường chéo (inter-ll A C B D), thì OA/OC là đoạn con của AC,
+       OB/OD là đoạn con của BD.
+    • Trong trường hợp này, KHÔNG bắt buộc vẽ thêm (segment O A)/(segment O B)/(segment O C)/(segment O D)
+       chỉ để biểu diễn đẳng thức độ dài; ưu tiên dùng equal-distance để tránh chồng nét.
    • "OA = OB = OC" → BẮT BUỘC có:
       (segment O A)
       (segment O B)
@@ -117,6 +133,11 @@ LƯU Ý: Tên điểm trong ví dụ (A, B, C, M, O...) chỉ minh họa. PHẢI
        - Bắt buộc có đủ: (on-circle A X), (on-circle B X), (on-circle C X), (on-circle D X)
     • CẤM chỉ viết (circle X) mà thiếu ràng buộc on-circle cho các đỉnh nội tiếp.
 
+12.1. CỤM "nằm trên đường tròn" / "thuộc đường tròn" phải dịch trực tiếp thành on-circle:
+   • "P nằm trên đường tròn tâm X" / "P ∈ (X)" → (on-circle P X)
+   • "B và C nằm trên đường tròn tâm M" → (on-circle B M) + (on-circle C M)
+   • CẤM đổi tâm: nếu câu nói tâm M thì không được viết (on-circle ... O)
+
 ═══ QUY TẮC VÀNG - VẼ SEGMENT KHI ĐỀ NHẮC ═══
 
 Đọc kỹ đề → tìm TẤT CẢ cạnh/đoạn được nhắc → kiểm tra đã có segment chưa → thêm nếu thiếu
@@ -130,6 +151,7 @@ LƯU Ý: Tên điểm trong ví dụ (A, B, C, M, O...) chỉ minh họa. PHẢI
 • Tiếp tuyến AB → đã có (segment A B) rồi
 • Dây CD → đã có (segment C D) rồi
 • Đường kính MN → (diameter M N O) KHÔNG tự vẽ → PHẢI thêm (segment M N)
+• CẤM lặp lại cùng một segment đã khai báo (ví dụ đã có (segment A C) thì không khai báo lại (segment A C)/(segment C A))
 
 BÁN KÍNH (segment O X):
 KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ vẽ khi:
@@ -137,6 +159,12 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
 • Cần cho góc ở tâm (∠AOB → cần OA và OB)
 • Ngay sau (tangent X ...) → yêu cầu kỹ thuật optimizer
 • X nằm trên đường kính đã vẽ → KHÔNG vẽ thêm
+
+TRÁNH ĐOẠN CON CHỒNG ĐOẠN MẸ:
+• Nếu đã có (segment A C) và biết O nằm trên AC (do inter-ll/on-segment), thì KHÔNG vẽ thêm (segment O A) hoặc (segment O C)
+   trừ khi đề bắt buộc nêu rõ phải "nối OA/OC".
+• Nếu đã có (segment B D) và biết O nằm trên BD, thì KHÔNG vẽ thêm (segment O B) hoặc (segment O D)
+   trừ khi đề bắt buộc nêu rõ phải "nối OB/OD".
 
 ƯU TIÊN QUY TẮC:
 • Nếu có (tangent X ...) thì quy tắc "vẽ (segment O X) ngay sau tangent" được ưu tiên cao hơn quy tắc "không tự vẽ bán kính".
@@ -384,6 +412,8 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
     • "Hai đường chéo AC và BD cắt nhau tại O":
        - BẮT BUỘC có: (segment A C), (segment B D)
        - BẮT BUỘC có: (define O point (inter-ll A C B D))
+       - CẤM thêm (define O point) riêng nếu O đã được define bởi inter-ll
+       - CẤM mọi define khác cho O sau dòng inter-ll (midpoint/projection/point tự do/...)
        - KHÔNG được chỉ ghi "cắt nhau tại O" mà thiếu đoạn AC/BD hoặc thiếu define O
 
 3. HÌNH VUÔNG:
@@ -396,6 +426,12 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
    • Tứ giác/hình vuông/chữ nhật: KHÔNG dùng circumcircle/incircle 4 điểm; dùng (circle tâm) + on-circle cho các đỉnh liên quan
    • Cụm "nội tiếp đường tròn tâm X": phải có on-circle cho toàn bộ đỉnh được nói là nội tiếp theo đúng tâm X
    • Nếu đề đã chỉ rõ tâm là O/M/... thì giữ nguyên đúng tên tâm đó trong toàn bộ DSL, KHÔNG tự đổi
+    • Nếu đề là "vẽ đường tròn tâm M bán kính MB" thì mẫu tối thiểu phải là:
+       (define M point (...))
+       (circle M)
+       (on-circle B M)
+       CẤM đổi sang (circle O) hoặc (on-circle B O)
+    • Nếu phần chứng minh nói thêm "C nằm trên đường tròn tâm M" thì PHẢI thêm (on-circle C M)
 
 5. TIẾP TUYẾN - THỨ TỰ BẮT BUỘC:
    Sau (tangent X ...) PHẢI có (segment O X) NGAY dòng tiếp theo
@@ -410,6 +446,7 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
    • "Chứng minh ∠BAC = 60°" → (angle-measure B A C 60)
    • "Chứng minh AB ⊥ CD" → (perpendicular (segment A B) (segment C D))
    • "Chứng minh ∠AOC = ∠BAC" → (angle-equal A O C B A C)
+   • "Chứng minh C nằm trên đường tròn tâm O" → (on-circle C O)
 
 7. MỆNH ĐỀ "THẲNG HÀNG":
    • KHÔNG được chuyển thành equal-distance tùy tiện
@@ -804,6 +841,7 @@ DẠNG 5: "AB là tiếp tuyến tại A, AC là dây"
 ═══ CHECKLIST TRƯỚC KHI OUTPUT ═══
 
 1. Mỗi điểm chỉ define MỘT LẦN
+1.1. Điểm define từ midpoint/inter-ll/projection/... KHÔNG được define lại dạng tự do
 2. on-segment đều có đúng 3 điểm khác nhau
 3. Nếu tiếp điểm là điểm riêng T (không phải endpoint đã có), phải có (on-circle T O) trước (tangent T ...)
 4. Tiếp điểm là endpoint → KHÔNG on-segment
@@ -831,6 +869,8 @@ DẠNG 5: "AB là tiếp tuyến tại A, AC là dây"
 26. Nếu đề chỉ định tâm đường tròn (O/M/...), answer KHÔNG được đổi sang tâm khác
 27. Nếu đề có "bán kính XY", answer PHẢI có (on-circle Y X)
 28. Nếu đề có "đường chéo AC, BD cắt nhau tại X", answer PHẢI có AC, BD và inter-ll tại X
+29. Không được lặp segment trùng nhau (XY và YX tính là cùng một segment)
+30. Nếu X là giao điểm trên đoạn đã vẽ (ví dụ O trên AC/BD), không vẽ thêm đoạn con XA/XB/XC/XD trừ khi đề yêu cầu tường minh
 
 ═══ INPUT ═══
 {{ extract }}

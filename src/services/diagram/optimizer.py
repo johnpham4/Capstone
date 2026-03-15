@@ -745,7 +745,7 @@ class Optimizer:
         self.register_loss(f"circumcenter_{point_name.val}",
                           lambda: (self.dist(circumcenter, p1) - self.dist(circumcenter, p2))**2 +
                                   (self.dist(circumcenter, p2) - self.dist(circumcenter, p3))**2,
-                          weight=10.0)
+                  weight=3000.0)
         return circumcenter
 
     def _define_orthocenter(self, point_name, triangle_points):

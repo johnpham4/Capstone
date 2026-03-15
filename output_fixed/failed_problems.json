@@ -2,6 +2,6 @@
   {
     "index": 18,
     "instruction": "Cho tam giác ABC cân tại A. Tam giác có đường tròn nội tiếp tâm I tiếp xúc với BC tại D. Gọi M là trung điểm của BC. Chứng minh rằng I, D, M thẳng hàng.",
-    "dsl": "(triangle (A B C) (isosceles A))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment B C)\n(define M point (midpoint B C))\n(segment B M)\n(segment C M)\n(define D point (segment B C))\n(on-circle D I)\n(equal-distance I D D M)"
+    "dsl": "(triangle (A B C) (isosceles A))\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment B C)\n(define M point (midpoint B C))\n(define D point (segment B C))\n(on-circle D I)\n(equal-distance I D D M)"
   }
 ]
