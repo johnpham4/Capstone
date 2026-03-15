@@ -1,8 +1,182 @@
 [
 {
-  "image": "images/img_231510.png",
-  "caption": "triangle ABC with incircle touching BC CA AB",
-  "id": 231510,
-  "caption_vn": "Cho tam giác ABC có đường tròn nội tiếp tâm I. Đường tròn tiếp xúc với BC tại D, tiếp xúc với CA tại E và tiếp xúc với AB tại F. Chứng minh rằng ID bằng IE và IE bằng IF."
+"id":231601,
+"image":"images/img_231601.png",
+"caption":"triangle with midpoint and parallel line and circumcircle",
+"caption_vn":"Cho tam giác ABC nội tiếp đường tròn tâm O. Gọi M là trung điểm của BC. Qua M kẻ đường thẳng song song với AB cắt AC tại N. Chứng minh rằng OM song song với AN."
+},
+{
+"id":231602,
+"image":"images/img_231602.png",
+"caption":"right triangle with midpoint and circle",
+"caption_vn":"Cho tam giác ABC vuông tại A. Gọi M là trung điểm của BC. Vẽ đường tròn tâm M bán kính MB. Chứng minh rằng A nằm trên đường tròn."
+},
+{
+"id":231603,
+"image":"images/img_231603.png",
+"caption":"isosceles triangle with incircle and midpoint",
+"caption_vn":"Cho tam giác ABC cân tại A. Tam giác có đường tròn nội tiếp tâm I tiếp xúc với BC tại D. Gọi M là trung điểm của BC. Chứng minh rằng I, D, M thẳng hàng."
+},
+{
+"id":231604,
+"image":"images/img_231604.png",
+"caption":"parallelogram with diagonals and circle",
+"caption_vn":"Cho hình bình hành ABCD. Hai đường chéo AC và BD cắt nhau tại O. Vẽ đường tròn tâm O bán kính OA. Chứng minh rằng C nằm trên đường tròn."
+},
+{
+"id":231605,
+"image":"images/img_231605.png",
+"caption":"rectangle with circumcircle",
+"caption_vn":"Cho hình chữ nhật ABCD nội tiếp đường tròn tâm O. Hai đường chéo cắt nhau tại O. Chứng minh rằng OA bằng OB và OB bằng OC."
+},
+{
+"id":231606,
+"image":"images/img_231606.png",
+"caption":"rhombus with diagonals and midpoint",
+"caption_vn":"Cho hình thoi ABCD. Hai đường chéo AC và BD cắt nhau tại O. Gọi M là trung điểm của AB. Chứng minh rằng OM song song với AD."
+},
+{
+"id":231607,
+"image":"images/img_231607.png",
+"caption":"square with circle and diameter",
+"caption_vn":"Cho hình vuông ABCD nội tiếp đường tròn tâm O. Chứng minh rằng AC và BD là các đường kính của đường tròn."
+},
+{
+"id":231608,
+"image":"images/img_231608.png",
+"caption":"trapezoid with midpoint segment",
+"caption_vn":"Cho hình thang ABCD có AB song song với CD. Gọi M là trung điểm của AD và N là trung điểm của BC. Chứng minh rằng MN song song với AB."
+},
+{
+"id":231609,
+"image":"images/img_231609.png",
+"caption":"circle with diameter and point on circle",
+"caption_vn":"Cho đường tròn tâm O có đường kính AB. Lấy điểm C trên đường tròn. Chứng minh rằng tam giác ACB là tam giác vuông."
+},
+{
+"id":231610,
+"image":"images/img_231610.png",
+"caption":"circle with chord and midpoint",
+"caption_vn":"Cho đường tròn tâm O và dây cung AB. Gọi M là trung điểm của AB. Chứng minh rằng OM vuông góc với AB."
+},
+{
+"id":231611,
+"image":"images/img_231611.png",
+"caption":"circle with tangent",
+"caption_vn":"Cho đường tròn tâm O. Đường thẳng AB tiếp xúc với đường tròn tại A. Chứng minh rằng OA vuông góc với AB."
+},
+{
+"id":231612,
+"image":"images/img_231612.png",
+"caption":"triangle with midpoint and parallel",
+"caption_vn":"Cho tam giác ABC. Gọi M là trung điểm của AB. Qua M kẻ đường thẳng song song với BC cắt AC tại N. Chứng minh rằng MN bằng một nửa BC."
+},
+{
+"id":231613,
+"image":"images/img_231613.png",
+"caption":"triangle with circumcircle and midpoint",
+"caption_vn":"Cho tam giác ABC nội tiếp đường tròn tâm O. Gọi M là trung điểm của BC. Chứng minh rằng OM vuông góc với BC."
+},
+{
+"id":231614,
+"image":"images/img_231614.png",
+"caption":"triangle with incircle",
+"caption_vn":"Cho tam giác ABC có đường tròn nội tiếp tâm I tiếp xúc với BC tại D. Chứng minh rằng ID vuông góc với BC."
+},
+{
+"id":231615,
+"image":"images/img_231615.png",
+"caption":"parallelogram inscribed in circle",
+"caption_vn":"Cho hình bình hành ABCD nội tiếp đường tròn. Chứng minh rằng ABCD là hình chữ nhật."
+},
+{
+"id":231616,
+"image":"images/img_231616.png",
+"caption":"square with midpoint and circle",
+"caption_vn":"Cho hình vuông ABCD. Hai đường chéo cắt nhau tại O. Gọi M là trung điểm của BC. Vẽ đường tròn tâm O bán kính OA."
+},
+{
+"id":231617,
+"image":"images/img_231617.png",
+"caption":"circle with chord and diameter",
+"caption_vn":"Cho đường tròn tâm O. AB là đường kính. CD là một dây cung. Gọi M là trung điểm của CD. Chứng minh rằng OM vuông góc với CD."
+},
+{
+"id":231618,
+"image":"images/img_231618.png",
+"caption":"triangle with tangent and circle",
+"caption_vn":"Cho tam giác ABC nội tiếp đường tròn tâm O. Qua A kẻ tiếp tuyến của đường tròn. Chứng minh rằng OA vuông góc với tiếp tuyến."
+},
+{
+"id":231619,
+"image":"images/img_231619.png",
+"caption":"trapezoid with circle",
+"caption_vn":"Cho hình thang ABCD có AB song song với CD. Hình thang nội tiếp một đường tròn tâm O. Chứng minh rằng AD bằng BC."
+},
+{
+"id":231620,
+"image":"images/img_231620.png",
+"caption":"rectangle with circle and midpoint",
+"caption_vn":"Cho hình chữ nhật ABCD nội tiếp đường tròn tâm O. Gọi M là trung điểm của AB. Chứng minh rằng OM song song với AD."
+},
+{
+"id":231621,
+"image":"images/img_231621.png",
+"caption":"triangle with circle diameter",
+"caption_vn":"Cho tam giác ABC. Vẽ đường tròn có đường kính AB. Chứng minh rằng mọi điểm C nằm trên đường tròn tạo thành tam giác vuông."
+},
+{
+"id":231622,
+"image":"images/img_231622.png",
+"caption":"square with circumcircle",
+"caption_vn":"Cho hình vuông ABCD nội tiếp đường tròn tâm O. Chứng minh rằng OA bằng OB bằng OC bằng OD."
+},
+{
+"id":231623,
+"image":"images/img_231623.png",
+"caption":"rhombus with circle",
+"caption_vn":"Cho hình thoi ABCD nội tiếp đường tròn tâm O. Chứng minh rằng ABCD là hình vuông."
+},
+{
+"id":231624,
+"image":"images/img_231624.png",
+"caption":"triangle with midpoint and circle",
+"caption_vn":"Cho tam giác ABC. Gọi M là trung điểm của BC. Vẽ đường tròn tâm M bán kính MB. Chứng minh rằng B và C nằm trên đường tròn."
+},
+{
+"id":231625,
+"image":"images/img_231625.png",
+"caption":"circle with tangent and diameter",
+"caption_vn":"Cho đường tròn tâm O có đường kính AB. Qua A kẻ tiếp tuyến của đường tròn. Chứng minh rằng tiếp tuyến vuông góc với OA."
+},
+{
+"id":231626,
+"image":"images/img_231626.png",
+"caption":"parallelogram with midpoint",
+"caption_vn":"Cho hình bình hành ABCD. Gọi M là trung điểm của AB. Chứng minh rằng đường thẳng DM cắt AC tại trung điểm của AC."
+},
+{
+"id":231627,
+"image":"images/img_231627.png",
+"caption":"trapezoid with midpoint line",
+"caption_vn":"Cho hình thang ABCD có AB song song với CD. Gọi M và N lần lượt là trung điểm của AD và BC. Chứng minh rằng MN song song với AB."
+},
+{
+"id":231628,
+"image":"images/img_231628.png",
+"caption":"circle with chord midpoint",
+"caption_vn":"Cho đường tròn tâm O và dây cung AB. Gọi M là trung điểm của AB. Chứng minh rằng OM vuông góc với AB."
+},
+{
+"id":231629,
+"image":"images/img_231629.png",
+"caption":"triangle with circumcircle",
+"caption_vn":"Cho tam giác ABC nội tiếp đường tròn tâm O. Chứng minh rằng OA bằng OB bằng OC."
+},
+{
+"id":231630,
+"image":"images/img_231630.png",
+"caption":"square inscribed in circle",
+"caption_vn":"Cho hình vuông ABCD nội tiếp đường tròn tâm O. Chứng minh rằng AC và BD cắt nhau tại tâm O."
 }
 ]

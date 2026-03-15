@@ -281,7 +281,7 @@ class DiagramBuilder:
     def process_circle(self, cmd):
         """
         Process circle commands:
-        - (circle O) -> default radius 1.0
+        - (circle O) -> auto infer circle from known center type (fallback radius 1.0)
         - (circle O (radius 0.5)) -> explicit radius
         - (circle O (incircle A B C)) -> inscribed circle
         """
@@ -292,8 +292,8 @@ class DiagramBuilder:
         
         # If only (circle O) - use default radius
         if len(cmd) == 2:
-            construction_type = 'radius'
-            construction_args = (1.0,)
+            construction_type = 'auto'
+            construction_args = ()
         else:
             construction = cmd[2]
             

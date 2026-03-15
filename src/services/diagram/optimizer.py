@@ -45,6 +45,8 @@ class Optimizer:
         self.angle_equal_assertions = []
         self.angle_measures = []  # Store angles with measure values: [(vertex, p1, p2, degrees)]
         self.perpendiculars = []  # Store perpendicular segments for rendering
+        self.defined_incenters = {}  # center_name -> [triangle point names]
+        self.defined_circumcenters = {}  # center_name -> [triangle point names]
         self.point_on_segment_defs = {}  # point name -> (seg_p1_name, seg_p2_name)
         self.on_circle_pairs = set()  # (point_name, center_name)
         self.tangent_specs = []  # Store tangent declarations for post-solve geometric correction
@@ -191,7 +193,9 @@ class Optimizer:
 
     def register_pt(self, p: TorchPoint, P, save_name=True):
         if save_name:
-            assert p.val not in self.name2pt, f"Point {p.val} already registered"
+            if p.val in self.name2pt:
+                # Duplicate point definitions appear in noisy DSL; keep first definition.
+                return self.name2pt[p.val]
             self.name2pt[p.val] = P
         self.all_points.append(P)
         return P
@@ -713,6 +717,7 @@ class Optimizer:
     def _define_incenter(self, point_name, triangle_points):
         """Define incenter - equal distance to all sides"""
         assert len(triangle_points) == 3
+        self.defined_incenters[point_name.val] = [p.val for p in triangle_points]
 
         p1 = self.lookup_pt(triangle_points[0])
         p2 = self.lookup_pt(triangle_points[1])
@@ -730,6 +735,7 @@ class Optimizer:
     def _define_circumcenter(self, point_name, triangle_points):
         """Define circumcenter - equal distance to all vertices"""
         assert len(triangle_points) == 3
+        self.defined_circumcenters[point_name.val] = [p.val for p in triangle_points]
 
         p1 = self.lookup_pt(triangle_points[0])
         p2 = self.lookup_pt(triangle_points[1])
@@ -988,6 +994,12 @@ class Optimizer:
     def _process_point_parameter(self, param_type, objects, args):
         param_type_str = str(param_type).lower() if param_type else ""
 
+        # No-op duplicate free-point definitions, e.g. `(define A point)` after `(triangle (A B C))`.
+        if objects and param_type_str in ["coords", ""] and objects[0].val in self.name2pt:
+            if self.verbosity:
+                logger.warning(f"Skipping duplicate free-point define for {objects[0].val}")
+            return
+
         if param_type_str == "centroid":
             self._define_centroid(objects[0], args)
         elif param_type_str == "orthocenter":
@@ -1034,6 +1046,23 @@ class Optimizer:
         elif param_type_str == "circumcircle":
             # Circumcircle defined by triangle points
             self.circles.append((center_name, {'type': 'circumcircle', 'triangle': [p.val for p in args]}))
+        elif param_type_str == "auto":
+            if center_name in self.defined_circumcenters:
+                self.circles.append((center_name, {
+                    'type': 'circumcircle',
+                    'triangle': self.defined_circumcenters[center_name]
+                }))
+            elif center_name in self.defined_incenters:
+                self.circles.append((center_name, {
+                    'type': 'incircle',
+                    'triangle': self.defined_incenters[center_name]
+                }))
+            else:
+                # Fallback to default positioned circle when no center metadata exists.
+                self.circles.append((center_name, {
+                    'type': 'positioned',
+                    'radius': 1.0
+                }))
         elif param_type_str == "radius":
             # Circle with explicit radius: (circle O (radius 0.05))
             radius = float(args[0].val) if args and hasattr(args[0], 'val') else float(args[0]) if args else 0.5
@@ -1116,16 +1145,23 @@ class Optimizer:
             p1_name = p1_obj.val
             p2_name = p2_obj.val
             center_name = center_obj.val
+
+            # Diameter implies a circle centered at center_name even if DSL omitted `(circle center)`.
+            if not any(circle_name == center_name for circle_name, _ in self.circles):
+                self.circles.append((center_name, {
+                    'type': 'diameter',
+                    'endpoints': [p1_name, p2_name]
+                }))
             
             # 1. Both points on circle - EXTREMELY HIGH PRIORITY
             self.register_loss(f"diameter_on_circle_{p1_name}_{center_name}",
-                lambda pt=p1, c=center, r=self._get_circle_radius(center_name): 
-                    (self.dist(pt, c) - r)**2,
+                lambda pt=p1, c=center, cn=center_name:
+                    (self.dist(pt, c) - self._get_circle_radius(cn))**2,
                 weight=10000000.0)
             
             self.register_loss(f"diameter_on_circle_{p2_name}_{center_name}",
-                lambda pt=p2, c=center, r=self._get_circle_radius(center_name): 
-                    (self.dist(pt, c) - r)**2,
+                lambda pt=p2, c=center, cn=center_name:
+                    (self.dist(pt, c) - self._get_circle_radius(cn))**2,
                 weight=10000000.0)
             
             # 2. Center is midpoint - EXTREMELY HIGH PRIORITY
@@ -1164,6 +1200,14 @@ class Optimizer:
                     if len(tri) >= 1 and all(name in self.name2pt for name in [center_name, tri[0]]):
                         center = self.lookup_pt_by_name(center_name)
                         p1 = self.lookup_pt_by_name(tri[0])
+                        if center is not None and p1 is not None:
+                            return self.dist(center, p1)
+
+                if circle_type == 'diameter':
+                    endpoints = circle_info.get('endpoints', [])
+                    if len(endpoints) >= 1 and all(name in self.name2pt for name in [center_name, endpoints[0]]):
+                        center = self.lookup_pt_by_name(center_name)
+                        p1 = self.lookup_pt_by_name(endpoints[0])
                         if center is not None and p1 is not None:
                             return self.dist(center, p1)
 
@@ -1342,8 +1386,6 @@ class Optimizer:
         logger.info(f"Available circles: {self.circles}")
         
         center = self.lookup_pt(points[1])
-        radius_expr = self._get_circle_radius(center_name)
-        
         center_key = f"center_at_origin_{center_name}"
         if center_key not in self.loss_fns:
             self.register_loss(
@@ -1354,7 +1396,7 @@ class Optimizer:
         
         self.register_loss(
             f"on_circle_{points[0].val}_{center_name}",
-            lambda pt=point, c=center, r=radius_expr: self.dist(pt, c) - r,
+            lambda pt=point, c=center, cn=center_name: self.dist(pt, c) - self._get_circle_radius(cn),
             weight=100000.0  
         )
 
@@ -1456,29 +1498,17 @@ class Optimizer:
             p2 = self.lookup_pt(p2_obj)
             center = self.lookup_pt(center_obj)
             center_name = center_obj.val
-            
-            # Find radius
-            radius = None
-            for circle_name, circle_info in self.circles:
-                if circle_name == center_name:
-                    radius = circle_info.get('radius')
-                    break
-            
-            if radius is None:
-                logger.warning(f"Circle {center_name} not found or has no radius")
-                return
-            
-            radius_const = self.const(radius)
+
             self.register_loss(
                 f"tangent_line_{p1_obj.val}{p2_obj.val}_circle_{center_name}",
-                lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
+                lambda pt1=p1, pt2=p2, c=center, cn=center_name: self.tangent_line_circle(pt1, pt2, c, self._get_circle_radius(cn)),
                 weight=20000.0  # Strongly enforce line-circle tangency
             )
 
             # If one endpoint is intended as tangent point, force it on the circle.
             self.register_loss(
                 f"tangent_endpoint_on_circle_{p1_obj.val}_{center_name}",
-                lambda pt=p1, c=center, r=radius_const: self.dist(pt, c) - r,
+                lambda pt=p1, c=center, cn=center_name: self.dist(pt, c) - self._get_circle_radius(cn),
                 weight=30000.0,
             )
 
@@ -1510,31 +1540,19 @@ class Optimizer:
             tangent_pt_name = tangent_point_obj.val
             p1_name = p1_obj.val
             p2_name = p2_obj.val
-            
-            # Find radius
-            radius = None
-            for circle_name, circle_info in self.circles:
-                if circle_name == center_name:
-                    radius = circle_info.get('radius')
-                    break
-            
-            if radius is None:
-                logger.warning(f"Circle {center_name} not found or has no radius")
-                return
-            
-            radius_const = self.const(radius)
+
             
             # CONSTRAINT 1: Khoảng cách từ tâm đến đường thẳng = bán kính
             self.register_loss(
                 f"tangent_line_{p1_name}{p2_name}_circle_{center_name}_at_{tangent_pt_name}",
-                lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
+                lambda pt1=p1, pt2=p2, c=center, cn=center_name: self.tangent_line_circle(pt1, pt2, c, self._get_circle_radius(cn)),
                 weight=20000.0
             )
 
             # CONSTRAINT 1.1: Điểm tiếp xúc phải nằm trên đường tròn.
             self.register_loss(
                 f"tangent_point_on_circle_{tangent_pt_name}_{center_name}",
-                lambda m=tangent_point, c=center, r=radius_const: self.dist(m, c) - r,
+                lambda m=tangent_point, c=center, cn=center_name: self.dist(m, c) - self._get_circle_radius(cn),
                 weight=30000.0,
             )
             
@@ -1558,18 +1576,16 @@ class Optimizer:
                     # Điểm này phải nằm NGOÀI đường tròn rõ ràng
                     # Nếu chỉ > radius một chút, line vẫn có thể cắt circle
                     # Cần >= radius * 1.3 để chắc chắn line không cắt
-                    min_dist = radius * 1.3  # Phải cách tâm ít nhất 1.3x bán kính
-                    
                     # Kiểm tra xem constraint đã tồn tại chưa (tránh duplicate khi có nhiều tiếp tuyến)
                     constraint_key = f"outside_circle_{pt_name}_{center_name}"
                     if constraint_key not in self.loss_fns:
                         self.register_loss(
                             constraint_key,
-                            lambda c=center, pt=pt, r_val=min_dist: torch.relu(r_val - self.dist(c, pt))**2,
+                            lambda c=center, pt=pt, cn=center_name: torch.relu(1.3 * self._get_circle_radius(cn) - self.dist(c, pt))**2,
                             weight=10000.0  # TĂNG CỰC MẠNH - ưu tiên cao hơn để không cắt circle
                         )
                         if self.verbosity:
-                            logger.info(f"Auto-added constraint: {pt_name} must be >= {min_dist:.2f} away from {center_name}")
+                            logger.info(f"Auto-added constraint: {pt_name} must stay outside circle {center_name}")
                     else:
                         if self.verbosity:
                             logger.info(f"Constraint {constraint_key} already exists, skipping")
@@ -1597,17 +1613,7 @@ class Optimizer:
             tangent_point = self.lookup_pt(tangent_point_obj)
             center = self.lookup_pt(center_obj)
             center_name = center_obj.val
-            
-            # Find radius
-            radius = None
-            for circle_name, circle_info in self.circles:
-                if circle_name == center_name:
-                    radius = circle_info.get('radius')
-                    break
-            
-            if radius is None:
-                logger.warning(f"Circle {center_name} not found or has no radius")
-                return
+
             
             # Parse segment identifier to get line points
             # segment_identifier could be a string "AB" or a Point object
@@ -1627,18 +1633,16 @@ class Optimizer:
                         logger.warning(f"Could not find points {p1_name} or {p2_name} for segment {seg_name}")
                         return
                     
-                    radius_const = self.const(radius)
-                    
                     # CONSTRAINT 1: Khoảng cách từ tâm đến đường thẳng = bán kính
                     self.register_loss(
                         f"tangent_line_{p1_name}{p2_name}_circle_{center_name}_at_{tangent_point_obj.val}",
-                        lambda pt1=p1, pt2=p2, c=center, r=radius_const: self.tangent_line_circle(pt1, pt2, c, r),
+                        lambda pt1=p1, pt2=p2, c=center, cn=center_name: self.tangent_line_circle(pt1, pt2, c, self._get_circle_radius(cn)),
                         weight=20000.0
                     )
 
                     self.register_loss(
                         f"tangent_point_on_circle_{tangent_point_obj.val}_{center_name}",
-                        lambda m=tangent_point, c=center, r=radius_const: self.dist(m, c) - r,
+                        lambda m=tangent_point, c=center, cn=center_name: self.dist(m, c) - self._get_circle_radius(cn),
                         weight=30000.0,
                     )
                     
@@ -1660,21 +1664,16 @@ class Optimizer:
                     tangent_pt_name = tangent_point_obj.val
                     for pt_name, pt in [(p1_name, p1), (p2_name, p2)]:
                         if pt_name != tangent_pt_name:
-                            # Điểm này phải nằm NGOÀI đường tròn rõ ràng
-                            # Nếu chỉ > radius một chút, line vẫn có thể cắt circle
-                            # Cần >= radius * 1.3 để chắc chắn line không cắt
-                            min_dist = radius * 1.3  # Phải cách tâm ít nhất 1.3x bán kính
-                            
                             # Check duplicate constraint trước khi register
                             constraint_key = f"outside_circle_{pt_name}_{center_name}"
                             if constraint_key not in self.loss_fns:
                                 self.register_loss(
                                     constraint_key,
-                                    lambda c=center, pt=pt, r_val=min_dist: torch.relu(r_val - self.dist(c, pt))**2,
+                                    lambda c=center, pt=pt, cn=center_name: torch.relu(1.3 * self._get_circle_radius(cn) - self.dist(c, pt))**2,
                                     weight=10000.0  # TĂNG CỰC MẠNH - ưu tiên cao hơn để không cắt circle
                                 )
                                 if self.verbosity:
-                                    logger.info(f"Auto-added constraint: {pt_name} must be >= {min_dist:.2f} away from {center_name}")
+                                    logger.info(f"Auto-added constraint: {pt_name} must stay outside circle {center_name}")
                             else:
                                 if self.verbosity:
                                     logger.info(f"Constraint {constraint_key} already exists, skipping")
@@ -2191,6 +2190,18 @@ class Optimizer:
                     else:
                         p1_t = self.name2pt[triangle_points[0]]
                         radius = self.dist(center_pt, p1_t).detach().cpu().item()
+                    info = {**info, 'radius': radius}
+                elif info['type'] == 'diameter':
+                    endpoints = info.get('endpoints', [])
+                    if endpoints and endpoints[0] in diagram.points:
+                        p1 = diagram.points[endpoints[0]]
+                        radius = math.hypot(center.x - p1.x, center.y - p1.y)
+                    else:
+                        p1 = self.lookup_pt_by_name(endpoints[0]) if endpoints else None
+                        if p1 is not None:
+                            radius = self.dist(center_pt, p1).detach().cpu().item()
+                        else:
+                            radius = 1.0
                     info = {**info, 'radius': radius}
                 # For 'positioned' type, radius is already in info
                 

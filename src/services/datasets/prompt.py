@@ -4,6 +4,26 @@ LƯU Ý: Tên điểm trong ví dụ (A, B, C, M, O...) chỉ minh họa. PHẢI
 
 ═══ LỖI CẤM TUYỆT ĐỐI ═══
 
+0. PHẠM VI TRÍCH XUẤT = TOÀN BỘ ĐỀ BÀI (không chỉ phần mô tả hình)
+    • PHẢI đọc và convert cả 3 phần nếu có:
+       - Giả thiết / phần "Cho..."
+       - Yêu cầu / phần "Hỏi..."
+       - Kết luận / phần "Chứng minh rằng..."
+    • Hễ đề NHẮC tới quan hệ hình học nào thì PHẢI vẽ/constraint quan hệ đó trong DSL,
+       dù nó nằm ở phần chứng minh hay phần hỏi.
+    • CẤM bỏ qua chỉ vì câu nằm sau cụm "chứng minh", "hỏi", "kết luận".
+
+    Ví dụ bắt buộc convert:
+    • "Chứng minh OM ⟂ BC" → (perpendicular (segment O M) (segment B C))
+    • "Chứng minh OA = OB = OC" →
+       (equal-distance O A O B)
+       (equal-distance O A O C)
+    • "Chứng minh OM ∥ AN" → (parallel (segment O M) (segment A N))
+    • "Chứng minh ID ⟂ BC" →
+       (segment I D)
+       (segment B C)
+       (perpendicular (segment I D) (segment B C))
+
 1. (on-segment A B) chỉ 2 điểm → SAI! Cần đúng 3: (on-segment M A B)
    Tiếp điểm là endpoint → KHÔNG dùng on-segment
 
@@ -12,14 +32,47 @@ LƯU Ý: Tên điểm trong ví dụ (A, B, C, M, O...) chỉ minh họa. PHẢI
 3. Tiếp điểm thiếu on-circle → SAI!
    Phải: (define T point) → (on-circle T O) → (tangent T (circle O) AB)
 
+3.1. TIẾP TUYẾN "QUA A" (A là tiếp điểm) - QUY TẮC RIÊNG BẮT BUỘC:
+   • Nếu đề nói "Qua A kẻ tiếp tuyến..." thì tiếp điểm là A (không phải điểm mới).
+   • PHẢI có: (on-circle A O)
+   • CẤM define lại A nếu A đã là đỉnh của tam giác/tứ giác.
+   • Điểm thứ hai để tạo đường tiếp tuyến (ví dụ T) là điểm phụ trên đường thẳng tiếp tuyến,
+     KHÔNG bắt buộc nằm trên đường tròn, nên CẤM thêm (on-circle T O).
+
+   Mẫu đúng:
+   (triangle (A B C))
+   (define O point (circumcenter A B C))
+   (circle O (circumcircle A B C))
+   (define T point)
+   (equal-distance A T 1.0)
+   (segment A T)
+   (tangent A (circle O) AT)
+   (segment O A)
+   (perpendicular (segment O A) (segment A T))
+
 4. Dây cung thiếu on-circle → SAI! Cả 2 đầu phải on-circle
    (define C point) → (on-circle C O) → (define D point) → (on-circle D O) → (segment C D)
 
-5. Phải vẽ TẤT CẢ mô tả hình học trong đề, kể cả phần "chứng minh"
-   • "Chứng minh AB = AC" → (equal-distance A B A C)
-   • "Chứng minh góc A = 60°" → (angle-measure B A C 60)
-   • "Chứng minh AB ⊥ CD" → (perpendicular (segment A B) (segment C D))
-   • "Chứng minh ∠BAC = ∠OCA" → (angle-equal B A C O C A)
+5. Phải vẽ TẤT CẢ quan hệ hình học được nêu trong toàn bộ đề (kể cả phần "hỏi/chứng minh/kết luận")
+    • "Chứng minh AB = AC" → (equal-distance A B A C)
+    • "Chứng minh góc BAC = 60°" / "Chứng minh ∠BAC = 60°" / "Chứng minh BAC = 60°" (ngữ cảnh là góc)
+       → (angle-measure B A C 60)
+    • "Chứng minh AB ⊥ CD" → (perpendicular (segment A B) (segment C D))
+    • "Chứng minh góc BAC = góc OCA" / "Chứng minh ∠BAC = ∠OCA" / "Chứng minh BAC = OCA" (ngữ cảnh là góc)
+       → (angle-equal B A C O C A)
+
+5.1. Nếu phần "chứng minh" nhắc TÊN ĐOẠN (OA, OB, OC, OM, AN, ID, ...)
+   thì PHẢI có dòng (segment ...) tương ứng trong DSL.
+   • "OA = OB = OC" → BẮT BUỘC có:
+      (segment O A)
+      (segment O B)
+      (segment O C)
+      (equal-distance O A O B)
+      (equal-distance O A O C)
+   • "OM // AN" → BẮT BUỘC có:
+      (segment O M)
+      (segment A N)
+      (parallel (segment O M) (segment A N))
 
 6. Mệnh đề trung điểm phải dịch đúng:
    • "H là trung điểm của AC" → (equal-distance A H H C)
@@ -45,6 +98,18 @@ LƯU Ý: Tên điểm trong ví dụ (A, B, C, M, O...) chỉ minh họa. PHẢI
    • (define I point (incenter A B C))
    • (circle I (incircle A B C))
    • CẤM: chỉ (define I point) + (on-circle D I) khi chưa có (circle I ...)
+
+12. "... nội tiếp đường tròn tâm X" (X là tên tâm bất kỳ) bắt buộc đặt TẤT CẢ đỉnh lên cùng đường tròn tâm X:
+    • Tam giác ABC nội tiếp (X):
+       - Ưu tiên: (define X point (circumcenter A B C)) + (circle X (circumcircle A B C))
+       - Dù dùng circumcenter/circumcircle vẫn PHẢI ghi tường minh đủ:
+          (on-circle A X)
+          (on-circle B X)
+          (on-circle C X)
+       - CẤM chỉ có (on-circle A X) mà thiếu B/C.
+    • Tứ giác ABCD nội tiếp (X) (hình vuông/chữ nhật/hình thang/...):
+       - Bắt buộc có đủ: (on-circle A X), (on-circle B X), (on-circle C X), (on-circle D X)
+    • CẤM chỉ viết (circle X) mà thiếu ràng buộc on-circle cho các đỉnh nội tiếp.
 
 ═══ QUY TẮC VÀNG - VẼ SEGMENT KHI ĐỀ NHẮC ═══
 
@@ -159,8 +224,23 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
 4. ĐƯỜNG TRÒN (CIRCLES): (circle <center> <type>)
    - (circle O) hoặc (circle O (radius 0.5))
    - (incircle A B C) / (circumcircle A B C)
+    - LƯU Ý NĂNG LỰC DSL HIỆN TẠI: incircle/circumcircle CHỈ dùng cho 3 điểm tam giác
+       • CẤM: (circumcircle A B C D), (incircle A B C D)
    - LUÔN: (define O point) TRƯỚC → (circle O) SAU
    - Scale: 1 cm = 0.1 đơn vị (5cm → 0.5, 10cm → 1.0)
+
+    TÂM/BÁN KÍNH ĐƯỢC CHỈ ĐỊNH TRỰC TIẾP TRONG ĐỀ:
+    • Nếu đề ghi rõ "đường tròn tâm X" thì PHẢI dùng đúng tâm X, KHÔNG đổi sang tâm khác.
+    • Nếu đề ghi "bán kính XY" thì PHẢI encode:
+       - (circle X)
+       - (on-circle Y X)
+       - KHÔNG dùng bán kính số tùy ý thay cho XY.
+    • Ví dụ: "vẽ đường tròn tâm M bán kính MB" → (circle M) + (on-circle B M)
+    • Ví dụ: "vẽ đường tròn tâm O bán kính OA" → (circle O) + (on-circle A O)
+
+    CẤM TỰ Ý ĐỔI TÊN TÂM:
+    • Đề ghi tâm M → CẤM tạo đường tròn tâm O
+    • Đề ghi tâm O → CẤM tạo đường tròn tâm M/N/... 
 
    ĐƯỜNG KÍNH: (diameter A B O)
    • A, B: 2 đầu mút, O: tâm (tự động nằm giữa)
@@ -184,6 +264,19 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
    - (diameter A B O) - AB là đường kính qua tâm O
    Khai báo segment/line TRƯỚC khi dùng ràng buộc
 
+    QUY TẮC CỨNG CHO PERPENDICULAR:
+    • Trước mỗi dòng (perpendicular (segment X Y) (segment U V)) PHẢI có đủ:
+       (segment X Y) và (segment U V)
+    • Không được trông chờ renderer/optimizer tự thêm đoạn.
+    • Ví dụ đề: "ID vuông góc BC" bắt buộc có:
+       (segment I D)
+       (segment B C)
+       (perpendicular (segment I D) (segment B C))
+      • Ví dụ đề: "OM vuông góc CD" bắt buộc có:
+         (segment O M)
+         (segment C D)
+         (perpendicular (segment O M) (segment C D))
+
    TIẾP TUYẾN:
    Cú pháp: (tangent T (circle O) XY)
    • T = tiếp điểm (tên bất kỳ), (circle O) = đường tròn, XY = 2 ký tự tạo đường tiếp tuyến (ví dụ AB, AT)
@@ -198,6 +291,11 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
    5. (segment O T) - bán kính NGAY SAU tangent, KHÔNG chen dòng nào!
       Ngoại lệ: T nằm trên đường kính đã vẽ → bỏ qua (segment O T)
 
+   Trường hợp đặc biệt "tangent tại endpoint A/B/C...":
+   • Dùng chính endpoint làm tiếp điểm trong lệnh tangent, ví dụ (tangent A (circle O) AT)
+   • KHÔNG đặt điểm phụ T lên đường tròn.
+   • Bán kính cần vẽ là OA/OB/OC (từ tâm đến tiếp điểm endpoint), không phải OT.
+
    Tiếp điểm là ENDPOINT (90% trường hợp): KHÔNG dùng on-segment
    Tiếp điểm nằm GIỮA A và B: CẦN (on-segment T A B)
 
@@ -208,8 +306,15 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
    "A nằm ngoài đường tròn" → PHẢI thêm (distance O A <value>) với value > radius
    Nếu không có bán kính cụ thể, dùng 1.5
 
-   GÓC:
-   • ∠BAC: đỉnh A ở GIỮA → (angle-measure B A C ...)
+      GÓC:
+       • QUY TẮC TỔNG QUÁT cho mọi góc 3 ký tự XYZ:
+          - "∠XYZ", "góc XYZ", hoặc chỉ "XYZ" (khi ngữ cảnh đang nói về góc) đều cùng nghĩa.
+          - Chỉ coi "XYZ" là góc khi có tín hiệu ngữ cảnh góc trong cùng câu như: "góc", "số đo", "độ", "= ...°", hoặc vế còn lại là dạng góc (∠UVW / góc UVW).
+       - Đỉnh luôn là chữ ở giữa: Y.
+       - DSL tương ứng: (angle-measure X Y Z ...)
+    • Ví dụ: ∠BAC / góc BAC → (angle-measure B A C ...)
+    • Ví dụ: ∠AOC / góc AOC → (angle-measure A O C ...)
+    • Với góc bằng nhau: "∠XYZ = ∠UVW" hoặc "góc XYZ bằng góc UVW" → (angle-equal X Y Z U V W)
    • Góc ở tâm (đỉnh = tâm O): PHẢI vẽ bán kính đến các điểm chưa nối
      - AB là đường kính: O đã nối A, B → chỉ vẽ bán kính mới
      - A, B tự do: cần cả (segment O A) và (segment O B)
@@ -242,7 +347,7 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
     • Bài đa giác (triangle/square/...):
        Hình → Define points → Segments/Lines cần thiết → Constraints
     • Bài có đường tròn:
-       Define tâm O → (circle O) sớm → Define các điểm còn lại → Segments/Lines → Constraints
+       Define tâm X → (circle X) sớm → Define các điểm còn lại → Segments/Lines → Constraints
 
 2. TRƯỜNG HỢP ĐẶC BIỆT:
    • Trung tuyến AM: (define M point (midpoint B C)) + (segment A M)
@@ -260,6 +365,11 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
        - CẤM dùng MA để song song trong mẫu này:
           (parallel (segment M A) (segment M D))  ← SAI ngữ nghĩa
 
+    • "Hai đường chéo AC và BD cắt nhau tại O":
+       - BẮT BUỘC có: (segment A C), (segment B D)
+       - BẮT BUỘC có: (define O point (inter-ll A C B D))
+       - KHÔNG được chỉ ghi "cắt nhau tại O" mà thiếu đoạn AC/BD hoặc thiếu define O
+
 3. HÌNH VUÔNG:
    • "Hình vuông ABCD" → CHỈ (square (A B C D))
    • CHỈ thêm khai báo khi đề yêu cầu: tâm, đường chéo, trung điểm, đường tròn
@@ -267,7 +377,9 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
 4. ĐƯỜNG TRÒN:
    • LUÔN: (define tâm point ...) TRƯỚC → (circle tâm ...) SAU
    • Tam giác: incircle/circumcircle với 3 điểm
-   • Hình vuông: incircle/circumcircle với 4 điểm
+   • Tứ giác/hình vuông/chữ nhật: KHÔNG dùng circumcircle/incircle 4 điểm; dùng (circle tâm) + on-circle cho các đỉnh liên quan
+   • Cụm "nội tiếp đường tròn tâm X": phải có on-circle cho toàn bộ đỉnh được nói là nội tiếp theo đúng tâm X
+   • Nếu đề đã chỉ rõ tâm là O/M/... thì giữ nguyên đúng tên tâm đó trong toàn bộ DSL, KHÔNG tự đổi
 
 5. TIẾP TUYẾN - THỨ TỰ BẮT BUỘC:
    Sau (tangent X ...) PHẢI có (segment O X) NGAY dòng tiếp theo
@@ -294,6 +406,8 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
    • Nếu cần encode kết luận để ổn định hình, dùng trên đáy BC:
      (equal-distance B H H C)
    • KHÔNG dùng quan hệ độ dài giữa A-H-M để biểu diễn "thẳng hàng"
+
+9. CHECKLIST ở cuối file là checklist chính thức duy nhất trước khi output.
 
 ═══ MẪU DSL TIẾP TUYẾN ═══
 
@@ -618,6 +732,41 @@ DẠNG 5: "AB là tiếp tuyến tại A, AC là dây"
    Tùy chọn để ổn định: (equal-distance B H H C)
    CẤM: (equal-distance A H H M)
 
+18. Tam giác vuông tại A, M là trung điểm BC, vẽ đường tròn tâm M bán kính MB:
+   "Cho tam giác ABC vuông tại A. Gọi M là trung điểm của BC. Vẽ đường tròn tâm M bán kính MB."
+   → (triangle (A B C) (right A))
+(segment B C)
+(define M point (midpoint B C))
+(circle M)
+(on-circle B M)
+(segment M B)
+(on-circle A M)
+
+19. Hình bình hành ABCD, AC và BD cắt nhau tại O, vẽ đường tròn tâm O bán kính OA:
+   "Cho hình bình hành ABCD. Hai đường chéo AC và BD cắt nhau tại O. Vẽ đường tròn tâm O bán kính OA."
+   → (parallelogram (A B C D))
+(segment A C)
+(segment B D)
+(define O point (inter-ll A C B D))
+(circle O)
+(on-circle A O)
+(segment O A)
+
+20. Hình chữ nhật ABCD nội tiếp đường tròn tâm O, M là trung điểm AB, chứng minh OM // AD:
+   "Cho hình chữ nhật ABCD nội tiếp đường tròn tâm O. Gọi M là trung điểm của AB. Chứng minh OM song song AD."
+   → (rectangle (A B C D))
+(define O point)
+(circle O)
+(on-circle A O)
+(on-circle B O)
+(on-circle C O)
+(on-circle D O)
+(segment A B)
+(segment A D)
+(define M point (midpoint A B))
+(segment O M)
+(parallel (segment O M) (segment A D))
+
 ═══ OUTPUT FORMAT ═══
 
 1. CHỈ trả về JSON: [{"instruction": "...", "answer": "DSL với \\n"}]
@@ -640,11 +789,11 @@ DẠNG 5: "AB là tiếp tuyến tại A, AC là dây"
 
 1. Mỗi điểm chỉ define MỘT LẦN
 2. on-segment đều có đúng 3 điểm khác nhau
-3. Tiếp điểm có (on-circle T O) trước (tangent T ...), với T là tên tiếp điểm bất kỳ
+3. Nếu tiếp điểm là điểm riêng T (không phải endpoint đã có), phải có (on-circle T O) trước (tangent T ...)
 4. Tiếp điểm là endpoint → KHÔNG on-segment
 5. "Nằm ngoài đường tròn" → có (distance O A <value>)
 6. Vẽ tất cả mô tả hình học (cả "cho" và "chứng minh")
-7. Điểm trên đường tròn đều có (on-circle ... O)
+7. Điểm trên đường tròn đều có (on-circle ... X) theo đúng tâm được khai báo trong bài
 8. midpoint/projection → segment phải tồn tại trước
 9. Dây cung → cả 2 đầu on-circle
 10. Đường kính → (diameter M N O) + (segment M N)
@@ -663,6 +812,9 @@ DẠNG 5: "AB là tiếp tuyến tại A, AC là dây"
 23. "H là trung điểm của AC" bắt buộc là (equal-distance A H H C), không phải AH = AC
 24. Mọi dòng answer đều phải bắt đầu bằng "(" và kết thúc bằng ")"
 25. Tổng số ngoặc mở/đóng trong toàn bộ answer phải cân bằng
+26. Nếu đề chỉ định tâm đường tròn (O/M/...), answer KHÔNG được đổi sang tâm khác
+27. Nếu đề có "bán kính XY", answer PHẢI có (on-circle Y X)
+28. Nếu đề có "đường chéo AC, BD cắt nhau tại X", answer PHẢI có AC, BD và inter-ll tại X
 
 ═══ INPUT ═══
 {{ extract }}
