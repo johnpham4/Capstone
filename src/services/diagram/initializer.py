@@ -117,12 +117,12 @@ class Initializer:
 
     @staticmethod
     def init_parallelogram(scale: float = 1.0) -> List[Tuple[float, float]]:
-        """Initialize coordinates for a parallelogram (opposite sides parallel)"""
+        """Initialize a visually stable parallelogram for cleaner renders."""
         return [
-            (-0.6 * scale, -0.3 * scale),    # Bottom left
-            (0.6 * scale, -0.3 * scale),     # Bottom right
-            (0.8 * scale, 0.5 * scale),      # Top right (shifted)
-            (-0.4 * scale, 0.5 * scale)      # Top left (shifted)
+            (-0.75 * scale, -0.45 * scale),  # Bottom left
+            (0.75 * scale, -0.25 * scale),   # Bottom right
+            (1.05 * scale, 0.55 * scale),    # Top right
+            (-0.45 * scale, 0.35 * scale)    # Top left
         ]
 
     @staticmethod

@@ -76,17 +76,11 @@ LƯU Ý: Tên điểm trong ví dụ (A, B, C, M, O...) chỉ minh họa. PHẢI
    thì PHẢI có dòng (segment ...) tương ứng trong DSL.
    Quy tắc tổng quát: bất kỳ đoạn XY nào được nêu trong đề (giả thiết/hỏi/chứng minh)
    đều phải có (segment X Y), không phụ thuộc tên chữ cái cụ thể.
-    NGOẠI LỆ CHỐNG VẼ CHỒNG:
-    • Nếu O đã được define là giao điểm 2 đường chéo (inter-ll A C B D), thì OA/OC là đoạn con của AC,
-       OB/OD là đoạn con của BD.
-    • Trong trường hợp này, KHÔNG bắt buộc vẽ thêm (segment O A)/(segment O B)/(segment O C)/(segment O D)
-       chỉ để biểu diễn đẳng thức độ dài; ưu tiên dùng equal-distance để tránh chồng nét.
-   • "OA = OB = OC" → BẮT BUỘC có:
-      (segment O A)
-      (segment O B)
-      (segment O C)
+   • "OA = OB = OC" → PHẢI có ít nhất:
       (equal-distance O A O B)
       (equal-distance O A O C)
+      - BẮT BUỘC thêm (segment O A), (segment O B), (segment O C)
+      - Không được bỏ các segment này chỉ vì lý do tránh chồng nét
    • "MN // AB" → BẮT BUỘC có:
       (segment M N)
       (segment A B)
@@ -138,6 +132,11 @@ LƯU Ý: Tên điểm trong ví dụ (A, B, C, M, O...) chỉ minh họa. PHẢI
    • "B và C nằm trên đường tròn tâm M" → (on-circle B M) + (on-circle C M)
    • CẤM đổi tâm: nếu câu nói tâm M thì không được viết (on-circle ... O)
 
+12.2. CẤM tự sinh điểm O khi đề không nhắc O:
+   • Nếu đề không chứa điểm O (không có "tâm O", "(O)", "OA/OB/OC", "... tại O"),
+     thì answer KHÔNG được có bất kỳ token O nào.
+   • Với bài có tâm M/N/I/... thì chỉ dùng đúng tâm đó, CẤM thêm (define O point) làm tâm mặc định.
+
 ═══ QUY TẮC VÀNG - VẼ SEGMENT KHI ĐỀ NHẮC ═══
 
 Đọc kỹ đề → tìm TẤT CẢ cạnh/đoạn được nhắc → kiểm tra đã có segment chưa → thêm nếu thiếu
@@ -165,6 +164,7 @@ TRÁNH ĐOẠN CON CHỒNG ĐOẠN MẸ:
    trừ khi đề bắt buộc nêu rõ phải "nối OA/OC".
 • Nếu đã có (segment B D) và biết O nằm trên BD, thì KHÔNG vẽ thêm (segment O B) hoặc (segment O D)
    trừ khi đề bắt buộc nêu rõ phải "nối OB/OD".
+• Nếu đề nhắc trực tiếp OA/OB/OC/OD (ví dụ "OA = OB = OC"), PHẢI vẽ các segment tương ứng.
 
 ƯU TIÊN QUY TẮC:
 • Nếu có (tangent X ...) thì quy tắc "vẽ (segment O X) ngay sau tangent" được ưu tiên cao hơn quy tắc "không tự vẽ bán kính".
@@ -409,12 +409,14 @@ TRÁNH ĐOẠN CON CHỒNG ĐOẠN MẸ:
          (segment A N)
          (parallel (segment O M) (segment A N))
 
-    • "Hai đường chéo AC và BD cắt nhau tại O":
+    • "Hai đường chéo AC và BD cắt nhau tại X":
        - BẮT BUỘC có: (segment A C), (segment B D)
-       - BẮT BUỘC có: (define O point (inter-ll A C B D))
-       - CẤM thêm (define O point) riêng nếu O đã được define bởi inter-ll
-       - CẤM mọi define khác cho O sau dòng inter-ll (midpoint/projection/point tự do/...)
-       - KHÔNG được chỉ ghi "cắt nhau tại O" mà thiếu đoạn AC/BD hoặc thiếu define O
+          - BẮT BUỘC define giao điểm bằng construction:
+             (define X point (inter-ll A C B D))
+          - Nếu X đồng thời là tâm đường tròn, dùng lại chính X đó cho (circle X),
+             KHÔNG được define X dạng tự do rồi chỉ thêm on-segment
+          - CẤM encode giao điểm chỉ bằng on-segment khi đề đã nói rõ "cắt nhau tại X"
+       - KHÔNG được chỉ ghi "cắt nhau tại X" mà thiếu đoạn AC/BD hoặc thiếu ràng buộc giao điểm
 
 3. HÌNH VUÔNG:
    • "Hình vuông ABCD" → CHỈ (square (A B C D))
@@ -820,6 +822,20 @@ DẠNG 5: "AB là tiếp tuyến tại A, AC là dây"
 (segment O M)
 (parallel (segment O M) (segment A D))
 
+21. Hình vuông ABCD nội tiếp đường tròn tâm O, chứng minh AC và BD cắt nhau tại tâm O:
+   "Cho hình vuông ABCD nội tiếp đường tròn tâm O. Chứng minh rằng AC và BD cắt nhau tại tâm O."
+   → (square (A B C D))
+(define O point)
+(circle O)
+(on-circle A O)
+(on-circle B O)
+(on-circle C O)
+(on-circle D O)
+(segment A C)
+(segment B D)
+(on-segment O A C)
+(on-segment O B D)
+
 ═══ OUTPUT FORMAT ═══
 
 1. CHỈ trả về JSON: [{"instruction": "...", "answer": "DSL với \\n"}]
@@ -868,9 +884,13 @@ DẠNG 5: "AB là tiếp tuyến tại A, AC là dây"
 25. Tổng số ngoặc mở/đóng trong toàn bộ answer phải cân bằng
 26. Nếu đề chỉ định tâm đường tròn (O/M/...), answer KHÔNG được đổi sang tâm khác
 27. Nếu đề có "bán kính XY", answer PHẢI có (on-circle Y X)
-28. Nếu đề có "đường chéo AC, BD cắt nhau tại X", answer PHẢI có AC, BD và inter-ll tại X
+28. Nếu đề có "đường chéo AC, BD cắt nhau tại X":
+   - BẮT BUỘC có (define X point (inter-ll A C B D))
+   - Không được thay thế bằng define tự do + on-segment
+   - Nếu X đồng thời là tâm đường tròn thì dùng lại X đó cho (circle X)
 29. Không được lặp segment trùng nhau (XY và YX tính là cùng một segment)
 30. Nếu X là giao điểm trên đoạn đã vẽ (ví dụ O trên AC/BD), không vẽ thêm đoạn con XA/XB/XC/XD trừ khi đề yêu cầu tường minh
+31. Nếu đề nhắc trực tiếp tên đoạn (OA/OB/OC/OD/...), PHẢI có segment tương ứng dù có nguy cơ chồng nét
 
 ═══ INPUT ═══
 {{ extract }}

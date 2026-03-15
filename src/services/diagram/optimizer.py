@@ -364,7 +364,7 @@ class Optimizer:
         assert len(points) == 4
         # Use dedicated parallelogram init for a cleaner, more stable layout.
         pt_objs, names = self._sample_quadrilateral_with_init(
-            points, Initializer.init_parallelogram, 1.3, quad_type=QuadrilateralType.PARALLELOGRAM
+            points, Initializer.init_parallelogram, 1.3, noise=0.0, quad_type=QuadrilateralType.PARALLELOGRAM
         )
         p1, p2, p3, p4 = pt_objs
 
