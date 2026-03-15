@@ -374,26 +374,9 @@ class MatplotlibDiagramRenderer:
                     p1 = points[i]
                     p2 = points[(i + 1) % 4]
                     self._draw_tick_marks(ax, p1, p2, 1)
-                
-                # Optionally draw diagonals with dashed lines to show perpendicularity
-                ax.plot([points[0].x, points[2].x], [points[0].y, points[2].y],
-                       'b--', linewidth=1.0, alpha=0.5)
-                ax.plot([points[1].x, points[3].x], [points[1].y, points[3].y],
-                       'b--', linewidth=1.0, alpha=0.5)
-                
-                # Draw right angle symbol at diagonal intersection
-                # Calculate intersection point (center of rhombus)
-                center_x = (points[0].x + points[2].x) / 2
-                center_y = (points[0].y + points[2].y) / 2
-                
-                # Create a temporary point for the center
-                class TempPoint:
-                    def __init__(self, x, y):
-                        self.x = x
-                        self.y = y
-                
-                center_pt = TempPoint(center_x, center_y)
-                self._draw_right_angle_symbol(ax, center_pt, points[0], points[1])
+
+                # Keep rhombus rendering clean: no implicit diagonal/right-angle
+                # decorations unless explicitly requested by DSL constraints.
 
             # QUADRILATERAL (generic): No special markings
             # Just the outline is already drawn above

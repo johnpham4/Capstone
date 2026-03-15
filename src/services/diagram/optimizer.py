@@ -8,7 +8,6 @@ from collections import namedtuple
 import math
 import traceback
 
-
 from src.models.domain.geometry.instructions import Parameter, Assertion
 from src.models.domain.geometry.value_objects import Point, Line
 from src.models.domain.geometry.entities import GeometricPoint, Diagram
@@ -320,8 +319,6 @@ class Optimizer:
         self.register_ndg(f"quad_edge_{names[2]}_{names[3]}", lambda: self.dist(p3, p4), weight=2.0)
         self.register_ndg(f"quad_edge_{names[3]}_{names[0]}", lambda: self.dist(p4, p1), weight=2.0)
         # NOTE: Rendering uses Diagram.quadrilaterals which is populated from
-        # self.quadrilaterals_metadata in get_diagram(). If we don't register
-        # metadata here, the outline won't be drawn even though points exist.
         if key not in self.quadrilaterals_metadata:
             self.quadrilaterals_metadata[key] = metadata if metadata is not None else {'type': quad_type}
         return pt_objs, names
@@ -365,9 +362,9 @@ class Optimizer:
 
     def sample_parallelogram(self, points: list):
         assert len(points) == 4
-        # Use scalene quad init for parallelogram (more general shape)
+        # Use dedicated parallelogram init for a cleaner, more stable layout.
         pt_objs, names = self._sample_quadrilateral_with_init(
-            points, Initializer.init_quadrilateral, 1.5, quad_type=QuadrilateralType.PARALLELOGRAM
+            points, Initializer.init_parallelogram, 1.3, quad_type=QuadrilateralType.PARALLELOGRAM
         )
         p1, p2, p3, p4 = pt_objs
 

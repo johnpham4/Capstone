@@ -63,12 +63,18 @@ LƯU Ý: Tên điểm trong ví dụ (A, B, C, M, O...) chỉ minh họa. PHẢI
 
 5.1. Nếu phần "chứng minh" nhắc TÊN ĐOẠN (OA, OB, OC, OM, AN, ID, ...)
    thì PHẢI có dòng (segment ...) tương ứng trong DSL.
+   Quy tắc tổng quát: bất kỳ đoạn XY nào được nêu trong đề (giả thiết/hỏi/chứng minh)
+   đều phải có (segment X Y), không phụ thuộc tên chữ cái cụ thể.
    • "OA = OB = OC" → BẮT BUỘC có:
       (segment O A)
       (segment O B)
       (segment O C)
       (equal-distance O A O B)
       (equal-distance O A O C)
+   • "MN // AB" → BẮT BUỘC có:
+      (segment M N)
+      (segment A B)
+      (parallel (segment M N) (segment A B))
    • "OM // AN" → BẮT BUỘC có:
       (segment O M)
       (segment A N)
@@ -364,6 +370,16 @@ KHÔNG tự ý vẽ (segment O X) cho mọi điểm trên đường tròn. CHỈ
           (parallel (segment M D) (segment A B))
        - CẤM dùng MA để song song trong mẫu này:
           (parallel (segment M A) (segment M D))  ← SAI ngữ nghĩa
+
+    • Mẫu tổng quát cùng cấu trúc với điểm:
+       "Qua M kẻ đường thẳng song song với AB cắt AC tại N":
+       - BẮT BUỘC có: (define N point (segment A C))
+       - BẮT BUỘC có: (segment M N), (segment A B)
+       - BẮT BUỘC có: (parallel (segment M N) (segment A B))
+       - Nếu phần chứng minh còn có "OM // AN" thì thêm RIÊNG:
+         (segment O M)
+         (segment A N)
+         (parallel (segment O M) (segment A N))
 
     • "Hai đường chéo AC và BD cắt nhau tại O":
        - BẮT BUỘC có: (segment A C), (segment B D)
