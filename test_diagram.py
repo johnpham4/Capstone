@@ -61,7 +61,7 @@ def test_single_problem(instruction, dsl_answer, output_path):
         print(f"Instructions count: {len(builder.instructions)}")
         # print(f"Instructions: {builder.instructions}")
         opts = {
-            'epochs': 1000,
+            'epochs': 1500,
             'n_tries': 3,
             'eps': 1e-6,
             'seed': 42,
@@ -106,7 +106,7 @@ def main():
     project_root = Path(__file__).resolve().parent
     config = _load_render_config(project_root, args.config)
 
-    configured_input = config.get("input_json_path", "dataset/data/train.json")
+    configured_input = config.get("input_json_path", "dataset\\data\\train.json")
     configured_output_dir = config.get("output_dir", "output_fixed")
 
     input_path_raw = args.input or configured_input

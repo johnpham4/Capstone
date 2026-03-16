@@ -179,6 +179,7 @@ TRÁNH ĐOẠN CON CHỒNG ĐOẠN MẸ:
      - Vuông cân: (triangle (A B C) (right_isosceles B))
      - Đều: (triangle (A B C) (equilateral))
 
+   • Tứ giác: (quadrilateral ABCD (A B C D))
    • Hình vuông: (square (A B C D))
    • Hình chữ nhật: (rectangle (A B C D))
    • Hình thang: (trapezoid (A B C D))

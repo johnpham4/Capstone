@@ -1,3 +1,4 @@
+from steps.data_prep.filter_data import filter_triangle
 from zenml import pipeline
 from loguru import logger
 
@@ -42,6 +43,6 @@ def data_preparation_pipeline(
     )
     logger.success(f"Data preparation pipeline completed. Dataset saved to: {output_path}")
 
-    #filter_triangle(diagram_texts=diagram_texts_translated, output_dir=output_dir)
+    filter_triangle(diagram_texts=diagram_texts_translated, output_dir=output_dir)
 
     return output_path
