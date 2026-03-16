@@ -106,7 +106,7 @@ def main():
     project_root = Path(__file__).resolve().parent
     config = _load_render_config(project_root, args.config)
 
-    configured_input = config.get("input_json_path", "dataset\\data\\train.json")
+    configured_input = config.get("input_json_path", "dataset/data/train.json")
     configured_output_dir = config.get("output_dir", "output_fixed")
 
     input_path_raw = args.input or configured_input

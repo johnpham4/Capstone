@@ -26,6 +26,9 @@ LƯU Ý: Tên điểm trong ví dụ (A, B, C, M, O...) chỉ minh họa. PHẢI
 
 1. (on-segment A B) chỉ 2 điểm → SAI! Cần đúng 3: (on-segment M A B)
    Tiếp điểm là endpoint → KHÔNG dùng on-segment
+   CẤM dùng on-segment trong construction của define:
+   • SAI:  (define D point (on-segment A B))
+   • ĐÚNG: (define D point (segment A B))
 
 2. Define trùng → SAI! Mỗi điểm CHỈ define MỘT LẦN duy nhất
 
@@ -224,6 +227,10 @@ TRÁNH ĐOẠN CON CHỒNG ĐOẠN MẸ:
    CẤM dùng on-circle trong construction:
    SAI: (define C point (on-circle C O))
    ĐÚNG: (define C point) + (on-circle C O)
+
+   CẤM dùng on-segment trong construction:
+   SAI: (define D point (on-segment A B))
+   ĐÚNG: (define D point (segment A B))
 
    TRUNG ĐIỂM CUNG vs TRUNG ĐIỂM ĐOẠN:
    • Trung điểm CUNG → điểm tự do trên đường tròn: (define C point) + (on-circle C O)
@@ -860,6 +867,7 @@ DẠNG 5: "AB là tiếp tuyến tại A, AC là dây"
 1. Mỗi điểm chỉ define MỘT LẦN
 1.1. Điểm define từ midpoint/inter-ll/projection/... KHÔNG được define lại dạng tự do
 2. on-segment đều có đúng 3 điểm khác nhau
+2.1. CẤM dùng (on-segment ...) trong define construction; nếu cần điểm trên đoạn AB thì dùng (define X point (segment A B))
 3. Nếu tiếp điểm là điểm riêng T (không phải endpoint đã có), phải có (on-circle T O) trước (tangent T ...)
 4. Tiếp điểm là endpoint → KHÔNG on-segment
 5. "Nằm ngoài đường tròn" → có (distance O A <value>)
