@@ -1,57 +1,57 @@
 [
   {
-    "image_dir": "images/img_231619.png",
-    "instruction": "Cho hình thang ABCD có AB song song với CD. Hình thang nội tiếp một đường tròn tâm O. Chứng minh rằng AD bằng BC.",
-    "answer": "(trapezoid (A B C D))\n(define O point)\n(circle O)\n(on-circle A O)\n(on-circle B O)\n(on-circle C O)\n(on-circle D O)\n(segment A B)\n(segment C D)\n(equal-distance A D B C)"
+    "image_dir": "images/img_100771.png",
+    "instruction": "Đường tròn O, đường thẳng cắt đường tròn O tại điểm A và điểm B",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)"
   },
   {
-    "image_dir": "images/img_231602.png",
-    "instruction": "Cho tam giác ABC vuông tại A. Gọi M là trung điểm của BC. Vẽ đường tròn tâm M bán kính MB. Chứng minh rằng A nằm trên đường tròn.",
-    "answer": "(triangle (A B C) (right A))\n(define M point (midpoint B C))\n(circle M)\n(on-circle B M)\n(segment M B)\n(on-circle A M)"
+    "image_dir": "images/img_100022.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua C là đường trung trực của đoạn thẳng AB",
+    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define D point (on-segment A B))\n(define E point (on-segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(segment A B)\n(segment A C)\n(define M point (midpoint A B))\n(segment C M)\n(perpendicular (segment C M) (segment A B))"
   },
   {
-    "image_dir": "images/img_231626.png",
-    "instruction": "Cho hình bình hành ABCD. Gọi M là trung điểm của AB. Chứng minh rằng đường thẳng DM cắt AC tại trung điểm của AC.",
-    "answer": "(parallelogram (A B C D))\n(define M point (midpoint A B))\n(segment A B)\n(segment A C)\n(segment D M)\n(define H point (inter-ll D M A C))\n(define N point (midpoint A C))\n(equal-distance A H H C)\n(equal-distance A N N C)"
+    "image_dir": "images/img_100375.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên on đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, đường thẳng DF, BC song song với DE, AC song song với DF",
+    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(segment A B)\n(segment A C)\n(segment B C)\n(define D point (on-segment A B))\n(define E point (on-segment A C))\n(define F point (on-segment B C))\n(segment D E)\n(segment D F)\n(parallel (segment B C) (segment D E))\n(parallel (segment A C) (segment D F))"
   },
   {
-    "image_dir": "images/img_231629.png",
-    "instruction": "Cho tam giác ABC nội tiếp đường tròn tâm O. Chứng minh rằng OA bằng OB bằng OC.",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(on-circle A O)\n(on-circle B O)\n(on-circle C O)\n(equal-distance O A O B)\n(equal-distance O A O C)\n(segment O A)\n(segment O B)\n(segment O C)"
+    "image_dir": "images/img_100658.png",
+    "instruction": "Tam giác ABC, AB = AC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
+    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(segment A C)\n(equal-distance A B A C)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))"
   },
   {
-    "image_dir": "images/img_231616.png",
-    "instruction": "Cho hình vuông ABCD. Hai đường chéo cắt nhau tại O. Gọi M là trung điểm của BC. Vẽ đường tròn tâm O bán kính OA.",
-    "answer": "(square (A B C D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(define M point (midpoint B C))\n(circle O)\n(on-circle A O)\n(segment O A)"
+    "image_dir": "images/img_10006.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC",
+    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 45)\n(segment B C)\n(segment C A)\n(segment C B)\n(perpendicular (segment C B) (segment C A))"
   },
   {
-    "image_dir": "images/img_231613.png",
-    "instruction": "Cho tam giác ABC nội tiếp đường tròn tâm O. Gọi M là trung điểm của BC. Chứng minh rằng OM vuông góc với BC.",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define M point (midpoint B C))\n(segment B C)\n(segment O M)\n(perpendicular (segment O M) (segment B C))"
+    "image_dir": "images/img_100403.png",
+    "instruction": "Đường tròn O, đường thẳng tiếp xúc với đường tròn O",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(equal-distance A B 1.0)\n(segment A B)\n(tangent A (circle O) AB)\n(segment O A)"
   },
   {
-    "image_dir": "images/img_231624.png",
-    "instruction": "Cho tam giác ABC. Gọi M là trung điểm của BC. Vẽ đường tròn tâm M bán kính MB. Chứng minh rằng B và C nằm trên đường tròn.",
-    "answer": "(triangle (A B C))\n(define M point (midpoint B C))\n(segment B C)\n(circle M)\n(on-circle B M)\n(on-circle C M)"
+    "image_dir": "images/img_100638.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng đi qua điểm B",
+    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(define D point (on-segment A B))\n(angle-equal A C D D C B)"
   },
   {
-    "image_dir": "images/img_231618.png",
-    "instruction": "Cho tam giác ABC nội tiếp đường tròn tâm O. Qua A kẻ tiếp tuyến của đường tròn. Chứng minh rằng OA vuông góc với tiếp tuyến.",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define T point)\n(on-circle A O)\n(segment O A)\n(segment A T)\n(tangent A (circle O) AT)\n(perpendicular (segment O A) (segment A T))"
+    "image_dir": "images/img_100413.png",
+    "instruction": "Tam giác ABC, AB = AC, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC",
+    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))"
   },
   {
-    "image_dir": "images/img_231621.png",
-    "instruction": "Cho tam giác ABC. Vẽ đường tròn có đường kính AB. Chứng minh rằng mọi điểm C nằm trên đường tròn tạo thành tam giác vuông.",
-    "answer": "(triangle (A B C))\n(define O point)\n(diameter A B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(segment A C)\n(segment B C)"
+    "image_dir": "images/img_100060.png",
+    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB",
+    "answer": "(triangle (A B C))\n(define D point (on-segment A B))\n(angle-equal A C D D C B)"
   },
   {
-    "image_dir": "images/img_231617.png",
-    "instruction": "Cho đường tròn tâm O. AB là đường kính. CD là một dây cung. Gọi M là trung điểm của CD. Chứng minh rằng OM vuông góc với CD.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(diameter A B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(define M point (midpoint C D))\n(segment C M)\n(segment D M)\n(segment O M)\n(perpendicular (segment O M) (segment C D))"
+    "image_dir": "images/img_100993.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng đi qua điểm B là đường trung trực của đoạn thẳng AC",
+    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(segment A B)\n(segment A C)\n(segment B C)\n(define M point (midpoint A B))\n(segment M A)\n(segment M B)\n(perpendicular (segment M A) (segment A B))\n(define N point (midpoint A C))\n(segment N A)\n(segment N C)\n(perpendicular (segment N A) (segment A C))"
   },
   {
-    "image_dir": "images/img_231620.png",
-    "instruction": "Cho hình chữ nhật ABCD nội tiếp đường tròn tâm O. Gọi M là trung điểm của AB. Chứng minh rằng OM song song với AD.",
-    "answer": "(rectangle (A B C D))\n(define O point)\n(circle O)\n(on-circle A O)\n(on-circle B O)\n(on-circle C O)\n(on-circle D O)\n(segment A B)\n(segment A D)\n(define M point (midpoint A B))\n(segment O M)\n(parallel (segment O M) (segment A D))"
+    "image_dir": "images/img_100315.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
+    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 45)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point)\n(on-circle N O)"
   }
 ]
