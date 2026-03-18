@@ -1,0 +1,7 @@
+[
+  {
+    "index": 11,
+    "instruction": "Đường tròn O, đường tròn B, đường tròn B tiếp xúc với đường tròn O, đường thẳng đi qua điểm O",
+    "dsl": "(define O point)\n(circle O)\n(define B point)\n(circle B)\n(tangent B (circle O) OB)\n(segment O B)"
+  }
+]
