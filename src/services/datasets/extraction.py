@@ -112,7 +112,9 @@ class SynthGeoDatasetExtractor:
 
     @classmethod
     def filter_diagrams(cls, diagram_texts: List[Dict]) -> List[Dict]:
-        non_triangle_pattern = r"(excircle|quadrilateral|hexagon|polygon)"
+        non_triangle_pattern = r"(excircle|đường tròn bàng tiếp|bàng tiếp|pentagon|ngũ giác|hexagon|lục giác|polygon|quadrilateral|tứ giác)"
+        typo = r"(trianlge)"
+        non_cover = r"(excenter|similar|đồng dạng|concentric|đồng tâm|inside|nằm trong|extension|kéo dài)"
         # triangle_pattern = r"\btriangle\b"
 
         triangle_texts = []
@@ -127,11 +129,12 @@ class SynthGeoDatasetExtractor:
             if re.search(non_triangle_pattern, caption, re.IGNORECASE):
                 continue
 
+            if re.search(typo, caption, re.IGNORECASE):
+                continue
+
+            if re.search(non_cover, caption, re.IGNORECASE):
+                continue
+
             triangle_texts.append(diagram)
 
         return triangle_texts
-
-
-
-
-
