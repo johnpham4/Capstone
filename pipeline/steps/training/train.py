@@ -1,6 +1,6 @@
 from zenml import step
 
-from pipeline.services.finetuning.sagemaker import run_finetuning_on_sagemaker
+from pipeline.services.unsloth_finetune.sagemaker import run_finetuning_on_sagemaker
 
 
 @step

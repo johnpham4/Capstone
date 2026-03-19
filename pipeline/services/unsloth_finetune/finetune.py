@@ -126,6 +126,7 @@ def finetune(
         model=model,
         tokenizer=tokenizer,
         train_dataset=dataset,
+        # eval_dataset=eval_dataset,
         args=sft_config,
     )
 

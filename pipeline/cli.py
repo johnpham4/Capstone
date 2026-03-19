@@ -110,7 +110,7 @@ def main(
 
         logger.info(f"Configuration: epochs={num_epochs}, batch_size={batch_size}, lr={learning_rate}")
 
-        from pipeline.services.finetuning.sagemaker import run_finetuning_on_sagemaker
+        from pipeline.services.unsloth_finetune.sagemaker import run_finetuning_on_sagemaker
 
         run_finetuning_on_sagemaker(
             num_train_epochs=num_epochs,

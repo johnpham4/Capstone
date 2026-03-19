@@ -30,11 +30,14 @@ simple_finetune:
 option_finetune:
 	PYTHONPATH=. uv run python -m pipeline.cli --run-finetune --num-epochs 1 --batch-size 2 --learning-rate 2e-4
 
-aws_excecution_roles:
-	PYTHONPATH=. uv run python src/infrastructures/aws/roles/create_execution_role.py
 
 aws_sagemaker_roles:
 	PYTHONPATH=. uv run python src/infrastructures/aws/roles/create_sagemaker_role.py
+
+
+aws_excecution_roles:
+	PYTHONPATH=. uv run python src/infrastructures/aws/roles/create_execution_role.py
+
 
 deploy_endpoint:
 	PYTHONPATH=. uv run python src/infrastructures/aws/deploy/huggingface/run.py

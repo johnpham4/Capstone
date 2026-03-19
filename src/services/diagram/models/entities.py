@@ -33,11 +33,10 @@ class Diagram:
     triangles: List[tuple] = field(default_factory=list)
     quadrilaterals: List[List[GeometricPoint]] = field(default_factory=list)
     segments: List[tuple] = field(default_factory=list)
-    circles: List[tuple] = field(default_factory=list)  # (center, radius_or_info)
+    circles: List[tuple] = field(default_factory=list)
     lines: Dict[str, Any] = field(default_factory=dict)
     angle_bisectors: List[Dict] = field(default_factory=list)
-    angle_equal_assertions: List[Dict] = field(default_factory=list)  # Store angle-equal constraints
-
+    angle_equal_assertions: List[Dict] = field(default_factory=list)
     # Tick marks for equal segments
     tick_styles: List[str] = field(default_factory=lambda: ["k-", "k--", "kx", "kxx", "kg", "k---"])
     segment_group: Dict[frozenset, int] = field(default_factory=dict)

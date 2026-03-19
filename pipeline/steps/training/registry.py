@@ -1,6 +1,6 @@
 from zenml import step
 
-from pipeline.services.finetuning.registry import registry_model
+from pipeline.services.unsloth_finetune.registry import registry_model
 
 
 @step
