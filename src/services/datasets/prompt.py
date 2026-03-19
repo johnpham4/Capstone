@@ -24,6 +24,25 @@ LƯU Ý: Tên điểm trong ví dụ (A, B, C, M, O...) chỉ minh họa. PHẢI
        (segment B C)
        (perpendicular (segment I D) (segment B C))
 
+0.1. QUY TẮC GÓC - BLOCK DUY NHẤT (ƯU TIÊN CAO NHẤT)
+    • Áp dụng cho mọi mệnh đề góc trong toàn bộ instruction.
+    • Nhận diện:
+       - "∠XYZ", "góc XYZ", hoặc "XYZ" khi có ngữ cảnh góc.
+       - "XYZ = n" với n là số độ.
+    • Mapping bắt buộc:
+       - Đỉnh là chữ giữa Y.
+       - "góc XYZ = n" → (angle-measure X Y Z n)
+       - "góc XYZ = góc UVW" → (angle-equal X Y Z U V W)
+    • Ràng buộc cứng:
+       - CẤM đổi thứ tự ký tự góc (ABC phải map thành A B C).
+       - CẤM đổi trị số góc.
+       - Mỗi mệnh đề dạng "góc XYZ = n" phải có đúng 1 dòng angle-measure tương ứng.
+       - Không được thay thế mệnh đề "góc XYZ = n" chỉ bằng shape type (right/isosceles/...)
+    • Ví dụ:
+       - "góc ABC = 90" → (angle-measure A B C 90)
+       - "góc BAC = 45" → (angle-measure B A C 45)
+       - "góc ACB = 45" → (angle-measure A C B 45)
+
 1. (on-segment A B) chỉ 2 điểm → SAI! Cần đúng 3: (on-segment M A B)
    Tiếp điểm là endpoint → KHÔNG dùng on-segment
    CẤM dùng on-segment trong construction của define:
@@ -69,11 +88,10 @@ LƯU Ý: Tên điểm trong ví dụ (A, B, C, M, O...) chỉ minh họa. PHẢI
 
 5. Phải vẽ TẤT CẢ quan hệ hình học được nêu trong toàn bộ đề (kể cả phần "hỏi/chứng minh/kết luận")
     • "Chứng minh AB = AC" → (equal-distance A B A C)
-    • "Chứng minh góc BAC = 60°" / "Chứng minh ∠BAC = 60°" / "Chứng minh BAC = 60°" (ngữ cảnh là góc)
-       → (angle-measure B A C 60)
+    • Mọi mệnh đề góc số đo/góc bằng nhau trong câu chứng minh phải tuân theo BLOCK GÓC (mục 0.1)
     • "Chứng minh AB ⊥ CD" → (perpendicular (segment A B) (segment C D))
     • "Chứng minh góc BAC = góc OCA" / "Chứng minh ∠BAC = ∠OCA" / "Chứng minh BAC = OCA" (ngữ cảnh là góc)
-       → (angle-equal B A C O C A)
+       → theo BLOCK GÓC (mục 0.1)
 
 5.1. Nếu phần "chứng minh" nhắc TÊN ĐOẠN (OA, OB, OC, OM, AN, ID, ...)
    thì PHẢI có dòng (segment ...) tương ứng trong DSL.
@@ -112,6 +130,7 @@ LƯU Ý: Tên điểm trong ví dụ (A, B, C, M, O...) chỉ minh họa. PHẢI
 10. "Tam giác ... là tam giác vuông" KHÔNG nêu đỉnh vuông:
    • KHÔNG tự ý thêm (angle-measure ... 90)
    • CHỈ dùng (angle-measure ... 90) khi đề ghi rõ "vuông tại <điểm>"
+   • Mọi xử lý góc tường minh phải theo BLOCK GÓC (mục 0.1)
 
 11. "Đường tròn nội tiếp tâm I" bắt buộc có đủ 2 dòng:
    • (define I point (incenter A B C))
@@ -182,7 +201,7 @@ TRÁNH ĐOẠN CON CHỒNG ĐOẠN MẸ:
      - Vuông cân: (triangle (A B C) (right_isosceles B))
      - Đều: (triangle (A B C) (equilateral))
 
-   • Tứ giác: (quadrilateral ABCD (A B C D))
+   • Tứ giác: (quadrilateral (A B C D))
    • Hình vuông: (square (A B C D))
    • Hình chữ nhật: (rectangle (A B C D))
    • Hình thang: (trapezoid (A B C D))
@@ -238,7 +257,22 @@ TRÁNH ĐOẠN CON CHỒNG ĐOẠN MẸ:
 
    ĐƯỜNG TRUNG TRỰC:
    "AO là đường trung trực BC": AO đi qua trung điểm BC và AO ⊥ BC
-   → CHỈ vẽ: (segment B C) + (segment A O) + (perpendicular (segment A O) (segment B C))
+   → PHẢI có: (segment B C) + (segment A O) + (perpendicular (segment A O) (segment B C))
+   → PHẢI thêm ràng buộc cách đều để đúng nghĩa trung trực:
+      (equal-distance O B O C)
+   → Nếu A là điểm nằm trên chính đường trung trực đó trong đề, thêm:
+      (equal-distance A B A C)
+   → Nếu đề KHÔNG đặt tên đường trung trực (chỉ ghi "đường thẳng là đường trung trực ..."):
+      dùng điểm phụ với đúng ngữ nghĩa, KHÔNG bịa inter-ll/projection sai ngữ cảnh.
+      Mẫu an toàn:
+      (define M point (midpoint B C))
+      (define P point (perp-bisector B C))
+      (segment M P)
+      (perpendicular (segment M P) (segment B C))
+      (equal-distance P B P C)
+   → Nếu đề nói "đường thẳng đi qua điểm X là đường trung trực đoạn YZ" mà X trùng Y hoặc Z:
+      coi như đường thẳng qua X vuông góc YZ (KHÔNG thêm equal-distance với chính X để tránh ràng buộc bất khả thi)
+      ví dụ X=C, đoạn AC → chỉ encode vuông góc qua C với AC.
    → KHÔNG tự ý define điểm giao nếu đề không nhắc
    → KHÔNG vẽ thêm (segment A M) hoặc (segment M O) - VẼ ĐÈ!
 
@@ -264,11 +298,12 @@ TRÁNH ĐOẠN CON CHỒNG ĐOẠN MẸ:
    - (line A B) - đường thẳng (vô hạn)
 
 4. ĐƯỜNG TRÒN (CIRCLES): (circle <center> <type>)
-   - (circle O) hoặc (circle O (radius 0.5))
+   - (circle X) hoặc (circle X (radius 0.5)) với X là tên tâm được nêu trong đề
    - (incircle A B C) / (circumcircle A B C)
     - LƯU Ý NĂNG LỰC DSL HIỆN TẠI: incircle/circumcircle CHỈ dùng cho 3 điểm tam giác
        • CẤM: (circumcircle A B C D), (incircle A B C D)
-   - LUÔN: (define O point) TRƯỚC → (circle O) SAU
+   - LUÔN: define đúng tâm được nêu trong đề trước rồi mới vẽ circle cùng tâm đó
+     (mẫu tổng quát: (define X point ...) TRƯỚC → (circle X) SAU)
    - Scale: 1 cm = 0.1 đơn vị (5cm → 0.5, 10cm → 1.0)
 
     TÂM/BÁN KÍNH ĐƯỢC CHỈ ĐỊNH TRỰC TIẾP TRONG ĐỀ:
@@ -284,14 +319,14 @@ TRÁNH ĐOẠN CON CHỒNG ĐOẠN MẸ:
     • Đề ghi tâm M → CẤM tạo đường tròn tâm O
     • Đề ghi tâm O → CẤM tạo đường tròn tâm M/N/... 
 
-   ĐƯỜNG KÍNH: (diameter A B O)
-   • A, B: 2 đầu mút, O: tâm (tự động nằm giữa)
-   • Tự động tạo: on-circle A O, on-circle B O, on-segment O A B
+   ĐƯỜNG KÍNH: (diameter A B X)
+   • A, B: 2 đầu mút, X: tâm (tự động nằm giữa)
+   • Tự động tạo: on-circle A X, on-circle B X, on-segment X A B
    • (diameter ...) CHỈ là constraint, KHÔNG tự vẽ → PHẢI thêm (segment A B)
 
    DÂY THƯỜNG (3 bước bắt buộc):
    1. Define điểm: (define C point) + (define D point)
-   2. Đặt trên đường tròn: (on-circle C O) + (on-circle D O)
+   2. Đặt trên đường tròn: (on-circle C X) + (on-circle D X) với X là tâm của đường tròn đang xét
    3. Vẽ đoạn: (segment C D)
 
 5. RÀNG BUỘC (CONSTRAINTS):
@@ -349,14 +384,8 @@ TRÁNH ĐOẠN CON CHỒNG ĐOẠN MẸ:
    Nếu không có bán kính cụ thể, dùng 1.5
 
       GÓC:
-       • QUY TẮC TỔNG QUÁT cho mọi góc 3 ký tự XYZ:
-          - "∠XYZ", "góc XYZ", hoặc chỉ "XYZ" (khi ngữ cảnh đang nói về góc) đều cùng nghĩa.
-          - Chỉ coi "XYZ" là góc khi có tín hiệu ngữ cảnh góc trong cùng câu như: "góc", "số đo", "độ", "= ...°", hoặc vế còn lại là dạng góc (∠UVW / góc UVW).
-       - Đỉnh luôn là chữ ở giữa: Y.
-       - DSL tương ứng: (angle-measure X Y Z ...)
-    • Ví dụ: ∠BAC / góc BAC → (angle-measure B A C ...)
-    • Ví dụ: ∠AOC / góc AOC → (angle-measure A O C ...)
-    • Với góc bằng nhau: "∠XYZ = ∠UVW" hoặc "góc XYZ bằng góc UVW" → (angle-equal X Y Z U V W)
+       • Mọi quy tắc nhận diện/map/kiểm tra góc chỉ dùng BLOCK GÓC (mục 0.1).
+       • KHÔNG tạo quy tắc góc thứ hai ở phần này để tránh mâu thuẫn.
    • Góc ở tâm (đỉnh = tâm O): PHẢI vẽ bán kính đến các điểm chưa nối
      - AB là đường kính: O đã nối A, B → chỉ vẽ bán kính mới
      - A, B tự do: cần cả (segment O A) và (segment O B)
@@ -397,7 +426,7 @@ TRÁNH ĐOẠN CON CHỒNG ĐOẠN MẸ:
    • Phân giác AD: (define D point (bisector B A C)) + (segment A D)
    • Đường thẳng vuông góc qua C: (define H point (projection C (segment A B))) + (line C H)
    • Đường trung bình DE: (define D point (midpoint A B)) + (define E point (midpoint A C)) + (segment D E)
-   • Tâm hình vuông O: (define O point (midpoint A C))
+   • Tâm hình vuông: CHỈ define khi đề nhắc rõ tên tâm X; khi đó dùng (define X point (inter-ll A C B D))
    • Đường chéo hình vuông: (segment A C) và/hoặc (segment B D)
 
     • "Qua M kẻ đường thẳng song song với AB cắt AC tại D":
@@ -441,6 +470,12 @@ TRÁNH ĐOẠN CON CHỒNG ĐOẠN MẸ:
        (circle M)
        (on-circle B M)
        CẤM đổi sang (circle O) hoặc (on-circle B O)
+   • "đường tròn ngoại tiếp X của tam giác ABC" → tâm PHẢI là X:
+      - ĐÚNG: (define X point (circumcenter A B C)) + (circle X (circumcircle A B C))
+      - SAI: define O rồi (on-circle X O)
+   • Với incircle/circumcircle đã xác định tâm, CẤM thêm on-circle cho chính các đỉnh tam giác
+      nếu đề KHÔNG nêu rõ các đỉnh đó nằm trên đường tròn tương ứng.
+      Ví dụ cấm: (circle O (incircle A B C)) rồi thêm (on-circle A O)/(on-circle B O)/(on-circle C O)
     • Nếu phần chứng minh nói thêm "C nằm trên đường tròn tâm M" thì PHẢI thêm (on-circle C M)
 
 5. TIẾP TUYẾN - THỨ TỰ BẮT BUỘC:
@@ -833,16 +868,14 @@ DẠNG 5: "AB là tiếp tuyến tại A, AC là dây"
 21. Hình vuông ABCD nội tiếp đường tròn tâm O, chứng minh AC và BD cắt nhau tại tâm O:
    "Cho hình vuông ABCD nội tiếp đường tròn tâm O. Chứng minh rằng AC và BD cắt nhau tại tâm O."
    → (square (A B C D))
-(define O point)
+(segment A C)
+(segment B D)
+(define O point (inter-ll A C B D))
 (circle O)
 (on-circle A O)
 (on-circle B O)
 (on-circle C O)
 (on-circle D O)
-(segment A C)
-(segment B D)
-(on-segment O A C)
-(on-segment O B D)
 
 ═══ OUTPUT FORMAT ═══
 
@@ -880,7 +913,7 @@ DẠNG 5: "AB là tiếp tuyến tại A, AC là dây"
 12. Projection đã có perpendicular → KHÔNG thêm perpendicular thừa
 13. Hình chiếu: KHÔNG vẽ (segment A H) hoặc (segment H C) khi H trên AC
 14. Sau (tangent X ...) → (segment O X) ngay dòng sau (trừ X trên đường kính)
-15. Đường trung trực: chỉ 3 dòng nếu đề không nhắc điểm giao
+15. Đường trung trực (không nhắc điểm giao): phải có perpendicular + equal-distance (ít nhất cho 1 điểm nằm trên đường trung trực)
 16. Đường trung trực + đề nhắc điểm giao → dùng inter-ll, KHÔNG midpoint
 17. Đường kính + tiếp tuyến → KHÔNG vẽ lại bán kính
 18. Perpendicular tiếp tuyến → dùng segment tiếp tuyến, KHÔNG bán kính
@@ -900,6 +933,10 @@ DẠNG 5: "AB là tiếp tuyến tại A, AC là dây"
 29. Không được lặp segment trùng nhau (XY và YX tính là cùng một segment)
 30. Nếu X là giao điểm trên đoạn đã vẽ (ví dụ O trên AC/BD), không vẽ thêm đoạn con XA/XB/XC/XD trừ khi đề yêu cầu tường minh
 31. Nếu đề nhắc trực tiếp tên đoạn (OA/OB/OC/OD/...), PHẢI có segment tương ứng dù có nguy cơ chồng nét
+32. Mọi kiểm tra về góc chỉ theo BLOCK GÓC (mục 0.1): đúng thứ tự ký tự, đúng trị số, đủ coverage cho mọi "góc XYZ = n"
+33. Với tam giác có nhiều góc cho trước (vd BAC, ACB), CẤM map nhầm sang đỉnh khác (đặc biệt CẤM đổi ACB thành ABC)
+34. "đường tròn ngoại tiếp X của tam giác ..." → tâm phải là X, KHÔNG tự đổi sang O rồi ràng buộc on-circle cho X
+35. CẤM sinh (on-circle A O)/(on-circle B O)/(on-circle C O) ngay sau (circle O (incircle A B C))
 
 ═══ INPUT ═══
 {{ extract }}

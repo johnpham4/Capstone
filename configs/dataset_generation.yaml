@@ -1,4 +1,4 @@
 parameters:
-  source_json_path: "./dataset/data/splits/Nhi/diagrams.json"
+  source_json_path: "./dataset/data/splits/Khang/filter.json"
   test_size: 0.1
-  output_dir: "./dataset/data/splits/Nhi"
+  output_dir: "./dataset/data/splits/Khang/"

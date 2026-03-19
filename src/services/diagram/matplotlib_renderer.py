@@ -199,7 +199,7 @@ class MatplotlibDiagramRenderer:
             fontsize=16,
             ha='center',
             va='center',
-            color='red',
+            color='blue',
             fontweight='bold',
             bbox=dict(boxstyle='round,pad=0.1', facecolor='white', edgecolor='none', alpha=0.8),
         )
@@ -561,7 +561,19 @@ class MatplotlibDiagramRenderer:
         # Draw angle measures (display degree values)
         if hasattr(self.diagram, 'angle_measures') and self.diagram.angle_measures:
             for angle_data in self.diagram.angle_measures:
-                # Issue 1: Draw arc at the angle being measured
+                degrees = float(angle_data['degrees'])
+
+                # For right angles, show only the green square marker (no blue arc, no degree text).
+                if abs(degrees - 90.0) < 1e-6:
+                    self._draw_right_angle_symbol(
+                        ax,
+                        angle_data['vertex'],
+                        angle_data['p1'],
+                        angle_data['p2']
+                    )
+                    continue
+
+                # Non-right angles: draw blue arc and blue degree value.
                 self._draw_angle_arc(
                     ax,
                     angle_data['vertex'],
@@ -571,13 +583,12 @@ class MatplotlibDiagramRenderer:
                     radius=0.12,
                     draw_tick=False
                 )
-                # Draw the degree text
                 self._draw_angle_measure(
                     ax,
                     angle_data['vertex'],
                     angle_data['p1'],
                     angle_data['p2'],
-                    angle_data['degrees'],
+                    degrees,
                     radius=0.22
                 )
 

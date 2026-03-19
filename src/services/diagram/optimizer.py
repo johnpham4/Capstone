@@ -224,6 +224,12 @@ class Optimizer:
         """Lookup a point by raw point name; returns None if not found."""
         return self.name2pt.get(name)
 
+    def _ensure_named_point(self, point_name: str):
+        """Create a free point if it was referenced before being explicitly defined."""
+        if point_name not in self.name2pt:
+            self.sample_uniform(Point(point_name))
+        return self.name2pt[point_name]
+
 
     def sample_uniform(self, p, lo=-1.0, hi=1.0, save_name=True, init_coords=None):
         if init_coords is not None:
@@ -874,10 +880,35 @@ class Optimizer:
 
         p1 = self.lookup_pt(segment_points[0])
         p2 = self.lookup_pt(segment_points[1])
-        point = self.sample_uniform(point_name)
-        self.register_loss(f"perp_bisector_{point_name.val}",
-                          lambda: (self.dist(point, p1) - self.dist(point, p2))**2,
-                          weight=10.0)
+
+        # Initialize near the midpoint to improve convergence for bisector constraints.
+        init_x = (p1.x.detach().cpu().item() + p2.x.detach().cpu().item()) / 2
+        init_y = (p1.y.detach().cpu().item() + p2.y.detach().cpu().item()) / 2
+        point = self.sample_uniform(point_name, init_coords=(init_x, init_y))
+
+        # 1) Locus condition: points on the perpendicular bisector satisfy |PP1| = |PP2|.
+        self.register_loss(
+            f"perp_bisector_equal_dist_{point_name.val}",
+            lambda: self.dist(point, p1) - self.dist(point, p2),
+            weight=3000.0,
+        )
+
+        # 2) Direction condition: vector midpoint->P is perpendicular to segment P1P2.
+        self.register_loss(
+            f"perp_bisector_perp_dir_{point_name.val}",
+            lambda: ((point.x - (p1.x + p2.x) / 2) * (p2.x - p1.x)
+                     + (point.y - (p1.y + p2.y) / 2) * (p2.y - p1.y)),
+            weight=3000.0,
+        )
+
+        # 3) Keep base segment non-degenerate for meaningful perpendicular-bisector geometry.
+        ndg_key = f"perp_bisector_base_ndg_{segment_points[0].val}_{segment_points[1].val}"
+        if ndg_key not in self.ndgs:
+            self.register_ndg(
+                ndg_key,
+                lambda: self.dist(p1, p2),
+                weight=10.0,
+            )
         return point
 
     def process_instruction(self, instr):
@@ -1084,6 +1115,9 @@ class Optimizer:
         if len(objects) >= 2:
             p1_name = objects[0].val if hasattr(objects[0], 'val') else str(objects[0])
             p2_name = objects[1].val if hasattr(objects[1], 'val') else str(objects[1])
+            # Support minimal DSL like `(segment A B)` by auto-creating endpoints.
+            self._ensure_named_point(p1_name)
+            self._ensure_named_point(p2_name)
             self.segments.append((p1_name, p2_name))
 
     def _process_line_parameter(self, param_type, objects, args):
@@ -1092,6 +1126,8 @@ class Optimizer:
         if len(objects) >= 2:
             p1_name = objects[0].val if hasattr(objects[0], 'val') else str(objects[0])
             p2_name = objects[1].val if hasattr(objects[1], 'val') else str(objects[1])
+            self._ensure_named_point(p1_name)
+            self._ensure_named_point(p2_name)
             self.lines.append((p1_name, p2_name))
 
     def process_assertion(self, assertion):
@@ -1374,9 +1410,19 @@ class Optimizer:
             logger.warning(f"on-circle constraint needs 2 points (point, center), got {len(points)}")
             return
         
-        point = self.lookup_pt(points[0])
         center_name = points[1].val
         point_name = points[0].val
+
+        # Guard against invalid DSL: triangle vertices are not on the incircle.
+        tri_for_incircle = self.defined_incenters.get(center_name)
+        if tri_for_incircle and point_name in tri_for_incircle:
+            if self.verbosity:
+                logger.warning(
+                    f"Skipping invalid on-circle constraint: {point_name} on incircle centered at {center_name}"
+                )
+            return
+
+        point = self.lookup_pt(points[0])
         self.on_circle_pairs.add((point_name, center_name))
         
         logger.info(f"Adding on-circle constraint: point={points[0].val}, center={center_name}")

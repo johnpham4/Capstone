@@ -16,7 +16,7 @@ from loguru import logger
 @click.command()
 @click.option(
     "--input-json",
-    default="dataset/data/diagrams.json",
+    default="dataset/data/diagrams_filter.json",
     help="Path to the input diagrams JSON file",
 )
 @click.option(
