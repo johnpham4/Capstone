@@ -17,7 +17,7 @@ env/
 .env
 .env.local
 
-#images/
+images/
 
 # IDEs and Editors
 .vscode/
