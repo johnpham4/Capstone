@@ -2,9 +2,9 @@ from typing import List, Tuple, Any
 from loguru import logger
 
 from src.services.diagram.dsl_parser import DSLParser
-from src.models.domain.geometry.value_objects import Point
-from src.models.domain.geometry.instructions import Parameter, Assertion, DistanceValue
-from src.models.domain.geometry.types import DiagramType, TriangleType, QuadrilateralType
+from .model.value_objects import Point
+from .model.instructions import Parameter, Assertion, DistanceValue
+from .model.types import DiagramType, TriangleType, QuadrilateralType
 
 
 class DiagramBuilder:
@@ -109,7 +109,7 @@ class DiagramBuilder:
     def process_square(self, cmd):
         if len(cmd) < 2:
             raise RuntimeError(f"Invalid square command: {cmd}")
-        
+
         points_data = cmd[1]
         if len(points_data) != 4:
             raise RuntimeError(f"Square requires exactly 4 points, got: {len(points_data)}")
@@ -124,7 +124,7 @@ class DiagramBuilder:
     def process_rectangle(self, cmd):
         if len(cmd) < 2:
             raise RuntimeError(f"Invalid rectangle command: {cmd}")
-        
+
         points_data = cmd[1]
         if len(points_data) != 4:
             raise RuntimeError(f"Rectangle requires exactly 4 points, got: {len(points_data)}")
@@ -139,7 +139,7 @@ class DiagramBuilder:
     def process_parallelogram(self, cmd):
         if len(cmd) < 2:
             raise RuntimeError(f"Invalid parallelogram command: {cmd}")
-        
+
         points_data = cmd[1]
         if len(points_data) != 4:
             raise RuntimeError(f"Parallelogram requires exactly 4 points, got: {len(points_data)}")
@@ -154,7 +154,7 @@ class DiagramBuilder:
     def process_trapezoid(self, cmd):
         if len(cmd) < 2:
             raise RuntimeError(f"Invalid trapezoid command: {cmd}")
-        
+
         points_data = cmd[1]
         if len(points_data) != 4:
             raise RuntimeError(f"Trapezoid requires exactly 4 points, got: {len(points_data)}")
@@ -170,7 +170,7 @@ class DiagramBuilder:
         """[NEW] Process DSL: (rhombus (A B C D))"""
         if len(cmd) < 2:
             raise RuntimeError(f"Invalid rhombus command: {cmd}")
-        
+
         points_data = cmd[1]
         if len(points_data) != 4:
             raise RuntimeError(f"Rhombus requires exactly 4 points, got: {len(points_data)}")
@@ -191,7 +191,7 @@ class DiagramBuilder:
 
         # Determine quadrilateral type from command name
         quad_type_str = cmd[0].upper()
-        
+
         # Generic quadrilateral has no specific type
         if quad_type_str == "QUADRILATERAL":
             quad_type = None
@@ -289,17 +289,17 @@ class DiagramBuilder:
             raise RuntimeError(f"Invalid circle command: {cmd}")
 
         center_name = cmd[1]
-        
+
         # If only (circle O) - use default radius
         if len(cmd) == 2:
             construction_type = 'auto'
             construction_args = ()
         else:
             construction = cmd[2]
-            
+
             if not isinstance(construction, tuple):
                 raise RuntimeError(f"Circle construction must be a tuple: {construction}")
-            
+
             construction_type = construction[0].lower()
             construction_args = construction[1:]
 
@@ -346,10 +346,10 @@ class DiagramBuilder:
         """Process: (on-circle B O) -> Point B lies on circle centered at O"""
         if len(cmd) != 3:
             raise RuntimeError(f"on-circle requires 2 points (point, center): {cmd}")
-        
+
         point = Point(cmd[1])  # B
         center = Point(cmd[2])  # O
-        
+
         instr = Assertion(
             constraint_type='on_circle',
             objects=[point, center]
@@ -360,23 +360,23 @@ class DiagramBuilder:
         """Process: (tangent M (circle O) AB) -> Line AB is tangent to circle O at point M"""
         if len(cmd) != 4:
             raise RuntimeError(f"tangent requires 3 arguments (tangent-point, circle, line-points): {cmd}")
-        
+
         # Extract tangent point M
         tangent_point = Point(cmd[1])
-        
+
         # Extract circle center O from nested tuple (circle O)
         circle_spec = cmd[2]
         if not isinstance(circle_spec, tuple) or circle_spec[0] != "circle":
             raise RuntimeError(f"tangent requires (circle O) as second argument: {cmd}")
         circle_center = Point(circle_spec[1])
-        
+
         # Extract line points from AB (two-character string)
         line_points_str = cmd[3]
         if not isinstance(line_points_str, str) or len(line_points_str) != 2:
             raise RuntimeError(f"tangent requires two-character line points (e.g., 'AB'): {cmd}")
         point_a = Point(line_points_str[0])
         point_b = Point(line_points_str[1])
-        
+
         # Create assertion: [tangent_point, circle_center, line_point_a, line_point_b]
         instr = Assertion(
             constraint_type='tangent',
@@ -388,11 +388,11 @@ class DiagramBuilder:
         """Process: (diameter M N O) -> MN is diameter of circle O"""
         if len(cmd) != 4:
             raise RuntimeError(f"diameter requires 3 points (p1, p2, center): {cmd}")
-        
+
         p1 = Point(cmd[1])  # M
         p2 = Point(cmd[2])  # N
         center = Point(cmd[3])  # O
-        
+
         # Diameter constraint: MN is diameter of circle O
         # - M and N both on circle O
         # - O is midpoint of M and N
@@ -407,11 +407,11 @@ class DiagramBuilder:
         """Process: (on-segment M C D) -> M lies on segment CD"""
         if len(cmd) != 4:
             raise RuntimeError(f"on-segment requires 3 points (point, seg_p1, seg_p2): {cmd}")
-        
+
         point = Point(cmd[1])  # M
         seg_p1 = Point(cmd[2])  # C
         seg_p2 = Point(cmd[3])  # D
-        
+
         instr = Assertion(
             constraint_type='on_segment',
             objects=[point, seg_p1, seg_p2]
@@ -422,11 +422,11 @@ class DiagramBuilder:
         """Process: (distance O A 0.03) -> Distance OA = 0.03"""
         if len(cmd) != 4:
             raise RuntimeError(f"distance requires 2 points and 1 value: {cmd}")
-        
+
         p1 = Point(cmd[1])  # O
         p2 = Point(cmd[2])  # A
         distance_value = cmd[3]  # 0.03
-        
+
         instr = Assertion(
             constraint_type='distance',
             objects=[p1, p2, DistanceValue(distance_value)]
@@ -445,30 +445,30 @@ class DiagramBuilder:
                 p1 = Point(cmd[1])
                 p2 = Point(cmd[2])
                 distance_value = float(cmd[3])
-                
+
                 instr = Assertion(
                     constraint_type='fixed_distance',
                     objects=[p1, p2],
                     distance=DistanceValue(distance_value)
                 )
                 self.instructions.append(instr)
-                
+
             except (ValueError, TypeError):
                 raise RuntimeError(f"equal-distance with 3 params requires (point point number): {cmd}")
-        
+
         elif len(cmd) == 5:
             # Format: (equal-distance A B C D) - equal distance between two segments
             p1 = Point(cmd[1])
             p2 = Point(cmd[2])
             p3 = Point(cmd[3])
             p4 = Point(cmd[4])
-            
+
             instr = Assertion(
                 constraint_type='equal_distance',
                 objects=[p1, p2, p3, p4]
             )
             self.instructions.append(instr)
-        
+
         else:
             raise RuntimeError(f"equal-distance requires either 3 params (p1 p2 distance) or 4 points (p1 p2 p3 p4): {cmd}")
 
@@ -542,11 +542,11 @@ class DiagramBuilder:
 
         points = [Point(cmd[i]) for i in range(1, 4)]
         degrees = cmd[4]
-        
+
         class DegreeValue:
             def __init__(self, value):
                 self.val = str(value)
-        
+
         instr = Assertion(
             constraint_type='angle_measure',
             objects=points + [DegreeValue(degrees)]
