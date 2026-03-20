@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import Generator
 import time
 from langchain_openai import ChatOpenAI
 from loguru import logger
@@ -11,9 +10,9 @@ from src.config.settings.base import settings
 from pipeline.domain import Document
 from pipeline.domain import GenerateDatasetSamplesPrompt, Prompt
 from pipeline.domain import InstructDataset, InstructDatasetSample, InstructTrainTestSplit
+from pipeline.domain.prompt_dsl import prompt as DATASET_GENERATION_PROMPT
 
 from . import utils as generation_utils
-from src.prompts import DATASET_GENERATION_PROMPT
 
 class DatasetGeneration(ABC):
 
@@ -70,9 +69,11 @@ Any violation is considered an error.
         sleep_seconds: float = 2.0,
         log_every_batches: int = 10,
     ) -> InstructTrainTestSplit:
+        system_prompt_content = cls.get_system_prompt().content
+
         def _to_langchain(prompt: GenerateDatasetSamplesPrompt) -> list[BaseMessage]:
             return [
-                SystemMessage(content=cls.get_system_prompt().content),
+                SystemMessage(content=system_prompt_content),
                 HumanMessage(content=prompt.content)
             ]
 
@@ -89,15 +90,16 @@ Any violation is considered an error.
         parser = JsonOutputParser()
         chain = llm | parser
 
-        messages_batch = [_to_langchain(p) for p in prompts]
-        def _batch(lst: list, size: int) -> Generator[list, None, None]:
-            yield from (lst[i : i + size] for i in range(0, len(lst), size))
-
-        batches = list(_batch(messages_batch, size=batch_size))
+        total_batches = (len(prompts) + batch_size - 1) // batch_size if prompts else 0
 
         samples = []
         total_start = time.perf_counter()
-        for batch_idx, batch in enumerate(batches):
+        for batch_idx in range(total_batches):
+            start = batch_idx * batch_size
+            end = start + batch_size
+            batch_prompts = prompts[start:end]
+            batch = [_to_langchain(p) for p in batch_prompts]
+
             # Add delay between batches to avoid rate limit
             if batch_idx > 0 and sleep_seconds > 0:
                 time.sleep(sleep_seconds)
@@ -108,12 +110,13 @@ Any violation is considered an error.
                 llm_elapsed = time.perf_counter() - llm_start
                 post_process_start = time.perf_counter()
 
-                for idx, raw_output in enumerate(raw_outputs):
-                    prompt_idx = batch_idx * batch_size + idx
-                    if prompt_idx >= len(prompts):
-                        continue
+                if len(raw_outputs) != len(batch_prompts):
+                    logger.warning(
+                        f"Output/prompt count mismatch in batch {batch_idx + 1}: "
+                        f"outputs={len(raw_outputs)} prompts={len(batch_prompts)}"
+                    )
 
-                    prompt = prompts[prompt_idx]
+                for prompt, raw_output in zip(batch_prompts, raw_outputs):
 
                     # raw_output is either a dict or list
                     if isinstance(raw_output, list):
@@ -126,7 +129,7 @@ Any violation is considered an error.
 
                     # Inject image_dir into each dict BEFORE Pydantic validation
                     for sample_dict in sample_dicts:
-                        sample_dict['image_dir'] = prompt.document.image_dir
+                        sample_dict["image_dir"] = prompt.document.image_dir
 
                         # Now convert to Pydantic model
                         if isinstance(sample_dict.get("answer"), list):
@@ -145,11 +148,11 @@ Any violation is considered an error.
                     done_batches = batch_idx + 1
                     elapsed_total = time.perf_counter() - total_start
                     avg_batch_seconds = elapsed_total / done_batches
-                    remaining_batches = len(batches) - done_batches
+                    remaining_batches = total_batches - done_batches
                     eta_minutes = (avg_batch_seconds * remaining_batches) / 60
                     logger.info(
                         (
-                            f"Batch {done_batches}/{len(batches)} completed | "
+                            f"Batch {done_batches}/{total_batches} completed | "
                             f"LLM: {llm_elapsed:.2f}s | "
                             f"Post-process: {post_process_elapsed:.2f}s | "
                             f"Avg/batch: {avg_batch_seconds:.2f}s | "

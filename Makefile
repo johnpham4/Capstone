@@ -16,46 +16,46 @@ zenml_status:
 	uv run zenml status
 
 data:
-	PYTHONPATH=. uv run python -m pipeline.cli --run-prepare-data --no-cache
+	uv run python -m pipeline.cli --run-prepare-data --no-cache
 
 generation:
-	PYTHONPATH=. uv run python -m pipeline.cli --run-generate-gmbl --no-cache
+	uv run python -m pipeline.cli --run-generate-gmbl --no-cache
 
 upload:
-	PYTHONPATH=. uv run python -m pipeline.cli --run-upload-dataset
+	uv run python -m pipeline.cli --run-upload-dataset
 
 simple_finetune:
-	PYTHONPATH=. uv run python -m pipeline.cli --run-finetune
+	uv run python -m pipeline.cli --run-finetune
 
 option_finetune:
-	PYTHONPATH=. uv run python -m pipeline.cli --run-finetune --num-epochs 1 --batch-size 2 --learning-rate 2e-4
+	uv run python -m pipeline.cli --run-finetune --num-epochs 1 --batch-size 2 --learning-rate 2e-4
 
 
 aws_sagemaker_roles:
-	PYTHONPATH=. uv run python src/infrastructures/aws/roles/create_sagemaker_role.py
+	uv run python src/infrastructures/aws/roles/create_sagemaker_role.py
 
 
 aws_excecution_roles:
-	PYTHONPATH=. uv run python src/infrastructures/aws/roles/create_execution_role.py
+	uv run python src/infrastructures/aws/roles/create_execution_role.py
 
 
 deploy_endpoint:
-	PYTHONPATH=. uv run python src/infrastructures/aws/deploy/huggingface/run.py
+	uv run python src/infrastructures/aws/deploy/huggingface/run.py
 
 del_endpoint:
-	PYTHONPATH=. uv run python src/infrastructures/aws/deploy/delete_sagemaker_endpoint.py
+	uv run python src/infrastructures/aws/deploy/delete_sagemaker_endpoint.py
 
 del_endpoint_config:
-	PYTHONPATH=. uv run python src/infrastructures/aws/deploy/delete_sagemaker_endpoint_config.py
+	uv run python src/infrastructures/aws/deploy/delete_sagemaker_endpoint_config.py
 
 endpoint:
 	uv run python -m src.main
 
 worker:
-	PYTHONPATH=. uv run python -m celery -A src.infrastructures.celery.config worker --loglevel=info --concurrency=4
+	uv run python -m celery -A src.infrastructures.celery.config worker --loglevel=info --concurrency=4
 
 flower:
-	PYTHONPATH=. uv run python -m celery -A src.infrastructures.celery.config flower --port=5555
+	uv run python -m celery -A src.infrastructures.celery.config flower --port=5555
 
 rabbitmq_status:
 	docker exec rabbitmq rabbitmqctl list_queues

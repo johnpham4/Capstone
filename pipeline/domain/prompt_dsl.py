@@ -317,7 +317,7 @@ TRÁNH ĐOẠN CON CHỒNG ĐOẠN MẸ:
 
     CẤM TỰ Ý ĐỔI TÊN TÂM:
     • Đề ghi tâm M → CẤM tạo đường tròn tâm O
-    • Đề ghi tâm O → CẤM tạo đường tròn tâm M/N/... 
+    • Đề ghi tâm O → CẤM tạo đường tròn tâm M/N/...
 
    ĐƯỜNG KÍNH: (diameter A B X)
    • A, B: 2 đầu mút, X: tâm (tự động nằm giữa)
