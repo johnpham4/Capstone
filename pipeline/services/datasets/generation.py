@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod
+import re
 import time
 from langchain_openai import ChatOpenAI
 from loguru import logger
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
-from langchain_core.prompts import PromptTemplate
 from langchain_core.exceptions import OutputParserException
 
 from src.config.settings.base import settings
+from src.services.diagram.dsl_parser import DSLParser
 from pipeline.domain import Document
 from pipeline.domain import GenerateDatasetSamplesPrompt, Prompt
 from pipeline.domain import InstructDataset, InstructDatasetSample, InstructTrainTestSplit
@@ -43,22 +44,102 @@ Any violation is considered an error.
 
     @classmethod
     def get_prompt(cls, document: Document) -> GenerateDatasetSamplesPrompt:
+        if cls.prompt_template_str is None:
+            raise ValueError("prompt_template_str must be set before generating prompts")
 
-        prompt_template = PromptTemplate.from_template(
-            template=cls.prompt_template_str,
-            template_format="jinja2",
-        )
+        extract_text = str(document.caption_vn)
+        input_variables = {"extract": extract_text}
 
-        input_variables = {"extract": document.caption_vn}
-
-        prompt_text = prompt_template.format(**input_variables)
+        if "{{ extract }}" in cls.prompt_template_str:
+            prompt_text = cls.prompt_template_str.replace("{{ extract }}", extract_text)
+        elif "{extract}" in cls.prompt_template_str:
+            prompt_text = cls.prompt_template_str.format(extract=extract_text)
+        else:
+            prompt_text = f"{cls.prompt_template_str}\n\n{extract_text}"
 
         return GenerateDatasetSamplesPrompt(
-            template=prompt_template.template,
+            template=cls.prompt_template_str,
             input_variables=input_variables,
             content=prompt_text,
             document=document
         )
+
+    @classmethod
+    def _normalize_and_validate_dsl(cls, answer: str) -> tuple[str, bool]:
+        """Best-effort normalize DSL line parentheses and validate parseability."""
+        if not isinstance(answer, str):
+            return "", False
+
+        raw_lines = [ln.strip() for ln in answer.splitlines() if ln.strip()]
+        if not raw_lines:
+            return "", False
+
+        def _clean_prefix(line: str) -> str:
+            line = line.strip().strip('"')
+            if line.startswith("```"):
+                return ""
+            line = re.sub(r"^[-*•]\s+", "", line)
+            line = re.sub(r"^\d+[\.)]\s+", "", line)
+            line = re.sub(r"^→\s*", "", line)
+            return line.strip()
+
+        def _balance_line_parens(line: str) -> str:
+            fixed = line
+            if not fixed.startswith("("):
+                fixed = "(" + fixed
+            if not fixed.endswith(")"):
+                fixed = fixed + ")"
+
+            open_count = fixed.count("(")
+            close_count = fixed.count(")")
+            if close_count > open_count:
+                extra = close_count - open_count
+                while extra > 0 and fixed.endswith(")"):
+                    fixed = fixed[:-1]
+                    extra -= 1
+
+            open_count = fixed.count("(")
+            close_count = fixed.count(")")
+            if open_count > close_count:
+                fixed = fixed + (")" * (open_count - close_count))
+
+            return fixed
+
+        normalized_lines: list[str] = []
+        for line in raw_lines:
+            cleaned = _clean_prefix(line)
+            if not cleaned:
+                continue
+            normalized_lines.append(_balance_line_parens(cleaned))
+
+        if not normalized_lines:
+            return "", False
+
+        joined = "\n".join(normalized_lines)
+        open_count = joined.count("(")
+        close_count = joined.count(")")
+        if close_count > open_count:
+            extra = close_count - open_count
+            while extra > 0 and joined.endswith(")"):
+                joined = joined[:-1]
+                extra -= 1
+            if joined.count(")") > joined.count("("):
+                return joined, False
+        if open_count > close_count:
+            joined = joined + (")" * (open_count - close_count))
+
+        normalized_lines = [ln for ln in joined.splitlines() if ln.strip()]
+
+        parser = DSLParser()
+        try:
+            for line in normalized_lines:
+                parsed = parser.parse_sexpr(line)
+                if parsed is None:
+                    return "\n".join(normalized_lines), False
+        except Exception:
+            return "\n".join(normalized_lines), False
+
+        return "\n".join(normalized_lines), True
 
     @classmethod
     def generate(
@@ -68,6 +149,7 @@ Any violation is considered an error.
         batch_size: int = 4,
         sleep_seconds: float = 2.0,
         log_every_batches: int = 10,
+        enable_dsl_validation: bool = True,
     ) -> InstructTrainTestSplit:
         system_prompt_content = cls.get_system_prompt().content
 
@@ -106,7 +188,27 @@ Any violation is considered an error.
 
             try:
                 llm_start = time.perf_counter()
-                raw_outputs = chain.batch(batch, stop=None)
+                raw_outputs = None
+                for attempt in range(5):
+                    try:
+                        raw_outputs = chain.batch(batch, stop=None, config={"max_concurrency": 1})
+                        break
+                    except Exception as rate_err:
+                        if "429" in str(rate_err) or "rate_limit" in str(rate_err).lower():
+                            wait = 2 ** attempt * 10
+                            logger.warning(
+                                f"Rate limit hit on batch {batch_idx + 1}, retrying in {wait}s "
+                                f"(attempt {attempt + 1}/5)"
+                            )
+                            time.sleep(wait)
+                            if attempt == 4:
+                                raise
+                        else:
+                            raise
+
+                if raw_outputs is None:
+                    raise RuntimeError(f"No outputs returned for batch {batch_idx + 1}")
+
                 llm_elapsed = time.perf_counter() - llm_start
                 post_process_start = time.perf_counter()
 
@@ -131,9 +233,21 @@ Any violation is considered an error.
                     for sample_dict in sample_dicts:
                         sample_dict["image_dir"] = prompt.document.image_dir
 
-                        # Now convert to Pydantic model
                         if isinstance(sample_dict.get("answer"), list):
                             sample_dict["answer"] = "\n".join(sample_dict["answer"])
+
+                        if enable_dsl_validation:
+                            normalized_answer, is_valid_dsl = cls._normalize_and_validate_dsl(
+                                sample_dict.get("answer", "")
+                            )
+                            if not is_valid_dsl:
+                                logger.warning(
+                                    "Skipping sample due to invalid DSL syntax after normalization. "
+                                    f"instruction={sample_dict.get('instruction', '')[:120]}"
+                                )
+                                logger.debug(f"Invalid DSL: {sample_dict.get('answer', '')}")
+                                continue
+                            sample_dict["answer"] = normalized_answer
 
                         try:
                             sample = InstructDatasetSample(**sample_dict)

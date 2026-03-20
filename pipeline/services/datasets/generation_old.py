@@ -14,7 +14,7 @@ from src.models.domain.training import Document
 from src.models.domain.training import GenerateDatasetSamplesPrompt, Prompt
 from src.models.domain.training import InstructDataset, InstructDatasetSample, InstructTrainTestSplit
 
-from . import utils as generation_utils
+from ....src.services.datasets import utils as generation_utils
 from .prompt import prompt
 import time
 
