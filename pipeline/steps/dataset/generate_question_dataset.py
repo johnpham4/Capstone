@@ -47,7 +47,7 @@ def generate_question_dataset(
             source_texts.append(text)
 
     logger.info(
-        f"Generating problem_vn for {len(source_texts)}/{len(source_items)} items..."
+        f"Generating problem for {len(source_texts)}/{len(source_items)} items..."
     )
 
     rewritten = QuestionRewriteService.rewrite_many(
@@ -59,12 +59,12 @@ def generate_question_dataset(
     )
 
     updated_items = [dict(item) if isinstance(item, dict) else item for item in source_items]
-    for idx, problem_vn in zip(indices, rewritten):
+    for idx, problem in zip(indices, rewritten):
         item = updated_items[idx]
         if isinstance(item, dict):
-            item["problem_vn"] = problem_vn
+            item["problem"] = problem
 
-    logger.info("Finished generating problem_vn")
+    logger.info("Finished generating problem")
     return updated_items
 
 
@@ -80,6 +80,6 @@ def save_question_dataset_to_json(
     with open(src_path, "w", encoding="utf-8") as f:
         json.dump(updated_items, f, ensure_ascii=False, indent=2)
 
-    logger.success(f"Updated source file in-place with problem_vn: {src_path}")
+    logger.success(f"Updated source file in-place with problem: {src_path}")
 
     return str(src_path)

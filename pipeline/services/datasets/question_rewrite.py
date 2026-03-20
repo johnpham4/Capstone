@@ -11,7 +11,7 @@ from src.config.settings.base import settings
 
 
 class QuestionRewriteService:
-    """Dedicated service: rewrite one Vietnamese geometry statement into one problem_vn."""
+    """Dedicated service: rewrite one Vietnamese geometry statement into one problem."""
 
     system_prompt = (
         "You rewrite Vietnamese geometry givens into a natural exam-style problem. "
@@ -30,7 +30,7 @@ class QuestionRewriteService:
         if not isinstance(output, dict):
             return ""
 
-        value = output.get("problem_vn", output.get("caption_vn", ""))
+        value = output.get("problem", output.get("caption_vn", ""))
         return str(value).strip()
 
     @classmethod
