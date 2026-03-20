@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Python
 __pycache__/
 **/__pycache__/
@@ -66,4 +67,74 @@ htmlcov/
 *.swp
 *~
 
+=======
+# Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.venv
+venv/
+ENV/
+env/
+.virtualenv
+
+# Environment variables
+.env
+.env.local
+
+images/
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+outputs/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# ZenML
+.zen/
+*.db
+
+# Docker
+*.log
+docker-compose.override.yml
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+>>>>>>> 6cf03dda8dad8bb8fa1226b8b4e9166c3f287527
 test.asy

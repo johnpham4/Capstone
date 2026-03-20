@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
 class Primitive(ABC):
-    """Base class for all geometric primitives"""
 
     def __init__(self, val):
         self.val = val
@@ -20,7 +19,6 @@ class Primitive(ABC):
 
 
 class Point(Primitive):
-    """Value Object: Represents a geometric point in DSL"""
 
     def __str__(self) -> str:
         if isinstance(self.val, str):
@@ -30,7 +28,6 @@ class Point(Primitive):
 
 
 class Line(Primitive):
-    """Value Object: Represents a geometric line"""
 
     def points_on(self):
         if isinstance(self.val, str):
@@ -50,7 +47,6 @@ class Line(Primitive):
 
 
 class Triangle(Primitive):
-    """Value Object: Represents a triangle"""
 
     def __init__(self, points: list[Point]):
         if len(points) != 3:
@@ -63,7 +59,6 @@ class Triangle(Primitive):
 
 
 class Circle(Primitive):
-    """Value Object: Represents a circle"""
 
     def __str__(self) -> str:
         if isinstance(self.val, str):
