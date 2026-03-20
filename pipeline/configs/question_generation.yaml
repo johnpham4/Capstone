@@ -1,4 +1,3 @@
 parameters:
-  source_json_path: "./dataset/data/diagrams_filter_10.json"
-  test_size: 0.1
-  output_dir: "./dataset/data"
+  source_json_path: "./dataset/data/train.json"
+  save_json: true
