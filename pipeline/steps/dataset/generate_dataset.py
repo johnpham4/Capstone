@@ -55,6 +55,8 @@ def generate_gmbl_dataset(
     prompts: list[GenerateDatasetSamplesPrompt],
     test_size: float = 0.2,
     batch_size: int = 4,
+    sleep_seconds: float = 2.0,
+    log_every_batches: int = 10,
 ) -> Annotated[InstructTrainTestSplit, "train_test_split"]:
 
 
@@ -63,7 +65,9 @@ def generate_gmbl_dataset(
     train_test_split = InstructiveDatasetGenerator.generate(
         prompts=prompts,
         test_size=test_size,
-        batch_size=batch_size
+        batch_size=batch_size,
+        sleep_seconds=sleep_seconds,
+        log_every_batches=log_every_batches,
     )
 
     logger.info(f"Generated {train_test_split.train.num_samples} train samples")

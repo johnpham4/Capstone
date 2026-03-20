@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Generator
+import time
 from langchain_openai import ChatOpenAI
 from loguru import logger
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
@@ -61,7 +62,14 @@ Any violation is considered an error.
         )
 
     @classmethod
-    def generate(cls, prompts: list[GenerateDatasetSamplesPrompt], test_size: float = 0.2, batch_size: int = 4) -> InstructTrainTestSplit:
+    def generate(
+        cls,
+        prompts: list[GenerateDatasetSamplesPrompt],
+        test_size: float = 0.2,
+        batch_size: int = 4,
+        sleep_seconds: float = 2.0,
+        log_every_batches: int = 10,
+    ) -> InstructTrainTestSplit:
         def _to_langchain(prompt: GenerateDatasetSamplesPrompt) -> list[BaseMessage]:
             return [
                 SystemMessage(content=cls.get_system_prompt().content),
@@ -88,14 +96,17 @@ Any violation is considered an error.
         batches = list(_batch(messages_batch, size=batch_size))
 
         samples = []
+        total_start = time.perf_counter()
         for batch_idx, batch in enumerate(batches):
             # Add delay between batches to avoid rate limit
-            if batch_idx > 0:
-                import time
-                time.sleep(2)  # 2 seconds delay
+            if batch_idx > 0 and sleep_seconds > 0:
+                time.sleep(sleep_seconds)
 
             try:
+                llm_start = time.perf_counter()
                 raw_outputs = chain.batch(batch, stop=None)
+                llm_elapsed = time.perf_counter() - llm_start
+                post_process_start = time.perf_counter()
 
                 for idx, raw_output in enumerate(raw_outputs):
                     prompt_idx = batch_idx * batch_size + idx
@@ -127,6 +138,25 @@ Any violation is considered an error.
                         except Exception as e:
                             logger.error(f"Pydantic validation error: {e}")
                             logger.debug(f"Sample dict: {sample_dict}")
+
+                post_process_elapsed = time.perf_counter() - post_process_start
+
+                if (batch_idx + 1) % max(log_every_batches, 1) == 0 or batch_idx == 0:
+                    done_batches = batch_idx + 1
+                    elapsed_total = time.perf_counter() - total_start
+                    avg_batch_seconds = elapsed_total / done_batches
+                    remaining_batches = len(batches) - done_batches
+                    eta_minutes = (avg_batch_seconds * remaining_batches) / 60
+                    logger.info(
+                        (
+                            f"Batch {done_batches}/{len(batches)} completed | "
+                            f"LLM: {llm_elapsed:.2f}s | "
+                            f"Post-process: {post_process_elapsed:.2f}s | "
+                            f"Avg/batch: {avg_batch_seconds:.2f}s | "
+                            f"ETA: {eta_minutes:.1f}m | "
+                            f"Samples so far: {len(samples)}"
+                        )
+                    )
 
             except OutputParserException as e:
                 logger.error(f"Parse error in batch {batch_idx}: {str(e)}")

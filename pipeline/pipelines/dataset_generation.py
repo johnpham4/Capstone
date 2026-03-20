@@ -13,6 +13,8 @@ def dataset_generation_pipeline(
     source_json_path: str = "./dataset/data/triangle_diagrams.json",
     test_size: float = 0.2,
     batch_size: int = 4,
+    sleep_seconds: float = 2.0,
+    log_every_batches: int = 10,
     save_json: bool = True,
     output_dir: str = "./dataset/data"
 ):
@@ -25,7 +27,9 @@ def dataset_generation_pipeline(
     train_test_split = generate_gmbl_dataset(
         prompts=prompts,
         test_size=test_size,
-        batch_size=batch_size
+        batch_size=batch_size,
+        sleep_seconds=sleep_seconds,
+        log_every_batches=log_every_batches,
     )
 
     if save_json:
