@@ -21,6 +21,9 @@ data:
 generation:
 	uv run python -m pipeline.cli --run-generate-gmbl --no-cache
 
+questions:
+	uv run python -m pipeline.cli --run-generate-questions --no-cache
+
 upload:
 	uv run python -m pipeline.cli --run-upload-dataset
 
