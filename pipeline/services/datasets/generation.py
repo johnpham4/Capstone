@@ -12,6 +12,7 @@ from pipeline.domain import Document
 from pipeline.domain import GenerateDatasetSamplesPrompt, Prompt
 from pipeline.domain import InstructDataset, InstructDatasetSample, InstructTrainTestSplit
 from pipeline.domain.prompt_dsl import prompt as DATASET_GENERATION_PROMPT
+from pipeline.domain.prompt_question import prompt as QUESTION_GENERATION_PROMPT
 
 from . import utils as generation_utils
 
@@ -236,6 +237,16 @@ Any violation is considered an error.
 
                     # Inject image_dir into each dict BEFORE Pydantic validation
                     for sample_dict in sample_dicts:
+                        # Support question-generation prompt output format:
+                        # {"caption_vn": "..."}
+                        if (
+                            "caption_vn" in sample_dict
+                            and "instruction" not in sample_dict
+                            and "answer" not in sample_dict
+                        ):
+                            sample_dict["instruction"] = str(prompt.document.caption_vn)
+                            sample_dict["answer"] = str(sample_dict["caption_vn"])
+
                         sample_dict["image_dir"] = prompt.document.image_dir
 
                         if isinstance(sample_dict.get("answer"), list):
@@ -305,4 +316,12 @@ class InstructiveDatasetGenerator(DatasetGeneration):
     @classmethod
     def post_process_datasets(cls, dataset: InstructDataset, test_size: float) -> InstructTrainTestSplit:
 
+        return generation_utils.create_instruct_train_test_split([dataset], test_size=test_size, random_state=42)
+
+
+class InstructiveQuestionDatasetGenerator(DatasetGeneration):
+    prompt_template_str = QUESTION_GENERATION_PROMPT
+
+    @classmethod
+    def post_process_datasets(cls, dataset: InstructDataset, test_size: float) -> InstructTrainTestSplit:
         return generation_utils.create_instruct_train_test_split([dataset], test_size=test_size, random_state=42)
