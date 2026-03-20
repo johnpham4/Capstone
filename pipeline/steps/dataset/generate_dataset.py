@@ -58,6 +58,7 @@ def generate_gmbl_dataset(
     batch_size: int = 4,
     sleep_seconds: float = 2.0,
     log_every_batches: int = 10,
+    max_concurrency: int = 4,
     enable_dsl_validation: bool = True,
 ) -> Annotated[dict, "train_test_split"]:
 
@@ -72,6 +73,7 @@ def generate_gmbl_dataset(
         batch_size=batch_size,
         sleep_seconds=sleep_seconds,
         log_every_batches=log_every_batches,
+        max_concurrency=max_concurrency,
         enable_dsl_validation=enable_dsl_validation,
     )
 

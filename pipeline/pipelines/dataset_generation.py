@@ -15,6 +15,7 @@ def dataset_generation_pipeline(
     batch_size: int = 4,
     sleep_seconds: float = 2.0,
     log_every_batches: int = 10,
+    max_concurrency: int = 4,
     enable_dsl_validation: bool = True,
     save_json: bool = True,
     output_dir: str = "./dataset/data"
@@ -31,6 +32,7 @@ def dataset_generation_pipeline(
         batch_size=batch_size,
         sleep_seconds=sleep_seconds,
         log_every_batches=log_every_batches,
+        max_concurrency=max_concurrency,
         enable_dsl_validation=enable_dsl_validation,
     )
 

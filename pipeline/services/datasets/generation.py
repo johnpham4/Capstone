@@ -149,6 +149,7 @@ Any violation is considered an error.
         batch_size: int = 4,
         sleep_seconds: float = 2.0,
         log_every_batches: int = 10,
+        max_concurrency: int = 4,
         enable_dsl_validation: bool = True,
     ) -> InstructTrainTestSplit:
         system_prompt_content = cls.get_system_prompt().content
@@ -191,7 +192,11 @@ Any violation is considered an error.
                 raw_outputs = None
                 for attempt in range(5):
                     try:
-                        raw_outputs = chain.batch(batch, stop=None, config={"max_concurrency": 1})
+                        raw_outputs = chain.batch(
+                            batch,
+                            stop=None,
+                            config={"max_concurrency": max(max_concurrency, 1)},
+                        )
                         break
                     except Exception as rate_err:
                         if "429" in str(rate_err) or "rate_limit" in str(rate_err).lower():
