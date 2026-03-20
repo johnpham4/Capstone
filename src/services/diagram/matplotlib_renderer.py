@@ -4,8 +4,8 @@ from pathlib import Path
 from loguru import logger
 import matplotlib.patches as patches
 
-from src.services.diagram.models import Diagram, GeometricPoint
-from src.services.diagram.models.types import QuadrilateralType
+from src.models.domain.geometry import Diagram, GeometricPoint
+from src.models.domain.geometry.types import QuadrilateralType
 
 
 class MatplotlibDiagramRenderer:
@@ -52,8 +52,8 @@ class MatplotlibDiagramRenderer:
         v1x, v1y = v1x / len1, v1y / len1
         v2x, v2y = v2x / len2, v2y / len2
 
-        # Size of right angle symbol (10% of shortest leg)
-        size = min(len1, len2) * 0.1
+        # Size of right angle symbol 
+        size = min(len1, len2) * 0.15
 
         # Draw small square
         corner1 = (vertex.x + v1x * size, vertex.y + v1y * size)
@@ -62,13 +62,42 @@ class MatplotlibDiagramRenderer:
 
         ax.plot([corner1[0], corner2[0], corner3[0]],
                 [corner1[1], corner2[1], corner3[1]],
-                'k-', linewidth=1.0)
+                color='green', linewidth=1.5)
 
-    def _draw_angle_arc(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, num_arcs: int = 1, radius: float = 0.12):
+    def _find_segment_intersection(self, p1: GeometricPoint, p2: GeometricPoint, 
+                                    p3: GeometricPoint, p4: GeometricPoint):
+        """
+        Tìm giao điểm của 2 đoạn thẳng: seg1=(p1,p2) và seg2=(p3,p4)
+        Trả về (x, y) nếu có giao điểm, None nếu không giao nhau
+        """
+        x1, y1 = p1.x, p1.y
+        x2, y2 = p2.x, p2.y
+        x3, y3 = p3.x, p3.y
+        x4, y4 = p4.x, p4.y
+        
+        denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+        
+        # Kiểm tra song song
+        if abs(denom) < 1e-10:
+            return None
+            
+        t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom
+        u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denom
+        
+        # Kiểm tra giao điểm có nằm trên cả 2 đoạn thẳng không
+        if 0 <= t <= 1 and 0 <= u <= 1:
+            x = x1 + t * (x2 - x1)
+            y = y1 + t * (y2 - y1)
+            return (x, y)
+        
+        return None
+
+    def _draw_angle_arc(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, num_arcs: int = 1, radius: float = 0.12, draw_tick: bool = False):
         """
         vertex: GeometricPoint - đỉnh góc
         p1, p2: GeometricPoint - 2 điểm tạo thành góc
         num_arcs: số arc (1 arc, 2 arcs, 3 arcs để phân biệt)
+        draw_tick: có vẽ dấu gạch nhỏ trên arc không (để chỉ góc bằng nhau)
         """
         # Vector từ vertex đến 2 điểm
         v1x = p1.x - vertex.x
@@ -108,6 +137,72 @@ class MatplotlibDiagramRenderer:
                              color='blue',
                              linewidth=1.2)
             ax.add_patch(arc)
+        
+        # Vẽ dấu gạch nhỏ ở giữa arc
+        if draw_tick:
+            # Tính góc giữa của arc
+            mid_angle = (angle1 + angle2) / 2
+            mid_rad = mid_angle * np.pi / 180
+            
+            # Vị trí giữa arc (sử dụng radius của arc ngoài cùng)
+            r_mid = radius + (num_arcs - 1) * 0.05
+            mid_x = vertex.x + r_mid * np.cos(mid_rad)
+            mid_y = vertex.y + r_mid * np.sin(mid_rad)
+            
+            # Vector RADIAL (từ tâm ra ngoài) - cắt vuông góc qua arc
+            tick_dx = np.cos(mid_rad)
+            tick_dy = np.sin(mid_rad)
+            
+            # Độ dài dấu gạch (cắt qua arc) - giảm từ 0.04 xuống 0.025
+            tick_length = 0.025
+            
+            ax.plot(
+                [mid_x - tick_dx * tick_length, mid_x + tick_dx * tick_length],
+                [mid_y - tick_dy * tick_length, mid_y + tick_dy * tick_length],
+                'b-',
+                linewidth=1.5
+            )
+    
+    def _draw_angle_measure(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, angle_degrees: float, radius: float = 0.16):
+        """Vẽ số đo góc tại đỉnh giữa hai tia p1-vertex và p2-vertex."""
+        v1x = p1.x - vertex.x
+        v1y = p1.y - vertex.y
+        v2x = p2.x - vertex.x
+        v2y = p2.y - vertex.y
+
+        v1_norm = np.sqrt(v1x**2 + v1y**2)
+        v2_norm = np.sqrt(v2x**2 + v2y**2)
+        if v1_norm < 1e-8 or v2_norm < 1e-8:
+            return
+
+        v1x, v1y = v1x / v1_norm, v1y / v1_norm
+        v2x, v2y = v2x / v2_norm, v2y / v2_norm
+
+        angle1 = np.arctan2(v1y, v1x)
+        angle2 = np.arctan2(v2y, v2x)
+        mid_angle = (angle1 + angle2) / 2
+
+        angle_diff = angle2 - angle1
+        if angle_diff > np.pi:
+            mid_angle += np.pi
+        elif angle_diff < -np.pi:
+            mid_angle -= np.pi
+
+        text_radius = radius * 0.85
+        text_x = vertex.x + text_radius * np.cos(mid_angle)
+        text_y = vertex.y + text_radius * np.sin(mid_angle)
+
+        ax.text(
+            text_x,
+            text_y,
+            f"{int(angle_degrees)}°",
+            fontsize=16,
+            ha='center',
+            va='center',
+            color='blue',
+            fontweight='bold',
+            bbox=dict(boxstyle='round,pad=0.1', facecolor='white', edgecolor='none', alpha=0.8),
+        )
 
 
     def render(
@@ -122,9 +217,30 @@ class MatplotlibDiagramRenderer:
             self.diagram = diagram
 
         if not self.diagram:
-            raise ValueError("No diagram to render")
+            logger.warning("No diagram provided, creating empty figure")
+            # Create empty figure instead of raising error
+            fig, ax = plt.subplots(figsize=(20, 20))
+            ax.text(0.5, 0.5, 'No diagram data', 
+                   horizontalalignment='center',
+                   verticalalignment='center',
+                   transform=ax.transAxes,
+                   fontsize=20,
+                   color='gray')
+            ax.set_xlim(-1, 1)
+            ax.set_ylim(-1, 1)
+            ax.set_aspect('equal', 'box')
+            ax.axis('off')
+            
+            if save:
+                output_path = Path(filename)
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+                plt.savefig(str(output_path), dpi=150, bbox_inches='tight')
+                logger.info(f"Saved empty diagram to {output_path}")
+            if show:
+                plt.show()
+            return fig, ax
 
-        fig, ax = plt.subplots(figsize=(8, 8))
+        fig, ax = plt.subplots(figsize=(20, 20))
 
         # 1. Draw Triangles (Solid Lines)
         for tri in self.diagram.triangles:
@@ -183,6 +299,14 @@ class MatplotlibDiagramRenderer:
             if equal_angles:
                 logger.info(f"Drawing equal angles arcs: {equal_angles}")
                 for idx1, idx2 in equal_angles:
+                    # Vẽ arc ở góc idx1 với dấu gạch
+                    self._draw_angle_arc(ax, pts[idx1], 
+                                        pts[(idx1-1)%3],
+                                        pts[(idx1+1)%3],
+                                        num_arcs=1,
+                                        draw_tick=True)
+                    
+                    # Vẽ arc ở góc idx2 (cùng số arc và dấu gạch)
                     # Vẽ arc ở góc idx1
                     self._draw_angle_arc(ax, pts[idx1],
                                         pts[(idx1-1)%3],
@@ -193,74 +317,127 @@ class MatplotlibDiagramRenderer:
                     self._draw_angle_arc(ax, pts[idx2],
                                         pts[(idx2-1)%3],
                                         pts[(idx2+1)%3],
-                                        num_arcs=1)
+                                        num_arcs=1,
+                                        draw_tick=True)
 
         # Draw quadrilaterals
         for quad in self.diagram.quadrilaterals:
             points = quad['points']
             quad_type = quad.get('type', QuadrilateralType.GENERAL)
+            
+            # Determine quad_type as string for comparison
+            if isinstance(quad_type, str):
+                quad_type_str = quad_type.lower()
+            else:
+                quad_type_str = str(quad_type).split('.')[-1].lower()
 
             # Draw edges
             xs = [p.x for p in points] + [points[0].x]
             ys = [p.y for p in points] + [points[0].y]
             ax.plot(xs, ys, 'k-', linewidth=1.5)
 
-            # Draw right angle markers for all 4 corners (square/rectangle)
-            if quad_type in [QuadrilateralType.SQUARE, QuadrilateralType.RECTANGLE]:
+            # SQUARE: All right angles + all sides equal (1 tick each)
+            if quad_type_str == 'square':
+                # Draw right angle markers at all 4 corners
                 for i in range(4):
                     vertex = points[i]
                     p1 = points[(i - 1) % 4]
                     p2 = points[(i + 1) % 4]
                     self._draw_right_angle_symbol(ax, vertex, p1, p2)
+                
+                # Draw 1 tick on all 4 sides
+                for i in range(4):
+                    p1 = points[i]
+                    p2 = points[(i + 1) % 4]
+                    self._draw_tick_marks(ax, p1, p2, 1)
 
-            # Draw equal side markings
-            equal_sides = quad.get('equal_sides', [])
-            if equal_sides:
-                if quad_type == QuadrilateralType.SQUARE:
-                    # All 4 sides equal - draw same number of ticks on all sides
-                    for i in range(4):
-                        p1 = points[i]
-                        p2 = points[(i + 1) % 4]
-                        self._draw_tick_marks(ax, p1, p2, 1)
-                elif quad_type == QuadrilateralType.RECTANGLE:
-                    # Opposite sides equal - draw 1 tick on AB/CD, 2 ticks on BC/DA
-                    for i in range(4):
-                        p1 = points[i]
-                        p2 = points[(i + 1) % 4]
-                        num_ticks = 1 if i % 2 == 0 else 2
-                        self._draw_tick_marks(ax, p1, p2, num_ticks)
+            # RECTANGLE: All right angles + opposite sides equal
+            elif quad_type_str == 'rectangle':
+                # Draw right angle markers at all 4 corners
+                for i in range(4):
+                    vertex = points[i]
+                    p1 = points[(i - 1) % 4]
+                    p2 = points[(i + 1) % 4]
+                    self._draw_right_angle_symbol(ax, vertex, p1, p2)
+                
+                # Draw different ticks for opposite sides: 1 tick on AB/CD, 2 ticks on BC/DA
+                for i in range(4):
+                    p1 = points[i]
+                    p2 = points[(i + 1) % 4]
+                    num_ticks = 1 if i % 2 == 0 else 2
+                    self._draw_tick_marks(ax, p1, p2, num_ticks)
 
-        # Draw circles
+            # RHOMBUS: All sides equal + diagonals perpendicular
+            elif quad_type_str == 'rhombus':
+                # Draw 1 tick on all 4 sides (all equal)
+                for i in range(4):
+                    p1 = points[i]
+                    p2 = points[(i + 1) % 4]
+                    self._draw_tick_marks(ax, p1, p2, 1)
+
+                # Keep rhombus rendering clean: no implicit diagonal/right-angle
+                # decorations unless explicitly requested by DSL constraints.
+
+            # QUADRILATERAL (generic): No special markings
+            # Just the outline is already drawn above
+
+        # Draw circles (radius calculated in optimizer)
         for center, info in self.diagram.circles:
+            logger.info(f"Drawing circle at {center.name} ({center.x:.4f}, {center.y:.4f}), info: {info}")
             if isinstance(info, dict):
-                if info['type'] == 'incircle':
-                    # Calculate incircle radius from triangle
-                    tri_points = [self.diagram.points[name] for name in info['triangle'] if name in self.diagram.points]
-                    if len(tri_points) == 3:
-                        # Use distance from center to one side
-                        p1, p2 = tri_points[0], tri_points[1]
-                        # Distance formula from point to line
-
-                        num = abs((p2.y - p1.y) * center.x - (p2.x - p1.x) * center.y + p2.x * p1.y - p2.y * p1.x)
-                        den = np.sqrt((p2.y - p1.y)**2 + (p2.x - p1.x)**2)
-                        radius = num / den if den > 0 else 0.1
-                        circle = plt.Circle((center.x, center.y), radius, fill=False, edgecolor='blue', linewidth=1.0)
-                        ax.add_patch(circle)
-                elif info['type'] == 'circumcircle':
-
-                    tri_points = [self.diagram.points[name] for name in info['triangle'] if name in self.diagram.points]
-                    if len(tri_points) == 3:
-                        radius = center.distance_to(tri_points[0])
-                        circle = plt.Circle((center.x, center.y), radius, fill=False, edgecolor='green', linewidth=1.0)
-                        ax.add_patch(circle)
+                radius = info.get('radius', 0.5)  # Use calculated radius from optimizer
+                logger.info(f"  Radius: {radius}, Type: {info.get('type')}")
+                
+                # Color by circle type
+                color_map = {
+                    'incircle': 'blue',
+                    'circumcircle': 'green',
+                    'positioned': 'black'
+                }
+                color = color_map.get(info.get('type', 'positioned'), 'black')
+                
+                circle = plt.Circle((center.x, center.y), radius, fill=False, 
+                                  edgecolor=color, linewidth=1.0)  
+                ax.add_patch(circle)
+                logger.info(f"  Circle added to plot")
             else:
-
-                circle = plt.Circle((center.x, center.y), info, fill=False, edgecolor='black', linewidth=1.0)
+                # Fallback for old format 
+                circle = plt.Circle((center.x, center.y), info, fill=False, 
+                                  edgecolor='black', linewidth=1.0)
                 ax.add_patch(circle)
 
         # 4. Draw Segments (Auxiliary - Dashed)
         for p1, p2, color in self.diagram.segments:
             ax.plot([p1.x, p2.x], [p1.y, p2.y], color=color, linewidth=1.0, linestyle='--', alpha=0.7)
+
+        # 4.5. Draw Perpendicular Markers
+        if hasattr(self.diagram, 'perpendiculars') and self.diagram.perpendiculars:
+            for perp_tuple in self.diagram.perpendiculars:
+                # perp_tuple = (name1, name2, name3, name4) - string names from optimizer
+                if len(perp_tuple) == 4:
+                    name1, name2, name3, name4 = perp_tuple
+                    
+                    # Convert names to GeometricPoint objects
+                    if all(name in self.diagram.points for name in [name1, name2, name3, name4]):
+                        p1 = self.diagram.points[name1]
+                        p2 = self.diagram.points[name2]
+                        p3 = self.diagram.points[name3]
+                        p4 = self.diagram.points[name4]
+                        
+                        # Tìm giao điểm
+                        intersection = self._find_segment_intersection(p1, p2, p3, p4)
+                        
+                        if intersection:
+                            # Tạo temporary point cho giao điểm
+                            class TempPoint:
+                                def __init__(self, x, y):
+                                    self.x = x
+                                    self.y = y
+                            
+                            intersection_pt = TempPoint(intersection[0], intersection[1])
+                            
+                            # Sử dụng 2 điểm trên mỗi đoạn thẳng để xác định hướng
+                            self._draw_right_angle_symbol(ax, intersection_pt, p1, p3)
 
         # 5. Draw Lines
         for line_name, line_data in self.diagram.lines.items():
@@ -292,8 +469,9 @@ class MatplotlibDiagramRenderer:
 
         # 6. Draw Points and Labels
         if self.diagram.points:
-            cx = sum(p.x for p in self.diagram.points.values()) / len(self.diagram.points)
-            cy = sum(p.y for p in self.diagram.points.values()) / len(self.diagram.points)
+            # Đồng bộ với optimizer: sử dụng (0, 0) làm tâm
+            cx = 0.0
+            cy = 0.0
 
             for name, p in self.diagram.points.items():
                 ax.plot(p.x, p.y, 'ko', markersize=4)
@@ -310,9 +488,10 @@ class MatplotlibDiagramRenderer:
                     name, (p.x, p.y),
                     xytext=(ox, oy),
                     textcoords='offset points',
-                    fontsize=10,
+                    fontsize=24,
                     fontweight='bold'
                 )
+                
 
         # Draw angle bisectors
         if hasattr(self.diagram, 'angle_bisectors') and self.diagram.angle_bisectors:
@@ -342,27 +521,123 @@ class MatplotlibDiagramRenderer:
             for assertion in self.diagram.angle_equal_assertions:
                 angle1 = assertion['angle1']
                 angle2 = assertion['angle2']
-
-                # Draw arc for angle 1 (p1-vertex-p2)
-                self._draw_angle_arc(ax, angle1['vertex'],
-                                   angle1['p1'],
-                                   angle1['p2'],
-                                   num_arcs=1,
-                                   radius=0.12)
-
-                # Draw arc for angle 2
+                
+                # Draw arc for angle 1 (p1-vertex-p2) với dấu gạch
+                self._draw_angle_arc(ax, angle1['vertex'], 
+                                   angle1['p1'], 
+                                   angle1['p2'], 
+                                   num_arcs=1, 
+                                   radius=0.12,
+                                   draw_tick=True)
+                
+                # Draw arc for angle 2 với dấu gạch
                 self._draw_angle_arc(ax, angle2['vertex'],
                                    angle2['p1'],
                                    angle2['p2'],
                                    num_arcs=1,
-                                   radius=0.12)
+                                   radius=0.12,
+                                   draw_tick=True)
+
+        # Issue 2: Draw angle bisector arcs (2 arcs for equal angles)
+        if hasattr(self.diagram, 'angle_bisectors_metadata') and self.diagram.angle_bisectors_metadata:
+            for bisector_data in self.diagram.angle_bisectors_metadata:
+                vertex_name = bisector_data['vertex']
+                bisector_pt_name = bisector_data['bisector_point']
+                angle_pts = bisector_data['angle_points']  # [B, A, C] where A is vertex
+                
+                vertex = self.diagram.get_point(vertex_name)
+                bisector_pt = self.diagram.get_point(bisector_pt_name)
+                p1 = self.diagram.get_point(angle_pts[0])  # B
+                p2 = self.diagram.get_point(angle_pts[2])  # C
+                
+                if vertex and bisector_pt and p1 and p2:
+                    # Arc 1: angle from p1 to bisector (góc BAM)
+                    self._draw_angle_arc(ax, vertex, p1, bisector_pt,
+                                       num_arcs=1, radius=0.12, draw_tick=True)
+                    # Arc 2: angle from bisector to p2 (góc MAC)
+                    self._draw_angle_arc(ax, vertex, bisector_pt, p2,
+                                       num_arcs=1, radius=0.12, draw_tick=True)
+
+        # Draw angle measures (display degree values)
+        if hasattr(self.diagram, 'angle_measures') and self.diagram.angle_measures:
+            for angle_data in self.diagram.angle_measures:
+                degrees = float(angle_data['degrees'])
+
+                # For right angles, show only the green square marker (no blue arc, no degree text).
+                if abs(degrees - 90.0) < 1e-6:
+                    self._draw_right_angle_symbol(
+                        ax,
+                        angle_data['vertex'],
+                        angle_data['p1'],
+                        angle_data['p2']
+                    )
+                    continue
+
+                # Non-right angles: draw blue arc and blue degree value.
+                self._draw_angle_arc(
+                    ax,
+                    angle_data['vertex'],
+                    angle_data['p1'],
+                    angle_data['p2'],
+                    num_arcs=1,
+                    radius=0.12,
+                    draw_tick=False
+                )
+                self._draw_angle_measure(
+                    ax,
+                    angle_data['vertex'],
+                    angle_data['p1'],
+                    angle_data['p2'],
+                    degrees,
+                    radius=0.22
+                )
+
 
         # Configure axes
         ax.set_aspect('equal')
+        
+        # Calculate bounding box for ALL elements (points + circles)
+        if self.diagram.points:
+            all_x = [p.x for p in self.diagram.points.values()]
+            all_y = [p.y for p in self.diagram.points.values()]
+            
+            min_x, max_x = min(all_x), max(all_x)
+            min_y, max_y = min(all_y), max(all_y)
+            
+            # Extend bounding box to include circles
+            if self.diagram.circles:
+                for center, info in self.diagram.circles:
+                    if isinstance(info, dict):
+                        radius = info.get('radius', 0.5)
+                    else:
+                        radius = info
+                        
+                    min_x = min(min_x, center.x - radius)
+                    max_x = max(max_x, center.x + radius)
+                    min_y = min(min_y, center.y - radius)
+                    max_y = max(max_y, center.y + radius)
+            
+            # Calculate true center of the entire diagram
+            actual_center_x = (min_x + max_x) / 2
+            actual_center_y = (min_y + max_y) / 2
+            
+            # Calculate zoom factor with tighter padding to avoid tiny rendered shapes
+            x_range = max_x - min_x
+            y_range = max_y - min_y
+            max_range = max(x_range, y_range) / 2
+            zoom_factor = max(0.55, max_range * 1.15)
+            
+            # Center the view on the actual center of all elements
+            ax.set_xlim(actual_center_x - zoom_factor, actual_center_x + zoom_factor)
+            ax.set_ylim(actual_center_y - zoom_factor, actual_center_y + zoom_factor)
+        else:
+            # Fallback if no points
+            ax.set_xlim(-1.0, 1.0)
+            ax.set_ylim(-1.0, 1.0)
+        
         ax.axis('off')
 
         # Save if requested
-
         if save:
             output_path = Path(filename)
             output_path.parent.mkdir(parents=True, exist_ok=True)
