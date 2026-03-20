@@ -18,14 +18,6 @@ from trl import SFTConfig, SFTTrainer
 from src.prompts import DSL_INFERENCE_INSTRUCTION
 
 
-def _to_bool(value: Any) -> bool:
-    if isinstance(value, bool):
-        return value
-    if value is None:
-        return False
-    return str(value).lower() in {"1", "true", "yes", "y", "on"}
-
-
 def _supports_bf16() -> bool:
     return torch.cuda.is_available() and torch.cuda.is_bf16_supported()
 
@@ -141,7 +133,6 @@ def finetune(
     gradient_accumulation_steps: int = 4,
     weight_decay: float = 0.01,
     warmup_steps: int = 10,
-    train_on_responses_only: bool = True,
     is_dummy: bool = False,
 ) -> tuple:
     use_bf16 = _supports_bf16()
@@ -185,7 +176,7 @@ def finetune(
         seed=3407,
         max_seq_length=max_seq_length,
         packing=False,
-        completion_only_loss=train_on_responses_only,
+        completion_only_loss=True,
     )
 
     trainer = SFTTrainer(
@@ -194,9 +185,6 @@ def finetune(
         train_dataset=dataset,
         args=sft_config,
     )
-
-    if train_on_responses_only:
-        print("Response-only training enabled via SFTConfig(completion_only_loss=True).")
 
     trainer.train()
     trainer.save_model(output_dir)
@@ -272,9 +260,6 @@ if __name__ == "__main__":
     parser.add_argument("--dataset_huggingface_workspace", type=str, default="minn4")
     parser.add_argument("--dataset_huggingface_repo_name", type=str, default="text2dsl")
     parser.add_argument("--model_output_huggingface_workspace", type=str, default="minn4")
-    parser.add_argument("--load_in_4bit", type=_to_bool, default=True)
-    parser.add_argument("--train_on_responses_only", type=_to_bool, default=True)
-    parser.add_argument("--is_dummy", type=_to_bool, default=False)
 
     parser.add_argument("--output_data_dir", type=str, default=os.environ.get("SM_OUTPUT_DATA_DIR", "./outputs"))
     parser.add_argument("--model_dir", type=str, default=os.environ.get("SM_MODEL_DIR", "./model"))
@@ -291,8 +276,6 @@ if __name__ == "__main__":
     print(f"Dataset workspace: '{args.dataset_huggingface_workspace}'")
     print(f"Dataset repo: '{args.dataset_huggingface_repo_name}'")
     print(f"Model output workspace: '{args.model_output_huggingface_workspace}'")
-    print(f"Train on responses only? '{args.train_on_responses_only}'")
-    print(f"Training in dummy mode? '{args.is_dummy}'")
     print(f"Output data dir: '{args.output_data_dir}'")
     print(f"Model dir: '{args.model_dir}'")
     print(f"Number of GPUs: '{args.n_gpus}'")
@@ -310,9 +293,6 @@ if __name__ == "__main__":
         gradient_accumulation_steps=args.gradient_accumulation_steps,
         learning_rate=args.learning_rate,
         warmup_steps=args.warmup_steps,
-        load_in_4bit=args.load_in_4bit,
-        train_on_responses_only=args.train_on_responses_only,
-        is_dummy=args.is_dummy,
     )
 
     inference(model=model, tokenizer=tokenizer)
