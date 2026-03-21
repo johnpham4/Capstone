@@ -16,8 +16,8 @@ from src.services.diagram.optimizer import Optimizer
 
 
 DEFAULT_OPTIMIZER_OPTS = {
-    "epochs": 1500,
-    "n_tries": 3,
+    "epochs": 1000,
+    "n_tries": 1,
     "eps": 1e-6,
     "seed": 42,
     "learning_rate": 0.01,
