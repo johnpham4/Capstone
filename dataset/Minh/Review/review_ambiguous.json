@@ -1,33 +1,6 @@
 {
-  "total": 2,
+  "total": 0,
   "status": "REVIEW",
-  "results": [
-    {
-      "image_dir": "images/img_119192.png",
-      "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường tròn ngoại tiếp O của tam giác ABC",
-      "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(segment A C)\n(define D point (segment A B))\n(segment C D)\n(angle-equal A C D D C B)",
-      "problem": "Cho tam giác ABC có AB = AC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD cắt nhau tại điểm D sao cho góc ACD = góc DCB. Hãy xác định xem điểm O là tâm của đường tròn ngoại tiếp tam giác ABC có thuộc đoạn thẳng CD hay không.",
-      "id": "diagram_119192.png",
-      "status": "REVIEW",
-      "codes": [
-        "AMBIGUOUS_PROBLEM"
-      ],
-      "short_reason": "De bai mo ho/chua du rang buoc ro rang, can review thu cong.",
-      "action": "manual_review"
-    },
-    {
-      "image_dir": "images/img_106556.png",
-      "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB",
-      "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(segment A B)\n(segment M A)\n(segment M B)\n(perpendicular (segment M A) (segment A B))\n(equal-distance M A M B)",
-      "problem": "Cho tam giác ABC, đường thẳng d là đường trung trực của đoạn thẳng AB. Hãy xác định xem điểm C có thuộc đường thẳng d hay không.",
-      "id": "diagram_106556.png",
-      "status": "REVIEW",
-      "codes": [
-        "AMBIGUOUS_PROBLEM"
-      ],
-      "short_reason": "De bai mo ho/chua du rang buoc ro rang, can review thu cong.",
-      "action": "manual_review"
-    }
-  ],
+  "results": [],
   "output_file": "dataset/Minh/Review/review_ambiguous.json"
 }

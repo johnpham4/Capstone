@@ -92,13 +92,13 @@ def extract_segment_mentions(text: str) -> List[Tuple[str, str]]:
 
 
 def is_ambiguous_problem(text: str) -> bool:
-    # REVIEW is reserved for genuinely ambiguous prompts, not for detected DSL/image errors.
     patterns = [
-        r"khang\s+dinh\s+nao\s+sau\s+day\s+dung",
-        r"hay\s+xac\s+dinh",
-        r"co\s+thuoc\s+.*hay\s+khong",
+        # "duong thang la ..." with missing object/relation is under-specified.
         r"duong\s+thang\s+la\b",
+        # "duong thang di qua diem X" is under-specified unless a second condition exists.
         r"duong\s+thang\s+di\s+qua\s+diem\s+[a-z]\b(?!\s+(va|vuong\s+goc|song\s+song|cat|la))",
+        # Generic line mention with no defining relation.
+        r"ve\s+duong\s+thang\b(?!\s+(di\s+qua|vuong\s+goc|song\s+song|cat|qua))",
     ]
     return any(re.search(p, text) for p in patterns)
 
