@@ -4,6 +4,7 @@ import re
 from datetime import datetime
 
 import gradio as gr
+from PIL import Image
 
 JSON_PATH = "dataset/Minh/full.json"
 IMAGE_FOLDER = "dataset/Minh/images"
@@ -59,23 +60,37 @@ def _item_key(item: dict, fallback_index: int) -> str:
     return str(fallback_index)
 
 
-def _item_image_path(item: dict, key: str) -> str:
+def _item_image_path(item: dict, key: str) -> str | None:
     """Resolve image path for both legacy and current json formats."""
+    candidates: list[str] = []
     image_dir = item.get("image_dir")
     if isinstance(image_dir, str) and image_dir:
         if os.path.isabs(image_dir):
-            return image_dir
+            candidates.append(image_dir)
+        else:
+            # Prefer path relative to dataset root where json lives
+            dataset_root = os.path.dirname(JSON_PATH)
+            candidates.append(os.path.join(dataset_root, image_dir))
 
-        # Prefer path relative to dataset root where json lives
-        dataset_root = os.path.dirname(JSON_PATH)
-        candidate = os.path.join(dataset_root, image_dir)
+            # Fallback to IMAGE_FOLDER + file name
+            base_name = os.path.basename(image_dir)
+            candidates.append(os.path.join(IMAGE_FOLDER, base_name))
+
+            # Common mismatch: JSON uses img_*.png while folder has diagram_*.png
+            if base_name.startswith("img_"):
+                candidates.append(
+                    os.path.join(IMAGE_FOLDER, base_name.replace("img_", "diagram_", 1))
+                )
+
+    # Generic fallback by numeric key
+    candidates.append(os.path.join(IMAGE_FOLDER, f"img_{key}.png"))
+    candidates.append(os.path.join(IMAGE_FOLDER, f"diagram_{key}.png"))
+
+    for candidate in candidates:
         if os.path.exists(candidate):
             return candidate
 
-        # Fallback to IMAGE_FOLDER + file name
-        return os.path.join(IMAGE_FOLDER, os.path.basename(image_dir))
-
-    return os.path.join(IMAGE_FOLDER, f"img_{key}.png")
+    return None
 
 
 def find_next_valid_index(i: int) -> int:
@@ -93,17 +108,31 @@ def get_item(i: int):
 
     item = data[i]
     id_ = _item_key(item, i)
-    caption_vn = item.get("caption_vn", "")
+    problem_text = (
+        item.get("problem")
+        or item.get("caption_vn")
+        or item.get("instruction")
+        or ""
+    )
     img_path = _item_image_path(item, id_)
+    img_value = None
+    image_note = ""
+    if img_path is None:
+        image_note = "\n\n[WARNING] No image file found for this item."
+    else:
+        try:
+            img_value = Image.open(img_path).copy()
+        except Exception:
+            image_note = "\n\n[WARNING] Image file exists but cannot be loaded."
 
     text = f"""
 ### ID: {id_}
 
-**Caption VN**
+**Problem**
 
-{caption_vn}
+{problem_text}{image_note}
 """
-    return text, img_path, i
+    return text, img_value, i
 
 
 def _save_bad_data() -> None:
@@ -150,7 +179,7 @@ with gr.Blocks() as demo:
             text_box = gr.Markdown(init_text)
 
         with gr.Column(scale=1):
-            image = gr.Image(init_img)
+            image = gr.Image(value=init_img, type="pil", show_label=False)
 
     with gr.Row():
         like_btn = gr.Button("👍 Like", variant="primary")
