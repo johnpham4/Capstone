@@ -159,6 +159,11 @@ def get_item(i: int):
         or ""
     )
     dsl_answer = item.get("answer") or item.get("dsl") or ""
+    status = item.get("status") or ""
+    codes = item.get("codes") or []
+    short_reason = item.get("short_reason") or ""
+    action = item.get("action") or ""
+    codes_text = ", ".join(str(c) for c in codes) if isinstance(codes, list) else str(codes)
     img_path = _item_image_path(item, id_)
     img_value = None
     image_note = ""
@@ -180,6 +185,13 @@ def get_item(i: int):
 **Problem**
 
 {problem_text}{image_note}
+
+**Review Info**
+
+- Status: {status}
+- Codes: {codes_text}
+- Short reason: {short_reason}
+- Action: {action}
 
 **DSL**
 
