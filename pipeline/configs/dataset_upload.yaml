@@ -1,3 +1,8 @@
+<<<<<<< HEAD:configs/dataset_upload.yaml
 parameters:
   dataset_dir: "dataset/data"
+=======
+parameters:
+  dataset_dir: "dataset/data"
+>>>>>>> 6cf03dda8dad8bb8fa1226b8b4e9166c3f287527:pipeline/configs/dataset_upload.yaml
   repo_id: "minn4/text2dsl"

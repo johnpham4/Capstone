@@ -1,3 +1,4 @@
+<<<<<<< HEAD:configs/data_preparation.yaml
 parameters:
   repo_id: "JO-KU/SynthGeo228K"
   text_filename: "diagram_val.json"
@@ -5,3 +6,12 @@ parameters:
 
   limit: 500
 
+=======
+parameters:
+  repo_id: "JO-KU/SynthGeo228K"
+  text_filename: "diagram_val.json"
+  split: "validation"
+
+  limit: 500
+
+>>>>>>> 6cf03dda8dad8bb8fa1226b8b4e9166c3f287527:pipeline/configs/data_preparation.yaml

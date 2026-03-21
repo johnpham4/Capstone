@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 import re
@@ -6,14 +7,56 @@ from datetime import datetime
 import gradio as gr
 from PIL import Image
 
-JSON_PATH = "dataset/Minh/full.json"
-IMAGE_FOLDER = "dataset/Minh/images"
-OUTPUT_BAD = "bad_images.json"
+DEFAULT_JSON_PATH = "dataset/Minh/Review/review_fail.json"
+DEFAULT_IMAGE_FOLDER = "dataset/Minh/images"
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Gradio reviewer for geometry samples")
+    parser.add_argument(
+        "--json-path",
+        default=os.getenv("REVIEW_JSON_PATH", DEFAULT_JSON_PATH),
+        help="Path to review JSON file (supports list or {'results': [...]})",
+    )
+    parser.add_argument(
+        "--image-folder",
+        default=os.getenv("REVIEW_IMAGE_FOLDER", DEFAULT_IMAGE_FOLDER),
+        help="Path to image folder",
+    )
+    parser.add_argument(
+        "--output-bad",
+        default=os.getenv("REVIEW_OUTPUT_BAD", ""),
+        help="Path to output bad json (optional)",
+    )
+    return parser.parse_args()
+
+
+def load_items(json_path: str) -> list[dict]:
+    with open(json_path, "r", encoding="utf-8") as f:
+        raw = json.load(f)
+
+    if isinstance(raw, list):
+        return raw
+
+    if isinstance(raw, dict):
+        results = raw.get("results")
+        if isinstance(results, list):
+            return results
+
+    raise ValueError(
+        "Unsupported JSON format. Expected a list or an object containing 'results'."
+    )
+
+
+args = parse_args()
+JSON_PATH = args.json_path
+IMAGE_FOLDER = args.image_folder
+OUTPUT_BAD = args.output_bad or f"bad_{os.path.splitext(os.path.basename(JSON_PATH))[0]}.json"
 
 
 # ===== LOAD DATA =====
-with open(JSON_PATH, "r", encoding="utf-8") as f:
-    data = json.load(f)
+items = load_items(JSON_PATH)
+TOTAL_ITEMS = len(items)
 
 
 def _load_bad_data() -> tuple[set[str], dict[str, str]]:
@@ -95,7 +138,7 @@ def _item_image_path(item: dict, key: str) -> str | None:
 
 def find_next_valid_index(i: int) -> int:
     """Skip ids that were already disliked."""
-    while i < len(data) and _item_key(data[i], i) in bad_ids:
+    while i < len(items) and _item_key(items[i], i) in bad_ids:
         i += 1
     return i
 
@@ -103,10 +146,11 @@ def find_next_valid_index(i: int) -> int:
 def get_item(i: int):
     i = find_next_valid_index(i)
 
-    if i >= len(data):
-        return "DONE", None, i
+    if i >= len(items):
+        done_text = f"DONE\n\nDa duyet: {TOTAL_ITEMS}/{TOTAL_ITEMS} cau"
+        return done_text, None, i
 
-    item = data[i]
+    item = items[i]
     id_ = _item_key(item, i)
     problem_text = (
         item.get("problem")
@@ -115,6 +159,11 @@ def get_item(i: int):
         or ""
     )
     dsl_answer = item.get("answer") or item.get("dsl") or ""
+    status = item.get("status") or ""
+    codes = item.get("codes") or []
+    short_reason = item.get("short_reason") or ""
+    action = item.get("action") or ""
+    codes_text = ", ".join(str(c) for c in codes) if isinstance(codes, list) else str(codes)
     img_path = _item_image_path(item, id_)
     img_value = None
     image_note = ""
@@ -127,11 +176,22 @@ def get_item(i: int):
             image_note = "\n\n[WARNING] Image file exists but cannot be loaded."
 
     text = f"""
+### Source JSON: {JSON_PATH}
+
+### Progress: {i + 1}/{TOTAL_ITEMS} | Total Questions: {TOTAL_ITEMS}
+
 ### ID: {id_}
 
 **Problem**
 
 {problem_text}{image_note}
+
+**Review Info**
+
+- Status: {status}
+- Codes: {codes_text}
+- Short reason: {short_reason}
+- Action: {action}
 
 **DSL**
 
@@ -161,7 +221,7 @@ def like(i: int):
 
 
 def dislike(i: int, reason: str):
-    item = data[i]
+    item = items[i]
     id_ = _item_key(item, i)
     reason = (reason or "").strip()
 

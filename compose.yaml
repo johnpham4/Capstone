@@ -1,3 +1,71 @@
+<<<<<<< HEAD
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: zenml_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: zenml
+      MYSQL_USER: zenml
+      MYSQL_PASSWORD: zenml
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - geo
+
+  zenml-server:
+    image: zenmldocker/zenml-server
+    ports:
+      - "8080:8080"
+    # environment:
+    #   - ZENML_STORE_URL=mysql://root:password@host.docker.internal/zenml
+    links:
+      - mysql
+    depends_on:
+      - mysql
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: on-failure
+    networks:
+      - geo
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+    networks:
+      - geo
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - geo
+
+volumes:
+  mysql_data:
+  rabbitmq_data:
+  redis_data:
+
+networks:
+  geo:
+    driver: bridge
+=======
 services:
   # api:
   #   build:
@@ -157,3 +225,4 @@ volumes:
 networks:
   geo:
     driver: bridge
+>>>>>>> 6cf03dda8dad8bb8fa1226b8b4e9166c3f287527
