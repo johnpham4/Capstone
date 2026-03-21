@@ -10,7 +10,9 @@ Bat buoc doc rule tai file:
 Khong bo qua sample nao.
 
 ## Nguyen tac thuc thi
-- Uu tien script runner, khong review thu cong tung sample trong chat neu script chay duoc.
+- BAT BUOC review thu cong bang Copilot GPT-5.3-Codex tren tung sample (doc de + doc DSL + xem anh).
+- KHONG dung code checker/regex checker de ra ket luan PASS/FAIL/REVIEW.
+- Chi duoc dung script cho viec doc/ghi file ho tro, KHONG duoc dung script de thay the phan danh gia noi dung.
 - Uu tien path trong workspace, khong attach ca folder anh lon de tranh loi 413.
 - FULL SWEEP mac dinh: chay het tat ca sample (chi dung khi user noi ro "stop" hoac gioi han max_chunks/max_samples).
 
@@ -38,30 +40,18 @@ Sau khi chia bang split_full_json.py:
 - Du lieu tao ra theo owner: <owner_dir>/full.json.
 - Khi can chi dinh JSON cho full sweep, uu tien dung file da chia tuong ung owner (vi du: json-files=<owner_dir>/full.json).
 
-## Lenh chay
-Neu co file scripts/full_sweep_dsl_image_checker.py thi BAT BUOC dung file nay.
+## Cach thuc thi (manual)
+- Khong chay auto checker de phan loai.
+- Duyet theo chunk nho (khuyen nghi 20 sample/chunk) de dam bao chat luong.
+- Moi sample BAT BUOC lam 3 buoc:
+1) Doc de bai va xac dinh rang buoc hinh hoc.
+2) Doc DSL, doi chieu tung rang buoc voi de bai.
+3) Xem anh that va doi chieu voi de bai + DSL.
 
-Lenh mac dinh:
-- PYTHONPATH=. uv run python scripts/full_sweep_dsl_image_checker.py --image-root <IMAGE_ROOT> --output-dir <OUTPUT_DIR> --review-dir <REVIEW_DIR>
-
-Lenh day du tham so:
-- PYTHONPATH=. uv run python scripts/full_sweep_dsl_image_checker.py --json-files <json_1> <json_2> ... --image-root <IMAGE_ROOT> --output-dir <OUTPUT_DIR> --review-dir <REVIEW_DIR> --chunk-size 20
-
-Lenh fallback (neu uv khong dung duoc):
-- .\\.venv-win\\Scripts\\python.exe scripts/full_sweep_dsl_image_checker.py --image-root <IMAGE_ROOT> --output-dir <OUTPUT_DIR> --review-dir <REVIEW_DIR>
-
-Neu prompt cho Copilot (khong tu go shell), chi can noi y dinh + path trong workspace:
-- Chay full sweep voi script scripts/full_sweep_dsl_image_checker.py, image-root=<IMAGE_ROOT>, output-dir=<OUTPUT_DIR>, review-dir=<REVIEW_DIR>.
-- Neu can chi dinh file JSON: json-files=<JSON_FILES> (vi du: dataset/<owner>/full.json).
-
-Quy uoc path trong prompt:
-- Uu tien path tuong doi theo workspace (vi du: scripts/full_sweep_dsl_image_checker.py, <IMAGE_ROOT>, <OUTPUT_DIR>).
-- Khong can tu viet PYTHONPATH=. hay uv run python trong prompt chat; chi can viet yeu cau va path.
-- Neu muon ep cach chay, ghi ro: uu tien uv, fallback .\\.venv-win\\Scripts\\python.exe.
-
-Chi fallback review thu cong khi:
-- Khong ton tai script, hoac
-- Script loi khong the chay/ghi file.
+Luu y danh gia:
+- Neu de mo ho NHUNG DSL + hinh van khop de bai thi cho PASS.
+- Chi cho REVIEW khi de thieu thong tin de dung hinh (vi du noi "duong thang" nhung khong noi di qua dau/quan he nao).
+- Neu DSL sai hoac hinh sai (hoac ca 2) thi cho FAIL.
 
 ## Input toi thieu
 - Duong dan file JSON dataset
@@ -85,6 +75,7 @@ Moi sample co the co:
 1) Check DSL theo toan bo rule trong prompt_dsl.py
 2) Mo anh theo id/image_dir va check hinh co khop DSL
 3) Check hinh co khop de (vuong goc, song song, trung diem, duong tron, vi tri diem)
+4) Ghi short_reason CU THE theo tung sample, khong dung cau chung chung.
 
 Khong duoc ket luan PASS neu chua check ca DSL va anh.
 
@@ -110,11 +101,15 @@ Khong duoc ket luan PASS neu chua check ca DSL va anh.
 - IMAGE_MISSING: khong tim thay anh
 
 ## Output bat buoc
-Script mode mac dinh CHI can 4 file split:
+Chi can 4 file split:
 - review_pass.json (chi gom sample status PASS)
 - review_fail.json (chi gom sample status FAIL)
 - review_ambiguous.json (chi gom sample status REVIEW - de mo ho/chua ro)
 - review_image_missing.json (chi gom sample status IMAGE_MISSING)
+
+Bat buoc cho file nay:
+- Van phai xuat DUNG 4 file split nhu tren.
+- Moi item phai co short_reason cu the, mo ta dung loi that su duoc quan sat tu de + DSL + anh.
 
 Bat buoc luu 4 file split trong folder tai REVIEW_DIR:
 - Neu chua co folder REVIEW_DIR thi phai tao moi.
