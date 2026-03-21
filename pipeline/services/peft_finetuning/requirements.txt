@@ -6,3 +6,4 @@ peft==0.14.0
 trl==0.24.0
 bitsandbytes==0.45.0
 comet-ml==3.47.6
+

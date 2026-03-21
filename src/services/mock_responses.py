@@ -4,3 +4,4 @@ MOCK_DSL = (
     "(define E point (midpoint A C))\n"
     "(segment D E)"
 )
+

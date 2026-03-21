@@ -59,3 +59,4 @@ async def delete_history_item(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Request not found or not owned by you",
         )
+

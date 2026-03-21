@@ -67,3 +67,4 @@ class ExternalServiceError(AppError):
             status_code=502,
             error_code="EXTERNAL_SERVICE_ERROR",
         )
+

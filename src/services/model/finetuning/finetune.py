@@ -387,3 +387,4 @@ if __name__ == "__main__":
     model_short_name = args.model_name.split("/")[-1]
     sft_output_model_repo_id = f"{args.model_output_huggingface_workspace}/text2diagram-{model_short_name}"
     save_model(model, tokenizer, "model_sft", push_to_hub=True, repo_id=sft_output_model_repo_id)
+

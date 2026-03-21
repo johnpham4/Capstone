@@ -23,3 +23,4 @@ class TaskStatusResponse(BaseModel):
     progress: Optional[int] = None
     result: Optional[dict] = None
     error: Optional[str] = None
+

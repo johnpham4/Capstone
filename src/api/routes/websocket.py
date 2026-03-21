@@ -76,3 +76,4 @@ async def notify_task_completion(task_id: str, result: dict):
             logger.info(f"[WS] Notified client for task {task_id}")
         except Exception as e:
             logger.error(f"[WS] Failed to notify: {e}")
+

@@ -120,3 +120,4 @@ class RegistryModel(Base, TimestampMixin):
     version: Mapped[int] = mapped_column()
     alias: Mapped[str] = mapped_column()
     prompt: Mapped[str] = mapped_column()
+

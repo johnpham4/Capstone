@@ -368,3 +368,4 @@ if __name__ == "__main__":
     model_repo_id = f"{args.model_output_huggingface_workspace}/text2diagram-{model_short_name}-peft"
     final_model_dir = str(Path(args.model_dir) / "model_sft")
     save_model(model, tokenizer, final_model_dir, push_to_hub=True, repo_id=model_repo_id)
+

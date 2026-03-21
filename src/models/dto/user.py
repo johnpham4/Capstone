@@ -14,3 +14,4 @@ class UserCreate(BaseModel):
     email: str
     password: str
 
+

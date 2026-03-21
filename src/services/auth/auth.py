@@ -75,3 +75,4 @@ class AuthService:
         if user_model is None:
             return None
         return self._repo.to_schema(user_model)
+

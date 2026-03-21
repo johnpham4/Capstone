@@ -17,3 +17,4 @@ class StreamOrchestrationRequest(BaseModel):
     user_input: str
     mode: Literal["diagram", "both"] = Field(default="diagram")
     llm_mock: bool = Field(default=False)
+

@@ -942,3 +942,4 @@ DẠNG 5: "AB là tiếp tuyến tại A, AC là dây"
 {{ extract }}
 
 """
+

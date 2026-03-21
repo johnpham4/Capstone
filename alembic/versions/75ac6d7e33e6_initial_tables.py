@@ -36,3 +36,4 @@ def downgrade() -> None:
     op.add_column('solutions', sa.Column('model_used', sa.VARCHAR(length=100), autoincrement=False, nullable=True))
     op.add_column('diagrams', sa.Column('model_used', sa.VARCHAR(length=100), autoincrement=False, nullable=True))
     # ### end Alembic commands ###
+

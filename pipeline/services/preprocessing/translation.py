@@ -155,3 +155,4 @@ class GeometryTranslator:
 
         logger.info(f"Translated {len(results)} texts")
         return results
+

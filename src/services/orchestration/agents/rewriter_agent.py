@@ -31,3 +31,4 @@ class RewriterAgent:
         except Exception as e:
             logger.warning(f"RewriterAgent LLM failed, using fallback: {e}")
             return RewriteResponse(problem_statement=user_input, mode="diagram")
+

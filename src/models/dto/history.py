@@ -30,3 +30,4 @@ class PaginatedHistory(BaseModel):
     total: int
     page: int
     page_size: int
+

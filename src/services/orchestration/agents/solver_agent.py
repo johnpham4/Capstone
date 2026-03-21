@@ -57,3 +57,4 @@ class SolverAgent:
 
         content = response.choices[0].message.content
         return content
+

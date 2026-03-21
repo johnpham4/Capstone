@@ -196,3 +196,4 @@ class Orchestrator:
             "has_diagram": diagram_result.get("status") != "failed",
             "has_solution": resolved_mode == "both",
         }
+

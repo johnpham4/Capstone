@@ -7,3 +7,4 @@ class ListPydanticOutputParser(PydanticOutputParser):
             return [super(ListPydanticOutputParser, self)._parse_obj(obj_) for obj_ in obj]
         else:
             return super(ListPydanticOutputParser, self)._parse_obj(obj)
+

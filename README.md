@@ -516,3 +516,4 @@ Note: after download complete, you should restore back what you deleted
 3. lên aws vào iam tạo user với iamfullaccess (không nhớ tên hỏi chat)
 4. chạy 2 lệnh make role trong makefile dể tạo role và key và gắn vào .env
 5. chuẩn bị data đầy đủ và chạy make finetune, không hiểu thì hỏi copilot
+

@@ -23,3 +23,4 @@ class SuccessResponse(BaseModel):
     message: str
     request_id: Optional[str] = None
     data: Optional[dict] = None
+

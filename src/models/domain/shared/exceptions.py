@@ -5,3 +5,4 @@ class DomainError(Exception):
 
 class ImproperlyConfigured(Exception):
     pass
+

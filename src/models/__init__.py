@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-from . import domain
-from . import schemas
 
-__all__ = ["domain", "schemas"]
-=======
 from . import dto
 from .orm import (
     TimestampMixin,
@@ -21,4 +16,4 @@ __all__ = [
     "DiagramModel",
     "SolutionModel",
 ]
->>>>>>> minh-re
+

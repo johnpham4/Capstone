@@ -26,3 +26,4 @@ class DiagramAgent:
         except Exception as e:
             logger.error(f"DiagramAgent error: {e}")
             return {"error": str(e), "status": "failed"}
+

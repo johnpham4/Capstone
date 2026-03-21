@@ -1,4 +1,4 @@
-﻿$path='dataset/data/splits/Nhi/test.json'
+$path='dataset/data/splits/Nhi/test.json'
 $data=Get-Content -Raw $path | ConvertFrom-Json
 $stats=[ordered]@{}
 $samples=[ordered]@{}
@@ -80,11 +80,11 @@ foreach($item in $data){
     }
   }
 
-  $hasOInInstr=($instr -match '(^|[^A-Z])O([^A-Z]|$)|\(O\)|tâm O|đường tròn O| tại O|OA|OB|OC|OD')
+  $hasOInInstr=($instr -match '(^|[^A-Z])O([^A-Z]|$)|\(O\)|t�m O|��?ng tr?n O| t?i O|OA|OB|OC|OD')
   $hasOInAns=($ans -match '(^|[^A-Z])O([^A-Z]|$)')
   if((-not $hasOInInstr) -and $hasOInAns){ Add-Issue 'unexpected_O_token_in_answer' $img 'O appears but instruction has no O' }
 
-  if($instr -match 'đường tròn\s+([A-Z])\s+với\s+đường\s+kính'){
+  if($instr -match '��?ng tr?n\s+([A-Z])\s+v?i\s+��?ng\s+k�nh'){
     $expectedCenter=$matches[1]
     $diaLine=($lines | Where-Object { $_ -match '^\(diameter\s+[A-Z]\s+[A-Z]\s+([A-Z])\)$' } | Select-Object -First 1)
     if($diaLine){
@@ -102,3 +102,4 @@ foreach($k in ($samples.Keys | Sort-Object)){
   "[$k]"
   $samples[$k] | ForEach-Object { " - {0} :: {1}" -f $_.image,$_.detail }
 }
+

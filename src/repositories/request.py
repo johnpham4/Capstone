@@ -65,3 +65,4 @@ class RequestRepository(AbstractRepository[RequestModel]):
         )
         result = await self._session.execute(stmt)
         return result.scalar_one()
+

@@ -80,3 +80,4 @@ def register_error_handlers(app: FastAPI) -> None:
                 }
             },
         )
+

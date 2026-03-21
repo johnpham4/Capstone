@@ -32,3 +32,4 @@ def downgrade() -> None:
     op.add_column('solutions', sa.Column('cache_hit', sa.BOOLEAN(), autoincrement=False, nullable=False))
     op.add_column('diagrams', sa.Column('cache_hit', sa.BOOLEAN(), autoincrement=False, nullable=False))
     # ### end Alembic commands ###
+

@@ -48,3 +48,4 @@ FROM runtime AS flower
 EXPOSE 5555
 CMD ["celery", "-A", "src.infrastructures.celery.config", "flower", \
      "--port=5555"]
+

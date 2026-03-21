@@ -60,3 +60,4 @@ class AbstractRepository(ABC, Generic[ModelType]):
         await self._session.delete(instance)
         await self._session.commit()
         return True
+

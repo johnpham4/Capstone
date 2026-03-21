@@ -44,3 +44,4 @@ def data_preparation_pipeline(
     filter_triangle(diagram_texts=diagram_texts_translated, output_dir=output_dir)
 
     return output_path
+

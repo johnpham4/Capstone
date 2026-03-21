@@ -29,3 +29,4 @@ class UserRepository(AbstractRepository[UserModel]):
             hashed_password=user.hashed_password,
             disabled=user.disabled,
         )
+
