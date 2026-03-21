@@ -1,7 +1,12 @@
 [
   {
-    "index": 8,
-    "instruction": "Đường tròn O, đường tròn B, đường tròn B tiếp xúc với đường tròn O, đường thẳng đi qua điểm O",
-    "dsl": "(define O point)\n(circle O)\n(define B point)\n(circle B)\n(tangent B (circle O) OB)\n(segment O B)"
+    "index": 1,
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, góc ADE = 90",
+    "dsl": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(define D point (midpoint A B))\n(segment A B)\n(define E point (midpoint A C))\n(segment A C)\n(segment D E)\n(define M point (projection C (segment A E)))\n(segment C M)\n(perpendicular (segment D E) (segment C E))\n(equal-distance D E E C)"
+  },
+  {
+    "index": 2,
+    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90",
+    "dsl": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point)\n(circle O)\n(diameter A B O)\n(segment A B)\n(segment D E)\n(angle-measure A D E 90)"
   }
 ]

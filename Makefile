@@ -25,7 +25,7 @@ generate_question:
 	uv run python -m pipeline.cli --run-generate-questions --no-cache
 
 render_diagram:
-	PYTHONPATH=. uv run python tools/run.py --run-render-diagram --no-cache
+	PYTHONPATH=. uv run python test_diagram.py
 
 upload:
 	uv run python -m pipeline.cli --run-upload-dataset

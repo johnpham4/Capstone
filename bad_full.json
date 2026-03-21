@@ -1,12 +1,62 @@
 [
   {
+    "id": "100631",
+    "reason": "chưa khai báo segment đã define các điểm trên đó",
+    "updated_at": "2026-03-21T18:10:03Z"
+  },
+  {
+    "id": "102305",
+    "reason": "",
+    "updated_at": "2026-03-21T18:10:03Z"
+  },
+  {
+    "id": "102788",
+    "reason": "sai góc",
+    "updated_at": "2026-03-21T18:10:03Z"
+  },
+  {
+    "id": "103440",
+    "reason": "chưa khai báo segment đã define điểm trên đó",
+    "updated_at": "2026-03-21T18:10:03Z"
+  },
+  {
+    "id": "104714",
+    "reason": "đề ko rõ",
+    "updated_at": "2026-03-21T18:10:03Z"
+  },
+  {
     "id": "106046",
     "reason": "thiếu segment D E",
-    "updated_at": "2026-03-21T17:24:07Z"
+    "updated_at": "2026-03-21T18:10:03Z"
+  },
+  {
+    "id": "108060",
+    "reason": "đề nhắc AP mà ko nối",
+    "updated_at": "2026-03-21T18:10:03Z"
+  },
+  {
+    "id": "112402",
+    "reason": "đề ko rõ ràng",
+    "updated_at": "2026-03-21T18:10:03Z"
+  },
+  {
+    "id": "113364",
+    "reason": "",
+    "updated_at": "2026-03-21T18:10:03Z"
+  },
+  {
+    "id": "117246",
+    "reason": "sai, đề bảo đường thẳng d với e mà ko vẽ",
+    "updated_at": "2026-03-21T18:10:03Z"
+  },
+  {
+    "id": "120889",
+    "reason": "chưa khai báp segment A B mà đã define D trên A B -- >Sai",
+    "updated_at": "2026-03-21T18:10:03Z"
   },
   {
     "id": "122283",
     "reason": "đề không rõ ràng",
-    "updated_at": "2026-03-21T17:24:07Z"
+    "updated_at": "2026-03-21T18:10:03Z"
   }
 ]

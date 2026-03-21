@@ -1,4 +1,3 @@
-<=
 import math
 from typing import Optional, Dict, Any, List
 from dataclasses import dataclass, field
@@ -133,4 +132,5 @@ class Diagram:
             "quadrilaterals": len(self.quadrilaterals),
             "segments": len(self.segments),
             "lines": len(self.lines)
-
+        }
+            

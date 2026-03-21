@@ -104,7 +104,7 @@ def test_single_problem(instruction, dsl_answer, output_path):
 
 def main():
     parser = argparse.ArgumentParser(description="Render diagrams from DSL dataset")
-    parser.add_argument("--config", default="configs/diagram_render.yaml", help="YAML config path")
+    parser.add_argument("--config", default="pipeline/configs/diagram_render.yaml", help="YAML config path")
     parser.add_argument("--input", default=None, help="Input JSON path")
     parser.add_argument("--output-dir", default=None, help="Directory to save rendered images")
     args = parser.parse_args()

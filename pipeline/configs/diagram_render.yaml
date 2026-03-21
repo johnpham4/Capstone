@@ -1,4 +1,4 @@
 parameters:
-  input_json_path: "./dataset/Minh/full.json"
-  output_dir: "./dataset/Minh/images"
+  input_json_path: "./dataset/data/draft.json"
+  output_dir: "./output_fixed"
 
