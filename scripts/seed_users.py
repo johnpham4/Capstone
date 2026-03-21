@@ -26,11 +26,11 @@ async def main():
 
     print("Initializing database...")
     await init_db()
-    print("✅ Database initialized")
+    print("Database initialized")
 
     print("Seeding demo user...")
     await seed_demo_user()
-    print("✅ Seed completed")
+    print("Seed completed")
 
 if __name__ == "__main__":
     asyncio.run(main())
