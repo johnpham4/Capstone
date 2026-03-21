@@ -1,5 +1,6 @@
 import io
 import json
+import re
 import sys
 import traceback
 from pathlib import Path
@@ -23,22 +24,18 @@ DEFAULT_OPTIMIZER_OPTS = {
     "enable_chord_ndg": False,
 }
 
-INPUT_JSON_PATH = "dataset/data/train.json"
+INPUT_JSON_PATH = "dataset/Minh/full.json"
 OUTPUT_DIR = "output_fixed"
 
 
-def _next_output_index(output_dir: Path) -> int:
-    existing_files = list(output_dir.glob("diagram_*.png"))
-    if not existing_files:
-        return 1
-
-    numbers = []
-    for file_path in existing_files:
-        try:
-            numbers.append(int(file_path.stem.split("_")[1]))
-        except (IndexError, ValueError):
-            continue
-    return max(numbers) + 1 if numbers else 1
+def _extract_image_index(image_dir: str | None) -> int | None:
+    """Extract numeric index from image path, e.g. images/img_122439.png -> 122439."""
+    if not image_dir:
+        return None
+    match = re.search(r"img_(\d+)\.png$", image_dir)
+    if not match:
+        return None
+    return int(match.group(1))
 
 
 def test_single_problem(instruction: str, dsl_answer: str, output_path: Path) -> bool:
@@ -98,45 +95,76 @@ def main():
     output_dir = (project_root / OUTPUT_DIR).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    start_idx = _next_output_index(output_dir)
-
     with open(json_path, "r", encoding="utf-8") as f:
         problems = json.load(f)
 
     print(f"Found {len(problems)} problems")
-    print(f"Starting from diagram_{start_idx:02d}.png")
+    print("Using image index from image_dir (e.g. img_122439.png -> 122439)")
 
     success_count = 0
     failed_problems = []  # Track failed problems
+    current_source_position = None
+    current_image_index = None
 
-    for idx, problem in enumerate(problems, start_idx):
-        instruction = problem.get("instruction", "")
-        answer = problem.get("answer") or problem.get("dsl")
+    try:
+        for source_position, problem in enumerate(problems, 1):
+            image_dir = problem.get("image_dir")
+            image_index = _extract_image_index(image_dir)
 
-        if not answer:
-            print(f"Skipping index {idx}: missing 'answer' or 'dsl' field")
-            failed_problems.append(
-                {
-                    "index": idx,
-                    "instruction": instruction,
-                    "dsl": "",
-                }
+            if image_index is None:
+                # Fallback for unexpected path format so the script can continue.
+                image_index = source_position
+
+            current_source_position = source_position
+            current_image_index = image_index
+
+            instruction = problem.get("instruction", "")
+            answer = problem.get("answer") or problem.get("dsl")
+
+            print(
+                f"\n=== Processing image_index={image_index} | "
+                f"source_position={source_position}/{len(problems)} ==="
             )
-            continue
 
-        output_filename = f"diagram_{idx:02d}.png"
-        output_path = output_dir / output_filename
+            if not answer:
+                print(
+                    f"Skipping image_index={image_index}, source_position={source_position}: "
+                    "missing 'answer' or 'dsl' field"
+                )
+                failed_problems.append(
+                    {
+                        "image_index": image_index,
+                        "image_dir": image_dir,
+                        "source_position": source_position,
+                        "instruction": instruction,
+                        "dsl": "",
+                    }
+                )
+                continue
 
-        if test_single_problem(instruction, answer, output_path):
-            success_count += 1
-        else:
-            failed_problems.append(
-                {
-                    "index": idx,
-                    "instruction": instruction,
-                    "dsl": answer,
-                }
+            output_filename = f"diagram_{image_index}.png"
+            output_path = output_dir / output_filename
+
+            if test_single_problem(instruction, answer, output_path):
+                success_count += 1
+            else:
+                failed_problems.append(
+                    {
+                        "image_index": image_index,
+                        "image_dir": image_dir,
+                        "source_position": source_position,
+                        "instruction": instruction,
+                        "dsl": answer,
+                    }
+                )
+    except KeyboardInterrupt:
+        print("\nInterrupted by user (Ctrl+C)")
+        if current_image_index is not None:
+            print(
+                "Last processing position: "
+                f"image_index={current_image_index}, source_position={current_source_position}"
             )
+        return
 
     print(f"Completed: {success_count}/{len(problems)} diagrams generated")
     print(f"Output directory: {output_dir.absolute()}")
@@ -147,7 +175,7 @@ def main():
         with open(failed_path, "w", encoding="utf-8") as f:
             json.dump(failed_problems, f, ensure_ascii=False, indent=2)
         print(f"\n {len(failed_problems)} failed problems saved to: {failed_path}")
-        print("Failed indices:", [p["index"] for p in failed_problems])
+        print("Failed image indices:", [p["image_index"] for p in failed_problems])
 
 if __name__ == "__main__":
     main()

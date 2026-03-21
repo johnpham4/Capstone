@@ -1,14 +1,14 @@
 """Geometry domain models package."""
 
-from src.models.domain.geometry.entities import GeometricPoint, Diagram
-from src.models.domain.geometry.value_objects import Point, Line, Triangle, Circle, Primitive
-from src.models.domain.geometry.types import (
+from .entities import GeometricPoint, Diagram
+from .value_objects import Point, Line, Triangle, Circle, Primitive
+from .types import (
     DiagramType,
     TriangleType,
     QuadrilateralType,
     CircleType,
 )
-from src.models.domain.geometry.instructions import (
+from .instructions import (
     Parameter,
     Assertion,
     Definition,

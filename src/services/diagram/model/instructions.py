@@ -4,7 +4,7 @@ Represents instructions parsed from DSL commands.
 """
 from dataclasses import dataclass
 from typing import Any, Tuple
-from src.models.domain.geometry.types import DiagramType
+from .types import DiagramType
 
 
 @dataclass
