@@ -34,12 +34,6 @@ from src.config.settings.base import settings
     help="Generate GMBL dataset from Vietnamese captions"
 )
 @click.option(
-    "--run-generate-questions",
-    is_flag=True,
-    default=False,
-    help="Generate question dataset from Vietnamese captions"
-)
-@click.option(
     "--run-finetune",
     is_flag=True,
     default=False,
@@ -80,7 +74,6 @@ def main(
     run_prepare_data: bool = False,
     run_upload_dataset: bool = False,
     run_generate_gmbl: bool = False,
-    run_generate_questions: bool = False,
     run_finetune: bool = False,
     run_render_diagram: bool = False,
     num_epochs: int = 1,
@@ -92,49 +85,44 @@ def main(
         run_prepare_data
         or run_upload_dataset
         or run_generate_gmbl
-        or run_generate_questions
         or run_finetune
+        or run_render_diagram
     ), "Please use one of the options"
 
     pipeline_args = {"enable_cache": not no_cache}
-    pipeline_dir = Path(__file__).resolve().parent
+    root_dir = Path(__file__).resolve().parent.parent
 
     if run_prepare_data:
-        pipeline_args["config_path"] = pipeline_dir / "configs" / "data_preparation.yaml"
+        pipeline_args["config_path"] = root_dir / "configs" / "data_preparation.yaml"
         assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
         pipeline_args["run_name"] = f"data_prep_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
 
         logger.info("Starting data preparation pipeline")
-        from pipeline.pipelines.data_preparation import data_preparation_pipeline
+        from pipelines.data_preparation import data_preparation_pipeline
         data_preparation_pipeline.with_options(**pipeline_args)()
 
     if run_upload_dataset:
-        pipeline_args["config_path"] = pipeline_dir / "configs" / "dataset_upload.yaml"
+        pipeline_args["config_path"] = root_dir / "configs" / "dataset_upload.yaml"
         assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
         pipeline_args["run_name"] = f"upload_dataset_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
 
         assert settings.HF_TOKEN, "HuggingFace token required. Set HF_TOKEN in .env"
         logger.info("Starting dataset upload pipeline")
-        from pipeline.pipelines.dataset_upload import dataset_upload_pipeline
+        from pipelines.dataset_upload import dataset_upload_pipeline
         dataset_upload_pipeline.with_options(**pipeline_args)()
 
     if run_generate_gmbl:
-        pipeline_args["config_path"] = pipeline_dir / "configs" / "dataset_generation.yaml"
+        pipeline_args["config_path"] = root_dir / "configs" / "dataset_generation.yaml"
         assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
         pipeline_args["run_name"] = f"generate_gmbl_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
 
         logger.info("Starting GMBL dataset generation pipeline")
-        from pipeline.pipelines.dataset_generation import dataset_generation_pipeline
+        from pipelines.dataset_generation import dataset_generation_pipeline
         dataset_generation_pipeline.with_options(**pipeline_args)()
 
-    if run_generate_questions:
-        pipeline_args["config_path"] = pipeline_dir / "configs" / "question_generation.yaml"
-        assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
-        pipeline_args["run_name"] = f"generate_questions_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
-
-        logger.info("Starting question generation pipeline")
-        from pipeline.pipelines.question_generation import question_generation_pipeline
-        question_generation_pipeline.with_options(**pipeline_args)()
+    if run_render_diagram:
+        logger.info("Starting diagram rendering script")
+        subprocess.run([sys.executable, str(root_dir / "test_diagram.py")], check=True)
 
     if run_finetune:
         assert settings.HF_TOKEN, "HF_TOKEN required. Set it in .env file"
@@ -156,8 +144,6 @@ def main(
                 "Function run_finetuning_on_sagemaker was not found in "
                 "src.services.model.finetuning.sagemaker."
             )
-        from src.services.model.finetuning.sagemaker import run_finetuning_on_sagemaker
-        from pipeline.services.unsloth_finetune.sagemaker import run_finetuning_on_sagemaker
 
         run_finetuning_on_sagemaker(
             num_train_epochs=num_epochs,

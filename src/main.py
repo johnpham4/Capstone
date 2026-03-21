@@ -1,55 +1,49 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 
 from src.api.endpoints import register_routes
+from src.api.error_handler import register_error_handlers
 from src.config.settings.base import settings
+from src.infrastructures.database.session import init_db
+from src.infrastructures.redis.connection import RedisConnector
 
-# Create FastAPI application
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    if settings.INIT_DB_ON_STARTUP:
+        logger.info("Initializing database...")
+        await init_db()
+        logger.info("Database initialized successfully")
+    yield
+    await RedisConnector.close()
+    logger.info("Application shutdown")
+
 app = FastAPI(
     title="GeoUni Backend API",
     description="Geometry problem solving platform with AI-powered agents",
     version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
-    openapi_url="/openapi.json"
+    openapi_url="/openapi.json",
+    lifespan=lifespan
 )
 
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure appropriately for production
-    allow_credentials=True,
+    allow_origins=settings.cors_origins,
+    allow_credentials=settings.CORS_ALLOW_CREDENTIALS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # Register all API routes
 register_routes(app)
+register_error_handlers(app)
 
-logger.info("GeoUni Backend Application initialized")
-
-
-@app.get("/")
-async def root():
-    """Root endpoint with API information."""
-    return {
-        "service": "GeoUni Backend API",
-        "version": "2.0.0",
-        "architecture": "Layered Architecture",
-        "docs": "/docs",
-        "health": "/health"
-    }
-
-
-@app.get("/health")
-async def health():
-    """Global health check endpoint."""
-    return {
-        "status": "healthy",
-        "service": "GeoUni Backend",
-        "version": "2.0.0"
-    }
 
 
 if __name__ == "__main__":

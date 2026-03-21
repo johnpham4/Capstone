@@ -1,6 +1,0 @@
-parameters:
-  repo_id: "JO-KU/SynthGeo228K"
-  text_filename: "diagram_val.json"
-  split: "validation"
-
-  limit: 6000

@@ -1,3 +1,0 @@
-model_path: ""
-vq_model_path: "JO-KU/Geo-MAGVIT"
-output_dir: "./outputs/inference_test"

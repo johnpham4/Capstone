@@ -1,3 +1,0 @@
-parameters:
-  input_json_path: "./dataset/data/train.json"
-  output_dir: "./output_fixed"

@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 [
     {
         "instruction": "Tam giác ABC cân tại A, D là trung điểm AB, E là trung điểm AC, DE song song với BC",
         "answer": "(triangle (A B C) (isosceles A))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)"
     }
+=======
+[
+    {
+        "instruction": "Tam giác ABC cân tại A, D là trung điểm AB, E là trung điểm AC, DE song song với BC",
+        "answer": "(triangle (A B C) (isosceles A))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)"
+    }
+>>>>>>> minh-re
 ]

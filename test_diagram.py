@@ -1,5 +1,8 @@
+import io
 import json
-import matplotlib.pyplot as plt
+import re
+import sys
+import traceback
 from pathlib import Path
 import sys
 import io
@@ -74,12 +77,15 @@ def test_single_problem(instruction, dsl_answer, output_path):
 
         print(f"\nFinal loss: {optimizer.losses}")
         print(f"Final coordinates:")
+        print(f"\nFinal loss: {optimizer.losses}")
+        print(f"Final coordinates:")
         for name, point in diagram.points.items():
             print(f"  {name}: ({point.x:.4f}, {point.y:.4f})")
 
         renderer = MatplotlibDiagramRenderer()
-        fig, ax = renderer.render(diagram, save=True, show=False, filename=str(output_path))
+        fig, _ax = renderer.render(diagram, save=True, show=False, filename=str(output_path))
 
+        fig.suptitle(instruction, fontsize=23, wrap=True)
         fig.suptitle(instruction, fontsize=23, wrap=True)
 
         plt.savefig(output_path, dpi=150, bbox_inches='tight')

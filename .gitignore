@@ -18,8 +18,6 @@ env/
 .env
 .env.local
 
-images/
-
 # IDEs and Editors
 .vscode/
 .idea/
@@ -67,5 +65,4 @@ htmlcov/
 *.swp
 *~
 
-doc/Project_Report_Part_I_Revised.md
-dataset/data/splits/Nhi/draft.json
+.venv-win

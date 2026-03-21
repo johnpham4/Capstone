@@ -508,3 +508,11 @@ aws ecr-public get-login-password --region us-east-1 \
 Note: after download complete, you should restore back what you deleted
 
 ```
+
+
+# Hướng dẫn finetune aws
+1. đăng nhặp aws trên browser
+2. trên terminal chạy - aws login (không có thì tải)
+3. lên aws vào iam tạo user với iamfullaccess (không nhớ tên hỏi chat)
+4. chạy 2 lệnh make role trong makefile dể tạo role và key và gắn vào .env
+5. chuẩn bị data đầy đủ và chạy make finetune, không hiểu thì hỏi copilot
