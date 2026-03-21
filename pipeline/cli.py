@@ -43,6 +43,12 @@ from src.config.settings.base import settings
     help="Run finetuning on AWS SageMaker"
 )
 @click.option(
+    "--run-render-diagram",
+    is_flag=True,
+    default=False,
+    help="Render diagram images from generated DSL dataset"
+)
+@click.option(
     "--num-epochs",
     type=int,
     default=1,
