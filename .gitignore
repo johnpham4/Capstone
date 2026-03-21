@@ -66,4 +66,4 @@ htmlcov/
 *.swp
 *~
 
-test.asy
+.venv-win

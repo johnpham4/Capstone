@@ -114,6 +114,7 @@ def get_item(i: int):
         or item.get("instruction")
         or ""
     )
+    dsl_answer = item.get("answer") or item.get("dsl") or ""
     img_path = _item_image_path(item, id_)
     img_value = None
     image_note = ""
@@ -131,6 +132,12 @@ def get_item(i: int):
 **Problem**
 
 {problem_text}{image_note}
+
+**DSL**
+
+```text
+{dsl_answer}
+```
 """
     return text, img_value, i
 
