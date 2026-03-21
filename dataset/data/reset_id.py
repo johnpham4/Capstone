@@ -1,6 +1,6 @@
 import json
 
-file_path = "minh_data.json"
+file_path = "dataset/data/minh_data.json"
 
 with open(file_path, "r", encoding="utf-8") as f:
     problems = json.load(f)

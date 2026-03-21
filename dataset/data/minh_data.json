@@ -790,5 +790,157 @@
   {
     "id": 197,
     "problem": "Cho đường tròn (O) có dây AB cố định. Đường kính IK vuông góc AB tại N. M thuộc cung lớn AB, MK cắt AB tại D. IM cắt AB tại C. a) Chứng minh INDM nội tiếp; b) Chứng minh ND.NC = NI.NK; c) E là giao của ID và CK, chứng minh E thuộc (O); d) Tìm vị trí M để tích DM.DK lớn nhất."
+  },
+  {
+    "id": 198,
+    "problem": "Cho tam giác ABC có AB=AC, gọi M là trung điểm của cạnh BC. a. Chứng minh 2 tam giác ABM và ACM bằng nhau. b. Chứng minh AM vuông góc với BC."
+  },
+  {
+    "id": 199,
+    "problem": "Cho tam giác ABC. Qua A kẻ đường thẳng song song với BC, qua C kẻ đường thẳng song song với AB hai đường thẳng này cắt nhau tại D. a. Chứng minh tam giác ABC bằng tam giác ADC. b. Chứng minh hai tam giác ADB và CBD bằng nhau. c. Gọi O là giao điểm của AC và BD. Chứng minh hai tam giác ABO và COD bằng nhau."
+  },
+  {
+    "id": 200,
+    "problem": "Cho tam giác ABC có AB = AC. Tia phân giác của góc A cắt BC tại M. a) Chứng minh: ∆AMB = ∆AMC. b) Chứng minh M là trung điểm của cạnh BC. c) K là một điểm bất kì trên đoạn thẳng AM, đường thẳng CK cắt cạnh AB tại I. Vẽ IH vuông góc với BC tại H. Chứng minh góc BAC = 2BIH.,"
+  },
+  {
+    "id": 201,
+    "problem": "Cho tam giác ABC (AB < AC) có AM là phân giác của góc A (M thuộc BC). Trên AC lấy D sao cho AD = AB. a. Chứng minh: BM = MD. b. Gọi K là giao điểm của AB và DM. Chứng minh: ΔDAK = ΔBAC."
+  },
+  {
+    "id": 202,
+    "problem": "Cho tam giác ABC vuông tại A. Kẻ AH ⊥ BC. Kẻ HP vuông góc với AB và kéo dài để có PE = PH. Kẻ HQ vuông góc với AC và kéo dài để có QF = QH. 1/ Chứng minh ΔAPE = ΔAPH, ΔAQH = ΔAQF. 2/ Chứng minh E, A, F thẳng hàng và A là trung điểm của EF.,"
+  },
+  {
+    "id": 203,
+    "problem": "Cho tam giác ABC vuông ở C, có góc A bằng 60°, tia phân giác của góc BAC cắt BC ở E, kẻ EK vuông góc với AB (K thuộc AB), kẻ BD vuông góc với AE (D thuộc AE). a) Chứng minh AK = KB b) Chứng minh AD = BC"
+  },
+  {
+    "id": 204,
+    "problem": "Cho tam giác ABC AB=AC và M là trung điểm của AC và N là trung điểm của AB. BM và CN cắt nhau tại K a) Chứng minh ΔBNC = ΔCMB. b) Chứng minh ΔBKC có KB=KC."
+  },
+  {
+    "id": 205,
+    "problem": "Cho đoạn thẳng BC. Gọi I là trung điểm của BC. Trên đường trung trực của BC lấy điểm A (A khác I). 1. Chứng minh ΔAIB = ΔAIC. 2. Kẻ IH vuông góc với AB, kẻ IK vuông góc với AC. a) Chứng minh ΔAHK có 2 cạnh bằng nhau. b) Chứng minh HK//BC.,"
+  },
+  {
+    "id": 206,
+    "problem": "Cho tam giác ABC vuông tại A có BD là phân giác, kẻ DE vuông góc với BC (E thuộc BC). Gọi F là giao điểm của AB và DE. Chứng minh rằng: a) BD là đường trung trực của AE. b) DF = DC. c) AD < DC. d) AE // FC."
+  },
+  {
+    "id": 207,
+    "problem": "Cho biết góc BOA = 120°. Trong góc AOB kẻ tia phân giác OC. Trên tia OC lấy điểm M. Vẽ OA ⊥ HM, OB ⊥ MK. a. Tính số đo các góc HMO và góc KMO. b. Chứng minh hai tam giác MHO và MKO bằng nhau."
+  },
+  {
+    "id": 208,
+    "problem": "Cho ΔABC có A = 70°; B = 30°; C = 80°. Sắp xếp các cạnh của ∆ABC theo thứ tự từ nhỏ đến lớn."
+  },
+  {
+    "id": 209,
+    "problem": "Cho đoạn thẳng MN có độ dài bằng 6cm. Vẽ đường trung trực d của đoạn thẳng MN."
+  },
+  {
+    "id": 210,
+    "problem": "Cho ΔABC cân tại A, đường cao AH. Kẻ HM vuông góc AB tại M; HN vuông góc AC tại N. 1. Chứng minh: BH = CH. 2. Chứng minh: ΔAMN cân. 3. Gọi P là giao điểm của MH với AC, Q là giao điểm của NH với AB, I là trung điểm của PQ. Chứng minh ba điểm N; H; I thẳng hàng."
+  },
+  {
+    "id": 211,
+    "problem": "Cho tam giác ABC có AB = 4 cm, BC = 7 cm và AC = 6 cm. Sắp xếp các góc của ∆ABC theo thứ tự từ nhỏ đến lớn."
+  },
+  {
+    "id": 212,
+    "problem": "Cho đoạn thẳng MN có độ dài bằng 5cm. Vẽ đường trung trực d của đoạn thẳng MN."
+  },
+  {
+    "id": 213,
+    "problem": "Cho tam giác ABC vuông tại A (AB < AC). Trên cạnh BC lấy điểm N sao cho BA = BN. Từ B kẻ BE ⊥ AN (E ∈ AN). a) Chứng minh ΔABE = ΔNBE. b) Kẻ đường cao AH của tam giác ABC, trên tia đối của tia HA lấy điểm D sao cho HD = HA. Chứng minh BA = BD. c) Gọi K là giao điểm của AH và BE. Chứng minh NK // CA."
+  },
+  {
+    "id": 214,
+    "problem": "Cho tam giác MNP có MN = 6 cm, NP = 8 cm và MP = 10 cm. Hãy so sánh các góc của ∆MNP."
+  },
+  {
+    "id": 215,
+    "problem": "Cho đoạn thẳng HA có độ dài bằng 5 cm. Vẽ đường trung trực b của đoạn thẳng HA."
+  },
+  {
+    "id": 216,
+    "problem": "Cho tam giác MNP vuông tại M. Gọi A là trung điểm cuả NP. Trên tia đối của tia AM lấy điểm E sao cho AM = AE. Chứng minh: a) ΔAMN = ΔAEP. b) EP ⊥ MP. c) MA = 1/2 NP."
+  },
+  {
+    "id": 217,
+    "problem": "Cho tam giác ABC có AB = 5 cm, BC = 9 cm và CA = 13 cm. Sắp xếp các góc của ∆ABC theo thứ tự từ nhỏ đến lớn."
+  },
+  {
+    "id": 218,
+    "problem": "Cho đoạn thẳng AB có độ dài bằng 4cm. Vẽ đường trung trực d của đoạn thẳng AB."
+  },
+  {
+    "id": 219,
+    "problem": "Cho tam giác ABC vuông tại A (AB < AC). Tia phân giác của góc ABC cắt AC tại D. Từ D kẻ DE ⊥ BC tại E. a) Chứng minh ΔABD = ΔEBD. b) Gọi F là giao điểm của AB và DE. Chứng minh BF = BC. c) Kẻ đường cao AH của ΔAFC. Chứng minh AE ⊥ AH."
+  },
+  {
+    "id": 220,
+    "problem": "Cho ΔABC có A = 75°; B = 40°; C = 65°. Sắp xếp các cạnh của ∆ABC theo thứ tự từ lớn đến nhỏ."
+  },
+  {
+    "id": 221,
+    "problem": "Cho đoạn thẳng AB có độ dài bằng 4cm. Vẽ đường trung trực d của đoạn thẳng AB."
+  },
+  {
+    "id": 222,
+    "problem": "Cho ΔABC vuông tại A. Kẻ đường cao AH (H ∈ BC), trên tia đối của tia HA lấy điểm E sao cho HA = HE. a) Chứng minh ΔBHA = ΔBHE. b) Trên tia HC lấy điểm D sao cho HD = HB. Chứng minh ΔABD cân tại A. c) Chứng tỏ rằng D là trực tâm của ΔACE."
+  },
+  {
+    "id": 223,
+    "problem": "Cho tam giác ABC có AB = 4 cm, AC = 6 cm và BC = 5 cm. Sắp xếp các góc của ∆ABC theo thứ tự từ lớn đến nhỏ."
+  },
+  {
+    "id": 224,
+    "problem": "Cho đoạn thẳng MN có độ dài bằng 6cm. Vẽ đường trung trực d của đoạn thẳng MN."
+  },
+  {
+    "id": 225,
+    "problem": "Cho tam giác ABC vuông tại A (AB < AC). Tia phân giác của góc ABC cắt AC tại D. Trên cạnh BC lấy điểm E sao cho BA = BE. a) Chứng minh ΔBAD = ΔBED. b) Góc BED là góc gì? Vì sao? c) DE cắt AB tại điểm I. Chứng minh BD ⊥ IC."
+  },
+  {
+    "id": 226,
+    "problem": "Cho ΔABC có A = 45°; B = 60°; C = 75°. Sắp xếp các cạnh của ∆ABC theo thứ tự từ lớn đến nhỏ."
+  },
+  {
+    "id": 227,
+    "problem": "Cho đoạn thẳng MN có độ dài bằng 6cm. Vẽ đường trung trực d của đoạn thẳng MN."
+  },
+  {
+    "id": 228,
+    "problem": "Cho ABC có AB < AC. Kẻ tia phân giác AD của góc BAC (D ∈ BC), trên cạnh AC lấy điểm E sao cho AE = AB. a) Chứng minh ΔADB = ΔADE. b) Chứng minh BD = DE. c) Trên tia AB lấy điểm F sao cho AF = AC. Chứng minh rằng ΔFDC cân."
+  },
+  {
+    "id": 229,
+    "problem": "Cho tam giác ABC có A = 80°; C = 28°; B = 72°. Sắp xếp các cạnh của ΔABC theo thứ tự tăng dần."
+  },
+  {
+    "id": 230,
+    "problem": "Cho đoạn thẳng MN có độ dài bằng 8cm. Vẽ đường trung trực d của đoạn thẳng MN."
+  },
+  {
+    "id": 231,
+    "problem": "Cho ΔABC vuông tại A. Trên cạnh BC lấy điểm D sao cho BA = BD. Từ D vẽ Dx ⊥ BC, Dx cắt AC tại H. a. Chứng minh ΔHBA = ΔHBD. b. Tia Dx cắt AB tại I. Chứng minh tam giác IBC cân. c. Gọi M là trung điểm IC, chứng minh ba điểm B, H, M thẳng hàng."
+  },
+  {
+    "id": 232,
+    "problem": "Cho tam giác ABC có AB = 10 cm, BC = 12 cm và CA = 7 cm. Sắp xếp các góc của ∆ABC theo thứ tự từ nhỏ đến lớn."
+  },
+  {
+    "id": 233,
+    "problem": "Cho đoạn thẳng AB có độ dài bằng 6cm. Vẽ đường trung trực d của đoạn thẳng AB."
+  },
+  {
+    "id": 234,
+    "problem": "Cho tam giác nhọn ABC. Đường trung tuyến AM (M ∈ BC). Trên tia đối của tia MA lấy điểm D sao cho MA = MD. a) Chứng minh ΔMAB = ΔMDC. b) Chứng minh CD // AB. c) Kẻ đường trung tuyến BN (N ∈ AC). Trên tia đối của tia NB lấy điểm E sao cho NB = NE. Chứng minh ba điểm E, C, D thẳng hàng."
+  },
+  {
+    "id": 235,
+    "problem": "Cho ΔABC vuông tại A. Trên cạnh BC lấy điểm M sao cho AB = MB. Từ M vẽ đường thẳng vuông góc với BC, cắt AC tại N. Gọi P là giao điểm của hai đường thẳng AB và MN. a) Chứng minh ΔABN = ΔMBN. b) Chứng minh ΔPNC cân tại N. c) Chứng minh AM // PC."
   }
 ]
