@@ -87,8 +87,6 @@ env/
 .env
 .env.local
 
-images/
-
 # IDEs and Editors
 .vscode/
 .idea/
@@ -136,5 +134,4 @@ htmlcov/
 *.swp
 *~
 
->>>>>>> 6cf03dda8dad8bb8fa1226b8b4e9166c3f287527
-test.asy
+.venv-win

@@ -31,10 +31,22 @@ from src.config.settings.base import settings
     help="Generate GMBL dataset from Vietnamese captions"
 )
 @click.option(
+    "--run-generate-questions",
+    is_flag=True,
+    default=False,
+    help="Generate question dataset from Vietnamese captions"
+)
+@click.option(
     "--run-finetune",
     is_flag=True,
     default=False,
     help="Run finetuning on AWS SageMaker"
+)
+@click.option(
+    "--run-render-diagram",
+    is_flag=True,
+    default=False,
+    help="Render diagram images from generated DSL dataset"
 )
 @click.option(
     "--num-epochs",
@@ -65,13 +77,20 @@ def main(
     run_prepare_data: bool = False,
     run_upload_dataset: bool = False,
     run_generate_gmbl: bool = False,
+    run_generate_questions: bool = False,
     run_finetune: bool = False,
     num_epochs: int = 1,
     batch_size: int = 2,
     learning_rate: float = 2e-4,
     dataset_workspace: str = "minn4",
 ) -> None:
-    assert run_prepare_data or run_upload_dataset or run_generate_gmbl or run_finetune, "Please use one of the options"
+    assert (
+        run_prepare_data
+        or run_upload_dataset
+        or run_generate_gmbl
+        or run_generate_questions
+        or run_finetune
+    ), "Please use one of the options"
 
     pipeline_args = {"enable_cache": not no_cache}
     pipeline_dir = Path(__file__).resolve().parent
@@ -103,6 +122,15 @@ def main(
         logger.info("Starting GMBL dataset generation pipeline")
         from pipeline.pipelines.dataset_generation import dataset_generation_pipeline
         dataset_generation_pipeline.with_options(**pipeline_args)()
+
+    if run_generate_questions:
+        pipeline_args["config_path"] = pipeline_dir / "configs" / "question_generation.yaml"
+        assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
+        pipeline_args["run_name"] = f"generate_questions_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
+
+        logger.info("Starting question generation pipeline")
+        from pipeline.pipelines.question_generation import question_generation_pipeline
+        question_generation_pipeline.with_options(**pipeline_args)()
 
     if run_finetune:
         assert settings.HF_TOKEN, "HF_TOKEN required. Set it in .env file"

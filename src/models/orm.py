@@ -111,7 +111,7 @@ class SolutionModel(Base, TimestampMixin):
 
 
 class RegistryModel(Base, TimestampMixin):
-    __table__ = "registry"
+    __tablename__ = "registry"
 
     id: Mapped[str] = mapped_column(
         String(36), primary_key=True, default=_generate_uuid

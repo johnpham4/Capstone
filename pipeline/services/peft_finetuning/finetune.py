@@ -11,6 +11,7 @@ from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
     BitsAndBytesConfig,
+    EarlyStoppingCallback,
     TextStreamer,
 )
 from trl import SFTConfig, SFTTrainer
@@ -79,18 +80,34 @@ def load_and_prepare_dataset(
     dataset_huggingface_repo_name: str,
     is_dummy: bool,
 ):
-    dataset = load_dataset(f"{dataset_huggingface_workspace}/{dataset_huggingface_repo_name}", split="train")
+    dataset_dict = load_dataset(f"{dataset_huggingface_workspace}/{dataset_huggingface_repo_name}")
 
-    if "instruction" not in dataset.column_names or "output" not in dataset.column_names:
+    if "train" not in dataset_dict:
+        raise ValueError("Dataset must contain a 'train' split.")
+
+    train_dataset = dataset_dict["train"]
+    eval_dataset = dataset_dict.get("validation", dataset_dict.get("val"))
+
+    if "instruction" not in train_dataset.column_names or "output" not in train_dataset.column_names:
         raise ValueError("Dataset must contain 'instruction' and 'output' columns.")
 
-    if "image" in dataset.column_names:
-        dataset = dataset.remove_columns("image")
+    if "image" in train_dataset.column_names:
+        train_dataset = train_dataset.remove_columns("image")
+
+    if eval_dataset is not None and "image" in eval_dataset.column_names:
+        eval_dataset = eval_dataset.remove_columns("image")
 
     if is_dummy:
-        upper_bound = min(400, len(dataset))
-        dataset = dataset.select(range(upper_bound))
-        print(f"Dummy mode enabled. Training with {upper_bound} samples.")
+        train_upper_bound = min(400, len(train_dataset))
+        train_dataset = train_dataset.select(range(train_upper_bound))
+        if eval_dataset is not None:
+            eval_upper_bound = min(100, len(eval_dataset))
+            eval_dataset = eval_dataset.select(range(eval_upper_bound))
+            print(
+                f"Dummy mode enabled. Training with {train_upper_bound} samples, eval with {eval_upper_bound} samples."
+            )
+        else:
+            print(f"Dummy mode enabled. Training with {train_upper_bound} samples.")
 
     def to_prompt_completion(batch: dict) -> dict:
         prompts = []
@@ -112,8 +129,14 @@ def load_and_prepare_dataset(
 
         return {"prompt": prompts, "completion": completions}
 
-    dataset = dataset.map(to_prompt_completion, batched=True, remove_columns=dataset.column_names)
-    return dataset
+    train_dataset = train_dataset.map(to_prompt_completion, batched=True, remove_columns=train_dataset.column_names)
+
+    if eval_dataset is not None:
+        if "instruction" not in eval_dataset.column_names or "output" not in eval_dataset.column_names:
+            raise ValueError("Validation split must contain 'instruction' and 'output' columns.")
+        eval_dataset = eval_dataset.map(to_prompt_completion, batched=True, remove_columns=eval_dataset.column_names)
+
+    return train_dataset, eval_dataset
 
 
 def finetune(
@@ -123,16 +146,21 @@ def finetune(
     dataset_huggingface_repo_name: str = "text2dsl",
     max_seq_length: int = 2048,
     load_in_4bit: bool = True,
-    lora_rank: int = 16,
-    lora_alpha: int = 32,
+    lora_rank: int = 32,
+    lora_alpha: int = 64,
     lora_dropout: float = 0.05,
     target_modules: List[str] = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
-    learning_rate: float = 2e-4,
-    num_train_epochs: int = 1,
-    per_device_train_batch_size: int = 2,
+    learning_rate: float = 1e-4,
+    num_train_epochs: int = 6,
+    per_device_train_batch_size: int = 4,
+    per_device_eval_batch_size: int = 4,
     gradient_accumulation_steps: int = 4,
     weight_decay: float = 0.01,
-    warmup_steps: int = 10,
+    warmup_ratio: float = 0.05,
+    seed: int = 3407,
+    enable_early_stopping: bool = True,
+    early_stopping_patience: int = 2,
+    early_stopping_threshold: float = 0.0,
     is_dummy: bool = False,
 ) -> tuple:
     use_bf16 = _supports_bf16()
@@ -147,13 +175,29 @@ def finetune(
         target_modules,
     )
 
-    dataset = load_and_prepare_dataset(
+    train_dataset, eval_dataset = load_and_prepare_dataset(
         tokenizer=tokenizer,
         dataset_huggingface_workspace=dataset_huggingface_workspace,
         dataset_huggingface_repo_name=dataset_huggingface_repo_name,
         is_dummy=is_dummy,
     )
-    print(f"Loaded {len(dataset)} formatted samples for training.")
+
+    print(f"Train samples: {len(train_dataset)}")
+    if eval_dataset is not None:
+        print(f"Eval samples: {len(eval_dataset)}")
+    else:
+        print("Eval split not found (expected 'validation' or 'val').")
+
+    # EarlyStoppingCallback requires evaluation + best-model tracking.
+    should_eval = eval_dataset is not None
+    callbacks = []
+    if should_eval and enable_early_stopping:
+        callbacks.append(
+            EarlyStoppingCallback(
+                early_stopping_patience=early_stopping_patience,
+                early_stopping_threshold=early_stopping_threshold,
+            )
+        )
 
     sft_config = SFTConfig(
         learning_rate=learning_rate,
@@ -163,9 +207,15 @@ def finetune(
         optim="paged_adamw_8bit" if load_in_4bit else "adamw_torch",
         weight_decay=weight_decay,
         lr_scheduler_type="cosine",
-        warmup_steps=warmup_steps,
+        warmup_ratio=warmup_ratio,
         logging_steps=10,
         save_strategy="epoch",
+        evaluation_strategy="epoch" if should_eval else "no",
+        per_device_eval_batch_size=per_device_eval_batch_size,
+        load_best_model_at_end=should_eval,
+        metric_for_best_model="eval_loss" if should_eval else None,
+        greater_is_better=False if should_eval else None,
+        save_total_limit=2,
         bf16=use_bf16,
         fp16=False,
         report_to="comet_ml" if os.getenv("COMET_API_KEY") else "none",
@@ -173,7 +223,7 @@ def finetune(
         dataloader_pin_memory=True,
         remove_unused_columns=False,
         output_dir=output_dir,
-        seed=3407,
+        seed=seed,
         max_seq_length=max_seq_length,
         packing=False,
         completion_only_loss=True,
@@ -182,8 +232,10 @@ def finetune(
     trainer = SFTTrainer(
         model=model,
         tokenizer=tokenizer,
-        train_dataset=dataset,
+        train_dataset=train_dataset,
+        eval_dataset=eval_dataset,
         args=sft_config,
+        callbacks=callbacks,
     )
 
     trainer.train()
@@ -252,11 +304,16 @@ def check_if_huggingface_model_exists(model_id: str, default_value: str = "nvidi
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name", type=str, default="nvidia/AceMath-1.5B-Instruct")
-    parser.add_argument("--num_train_epochs", type=int, default=1)
-    parser.add_argument("--per_device_train_batch_size", type=int, default=2)
+    parser.add_argument("--num_train_epochs", type=int, default=6)
+    parser.add_argument("--per_device_train_batch_size", type=int, default=4)
+    parser.add_argument("--per_device_eval_batch_size", type=int, default=4)
     parser.add_argument("--gradient_accumulation_steps", type=int, default=4)
-    parser.add_argument("--learning_rate", type=float, default=2e-4)
-    parser.add_argument("--warmup_steps", type=int, default=10)
+    parser.add_argument("--learning_rate", type=float, default=1e-4)
+    parser.add_argument("--warmup_ratio", type=float, default=0.05)
+    parser.add_argument("--seed", type=int, default=3407)
+    parser.add_argument("--enable_early_stopping", action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument("--early_stopping_patience", type=int, default=2)
+    parser.add_argument("--early_stopping_threshold", type=float, default=0.0)
     parser.add_argument("--dataset_huggingface_workspace", type=str, default="minn4")
     parser.add_argument("--dataset_huggingface_repo_name", type=str, default="text2dsl")
     parser.add_argument("--model_output_huggingface_workspace", type=str, default="minn4")
@@ -270,9 +327,14 @@ if __name__ == "__main__":
     print(f"Model: '{args.model_name}'")
     print(f"Num training epochs: '{args.num_train_epochs}'")
     print(f"Per device train batch size: '{args.per_device_train_batch_size}'")
+    print(f"Per device eval batch size: '{args.per_device_eval_batch_size}'")
     print(f"Gradient accumulation steps: '{args.gradient_accumulation_steps}'")
     print(f"Learning rate: {args.learning_rate}")
-    print(f"Warmup steps: {args.warmup_steps}")
+    print(f"Warmup ratio: {args.warmup_ratio}")
+    print(f"Seed: {args.seed}")
+    print(f"Early stopping enabled: {args.enable_early_stopping}")
+    print(f"Early stopping patience: {args.early_stopping_patience}")
+    print(f"Early stopping threshold: {args.early_stopping_threshold}")
     print(f"Dataset workspace: '{args.dataset_huggingface_workspace}'")
     print(f"Dataset repo: '{args.dataset_huggingface_repo_name}'")
     print(f"Model output workspace: '{args.model_output_huggingface_workspace}'")
@@ -290,9 +352,14 @@ if __name__ == "__main__":
         dataset_huggingface_repo_name=args.dataset_huggingface_repo_name,
         num_train_epochs=args.num_train_epochs,
         per_device_train_batch_size=args.per_device_train_batch_size,
+        per_device_eval_batch_size=args.per_device_eval_batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
         learning_rate=args.learning_rate,
-        warmup_steps=args.warmup_steps,
+        warmup_ratio=args.warmup_ratio,
+        seed=args.seed,
+        enable_early_stopping=args.enable_early_stopping,
+        early_stopping_patience=args.early_stopping_patience,
+        early_stopping_threshold=args.early_stopping_threshold,
     )
 
     inference(model=model, tokenizer=tokenizer)
