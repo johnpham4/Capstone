@@ -8,6 +8,7 @@ import sys
 import io
 import argparse
 import yaml
+import matplotlib.pyplot as plt
 
 # Fix encoding for Windows terminal
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
