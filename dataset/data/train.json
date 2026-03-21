@@ -10800,4 +10800,4 @@
     "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(segment A C)\n(equal-distance A B A C)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))\n(equal-distance O A O B)",
     "problem": "Cho tam giác ABC cân tại A với AB = AC, đường thẳng là đường trung trực của đoạn thẳng AB, O là tâm của đường tròn ngoại tiếp tam giác ABC. Tính bán kính R của đường tròn ngoại tiếp O."
   }
-
+]
