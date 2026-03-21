@@ -1,0 +1,65 @@
+[
+  {
+    "image_index": 101645,
+    "image_dir": "images/img_101645.png",
+    "source_position": 251,
+    "instruction": "Đường tròn O, hai đường thẳng đi qua điểm O",
+    "dsl": "(define O point)\n(circle O)\n(define A point (segment O O))\n(define B point (segment O O))\n(segment A B)"
+  },
+  {
+    "image_index": 103206,
+    "image_dir": "images/img_103206.png",
+    "source_position": 266,
+    "instruction": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A",
+    "dsl": "(define A point)\n(define B point)\n(circle A)\n(circle B)\n(tangent B (circle A) AB)"
+  },
+  {
+    "image_index": 114174,
+    "image_dir": "images/img_114174.png",
+    "source_position": 342,
+    "instruction": "Đường tròn O, đường thẳng là đi qua điểm O",
+    "dsl": "(define O point)\n(circle O)\n(define A point (segment O O))\n(segment O A)"
+  },
+  {
+    "image_index": 114503,
+    "image_dir": "images/img_114503.png",
+    "source_position": 378,
+    "instruction": "Đường tròn O, hai đường thẳng đi qua điểm O",
+    "dsl": "(define O point)\n(circle O)\n(define A point (segment O O))\n(define B point (segment O O))\n(segment A B)"
+  },
+  {
+    "image_index": 114128,
+    "image_dir": "images/img_114128.png",
+    "source_position": 422,
+    "instruction": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A",
+    "dsl": "(define A point)\n(define B point)\n(circle A)\n(circle B)\n(tangent B (circle A) AB)"
+  },
+  {
+    "image_index": 113221,
+    "image_dir": "images/img_113221.png",
+    "source_position": 450,
+    "instruction": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A",
+    "dsl": "(define A point)\n(circle A)\n(define B point)\n(circle B)\n(tangent B (circle A) AB)"
+  },
+  {
+    "image_index": 114657,
+    "image_dir": "images/img_114657.png",
+    "source_position": 457,
+    "instruction": "Đường tròn O, đường thẳng là đi qua điểm O",
+    "dsl": "(define O point)\n(circle O)\n(define A point (segment O O))\n(segment O A)"
+  },
+  {
+    "image_index": 110653,
+    "image_dir": "images/img_110653.png",
+    "source_position": 473,
+    "instruction": "Đường tròn O, đường thẳng là đi qua điểm O",
+    "dsl": "(define O point)\n(circle O)\n(define A point (segment O O))\n(segment O A)"
+  },
+  {
+    "image_index": 112790,
+    "image_dir": "images/img_112790.png",
+    "source_position": 494,
+    "instruction": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A, đường thẳng tiếp xúc với đường tròn A",
+    "dsl": "(define A point)\n(circle A)\n(define B point)\n(circle B)\n(tangent B (circle A) AB)"
+  }
+]

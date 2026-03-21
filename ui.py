@@ -7,9 +7,8 @@ from datetime import datetime
 import gradio as gr
 from PIL import Image
 
-DEFAULT_JSON_PATH = "dataset/Minh/Review/review_fail.json"
+DEFAULT_JSON_PATH = "dataset/Minh/full.json"
 DEFAULT_IMAGE_FOLDER = "dataset/Minh/images"
-
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Gradio reviewer for geometry samples")
@@ -186,13 +185,6 @@ def get_item(i: int):
 
 {problem_text}{image_note}
 
-**Review Info**
-
-- Status: {status}
-- Codes: {codes_text}
-- Short reason: {short_reason}
-- Action: {action}
-
 **DSL**
 
 ```text
@@ -280,4 +272,3 @@ with gr.Blocks() as demo:
 
 
 demo.launch()
-
