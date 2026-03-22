@@ -1,9 +1,0 @@
-[
-  {
-    "image_index": 9,
-    "image_dir": "",
-    "source_position": 9,
-    "instruction": "Cho ΔABC vuông tại A có AB = 12 cm, AC = 16 cm, đường cao HA. Tia phân giác của góc ABC lần lượt cắt AH và AC tại M và N. Đường thẳng qua H song song với BN và cắt AC tại I. a) Chứng minh ΔABC ∽ ΔHBA. b) Tính độ dài các cạnh BC, AH, BH. c) Chứng minh tam giác AMN cân tại A và AM.AB = MH.BC. d) Chứng minh: AM² = NI.NC",
-    "dsl": "(triangle (A B C) (right A))\n(segment A B)\n(segment A C)\n(segment B C)\n(distance A B 1.2)\n(distance A C 1.6)\n(define H point (projection A (segment B C)))\n(segment A H)\n(define M point (segment A H))\n(define N point (segment A C))\n(segment B N)\n(define I point (segment A C))\n(segment H I)\n(parallel (segment H I) (segment B N))\n(equal-distance A M A N)\n(equal-distance N I N C)"
-  }
-]
