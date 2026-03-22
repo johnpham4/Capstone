@@ -196,9 +196,9 @@ TRÁNH ĐOẠN CON CHỒNG ĐOẠN MẸ:
 1. HÌNH (SHAPES)
    • Tam giác: (triangle (A B C) [type])
      - Thường: (triangle (A B C))
-     - Cân: (triangle (A B C) (isosceles A))
-     - Vuông: (triangle (A B C) (right B))
-     - Vuông cân: (triangle (A B C) (right_isosceles B))
+     - Cân tại A: (triangle (A B C) (isosceles A))
+     - Vuông tại B : (triangle (A B C) (right B))
+     - Vuông cân tại B: (triangle (A B C) (right_isosceles B))
      - Đều: (triangle (A B C) (equilateral))
 
    • Tứ giác: (quadrilateral (A B C D))

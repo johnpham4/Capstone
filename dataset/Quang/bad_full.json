@@ -1,0 +1,762 @@
+[
+  {
+    "id": "100291",
+    "reason": "sai góc",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "100631",
+    "reason": "chưa khai báo segment đã define các điểm trên đó",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "100771",
+    "reason": "đề bảo là đường thẳng cắt đường tròn tại 2 điểm A B chứ chưa bảo là vẽ đoạn thẳng AB mà",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "100985",
+    "reason": "AB chưa nằm trên đường tròn",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "101021",
+    "reason": "trung trực",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "101225",
+    "reason": "E chưa nằm trên đoạn AC",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "10136",
+    "reason": "",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "101659",
+    "reason": "chưa cân tại A, thiếu dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "102305",
+    "reason": "",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "102373",
+    "reason": "đề ko rõ ràng",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "102614",
+    "reason": "sai dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "102788",
+    "reason": "sai góc",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "103320",
+    "reason": "2 đường tròn",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "103440",
+    "reason": "chưa khai báo segment đã define điểm trên đó",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "103482",
+    "reason": "chưa có dsl AB = AC",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "103599",
+    "reason": "sai",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "103961",
+    "reason": "sai dsl (angle-measure D A E 90)",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "104484",
+    "reason": "ab chưa là đường kính",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "104714",
+    "reason": "đề ko rõ",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "105579",
+    "reason": "sai góc dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "106046",
+    "reason": "thiếu segment D E",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "106512",
+    "reason": "",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "107054",
+    "reason": "sai góc vuông",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "107613",
+    "reason": "cứ sai sai gì ấy",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "107841",
+    "reason": "nối cd",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "108060",
+    "reason": "đề nhắc AP mà ko nối",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "108174",
+    "reason": "nối de",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "10836",
+    "reason": "sai góc vuông",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "108621",
+    "reason": "ko thấy gì để check",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "108711",
+    "reason": "sai dsl góc ABC, điểm D tự sinh",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "108875",
+    "reason": "sai góc vuông",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "109217",
+    "reason": "đường thẳng đi qua điểm sai",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "109580",
+    "reason": "sai dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "109652",
+    "reason": "chưa vuông",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "109936",
+    "reason": "",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "11014",
+    "reason": "dư 1 đường tròn",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "110304",
+    "reason": "",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "110591",
+    "reason": "ko thấy gì để check",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "110915",
+    "reason": "",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "111118",
+    "reason": "nên thêm tam giác cân",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "111224",
+    "reason": "hình nhỏ",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "111755",
+    "reason": "ko thấy nối hoặc do xấu quá ko thấy gì",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "11185",
+    "reason": "sai dsl (nếu chỉ là đường thẳng k có vuông góc thì thêm prompt tạo điểm cuối)",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "112366",
+    "reason": "",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "112402",
+    "reason": "đề ko rõ ràng",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "112556",
+    "reason": "sai hình",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "113061",
+    "reason": "tam giác nhỏ",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "113364",
+    "reason": "",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "113831",
+    "reason": "sai dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "113968",
+    "reason": "thiếu ab = ac",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "114372",
+    "reason": "chưa cân tại A, thiếu dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "114601",
+    "reason": "đề nhắc CAF mà ko nối AF",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "11471",
+    "reason": "sai góc dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "114730",
+    "reason": "sai góc dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "115225",
+    "reason": "sai góc dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "115843",
+    "reason": "sai góc dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "116111",
+    "reason": "",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "116311",
+    "reason": "sai dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "116538",
+    "reason": "nối đoạn CD",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "116810",
+    "reason": "sai góc dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "117246",
+    "reason": "sai, đề bảo đường thẳng d với e mà ko vẽ",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "118433",
+    "reason": "",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "119274",
+    "reason": "sai góc dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "11949",
+    "reason": "test lại vẽ thêm cái segment DC",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "119538",
+    "reason": "đề có nhắc AP mà ko nối AP",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "119597",
+    "reason": "sai góc",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "119611",
+    "reason": "sai góc dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "120283",
+    "reason": "sai góc dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "120297",
+    "reason": "hình vẽ bé",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "120792",
+    "reason": "vẽ 1 đường tròn thôi",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "120796",
+    "reason": "",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "120856",
+    "reason": "sai góc vuông",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "120889",
+    "reason": "chưa khai báp segment A B mà đã define D trên A B -- >Sai",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "121048",
+    "reason": "hình nhỏ",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "1212",
+    "reason": "đề ko rõ ràng đường trung trực là đường nào",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "121577",
+    "reason": "sai trung trực",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "12182",
+    "reason": "",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "121970",
+    "reason": "",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "1220",
+    "reason": "sai góc dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "122164",
+    "reason": "chưa cắt O",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "122283",
+    "reason": "đề không rõ ràng",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "122378",
+    "reason": "nên thêm thành tam giác cân",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "122456",
+    "reason": "sai góc dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "122659",
+    "reason": "đề ko rõ ràng",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "122690",
+    "reason": "",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "122823",
+    "reason": "sai góc dsl",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "123023",
+    "reason": "sai góc",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "123034",
+    "reason": "sai",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "123065",
+    "reason": "sai trung trực",
+    "updated_at": "2026-03-22T15:17:25Z"
+  },
+  {
+    "id": "100375",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "10120",
+    "reason": "chưa nối AF",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "101330",
+    "reason": "chưa nối CD",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "101530",
+    "reason": "không nối DE",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "101567",
+    "reason": "chưa có điểm bắt đầu và kết của đường trung trực",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "101937",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "102260",
+    "reason": "điểm N chưa nằm trên đường tròn",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "102410",
+    "reason": "chưa nối DE",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "102727",
+    "reason": "A k nằm trên đg tròn",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "103171",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "103258",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "103294",
+    "reason": "hình nhỏ",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "104320",
+    "reason": "",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "104419",
+    "reason": "hình nhỏ",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "104458",
+    "reason": "hình nhỏ",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "104479",
+    "reason": "góc vuông trong hình chưa vuôg",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "104586",
+    "reason": "sai góc dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "104604",
+    "reason": "sai góc",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "10579",
+    "reason": "sai đường trung trực",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "106502",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "106535",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "106909",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "107500",
+    "reason": "sai đường vuông góc (chủ yếu do đề nhảm)",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "108048",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "108631",
+    "reason": "tự sinh điểm P, đường trung trực của C chưa đụng AB",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "109009",
+    "reason": "sai góc dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "109186",
+    "reason": "điểm C chưa nằm trên đường tròn",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "109322",
+    "reason": "hình nhỏ, tự sinh điểm",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "109342",
+    "reason": "",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "110142",
+    "reason": "k có đg tròn E tự sinh đường tròn O",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "110672",
+    "reason": "chưa nối DE",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "111209",
+    "reason": "",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "111280",
+    "reason": "chưa nối CD, tự sinh C1,C2",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "1116",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "111913",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "111979",
+    "reason": "điểm N chưa nằm trên đường tròn",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "112155",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "112199",
+    "reason": "AB chyaw bằng AC, dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "112276",
+    "reason": "",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "112709",
+    "reason": "không nối CD",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "112710",
+    "reason": "sai góc vuông dsl, N chưa nằm trên đg tròn",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "112975",
+    "reason": "AB k bằng AC",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "113525",
+    "reason": "",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "11377",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "11599",
+    "reason": "",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "117038",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "117437",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "118041",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "118569",
+    "reason": "hình nhỏ",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "11892",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "118947",
+    "reason": "chưa có đg thẳng qua C vuông góc",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "119181",
+    "reason": "chưa nối DE",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "120625",
+    "reason": "D bị trùng A",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "12072",
+    "reason": "hình nhỏ",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "121335",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "121468",
+    "reason": "góc B k vuông",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "121640",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "12191",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "122156",
+    "reason": "sai góc vuông dsl",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "12244",
+    "reason": "góc B chưa vuông",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "122677",
+    "reason": "không nối AF",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "122746",
+    "reason": "chưa nối CD",
+    "updated_at": "2026-03-22T16:20:34Z"
+  },
+  {
+    "id": "123248",
+    "reason": "2 tam giác bằng nhau nhưng dsl là 2 góc bằng nhau",
+    "updated_at": "2026-03-22T16:20:34Z"
+  }
+]
