@@ -1,3 +1,0 @@
-parameters:
-  input_json_path: "./dataset/Minh/full.json"
-  output_dir: "./dataset/Minh/images"

@@ -462,4 +462,3 @@ By using this Makefile, you can easily manage the entire lifecycle of your SageM
 
 ## Note
 Ensure you have the necessary permissions in your AWS account to create IAM users and roles, deploy SageMaker endpoints, and perform inference before running these scripts.
->>>>>>>> 6cf03dda8dad8bb8fa1226b8b4e9166c3f287527:pipeline/services/unsloth_finetune/Readme.md

@@ -1,13 +1,3 @@
-<<<<<<< HEAD:configs/training.yaml
-parameters:
-  num_train_epochs: 1
-  per_device_train_batch_size: 2
-  learning_rate: 2.0e-4
-  dataset_huggingface_workspace: "minn4"
-  dataset_huggingface_repo_name: "text2dsl"
-
-
-=======
 parameters:
   num_train_epochs: 1
   per_device_train_batch_size: 2
@@ -20,4 +10,3 @@ parameters:
   alias: str = ""
 
 
->>>>>>> 6cf03dda8dad8bb8fa1226b8b4e9166c3f287527:pipeline/configs/training.yaml

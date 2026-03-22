@@ -43,12 +43,6 @@ from src.config.settings.base import settings
     help="Run finetuning on AWS SageMaker"
 )
 @click.option(
-    "--run-render-diagram",
-    is_flag=True,
-    default=False,
-    help="Render diagram images from generated DSL dataset"
-)
-@click.option(
     "--num-epochs",
     type=int,
     default=1,
@@ -138,11 +132,7 @@ def main(
 
         logger.info(f"Configuration: epochs={num_epochs}, batch_size={batch_size}, lr={learning_rate}")
 
-<<<<<<< HEAD:tools/run.py
-        from src.services.model.finetuning.sagemaker import run_finetuning_on_sagemaker
-=======
         from pipeline.services.unsloth_finetune.sagemaker import run_finetuning_on_sagemaker
->>>>>>> 6cf03dda8dad8bb8fa1226b8b4e9166c3f287527:pipeline/cli.py
 
         run_finetuning_on_sagemaker(
             num_train_epochs=num_epochs,
