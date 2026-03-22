@@ -25,7 +25,7 @@ DEFAULT_OPTIMIZER_OPTS = {
 }
 
 INPUT_JSON_PATH = "dataset/data/train_outsrc.json"
-OUTPUT_DIR = "dataset/outsrc"
+OUTPUT_DIR = "outsrc"
 
 
 def _extract_image_index(image_dir: str | None) -> int | None:
@@ -108,6 +108,11 @@ def main():
 
     try:
         for source_position, problem in enumerate(problems, 1):
+            if source_position != 1 and source_position != 9:
+                continue
+            if source_position == 10:
+                print("==============")
+                break
             image_dir = problem.get("image_dir")
             image_index = _extract_image_index(image_dir)
 

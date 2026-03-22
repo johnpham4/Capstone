@@ -2,121 +2,121 @@
   {
     "image_dir": "",
     "instruction": "Cho hình thang ABCD (AB // CD). Gọi M, N, P, Q lần lượt là trung điểm của các đoạn thẳng AD, BC, AC, BD. a) Chứng minh bốn điểm M, N, P, Q nằm trên một đường thẳng. b) Tính MN, PQ, biết các cạnh đáy của hình thang AB=a; CD=b (b>a). c) Chứng minh rằng nếu MQ = PQ = PN thì b=2a.",
-    "answer": "(trapezoid (A B C D))\n(define M point (midpoint A D))\n(define N point (midpoint B C))\n(define P point (midpoint A C))\n(define Q point (midpoint B D))\n(segment A B)\n(segment C D)\n(segment A D)\n(segment B C)\n(segment A C)\n(segment B D)\n(segment M N)\n(segment P Q)\n(equal-distance M N P Q)",
+    "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(segment A D)\n(segment B C)\n(segment A C)\n(segment B D)\n(define M point (midpoint A D))\n(define N point (midpoint B C))\n(define P point (midpoint A C))\n(define Q point (midpoint B D))\n(segment M N)\n(segment P Q)\n(equal-distance M N P Q)\n(segment M Q)\n(segment Q P)\n(segment P N)",
     "id": 0
   },
   {
     "image_dir": "",
     "instruction": "Cho hình thoi ABCD có 𝐴̂ = 60. Gọi E, F, G, H lần lượt là trung điểm của các cạnh AB, BC, CD, DA. Chứng minh đa giác EBFGDH là lục giác đều.",
-    "answer": "(rhombus (A B C D))\n(angle-measure A B C 60)\n(define E point (midpoint A B))\n(define F point (midpoint B C))\n(define G point (midpoint C D))\n(define H point (midpoint D A))\n(segment A B)\n(segment B C)\n(segment C D)\n(segment D A)\n(segment E F)\n(segment F G)\n(segment G H)\n(segment H E)\n(equal-distance E F G H)\n(equal-distance E B E H)\n(equal-distance F B F G)\n(equal-distance G C G H)\n(equal-distance H D H E)",
+    "answer": "(rhombus (A B C D))\n(angle-measure D A B 60)\n(segment A B)\n(segment B C)\n(segment C D)\n(segment D A)\n(define E point (midpoint A B))\n(define F point (midpoint B C))\n(define G point (midpoint C D))\n(define H point (midpoint D A))\n(segment E B)\n(segment B F)\n(segment F G)\n(segment G D)\n(segment D H)\n(segment H E)\n(equal-distance E B B F)\n(equal-distance E B F G)\n(equal-distance E B G D)\n(equal-distance E B D H)\n(equal-distance E B H E)",
     "id": 1
   },
   {
     "image_dir": "",
     "instruction": "Cho (O), đường kính AB. Cát tuyến MN qua trung điểm H của OB. 1. Quỹ tích trung điểm I của MN. 2. Ax ⊥ MN, BI cắt Ax tại C, chứng minh CMBN là hình bình hành. 3. C là trực tâm ∆AMN. 4. Quỹ tích của C. 5. Tính diện tích phần hình tròn nằm ngoài ∆AMN.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(diameter A B O)\n(segment A B)\n(define H point (midpoint O B))\n(define M point)\n(define N point)\n(segment M N)\n(define I point (midpoint M N))\n(segment M N)\n(define A_x point (segment A H))\n(segment B I)\n(define C point (inter-ll A_x B I))\n(segment C B)\n(segment C N)\n(segment C M)\n(segment B N)\n(segment B M)\n(parallelogram (C M B N))\n(define C point (orthocenter A M N))\n(define C point)\n(define C point)\n(define C point)",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(diameter A B O)\n(segment A B)\n(segment O B)\n(define H point (midpoint O B))\n(define M point)\n(define N point)\n(on-circle M O)\n(on-circle N O)\n(segment M N)\n(on-segment H M N)\n(define I point (midpoint M N))\n(segment B I)\n(define X point)\n(segment A X)\n(perpendicular (segment A X) (segment M N))\n(define C point (inter-ll A X B I))\n(segment B C)\n(segment C M)\n(segment C N)\n(parallelogram (C M B N))\n(segment A C)\n(segment A N)\n(perpendicular (segment A C) (segment M N))\n(perpendicular (segment C M) (segment A N))",
     "id": 2
   },
   {
     "image_dir": "",
     "instruction": "Cho tam giác ABC và một điểm M thuộc cạnh BC. Qua M vẽ đường thẳng song song với AB, cắt AC ở E và đường thẳng song song với AC, cắt AB ở F. a) Chứng minh tứ giác AFME là hình bình hành. b) Xác định vị trí điểm M trên cạnh BC để tứ giác AFME là hình thoi.",
-    "answer": "(triangle (A B C))\n(define M point (segment B C))\n(define E point (segment A C))\n(define F point (segment A B))\n(segment A F)\n(segment A E)\n(segment F E)\n(segment M E)\n(segment M F)\n(parallel (segment A F) (segment M E))\n(parallel (segment A E) (segment M F))\n(quadrilateral (A F M E))",
+    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(segment B C)\n(define M point (segment B C))\n(define E point (segment A C))\n(define F point (segment A B))\n(segment A F)\n(segment A E)\n(segment M E)\n(segment M F)\n(parallel (segment M E) (segment A B))\n(parallel (segment M F) (segment A C))\n(parallel (segment A F) (segment M E))\n(parallel (segment A E) (segment M F))\n(quadrilateral (A F M E))",
     "id": 3
   },
   {
     "image_dir": "",
     "instruction": "Cho tam giác ABC có đường cao AI. Từ A kẻ tia Ax vuông góc với AC, từ B kẻ tia By song song với AC. Gọi M là giao điểm của tia Ax và tia By. Nối M với trung điểm P của AB, đường MP cắt AC tại Q và BQ cắt AI tại H. a) Tứ giác AMBQ là hình chữ nhật? b) Chứng minh tam giác PIQ cân.",
-    "answer": "(triangle (A B C))\n(define I point (projection A (segment B C)))\n(segment A I)\n(define Ax point (segment A C))\n(perpendicular (segment A Ax) (segment A C))\n(define By point (segment B C))\n(parallel (segment B By) (segment A C))\n(define M point (inter-ll Ax By))\n(define P point (midpoint A B))\n(segment A B)\n(segment M P)\n(define Q point (segment M A))\n(segment M Q)\n(segment B Q)\n(define H point (inter-ll B Q A I))\n(equal-distance A M A Q)\n(equal-distance B M B Q)\n(equal-distance A P P B)\n(equal-distance B P P A)\n(equal-distance M Q Q P)\n(equal-distance P I I Q)",
+    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(segment B C)\n(define I point (projection A (segment B C)))\n(segment A I)\n(define X point)\n(segment A X)\n(perpendicular (segment A X) (segment A C))\n(define Y point)\n(segment B Y)\n(parallel (segment B Y) (segment A C))\n(define M point (inter-ll A X B Y))\n(define P point (midpoint A B))\n(segment M P)\n(define Q point (inter-ll M P A C))\n(segment B Q)\n(define H point (inter-ll B Q A I))\n(segment A M)\n(segment B M)\n(segment A Q)\n(segment B Q)\n(perpendicular (segment A M) (segment B M))\n(parallel (segment A M) (segment B Q))\n(parallel (segment B M) (segment A Q))",
     "id": 4
   },
   {
     "image_dir": "",
     "instruction": "Cho đường tròn (O; R), điểm A nằm ngoài (O). Vẽ tiếp tuyến AB, AC. Kẻ đường kính CD. a) Chứng minh A, B, O, C thuộc một đường tròn. b) Chứng minh OA ⊥ BC và BD // OA. c) AD cắt (O) tại E, AO cắt BC tại H. Chứng minh AD.AE = AH.AO.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(distance O A 1.5)\n(define B point)\n(on-circle B O)\n(segment A B)\n(tangent B (circle O) AB)\n(segment O B)\n(define C point)\n(on-circle C O)\n(segment A C)\n(tangent C (circle O) AC)\n(segment O C)\n(define D point)\n(define M point (midpoint C D))\n(diameter C D O)\n(segment C D)\n(define E point (on-circle E O))\n(define H point (inter-ll A O B C))\n(segment A D)\n(segment A H)\n(segment B C)\n(perpendicular (segment O A) (segment B C))\n(parallel (segment B D) (segment O A))\n(equal-distance A D A E)\n(equal-distance A H A O)",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(distance O A 1.5)\n(define B point)\n(on-circle B O)\n(segment A B)\n(tangent B (circle O) AB)\n(segment O B)\n(define C point)\n(on-circle C O)\n(segment A C)\n(tangent C (circle O) AC)\n(segment O C)\n(define D point)\n(diameter C D O)\n(segment C D)\n(segment B D)\n(segment O A)\n(segment B C)\n(perpendicular (segment O A) (segment B C))\n(parallel (segment B D) (segment O A))\n(segment A D)\n(define E point)\n(on-circle E O)\n(segment A E)\n(define H point (inter-ll A O B C))\n(segment A H)",
     "id": 5
   },
   {
     "image_dir": "",
     "instruction": "Cho hình thang ABCD (AB // CD). a) Chứng minh rằng nếu hai tia phân giác của hai góc A và D cùng đi qua trung điểm F của cạnh bên BC thì cạnh bên AD bằng tổng hai đáy. b) Chứng minh rằng nếu AD = AB + CD thì hai tia phân giác của hai góc A và D cắt nhau tại trung điểm của cạnh bên BC.",
-    "answer": "(trapezoid (A B C D))\n(define F point (midpoint B C))\n(segment A B)\n(segment C D)\n(segment A D)\n(segment B C)\n(equal-distance A D A B)\n(equal-distance A D A C)\n(equal-distance A D C D)\n(equal-distance A D A F)\n(equal-distance B F F C)\n(equal-distance C F F D)\n(equal-distance A F F D)\n(equal-distance A F F B)\n(equal-distance A D B C)\n(equal-distance A D A B)\n(equal-distance A D C D)\n(equal-distance A D A F)\n(equal-distance B F F C)\n(equal-distance C F F D)\n(equal-distance A F F D)\n(equal-distance A F F B)\n(equal-distance A D A B)\n(equal-distance A D C D)\n(equal-distance A D A F)\n(equal-distance B F F C)\n(equal-distance C F F D)\n(equal-distance A F F D)\n(equal-distance A F F B)",
+    "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(segment A D)\n(segment B C)\n(define F point (midpoint B C))\n(segment A F)\n(segment D F)\n(angle-equal D A F F A B)\n(angle-equal C D F F D A)",
     "id": 6
   },
   {
     "image_dir": "",
     "instruction": "Cho tam giác ABC. Từ một điểm E trên cạnh AC vẽ đường thẳng song song với BC cắt AB tại F và đường thẳng song song với AB cắt BC tại D. Giả sử AE = BF. Chứng minh: a) Tam giác AED cân; b) AD là phân giác của góc A.",
-    "answer": "(triangle (A B C))\n(define E point (segment A C))\n(define F point (segment A B))\n(segment A E)\n(segment A F)\n(define D point (segment B C))\n(segment B D)\n(parallel (segment E F) (segment B C))\n(parallel (segment A D) (segment A F))\n(equal-distance A E A F)\n(equal-distance A D A E)\n(equal-distance A D A F)\n(equal-distance E D F A)\n(equal-distance E D D F)\n(equal-distance A E A F)\n(equal-distance A D A E)\n(equal-distance A D A F)\n(equal-distance E D D F)\n(equal-distance A D A F)\n(equal-distance A E A F)\n(equal-distance A D A E)\n(equal-distance A D A F)\n(equal-distance E D D F)\n(equal-distance A D A F)\n(equal-distance A E A F)\n(equal-distance A D A E)\n(equal-distance A D A F)\n(equal-distance E D D F)\n(equal-distance A D A F)\n(equal-distance A E A F)\n(equal-distance A D A E)\n(equal-distance A D A F)\n(equal-distance E D D F)\n(equal-distance A D A F)\n(equal-distance A E A F)\n(equal-distance A D A E)\n(equal-distance A D A F)\n(equal-distance E D D F)\n(equal-distance A D A F)\n(equal-distance A E A F)\n(equal-distance A D A E)\n(equal-distance A D A F)\n(equal-distance E D D F)\n(equal-distance A D A F)\n(equal-distance A E A F)\n(equal-distance A D A E)\n(equal-distance A D A F)\n(equal-distance E D D F)\n(equal-distance A D A F)\n(equal-distance A E A F)\n(equal-distance A D A E)\n(equal-distance A D A F)\n(equal-distance E D D)",
+    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(segment B C)\n(define E point (segment A C))\n(define F point (segment A B))\n(define D point (segment B C))\n(segment E F)\n(segment D E)\n(segment A D)\n(parallel (segment E F) (segment B C))\n(parallel (segment D E) (segment A B))\n(equal-distance A E B F)\n(equal-distance A E A D)\n(angle-equal B A D D A C)",
     "id": 7
   },
   {
     "image_dir": "",
     "instruction": "Cho ΔABC vuông tại A có AB = 12 cm, AC = 16 cm, đường cao HA. Tia phân giác của góc ABC lần lượt cắt AH và AC tại M và N. Đường thẳng qua H song song với BN và cắt AC tại I. a) Chứng minh ΔABC ∽ ΔHBA. b) Tính độ dài các cạnh BC, AH, BH. c) Chứng minh tam giác AMN cân tại A và AM.AB = MH.BC. d) Chứng minh: AM² = NI.NC",
-    "answer": "(triangle (A B C) (right A))\n(define H point (projection A (segment B C)))\n(segment A B)\n(segment A C)\n(equal-distance A B 1.2)\n(equal-distance A C 1.6)\n(define M point (segment A H))\n(define N point (segment A C))\n(segment H M)\n(segment H B)\n(define I point (segment A C))\n(parallel (segment H I) (segment B N))\n(equal-distance B H B C)\n(equal-distance A M A N)\n(equal-distance M H H B)\n(equal-distance A M A B)\n(equal-distance H B H C)\n(equal-distance A M A N)\n(equal-distance M H H B)\n(equal-distance A M A N)\n(equal-distance N I N C)\n(equal-distance A M A N)\n(equal-distance N I N C)\n(equal-distance A M A N)\n(equal-distance N I N C)\n(equal-distance A M A N)\n(equal-distance N I N C)\n(equal-distance A M A N)\n(equal-distance N I N C)\n(equal-distance A M A N)\n(equal-distance N I N C)\n(equal-distance A M A N)\n(equal-distance N I N C)\n(equal-distance A M A N)\n(equal-distance N I N C)\n(equal-distance A M A N)\n(equal-distance N I N C)\n(equal-distance A M A N)\n(equal-distance N I N C)\n(equal-distance A M A N)\n(equal-distance N I N C)\n(equal-distance A M A N)\n(equal-distance N I N C)\n(equal-distance A M A N)\n(equal-distance N I N C)\n(equal)",
+    "answer": "(triangle (A B C) (right A))\n(segment A B)\n(segment A C)\n(segment B C)\n(distance A B 1.2)\n(distance A C 1.6)\n(define H point (projection A (segment B C)))\n(segment A H)\n(define M point (segment A H))\n(define N point (segment A C))\n(segment B N)\n(define I point (segment A C))\n(segment H I)\n(parallel (segment H I) (segment B N))\n(equal-distance A M A N)\n(equal-distance N I N C)",
     "id": 8
   },
   {
     "image_dir": "",
     "instruction": "Cho tứ giác ABCD, 𝐵̂ = 120; 𝐶̂ = 60; 𝐷̂ = 90 . Tính góc A và góc ngoài tại đỉnh A.",
-    "answer": "(quadrilateral (A B C D))\n(angle-measure B A C 120)\n(angle-measure C A D 60)\n(angle-measure D A B 90)\n(angle-measure A B C 90)",
+    "answer": "(quadrilateral (A B C D))\n(angle-measure A B C 120)\n(angle-measure B C D 60)\n(angle-measure C D A 90)",
     "id": 9
   },
   {
     "image_dir": "",
     "instruction": "Cho tam giác ABC vuông tại A. Kẻ đường cao AH. Từ H kẻ HD ⊥ AC, HE ⊥ AB. Gọi M, N lần lượt là trung điểm của các đoạn thẳng HB, HC. Chứng minh tứ giác DEMN là hình thang vuông",
-    "answer": "(triangle (A B C) (right A))\n(define H point (projection A (segment B C)))\n(segment A H)\n(define D point (segment H C))\n(segment H D)\n(perpendicular (segment H D) (segment A C))\n(define E point (segment H B))\n(segment H E)\n(perpendicular (segment H E) (segment A B))\n(define M point (midpoint H B))\n(define N point (midpoint H C))\n(segment H B)\n(segment H C)\n(segment D E)\n(segment M N)\n(parallel (segment D E) (segment M N))\n(perpendicular (segment D E) (segment H D))\n(perpendicular (segment M N) (segment H E))",
+    "answer": "(triangle (A B C) (right A))\n(segment A B)\n(segment A C)\n(segment B C)\n(define H point (projection A (segment B C)))\n(segment A H)\n(define D point (projection H (segment A C)))\n(segment H D)\n(define E point (projection H (segment A B)))\n(segment H E)\n(segment H B)\n(segment H C)\n(define M point (midpoint H B))\n(define N point (midpoint H C))\n(segment D E)\n(segment M N)\n(parallel (segment D E) (segment M N))\n(perpendicular (segment D E) (segment H E))",
     "id": 10
   },
   {
     "image_dir": "",
     "instruction": "Cho đường tròn (O; R), từ một điểm A trên (O) kẻ tiếp tuyến d với (O). Trên đường thẳng d lấy điểm M bất kì kẻ cát tuyến MNP và gọi K là trung điểm của NP, kẻ tiếp tuyến MB. Kẻ AC ⊥ MB, BD ⊥ MA, gọi H là giao điểm của AC và BD, I là giao điểm của OM và AB. 1. Chứng minh tứ giác AMBO nội tiếp. 2. Chứng minh năm điểm O, K, A, M, B cùng nằm trên một đường tròn. 3. Chứng minh OI.OM = R²; OI.IM = IA². 4. Chứng minh OAHB là hình thoi. 5. Chứng minh ba điểm O, H, M thẳng hàng. 6. Tìm quỹ tích của điểm H khi M di chuyển trên đường thẳng d.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define M point)\n(define d line)\n(tangent A (circle O) d)\n(define N point)\n(define P point)\n(segment M N)\n(segment M P)\n(define K point (midpoint N P))\n(segment N P)\n(tangent K (circle O) MB)\n(define B point)\n(define C point)\n(define H point (inter-ll A C B D))\n(define I point (inter-ll O M A B))\n(segment A B)\n(segment A M)\n(segment B M)\n(segment K M)\n(segment A C)\n(segment B D)\n(perpendicular (segment A C) (segment K B))\n(perpendicular (segment B D) (segment M A))\n(define H point (inter-ll A C B D))\n(define I point (inter-ll O M A B))\n(triangle (A M B O))\n(on-circle A O)\n(on-circle B O)\n(on-circle K O)\n(on-circle M O)\n(on-circle I O)\n(equal-distance O I O M)\n(equal-distance O I I A)\n(equal-distance O A H B)\n(equal-distance O H H M)\n(equal)",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define M point)\n(segment A M)\n(tangent A (circle O) AM)\n(segment O A)\n(define N point)\n(define P point)\n(on-circle N O)\n(on-circle P O)\n(segment M N)\n(segment M P)\n(segment N P)\n(define K point (midpoint N P))\n(define B point)\n(on-circle B O)\n(segment M B)\n(tangent B (circle O) MB)\n(segment O B)\n(define C point)\n(segment A C)\n(perpendicular (segment A C) (segment M B))\n(define D point)\n(segment B D)\n(perpendicular (segment B D) (segment M A))\n(define H point (inter-ll A C B D))\n(segment O M)\n(segment A B)\n(define I point (inter-ll O M A B))\n(segment O H)\n(segment H M)\n(equal-distance O A A H)\n(equal-distance A H H B)\n(equal-distance H B B O)",
     "id": 11
   },
   {
     "image_dir": "",
     "instruction": "Cho đường tròn (O) đường kính AB. H thuộc OB. MH ⊥ AB tại H. MA, MB cắt (O) tại C, D. I là giao AD và BC. 1. MCID nội tiếp. 2. AD, BC, MH đồng quy tại I. 3. KCOH nội tiếp (K là tâm ngoại tiếp MCID).",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(diameter A B O)\n(segment A B)\n(define H point)\n(on-circle H O)\n(segment O H)\n(define M point)\n(segment M H)\n(perpendicular (segment M H) (segment A B))\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment A M)\n(segment B M)\n(define I point (inter-ll A D B C))\n(segment A D)\n(segment B C)\n(define M point (midpoint C D))\n(define K point (circumcenter M C I D))\n(circle K (circumcircle M C I D))\n(on-circle K M)\n(on-circle K C)\n(on-circle K I)\n(on-circle K D)\n(on-circle K A)\n(on-circle K B)",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(diameter A B O)\n(segment A B)\n(segment O B)\n(define H point (segment O B))\n(define M point)\n(segment M H)\n(perpendicular (segment M H) (segment A B))\n(segment M A)\n(segment M B)\n(define C point)\n(define D point)\n(on-circle C O)\n(on-circle D O)\n(segment A D)\n(segment B C)\n(define I point (inter-ll A D B C))\n(segment C I)\n(segment I D)\n(define K point (circumcenter M C D))\n(circle K (circumcircle M C D))\n(on-circle I K)\n(segment O C)\n(segment O H)\n(segment K C)\n(segment K H)",
     "id": 12
   },
   {
     "image_dir": "",
     "instruction": "Cho góc vuông xOy, điểm A nằm trong góc đó. Gọi B là điểm đối xứng với A qua Ox, C là điểm đối xứng với A qua Oy. Chứng minh B đối xứng với C qua O.",
-    "answer": "(define O point)\n(define A point)\n(define B point (inter-ll A (line O O)))\n(define C point (inter-ll A (line O O)))\n(equal-distance O B O C)",
+    "answer": "(define O point)\n(define A point)\n(segment O A)\n(define B point)\n(segment O B)\n(perpendicular (segment O B) (segment O A))\n(equal-distance O B O A)\n(define C point)\n(segment O C)\n(perpendicular (segment O C) (segment O A))\n(equal-distance O C O A)\n(segment B C)\n(on-segment O B C)\n(equal-distance O B O C)",
     "id": 13
   },
   {
     "image_dir": "",
     "instruction": "Cho điểm M ngoài (O). Vẽ tiếp tuyến MA, MB. Vẽ cát tuyến MCD. OM cắt AB và (O) tại H, I. E là trung điểm DC. Chứng minh: a) Tứ giác MAOB, ABOE nội tiếp; b) MC.MD = MA² và góc MHC = góc MDO; c) OH.OM + MC.MD = MO².",
-    "answer": "(define O point)\n(circle O)\n(define M point)\n(distance O M 1.5)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment M A)\n(segment M B)\n(tangent A (circle O) MA)\n(tangent B (circle O) MB)\n(define C point)\n(define D point)\n(define H point (inter-ll O M A B))\n(define I point (inter-ll O M A B))\n(segment M C)\n(segment M D)\n(segment O H)\n(segment O I)\n(define E point (midpoint C D))\n(segment C D)\n(segment D C)\n(segment A B)\n(segment A O)\n(segment B O)\n(on-circle H O)\n(on-circle I O)\n(on-circle E O)\n(equal-distance A O A B)\n(equal-distance B O B A)\n(equal-distance M C M D)\n(equal-distance M H M I)\n(equal-distance O H O I)\n(equal-distance O M O E)\n(equal-distance M C M D)\n(equal-distance A B A O)\n(equal-distance A B A E)\n(equal-distance M A M B)\n(equal-distance O H O I)\n(equal-distance M C M D)\n(angle-equal M H C M D)\n(angle-equal M H C M D)\n(equal-distance O H O M)\n(equal-distance M C M D)\n(equal-distance O H O M)\n(equal-distance M C M D)\n(equal-distance O H O M)\n(equal-distance M C M D)\n(equal-distance O H O M)\n(equal-distance M C M D)\n(equal-distance O H O M)\n(equal-distance M C M D)\n(equal-distance O H O M)\n(equal-distance M C M D)\n(equal)",
+    "answer": "(define O point)\n(circle O)\n(define M point)\n(distance O M 1.5)\n(define A point)\n(on-circle A O)\n(segment M A)\n(tangent A (circle O) MA)\n(segment O A)\n(define B point)\n(on-circle B O)\n(segment M B)\n(tangent B (circle O) MB)\n(segment O B)\n(segment A B)\n(define C point)\n(define D point)\n(on-circle C O)\n(on-circle D O)\n(segment C D)\n(segment M C)\n(segment M D)\n(segment O M)\n(define H point (inter-ll O M A B))\n(define I point (segment O M))\n(on-circle I O)\n(segment O H)\n(segment O I)\n(define E point (midpoint C D))\n(segment A E)\n(segment O E)\n(angle-equal M H C M D O)",
     "id": 14
   },
   {
     "image_dir": "",
     "instruction": "Cho hình thoi ABCD có 𝐴̂ = 60. Trên AD và CD lấy các điểm M, N sao cho AM + CN = AD. Gọi P là điểm đối xứng của N qua BC, MP cắt BC tại Q. Tứ giác MDCQ là hình gì ?",
-    "answer": "(rhombus (A B C D))\n(angle-measure A B C 60)\n(define M point (segment A D))\n(define N point (segment C D))\n(equal-distance A M M D)\n(equal-distance C N N D)\n(define P point (inter-ll N B C))\n(define Q point (inter-ll M P B C))\n(segment M P)\n(segment M D)\n(segment C Q)\n(segment D Q)",
+    "answer": "(rhombus (A B C D))\n(angle-measure D A B 60)\n(segment A D)\n(segment C D)\n(segment B C)\n(define M point (segment A D))\n(define N point (segment C D))\n(define P point)\n(equal-distance B N B P)\n(equal-distance C N C P)\n(segment M P)\n(define Q point (inter-ll M P B C))\n(segment M D)\n(segment D C)\n(segment C Q)\n(segment Q M)",
     "id": 15
   },
   {
     "image_dir": "",
     "instruction": "Cho tam giác ABC có AB = 3cm, AC = 4cm, BC = 5cm. Gọi AH là đường cao của ΔABC. a) Chứng minh tam giác ABC vuông. b) Chứng minh ΔABC ∽ ΔHBA và ΔABC ∽ ΔHAC. c) Tính AH và chứng minh AH² = HB . HC",
-    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(segment B C)\n(equal-distance A B A C 0.3)\n(equal-distance A C A B 0.4)\n(equal-distance B C A B 0.5)\n(define H point (projection A (segment B C)))\n(segment A H)\n(perpendicular (segment A H) (segment B C))\n(angle-measure A B C 90)\n(angle-equal A B C H B A)\n(angle-equal A C B H A C)\n(define AH point (segment A H))\n(equal-distance A H H B 1.0)\n(equal-distance A H H C 1.0)\n(equal-distance H B H C 1.0)",
+    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(segment B C)\n(distance A B 0.3)\n(distance A C 0.4)\n(distance B C 0.5)\n(angle-measure B A C 90)\n(define H point (projection A (segment B C)))\n(segment A H)\n(segment H B)\n(segment H C)\n(angle-equal A B C H B A)\n(angle-equal A C B H A C)",
     "id": 16
   },
   {
     "image_dir": "",
     "instruction": "Cho tam giác đều ABC có đường cao AH. M thuộc BC. MP, MQ vuông góc AB, AC. 1. Chứng minh APMQ nội tiếp. 2. Chứng minh MP + MQ = AH. 3. Chứng minh OH ⊥ PQ.",
-    "answer": "(triangle (A B C) (equilateral))\n(define H point (projection A (segment B C)))\n(segment B C)\n(define M point (segment B C))\n(define P point (segment A B))\n(segment A P)\n(define Q point (segment A C))\n(segment A Q)\n(perpendicular (segment M P) (segment A B))\n(perpendicular (segment M Q) (segment A C))\n(define O point (circumcenter A P Q))\n(circle O (circumcircle A P Q))\n(on-circle A O)\n(on-circle P O)\n(on-circle Q O)\n(equal-distance M P M Q)\n(equal-distance O H H A)\n(perpendicular (segment O H) (segment P Q))",
+    "answer": "(triangle (A B C) (equilateral))\n(segment A B)\n(segment A C)\n(segment B C)\n(define H point (projection A (segment B C)))\n(segment A H)\n(define M point (segment B C))\n(define P point (projection M (segment A B)))\n(segment M P)\n(define Q point (projection M (segment A C)))\n(segment M Q)\n(segment P Q)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment O H)\n(perpendicular (segment O H) (segment P Q))",
     "id": 17
   },
   {
     "image_dir": "",
     "instruction": "Cho hình bình hành ABCD, hai đường chéo cắt nhau ở O. Hai đường thẳng d1 và d2 cùng đi qua O và vuông góc với nhau. Đường thẳng d1 cắt các cạnh AB và CD ở M và P. Đường thẳng d2 cắt các cạnh BC và AD ở N và Q. Chứng minh tứ giác MNPQ là hình thoi.",
-    "answer": "(parallelogram (A B C D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(segment A B)\n(segment C D)\n(define M point (segment A B))\n(define P point (segment C D))\n(segment B C)\n(segment A D)\n(define N point (segment B C))\n(define Q point (segment A D))\n(segment M P)\n(segment N Q)\n(equal-distance M N P Q)\n(equal-distance M P N Q)",
+    "answer": "(parallelogram (A B C D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(segment A B)\n(segment C D)\n(segment B C)\n(segment A D)\n(define M point (segment A B))\n(define P point (segment C D))\n(define N point (segment B C))\n(define Q point (segment A D))\n(segment M P)\n(segment N Q)\n(perpendicular (segment M P) (segment N Q))\n(segment M N)\n(segment N P)\n(segment P Q)\n(segment Q M)\n(equal-distance M N N P)\n(equal-distance M N P Q)\n(equal-distance M N Q M)",
     "id": 18
   },
   {
     "image_dir": "",
     "instruction": "Cho hình vuông ABCD. Trên tia đối của tia BA lấy điểm E, trên tia đối của tia CB lấy điểm F sao cho AE = CF. a) Chứng minh tam giác EDF vuông cân. b) Gọi I là trung điểm của EF. Chứng minh BI = DI. c) Gọi O là giao điểm của hai đường chéo AC và BD. Chứng minh O, C, I thẳng hàng.",
-    "answer": "(square (A B C D))\n(define E point (segment B A))\n(define F point (segment C B))\n(equal-distance A E C F)\n(define I point (midpoint E F))\n(segment E F)\n(equal-distance B I I D)\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(equal-distance O C O I)",
+    "answer": "(square (A B C D))\n(segment A B)\n(segment B C)\n(segment C D)\n(segment D A)\n(define E point (line B A))\n(define F point (line C B))\n(equal-distance A E C F)\n(segment E D)\n(segment D F)\n(segment E F)\n(perpendicular (segment E D) (segment D F))\n(equal-distance D E D F)\n(define I point (midpoint E F))\n(segment B I)\n(segment D I)\n(equal-distance B I D I)\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(segment O C)\n(segment C I)",
     "id": 19
   },
   {
