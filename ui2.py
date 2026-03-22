@@ -92,7 +92,7 @@ def _item_key(item: dict, fallback_index: int) -> str:
     if item.get("id") is not None:
         return str(item["id"])
 
-    image_dir = item.get("image_dir")
+    image_dir = item.get("id")
     if isinstance(image_dir, str) and image_dir:
         match = re.search(r"img_(\d+)\.png$", image_dir)
         if match:
@@ -105,7 +105,7 @@ def _item_key(item: dict, fallback_index: int) -> str:
 def _item_image_path(item: dict, key: str) -> str | None:
     """Resolve image path for both legacy and current json formats."""
     candidates: list[str] = []
-    image_dir = item.get("image_dir")
+    image_dir = item.get("id")
     if isinstance(image_dir, str) and image_dir:
         if os.path.isabs(image_dir):
             candidates.append(image_dir)
