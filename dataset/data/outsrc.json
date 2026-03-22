@@ -750,11 +750,6 @@
     "caption_vn": "Cho tứ giác ABCD có các góc B và D là góc vuông. Từ một điểm M trên đường chéo AC, vẽ MN ⊥ BC, MP ⊥ AD. Chứng minh: MN/AB + MP/CD = 1."
   },
   {
-    "id": 150,
-    "image_dir": "",
-    "caption_vn": "Cho hình bình hành ABCD. Một cát tuyến qua D, cắt đường chéo AC ở I và cắt cạnh BC ở N, cắt đường thẳng AB ở M. a) Chứng minh rằng tích AM.CN không phụ thuộc vào vị trí của cát tuyến qua D. b) Chứng minh hệ thức: ID² = IM.IN."
-  },
-  {
     "id": 151,
     "image_dir": "",
     "caption_vn": "Cho hình chữ nhật ABCD. Trên các cạnh AB, BC, CD, DA lần lượt lấy các điểm E, F, G, H sao cho AE/AB = AH/AD = CF/CB = CG/CD. a) Chứng minh tứ giác EFGH là hình bình hành. b) Chứng minh hình bình hành EFGH có chu vi không đổi."
@@ -1385,11 +1380,6 @@
     "caption_vn": "Cho tam giác cân ABC (AB = AC), I là tâm đường tròn nội tiếp, K là tâm đường tròn bàng tiếp góc A, O là trung điểm của IK. 1. Chứng minh B, C, I, K cùng nằm trên một đường tròn. 2. Chứng minh AC là tiếp tuyến của đường tròn (O). 3. Tính bán kính đường tròn (O) biết AB = AC = 20 Cm, BC = 24 Cm."
   },
   {
-    "id": 277,
-    "image_dir": "",
-    "caption_vn": "Cho đường tròn (O; R), từ một điểm A trên (O) kẻ tiếp tuyến d với (O). Trên đường thẳng d lấy điểm M bất kì kẻ cát tuyến MNP và gọi K là trung điểm của NP, kẻ tiếp tuyến MB. Kẻ AC ⊥ MB, BD ⊥ MA, gọi H là giao điểm của AC và BD, I là giao điểm của OM và AB. 1. Chứng minh tứ giác AMBO nội tiếp. 2. Chứng minh năm điểm O, K, A, M, B cùng nằm trên một đường tròn. 3. Chứng minh OI.OM = R²; OI.IM = IA². 4. Chứng minh OAHB là hình thoi. 5. Chứng minh ba điểm O, H, M thẳng hàng. 6. Tìm quỹ tích của điểm H khi M di chuyển trên đường thẳng d."
-  },
-  {
     "id": 278,
     "image_dir": "",
     "caption_vn": "Cho tam giác ABC vuông ở A, đường cao AH. Vẽ đường tròn tâm A bán kính AH. Gọi HD là đường kính của đường tròn (A; AH). Tiếp tuyến của đường tròn tại D cắt CA ở E. 1. Chứng minh tam giác BEC cân. 2. Gọi I là hình chiếu của A trên BE, Chứng minh rằng AI = AH. 3. Chứng minh rằng BE là tiếp tuyến của đường tròn (A; AH). 4. Chứng minh BE = BH + DE."
@@ -1493,11 +1483,6 @@
     "id": 298,
     "image_dir": "",
     "caption_vn": "Cho tam giác ABC nhọn nội tiếp (O; R), ∠BAC = 60°. 1. Tính ∠BOC và BC. 2. CD là đường kính, H là trực tâm, chứng minh BD // AH, AD // BH. 3. Tính AH."
-  },
-  {
-    "id": 299,
-    "image_dir": "",
-    "caption_vn": "Cho (O), đường kính AB. Cát tuyến MN qua trung điểm H của OB. 1. Quỹ tích trung điểm I của MN. 2. Ax ⊥ MN, BI cắt Ax tại C, chứng minh CMBN là hình bình hành. 3. C là trực tâm ∆AMN. 4. Quỹ tích của C. 5. Tính diện tích phần hình tròn nằm ngoài ∆AMN."
   },
   {
     "id": 300,
@@ -1668,11 +1653,6 @@
     "id": 333,
     "image_dir": "",
     "caption_vn": "Hai đường tròn cắt nhau tại A, B. Tiếp tuyến tại A cắt đường tròn tại C, D. P, Q là trung điểm AC, AD. a. ∆ABD ∽ ∆CBA. b. ∠BQD = ∠APB. c. APBQ nội tiếp."
-  },
-  {
-    "id": 334,
-    "image_dir": "",
-    "caption_vn": "Từ A ngoài (O) kẻ tiếp tuyến AB, AC và cát tuyến AKD sao cho BD // AC. BK cắt AC tại I. a. Cách vẽ cát tuyến. b. IC² = IK.IB. c. ∠BAC = 60°, AKD đi qua O."
   },
   {
     "id": 335,
@@ -1975,11 +1955,6 @@
     "caption_vn": "Cho đường tròn (O) đường kính AB. Dây MN vuông góc với AB. BM cắt NA tại K. H là chân đường vuông góc từ K xuống AB. Chứng minh: a) Tứ giác AHKM nội tiếp; b) NB.HK = AN.HB; c) HM là tiếp tuyến của đường tròn (O)."
   },
   {
-    "id": 395,
-    "image_dir": "",
-    "caption_vn": "Cho điểm M ngoài (O). Vẽ tiếp tuyến MA, MB. Vẽ cát tuyến MCD. OM cắt AB và (O) tại H, I. E là trung điểm DC. Chứng minh: a) Tứ giác MAOB, ABOE nội tiếp; b) MC.MD = MA² và góc MHC = góc MDO; c) OH.OM + MC.MD = MO²."
-  },
-  {
     "id": 396,
     "image_dir": "",
     "caption_vn": "Cho tam giác ABC vuông tại A nội tiếp (O). D thuộc BC, kẻ đường vuông góc BC cắt AC tại F và tia đối AB tại E. H là giao BF và CE, tia HD cắt (O) tại K. a) Chứng minh tứ giác AECD nội tiếp; b) Chứng minh BF.BH = BD.BC và AK vuông góc BC; c) I là trung điểm EF, chứng minh OI vuông góc AH."
@@ -2102,11 +2077,6 @@
   {
     "id": 420,
     "caption_vn": "Tìm các phép quay biến lục giác đều tâm O thành chính nó?",
-    "image_dir": ""
-  },
-  {
-    "id": 421,
-    "caption_vn": "Từ điểm M nằm ngoài đường tròn (O), kẻ hai tiếp tuyến MA, MB với (O) (A, B là hai tiếp điểm). Vẽ cát tuyến MCD với (O) sao cho MC < MD và tia MD nằm giữa hai tia MA và MO. Gọi E là trung điểm của CD. a) Chứng minh 4 điểm M, A, O, B cùng thuộc một đường tròn.",
     "image_dir": ""
   },
   {

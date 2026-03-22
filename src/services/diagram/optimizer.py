@@ -53,19 +53,21 @@ class Optimizer:
         self.unnamed_point_counter = 0
         self.has_loss = False
         self.trainable_vars = []
+        self.best_loss = None
+        self.count = 0
 
     def get_point(self, x, y):
         if not isinstance(x, torch.Tensor):
-            x = torch.tensor(x, dtype=torch.float64, device=self.device)
+            x = torch.tensor(x, dtype=torch.float32, device=self.device)
         if not isinstance(y, torch.Tensor):
-            y = torch.tensor(y, dtype=torch.float64, device=self.device)
+            y = torch.tensor(y, dtype=torch.float32, device=self.device)
         return TorchPoint(x, y)
 
     def mkvar(self, name, lo=-1.0, hi=1.0, init_value=None):
         if init_value is not None:
-            val = torch.tensor([init_value], dtype=torch.float64, device=self.device)
+            val = torch.tensor([init_value], dtype=torch.float32, device=self.device)
         else:
-            val = torch.empty(1, dtype=torch.float64, device=self.device).uniform_(lo, hi)
+            val = torch.empty(1, dtype=torch.float32, device=self.device).uniform_(lo, hi)
         param = nn.Parameter(val)
         self.trainable_vars.append(param)
         return param.squeeze()
@@ -80,7 +82,7 @@ class Optimizer:
         return name
 
     def const(self, x):
-        return torch.tensor(x, dtype=torch.float64, device=self.device)
+        return torch.tensor(x, dtype=torch.float32, device=self.device)
 
     def dist(self, p1: TorchPoint, p2: TorchPoint):
         dx = p1.x - p2.x
@@ -2028,6 +2030,27 @@ class Optimizer:
                 logger.info(f" {instr}")
             self.process_instruction(instr)
 
+    def early_stop(self, loss: float, mode: str = "min", patience: int = 5, epsilon: float = 1e-6) -> bool:
+        if self.best_loss is None:
+            self.best_loss = loss
+            self.counter = 0
+            return False
+
+        if mode == "min":
+            improved = loss < self.best_loss - epsilon
+        elif mode == "max":
+            improved = loss > self.best_loss + epsilon
+        else:
+            raise ValueError("mode must be 'min' or 'max'")
+
+        if improved:
+            self.best_loss = loss
+            self.counter = 0
+        else:
+            self.counter += 1
+
+        return self.counter > patience
+
     def train(self, epochs: int = 1000, lr: float = 0.01):
         if not self.has_loss:
             return 0.0
@@ -2048,9 +2071,9 @@ class Optimizer:
                 logger.info(f"Iteration {i:4d}: Loss = {total_loss.item():.6f}")
 
             # Early stopping
-            if total_loss.item() < 1e-6:
-                if self.verbosity >= 0:
-                    logger.info(f"Converged at iteration {i} with loss {total_loss.item():.6f}")
+            if self.early_stop(total_loss.item(), mode="min", patience=10):
+                if self.verbosity:
+                    logger.info(f"Early stopped at iteration {i}")
                 break
 
         final_loss = total_loss.item()
