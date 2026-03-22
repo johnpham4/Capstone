@@ -1,4 +1,3 @@
-<=
 """
 DSL Instruction Models - Domain entities using dataclass.
 Represents instructions parsed from DSL commands.

@@ -1,4 +1,3 @@
-<=
 import math
 from typing import Optional, Dict, Any, List
 from dataclasses import dataclass, field

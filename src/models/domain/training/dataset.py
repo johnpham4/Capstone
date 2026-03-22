@@ -1,4 +1,3 @@
-<=
 from enum import Enum
 from loguru import logger
 from pydantic import BaseModel

@@ -1,4 +1,3 @@
-<=
 # SageMaker Roles, Deployment, and Inference
 
 This repository contains scripts for creating and managing AWS IAM roles and users for Amazon SageMaker, deploying a Hugging Face model as a SageMaker endpoint, and testing inference on the deployed endpoint.
