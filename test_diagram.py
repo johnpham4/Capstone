@@ -24,8 +24,8 @@ DEFAULT_OPTIMIZER_OPTS = {
     "enable_chord_ndg": False,
 }
 
-INPUT_JSON_PATH = "dataset/Minh/full.json"
-OUTPUT_DIR = "output_fixed"
+INPUT_JSON_PATH = "dataset/data/train_outsrc.json"
+OUTPUT_DIR = "dataset/outsrc"
 
 
 def _extract_image_index(image_dir: str | None) -> int | None:
