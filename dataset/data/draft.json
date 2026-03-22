@@ -1,0 +1,698 @@
+[
+    {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD, 𝐵̂ = 120; 𝐶̂ = 60; 𝐷̂ = 90 . Tính góc A và góc ngoài tại đỉnh A."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD có AB = AD, CB = CD, 𝐶̂ = 60 ; 𝐴̂ = 100. a) Chứng minh AC là đường trung trực của BD. b) Tính 𝐵̂, 𝐷̂."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD có phân giác trong của góc A và góc B cắt nhau tại E, phân giác ngoài của góc A và góc B cắt nhau tại F. Chứng minh: 𝐴𝐸𝐵 ̂ = (𝐶̂+ 𝐷̂)/2và 𝐴𝐹𝐵 ̂ = (𝐴̂+𝐵̂)/2."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD có 𝐵̂ + 𝐷̂ = 180 và CB=CD. Trên tia đối của tia DA lấy điểm E sao cho DE = AB. Chứng minh: a) Các tam giác ABC và EDC bằng nhau. b) AC là phân giác của góc A."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD biết số đo của các góc 𝐴̂, 𝐵̂, 𝐶̂,𝐷̂ tỉ lệ thuận với 5; 8; 13 và 10. a) Tính số đo các góc của tứ giác ABCD. b) Kéo dài hai cạnh AB và DC cắt nhau ở E, kéo dài hai cạnh AD và BC cắt nhau ở F. Hai tia phân giác của các góc AED và góc AFB cắt nhau ở O. Phân giác của góc AFB cắt các cạnh CD và AB tại M và N. Chứng minh O là trung điểm của đoạn MN."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD có 𝐵̂ + 𝐷̂ = 180, AC là tia phân giác của góc A. Chứng minh CB = CD."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD có 𝐴̂ = 𝑎, 𝐶̂ = 𝑏. Hai đường thẳng AD và BC cắt nhau tại E, hai đường thẳng AB và DC cắt nhau tại F. Các tia phân giác của hai góc AEB và AFD cắt nhau tại I. Tính góc 𝐸𝐼𝐹̂ theo a,b."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD. Chứng minh: a) AB<BC+CD+DA b) AC+BD<AB+BC+CD+DA."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD có AC+CD ≥ AB+DB. Chứng minh: AB < AC."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD. Gọi O là giao điểm của hai đường chéo AC và BD. a) Chứng minh: (AB + BC + CD + AD) / 2 < OA + OB + OC + OD < AB + BC + CD + AD. b)* Khi O là điểm bất kì thuộc miền trong của tứ giác ABCD, kết luận trên có đúng không?"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Chứng minh rằng trong một tứ giác thì: a) Tổng độ dài 2 cạnh đối diện nhỏ hơn tổng độ dài hai đường chéo. b) Tổng độ dài hai đường chéo lớn hơn nửa chu vi của tứ giác."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD (AB // CD) có 𝐴̂ − 𝐷̂ = 20 , 𝐵̂ = 2𝐶̂. Tính các góc của hình thang."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD (AB // CD) có AB < CD, AD = BC = AB, 𝐵𝐷𝐶 ̂ = 30. Tính các góc của hình thang."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD (AB // CD) có AB < CD. Chứng minh rằng: 𝐴̂ + 𝐵̂ > 𝐶̂ + 𝐷̂."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": " Cho hình thang ABCD (AB // CD). Hai đường phân giác của góc A và B cắt nhau tại điểm K thuộc đáy CD. Chứng minh AD + BC = DC."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD (AB // CD). a) Chứng minh rằng nếu hai tia phân giác của hai góc A và D cùng đi qua trung điểm F của cạnh bên BC thì cạnh bên AD bằng tổng hai đáy. b) Chứng minh rằng nếu AD = AB + CD thì hai tia phân giác của hai góc A và D cắt nhau tại trung điểm của cạnh bên BC."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD có 𝐴̂ = 𝐵̂ = 90 và 𝐴𝐵 = 𝐵𝐶 = 𝐴𝐷/2 . Lấy điểm M thuộc đáy nhỏ BC. Kẻ Mx ⊥ MA, Mx cắt CD tại N. Chứng minh rằng tam giác AMN vuông cân."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD có AB = BC và AC là tia phân giác của góc A. Chứng minh ABCD là hình thang"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC vuông tại A. Lấy điểm M thuộc cạnh BC sao cho AM = BC/2 , N là trung điểm cạnh AB. Chứng minh: a) Tam giác AMB cân. b) Tứ giác MNAC là hình thang vuông."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC vuông tại A. Kẻ đường cao AH. Từ H kẻ HD ⊥ AC, HE ⊥ AB. Gọi M, N lần lượt là trung điểm của các đoạn thẳng HB, HC. Chứng minh tứ giác DEMN là hình thang vuông"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang cân ABCD (AB // CD, AB < CD). Kẻ các đường cao AE, BF của hình thang. Chứng minh rằng DE = CF."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang cân ABCD (AB // CD). a) Chứng minh: 𝐴𝐶𝐷 ̂ = 𝐵𝐷𝐶 ̂. b) Gọi E là giao điểm của AC và BD. Chứng minh: EA = EB."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang cân ABCD (AB // CD, AB > CD) có CD=a, 𝐴̂ + 𝐵̂ = 1/2 (𝐶̂ + 𝐷̂). Đường chéo AC vuông góc với cạnh bên BC. a) Tính các góc của hình thang. b) Chứng minh AC là phân giác của góc 𝐷𝐴𝐵 ̂. c) Tính diện tích của hình thang."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang cân ABCD (AB // CD) có 𝐵𝐷𝐶 ̂ = 45. Gọi O là giao điểm của AC và BD. a) Chứng minh tam giác DOC vuông cân. b) Tính diện tích của hình thang ABCD, biết BD = 6 (cm)."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC cân tại A, các đường phân giác BD, CE (D ∈ AC, E ∈ AB). Chứng minh rằng BEDC là hình thang cân có đáy nhỏ bằng cạnh bên."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD (AB // CD) có ACD ̂ = BDC ̂. Chứng minh rằng ABCD là hình thang cân."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC cân tại A. Trên các cạnh AB, AC lấy lần lượt các điểm D và E sao cho AD = AE. a) Chứng minh BDEC là hình thang cân. b) Tính các góc của hình thang cân đó, biết 𝐴̂ = 50."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD (AB // CD) có AC = BD. Qua B kẻ đường thẳng song song với AC cắt đường thẳng DC tại E. Chứng minh: a) Tam giác BDE là tam giác cân. b) Các tam giác ACD và BDC bằng nhau"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác đều ABC và điểm M thuộc miền trong của tam giác. Qua M kẻ đường thẳng song song với BC cắt AB ở D, đường thẳng song song với AC cắt BC ở E, đường thẳng song song với AB cắt AC ở F. Chứng minh: a) Các tứ giác BDME, CFME, ADMF là các hình thang cân. b) Chu vi của tam giác DEF bằng tổng các khoảng cách từ M đến các đỉnh của tam giác ABC. c) 𝐷𝑀𝐸 ̂ = 𝐷𝑀𝐹 ̂ = 𝐸𝑀𝐹 ̂. "
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD (AD // BC, AD > BC) có đường chéo AC vuông góc với cạnh bên CD, BAC ̂ = CAD ̂ và D̂ = 60°. a) Chứng minh ABCD là hình thang cân. b) Tính độ dài cạnh đáy AD, biết chu vi hình thang bằng 20 cm."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC và hai đường trung tuyến BD, CE cắt nhau tại G. Gọi M, N lần lượt là trung điểm của BG, CG. Chứng minh tứ giác MNDE có các cặp cạnh đối song song và bằng nhau."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD có góc 𝐶̂ = 40, 𝐷̂ = 80, AD = BC. Gọi E, F theo thứ tự là trung điểm của AB và CD. Tính góc nhọn tạo bởi đường thẳng FE với các đường thẳng AD và BC."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": " Cho A, B, C theo thứ tự nằm trên đường thẳng d (AB > BC). Trên cùng nửa mặt phẳng bờ là d, vẽ các tam giác đều AMB và BNC. Gọi P, Q, R, S lần lượt là trung điểm của BM, CM, BN, AN. Chứng minh: a) PQRS là hình thang cân. b) SQ = 1/2 MN"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD (AB // CD). Gọi M, N, P, Q lần lượt là trung điểm của các đoạn thẳng AD, BC, AC, BD. a) Chứng minh bốn điểm M, N, P, Q nằm trên một đường thẳng. b) Tính MN, PQ, biết các cạnh đáy của hình thang AB=a; CD=b (b>a). c) Chứng minh rằng nếu MQ = PQ = PN thì b=2a."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD (AB // CD). Gọi E, F, K lần lượt là trung điểm của AD, BC, BD. Chứng minh ba điểm E, K, F thẳng hàng."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD (AB // CD). Gọi E, F lần lượt là trung điểm của AD và BC. Đường thẳng EF cắt BD ở I, cắt AC ở K. a) Chứng minh: AK = KC, BI = ID. b) Cho AB = 6, CD = 10. Tính EI, KF, IK."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD. Gọi E, F, K lần lượt là trung điểm của AD, BC, AC. a) So sánh độ dài các đoạn thẳng EK và CD, KF và AB. b) Chứng minh: EF ≤ (AB + CD)/2. c) Khi EF = (AB + CD)/2 thì tứ giác ABCD là hình gì"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Tính độ dài đường trung bình của một hình thang cân biết rằng các đường chéo của nó vuông góc với nhau và bằng 20cm, đường cao bằng 10 cm."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC, trọng tâm G. Vẽ đường thẳng d đi qua G cắt các đoạn thẳng AB, AC. Gọi A’, B’, C’ thứ tự là hình chiếu của A, B, C trên d. Tìm liên hệ giữa các độ dài AA’, BB’, CC’."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho góc 𝑥𝑂𝑦 ̂ = 50 và điểm A nằm trong góc đó. Vẽ điểm B đối xứng với A qua Ox, điểm C đối xứng với A qua Oy. a) So sánh các độ dài OB và OC. b) Tính số đo góc 𝐵𝑂𝐶 ̂."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang vuông ABCD (góc A=D=90°). Gọi K là điểm đối xứng với B qua AD,E là giao điểm của CK và AD. Chứng minh 𝐶𝐸𝐷 ̂ = 𝐴𝐸𝐵 ̂ "
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC vuông tại A, đường cao AH. Gọi I, K lần lượt là điểm đối xứng với điểm H qua các cạnh AB, AC. Chứng minh: a) Ba điểm I, A, K thẳng hàng. b) Tứ giác BIKC là hình thang. c) IK = 2AH."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hai điểm A, B nằm trong một nửa mặt phẳng bờ là đường thẳng d. Tìm điểm M ∈ d sao cho MA + MB ngắn nhất."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD. Gọi E là trung điểm của AD, F là trung điểm của BC. a) Chứng minh BE = DFvà 𝐴𝐵𝐸 ̂ = 𝐶𝐷𝐹 ̂. b) Chứng minh tứ giác EBFD là hình bình hành. c) Chứng minh các đường thẳng EF, DB và AC đồng quy."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD (AB > BC). Tia phân giác của góc D cắt AB ở E, tia phân giác của góc B cắt CD ở F. a) Chứng minh DE=BF. b) Tứ giác DEBF là hình gì?"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD. Gọi K, I lần lượt là trung điểm của các cạnh AB và CD, M và N là giao điểm của AI và CK với BD. a) Chứng minh AI=CK. b) Chứng minh: DM = MN = NB."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD, đường chéo BD. Kẻ AH vuông góc với BD ở H, CK vuông góc với BD ở K. Chứng minh tứ giác AHCK là hình bình hành."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD. Gọi O là giao điểm hai đường chéo AC và BD. Qua điểm O, vẽ đường thẳng a cắt hai đường thẳng AD, BC lần lượt tại E, F, vẽ đường thẳng b cắt hai cạnh AB, CD lần lượt tại K, H. Chứng minh tứ giác EKFH là hình bình hành."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD. Gọi M, N, P, Q lần lượt là trung điểm của các cạnh AB, BC, CD, DA và I, K là trung điểm các đường chéo AC, BD. Chứng minh: a) Các tứ giác MNPQ, INKQ là hình bình hành. b) Các đường thẳng MP, NQ, IK đồng quy."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC và H là trực tâm. Các đường thẳng vuông góc với AB tại B, vuông góc với AC tại C cắt nhau ở D. a) Chứng minh tứ giác BDCH là hình bình hành. b) Tính số đo góc 𝐵𝐷𝐶 ̂, biết 𝐵𝐴𝐶 ̂ = 60."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD, AD = 2AB. Từ C vẽ CE vuông góc với AB. Nối E với trung điểm M của AD. Từ M vẽ MF vuông góc với CE, MF cắt BC tại N. a) Tứ giác MNCD là hình gì? b) Tam giác EMC là tam giác gì? c) Chứng minh: 𝐵𝐴𝐷 ̂ = 2𝐴𝐸𝑀̂."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD. Gọi E, F lần lượt là giao điểm của AB và CD, AD và BC; M, N, P, Q lần lượt là trung điểm của AE, EC, CF, FA. Chứng minh tứ giác MNPQ là hình bình hành."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD. Các điểm E, F thuộc đường chéo AC sao cho AE = EF = FC. Gọi M là giao điểm của BF và CD; N là giao điểm của DE và AB. Chứng minh rằng: a) M, N theo thứ tự là trung điểm của CD, AB. b) EMFN là hình bình hành."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang vuông ABCD, có 𝐴̂ = 𝐵̂ = 90 và AD = 2BC. Kẻ AH vuông góc với BD (H thuộc BD). Gọi I là trung điểm của HD. Chứng minh rằng: CI ⊥ AI."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD. Gọi E là điểm đối xứng với D qua A, F là điểm đối xứng với D qua C. Chứng minh: a) 2AC=EF. b) Điểm E đối xứng với điểm F qua điểm B."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD và điểm E trên cạnh AB, I và K là các trung điểm của cạnh AD và BC. Gọi các điểm M, N lần lượt đối xứng với điểm E qua điểm I và điểm K. a) Chứng minh các điểm M, N thuộc đường thẳng CD. b) Chứng minh MN=2CD."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho góc vuông xOy, điểm A nằm trong góc đó. Gọi B là điểm đối xứng với A qua Ox, C là điểm đối xứng với A qua Oy. Chứng minh B đối xứng với C qua O."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD, O là giao điểm của hai đường chéo. Một đường thẳng đi qua O cắt các cạnh AB và CD theo thứ tự ở M và N. Chứng minh điểm M đối xứng với điểm N qua O."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD có tâm đối xứng là O, một điểm E ở trên đoạn OD. Gọi F là điểm đối xứng của điểm C qua E. a) Chứng minh tứ giác ODFA là hình thang. b) Xác định vị trí điểm E trên OD để hình thang ODFA là hình bình hành."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC, trọng tâm G. Gọi M, N, P theo thứ tự là các điểm đối xứng của A, B, C qua tâm G. a) Chứng minh tứ giác BPNC là hình bình hành. b) Chứng minh các tam giác ABC, MNP bằng nhau. c) Chứng minh các tam giác ABC, MNP có cùng trọng tâm."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD. Gọi O là giao điểm của hai đường chéo AC và BD. Trên AB lấy điểm E, trên CD lấy điểm F sao cho AE = CF. a) Chứng minh E đối xứng với F qua O. b) Từ E dựng Ex // AC cắt BC tại I, dựng Fy // AC cắt AD tại K. Chứng minh rằng: EI = FK; I và K đối xứng với nhau qua O."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC. Gọi A' là điểm đối xứng với A qua C, B' là điểm đối xứng với B qua A, C' là điểm đối xứng với C qua B. Gọi BM là trung tuyến của tam giác ABC, B'M' là trung tuyến của tam giác A'B'C'. a) Chứng minh rằng ABM'M là hình bình hành. b) Gọi G là giao điểm của BM và B'M'. Chứng minh rằng G là trọng tâm của hai tam giác ABC và tam giác A'B'C'."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC, đường cao AH. Gọi I là trung điểm của AC, E là điểm đối xứng với H qua I. Gọi M, N lần lượt là trung điểm của HC, CE. Các đường thẳng AM, AN cắt HE tại G và K. a) Chứng minh tứ giác AHCE là hình chữ nhật. b) Chứng minh HG = GK = KE."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD có hai đường chéo vuông góc với nhau. Gọi E, F, G, H theo thứ tự là trung điểm của các cạnh AB, BC, CD, DA. Tứ giác EFGH là hình gì?"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC vuông tại A. Về phía ngoài tam giác ABC, vẽ hai tam giác vuông cân ADB (DA = DB) và ACE (EA = EC). Gọi M là trung điểm của BC, I là giao điểm của DM với AB, K là giao điểm của EM với AC. Chứng minh: a) Ba điểm D, A, E thẳng hàng. b) Tứ giác IAKM là hình chữ nhật. c) Tam giác DME là tam giác vuông cân."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang cân ABCD (AB // CD, AB < CD). Gọi M, N, P, Q lần lượt là trung điểm các đoạn thẳng AD, BD, AC, BC. a) Chứng minh bốn điểm M, N, P, Q thẳng hàng. b) Chứng minh tứ giác ABPN là hình thang cân. c) Tìm một hệ thức liên hệ giữa AB và CD để ABPN là hình chữ nhật."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC. Gọi O là một điểm thuộc miền trong của tam giác, M, N, P, Q lần lượt là trung điểm của các đoạn thẳng OB, OC, AC, AB. a) Chứng minh tứ giác MNPQ là hình bình hành. b) Xác định vị trí của điểm O đế tứ giác MNPQ là hình chữ nhật."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": " Cho tam giác ABC vuông cân tại C. Trên các cạnh AC, BC lấy lần lượt các điểm P, Q sao cho AP = CQ. Từ điểm P vẽ PM song song với BC (M ∈ AB). a) Chứng minh tứ giác PCQM là hình chữ nhật. 26 b) Gọi I là trung điểm của PQ. Chứng minh rằng khi P di chuyển trên cạnh AC, Q di chuyển trên cạnh BC thì điểm I di chuyển trên một đoạn thẳng cố định."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình chữ nhật ABCD. Nối C với một điểm E bất kỳ trên đường chéo BD. Trên tia đối của tia EC lấy điểm F sao cho EF = EC. Vẽ FH và FK lần lượt vuông góc với AB và AD. Chứng minh rằng: a) Tứ giác AHFK là hình chữ nhật. b) AF song song với BD và KH song song với AC. c) Ba điểm E, H, K thẳng hàng."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC và H là trực tâm. Gọi M, N, P lần lượt là trung điểm của các cạnh AB, BC và CA; D, E, F lần lượt là trung điểm các đoạn HA, HB và HC. a) Chứng minh rằng các tứ giác MNFD và MEFP là các hình chữ nhật. b) Để các đoạn MD, ME và DP bằng nhau thì tam giác ABC phải là tam giác gì?"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình chữ nhật ABCD. Vẽ BH ⊥ AC (H ∈ AC). Gọi M, K lần lượt là trung điểm của AH và DC; I, O lần lượt là trung điểm của AB và IC. a) Chứng minh IC = KB và MO = 1/2 IC. b) Tính số đo góc 𝐵𝑀𝐾 ̂."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình chữ nhật ABCD, AB = 2AD. Vẽ tia AM (M thuộc cạnh DC) sao cho 𝐷𝐴𝑀̂ = 15°. Chứng minh tam giác ABM là tam giác cân."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình chữ nhật ABCD. Kẻ AH ⊥ BD. Gọi I là trung điểm của DH. Kẻ đường thẳng vuông góc với AI tại I cắt cạnh BC ở K. Chứng minh K là trung điểm cạnh BC."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình chữ nhật ABCD. Gọi M, N, P, Q lần lượt là trung điểm của các cạnh AB, BC, CD, AD. Chứng minh tứ giác MNPQ là hình thoi."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD có 𝐶̂ = 40,𝐷̂ = 80, AD=BC. Gọi E, F, M, N lần lượt là trung điểm của AB, DC, DB, AC. a) Chứng minh tứ giác EMFN là hình thoi. b) Tính góc 𝑀𝐹𝑁 ̂."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD, O là giao điểm hai đường chéo AC và BD. Gọi E, F, G, H lần lượt là các giao điểm của các phân giác trong của các tam giác OAB, OBC, ODC, ODA. a) Chứng minh: ba điểm E, O, G thẳng hàng, ba điểm H, O, F thẳng hàng. b) Chứng minh các tam giác AEB và CGD bằng nhau. c) Chứng minh tứ giác EFGH là hình thoi."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC và một điểm M thuộc cạnh BC. Qua M vẽ đường thẳng song song với AB, cắt AC ở E và đường thẳng song song với AC, cắt AB ở F. a) Chứng minh tứ giác AFME là hình bình hành. b) Xác định vị trí điểm M trên cạnh BC để tứ giác AFME là hình thoi."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD có AB = 2AD , 𝐷̂ = 70°. Vẽ BH ⊥ AD (H ∈ AD). Gọi M, N lần lượt là trung điểm cạnh CD, AB. a) Chứng minh tứ giác ANMD là hình thoi. b) Tính góc 𝐻𝑀𝐶 ̂."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác đều ABC. Gọi H là trực tâm của tam giác, AD là đường cao. Trên cạnh BC lấy điểm M. Từ M vẽ ME ⊥ AB (E ∈ AB) và MF ⊥ AC (F ∈ AC). Gọi I là trung điểm của AM. a) Chứng minh tứ giác DEIF là hình thoi. b) Chứng minh các đường thẳng MH, ID, EF đồng quy."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD, hai đường chéo cắt nhau ở O. Hai đường thẳng d1 và d2 cùng đi qua O và vuông góc với nhau. Đường thẳng d1 cắt các cạnh AB và CD ở M và P. Đường thẳng d2 cắt các cạnh BC và AD ở N và Q. Chứng minh tứ giác MNPQ là hình thoi."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thoi ABCD có AC = 8cm, BD = 10cm. Tính độ dài của cạnh hình thoi."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thoi ABCD có 𝐴̂ = 60. Trên các cạnh AB, BC lần lượt lấy hai điểm M, N sao cho BM = CN. Chứng minh tam giác MDN là tam giác đều."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thoi ABCD có 𝐴̂ = 60. Trên AD và CD lấy các điểm M, N sao cho AM + CN = AD. Gọi P là điểm đối xứng của N qua BC, MP cắt BC tại Q. Tứ giác MDCQ là hình gì ?"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho P là một điểm chuyển động trong tam giác ABC sao cho 𝑃𝐵𝐴 ̂ = 𝑃𝐶𝐴 ̂. Hạ PM ⊥ AB; PN ⊥ AC (M ∈ AB; N ∈ AC). Gọi K, S là hai đỉnh khác của hình thoi KMSN. Chứng minh KS đi qua một điểm cố định."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC vuông tại A. Phân giác trong AD của góc A (D ∈ BC). Vẽ DF ⊥ AC, DE ⊥ AB. Chứng minh tứ giác AEDF là hình vuông."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình vuông ABCD. Trên các cạnh AB, BC, CD, DA lần lượt lấy các điểm E, F, G, H sao cho AE = BF = CG = DH. Chứng minh tứ giác EFGH là hình vuông."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC vuông tại A, M là một điểm thuộc cạnh BC. Qua M vẽ các đường thẳng song song với AB và AC, chúng cắt các cạnh AB, AC theo thứ tự tại E và F. a) Tứ giác AFME là hình gì? b) Xác định vị trí điểm M trên cạnh BC để tứ giác AFME là hình vuông."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình chữ nhật ABCD có AB = 2AD. Gọi E, F theo thứ tự là trung điểm của AB, CD. Gọi M là giao điểm của AF và DE, N là giao điểm của BF và CE. a) Tứ giác ADFE là hình gì? b) Tứ giác EMFN là hình gì?"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC. Dựng ra phía ngoài tam giác các hình vuông ABC’D và ACEF. Gọi Q, N lần lượt là giao điểm các đường chéo của ABC’D và ACEF; M, P lần lượt là trung điểm BC và DF. Chứng minh rằng tứ giác MNPQ là hình vuông."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình vuông ABCD. Trên cạnh các AD, DC lần lượt lấy các điểm E, F sao cho AE = DF. Gọi M, N lần lượt là trung điểm của EF, BF. a) Chứng minh các tam giác ADF và BAE bằng nhau. b) Chứng minh MN vuông góc với AF."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình vuông ABCD. Trên tia đối của tia BA lấy điểm E, trên tia đối của tia CB lấy điểm F sao cho AE = CF. a) Chứng minh tam giác EDF vuông cân. b) Gọi I là trung điểm của EF. Chứng minh BI = DI. c) Gọi O là giao điểm của hai đường chéo AC và BD. Chứng minh O, C, I thẳng hàng."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC, dựng ra phía ngoài tam giác các hình vuông ABC’D và ACEF. Vẽ đường cao AH kéo dài HA gặp DF tại I. Chứng minh rằng DI = IF."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD. Vẽ về phía ngoài hình bình hành, hai hình vuông ABEF và ADGH. Chứng minh: a) AC = FH và AC ⊥ FH. b) Tam giác CEG là tam giác vuông cân."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho đoạn thẳng AB và điểm M thuộc đoạn thẳng đó. Vẽ về một phía của AB, các hình vuông AMCD, BMEF. a) Chứng minh AE vuông góc với BC. b) Gọi H là giao điểm của AE và BC. Chứng minh ba điểm D, H, F thẳng hàng. c) Chứng minh đường thẳng DF luôn đi qua một điểm cố định khi M di chuyển trên đoạn thẳng cố định AB."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình vuông ABCD. Trên cạnh CD lấy điểm M. Tia phân giác của góc 𝐴𝐵𝑀̂ cắt AD ở I. Chứng minh rằng: BI ≤ 2 MI."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình vuông ABCD. Lấy điểm E thuộc đường chéo AC. Kẻ EF ⊥ AD, EG ⊥ CD. a) Chứng minh rằng: EB = FG và EB ⊥ FG. b) Chứng minh rằng: Các đường thẳng BE, AG, CF đồng quy."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC. Vẽ ra phía ngoài tam giác ABC, các hình vuông ABDE và ACFG. Vẽ hình bình hành EAGH. Chứng minh rằng: a) AH = BC và AH ⊥ BC. b) Các đường thẳng HA, BF, CD đồng quy."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD. Gọi E, F, G, H lần lượt là trung điểm của AB, BC, CD, DA. Các đường chéo AC, BD của tứ giác ABCD thoả điều kiện gì thì tứ giác EFGH là: a) Hình chữ nhật. b) Hình thoi. c) Hình vuông."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC cân tại A, trung tuyến AM. Gọi I là trung điểm của AC, K là điểm đối xứng của điểm M qua điểm I. a) Tứ giác AMCK là hình gì? b) Tứ giác AKMB là hình gì? c) Có trường hợp nào của tam giác ABC để tứ giác AKMB là hình thoi."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC vuông tại A. Về phia ngoài tam giác, vẽ các hình vuông ABDE, ACGH. a) Chứng minh tứ giác BCHE là hình thang cân. b) Vẽ đường cao AK của tam giác ABC. Chứng minh AK, DE, GH đồng quy."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang cân ABCD với AB // CD. Gọi M, N, P, Q lần lượt là trung điểm của AB, BC, CD, DA. a) Tứ giác MNPQ là hình gì? b) Cho biết diện tích tứ giác ABCD bằng 30cm². Tính diện tích tứ giác MNPQ."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC vuông tại A, trung tuyến AM. Gọi D là trung điểm của AB, E là điểm đối xứng của điểm M qua điểm D. a) Chứng minh điểm E đối xứng với điểm M qua đường thẳng AB. b) Các tứ giác AEMC, AEBM là hình gì? c) Cho BC = 4cm. Tính chu vi tứ giác AEBM. d) Tam giác vuông thoả điều kiện gì thì AEBM là hình vuông."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": " Cho hình thoi ABCD, O là giao điểm của hai đường chéo. Vẽ đường thẳng qua B song song với AC, đường thẳng qua C song song với BD, hai đường thẳng đó cắt nhau ở K. a) Tứ giác OBKC là hình gì? b) Chứng minh AB = OK. c) Tìm điều kiện của hình thoi ABCD để OBKC là hình vuông."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD có BC = 2AB và 𝐴̂ = 60. Gọi E, F lần lượt là trung điểm của BC và AD. a) Tứ giác ECDF là hình gì? b) Tứ giác ABED là hình gì? c) Tính số đo của góc 𝐴𝐸𝐷 ̂."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": " Cho hình thang ABCD (AB // CD). Gọi E, F theo thứ tự là trung điểm của AB, CD. Gọi O là trung điểm của EF. Qua O vẽ đường thẳng song song với AB, cắt AD và BC theo thứ tự tại M và N. a) Tứ giác EMFN là hình gì? b) Hình thang ABCD có thêm điều kiện gì để EMFN là hình thoi. c) Hình thang ABCD có thêm điều kiện gì để EMFN là hình vuông."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình vuông ABCD. E là điểm trên cạnh DC, F là điểm trên tia đối của tia BC sao cho BF = DE. a) Chứng minh tam giác AEF vuông cân. b) Gọi I là trung điểm của EF. Chứng minh I thuộc BD. c) Lấy điểm K đối xứng với A qua I. Chứng minh tứ giác AEKF là hình vuông."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD có AD = 2AB, 𝐴̂ = 60°. Gọi E và F lần lượt là trung điểm của BC và AD. a) Chứng minh AE BF. b) Chứng minh tứ giác BFDC là hình thang cân. c) Lấy điểm M đối xứng của A qua B. Chứng minh tứ giác BMCD là hình chữ nhật. d) Chứng minh ba điểm M, E, D thẳng hàng."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho ABCD là hình bình hành. Gọi M, N, P, Q lần lượt là trung điểm của AB, BC, CD, DA. Gọi K là giao điểm của AC và DM, L là giao điểm của BP và AC. a) Tứ giác MNPQ là hình gì? b) Tứ giác MDPB là hình gì? c) Chứng minh: AK = KL = LC."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD có AB = 2AD. Gọi E, F thứ tự là trung điểm của AB và CD. a) Các tứ giác AEFD, AECF là hình gì? b) Gọi M là giao điểm của AF và DE, N là giao điểm của BF và CE. Chứng minh rằng tứ giác EMFN là hình chữ nhật. c) Hình bình hành ABCD nói trên có thêm điều kiện gì để EMFN là hình vuông?"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD có A=120°, phân giác góc D đi qua trung điểm I của cạnh AB, kẻ AH vuông DC. a. CMR: AB=2AD. b. CMR: DI=2AH c. CMR: AC vuông AD d. Gọi M là điểm bất kì trên cạnh CD thì trung điểm O của đoạn AM duy chuyển trên đường nào?"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD vẽ các tam giác đều ABE và ADF nằm ngoài hình bình hành. O là giao điểm hai đường chéo. a. CM: ΔDFC=ΔBCE b. ΔFCE đều c. M và N là trung điểm AE và AF, tính góc NOM."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho ΔABC vuông A, AC>AB, đường cao AH, K thuộc HC sao cho HK=AH, kẻ Ax//BC, Kt//AH, Ax giao Kt tại E, AC giao KE tại P. a. AHKE là hình gì? b. ΔAPB vuông cân. c. Q là điểm thứ 4 của hình bình hành APQB, I là giao PB và AQ. CM: ΔAIK cân và H,I,E thẳng hàng. d. HE//QK."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC cân tại A. M,N,P là trung điểm AB,AC,BC. CMR: a. Tứ giác MNCB là hình gì? b. MP đi qua trung điểm O của BN. c. AMPN là hinh thoi d. Tìm điều kiện tam giác ABC để AMPN là hình vuông."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang vuông MNPQ (M=90) có QP=2MN, các cạnh bên kéo dài cắt nhau tại A, gọi B,C là trung điểm MN,PQ. a. MNCQ la hình gì? b. CM: MANC là hình bình hành. c. MN giao PQ tại H, CMR: B,H,C thẳng hàng và CH=2BH"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình vuông ABCD. M là điểm bất kì trên BC, Trong nửa mặt phẳng bờ AB chứa C dựng hình vuông AMHN, qua M vẽ d//AB cắt AH tại E, AH giao DC tại F. a. CM: BM=ND b. N,D,C thẳng hàng. c. EMFN là hình gì? d. CM: DF+BM=FM và chu vi tam giác FMC không đổi khi M thay đổi."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC vuông A, đường cao AH. Dựng phía ngoài tam giác hình vuông ABDG và ACEF, DG giao EF tại I. CMR: a. I,A,H thẳng hàng. b. IH,DC,BE đồng quy."
+  }
+]

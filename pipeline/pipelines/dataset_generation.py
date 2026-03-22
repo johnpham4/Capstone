@@ -1,5 +1,8 @@
 from zenml import pipeline
 from loguru import logger
+import os
+import yaml
+
 
 from pipeline.steps.dataset import (
     load_source_data,
@@ -10,7 +13,9 @@ from pipeline.steps.dataset import (
 
 @pipeline
 def dataset_generation_pipeline(
-    source_json_path: str = "./dataset/data/triangle_diagrams.json",
+    config_path: str = "pipeline/configs/dataset_generation.yaml",
+    source_json_path: str = "",
+    output_dir: str = "",
     test_size: float = 0.2,
     batch_size: int = 4,
     sleep_seconds: float = 2.0,
@@ -18,8 +23,16 @@ def dataset_generation_pipeline(
     max_concurrency: int = 4,
     enable_dsl_validation: bool = True,
     save_json: bool = True,
-    output_dir: str = "./dataset/data"
 ):
+    if config_path and os.path.exists(config_path):
+        with open(config_path, "r", encoding="utf-8") as f:
+            config = yaml.safe_load(f)
+
+        params = config.get("parameters", {})
+
+        source_json_path = params.get("source_json_path", source_json_path)
+        output_dir = params.get("output_dir", output_dir)
+
     logger.info("Starting GMBL dataset generation pipeline")
 
     documents = load_source_data(source_json_path=source_json_path)
@@ -44,6 +57,6 @@ def dataset_generation_pipeline(
         logger.success(f"Dataset saved to: {dataset_dir}")
         return dataset_dir
 
-    logger.success(f"Dataset generation completed")
+    logger.success("Dataset generation completed")
     return train_test_split
 

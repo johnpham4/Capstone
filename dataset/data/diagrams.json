@@ -1,122 +1,506 @@
 [
   {
-    "image": "images/img_1.png",
-    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is the midpoint of segment AB, point E is the midpoint of segment AC, line DE, angle ADE = 90, circle D with diameter AB",
-    "id": 1,
-    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn D với đường kính AB"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thoi ABCD có 𝐴̂ = 60. Gọi E, F, G, H lần lượt là trung điểm của các cạnh AB, BC, CD, DA. Chứng minh đa giác EBFGDH là lục giác đều."
   },
   {
-    "image": "images/img_10000.png",
-    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, point E is on segment AC, BC // DE, excircle O of triangle ABC is tangent to segment BC, angle ADE = 90",
-    "id": 10000,
-    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, góc ADE = 90"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình chữ nhật ABCD. E là điểm bất kì nằm trên đường chéo AC. Đường thẳng qua E, song song với AD cắt AB, DC lần lượt tại F, G. Đường thẳng qua E, song song với AB cắt AD, BC lần lượt tại H, K. Chứng minh hai hình chữ nhật EFBK và EGDH có cùng diện tích."
   },
   {
-    "image": "images/img_100000.png",
-    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point B and point C",
-    "id": 100000,
-    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm B và điểm C"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC. Gọi M, N lần lượt là trung điểm của các cạnh AB, AC. Vẽ BP ⊥ MN, CQ ⊥ MN (P, Q ∈ MN). Chứng minh tứ giác BPQC là hình chữ nhật."
   },
   {
-    "image": "images/img_100010.png",
-    "caption": "circle O, point A is on circle O",
-    "id": 100010,
-    "caption_vn": "Đường tròn O, điểm A nằm trên đường tròn O"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình vuông ABCD. Gọi M, N lần lượt là trung điểm của AB, CD. Chứng minh các tứ giác ADCM và ABCN có diện tích bằng nhau."
   },
   {
-    "image": "images/img_100011.png",
-    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, incircle O of triangle ABC, point N is on the circle O",
-    "id": 100011,
-    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang vuông ABCD (𝐴̂ = 𝐷̂ = 90), AB = 3cm, AD = 4cm và 𝐴𝐵𝐶 ̂ = 135. Tính diện tích của hình thang đó."
   },
   {
-    "image": "images/img_10002.png",
-    "caption": "triangle ABC, AB = AC, point O is the excenter of triangle ABC",
-    "id": 10002,
-    "caption_vn": "Tam giác ABC, AB = AC, điểm O là tâm đường tròn bàng tiếp của tam giác ABC"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Diện tích hình bình hành bằng 24cm². Khoảng cách từ giao điểm của hai đường chéo đến các đường thẳng chứa các cạnh hình bình hành bằng 2cm và 3cm. Tính chu vi của hình bình hành."
   },
   {
-    "image": "images/img_100022.png",
-    "caption": "triangle ABC, AB = AC, point D is on segment AB, point E is on segment AC, BC // DE, a line through C is the perpendicular bisector of segment AB",
-    "id": 100022,
-    "caption_vn": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua C là đường trung trực của đoạn thẳng AB"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC cân tại A, điểm M thuộc đáy BC. Gọi BD là đường cao của tam giác ABC; H và K chân đường vuông góc kẻ từ M đến AB và AC. Chứng minh: MH + MK = BD"
   },
   {
-    "image": "images/img_100026.png",
-    "caption": "triangle ABC, angle ABC = 90, point D is on segment AB, point E is on segment AC, BC // DE, circle O with diameter AB, angle ADE = 90",
-    "id": 100026,
-    "caption_vn": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD. Gọi K và L là hai điểm thuộc cạnh BC sao cho BK = KL = LC. Tính tỉ số diện tích của: a) Các tam giác DAC và DCK. b) Tam giác DAC và tứ giác ADLB. c) Các tứ giác ABKD và ABLD."
   },
   {
-    "image": "images/img_100044.png",
-    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, point D is on segment AB, point E is on segment AC, BC // DE, excircle O of triangle ABC is tangent to segment BC, angle ADE = 90",
-    "id": 100044,
-    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC, góc ADE = 90"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác đều ABC, đường cao AH và điểm M thuộc miền trong của tam giác. Gọi P, Q, R lần lượt là chân đường vuông góc kẻ từ M đến BC, AC, AB. Chứng minh: MP + MQ + MR = AH"
   },
   {
-    "image": "images/img_100046.png",
-    "caption": "triangle ABC, AB = AC, point D is on segment AB, point E is on segment AC, BC // DE, circumcircle O of triangle ABC",
-    "id": 100046,
-    "caption_vn": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC. Gọi M, N lần lượt là trung điểm của các cạnh AC, AB. Từ N kẻ đường thẳng song song với BM cắt đwòng thẳng BC tại D. Biết diện tích tam giác ABC bằng a(cm²). a) Tính diện tích hình thang CMND theo a. b) Cho a = 128cm² và BC = 32cm. Tính chiều cao của hình thang CMND."
   },
   {
-    "image": "images/img_100053.png",
-    "caption": "triangle ABC, point D is the midpoint of segment AB, point E is the midpoint of segment AC, point F is the midpoint of segment BC, line DE, line EF, BC // DE, EF // AB",
-    "id": 100053,
-    "caption_vn": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC, đường thẳng DE, đường thẳng EF, BC song song với DE, EF song song với AB"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD. Kéo dài AB một đoạn BM = AB, kéo dài BC một đoạn CN = BC, kéo dài CD một đoạn DP = CD và kéo dài DA một đoạn AQ = DA. Chứng minh S.MNPQ = 5S.ABCD"
   },
   {
-    "image": "images/img_100058.png",
-    "caption": "triangle ABC, AB = AC, a line through point C is perpendicular to segment AB, a line through point B is perpendicular to segment AC",
-    "id": 100058,
-    "caption_vn": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD. Gọi M, P, N, Q lần lượt là trung điểm các cạnh AB, BC, CD, AD; O là giao điểm của MN và PQ. Chứng minh: a) S.AOQ + S.BOP = S.MPQ. b) S.AOD + S.BOC = 1/2 S.ABCD."
   },
   {
-    "image": "images/img_100059.png",
-    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, point D is on segment AB, point E is on segment AC, BC // DE, circumcircle O of triangle ABC, angle ADE = 90",
-    "id": 100059,
-    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC, góc ADE = 90"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD. Qua điểm B vẽ đường thẳng song song với đường chéo AC. Đường thẳng đó cắt cạnh DC ở E. Chứng minh: S.ADE = S.ABCD"
   },
   {
-    "image": "images/img_10006.png",
-    "caption": "triangle ABC, angle ABC = 90, angle BAC = 45, angle ACB = 45, a line through point C is perpendicular to segment BC",
-    "id": 10006,
-    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD có AC = 10cm, BD = 12cm. Hai đường chéo AC và BD cắt nhau tại O. Biết 𝐴𝑂𝐵 ̂ = 30. Tính diện tích tứ giác ABCD."
   },
   {
-    "image": "images/img_100060.png",
-    "caption": "triangle ABC, point D is on segment AB, angle ACD = angle DCB",
-    "id": 100060,
-    "caption_vn": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang cân ABCD (AB // CD). Gọi I, J, K, L lần lượt là trung điểm của AB, BC, CD, DA. a) Tứ giác IJKL là hình gì? b) Cho biết diện tích hình thang ABCD bằng 20cm². Tính diện tích tứ giác IJKL."
   },
   {
-    "image": "images/img_100070.png",
-    "caption": "triangle ABC, a line through point A, excircle O of triangle ABC is tangent to segment BC",
-    "id": 100070,
-    "caption_vn": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn bàng tiếp O của tam giác ABC tiếp xúc với đoạn thẳng BC"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD. Vẽ phân giác AM của góc A (M ∈ CD), phân giác CN của góc C (N ∈ AB). Các phân giác AM, CN lần lượt cắt BD tại E và F. Chứng minh diện tích hai tứ giác AEFN và CFEM bằng nhau."
   },
   {
-    "image": "images/img_100081.png",
-    "caption": "triangle ABC",
-    "id": 100081,
-    "caption_vn": "Tam giác ABC"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình chữ nhật ABCD có AB = 12 cm, AD = 6,8 cm. Gọi H, I, E, K là các trung điểm tương ứng của BC, HC, DC, EC. a) Tính diện tích tam giác DBE. b) Tính diện tích tứ giác EHIK."
   },
   {
-    "image": "images/img_100088.png",
-    "caption": "triangle ABC, point M is the midpoint of segment AB",
-    "id": 100088,
-    "caption_vn": "Tam giác ABC, điểm M là trung điểm của đoạn thẳng AB"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình vuông ABCD có tâm đối xứng O, cạnh a. Một góc vuông xOy có tia Ox cắt cạnh AB tại E, tia Oy cắt cạnh BC tại F. Tính diện tích tứ giác OEBF"
   },
   {
-    "image": "images/img_100089.png",
-    "caption": "triangle ABC, angle ABC = 90, angle BAC = 60, angle ACB = 30, a line through point A",
-    "id": 100089,
-    "caption_vn": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Tính diện tích một hình thang vuông, biết hai đáy có độ dài 6 cm và 9 cm, góc tạo bởi cạnh bên và đáy lớn có số đo bằng 45 độ."
   },
   {
-    "image": "images/img_100096.png",
-    "caption": "triangle ABC, angle ABC = 90, incircle O of triangle ABC, excircle P of triangle ABC is tangent to segment BC",
-    "id": 100096,
-    "caption_vn": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, đường tròn bàng tiếp P của tam giác ABC tiếp xúc với đoạn thẳng BC"
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD có độ dài hai đáy AB = 5cm, CD = 15cm, độ dài hai đường chéo AC = 16cm, BD = 12cm. Từ A vẽ đường thẳng song song với BD, cắt CD tại E. a) Chứng minh tam giác ACE là tam giác vuông. b) Tính diện tích hình thang ABCD."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Gọi O là điểm nằm trong hình bình hành ABCD. Chứng minh:  S.ABO + S.CDO = S.BCO + S.DAO"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình chữ nhật ABCD, O là điểm nằm trong hình chữ nhật, AB = a, AD = b. Tính tổng diện tích các tam giác OAB và OCD theo a và b."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình chữ nhật ABCD. Gọi E, F là hai điểm lần lượt trên hai cạnh AB và DC sao cho AE = CF; I là điểm trên cạnh AD; IB và IC lần lượt cắt EF tại M và N. Chứng minh: S.IMN = S.MEB + S.NFC"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD. Chứng minh rằng ta luôn vẽ được một tam giác mà diện tích của nó bằng diện tích tứ giác ABCD. "
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC có BC = a, đường cao AH = h. Từ điểm I trên đường cao AH, vẽ đường thẳng song song với BC, cắt hai cạnh AB, AC lần lượt tại M và N. Vẽ MQ, NP vuông góc với BC. Đặt AI = x. a) Tính diện tích tứ giác MNPQ theo a, h, x. b) Xác định vị trí điểm I trên AH để diện tích tứ giác MNPQ lớn nhất."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD (AB // CD). Gọi M, N lần lượt là trung điểm của AB, CD. Một đường thẳng song song với hai đáy cắt AD ở E, MN ở I, BC ở F. Chứng minh IE = IF."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD. Qua trung điểm K của đường chéo BD, vẽ đường thẳng song song với đường chéo AC, cắt AD tại E. Chứng minh CE chia tứ giác thành hai phần có diện tích bằng nhau."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC. Trên cạnh AC lấy các điểm M, N sao cho AM = MN = NC. Đường thẳng qua M, song song với AB, cắt đường thẳng qua N song song với BC tại O. Chứng minh OA, OB, OC chia tam giác ABC thành ba phần có diện tích bằng nhau."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC, G là trọng tâm. Qua G vẽ đường thẳng song song với cạnh AC, cắt các cạnh AB, BC lần lượt ở D và E. Tính độ dài đoạn thẳng DE, biết DA+EC=16cm và chu vi tam giác ABC bằng 75cm."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD (AB // CD). Đường thẳng song song hai đáy cắt cạnh AD tại M, cắt cạnh BC tại N sao cho MD = 3MA. a) Tính tỉ số NB/NC. b) Cho AB = 8cm, CD = 20cm. Tính MN."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC. Gọi D là điểm chia cạnh AB thành hai đoạn thẳng có độ dài AD = 13,5cm, DB = 4,5cm. Tính tỉ số các khoảng cách từ các điểm D và B đến cạnh AC."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD, O là giao điểm của hai đường chéo. Qua điểm I thuộc đoạn OB, vẽ đường thẳng song song với đường chéo AC, cắt các cạnh AB, BC và các tia DA, DC theo thứ tự tại các điểm M, N, P, Q. a) Chứng minh: IM/OA = IB/OB và IM/IP = IB/ID . OD/OB  b) IM/IP = IN/IQ"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD. Gọi E là trung điểm của cạnh AB, F là trung điểm của cạnh CD. Chứng minh rằng hai đoạn thẳng DE và BF chia đường chéo AC thành ba đoạn bằng nhau."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD có các góc B và D là góc vuông. Từ một điểm M trên đường chéo AC, vẽ MN ⊥ BC, MP ⊥ AD. Chứng minh: MN/AB + MP/CD = 1."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD. Một cát tuyến qua D, cắt đường chéo AC ở I và cắt cạnh BC ở N, cắt đường thẳng AB ở M. a) Chứng minh rằng tích AM.CN không phụ thuộc vào vị trí của cát tuyến qua D. b) Chứng minh hệ thức: ID² = IM.IN."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình chữ nhật ABCD. Trên các cạnh AB, BC, CD, DA lần lượt lấy các điểm E, F, G, H sao cho AE/AB = AH/AD = CF/CB = CG/CD. a) Chứng minh tứ giác EFGH là hình bình hành. b) Chứng minh hình bình hành EFGH có chu vi không đổi."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": " Cho hình thang ABCD (AB // CD), M là trung điểm của CD. Gọi I là giao điểm của AM và BD, K là giao điểm của BM và AC. a) Chứng minh IK // AB. b) Đường thẳng IK cắt AD, BC lần lượt ở E và F. Chứng minh EI = IK = KF."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD có đáy nhỏ CD. Từ D, vẽ đường thẳng song song với cạnh BC, cắt AC tại M và AB tại K. Từ C, vẽ đường thẳng song song với cạnh bên AD, cắt cạnh đáy AB tại F. Qua F, vẽ đường thẳng song song với đường chéo AC, cắt cạnh bên BC tại P. Chứng minh rằng: a) MP song song với AB. b) Ba đường thẳng MP, CF, DB đồng quy."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD, O là giao điểm của hai đường chéo AC và BD. Đường thẳng song song với BC qua O, cắt AB ở E và đường thẳng song song với CD qua O, cắt AD ở F. a) Chứng minh đường thẳng EF song song với đường chéo BD. b) Từ O vẽ các đường thẳng song song với AB và AD, cắt BC và DC lần lượt tại G và H. Chứng minh hệ thức: CG.DH = BG.CH."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC có độ dài các cạnh AB = m, AC = n; AD là đường phân giác trong của góc A. Tính tỉ số diện tích của tam giác ABD và tam giác ACD."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC cân ở A, phân giác trong BD, BC = 10cm, AB = 15cm. a) Tính AD, DC. b) Đường phân giác ngoài của góc B của tam giác ABC cắt đường thẳng AC tại D'. Tính D'C."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC, trung tuyến AM và đường phân giác trong AD. a) Tính diện tích tam giác ADM, biết AB = m, AC = n (n > m) và diện tích ΔABC bằng S. b) Cho n = 7cm, m = 3cm. Diện tích tam giác ADM chiếm bao nhiêu phần trăm diện tích tam giác ABC?"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC có AB = 5cm, AC = 6cm, BC = 7cm. Gọi G là trọng tâm tam giác ABC, O là giao điểm của hai đường phân giác BD, AE. a) Tính độ dài đoạn thẳng AD. b) Chứng minh OG // AC."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC, trung tuyến AM, đường phân giác của góc 𝐴𝑀𝐵 ̂ cắt AB ở D, đường phân giác của góc 𝐴𝑀𝐶 ̂ cắt cạnh AC ở E. Chứng minh DE // BC."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC (AB < AC), AD là phân giác trong của góc A. Qua trung điểm E của cạnh BC, vẽ đường thẳng song song với AD, cắt cạnh AC tại F, cắt đường thẳng AB tại G. Chứng minh CF = BG."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang cân ABCD, đáy lớn DC, góc 𝐷̂ = 60. Đường phân giác của góc D cắt đường chéo AC tại I, chia AC thành hai đoạn theo tỉ số 4/11 và cắt đáy AB tại M. Tính các cạnh đáy AB, DC, biết MA – MB = 6cm."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD. Một đường thẳng cắt AB ở E, AD ở F và cắt đường chéo AC ở G. Chứng minh hệ thức: AB/AE + AD/AF = AC/AG."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD. Trên cạnh AB lấy một điểm M và trên cạnh CD lấy một điểm N sao cho DN = BM. Chứng minh rằng ba đường thẳng MN, DB, AC đồng quy."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác A'B'C' đòng dạng với tam giác ABC theo tỉ số k. Tính tỉ số chu vi của hai tam giác."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình vuông ABCD. Trên hai cạnh AB, BC lấy hai điểm P và Q sao cho BP = BQ. Gọi H là hình chiếu của B trên đường thẳng CP. a) Chứng minh ΔBHP ∽ ΔCHB. b) Chứng minh ΔCHD ∽ ΔBHQ. Từ đó suy ra 𝐷𝐻𝑄 ̂ = 90."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Hai tam giác ABC và DEF có 𝐴̂ = 𝐷̂; 𝐵̂ = 𝐸̂, AB = 8cm, BC = 10cm, DE = 6cm. a) Tính độ dài các cạnh AC, DF, EF, biết rằng cạnh AC dài hơn cạnh DF là 3cm. b) Cho diện tích tam giác ABC bằng 39,69cm². Tính diện tích tam giác DEF."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC vuông tại A, đường cao AH, BH = 4cm, CH = 9cm. Gọi I, K lần lượt là hình chiếu của H lên AB, AC. a) Chứng minh ΔAKI ∽ ΔABC. b) Tính diện tích tam giác ABC. c) Tính diện tích của tứ giác AKHI."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC, hai trung tuyến BM và CN cắt nhau tại G. Tính diện tích tam giác GMN, biết diện tích tam giác ABC bằng S."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình vuông ABCD, cạnh a. Gọi E là điểm đối xứng với C qua D, EB cắt AD tại I. Trên EB lấy điểm M sao cho DM = DA. a) Chứng minh ΔEMC ∽ ΔECB. b) Chứng minh EB.MC = 2a². c) Tính diện tích tam giác EMC theo a."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC vuông tại A. Trên cạnh AB, lấy điểm M sao cho 2AM = 3MB. Một đường thẳng qua M, song song với BC, cắt AC tại N. Một đường thẳng qua N, song song với AB, cắt BC tại D. a) Chứng minh ΔAMN ∽ ΔNDC. b) Cho AN = 8cm, BM = 4cm. Tính diện tích các tam giác AMN, ABC và NDC."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC, G là trọng tâm của tam giác. Gọi E, F, H lần lượt là trung điểm của AG, BG, CG. Chứng minh các tam giác EFH và ABC đồng dạng với nhau và G là trọng tâm của tam giác EFH."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC. Trên các cạnh BC, CA, AB lấy lần lượt các điểm M, N, P sao cho AM, BN, CP đồng quy tại O. Qua A và C vẽ các đường thẳng song song với BO cắt CO, OA lần lượt ở E và F. Chứng minh: ΔFCM ∽ ΔOMB và ΔPAE ∽ ΔPBO."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC có AB = 15cm, AC = 20cm. Trên hai cạnh AB, AC lần lượt lấy 2 điểm D, E sao cho AD = 8cm, AE = 6cm. a) Chứng minh AED ∽ ABC. b) Tính chu vi của tam giác ADE, khi biết BC = 25cm. c) Tính góc ADE, biết 𝐶̂ = 20."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho góc xOy . Trên cạnh Ox, lấy 2 điểm A, B sao cho OA = 5cm, OB = 16cm. Trên cạnh Oy, lấy 2 điểm C, D sao cho OC = 8cm, OD = 10cm. a) Chứng minh: ΔOCB ∽ ΔOAD. b) Gọi I là giao điểm của AD và BC. Chứng minh 𝐵𝐴𝐼 ̂ = 𝐷𝐶𝐼 ̂ ."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD. Vẽ CE ⊥ AB và CF ⊥ AD, BH ⊥ AC. a) Chứng minh ΔABH ∽ ΔACE. b) Chứng minh: AB.AE + AD.AF = AC^2"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD (AB // CD). Gọi O là giao điểm của hai đường chéo AC và BD. a) Chứng minh OA.OD = OB.OC. b) Đường thẳng qua O, vuông góc với AB, CD theo thứ tự tại H, K. Chứng minh OH/OK = AB/CD."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC có ba góc nhọn. Gọi O là giao điểm của ba đường cao AH, BK, CI. a) Chứng minh OK.OB = OI.OC b) Chứng minh ΔOKI ∽ ΔOCB c) Chứng minh ΔBOH ∽ ΔBCK d) Chứng minh BO.BK + CO.CI = BC^2"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC vuông ở A, AB = 5,4cm, AC = 7,2cm. a) Tính BC. b) Từ trung điểm M của BC, vẽ đường thẳng vuông góc với BC, cắt đường thẳng AC tại H và cắt đường thẳng AB tại E. Chứng minh ΔEMB ∽ ΔCAB. c) Tính EB và EM. d) Chứng minh BH vuông góc với EC. e) Chứng minh HA.HC = HM.HE."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC vuông ở A, đường cao AH. a) Hãy nêu từng cặp các tam giác đồng dạng. b) Cho AB = 12,45cm, AC = 20,50cm. Tính độ dài các đoạn thẳng BC, AH, BH, CH"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tứ giác ABCD, có 𝐷𝐵𝐶 ̂ = 90, AD = √20cm, AB = 4cm, DB = 6cm, DC = 9cm. a) Tính góc 𝐵𝐴𝐷 ̂ b) Chứng minh ΔBAD ∽ ΔDBC c) Chứng minh DC // AB."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác cân ABC, AB = AC = b, BC = a. Vẽ các đường cao BH, CK. a) Chứng minh BK = CH b) Chứng minh KH // BC c) Tính độ dài HC và HK."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC. Gọi M, N theo thứ tự là trung điểm của BC, AC. O là giao điểm các đường trung trực, H là trực tâm, G là trọng tâm của tam giác ABC. a) Chứng minh ΔOMN ∽ ΔHAB. b) So sánh độ dài AH và OM. c) Chứng minh ΔHAG ∽ ΔOMG. d) Chứng minh ba điểm H, G, O thẳng hàng và GH = 2GO."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC, các đường cao AK và BD cắt nhau tại G. Vẽ các đường trung trực HE, HF của AC và BC. Chứng minh: a) BG = 2HE b) AG = 2HF."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang vuông ABCD (AB // DC, 𝐴̂ = 𝐷̂ = 90 ). Đường chéo BD vuông góc với cạnh bên BC. Chứng minh: BD² = AB.DC"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang KLMN (KN // LM). gọi E là giao điểm của hai đường chéo. Qua E, vẽ một đường thẳng song song với LM, cắt MN tại F. Chứng minh: 1/EF = 1/KN + 1/LM"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": " Cho hình bình hành MNPQ có E là trung điểm PQ, G là trọng tâm ∆MPQ, F thuộc cạnh MQ sao cho FG//NM. a. Tính tỉ số QE/FG b. Chứng minh ΔQGE ∽ ΔNGM và tìm tỉ số đồng dạng"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD, F thuộc BC Tia AF cắt BD và DC ở E và G. CMR: a. ∆BEF ∽ ∆DEA và ∆DGE ∽ ∆BAE. b. AE^2=EF.EG. c. BF.DG không thay đổi. "
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho ∆ABC vuông tại A, đường cao AH, AB=5cm, AC=12cm, Gọi D, E là hình chiếu của H trên AB,AC. a. Tính BC,DE. b. Chứng minh ∆ACB ∽ ∆ADE. c. Đường vuông góc với DE tại D và E cắt BC tại M và N, Chứng minh M là trung điểm BH, N là trung điểm CH."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình chữ nhật ABCD kẻ AH vuông BD. a. Chứng minh ∆AHD ∽ ∆BDC và BC^2=DH.DB. b. Gọi S là trung điểm BH, R là trung điểm AH. Chứng minh: SH.BD=SR.DC c. Gọi T là trung điểm DC. chứng minh DRST là hình bình hành. d. Tính 𝐴𝑆𝑇 ̂ ."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": " Cho hình vuông ABCD và một điểm E bất kì trên BC. Kẻ Ax vuông AE cắt CD tại F. Trung tuyến AI của tam giác AEF cắt CD tại K. Qua E kẻ đường thẳng song song AB cắt AI tại G. a. Chứng minh AE=AF. b. Tứ giác EGFK là hình thoi. c. ∆FIK đồng dạng ∆FCE. d. 𝐸𝐾 = 𝐵𝐸 + 𝐷𝐾 và chu vi tam giác ECK không đổi khi E duy chuyển trên BC."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình bình hành ABCD có góc A nhọn, kẻ BH, CM, CN, DI lần lượt vuông góc   với AC, AB, AD, và AC. a. Chứng minh AH=CI b. Chứng minh : AB.CM=CN.AD c. Tứ giác BIDH là hình gì? d. AD.AN+AB.AM=ACAC^"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho tam giác ABC và điểm S không thuộc mp(ABC). Nối S với A, B, C. Gọi M, N, P, Q lần lượt là trung điểm của AB, BC, SC, SA. a) Chứng minh MQ // mp(SBC) và NP // mp(SAB). b) Chứng minh tứ giác MNPQ là hình bình hành."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho hình thang ABCD có AB//CD, góc A và D vuông, AB=2cm, AD=CD=8cm, a. Tính BC. b. Gọi O là trung điểm AD, chứng minh ∆BOC vuông. c. Chứng minh ∆AOB ∽ ∆DOC; ∆ABO ∽ ∆OBC"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho ∆ABC vuông tại C( AC<CB) . Lấy I bất kì trên AB, trên nửa mp bờ AB chứa C kẻ tia Ax và By cùng vuông góc AB, đường vuông góc với IC qua C cắt Ax , By ở M và N. a. Chứng minh ∆CAI ∽ ∆CBN b. Chứng minh: AB.NC=IN.CB"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho ∆ABC đều, gọi O là trung điểm BC. Tại O dựng góc xOy=60 độ , Ox cắt AB tại M, Oy cắt AC tại N. a. ∆BOM ∽ ∆CNO. b. BC^2=4BM.CN. c. ∆BOM ∽ ∆ONM và OM là phân giác góc BMN. d. Chứng minh ON^2=CN.MN"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": " Cho ∆ABC vuông tại A, đường cao AH, gọi E, F là hình chiếu của H lên AB và AC. a. Chứng minh AEFH là hình chữ nhật. b. Chứng minh AE.AB=AF.AC. c. Đường thẳng qua A và vuông góc với EF cắt BC tại I, Chứng minh I là trung điểm BC."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho ∆ABC vuông tại A, đường cao AH chia cạnh huyền thành hai đoạn có độ dài là 4 và 9, gọi D và E là hình chiếu của H lên AB, AC. a. Tính AB, AC, DE. b. Các đường vuông góc với DE tại D và E cắt BC tại M và N, Chứng minh M là trung điểm BH, N là trung điểm CH. c. Tính diện tích DEMN."
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho ∆ABC có AC>AB, phân giác trong AD, Qua C kẻ Cx sao cho tia CB nằm giữa hai tia CA và Cx và 𝐵𝐶𝑥 ̂ = 𝐵𝐴𝐷 ̂, AD giao Cx tại E. a. ∆DCE ∽ ∆DAB. b. ∆EBC cân. c. ∆ABD ∽ ∆AEC từ đó suy ra: AB.AC=AD^2 + BD.DC"
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "",
+    "problem": "Cho ∆ABC vuông tại A, AB=8cm, AC=6cm, phân giác AD, a. Tính CD và BD. b. Từ D kẻ DE và DF lần lượt vuông góc với AB và AC. Tính chu vi và diện tích của AEDF."
   }
 ]

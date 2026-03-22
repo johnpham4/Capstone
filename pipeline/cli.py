@@ -9,7 +9,7 @@ from src.config.settings.base import settings
 
 from pipeline.pipelines.data_preparation import data_preparation_pipeline
 from pipeline.pipelines.dataset_generation import dataset_generation_pipeline
-from pipelines.dataset_upload import dataset_upload_pipeline
+from pipeline.pipelines.dataset_upload import dataset_upload_pipeline
 
 @click.command()
 @click.option(
@@ -96,14 +96,14 @@ def main(
     root_dir = Path(__file__).resolve().parent.parent
 
     if run_prepare_data:
-        pipeline_args["config_path"] = root_dir / "configs" / "data_preparation.yaml"
+        pipeline_args["config_path"] = str(root_dir / "configs" / "data_preparation.yaml")
         assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
         pipeline_args["run_name"] = f"data_prep_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
         logger.info("Starting data preparation pipeline")
         data_preparation_pipeline.with_options(**pipeline_args)()
 
     if run_upload_dataset:
-        pipeline_args["config_path"] = root_dir / "configs" / "dataset_upload.yaml"
+        pipeline_args["config_path"] = str(root_dir / "configs" / "dataset_upload.yaml")
         assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
         pipeline_args["run_name"] = f"upload_dataset_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
 
@@ -112,8 +112,9 @@ def main(
         dataset_upload_pipeline.with_options(**pipeline_args)()
 
     if run_generate_gmbl:
-        pipeline_args["config_path"] = root_dir / "configs" / "dataset_generation.yaml"
-        assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
+        config_path = root_dir / "configs" / "dataset_generation.yaml"
+        assert config_path.exists(), f"Config file not found: {config_path}"
+        pipeline_args["config_path"] = str(config_path)
         pipeline_args["run_name"] = f"generate_gmbl_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
 
         logger.info("Starting GMBL dataset generation pipeline")

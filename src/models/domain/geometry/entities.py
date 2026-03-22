@@ -131,5 +131,5 @@ class Diagram:
             "triangles": len(self.triangles),
             "quadrilaterals": len(self.quadrilaterals),
             "segments": len(self.segments),
-            "lines": len(self.lines)
+            "lines": len(self.lines)}
 
