@@ -1,8 +1,0 @@
-[
-    {
-    "image_dir": "images/img_120889.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(define D point (midpoint A B))\n(segment A B)\n(define E point (midpoint A C))\n(segment A C)\n(segment D E)\n(define M point (projection C (segment A E)))\n(segment C M)\n(perpendicular (segment D E) (segment C E))\n(equal-distance D E E C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, và đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, đồng thời góc ADE = 90°. Tính độ dài đoạn thẳng DE."
-  }
-]
