@@ -7,8 +7,8 @@ from datetime import datetime
 import gradio as gr
 from PIL import Image
 
-DEFAULT_JSON_PATH = "dataset/Nhi/full-filter.json"
-DEFAULT_IMAGE_FOLDER = "dataset/Nhi/images"
+DEFAULT_JSON_PATH = "dataset/Nhi/failed.json"
+DEFAULT_IMAGE_FOLDER = "output_fixed"
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Gradio reviewer for geometry samples")

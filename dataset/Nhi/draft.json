@@ -1,0 +1,9 @@
+[
+{
+    "image_dir": "images/img_11501.png",
+    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng đi qua điểm B",
+    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C D 45)\n(define D point (segment A B))\n(segment C D)\n(angle-equal A C D D C B)",
+    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, điểm D nằm trên đoạn thẳng AB sao cho góc ACD = góc DCB. Tìm hiểu xem đường thẳng nào đi qua điểm B.",
+    "id": "images/img_182.png"
+  }
+]

@@ -7,8 +7,9 @@ from datetime import datetime
 import gradio as gr
 from PIL import Image
 
-DEFAULT_JSON_PATH = "dataset/Nhi/full-filter.json"
+DEFAULT_JSON_PATH = "dataset/Nhi/failed.json"
 DEFAULT_IMAGE_FOLDER = "dataset/Nhi/images"
+BAD_FILTER_PATH = "dataset/Nhi/bad_full-filter.json"
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Gradio reviewer for geometry samples")
@@ -47,6 +48,27 @@ def load_items(json_path: str) -> list[dict]:
     )
 
 
+# ===== LOAD BAD FILTER REASONS =====
+def load_bad_filter_reasons(bad_filter_path: str) -> dict:
+    if not os.path.exists(bad_filter_path):
+        return {}
+    with open(bad_filter_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    # Có thể là list các dict hoặc list các id (string)
+    result = {}
+    if isinstance(data, list):
+        for item in data:
+            if isinstance(item, dict) and "id" in item:
+                result[str(item["id"])] = item.get("reason", "")
+            elif isinstance(item, str):
+                result[item] = ""
+    return result
+
+bad_filter_reasons = load_bad_filter_reasons(BAD_FILTER_PATH)
+
+
+
+FAILED_FILTER_PATH = "dataset/Nhi/failed_filter.json"
 args = parse_args()
 JSON_PATH = args.json_path
 IMAGE_FOLDER = args.image_folder
@@ -174,6 +196,10 @@ def get_item(i: int):
         except Exception:
             image_note = "\n\n[WARNING] Image file exists but cannot be loaded."
 
+    # Lấy reason từ bad_full-filter.json nếu có
+    bad_reason = bad_filter_reasons.get(id_, None)
+    reason_text = f"\n**Reason (bad_full-filter.json):**\n{bad_reason}" if bad_reason else ""
+
     text = f"""
 ### Source JSON: {JSON_PATH}
 
@@ -184,6 +210,7 @@ def get_item(i: int):
 **Problem**
 
 {problem_text}{image_note}
+{reason_text}
 
 **DSL**
 
@@ -212,6 +239,32 @@ def like(i: int):
     return (*get_item(i), "")
 
 
+
+def _append_to_failed_filter(item: dict):
+    # Đọc file failed_filter.json, nếu chưa có thì tạo mới
+    try:
+        if os.path.exists(FAILED_FILTER_PATH):
+            with open(FAILED_FILTER_PATH, "r", encoding="utf-8") as f:
+                failed_data = json.load(f)
+        else:
+            failed_data = []
+    except Exception:
+        failed_data = []
+
+    # Tránh thêm trùng id
+    item_id = str(item.get("id")) if item.get("id") is not None else None
+    existed_ids = set()
+    for entry in failed_data:
+        if isinstance(entry, dict) and "id" in entry:
+            existed_ids.add(str(entry["id"]))
+        elif isinstance(entry, str):
+            existed_ids.add(entry)
+    # Nếu chưa có thì thêm vào
+    if item_id and item_id not in existed_ids:
+        failed_data.append(item)
+        with open(FAILED_FILTER_PATH, "w", encoding="utf-8") as f:
+            json.dump(failed_data, f, indent=2, ensure_ascii=False)
+
 def dislike(i: int, reason: str):
     item = items[i]
     id_ = _item_key(item, i)
@@ -220,6 +273,9 @@ def dislike(i: int, reason: str):
     bad_ids.add(id_)
     bad_records[id_] = reason
     _save_bad_data()
+
+    # Thêm sample vào failed_filter.json
+    _append_to_failed_filter(item)
 
     i += 1
     return (*get_item(i), "")
