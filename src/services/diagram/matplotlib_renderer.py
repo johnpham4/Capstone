@@ -440,41 +440,49 @@ class MatplotlibDiagramRenderer:
                             # Sử dụng 2 điểm trên mỗi đoạn thẳng để xác định hướng
                             self._draw_right_angle_symbol(ax, intersection_pt, p1, p3)
 
+
         # 5. Draw Lines
         for line_name, line_data in self.diagram.lines.items():
             p1, p2 = line_data
             dx = p2.x - p1.x
             dy = p2.y - p1.y
             length = np.sqrt(dx**2 + dy**2)
-
+            print(f"Drawing line '{line_name}': ({p1.x:.4f}, {p1.y:.4f}) to ({p2.x:.4f}, {p2.y:.4f})")
+            
             if length > 0:
-            # Normalize direction
                 dx /= length
                 dy /= length
-                extend_factor = 2.0  # Extend line in both directions
+                extend_factor = 5.0  
 
                 start_x = p1.x - dx * extend_factor
                 start_y = p1.y - dy * extend_factor
                 end_x = p2.x + dx * extend_factor
                 end_y = p2.y + dy * extend_factor
 
-
                 ax.plot([start_x, end_x], [start_y, end_y],
-                       color='blue', linewidth=1.0, linestyle='-', alpha=0.6)
+                        color='blue', linewidth=1.0, linestyle='-', alpha=0.6)
 
                 arrow_size = 0.15
                 ax.annotate('', xy=(end_x, end_y), xytext=(end_x - dx * arrow_size, end_y - dy * arrow_size),
-                           arrowprops=dict(arrowstyle='->', color='blue', lw=1.0, alpha=0.6))
+                            arrowprops=dict(arrowstyle='->', color='blue', lw=1.0, alpha=0.6))
                 ax.annotate('', xy=(start_x, start_y), xytext=(start_x + dx * arrow_size, start_y + dy * arrow_size),
-                           arrowprops=dict(arrowstyle='->', color='blue', lw=1.0, alpha=0.6))
+                            arrowprops=dict(arrowstyle='->', color='blue', lw=1.0, alpha=0.6))
+
+        # 5.5 Draw right angle for all perpendicular constraints (lines and segments)
+        if hasattr(self.diagram, 'perpendicular_lines') and self.diagram.perpendicular_lines:
+            for perp in self.diagram.perpendicular_lines:
+                # perp = (intersection_pt, dir1_pt, dir2_pt)
+                vertex, p1, p2 = perp
+                self._draw_right_angle_symbol(ax, vertex, p1, p2)
 
         # 6. Draw Points and Labels
         if self.diagram.points:
-            # Đồng bộ với optimizer: sử dụng (0, 0) làm tâm
             cx = 0.0
             cy = 0.0
 
             for name, p in self.diagram.points.items():
+                if name.endswith('_aux'):   
+                    continue
                 ax.plot(p.x, p.y, 'ko', markersize=4)
 
                 dx, dy = p.x - cx, p.y - cy

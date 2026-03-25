@@ -1,5 +1,6 @@
 
 from typing import List, Tuple, Any
+from unicodedata import name
 from loguru import logger
 
 from src.services.diagram.dsl_parser import DSLParser
@@ -14,6 +15,7 @@ class DiagramBuilder:
         self.instructions: List[Any] = []
         self.problem_lines = problem_lines
         self.warnings: List[str] = []  # Track skipped commands
+        self.lines = {}
 
         cmds = DSLParser.parse_sexprs(self.problem_lines)
         for idx, cmd in enumerate(cmds):
@@ -43,6 +45,8 @@ class DiagramBuilder:
             self.process_segment(cmd)
         elif head == "line":
             self.process_line(cmd)
+        elif head == "through":
+            self.process_through(cmd)
         elif head == "on-circle":
             self.process_on_circle(cmd)
         elif head == "on-segment":
@@ -236,48 +240,60 @@ class DiagramBuilder:
         if len(cmd) < 3:
             raise RuntimeError(f"Invalid define command: {cmd}")
 
-        point_name = cmd[1]
+        name = cmd[1]
         obj_type = cmd[2]
 
-        if obj_type != "point":
-            raise NotImplementedError(f"Only 'point' type supported, got: {obj_type}")
-
-        # Simple point definition: (define O point)
-        if len(cmd) == 3:
-            p = Point(point_name)
+        if obj_type == "point":
+            p = Point(name)
             self.register_pt(p)
-            # Create simple coords parameter
+
+            # (define O point)
+            if len(cmd) == 3:
+                instr = Parameter(
+                    diagram_type=DiagramType.POINT,
+                    objects=[p],
+                    param_type="coords",
+                    args=()
+                )
+                self.instructions.append(instr)
+                return
+
+            # (define H point (projection C (segment A B)))
+            construction = cmd[3]
+            if not isinstance(construction, tuple):
+                raise RuntimeError(f"Construction must be a tuple: {construction}")
+
+            construction_type = construction[0].lower()
+            construction_args = construction[1:]
+
+            processed_args = []
+            for arg in construction_args:
+                if isinstance(arg, tuple):
+                    processed_args.extend(arg[1:])
+                else:
+                    processed_args.append(arg)
+
             instr = Parameter(
                 diagram_type=DiagramType.POINT,
                 objects=[p],
-                param_type="coords",
-                args=()
+                param_type=construction_type,
+                args=tuple(Point(p) for p in processed_args)
             )
             self.instructions.append(instr)
             return
 
-        # Point with construction: (define H point (projection C (segment A B)))
-        construction = cmd[3]
-        if not isinstance(construction, tuple):
-            raise RuntimeError(f"Construction must be a tuple: {construction}")
+        elif obj_type == "line":
+            if not hasattr(self, "lines"):
+                self.lines = {}
 
-        construction_type = construction[0].lower()
-        construction_args = construction[1:]
+            self.lines[name] = {
+                "through": None,
+                "perpendicular": None
+            }
+            return
 
-        processed_args = []
-        for arg in construction_args:
-            if isinstance(arg, tuple):
-                processed_args.extend(arg[1:])
-            else:
-                processed_args.append(arg)
-
-        instr = Parameter(
-            diagram_type=DiagramType.POINT,
-            objects=[Point(point_name)],
-            param_type=construction_type,
-            args=tuple(Point(p) for p in processed_args)
-        )
-        self.instructions.append(instr)
+        else:
+            raise NotImplementedError(f"Unsupported define type: {obj_type}")
 
     def process_circle(self, cmd):
         """
@@ -342,6 +358,13 @@ class DiagramBuilder:
             args=()
         )
         self.instructions.append(instr)
+        
+    def process_through(self, cmd):
+        line_name = cmd[1]
+        point_name = cmd[2]
+        if line_name in self.lines:
+            self.lines[line_name]["through"] = Point(point_name)
+    
 
     def process_on_circle(self, cmd):
         """Process: (on-circle B O) -> Point B lies on circle centered at O"""
@@ -499,29 +522,40 @@ class DiagramBuilder:
         self.instructions.append(instr)
 
     def process_perpendicular(self, cmd):
-        """Process: (perpendicular (segment A B) (segment C D))"""
         if len(cmd) != 3:
-            raise RuntimeError(f"Perpendicular requires 2 segments: {cmd}")
+            raise RuntimeError(f"Perpendicular requires 2 arguments: {cmd}")
 
-        seg1 = cmd[1]
-        seg2 = cmd[2]
+        obj1 = cmd[1]
+        obj2 = cmd[2]
 
-        if not (isinstance(seg1, tuple) and isinstance(seg2, tuple)):
-            raise RuntimeError(f"Perpendicular arguments must be segments: {cmd}")
+        if isinstance(obj1, str):
+            if not hasattr(self, "lines") or obj1 not in self.lines:
+                raise RuntimeError(f"Undefined line: {obj1}")
 
-        if seg1[0] != "segment" or seg2[0] != "segment":
-            raise RuntimeError(f"Perpendicular requires segments: {cmd}")
+            if not (isinstance(obj2, tuple) and obj2[0] == "segment"):
+                raise RuntimeError(f"Expected segment, got: {obj2}")
 
-        p1 = Point(seg1[1])
-        p2 = Point(seg1[2])
-        p3 = Point(seg2[1])
-        p4 = Point(seg2[2])
+            a = obj2[1]
+            b = obj2[2]
 
-        instr = Assertion(
-            constraint_type='perpendicular',
-            objects=[p1, p2, p3, p4]
-        )
-        self.instructions.append(instr)
+            self.lines[obj1]["perpendicular"] = (a, b)
+            return
+
+        if (isinstance(obj1, tuple) and obj1[0] == "segment" and
+            isinstance(obj2, tuple) and obj2[0] == "segment"):
+            p1 = Point(obj1[1])
+            p2 = Point(obj1[2])
+            p3 = Point(obj2[1])
+            p4 = Point(obj2[2])
+
+            instr = Assertion(
+                constraint_type='perpendicular',
+                objects=[p1, p2, p3, p4]
+            )
+            self.instructions.append(instr)
+            return
+
+        raise RuntimeError(f"Invalid perpendicular command: {cmd}")
 
     def process_angle_equal(self, cmd):
         """Process: (angle-equal A B C D E F) -> ∠ABC = ∠DEF"""
