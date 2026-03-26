@@ -66,7 +66,7 @@ def test_single_problem(instruction, dsl_answer, output_path):
         # print(f"Instructions: {builder.instructions}")
         opts = {
             'epochs': 1500,
-            'n_tries': 3,
+            'n_tries': 1,
             'eps': 1e-6,
             'seed': 42,
             'learning_rate': 0.01,
@@ -113,8 +113,8 @@ def main():
     project_root = Path(__file__).resolve().parent
     config = _load_render_config(project_root, args.config)
 
-    configured_input = config.get("input_json_path", "dataset/data/train.json")
-    configured_output_dir = config.get("output_dir", "output_fixed")
+    configured_input = config.get("input_json_path", "dataset/Khang/fix-draw.json")
+    configured_output_dir = config.get("output_dir", "dataset/Khang/fix-image")
 
     input_path_raw = args.input or configured_input
     output_dir_raw = args.output_dir or configured_output_dir

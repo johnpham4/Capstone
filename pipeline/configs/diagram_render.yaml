@@ -1,4 +1,4 @@
 parameters:
-  input_json_path: "./dataset/data/draft.json"
-  output_dir: "./output_fixed"
+  input_json_path: "dataset/Khang/fix-draw.json"
+  output_dir: "dataset/Khang/fix-image"
 
