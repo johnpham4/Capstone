@@ -1,0 +1,8 @@
+[
+  {
+    "image_dir": "",
+    "instruction": "Cho tam giác ABC vuông tại A. Kẻ đường cao AH. Từ H kẻ HD ⊥ AC, HE ⊥ AB. Gọi M, N lần lượt là trung điểm của các đoạn thẳng HB, HC. Chứng minh tứ giác DEMN là hình thang vuông",
+    "answer": "(triangle (A B C) (right A))\n(define H point (projection A (segment B C)))\n(segment A H)\n(define D point (projection H (segment A C)))\n(segment H D)\n(define E point (projection H (segment A B)))\n(segment H E)\n(define M point (midpoint H B))\n(define N point (midpoint H C))",
+    "id": 10
+  }
+]
