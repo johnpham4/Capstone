@@ -20,11 +20,10 @@ LineSF = namedtuple("LineSF", ["a", "b", "c", "p1", "p2"])
 LineNF = namedtuple("LineNF", ["n", "f"])
 
 class Optimizer:
-    def __init__(self, instructions, opts, lines=None, verbosity=False):
+    def __init__(self, instructions, opts, verbosity=False):
         self.instructions = instructions
         self.opts = opts
         self.verbosity = verbosity
-        self.input_lines = lines if isinstance(lines, dict) else {}
         self._init_state()  # Initialize all state variables
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -42,7 +41,6 @@ class Optimizer:
         self.quadrilaterals_metadata = {}
         self.segments = []
         self.lines = []
-        self.lines_dict = self.input_lines.copy()
         self.line_objects = {}
         self.angle_equal_assertions = []
         self.angle_measures = []  # Store angles with measure values: [(vertex, p1, p2, degrees)]
@@ -1126,34 +1124,12 @@ class Optimizer:
     def _process_line_parameter(self, param_type, objects, args):
         """Process line instructions - store for visualization"""
         # Line through 2 points: (line A B)
-        if param_type and hasattr(param_type, 'val'):
-            line_name = param_type.val
-            # Check for through and perpendicular in args
-            through = None
-            perpendicular = None
-            for arg in args:
-                if hasattr(arg, 'head') and str(arg.head).lower() == 'through' and arg.args:
-                    through = arg.args[0]
-                if hasattr(arg, 'head') and str(arg.head).lower() == 'perpendicular' and arg.args:
-                    perpendicular = tuple(a.val if hasattr(a, 'val') else str(a) for a in arg.args)
-            if through is not None and perpendicular is not None:
-                self.lines_dict[line_name] = {'through': through, 'perpendicular': perpendicular}
-                return
-            
-        # Unnamed line through 2 points: (line A B)
         if len(objects) >= 2:
             p1_name = objects[0].val if hasattr(objects[0], 'val') else str(objects[0])
             p2_name = objects[1].val if hasattr(objects[1], 'val') else str(objects[1])
             self._ensure_named_point(p1_name)
             self._ensure_named_point(p2_name)
-            # Generate a unique name for unnamed lines
-            line_name = f"{p1_name}_{p2_name}"
-            idx = 1
-            while line_name in self.lines_dict:
-                line_name = f"{p1_name}_{p2_name}_{idx}"
-                idx += 1
-            self.lines_dict[line_name] = {'through': None, 'points': (p1_name, p2_name)}
-            self.lines.append((p1_name, p2_name)) 
+            self.lines.append((p1_name, p2_name))
 
     def process_assertion(self, assertion):
         """Process assertion/constraint instructions"""
@@ -2043,33 +2019,6 @@ class Optimizer:
             'angle2': (points[3].val, points[4].val, points[5].val)   # (C, A, D)
         })
 
-    def _process_line_constraints(self):
-        if not hasattr(self, 'lines_dict'):
-            return
-        for line_name, info in self.lines_dict.items():
-            if info.get("through") and info.get("perpendicular"):
-                c = info["through"]
-                a, b = info["perpendicular"]
-                c_name = c.val if hasattr(c, 'val') else c
-                d_name = f"{line_name}_aux"
-
-                if c_name in self.name2pt and a in self.name2pt and b in self.name2pt:
-                    pt_c = self.name2pt[c_name]
-                    pt_a = self.name2pt[a]
-                    pt_b = self.name2pt[b]
-
-                    d_pt = self.get_point(
-                        self.mkvar(f"{d_name}_x"),
-                        self.mkvar(f"{d_name}_y")
-                    )
-                    self.name2pt[d_name] = d_pt
-
-                    def perp_loss(c=pt_c, d=d_pt, pa=pt_a, pb=pt_b):
-                        return self.perpendicular(c, d, pa, pb) ** 2
-
-                    self.register_loss(f"perp_{line_name}", perp_loss, weight=30.0)
-                    self.lines.append((c_name, d_name))  
-
 
     def preprocess(self):
         if self.verbosity:
@@ -2078,9 +2027,7 @@ class Optimizer:
         for instr in self.instructions:
             if self.verbosity:
                 logger.info(f" {instr}")
-            
             self.process_instruction(instr)
-        self._process_line_constraints()
 
     def train(self, epochs: int = 1000, lr: float = 0.01):
         if not self.has_loss:
@@ -2230,22 +2177,6 @@ class Optimizer:
 
         self._apply_incircle_post_correction(diagram)
         self._apply_tangent_post_correction(diagram)
-
-        # Add lines and collect perpendicular line info for right angle rendering
-        diagram.perpendicular_lines = []
-        if hasattr(self, 'lines_dict'):
-            for line_name, line_info in self.lines_dict.items():
-                through_pt = line_info.get('through')
-                perp = line_info.get('perpendicular')
-                if through_pt is not None and perp is not None:
-                    c_name = through_pt.val if hasattr(through_pt, 'val') else through_pt
-                    a_name, b_name = perp
-                    c = diagram.points.get(c_name)
-                    a = diagram.points.get(a_name)
-                    b = diagram.points.get(b_name)
-                    d = diagram.points.get(f"{line_name}_aux")
-                    if c and a and b and d:
-                        diagram.perpendicular_lines.append((c, a, d))
 
         # Add triangles with metadata
         for key, metadata in self.triangles_metadata.items():
