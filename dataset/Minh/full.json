@@ -1,33 +1,9 @@
 [
   {
-    "image_dir": "images/img_122283.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P",
-    "answer": "(triangle (A B C))\n(define P point (inter-ll A B))\n(segment A B)",
-    "problem": "Cho tam giác ABC, có đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt nhau tại điểm P. Tính độ dài đoạn AP."
-  },
-  {
     "image_dir": "images/img_106046.png",
     "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, BC song song với DE, góc BAF = góc CAF, góc ADE = 90",
     "answer": "(triangle (A B C) (right B))\n(segment A B)\n(segment A C)\n(segment B C)\n(define D point (segment A B))\n(define E point (segment A C))\n(define F point (segment B C))\n(parallel (segment B C) (segment D E))\n(angle-equal B A F C A F)\n(angle-measure A D E 90)",
     "problem": "Cho tam giác ABC với góc ABC = 90 độ, điểm D ∈ AB, điểm E ∈ AC, điểm F ∈ BC, BC ∥ DE, góc BAF = góc CAF và góc ADE = 90 độ. Tính độ dài đoạn DE."
-  },
-  {
-    "image_dir": "images/img_102080.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A B))",
-    "problem": "Cho tam giác ABC, đường thẳng đi qua điểm C và vuông góc với đoạn thẳng AB, O là tâm đường tròn nội tiếp của tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_108327.png",
-    "instruction": "Đường tròn O, đường thẳng là đi qua điểm O",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(segment O A)",
-    "problem": "Cho đường tròn O và đường thẳng d đi qua điểm O. Khẳng định nào sau đây đúng?"
-  },
-  {
-    "image_dir": "images/img_104714.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, đường thẳng đi qua điểm C",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(define D point (segment A C))\n(segment A C)\n(segment C D)\n(perpendicular (segment C D) (segment A C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, và đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC. Khẳng định nào sau đây đúng?"
   },
   {
     "image_dir": "images/img_102788.png",
@@ -36,34 +12,16 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, và BC ∥ DE. Tính độ dài đoạn thẳng DE nếu biết rằng AB = 2a."
   },
   {
-    "image_dir": "images/img_117246.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(segment B C)\n(define M point (midpoint B C))\n(define P point (bisector B C))\n(segment M P)\n(perpendicular (segment M P) (segment B C))\n(segment A B)\n(segment A C)\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A B))",
-    "problem": "Cho tam giác ABC, đường thẳng d là đường trung trực của đoạn thẳng BC, và đường thẳng e đi qua điểm C vuông góc với đoạn thẳng AB. Tính độ dài đoạn thẳng từ điểm C đến đường thẳng d."
-  },
-  {
     "image_dir": "images/img_115552.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90",
     "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A C)))\n(segment C H)\n(perpendicular (segment C H) (segment A C))\n(angle-measure A D E 90)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC ∥ DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, và góc ADE = 90°. Tính độ dài đoạn DE nếu biết rằng AB = 2a."
   },
   {
-    "image_dir": "images/img_112402.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(define P point (perp-bisector A B))\n(segment M P)\n(perpendicular (segment M P) (segment A B))\n(equal-distance P A P B)",
-    "problem": "Cho tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, O là tâm của đường tròn nội tiếp tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
     "image_dir": "images/img_100173.png",
     "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
     "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point)\n(on-circle N O)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, O là tâm đường tròn nội tiếp của tam giác ABC, N là điểm thuộc đường tròn O. Tính độ dài đoạn thẳng AN."
-  },
-  {
-    "image_dir": "images/img_120889.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(define D point (midpoint A B))\n(segment A B)\n(define E point (midpoint A C))\n(segment A C)\n(segment D E)\n(define M point (projection C (segment A E)))\n(segment C M)\n(perpendicular (segment D E) (segment C E))\n(equal-distance D E E C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, và đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, đồng thời góc ADE = 90°. Tính độ dài đoạn thẳng DE."
   },
   {
     "image_dir": "images/img_100631.png",
@@ -78,12 +36,6 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE ⟂ AD và đường tròn nội tiếp O của tam giác ABC. Tính độ dài đoạn thẳng DE."
   },
   {
-    "image_dir": "images/img_102305.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(segment A M)\n(segment B M)\n(perpendicular (segment M A) (segment A B))\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua trung điểm của đoạn thẳng AB là đường trung trực của AB, và O là tâm của đường tròn nội tiếp tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
     "image_dir": "images/img_108060.png",
     "instruction": "Tam giác ABC, AB = AC, điểm P là trực tâm của tam giác ABC",
     "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define P point (orthocenter A B C))",
@@ -94,18 +46,6 @@
     "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90",
     "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point)\n(circle O)\n(diameter A B O)\n(segment A B)\n(segment D E)\n(angle-measure A D E 90)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC ∥ DE, đường tròn O có đường kính AB, và góc ADE = 90°. Tính độ dài đoạn DE nếu biết rằng AB = 10."
-  },
-  {
-    "image_dir": "images/img_113364.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P",
-    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(define P point (inter-ll A B A C))\n(equal-distance A B A C)",
-    "problem": "Cho tam giác ABC với AB = AC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt nhau tại điểm P. Khẳng định nào sau đây đúng?"
-  },
-  {
-    "image_dir": "images/img_104071.png",
-    "instruction": "Hình vuông ABCD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD",
-    "answer": "(square (A B C D))\n(segment A B)\n(segment C D)\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment M N)\n(perpendicular (segment M N) (segment A B))\n(perpendicular (segment M N) (segment C D))",
-    "problem": "Cho hình vuông ABCD, trong đó đường thẳng đi qua trung điểm của AB và CD là đường trung trực. Tính độ dài đoạn thẳng từ điểm A đến đường trung trực đó."
   },
   {
     "image_dir": "images/img_104732.png",
@@ -120,18 +60,6 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, D là trung điểm của AB, E là trung điểm của AC, F nằm trên BC, DE ∥ BC, góc BAF = góc CAF, và góc ADE = 90°. Tính tỉ số diện tích của tam giác ADF và tam giác AEF."
   },
   {
-    "image_dir": "images/img_110915.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define D point (segment A B))\n(segment A B)\n(segment A C)\n(segment B C)\n(define M point (midpoint A C))\n(segment A C)\n(define P point (segment C D))\n(perpendicular (segment M P) (segment A C))\n(equal-distance D C D B)",
-    "problem": "Cho tam giác ABC, trong đó ∠ABC = 90°, ∠BAC = 60°, ∠ACB = 30°, điểm D nằm trên đoạn thẳng AB, đường thẳng CD sao cho ∠ACD = ∠DCB, và đường thẳng CD là đường trung trực của đoạn thẳng AC. Tính độ dài đoạn thẳng AD nếu biết rằng AB = 2AC."
-  },
-  {
-    "image_dir": "images/img_102373.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng là đường trung trực của đoạn thẳng BC",
-    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define M point (midpoint B C))\n(define O point (perp-bisector B C))\n(segment M O)\n(perpendicular (segment M O) (segment B C))\n(equal-distance O B O C)",
-    "problem": "Cho tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC ∥ DE và đường thẳng là đường trung trực của đoạn thẳng BC. Tính độ dài đoạn thẳng DE nếu biết rằng AB = 10 cm và AC = 8 cm."
-  },
-  {
     "image_dir": "images/img_106694.png",
     "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng BC, góc ACD = góc DCB, góc CAE = góc EAB, đường thẳng DE, đường thẳng AE, AF vuông góc với BC",
     "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment B C))\n(segment A C)\n(segment D C)\n(angle-equal A C D D C B)\n(angle-equal C A E E A B)\n(segment D E)\n(segment A E)\n(define F point (projection A (segment B C)))\n(segment A F)\n(perpendicular (segment A F) (segment B C))",
@@ -142,12 +70,6 @@
     "instruction": "Hình thang ABCD, AB song song với CD, BC = AD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng CD, đường thẳng PQ",
     "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(equal-distance B C A D)\n(define P point (segment A B))\n(define Q point (segment C D))\n(segment P Q)\n(parallel (segment A B) (segment C D))",
     "problem": "Cho hình thang ABCD với AB ∥ CD và BC = AD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng CD, đường thẳng PQ. Tính độ dài đoạn thẳng PQ."
-  },
-  {
-    "image_dir": "images/img_121577.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(segment A B)\n(define P point (bisector A B C))\n(segment M P)\n(perpendicular (segment M P) (segment A B))\n(equal-distance P A P B)",
-    "problem": "Cho tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB. Khẳng định nào sau đây đúng?"
   },
   {
     "image_dir": "images/img_123023.png",
@@ -162,12 +84,6 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, O là tâm đường tròn nội tiếp của tam giác ABC, và N là một điểm thuộc đường tròn O. Tính độ dài đoạn thẳng AN."
   },
   {
-    "image_dir": "images/img_101021.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(triangle (A B C) (right B))\n(segment B C)\n(define M point (midpoint B C))\n(segment A M)\n(perpendicular (segment A M) (segment B C))\n(equal-distance M B M C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua điểm A là đường trung trực của đoạn thẳng BC. Hãy khẳng định rằng đoạn thẳng AB bằng đoạn thẳng AC."
-  },
-  {
     "image_dir": "images/img_119538.png",
     "instruction": "Tam giác ABC, góc ABC = 90, điểm P là trọng tâm của tam giác ABC",
     "answer": "(triangle (A B C) (right B))\n(define P point (centroid A B C))",
@@ -178,18 +94,6 @@
     "instruction": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
     "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A B))",
     "problem": "Cho tam giác ABC và đường tròn ngoại tiếp O của tam giác ABC. Điểm N nằm trên đoạn thẳng AB. Tính bán kính R của đường tròn ngoại tiếp O."
-  },
-  {
-    "image_dir": "images/img_123065.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC với đường thẳng là đường trung trực của đoạn thẳng AB và O là tâm của đường tròn ngoại tiếp tam giác ABC. Tính bán kính của đường tròn ngoại tiếp O nếu biết độ dài các cạnh của tam giác ABC."
-  },
-  {
-    "image_dir": "images/img_102614.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A C)))\n(segment C H)\n(perpendicular (segment C H) (segment A C))\n(angle-measure A D E 90)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC ∥ DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC và góc ADE = 90°. Tính độ dài đoạn DE nếu biết độ dài AB."
   },
   {
     "image_dir": "images/img_119748.png",
@@ -204,12 +108,6 @@
     "problem": "Cho hình thang ABCD, với AB ∥ CD và BC = AD. Điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng CD. Hãy chứng minh rằng đoạn thẳng PQ cắt hai đường chéo AC và BD."
   },
   {
-    "image_dir": "images/img_1212.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC có đường trung trực của đoạn thẳng AB và đường tròn nội tiếp O. Chứng minh rằng O nằm trên đường trung trực của đoạn thẳng AB."
-  },
-  {
     "image_dir": "images/img_103961.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, góc ADE = 90, đường tròn ngoại tiếp E của tam giác ABC",
     "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(angle-measure D A E 90)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(on-circle E O)",
@@ -220,12 +118,6 @@
     "instruction": "Hình thang ABCD, AB song song với CD, BC = AD, đường thẳng AC và đường thẳng BD cắt tại điểm O",
     "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(equal-distance B C A D)\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))",
     "problem": "Cho hình thang ABCD với AB ∥ CD và BC = AD, đường thẳng AC và đường thẳng BD cắt nhau tại điểm O. Tính diện tích của hình thang ABCD nếu biết chiều cao từ điểm O đến cạnh CD."
-  },
-  {
-    "image_dir": "images/img_110364.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua O là đường trung trực của đoạn thẳng AB. Hãy xác định xem O có thuộc đường trung trực của đoạn thẳng AC hay không."
   },
   {
     "image_dir": "images/img_115743.png",
@@ -240,52 +132,16 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng BC, đường thẳng DE và AC song song với DE. Tính độ dài đoạn thẳng DE nếu biết rằng AB = 6 và BC = 8."
   },
   {
-    "image_dir": "images/img_108621.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(define D point (segment A B))\n(angle-equal A C D D C B)\n(segment A C)\n(define M point (midpoint A C))\n(segment M A)\n(segment M C)\n(perpendicular (segment M A) (segment A C))\n(equal-distance M A M C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, điểm D nằm trên đoạn thẳng AB sao cho góc ACD = góc DCB, và đường thẳng đi qua D là đường trung trực của đoạn thẳng AC. Tính độ dài đoạn thẳng AD nếu biết rằng AB = 2AD."
-  },
-  {
-    "image_dir": "images/img_118020.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, O là tâm của đường tròn nội tiếp tam giác ABC. Một đường thẳng đi qua điểm A cắt cạnh BC tại điểm D. Tính diện tích của tam giác AOD."
-  },
-  {
     "image_dir": "images/img_106233.png",
     "instruction": "Tam giác ABC, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC",
     "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define P point (circumcenter A B C))\n(circle P (circumcircle A B C))",
     "problem": "Cho tam giác ABC, O là tâm đường tròn nội tiếp và P là tâm đường tròn ngoại tiếp của tam giác ABC. Tính bán kính của đường tròn nội tiếp O và đường tròn ngoại tiếp P."
   },
   {
-    "image_dir": "images/img_110591.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A C B 30)\n(define D point (segment A B))\n(segment A B)\n(segment A C)\n(segment C D)\n(angle-equal A C D D C B)\n(define M point (midpoint A C))\n(segment A C)\n(segment M D)\n(perpendicular (segment M D) (segment A C))\n(equal-distance M A M C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Điểm D nằm trên đoạn thẳng AB, đường thẳng CD có góc ACD = góc DCB và CD là đường trung trực của đoạn thẳng AC. Tính độ dài đoạn thẳng AD nếu biết rằng AB = 2AC."
-  },
-  {
-    "image_dir": "images/img_116311.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC, đường thẳng đi qua điểm C",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A C B 30)\n(segment B C)\n(define D point (segment C B))\n(segment C D)\n(perpendicular (segment C D) (segment B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC. Hãy xác định tam giác ABC là tam giác gì?"
-  },
-  {
     "image_dir": "images/img_101237.png",
     "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
     "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point)\n(on-circle N O)",
     "problem": "Cho tam giác ABC vuông tại B, O là tâm đường tròn nội tiếp của tam giác ABC, N ∈ O. Tính độ dài đoạn thẳng AN."
-  },
-  {
-    "image_dir": "images/img_109580.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(segment D E)\n(define H point (projection D (segment A E)))\n(segment D H)\n(perpendicular (segment D H) (segment D E))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC. Đường thẳng DE và BC song song với nhau, đồng thời góc ADE = 90°. Hãy khẳng định rằng tam giác ABE là tam giác gì?"
-  },
-  {
-    "image_dir": "images/img_123034.png",
-    "instruction": "Đường thẳng AB",
-    "answer": "(segment A B)",
-    "problem": "Cho đường thẳng AB. Khẳng định nào sau đây đúng về đường thẳng này?"
   },
   {
     "image_dir": "images/img_10938.png",
@@ -300,24 +156,6 @@
     "problem": "Cho tam giác ABC có AB = AC và đường tròn ngoại tiếp O của tam giác ABC. Tính bán kính R của đường tròn ngoại tiếp O nếu biết rằng độ dài cạnh BC bằng 6 cm."
   },
   {
-    "image_dir": "images/img_111755.png",
-    "instruction": "Đường thẳng AB",
-    "answer": "(segment A B)",
-    "problem": "Cho đường thẳng AB. Khẳng định nào sau đây đúng về đường thẳng này?"
-  },
-  {
-    "image_dir": "images/img_103599.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90 độ, O là tâm đường tròn ngoại tiếp tam giác ABC. Một đường thẳng đi qua điểm A cắt đường tròn O tại điểm D. Tính độ dài đoạn AD nếu biết rằng bán kính của đường tròn O bằng r."
-  },
-  {
-    "image_dir": "images/img_112921.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD, đường thẳng đi qua điểm B",
-    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(define D point (segment A B))\n(angle-equal A C D D C B)\n(segment C D)\n(line B D)",
-    "problem": "Cho tam giác ABC có AB = AC, điểm D nằm trên đoạn thẳng AB sao cho góc ACD = góc DCB. Chứng minh rằng CD đi qua điểm B."
-  },
-  {
     "image_dir": "images/img_105527.png",
     "instruction": "Hình vuông ABCD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng BC, đường thẳng PQ",
     "answer": "(square (A B C D))\n(define P point (segment A B))\n(define Q point (segment B C))\n(segment P Q)",
@@ -330,40 +168,10 @@
     "problem": "Cho tam giác ABC với góc ABC = 90° và đường tròn nội tiếp O của tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
   },
   {
-    "image_dir": "images/img_112556.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(segment B C)\n(segment A C)\n(perpendicular (segment B A) (segment C A))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua điểm C và vuông góc với đoạn thẳng AB, O là tâm đường tròn ngoại tiếp tam giác ABC. Tính bán kính của đường tròn ngoại tiếp O."
-  },
-  {
-    "image_dir": "images/img_106604.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A C B 30)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(on-circle A O)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Gọi O là trung điểm của đường tròn ngoại tiếp tam giác ABC. Tính độ dài bán kính R của đường tròn ngoại tiếp O."
-  },
-  {
-    "image_dir": "images/img_107103.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(triangle (A B C) (right B))\n(segment B C)\n(define M point (midpoint B C))\n(segment A M)\n(perpendicular (segment A M) (segment B C))\n(equal-distance M B M C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua điểm A là đường trung trực của đoạn thẳng BC. Tính độ dài đoạn thẳng AB nếu biết rằng AC = 10."
-  },
-  {
-    "image_dir": "images/img_122659.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C",
-    "answer": "(triangle (A B C) (right B))\n(segment A B)\n(define D point (segment C A))\n(segment C D)\n(perpendicular (segment C D) (segment A B))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB. Hãy khẳng định rằng đoạn thẳng này là đường cao từ điểm C xuống cạnh AB."
-  },
-  {
     "image_dir": "images/img_114833.png",
     "instruction": "Hình chữ nhật ABCD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng BC, đường thẳng PQ",
     "answer": "(rectangle (A B C D))\n(define P point (segment A B))\n(define Q point (segment B C))\n(segment P Q)",
     "problem": "Cho hình chữ nhật ABCD, với điểm P thuộc đoạn thẳng AB và điểm Q thuộc đoạn thẳng BC. Chứng minh rằng đường thẳng PQ không cắt đoạn thẳng CD."
-  },
-  {
-    "image_dir": "images/img_100771.png",
-    "instruction": "Đường tròn O, đường thẳng cắt đường tròn O tại điểm A và điểm B",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)",
-    "problem": "Cho đường tròn O và đường thẳng cắt đường tròn O tại hai điểm A và B. Tính độ dài đoạn thẳng AB."
   },
   {
     "image_dir": "images/img_122798.png",
@@ -384,22 +192,10 @@
     "problem": "Cho tam giác ABC cân tại A, D ∈ AB, E ∈ AC, BC ∥ DE, O là đường tròn ngoại tiếp tam giác ABC. Tính tỉ số diện tích của tam giác ADE và tam giác ABC."
   },
   {
-    "image_dir": "images/img_112104.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(segment C D)\n(segment C E)\n(perpendicular (segment C D) (segment A B))",
-    "problem": "Cho tam giác ABC, D ∈ AB, E ∈ AC, BC ∥ DE, và đường thẳng đi qua C ⟂ AB. Tính độ dài đoạn DE nếu biết rằng độ dài AB = 10 cm và độ dài AC = 12 cm."
-  },
-  {
     "image_dir": "images/img_118315.png",
     "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B",
     "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(segment B D)",
     "problem": "Cho tam giác ABC, điểm D ∈ AB, điểm E ∈ AC, BC ∥ DE, và đường thẳng đi qua điểm B. Tính tỉ số giữa các đoạn AD và DB."
-  },
-  {
-    "image_dir": "images/img_104061.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A C B 30)\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A C)))\n(segment C H)\n(perpendicular (segment C H) (segment A C))\n(angle-measure A D E 90)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC ∥ DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, và góc ADE = 90°. Tính độ dài đoạn DE nếu biết rằng AB = 2a và AC = a."
   },
   {
     "image_dir": "images/img_101896.png",
@@ -412,12 +208,6 @@
     "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng BC, đường thẳng DE, AC song song với DE",
     "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint B C))\n(segment A B)\n(segment B C)\n(segment D E)\n(parallel (segment A C) (segment D E))",
     "problem": "Cho tam giác ABC với góc ABC = 90°, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng BC, đường thẳng DE và AC song song với DE. Tính độ dài đoạn thẳng DE."
-  },
-  {
-    "image_dir": "images/img_112303.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, O là tâm của đường tròn nội tiếp tam giác ABC. Tính bán kính của đường tròn nội tiếp O nếu biết rằng diện tích của tam giác ABC là S và chu vi là P."
   },
   {
     "image_dir": "images/img_115939.png",
@@ -444,24 +234,6 @@
     "problem": "Cho tam giác ABC có AB = AC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD cắt nhau tại điểm D sao cho góc ACD = góc DCB. Hãy xác định xem điểm O là tâm của đường tròn ngoại tiếp tam giác ABC có thuộc đoạn thẳng CD hay không."
   },
   {
-    "image_dir": "images/img_123428.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define O point (incenter A B C))\n(circle O (incircle A B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Gọi O là tâm đường tròn nội tiếp của tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_123396.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Gọi đường thẳng là đường trung trực của đoạn thẳng AB và O là tâm của đường tròn ngoại tiếp tam giác ABC. Tính bán kính của đường tròn ngoại tiếp O."
-  },
-  {
-    "image_dir": "images/img_107031.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C",
-    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(equal-distance A B A C)\n(define D point (segment C A))\n(segment C D)\n(perpendicular (segment A B) (segment C D))",
-    "problem": "Cho tam giác ABC với AB = AC, và đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB. Khẳng định nào sau đây đúng?"
-  },
-  {
     "image_dir": "images/img_104959.png",
     "instruction": "Hình chữ nhật ABCD",
     "answer": "(rectangle (A B C D))",
@@ -472,18 +244,6 @@
     "instruction": "Tam giác ABC, điểm O là tâm đường tròn nội tiếp của tam giác ABC",
     "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))",
     "problem": "Cho tam giác ABC, O là tâm đường tròn nội tiếp của tam giác ABC. Tính bán kính r của đường tròn nội tiếp."
-  },
-  {
-    "image_dir": "images/img_102607.png",
-    "instruction": "Hình thang ABCD, AB song song với CD, BC = AD, đường thẳng đi qua điểm A",
-    "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(equal-distance B C A D)",
-    "problem": "Cho hình thang ABCD với AB ∥ CD và BC = AD. Một đường thẳng đi qua điểm A cắt CD tại điểm E. Tính độ dài của đoạn thẳng AE nếu biết rằng CD = 10 cm."
-  },
-  {
-    "image_dir": "images/img_122964.png",
-    "instruction": "Hình thang ABCD, AB song song với CD, đường thẳng là đi qua điểm A",
-    "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(line A B)",
-    "problem": "Cho hình thang ABCD với AB ∥ CD. Một đường thẳng đi qua điểm A cắt hai cạnh AD và BC. Tính chu vi của hình thang ABCD."
   },
   {
     "image_dir": "images/img_117211.png",
@@ -504,22 +264,10 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°, điểm D nằm trên đoạn thẳng AB sao cho góc ACD = góc DCB. Chứng minh rằng CD bisect góc ACB."
   },
   {
-    "image_dir": "images/img_115162.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(segment B C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Đường thẳng đi qua điểm B và điểm C. Tính độ dài cạnh AC nếu biết rằng AB = 10."
-  },
-  {
     "image_dir": "images/img_100537.png",
     "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC, đường kính AC",
     "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define P point (circumcenter A B C))\n(circle P (circumcircle A B C))\n(segment A C)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, O là tâm đường tròn nội tiếp và P là tâm đường tròn ngoại tiếp của tam giác ABC, AC là đường kính của đường tròn ngoại tiếp. Tính bán kính của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_103515.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(segment A C)\n(segment B C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, đường thẳng d đi qua điểm A, và O là tâm đường tròn nội tiếp của tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
   },
   {
     "image_dir": "images/img_120252.png",
@@ -530,20 +278,8 @@
   {
     "image_dir": "images/img_100724.png",
     "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(segment C O)\n(perpendicular (segment C O) (segment A B))",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(define D point)\n(segment C D)\n(parallel (segment C D) (segment A B))\n(circle O (circumcircle A B C))\n(segment A B)\n(segment C O)\n(perpendicular (segment C O) (segment A B))",
     "problem": "Cho tam giác ABC, đường thẳng đi qua điểm C và vuông góc với đoạn thẳng AB, O là tâm đường tròn ngoại tiếp tam giác ABC. Tính bán kính của đường tròn ngoại tiếp O nếu biết rằng độ dài các cạnh của tam giác ABC lần lượt là a, b, c."
-  },
-  {
-    "image_dir": "images/img_101872.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(segment A B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Một đường thẳng đi qua điểm A cắt BC tại điểm D. Tính độ dài đoạn AD nếu biết rằng AB = 2AD."
-  },
-  {
-    "image_dir": "images/img_114881.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 45)\n(segment A C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45° và một đường thẳng d đi qua điểm C. Tính độ dài cạnh AB nếu biết rằng AC = 2."
   },
   {
     "image_dir": "images/img_11869.png",
@@ -564,34 +300,10 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, và BC ∥ DE. Tính độ dài đoạn thẳng DE nếu biết rằng AB = 2."
   },
   {
-    "image_dir": "images/img_106827.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, tam giác DEF, tam giác DEF = 90, góc EFD = 45, góc EDF = 45, tam giác ABC bằng tam giác DEF",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(triangle (D E F) (right E))\n(angle-measure E F D 45)\n(angle-measure D E F 45)\n(angle-equal A B C D E F)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45° và tam giác DEF với góc EFD = 45°, góc EDF = 45°, DEF ⟂ EFD, biết rằng tam giác ABC = tam giác DEF. Tính diện tích của tam giác ABC."
-  },
-  {
-    "image_dir": "images/img_103751.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C",
-    "answer": "(triangle (A B C))\n(segment A B)\n(define D point (segment A B))\n(segment C D)\n(perpendicular (segment C D) (segment A B))",
-    "problem": "Cho tam giác ABC, có đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, và một đường thẳng khác cũng đi qua điểm C. Khẳng định nào sau đây đúng?"
-  },
-  {
     "image_dir": "images/img_100403.png",
     "instruction": "Đường tròn O, đường thẳng tiếp xúc với đường tròn O",
     "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(equal-distance A B 1.0)\n(segment A B)\n(tangent A (circle O) AB)\n(segment O A)",
     "problem": "Cho đường tròn O và một đường thẳng tiếp xúc với đường tròn O tại điểm A. Khẳng định nào sau đây đúng?"
-  },
-  {
-    "image_dir": "images/img_120342.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(define D point (segment A B))\n(angle-equal A C D D C B)\n(segment C D)\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A B))",
-    "problem": "Cho tam giác ABC cân tại A, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD vuông góc với đoạn thẳng AB. Tính độ dài đoạn thẳng CD nếu biết AB = AC."
-  },
-  {
-    "image_dir": "images/img_121733.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(segment A B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Một đường thẳng đi qua điểm A. Tính độ dài cạnh BC nếu biết rằng AB = 10."
   },
   {
     "image_dir": "images/img_104900.png",
@@ -606,40 +318,16 @@
     "problem": "Cho hình thang ABCD với AB ∥ CD. Tính độ dài của đoạn thẳng AC nếu biết rằng chiều cao của hình thang là h."
   },
   {
-    "image_dir": "images/img_100756.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A B))\n(angle-measure A D E 90)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE ∥ BC, và đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB. Chứng minh rằng góc ADE = 90°."
-  },
-  {
     "image_dir": "images/img_122829.png",
     "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC",
     "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(on-circle D O)\n(on-circle E O)",
     "problem": "Cho tam giác ABC, trong đó D là trung điểm của đoạn thẳng AB, E là trung điểm của đoạn thẳng AC, đường thẳng DE và BC song song với nhau, O là tâm của đường tròn nội tiếp tam giác ABC. Tính tỉ số diện tích của tam giác ADE và tam giác ABC."
   },
   {
-    "image_dir": "images/img_116574.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua C là đường trung trực của đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define M point (midpoint A B))\n(segment A B)\n(segment C M)\n(perpendicular (segment C M) (segment A B))\n(equal-distance C M C A)",
-    "problem": "Cho tam giác ABC cân tại A, với AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, và BC ∥ DE. Đường thẳng đi qua C là đường trung trực của đoạn thẳng AB. Tính độ dài đoạn thẳng DE nếu biết rằng BC = 5 cm."
-  },
-  {
     "image_dir": "images/img_109042.png",
     "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
     "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point)\n(on-circle N O)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, O là tâm của đường tròn nội tiếp tam giác ABC, và N là một điểm thuộc đường tròn O. Tính bán kính của đường tròn nội tiếp nếu biết rằng diện tích tam giác ABC bằng S."
-  },
-  {
-    "image_dir": "images/img_122863.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(segment B C)",
-    "problem": "Cho tam giác ABC cân tại A với AB = AC, và một đường thẳng đi qua điểm B và điểm C. Khẳng định nào sau đây đúng?"
-  },
-  {
-    "image_dir": "images/img_113737.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(segment B C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Đường thẳng d đi qua điểm B và điểm C. Tính độ dài cạnh AC nếu biết rằng AB = 10."
   },
   {
     "image_dir": "images/img_115392.png",
@@ -654,22 +342,10 @@
     "problem": "Cho tam giác ABC cân tại A với AB = AC, O là tâm của đường tròn nội tiếp tam giác ABC. Tính bán kính r của đường tròn nội tiếp."
   },
   {
-    "image_dir": "images/img_100273.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A C)\n(segment C B)\n(segment A B)\n(define D point (segment C A))\n(segment C D)\n(perpendicular (segment C D) (segment A C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, đường thẳng đi qua điểm C và vuông góc với đoạn thẳng AC, O là tâm đường tròn nội tiếp của tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
     "image_dir": "images/img_112825.png",
     "instruction": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B",
     "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))",
     "problem": "Cho tam giác ABC với AB = AC, D là trung điểm của AB, E là trung điểm của AC, đường thẳng DE và BC song song với DE. Hãy xác định xem tam giác ABC có phải là tam giác đều hay không."
-  },
-  {
-    "image_dir": "images/img_119008.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P",
-    "answer": "(triangle (A B C) (right B))\n(define P point (inter-ll (line A B) (line B A)))\n(segment A B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt nhau tại điểm P. Tính độ dài đoạn thẳng AP nếu biết rằng AB = 5 và AC = 12."
   },
   {
     "image_dir": "images/img_114407.png",
@@ -690,40 +366,10 @@
     "problem": "Cho tam giác ABC với góc ABC = 90 độ và đường tròn nội tiếp O. Tính bán kính r của đường tròn nội tiếp O."
   },
   {
-    "image_dir": "images/img_105912.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm B",
-    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(segment A B)\n(segment C D)\n(angle-equal A C D D C B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, điểm D nằm trên đoạn thẳng AB, đường thẳng CD sao cho góc ACD = góc DCB. Tính độ dài đoạn thẳng CD nếu biết rằng AB = 10 và AC = 8."
-  },
-  {
-    "image_dir": "images/img_118119.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(define D point (midpoint A B))\n(segment A B)\n(define E point (midpoint A C))\n(segment A C)\n(segment D E)\n(define M point (projection C (segment A C)))\n(segment A C)\n(segment C M)\n(perpendicular (segment D E) (segment A C))\n(angle-measure D A E 90)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC. Đường thẳng DE và đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, với góc ADE = 90°. Tính độ dài đoạn thẳng DE."
-  },
-  {
-    "image_dir": "images/img_118414.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A C)))\n(segment C H)\n(perpendicular (segment C H) (segment A C))\n(angle-measure A D E 90)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC ∥ DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, và góc ADE = 90°. Tính độ dài đoạn DE nếu biết AB = 2a."
-  },
-  {
     "image_dir": "images/img_121545.png",
     "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE",
     "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(equal-distance A B A C)",
     "problem": "Cho tam giác ABC cân tại A, D ∈ AB, E ∈ AC, và BC ∥ DE. Tính độ dài đoạn DE nếu biết rằng độ dài đoạn BC bằng 5 cm."
-  },
-  {
-    "image_dir": "images/img_118474.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, O là tâm đường tròn ngoại tiếp tam giác ABC. Tìm vị trí của điểm A trên đường thẳng đi qua A sao cho đường thẳng này cắt đường tròn O tại hai điểm khác nhau."
-  },
-  {
-    "image_dir": "images/img_100401.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 45)\n(define D point (midpoint A B))\n(segment A B)\n(define E point (midpoint A C))\n(segment A C)\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define F point (line B D))\n(perpendicular (segment D E) (segment A D))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE ∥ BC và góc ADE = 90°. Hãy xác định hình dạng của tam giác ABC."
   },
   {
     "image_dir": "images/img_119918.png",
@@ -762,12 +408,6 @@
     "problem": "Cho tam giác ABC cân tại A với AB = AC và đường tròn ngoại tiếp O của tam giác ABC. Tính bán kính R của đường tròn ngoại tiếp O."
   },
   {
-    "image_dir": "images/img_107002.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A B))",
-    "problem": "Cho tam giác ABC, điểm D ∈ AB, điểm E ∈ AC, BC ∥ DE, và đường thẳng đi qua điểm C ⟂ AB. Tính độ dài đoạn DE nếu biết rằng độ dài BC bằng 5cm."
-  },
-  {
     "image_dir": "images/img_119065.png",
     "instruction": "Tam giác ABC, điểm M là trung điểm của đoạn thẳng AB",
     "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(segment A B)",
@@ -778,24 +418,6 @@
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC, đường kính AC",
     "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 90)\n(angle-measure A C B 30)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define P point (circumcenter A B C))\n(circle P (circumcircle A B C))\n(diameter A C P)\n(segment A C)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°, O là tâm của đường tròn nội tiếp và P là tâm của đường tròn ngoại tiếp tam giác ABC. Tính độ dài đường kính AC."
-  },
-  {
-    "image_dir": "images/img_105018.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 90)\n(angle-measure A C B 30)\n(segment B C)\n(define M point (midpoint B C))\n(segment M A)\n(equal-distance M B M C)\n(perpendicular (segment M A) (segment B C))\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, và đường thẳng là đường trung trực của đoạn thẳng BC. Tính độ dài đoạn thẳng AB nếu biết rằng BC = 2."
-  },
-  {
-    "image_dir": "images/img_106746.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(segment A B)\n(segment A C)\n(define M point (midpoint A B))\n(define N point (midpoint A C))\n(segment M N)\n(perpendicular (segment M N) (segment A B))\n(perpendicular (segment M N) (segment A C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng d là đường trung trực của đoạn thẳng AB, đường thẳng e là đường trung trực của đoạn thẳng AC. Tính độ dài đoạn thẳng BC."
-  },
-  {
-    "image_dir": "images/img_117713.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C",
-    "answer": "(triangle (A B C) (right B))\n(segment A B)\n(define D point (segment C A))\n(segment C D)\n(perpendicular (segment C D) (segment A B))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, có đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB. Hãy xác định xem đoạn thẳng nào đi qua điểm C có vuông góc với AB."
   },
   {
     "image_dir": "images/img_106051.png",
@@ -834,18 +456,6 @@
     "problem": "Cho tam giác ABC và đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đường tròn O. Tính độ dài đoạn thẳng AN."
   },
   {
-    "image_dir": "images/img_120752.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(segment A B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Một đường thẳng đi qua điểm A cắt BC tại điểm D. Tính độ dài của đoạn AD nếu biết rằng AB = 2AD."
-  },
-  {
-    "image_dir": "images/img_116740.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(triangle (A B C) (right B))\n(segment A B)\n(define M point (midpoint A B))\n(define O point (perp-bisector A B))\n(segment A O)\n(segment B O)\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua trung điểm của đoạn thẳng AB là đường trung trực của AB. Tính độ dài đoạn thẳng AC nếu biết độ dài đoạn thẳng BC."
-  },
-  {
     "image_dir": "images/img_103529.png",
     "instruction": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
     "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))",
@@ -858,70 +468,16 @@
     "problem": "Cho hình thang ABCD với AB ∥ CD và AB ⟂ AD, điểm P ∈ AB, điểm Q ∈ CD, đường thẳng PQ. Tính độ dài đoạn thẳng PQ nếu biết độ dài AB và CD."
   },
   {
-    "image_dir": "images/img_109621.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment D E)\n(define M point (projection C (segment A E)))\n(segment A E)\n(perpendicular (segment D E) (segment A E))\n(equal-distance D M M E)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE và đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, với góc ADE = 90°. Tính độ dài đoạn thẳng DE."
-  },
-  {
-    "image_dir": "images/img_106281.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC có đường thẳng là đường trung trực của đoạn thẳng AB và đường tròn ngoại tiếp O của tam giác ABC. Tính bán kính của đường tròn ngoại tiếp O."
-  },
-  {
     "image_dir": "images/img_118820.png",
     "instruction": "Đường tròn O, điểm A nằm trên đường tròn O",
     "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)",
     "problem": "Cho đường tròn O và điểm A ∈ O. Tính bán kính của đường tròn O nếu biết rằng khoảng cách từ O đến A là 5 cm."
   },
   {
-    "image_dir": "images/img_104056.png",
-    "instruction": "Đường thẳng AB",
-    "answer": "(segment A B)",
-    "problem": "Cho đường thẳng AB. Khẳng định nào sau đây đúng?"
-  },
-  {
-    "image_dir": "images/img_122996.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))",
-    "problem": "Cho tam giác ABC và đường tròn ngoại tiếp O của tam giác ABC. Một đường thẳng đi qua điểm A cắt đường tròn O tại hai điểm khác nhau. Tính diện tích của tam giác ABC nếu biết rằng bán kính của đường tròn O là R."
-  },
-  {
-    "image_dir": "images/img_117601.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(triangle (A B C) (right B))\n(segment A B)\n(define M point (midpoint A B))\n(define O point (perp-bisector A B))\n(segment A O)\n(segment B O)\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90° và đường thẳng đi qua trung điểm của AB là đường trung trực của đoạn thẳng AB. Tính độ dài của đoạn thẳng AC nếu biết rằng độ dài của đoạn thẳng BC bằng 5 cm."
-  },
-  {
-    "image_dir": "images/img_111365.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(equal-distance A B A C)\n(segment C A)\n(segment C B)\n(perpendicular (segment C A) (segment A B))",
-    "problem": "Cho tam giác ABC cân tại A, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, O là tâm đường tròn nội tiếp của tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
     "image_dir": "images/img_102092.png",
     "instruction": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC",
     "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(on-circle D O)\n(on-circle E O)",
     "problem": "Cho tam giác ABC với AB = AC, D là trung điểm của AB, E là trung điểm của AC, đường thẳng DE ∥ BC và O là tâm đường tròn nội tiếp của tam giác ABC. Tính độ dài đoạn thẳng DE nếu biết rằng BC = 2DE."
-  },
-  {
-    "image_dir": "images/img_105557.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define F point (segment B D))\n(perpendicular (segment D E) (segment B F))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC ∥ DE và đường thẳng đi qua điểm B tạo với DE góc ADE = 90°. Tính độ dài đoạn DE nếu biết độ dài cạnh BC."
-  },
-  {
-    "image_dir": "images/img_11656.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C",
-    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(segment A B)\n(define D point (segment C A))\n(segment C D)\n(perpendicular (segment A B) (segment C D))",
-    "problem": "Cho tam giác ABC cân tại A, có AB = AC, và đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB. Khẳng định nào sau đây đúng?"
-  },
-  {
-    "image_dir": "images/img_118961.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm B",
-    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(segment A B)\n(segment C D)\n(angle-equal A C D D C B)\n(segment B D)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, điểm D nằm trên đoạn thẳng AB, đường thẳng CD sao cho góc ACD = góc DCB. Hãy khẳng định rằng CD là đường phân giác của góc ACB."
   },
   {
     "image_dir": "images/img_101365.png",
@@ -954,40 +510,16 @@
     "problem": "Cho tam giác ABC với AB = AC, M là trung điểm của đoạn thẳng AB. Tính độ dài đoạn thẳng AM."
   },
   {
-    "image_dir": "images/img_113863.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(segment A B)\n(segment C D)\n(angle-equal A C D D C B)\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A B))",
-    "problem": "Cho tam giác ABC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, và đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB. Tính giá trị của góc ADB."
-  },
-  {
     "image_dir": "images/img_105584.png",
     "instruction": "Tam giác ABC, AB = AC, đường tròn O với đường kính BC",
     "answer": "(triangle (A B C))\n(define O point)\n(diameter B C O)\n(segment B C)\n(equal-distance A B A C)",
     "problem": "Cho tam giác ABC cân tại A, O là tâm của đường tròn có đường kính BC. Tính bán kính của đường tròn O."
   },
   {
-    "image_dir": "images/img_103864.png",
-    "instruction": "Đường tròn O, đường thẳng đi qua điểm O, đường thẳng tiếp xúc với đường tròn O",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(segment O A)\n(define B point)\n(on-circle B O)\n(segment A B)\n(tangent B (circle O) AB)",
-    "problem": "Cho đường tròn O và một đường thẳng d đi qua điểm O. Gọi t là đường thẳng tiếp xúc với đường tròn O tại điểm A. Tính độ dài đoạn thẳng từ O đến t."
-  },
-  {
     "image_dir": "images/img_109170.png",
     "instruction": "Hình vuông ABCD",
     "answer": "(square (A B C D))",
     "problem": "Cho hình vuông ABCD. Tính độ dài đường chéo AC."
-  },
-  {
-    "image_dir": "images/img_102370.png",
-    "instruction": "Hình thang ABCD, AB song song với CD, BC = AD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD",
-    "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(equal-distance B C A D)\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment M N)\n(perpendicular (segment M N) (segment A B))\n(parallel (segment A B) (segment C D))",
-    "problem": "Cho hình thang ABCD với AB ∥ CD, BC = AD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD. Tính độ dài đoạn thẳng AC."
-  },
-  {
-    "image_dir": "images/img_107305.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(segment B C)\n(define M point (midpoint B C))\n(segment A M)\n(perpendicular (segment A M) (segment B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Đường thẳng đi qua điểm A cắt đường trung trực của đoạn thẳng BC tại điểm D. Tính độ dài đoạn AD nếu biết rằng BC = 2a."
   },
   {
     "image_dir": "images/img_105406.png",
@@ -1062,12 +594,6 @@
     "problem": "Cho tam giác ABC và đường tròn ngoại tiếp O của tam giác ABC. Tính bán kính R của đường tròn ngoại tiếp O nếu biết rằng diện tích tam giác ABC bằng S."
   },
   {
-    "image_dir": "images/img_120766.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 45)\n(segment B C)\n(define M point (midpoint B C))\n(segment M A)\n(perpendicular (segment M A) (segment B C))\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Gọi đường thẳng d là đường trung trực của đoạn thẳng BC và đường thẳng e đi qua điểm C vuông góc với đoạn thẳng AC. Tính độ dài đoạn thẳng AB nếu biết rằng BC = x."
-  },
-  {
     "image_dir": "images/img_122803.png",
     "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC",
     "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))",
@@ -1078,12 +604,6 @@
     "instruction": "Tam giác ABC, AB = AC, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
     "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point)\n(on-circle N O)",
     "problem": "Cho tam giác ABC cân tại A, O là tâm đường tròn nội tiếp của tam giác ABC, N ∈ O. Tính độ dài đoạn thẳng AN."
-  },
-  {
-    "image_dir": "images/img_117158.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(segment B C)\n(define M point (midpoint B C))\n(segment M A)\n(perpendicular (segment M A) (segment B C))\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45° và góc ACB = 45°. Đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, đồng thời là đường trung trực của đoạn thẳng BC. Tính độ dài đoạn thẳng AB nếu biết rằng BC = 10."
   },
   {
     "image_dir": "images/img_110359.png",
@@ -1104,12 +624,6 @@
     "problem": "Cho tam giác ABC với AB = AC, điểm D nằm trên đoạn thẳng AB, đường thẳng AD, và góc ACD = góc DCB, đồng thời AB ⟂ AD. Tính giá trị của góc ADB."
   },
   {
-    "image_dir": "images/img_117007.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm B",
-    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(segment A B)\n(segment B C)\n(segment C D)\n(angle-equal A C D D C B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, điểm D nằm trên đoạn thẳng AB, đường thẳng CD sao cho góc ACD = góc DCB. Hãy khẳng định rằng CD là đường phân giác của góc ACB."
-  },
-  {
     "image_dir": "images/img_108867.png",
     "instruction": "Tam giác ABC, góc ABC = 90, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC, điểm O là trung điểm của đoạn thẳng AC",
     "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(segment A C)\n(define O point (midpoint A C))\n(circle O (circumcircle A B C))",
@@ -1122,22 +636,10 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, và BC ∥ DE. Tính độ dài đoạn DE nếu biết rằng AB = 10 và AC = 5."
   },
   {
-    "image_dir": "images/img_116783.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(segment A C)\n(define D point (segment B A))\n(segment B D)\n(perpendicular (segment B D) (segment A C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC. Tính độ dài đoạn thẳng BC nếu biết rằng AB = 5 và AC = 12."
-  },
-  {
     "image_dir": "images/img_107076.png",
     "instruction": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, đường thẳng DE, BC song song với DE, góc BAF = góc CAF, AF vuông góc với BC",
     "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(define F point (segment B C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(angle-equal B A F C A F)\n(segment A F)\n(segment B C)\n(perpendicular (segment A F) (segment B C))",
     "problem": "Cho tam giác ABC với AB = AC, D là trung điểm của AB, E là trung điểm của AC, F ∈ BC, DE ∥ BC, ∠BAF = ∠CAF, AF ⟂ BC. Tính độ dài đoạn thẳng DE nếu biết rằng AB = 10 cm."
-  },
-  {
-    "image_dir": "images/img_117862.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, góc ADE = 90, đường thẳng đi qua điểm B",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(angle-measure D A E 90)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC ∥ DE, góc ADE = 90°. Tính độ dài đoạn thẳng DE nếu biết AB = 6 và AC = 8."
   },
   {
     "image_dir": "images/img_121137.png",
@@ -1170,40 +672,16 @@
     "problem": "Cho hình thang ABCD với AB ∥ CD và BC = AD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng BC. Hãy tính độ dài đoạn thẳng PQ."
   },
   {
-    "image_dir": "images/img_111291.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C",
-    "answer": "(triangle (A B C))\n(segment A B)\n(define D point (segment C A))\n(define E point (segment C B))\n(perpendicular (segment C D) (segment A B))\n(segment C D)\n(segment C E)",
-    "problem": "Cho tam giác ABC, có đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB và một đường thẳng khác cũng đi qua điểm C. Tính độ dài đoạn thẳng từ C đến giao điểm của hai đường thẳng này."
-  },
-  {
     "image_dir": "images/img_114963.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE",
     "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))",
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, và BC ∥ DE. Tính tỉ số diện tích của tam giác ABC và tứ giác ABDE."
   },
   {
-    "image_dir": "images/img_120560.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C) (right B))\n(segment B C)\n(define M point (midpoint B C))\n(define P point (perp-bisector B C))\n(segment M P)\n(perpendicular (segment M P) (segment B C))\n(equal-distance P B P C)\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A B))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua điểm M là trung trực của đoạn thẳng BC, và đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB. Tính độ dài đoạn thẳng AM nếu biết rằng AB = 6 và AC = 8."
-  },
-  {
     "image_dir": "images/img_103070.png",
     "instruction": "Tam giác ABC, AB = AC, đường tròn nội tiếp O của tam giác ABC",
     "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(equal-distance A B A C)",
     "problem": "Cho tam giác ABC cân tại A, O là tâm đường tròn nội tiếp của tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_106215.png",
-    "instruction": "Đường tròn A, đường tròn B, đường tròn B cắt đường tròn A tại điểm C và điểm D, điểm P nằm trên đường tròn A",
-    "answer": "(define A point)\n(circle A)\n(define B point)\n(circle B)\n(define C point (inter-ll A B))\n(define D point (inter-ll A B))\n(define P point)\n(on-circle P A)\n(on-circle C A)\n(on-circle D A)\n(on-circle C B)\n(on-circle D B)",
-    "problem": "Cho đường tròn A và đường tròn B cắt nhau tại hai điểm C và D, điểm P nằm trên đường tròn A. Tính độ dài đoạn thẳng PD nếu biết rằng bán kính của đường tròn A là r."
-  },
-  {
-    "image_dir": "images/img_111315.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(segment A C)\n(define D point (segment B C))\n(segment B D)\n(perpendicular (segment B D) (segment A C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90 độ, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC. Tính độ dài đoạn thẳng BC nếu biết rằng AB = 5 và AC = 12."
   },
   {
     "image_dir": "images/img_102867.png",
@@ -1218,88 +696,16 @@
     "problem": "Cho tam giác ABC cân tại A, P là trực tâm của tam giác ABC. Tính độ dài đoạn thẳng AP."
   },
   {
-    "image_dir": "images/img_107947.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Đường thẳng đi qua trung điểm của đoạn thẳng AB là đường trung trực của AB, và O là tâm của đường tròn nội tiếp tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_104828.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment B C)\n(segment A C)\n(segment A B)\n(define H point (projection C (segment B C)))\n(segment C H)\n(perpendicular (segment C H) (segment B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC cắt đoạn thẳng AB tại điểm D. Hãy tính bán kính r của đường tròn nội tiếp O của tam giác ABC."
-  },
-  {
-    "image_dir": "images/img_112731.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A C B 30)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(segment A C)\n(segment B C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Gọi O là tâm của đường tròn nội tiếp tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_123826.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm B",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define D point (segment A B))\n(segment A B)\n(segment C D)\n(angle-equal A C D D C B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°, điểm D nằm trên đoạn thẳng AB và đường thẳng CD sao cho góc ACD = góc DCB. Hãy khẳng định rằng đường thẳng CD đi qua điểm B."
-  },
-  {
     "image_dir": "images/img_104201.png",
     "instruction": "Tam giác ABC, AB = AC, điểm M là trung điểm của đoạn thẳng AB",
     "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(segment A B)\n(segment A C)\n(equal-distance A B A C)",
     "problem": "Cho tam giác ABC với AB = AC, M là trung điểm của đoạn thẳng AB. Khẳng định nào sau đây đúng: M nằm trên đường trung tuyến từ A đến BC?"
   },
   {
-    "image_dir": "images/img_11199.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(segment A B)\n(segment A C)\n(define M point (midpoint A B))\n(define N point (midpoint A C))\n(segment M N)\n(perpendicular (segment M N) (segment A B))\n(perpendicular (segment M N) (segment A C))\n(equal-distance M A M B)\n(equal-distance N A N C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng d là đường trung trực của đoạn thẳng AB, đường thẳng e là đường trung trực của đoạn thẳng AC. Tính độ dài đoạn thẳng BC."
-  },
-  {
-    "image_dir": "images/img_114530.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 45)\n(segment C C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, và một đường thẳng d đi qua điểm C. Tính độ dài cạnh AB nếu biết rằng AC = 10."
-  },
-  {
-    "image_dir": "images/img_106799.png",
-    "instruction": "Hình chữ nhật ABCD, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(rectangle (A B C D))\n(segment B C)",
-    "problem": "Cho hình chữ nhật ABCD, trong đó đường thẳng đi qua điểm B và điểm C. Khẳng định nào sau đây đúng?"
-  },
-  {
-    "image_dir": "images/img_108496.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, O là tâm của đường tròn nội tiếp tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_120845.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A C)\n(segment B C)\n(segment A B)\n(perpendicular (segment C A) (segment A B))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, và đường tròn ngoại tiếp O của tam giác ABC. Tính bán kính R của đường tròn ngoại tiếp O."
-  },
-  {
-    "image_dir": "images/img_11103.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(segment B C)\n(define M point (midpoint B C))\n(define P point (perp-bisector B C))\n(segment M P)\n(perpendicular (segment M P) (segment B C))\n(segment A B)\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A B))",
-    "problem": "Cho tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, và đường thẳng là đường trung trực của đoạn thẳng BC. Tính độ dài đoạn thẳng từ điểm A đến đường trung trực của BC."
-  },
-  {
-    "image_dir": "images/img_1007.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(define M point (midpoint A B))\n(define N point (midpoint A C))\n(segment M N)\n(perpendicular (segment M N) (segment A B))\n(perpendicular (segment M N) (segment A C))",
-    "problem": "Cho tam giác ABC, đường thẳng d1 là đường trung trực của đoạn thẳng AB, đường thẳng d2 là đường trung trực của đoạn thẳng AC. Khẳng định nào sau đây đúng?"
-  },
-  {
     "image_dir": "images/img_11653.png",
     "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD, đường tròn ngoại tiếp O của tam giác ABC",
     "answer": "(triangle (A B C))\n(define D point (segment A B))\n(segment A B)\n(segment C D)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(on-circle A O)\n(on-circle B O)\n(on-circle C O)\n(angle-equal A C D D C B)",
     "problem": "Cho tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD và đường tròn ngoại tiếp O của tam giác ABC. Tính độ dài đoạn thẳng CD nếu biết rằng AB = 10 cm và AC = 12 cm."
-  },
-  {
-    "image_dir": "images/img_103060.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(segment A B)\n(segment M C)\n(segment A M)\n(segment B M)\n(perpendicular (segment M C) (segment A B))\n(equal-distance M A M B)",
-    "problem": "Cho tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB. Hãy khẳng định rằng hai đoạn thẳng AC và BC có độ dài bằng nhau."
   },
   {
     "image_dir": "images/img_100486.png",
@@ -1320,28 +726,10 @@
     "problem": "Cho tam giác ABC, điểm D ∈ AB, điểm E ∈ AC, điểm F ∈ BC, góc BAF = góc FAC, BC ∥ DE, đường thẳng AF. Tính tỉ số diện tích của tam giác AEF và tam giác ABC."
   },
   {
-    "image_dir": "images/img_107465.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(segment A B)\n(define M point (midpoint A B))\n(define P point (perp-bisector A B))\n(segment M P)\n(perpendicular (segment M P) (segment A B))\n(equal-distance P A P B)\n(segment A C)\n(define N point (midpoint A C))\n(define Q point (perp-bisector A C))\n(segment N Q)\n(perpendicular (segment N Q) (segment A C))\n(equal-distance Q A Q C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng d1 là đường trung trực của đoạn thẳng AB, đường thẳng d2 là đường trung trực của đoạn thẳng AC. Tính độ dài đoạn thẳng BC."
-  },
-  {
-    "image_dir": "images/img_103866.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A và điểm C",
-    "answer": "(triangle (A B C) (right B))\n(segment A C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua điểm A và điểm C. Tính độ dài cạnh AC nếu biết rằng AB = 5 và BC = 12."
-  },
-  {
     "image_dir": "images/img_115894.png",
     "instruction": "Tam giác ABC, điểm M là trung điểm của đoạn thẳng AB",
     "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(segment A B)",
     "problem": "Cho tam giác ABC, M là trung điểm của đoạn thẳng AB. Tính độ dài đoạn thẳng AM."
-  },
-  {
-    "image_dir": "images/img_106840.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(triangle (A B C) (right B))\n(segment B C)\n(define M point (midpoint B C))\n(define P point (perp-bisector B C))\n(segment M P)\n(perpendicular (segment M P) (segment B C))\n(equal-distance P B P C)\n(segment A P)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua điểm A là đường trung trực của đoạn thẳng BC. Hãy xác định xem tam giác ABC có phải là tam giác vuông hay không."
   },
   {
     "image_dir": "images/img_116239.png",
@@ -1350,34 +738,10 @@
     "problem": "Cho tam giác ABC và đường tròn O có đường kính AB. Tính bán kính của đường tròn O."
   },
   {
-    "image_dir": "images/img_121407.png",
-    "instruction": "Đường tròn A, đường tròn B, đường tròn B cắt đường tròn A tại điểm C và điểm D",
-    "answer": "(define A point)\n(define B point)\n(circle A)\n(circle B)\n(define C point (inter-ll A B))\n(define D point (inter-ll A B))\n(on-circle C A)\n(on-circle D A)\n(on-circle C B)\n(on-circle D B)",
-    "problem": "Cho đường tròn A và đường tròn B cắt nhau tại hai điểm C và D. Hãy xác định vị trí của điểm C và điểm D trên đường tròn A và đường tròn B."
-  },
-  {
     "image_dir": "images/img_115293.png",
     "instruction": "Tam giác ABC, AB = AC, BC = AC",
     "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(equal-distance B C A C)",
     "problem": "Cho tam giác ABC với AB = AC và BC = AC. Hãy xác định loại tam giác ABC và chứng minh rằng nó là tam giác cân."
-  },
-  {
-    "image_dir": "images/img_113080.png",
-    "instruction": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A, điểm P nằm trên đường tròn A",
-    "answer": "(define A point)\n(circle A)\n(define B point)\n(circle B)\n(on-circle P A)\n(tangent B (circle A) B)",
-    "problem": "Cho đường tròn A và đường tròn B, trong đó đường tròn B tiếp xúc với đường tròn A tại một điểm. Điểm P nằm trên đường tròn A. Tính bán kính của đường tròn B nếu biết rằng bán kính của đường tròn A là R."
-  },
-  {
-    "image_dir": "images/img_111778.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B",
-    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))",
-    "problem": "Cho tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, và BC ∥ DE, đường thẳng đi qua điểm B. Tính tỉ số các đoạn thẳng AD và DB."
-  },
-  {
-    "image_dir": "images/img_115468.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A C B 30)\n(segment B C)\n(define M point (midpoint B C))\n(segment A M)\n(perpendicular (segment A C) (segment M B))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC và đường thẳng này là đường trung trực của đoạn thẳng BC. Tính độ dài đoạn thẳng AB."
   },
   {
     "image_dir": "images/img_104876.png",
@@ -1404,22 +768,10 @@
     "problem": "Cho tam giác ABC với góc ABC = 90° và đường tròn O có đường kính BC. Tính bán kính của đường tròn O."
   },
   {
-    "image_dir": "images/img_123334.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(segment O A)\n(segment O B)\n(segment O C)\n(define D point (segment C A))\n(define E point (segment C B))\n(perpendicular (segment C D) (segment A B))",
-    "problem": "Cho tam giác ABC với AB = AC, đường thẳng đi qua điểm C và vuông góc với đoạn thẳng AB, O là tâm đường tròn ngoại tiếp tam giác ABC. Tính bán kính của đường tròn ngoại tiếp O."
-  },
-  {
     "image_dir": "images/img_123552.png",
     "instruction": "Tam giác ABC, AB = AC, đường tròn nội tiếp O của tam giác ABC",
     "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(equal-distance A B A C)",
     "problem": "Cho tam giác ABC cân tại A với AB = AC, O là tâm đường tròn nội tiếp của tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_113303.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng BC",
-    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(segment B C)\n(segment C D)\n(angle-equal A C D D C B)\n(define M point (midpoint B C))\n(segment B C)\n(segment M D)\n(perpendicular (segment M D) (segment B C))\n(equal-distance D B D C)",
-    "problem": "Cho tam giác ABC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, và đường thẳng CD là đường trung trực của đoạn thẳng BC. Tính độ dài đoạn thẳng AD nếu biết rằng AB = 2AD."
   },
   {
     "image_dir": "images/img_111411.png",
@@ -1432,12 +784,6 @@
     "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, và điểm F nằm trên đoạn thẳng BC, BC song song với DE, AC song song với DF, đường thẳng DF",
     "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(define D point (segment A B))\n(define E point (segment A C))\n(define F point (segment B C))\n(parallel (segment B C) (segment D E))\n(parallel (segment A C) (segment D F))\n(segment D F)",
     "problem": "Cho tam giác ABC cân tại A, D ∈ AB, E ∈ AC, F ∈ BC, BC ∥ DE, AC ∥ DF. Tính tỉ số diện tích của tam giác AEF và tam giác ABC."
-  },
-  {
-    "image_dir": "images/img_117612.png",
-    "instruction": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, đường thẳng đi qua điểm A",
-    "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(segment A D)\n(perpendicular (segment A B) (segment A D))\n(line A B)",
-    "problem": "Cho hình thang ABCD với AB ∥ CD và AB ⟂ AD. Một đường thẳng đi qua điểm A. Tính diện tích của hình thang ABCD nếu biết chiều dài AB và CD."
   },
   {
     "image_dir": "images/img_105016.png",
@@ -1494,18 +840,6 @@
     "problem": "Cho tam giác ABC cân tại A với AB = AC và đường tròn ngoại tiếp O của tam giác ABC. Khẳng định nào sau đây đúng về vị trí của điểm O?"
   },
   {
-    "image_dir": "images/img_114744.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(angle-measure A D E 90)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC ∥ DE và đường thẳng đi qua điểm B tạo với DE một góc ADE = 90°. Tính độ dài đoạn DE nếu biết độ dài AB."
-  },
-  {
-    "image_dir": "images/img_101645.png",
-    "instruction": "Đường tròn O, hai đường thẳng đi qua điểm O",
-    "answer": "(define O point)\n(circle O)\n(define A point (segment O O))\n(define B point (segment O O))\n(segment A B)",
-    "problem": "Cho đường tròn O và hai đường thẳng d1, d2 đi qua điểm O. Khẳng định nào sau đây đúng về vị trí của hai đường thẳng d1 và d2?"
-  },
-  {
     "image_dir": "images/img_115886.png",
     "instruction": "Tam giác ABC, AB = AC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
     "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point)\n(on-circle N O)",
@@ -1518,12 +852,6 @@
     "problem": "Cho đường tròn O và điểm A ∈ O. Tính bán kính của đường tròn O nếu biết rằng khoảng cách từ O đến A là 5 cm."
   },
   {
-    "image_dir": "images/img_114356.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A B))\n(angle-measure A D E 90)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, D là trung điểm của đoạn thẳng AB, E là trung điểm của đoạn thẳng AC, đường thẳng DE ∥ BC, và đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB. Chứng minh rằng góc ADE = 90°."
-  },
-  {
     "image_dir": "images/img_122253.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC, góc ADE = 90",
     "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 45)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(angle-measure A D E 90)",
@@ -1534,30 +862,6 @@
     "instruction": "Tam giác ABC, AB = AC, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC",
     "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(segment A B)\n(segment A C)\n(equal-distance A B A C)",
     "problem": "Cho tam giác ABC có AB = AC, O là tâm đường tròn ngoại tiếp của tam giác ABC. Tính độ dài đoạn thẳng AO."
-  },
-  {
-    "image_dir": "images/img_10391.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, O là tâm đường tròn nội tiếp của tam giác ABC. Một đường thẳng đi qua điểm A cắt đường tròn tại điểm D. Tính độ dài đoạn AD nếu biết rằng bán kính của đường tròn nội tiếp là r."
-  },
-  {
-    "image_dir": "images/img_120976.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(segment A B)\n(define D point (segment C A))\n(segment C D)\n(perpendicular (segment C D) (segment A B))",
-    "problem": "Cho tam giác ABC, đường thẳng đi qua điểm C và vuông góc với đoạn thẳng AB. Tính độ dài đoạn thẳng từ C đến đường thẳng AB."
-  },
-  {
-    "image_dir": "images/img_11792.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(equal-distance A B A C)\n(define M point (midpoint B C))\n(segment B C)\n(define P point (segment A M))\n(segment A P)\n(perpendicular (segment A P) (segment B C))",
-    "problem": "Cho tam giác ABC với AB = AC, đường thẳng đi qua A là đường trung trực của đoạn thẳng BC, và đường thẳng đi qua C vuông góc với đoạn thẳng AB. Tính độ dài đoạn thẳng AC."
-  },
-  {
-    "image_dir": "images/img_105568.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm B",
-    "answer": "(triangle (A B C) (right B))\n(segment B B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90 độ, đường thẳng d đi qua điểm B. Tính độ dài đoạn thẳng AC nếu biết rằng AB = 5 và BC = 12."
   },
   {
     "image_dir": "images/img_103142.png",
@@ -1578,46 +882,16 @@
     "problem": "Cho tam giác ABC với góc ABC = 90 độ, O là tâm của đường tròn nội tiếp tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
   },
   {
-    "image_dir": "images/img_111868.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P",
-    "answer": "(triangle (A B C))\n(define P point (inter-ll A B))\n(segment A B)",
-    "problem": "Cho tam giác ABC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P. Tính độ dài đoạn thẳng AP."
-  },
-  {
-    "image_dir": "images/img_105081.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(segment A B)\n(segment A C)\n(define M point (midpoint A B))\n(define P point (perp-bisector A B))\n(segment M P)\n(perpendicular (segment M P) (segment A B))\n(equal-distance C M C P)",
-    "problem": "Cho tam giác ABC với AB = AC, D là trung điểm của AB, E là trung điểm của AC, đường thẳng DE ∥ BC, và đường thẳng đi qua C là đường trung trực của AB. Tính độ dài đoạn thẳng DE nếu biết rằng AB = 10."
-  },
-  {
-    "image_dir": "images/img_103206.png",
-    "instruction": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A",
-    "answer": "(define A point)\n(define B point)\n(circle A)\n(circle B)\n(tangent B (circle A) AB)",
-    "problem": "Cho đường tròn A và đường tròn B, biết rằng đường tròn B tiếp xúc với đường tròn A. Tính bán kính của đường tròn B nếu bán kính của đường tròn A là R."
-  },
-  {
     "image_dir": "images/img_10222.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90",
     "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point)\n(circle O)\n(diameter A B O)\n(segment A B)\n(segment O A)\n(segment O B)\n(angle-measure A D E 90)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC ∥ DE, đường tròn O có đường kính AB, và góc ADE = 90°. Tính độ dài đoạn DE nếu biết rằng AB = 10."
   },
   {
-    "image_dir": "images/img_111012.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P",
-    "answer": "(triangle (A B C))\n(define P point (inter-ll A B))\n(segment A B)",
-    "problem": "Cho tam giác ABC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P. Tính độ dài đoạn thẳng AP."
-  },
-  {
     "image_dir": "images/img_102936.png",
     "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, và điểm F nằm trên đoạn thẳng BC, BC song song với DE, AC song song với DF, đường thẳng DF",
     "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(define D point (segment A B))\n(define E point (segment A C))\n(define F point (segment B C))\n(parallel (segment B C) (segment D E))\n(parallel (segment A C) (segment D F))\n(segment D F)",
     "problem": "Cho tam giác ABC cân tại A, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, và điểm F nằm trên đoạn thẳng BC, biết rằng BC ∥ DE, AC ∥ DF. Tính tỉ lệ diện tích của tam giác ADF so với diện tích tam giác ABC."
-  },
-  {
-    "image_dir": "images/img_110932.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A",
-    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define D point (segment A B))\n(segment A D)",
-    "problem": "Cho tam giác ABC cân tại A với AB = AC, và một đường thẳng đi qua điểm A. Khẳng định nào sau đây đúng?"
   },
   {
     "image_dir": "images/img_10512.png",
@@ -1632,22 +906,10 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60° và góc ACB = 30°. Tính độ dài cạnh BC nếu biết rằng cạnh AB = 10."
   },
   {
-    "image_dir": "images/img_109444.png",
-    "instruction": "Hình chữ nhật ABCD, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(rectangle (A B C D))\n(segment B C)",
-    "problem": "Cho hình chữ nhật ABCD, biết rằng đường thẳng đi qua điểm B và điểm C. Hãy xác định hình dạng của đường thẳng này."
-  },
-  {
     "image_dir": "images/img_114859.png",
     "instruction": "Tam giác ABC, góc ABC = 90, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn ngoại tiếp O của tam giác ABC, góc ADE = 90",
     "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(angle-measure A D E 90)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC ∥ DE, O là đường tròn ngoại tiếp của tam giác ABC, và góc ADE = 90°. Tính độ dài đoạn DE."
-  },
-  {
-    "image_dir": "images/img_11975.png",
-    "instruction": "Hình chữ nhật ABCD, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(rectangle (A B C D))\n(segment B C)",
-    "problem": "Cho hình chữ nhật ABCD, trong đó đường thẳng đi qua điểm B và điểm C. Tính độ dài đoạn thẳng AC."
   },
   {
     "image_dir": "images/img_105591.png",
@@ -1674,18 +936,6 @@
     "problem": "Cho tam giác ABC cân tại A với AB = AC, P là trọng tâm của tam giác ABC. Tính tỉ số AP : PB."
   },
   {
-    "image_dir": "images/img_11724.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, đường thẳng đi qua O là đường trung trực của đoạn thẳng AB. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_121711.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng đi qua điểm A",
-    "answer": "(triangle (A B C))\n(segment A B)\n(define M point (midpoint A B))\n(define P point (segment A M))\n(segment A P)\n(segment M P)\n(perpendicular (segment A B) (segment M P))\n(equal-distance M A M B)",
-    "problem": "Cho tam giác ABC, đường thẳng d là đường trung trực của đoạn thẳng AB, và đường thẳng e đi qua điểm A. Tính độ dài đoạn thẳng từ A đến điểm cắt của d và e."
-  },
-  {
     "image_dir": "images/img_11709.png",
     "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, góc BAF = góc FAC, BC song song với DE, đường thẳng AF",
     "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(define F point (segment B C))\n(angle-equal B A F F A C)\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(segment A F)",
@@ -1704,12 +954,6 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, D là trung điểm của đoạn thẳng AB, E là trung điểm của đoạn thẳng AC, đường thẳng DE ⟂ AC, O là tâm đường tròn nội tiếp của tam giác ABC. Tính độ dài đoạn thẳng DE."
   },
   {
-    "image_dir": "images/img_116171.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm O là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(segment A C)\n(segment B C)\n(segment O A)\n(segment O B)\n(equal-distance O A O B)\n(segment O B)\n(perpendicular (segment O A) (segment A B))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Đường thẳng đi qua điểm O là đường trung trực của đoạn thẳng AB và O là tâm của đường tròn ngoại tiếp tam giác ABC. Tính bán kính R của đường tròn ngoại tiếp."
-  },
-  {
     "image_dir": "images/img_115255.png",
     "instruction": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đường tròn O, đường kính AC",
     "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point)\n(on-circle N O)\n(define M point)\n(diameter A C O)\n(segment A C)",
@@ -1726,30 +970,6 @@
     "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
     "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))",
     "problem": "Cho tam giác ABC, trong đó D là trung điểm của đoạn thẳng AB, E là trung điểm của đoạn thẳng AC, và BC ∥ DE. Tính tỉ lệ diện tích của tam giác ABC so với diện tích của tứ giác DBEC."
-  },
-  {
-    "image_dir": "images/img_110787.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(segment A C)\n(equal-distance A B A C)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC cân tại A với AB = AC, đường thẳng đi qua trung điểm của AB là đường trung trực của đoạn thẳng AB, và O là tâm của đường tròn ngoại tiếp tam giác ABC. Tính bán kính của đường tròn ngoại tiếp O."
-  },
-  {
-    "image_dir": "images/img_104385.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A B))",
-    "problem": "Cho tam giác ABC, trong đó D là trung điểm của đoạn thẳng AB, E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC ∥ DE, và đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB. Tính độ dài đoạn thẳng DE nếu biết rằng AB = 10 cm và AC = 8 cm."
-  },
-  {
-    "image_dir": "images/img_118364.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(segment A B)\n(define M point (midpoint A B))\n(segment A M)\n(segment B M)\n(perpendicular (segment M A) (segment A B))\n(equal-distance M A M B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Gọi M là trung điểm của đoạn thẳng AB và đường thẳng MN là đường trung trực của AB. Tính độ dài đoạn thẳng AM."
-  },
-  {
-    "image_dir": "images/img_104870.png",
-    "instruction": "Đường tròn O, đường tròn B, đường tròn B tiếp xúc với đường tròn O, đường thẳng đi qua điểm O",
-    "answer": "(define O point)\n(circle O)\n(define B point)\n(circle B)\n(tangent B (circle O) B O)\n(segment O B)",
-    "problem": "Cho đường tròn O và đường tròn B, biết rằng đường tròn B tiếp xúc với đường tròn O tại một điểm. Hãy xác định vị trí của đường thẳng đi qua điểm O và cho biết đường thẳng này có tính chất gì liên quan đến hai đường tròn."
   },
   {
     "image_dir": "images/img_122309.png",
@@ -1794,22 +1014,10 @@
     "problem": "Cho tam giác ABC cân tại A, D ∈ AB, E ∈ AC, BC ∥ DE, O là đường tròn ngoại tiếp tam giác ABC. Tính tỉ số diện tích của tam giác ADE và tam giác ABC."
   },
   {
-    "image_dir": "images/img_107960.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(define D point (segment C A))\n(define E point (segment C B))\n(perpendicular (segment A B) (segment C D))\n(perpendicular (segment A B) (segment C E))",
-    "problem": "Cho tam giác ABC, đường thẳng CD đi qua điểm C và vuông góc với đoạn thẳng AB, O là tâm đường tròn ngoại tiếp tam giác ABC. Tính bán kính của đường tròn ngoại tiếp O."
-  },
-  {
     "image_dir": "images/img_120545.png",
     "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn O với đường kính AB",
     "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point)\n(circle O)\n(diameter A B O)",
     "problem": "Cho tam giác ABC, D là trung điểm của đoạn thẳng AB, E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC ∥ DE, và đường tròn O có đường kính AB. Tính chu vi của tam giác CDE."
-  },
-  {
-    "image_dir": "images/img_106356.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(segment B C)\n(segment A C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua điểm C và vuông góc với đoạn thẳng AB, O là tâm của đường tròn nội tiếp tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
   },
   {
     "image_dir": "images/img_110985.png",
@@ -1818,22 +1026,10 @@
     "problem": "Cho tam giác ABC, O là tâm đường tròn nội tiếp của tam giác ABC. Tính bán kính r của đường tròn nội tiếp khi biết diện tích S của tam giác ABC."
   },
   {
-    "image_dir": "images/img_116230.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(segment A B)\n(define D point (segment C A))\n(segment C D)\n(perpendicular (segment C D) (segment A B))",
-    "problem": "Cho tam giác ABC, có đường thẳng đi qua điểm C và vuông góc với đoạn thẳng AB. Hãy khẳng định rằng đường thẳng này là đường cao từ đỉnh C xuống cạnh AB."
-  },
-  {
     "image_dir": "images/img_118930.png",
     "instruction": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, đường thẳng AC và đường thẳng BD cắt tại điểm O",
     "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(segment A D)\n(perpendicular (segment A B) (segment A D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))",
     "problem": "Cho hình thang ABCD với AB ∥ CD và AB ⟂ AD. Đường thẳng AC và BD cắt nhau tại điểm O. Tính diện tích của hình thang ABCD nếu biết chiều dài AB và CD."
-  },
-  {
-    "image_dir": "images/img_123079.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(define D point (midpoint A B))\n(segment A B)\n(define E point (midpoint A C))\n(segment A C)\n(segment D E)\n(define M point (projection C (segment A C)))\n(segment C M)\n(perpendicular (segment D E) (segment A C))\n(angle-measure D E M 90)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC. Đường thẳng DE và đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, đồng thời góc ADE = 90°. Tính độ dài đoạn thẳng DE."
   },
   {
     "image_dir": "images/img_117322.png",
@@ -1896,22 +1092,10 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, điểm F là trung điểm của đoạn thẳng BC. Các đường thẳng DE và EF lần lượt vuông góc với AB, BC và song song với nhau, với BC ∥ DE và EF ∥ AB. Chứng minh rằng góc ADE = 90° và góc CFE = 90°."
   },
   {
-    "image_dir": "images/img_109885.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(segment A B)\n(segment M C)\n(perpendicular (segment M C) (segment A B))\n(equal-distance M A M B)",
-    "problem": "Cho tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB. Khẳng định nào sau đây đúng?"
-  },
-  {
     "image_dir": "images/img_103207.png",
     "instruction": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, điểm O là trung điểm của đường kính AC",
     "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define M point (midpoint A C))\n(segment A C)\n(segment O M)\n(equal-distance O A O C)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, O là trung điểm của đường kính AC của đường tròn ngoại tiếp tam giác ABC. Tính độ dài AO."
-  },
-  {
-    "image_dir": "images/img_118088.png",
-    "instruction": "Hình bình hành ABCD, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(parallelogram (A B C D))\n(segment A B)\n(segment B C)\n(segment C D)\n(segment D A)\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A B))",
-    "problem": "Cho hình bình hành ABCD, có đường thẳng đi qua điểm C và vuông góc với đoạn thẳng AB. Tính độ dài đoạn thẳng CD."
   },
   {
     "image_dir": "images/img_112107.png",
@@ -1974,22 +1158,10 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC. Biết rằng DE ∥ BC và DF ∥ AC. Tính độ dài đoạn thẳng DE nếu biết rằng AB = 10."
   },
   {
-    "image_dir": "images/img_114681.png",
-    "instruction": "Hình bình hành ABCD, tam giác PMN",
-    "answer": "(parallelogram (A B C D))\n(triangle (P M N))",
-    "problem": "Cho hình bình hành ABCD và tam giác PMN. Biết rằng AB ∥ CD và AD ∥ BC. Tính chu vi của hình bình hành ABCD."
-  },
-  {
     "image_dir": "images/img_112302.png",
     "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, điểm F nằm trên đoạn thẳng BC, góc BAF = góc FAC, BC song song với DE, đường thẳng AF",
     "answer": "(triangle (A B C))\n(define D point (segment A B))\n(define E point (segment A C))\n(define F point (segment B C))\n(angle-equal B A F F A C)\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(segment A F)",
     "problem": "Cho tam giác ABC, điểm D ∈ AB, điểm E ∈ AC, điểm F ∈ BC, góc BAF = góc FAC, BC ∥ DE, đường thẳng AF. Tính tỉ số giữa các đoạn thẳng AD và DB."
-  },
-  {
-    "image_dir": "images/img_122892.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define M point (midpoint B C))\n(segment B C)\n(define P point (perp-bisector B C))\n(segment M P)\n(perpendicular (segment M P) (segment B C))\n(equal-distance P A P C)\n(segment A C)\n(perpendicular (segment C A) (segment A B))",
-    "problem": "Cho tam giác ABC với AB = AC, đường thẳng đi qua điểm A là đường trung trực của đoạn thẳng BC, và đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB. Tính độ dài đoạn thẳng AC."
   },
   {
     "image_dir": "images/img_100104.png",
@@ -1998,28 +1170,10 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Điểm D nằm trên đoạn thẳng AB sao cho góc ACD = góc DCB. Hãy xác định vị trí của điểm D trên đoạn AB và chứng minh rằng đường tròn nội tiếp O của tam giác ABC tiếp xúc với đoạn AC."
   },
   {
-    "image_dir": "images/img_108137.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(triangle (A B C) (right B))\n(segment B C)\n(define M point (midpoint B C))\n(define P point (perp-bisector B C))\n(segment M P)\n(perpendicular (segment M P) (segment B C))\n(equal-distance P B P C)\n(segment A P)",
-    "problem": "Cho tam giác ABC với góc ABC = 90° và đường thẳng đi qua điểm A là đường trung trực của đoạn thẳng BC. Tính độ dài đoạn thẳng AB nếu biết rằng AC = 2AB."
-  },
-  {
-    "image_dir": "images/img_110467.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, tam giác DEF, tam giác DEF = 90, góc EFD = 45, góc EDF = 45, tam giác ABC bằng tam giác DEF",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(triangle (D E F) (right E))\n(angle-measure E F D 45)\n(angle-measure D E F 45)\n(angle-equal A B C D E F)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45° và tam giác DEF với góc DEF = 90°, góc EFD = 45°, góc EDF = 45°, biết rằng tam giác ABC bằng tam giác DEF. Hãy khẳng định rằng hai tam giác ABC và DEF là tam giác gì?"
-  },
-  {
     "image_dir": "images/img_12360.png",
     "instruction": "Hình thang ABCD, AB song song với CD, đường thẳng đi qua điểm vuông góc với đoạn thẳng AB",
     "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(define M point (segment A B))\n(segment M C)",
     "problem": "Cho hình thang ABCD với AB ∥ CD và một đường thẳng đi qua điểm vuông góc với đoạn thẳng AB. Tính diện tích của hình thang ABCD nếu biết chiều dài của AB và CD."
-  },
-  {
-    "image_dir": "images/img_118450.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng là đường trung trực của đoạn thẳng BC",
-    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define M point (midpoint B C))\n(define O point (perp-bisector B C))\n(segment M O)\n(perpendicular (segment M O) (segment B C))\n(equal-distance O B O C)",
-    "problem": "Cho tam giác ABC, D là trung điểm của AB, E là trung điểm của AC, DE ∥ BC và đường thẳng đi qua D, E là đường trung trực của BC. Tính độ dài đoạn thẳng DE nếu biết rằng độ dài BC bằng 10 cm."
   },
   {
     "image_dir": "images/img_110511.png",
@@ -2028,52 +1182,10 @@
     "problem": "Cho tam giác ABC, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC ∥ DE và O là đường tròn ngoại tiếp của tam giác ABC. Tính tỉ số diện tích của tam giác ADE và tam giác ABC."
   },
   {
-    "image_dir": "images/img_105352.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(on-circle A O)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Gọi O là tâm đường tròn ngoại tiếp tam giác ABC. Một đường thẳng đi qua điểm A cắt đường tròn O tại điểm D. Tính độ dài đoạn AD nếu biết rằng AB = AC."
-  },
-  {
-    "image_dir": "images/img_123556.png",
-    "instruction": "Đường tròn O, đường thẳng đi qua điểm O, đường thẳng tiếp xúc với đường tròn O",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(tangent B (circle O) AB)",
-    "problem": "Cho đường tròn O và đường thẳng d đi qua điểm O. Gọi t là đường thẳng tiếp xúc với đường tròn O tại điểm A. Tính độ dài đoạn thẳng từ điểm A đến điểm O."
-  },
-  {
-    "image_dir": "images/img_102400.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(segment B C)\n(segment A C)\n(perpendicular (segment B C) (segment A B))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, và đường tròn ngoại tiếp O của tam giác ABC. Tính bán kính R của đường tròn ngoại tiếp O."
-  },
-  {
-    "image_dir": "images/img_114174.png",
-    "instruction": "Đường tròn O, đường thẳng là đi qua điểm O",
-    "answer": "(define O point)\n(circle O)\n(define A point (segment O O))\n(segment O A)",
-    "problem": "Cho đường tròn O và đường thẳng d đi qua điểm O. Khẳng định nào sau đây đúng?"
-  },
-  {
     "image_dir": "images/img_11233.png",
     "instruction": "Hình vuông ABCD, đường thẳng AC và đường thẳng BD cắt tại điểm O",
     "answer": "(square (A B C D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))",
     "problem": "Cho hình vuông ABCD, với đường thẳng AC và đường thẳng BD cắt nhau tại điểm O. Tính độ dài đoạn thẳng AO."
-  },
-  {
-    "image_dir": "images/img_113298.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm E là đường trung trực của đoạn thẳng BC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment B C)\n(segment D E)\n(perpendicular (segment E D) (segment B C))\n(angle-measure A D E 90)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE và đường thẳng đi qua điểm E là đường trung trực của đoạn thẳng BC, đồng thời góc ADE = 90°. Tính độ dài đoạn thẳng DE."
-  },
-  {
-    "image_dir": "images/img_116084.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng đi qua điểm B",
-    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))",
-    "problem": "Cho tam giác ABC, trong đó D là trung điểm của đoạn thẳng AB, E là trung điểm của đoạn thẳng AC, đường thẳng DE và BC song song với nhau. Hãy xác định xem đường thẳng nào đi qua điểm B."
-  },
-  {
-    "image_dir": "images/img_11164.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 90)\n(angle-measure A C B 30)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Đường thẳng đi qua điểm A cắt đường tròn ngoại tiếp O của tam giác ABC tại điểm D. Tính độ dài của đoạn AD nếu biết rằng AB = 2."
   },
   {
     "image_dir": "images/img_108372.png",
@@ -2088,22 +1200,10 @@
     "problem": "Cho đường tròn O và điểm A ∈ O. Tính chu vi của đường tròn O nếu bán kính của nó là r."
   },
   {
-    "image_dir": "images/img_122762.png",
-    "instruction": "Đường tròn O, đường thẳng đi qua điểm O, đường thẳng tiếp xúc với đường tròn O",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(segment O A)\n(define B point)\n(on-circle B O)\n(segment O B)\n(tangent B (circle O) AB)",
-    "problem": "Cho đường tròn O và đường thẳng d đi qua điểm O. Gọi t là đường thẳng tiếp xúc với đường tròn O tại điểm A. Tính độ dài đoạn thẳng từ O đến t."
-  },
-  {
     "image_dir": "images/img_121645.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45",
     "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)",
     "problem": "Cho tam giác ABC vuông tại B, với góc BAC = 45° và góc ACB = 45°. Tính độ dài cạnh AC nếu biết rằng AB = 10."
-  },
-  {
-    "image_dir": "images/img_106556.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(segment A B)\n(segment M A)\n(segment M B)\n(perpendicular (segment M A) (segment A B))\n(equal-distance M A M B)",
-    "problem": "Cho tam giác ABC, đường thẳng d là đường trung trực của đoạn thẳng AB. Hãy xác định xem điểm C có thuộc đường thẳng d hay không."
   },
   {
     "image_dir": "images/img_100396.png",
@@ -2118,28 +1218,10 @@
     "problem": "Cho tam giác ABC, D là trung điểm của AB, E là trung điểm của AC, đường thẳng DE, BC ∥ DE và O là đường tròn ngoại tiếp tam giác ABC. Tính độ dài đoạn thẳng DE nếu biết rằng AB = 10 cm và AC = 8 cm."
   },
   {
-    "image_dir": "images/img_11291.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 90)\n(angle-measure A C B 30)\n(define D point (segment C B))\n(segment C D)\n(perpendicular (segment C D) (segment B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30° và đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC. Tính độ dài cạnh AC nếu biết rằng cạnh AB = 10."
-  },
-  {
     "image_dir": "images/img_101038.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
     "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point)\n(on-circle N O)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°, O là tâm của đường tròn nội tiếp tam giác ABC, và N là một điểm nằm trên đường tròn O. Tính độ dài đoạn thẳng AN."
-  },
-  {
-    "image_dir": "images/img_114423.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(define O point (incenter A B C))\n(circle O (incircle A B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Gọi O là tâm đường tròn nội tiếp của tam giác ABC. Đường thẳng đi qua điểm A cắt cạnh BC tại điểm D. Tính độ dài đoạn AD nếu biết AB = AC."
-  },
-  {
-    "image_dir": "images/img_120389.png",
-    "instruction": "Đường tròn O, đường thẳng đi qua điểm O, đường thẳng tiếp xúc với đường tròn O",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(segment O B)\n(tangent A (circle O) AB)",
-    "problem": "Cho đường tròn O và đường thẳng d đi qua điểm O. Gọi t là đường thẳng tiếp xúc với đường tròn O tại điểm A. Tính độ dài đoạn thẳng từ O đến t."
   },
   {
     "image_dir": "images/img_121738.png",
@@ -2152,12 +1234,6 @@
     "instruction": "Tam giác ABC, góc ABC = 90, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB, đường kính AC",
     "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O)\n(define N point (segment A B))\n(diameter A C O)\n(segment A C)\n(segment A B)\n(segment B C)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, O là tâm đường tròn ngoại tiếp tam giác ABC, N là điểm thuộc đoạn thẳng AB, AC là đường kính của đường tròn ngoại tiếp. Tính độ dài đoạn thẳng ON."
-  },
-  {
-    "image_dir": "images/img_119061.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(define M point (midpoint A B))\n(define N point (midpoint A C))\n(segment M N)\n(perpendicular (segment M N) (segment A B))\n(perpendicular (segment M N) (segment A C))\n(equal-distance A B A C)",
-    "problem": "Cho tam giác ABC với AB = AC, đường thẳng d là đường trung trực của đoạn thẳng AB, và đường thẳng e là đường trung trực của đoạn thẳng AC. Khẳng định nào sau đây đúng?"
   },
   {
     "image_dir": "images/img_105707.png",
@@ -2196,18 +1272,6 @@
     "problem": "Cho hình vuông ABCD, điểm P ∈ AB, điểm Q ∈ BC, và đường thẳng PQ. Tính độ dài đoạn thẳng PQ nếu biết rằng AB = a."
   },
   {
-    "image_dir": "images/img_123024.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(define M point (midpoint B C))\n(segment B C)\n(define P point (segment A M))\n(segment A P)\n(perpendicular (segment A P) (segment B C))\n(equal-distance A B A C)",
-    "problem": "Cho tam giác ABC với AB = AC, đường thẳng đi qua điểm A là đường trung trực của đoạn thẳng BC. Khẳng định nào sau đây đúng?"
-  },
-  {
-    "image_dir": "images/img_109380.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C",
-    "answer": "(triangle (A B C) (right B))\n(segment A B)\n(define D point (segment C A))\n(segment C D)\n(perpendicular (segment C D) (segment A B))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB. Hãy khẳng định rằng đường thẳng này là đường phân giác của góc ACB."
-  },
-  {
     "image_dir": "images/img_112180.png",
     "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, góc ADE = 90, đường tròn O với đường kính AB",
     "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment D E)\n(perpendicular (segment D E) (segment A B))\n(define O point)\n(circle O)\n(diameter A B O)\n(segment A B)",
@@ -2220,22 +1284,10 @@
     "problem": "Cho tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB. Tính độ dài đoạn thẳng AD nếu biết AB = 10 cm và AC = 12 cm."
   },
   {
-    "image_dir": "images/img_114962.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AC, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A C)\n(segment C A)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, đường thẳng đi qua điểm C và vuông góc với đoạn thẳng AC, và đường tròn nội tiếp O của tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
     "image_dir": "images/img_114857.png",
     "instruction": "Tam giác ABC, góc ABC = 90, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
     "answer": "(triangle (A B C) (right B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point)\n(on-circle N O)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, O là tâm đường tròn nội tiếp của tam giác ABC, và N là một điểm thuộc đường tròn O. Tính độ dài đoạn thẳng AN."
-  },
-  {
-    "image_dir": "images/img_115550.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 45)\n(segment B C)\n(define D point (segment C B))\n(segment C D)\n(perpendicular (segment C D) (segment B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45° và đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC. Tính độ dài đoạn thẳng AC nếu biết rằng AB = 10."
   },
   {
     "image_dir": "images/img_117121.png",
@@ -2244,28 +1296,10 @@
     "problem": "Cho hình vuông ABCD, điểm P ∈ AB. Tính độ dài đoạn thẳng PD, biết rằng AB = a."
   },
   {
-    "image_dir": "images/img_105556.png",
-    "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường thẳng là đường trung trực của đoạn thẳng BC",
-    "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define M point (midpoint B C))\n(define P point (perp-bisector B C))\n(segment M P)\n(perpendicular (segment M P) (segment B C))\n(equal-distance P B P C)",
-    "problem": "Cho tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE ∥ BC, và đường thẳng đi qua D và E là đường trung trực của đoạn thẳng BC. Tính độ dài đoạn thẳng DE nếu biết rằng BC = 2DE."
-  },
-  {
-    "image_dir": "images/img_112464.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(segment A B)\n(segment A C)\n(define M point (midpoint A B))\n(define N point (midpoint A C))\n(segment M N)\n(perpendicular (segment M N) (segment A B))\n(perpendicular (segment M N) (segment A C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, trong đó đường thẳng đi qua trung điểm của AB và vuông góc với AB, đồng thời đường thẳng đi qua trung điểm của AC và vuông góc với AC. Tính độ dài đoạn thẳng BC."
-  },
-  {
     "image_dir": "images/img_105833.png",
     "instruction": "Tam giác ABC, AB = AC, điểm P là trực tâm của tam giác ABC",
     "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define P point (orthocenter A B C))",
     "problem": "Cho tam giác ABC có AB = AC, P là trực tâm của tam giác ABC. Tính độ dài đoạn thẳng AP."
-  },
-  {
-    "image_dir": "images/img_114503.png",
-    "instruction": "Đường tròn O, hai đường thẳng đi qua điểm O",
-    "answer": "(define O point)\n(circle O)\n(define A point (segment O O))\n(define B point (segment O O))\n(segment A B)",
-    "problem": "Cho đường tròn O và hai đường thẳng d1, d2 đi qua điểm O. Khẳng định nào sau đây đúng: d1 và d2 có cắt nhau tại O hay không?"
   },
   {
     "image_dir": "images/img_122152.png",
@@ -2274,22 +1308,10 @@
     "problem": "Cho tam giác ABC cân tại A với AB = AC, O là tâm đường tròn nội tiếp và P là tâm đường tròn ngoại tiếp của tam giác ABC. Tính bán kính của đường tròn nội tiếp O nếu biết rằng diện tích của tam giác ABC là S."
   },
   {
-    "image_dir": "images/img_123708.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng d đi qua điểm A, và O là tâm đường tròn ngoại tiếp tam giác ABC. Tính bán kính của đường tròn ngoại tiếp O."
-  },
-  {
     "image_dir": "images/img_117300.png",
     "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC",
     "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(on-circle D O)\n(on-circle E O)",
     "problem": "Cho tam giác ABC, D là trung điểm của đoạn thẳng AB, E là trung điểm của đoạn thẳng AC, đường thẳng DE và BC song song với nhau, O là tâm của đường tròn nội tiếp tam giác ABC. Tính độ dài đoạn thẳng DE."
-  },
-  {
-    "image_dir": "images/img_122200.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
-    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(segment A B)\n(segment A C)\n(segment B C)\n(define D point (segment C A))\n(segment C D)\n(perpendicular (segment C D) (segment A B))\n(define E point (segment B C))\n(segment B E)\n(perpendicular (segment B E) (segment A C))",
-    "problem": "Cho tam giác ABC với AB = AC, đường thẳng CD đi qua điểm C và vuông góc với đoạn thẳng AB, đường thẳng BE đi qua điểm B và vuông góc với đoạn thẳng AC. Tính độ dài đoạn thẳng CE."
   },
   {
     "image_dir": "images/img_117093.png",
@@ -2298,46 +1320,10 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°, đường tròn ngoại tiếp O của tam giác ABC, và điểm N nằm trên đường tròn O, đường kính AC. Tính độ dài đoạn thẳng AN."
   },
   {
-    "image_dir": "images/img_103682.png",
-    "instruction": "Đường tròn O, đường thẳng đi qua điểm O, đường thẳng tiếp xúc với đường tròn O",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(define B point)\n(segment A B)\n(on-circle A O)\n(tangent B (circle O) AB)",
-    "problem": "Cho đường tròn O và một đường thẳng d đi qua điểm O. Gọi t là đường thẳng tiếp xúc với đường tròn O tại điểm A. Tính độ dài đoạn thẳng từ O đến t."
-  },
-  {
-    "image_dir": "images/img_111248.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(segment A B)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(define P point (perp-bisector A B))\n(segment M P)\n(perpendicular (segment M P) (segment A B))\n(equal-distance P A P B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua O là đường trung trực của đoạn thẳng AB. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_104598.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C) (right B))\n(segment B C)\n(define M point (midpoint B C))\n(segment A M)\n(segment C M)\n(perpendicular (segment C M) (segment A B))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, và đường thẳng là đường trung trực của đoạn thẳng BC. Khẳng định nào sau đây đúng?"
-  },
-  {
-    "image_dir": "images/img_115507.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(equal-distance A B A C)\n(define D point (segment C A))\n(segment C D)\n(perpendicular (segment A B) (segment C D))",
-    "problem": "Cho tam giác ABC cân tại A, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB. Tính độ dài đoạn thẳng từ C đến điểm trên AB mà nó cắt vuông góc."
-  },
-  {
     "image_dir": "images/img_1195.png",
     "instruction": "Tam giác ABC, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
     "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define N point (segment A B))",
     "problem": "Cho tam giác ABC và đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_103632.png",
-    "instruction": "Tam giác ABC, AB = AC, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(define N point (segment A B))",
-    "problem": "Cho tam giác ABC cân tại A, O là tâm đường tròn nội tiếp của tam giác ABC, N ∈ AB. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_102690.png",
-    "instruction": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A, điểm P nằm trên đường tròn A",
-    "answer": "(define A point)\n(circle A)\n(define B point)\n(circle B)\n(on-circle P A)\n(tangent B (circle A) B)",
-    "problem": "Cho đường tròn A và đường tròn B, trong đó đường tròn B tiếp xúc với đường tròn A tại một điểm. Gọi P là một điểm thuộc đường tròn A. Tính khoảng cách từ điểm P đến tâm của đường tròn B."
   },
   {
     "image_dir": "images/img_122091.png",
@@ -2352,18 +1338,6 @@
     "problem": "Cho tam giác ABC có AB = AC, điểm D là trung điểm của AB, điểm E là trung điểm của AC, điểm F nằm trên BC, đường thẳng DE ∥ BC, góc BAF = góc CAF, và AF ⟂ BC. Tính độ dài đoạn thẳng DE nếu biết rằng AB = 10 cm."
   },
   {
-    "image_dir": "images/img_123103.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(define M point (midpoint A B))\n(define N point (midpoint A C))\n(segment M N)\n(perpendicular (segment M N) (segment A B))\n(perpendicular (segment M N) (segment A C))",
-    "problem": "Cho tam giác ABC, đường thẳng d1 là đường trung trực của đoạn thẳng AB, đường thẳng d2 là đường trung trực của đoạn thẳng AC. Tính độ dài đoạn thẳng BC nếu biết rằng hai đường thẳng d1 và d2 cắt nhau tại điểm O."
-  },
-  {
-    "image_dir": "images/img_116123.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(segment A B)\n(segment A C)\n(define P point (perp-bisector A B))\n(segment M P)\n(perpendicular (segment M P) (segment A B))\n(equal-distance P A P B)\n(define N point (midpoint A C))\n(segment A C)\n(define Q point (perp-bisector A C))\n(segment N Q)\n(perpendicular (segment N Q) (segment A C))\n(equal-distance Q A Q C)",
-    "problem": "Cho tam giác ABC, đường thẳng d1 là đường trung trực của đoạn thẳng AB, đường thẳng d2 là đường trung trực của đoạn thẳng AC. Tính độ dài đoạn thẳng BC nếu biết rằng A, B, C là các đỉnh của tam giác đều."
-  },
-  {
     "image_dir": "images/img_121203.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm O là tâm đường tròn ngoại tiếp của tam giác ABC",
     "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(on-circle A O)\n(on-circle B O)\n(on-circle C O)",
@@ -2374,36 +1348,6 @@
     "instruction": "Hình thang ABCD, AB song song với CD, AB vuông góc với AD, đường thẳng AC và đường thẳng BD cắt tại điểm O",
     "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(segment A D)\n(perpendicular (segment A B) (segment A D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))",
     "problem": "Cho hình thang ABCD với AB ∥ CD và AB ⟂ AD. Gọi O là điểm giao của đường thẳng AC và đường thẳng BD. Tính diện tích của hình thang ABCD nếu biết chiều dài của AB và CD."
-  },
-  {
-    "image_dir": "images/img_118186.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC",
-    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(segment A B)\n(segment A C)\n(define M point (projection C (segment A B)))\n(segment C M)\n(perpendicular (segment C M) (segment A B))\n(define N point (projection B (segment A C)))\n(segment B N)\n(perpendicular (segment B N) (segment A C))",
-    "problem": "Cho tam giác ABC với AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, và đường thẳng đi qua điểm B vuông góc với đoạn thẳng AC. Tính độ dài đoạn thẳng nối hai điểm giao nhau của hai đường thẳng vuông góc đó."
-  },
-  {
-    "image_dir": "images/img_123333.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, O là tâm đường tròn ngoại tiếp tam giác ABC. Một đường thẳng đi qua điểm A cắt đường tròn O tại điểm D. Tính độ dài đoạn AD nếu biết rằng AB = AC."
-  },
-  {
-    "image_dir": "images/img_110776.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))",
-    "problem": "Cho tam giác ABC và đường tròn ngoại tiếp O của tam giác ABC. Một đường thẳng đi qua điểm A cắt đường tròn O tại điểm D. Tính độ dài đoạn AD nếu biết rằng bán kính của đường tròn O là R."
-  },
-  {
-    "image_dir": "images/img_111038.png",
-    "instruction": "Hình chữ nhật ABCD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD",
-    "answer": "(rectangle (A B C D))\n(segment A B)\n(segment C D)\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment M N)\n(perpendicular (segment M N) (segment A B))\n(equal-distance M A M B)\n(equal-distance N C N D)",
-    "problem": "Cho hình chữ nhật ABCD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD. Tính độ dài của đoạn thẳng nối hai điểm giữa của hai đoạn thẳng AD và BC."
-  },
-  {
-    "image_dir": "images/img_109666.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(equal-distance A B A C)\n(segment O A)\n(segment O B)\n(segment O C)\n(define D point (segment A B))\n(perpendicular (segment D C) (segment A B))",
-    "problem": "Cho tam giác ABC cân tại A, đường thẳng CD đi qua điểm C và vuông góc với đoạn thẳng AB, O là tâm của đường tròn nội tiếp tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
   },
   {
     "image_dir": "images/img_106663.png",
@@ -2434,12 +1378,6 @@
     "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC",
     "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(on-circle D O)\n(on-circle E O)",
     "problem": "Cho tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE và BC ∥ DE. O là tâm đường tròn nội tiếp của tam giác ABC. Tính độ dài đoạn thẳng DE."
-  },
-  {
-    "image_dir": "images/img_113592.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng BC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A C B 30)\n(define D point (segment A B))\n(segment B C)\n(segment A C)\n(define M point (midpoint B C))\n(segment M D)\n(perpendicular (segment M D) (segment B C))\n(equal-distance D C D B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Điểm D nằm trên đoạn thẳng AB, đường thẳng CD cắt BC tại E sao cho góc ACD = góc DCB. Chứng minh rằng CD là đường trung trực của đoạn thẳng BC."
   },
   {
     "image_dir": "images/img_116907.png",
@@ -2514,34 +1452,10 @@
     "problem": "Cho hình bình hành ABCD, điểm P nằm trên đoạn thẳng AB. Tính độ dài đoạn thẳng PD, biết rằng AD = BC."
   },
   {
-    "image_dir": "images/img_110528.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng đi qua điểm B là đường trung trực của đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(segment A B)\n(define M point (midpoint A B))\n(define P point (perp-bisector A B))\n(segment M P)\n(perpendicular (segment M P) (segment A B))\n(equal-distance P A P B)\n(segment B C)\n(define Q point (midpoint A C))\n(define R point (perp-bisector A C))\n(segment Q R)\n(perpendicular (segment Q R) (segment A C))\n(equal-distance R A R C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, đường thẳng đi qua điểm M là trung trực của đoạn thẳng AB, và đường thẳng đi qua điểm B là trung trực của đoạn thẳng AC. Tính độ dài đoạn thẳng BC nếu biết rằng AB = AC."
-  },
-  {
     "image_dir": "images/img_119797.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, BC song song với DE",
     "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define D point (midpoint A B))\n(segment A B)\n(define E point (midpoint A C))\n(segment A C)\n(segment B C)\n(parallel (segment B C) (segment D E))",
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, và BC ∥ DE. Tính độ dài đoạn thẳng DE nếu biết độ dài cạnh BC."
-  },
-  {
-    "image_dir": "images/img_114128.png",
-    "instruction": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A",
-    "answer": "(define A point)\n(define B point)\n(circle A)\n(circle B)\n(tangent B (circle A) AB)",
-    "problem": "Cho đường tròn A và đường tròn B, trong đó đường tròn B tiếp xúc với đường tròn A. Tính bán kính của đường tròn B nếu biết bán kính của đường tròn A."
-  },
-  {
-    "image_dir": "images/img_108883.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng là đường trung trực của đoạn thẳng BC",
-    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(segment B C)\n(segment C D)\n(angle-equal A C D D C B)\n(define M point (midpoint B C))\n(define P point (bisector B C A))\n(segment M P)\n(perpendicular (segment M P) (segment B C))\n(equal-distance P B P C)",
-    "problem": "Cho tam giác ABC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, và đường thẳng CD là đường trung trực của đoạn thẳng BC. Tính độ dài đoạn thẳng AD nếu biết rằng AB = 10 cm và AC = 12 cm."
-  },
-  {
-    "image_dir": "images/img_107026.png",
-    "instruction": "Điểm A",
-    "answer": "(define A point)",
-    "problem": "Cho điểm A trong mặt phẳng. Hãy xác định xem điểm A có thuộc vào đường tròn nào không, hoặc cho biết tọa độ của điểm A nếu biết thêm thông tin."
   },
   {
     "image_dir": "images/img_123722.png",
@@ -2560,12 +1474,6 @@
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE",
     "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))",
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, và BC ∥ DE. Tính độ dài đoạn thẳng DE nếu biết rằng AB = 2a và AC = a."
-  },
-  {
-    "image_dir": "images/img_111822.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, tam giác DEF, tam giác DEF = 90, góc EFD = 45, góc EDF = 45, tam giác ABC bằng tam giác DEF",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(triangle (D E F) (right E))\n(angle-measure E F D 45)\n(angle-measure D E F 45)\n(angle-equal A B C D E F)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45° và tam giác DEF với góc DEF = 90°, góc EFD = 45°, góc EDF = 45°, biết rằng tam giác ABC = tam giác DEF. Tính diện tích của tam giác ABC nếu độ dài cạnh AB = 4."
   },
   {
     "image_dir": "images/img_105669.png",
@@ -2598,48 +1506,6 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, điểm D ∈ AB, điểm E ∈ AC, BC ∥ DE, O là đường tròn ngoại tiếp tam giác ABC, và góc ADE = 90°. Tính diện tích của tam giác ADE."
   },
   {
-    "image_dir": "images/img_113063.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(triangle (A B C))\n(segment B C)",
-    "problem": "Cho tam giác ABC và đường thẳng d đi qua điểm B và điểm C. Khẳng định nào sau đây đúng?"
-  },
-  {
-    "image_dir": "images/img_102785.png",
-    "instruction": "Hình vuông ABCD, đường thẳng là đường trung trực của đoạn thẳng AB và đoạn thẳng CD",
-    "answer": "(square (A B C D))\n(segment A B)\n(segment C D)\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment M N)\n(perpendicular (segment M N) (segment A B))\n(perpendicular (segment M N) (segment C D))",
-    "problem": "Cho hình vuông ABCD, đường thẳng đi qua trung điểm của đoạn thẳng AB và đoạn thẳng CD. Tính độ dài đoạn thẳng này nếu cạnh của hình vuông là a."
-  },
-  {
-    "image_dir": "images/img_106371.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(define M point (midpoint A B))\n(segment A B)\n(segment M A)\n(segment M B)\n(perpendicular (segment M A) (segment A B))\n(equal-distance M A M B)",
-    "problem": "Cho tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB. Khẳng định nào sau đây đúng?"
-  },
-  {
-    "image_dir": "images/img_122224.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(segment B C)\n(segment A C)\n(define D point (segment C A))\n(segment C D)\n(perpendicular (segment A B) (segment C D))",
-    "problem": "Cho tam giác ABC với AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, và O là tâm đường tròn ngoại tiếp của tam giác ABC. Tính độ dài đoạn thẳng CO."
-  },
-  {
-    "image_dir": "images/img_121563.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng là đường trung trực của đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(define M point (midpoint A B))\n(define O point (bisector A B C))\n(segment O M)\n(perpendicular (segment O M) (segment A B))\n(equal-distance A B A C)",
-    "problem": "Cho tam giác ABC có AB = AC, đường thẳng d là đường trung trực của đoạn thẳng AB. Khẳng định nào sau đây đúng?"
-  },
-  {
-    "image_dir": "images/img_102473.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(triangle (A B C))\n(segment B C)",
-    "problem": "Cho tam giác ABC và đường thẳng d đi qua điểm B và điểm C. Khẳng định nào sau đây đúng?"
-  },
-  {
-    "image_dir": "images/img_116189.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường thẳng đi qua điểm C",
-    "answer": "(triangle (A B C) (right B))\n(segment A B)\n(define D point (segment C A))\n(segment C D)\n(perpendicular (segment C D) (segment A B))",
-    "problem": "Cho tam giác ABC với góc ABC = 90 độ, có đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB. Hãy khẳng định rằng đường thẳng này là đường cao từ điểm C xuống cạnh AB."
-  },
-  {
     "image_dir": "images/img_118294.png",
     "instruction": "Tam giác ABC, điểm O là tâm đường tròn nội tiếp của tam giác ABC",
     "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))",
@@ -2664,118 +1530,16 @@
     "problem": "Cho hình thang ABCD với AB ∥ CD và AB ⟂ AD. Một đường thẳng đi qua điểm A cắt CD tại điểm E. Tính diện tích của hình thang ABCD nếu biết chiều dài AB và CD."
   },
   {
-    "image_dir": "images/img_122134.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm C là đường trung trực của đoạn thẳng AC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define D point (midpoint A B))\n(segment A B)\n(define E point (midpoint A C))\n(segment A C)\n(segment D E)\n(define M point (projection C (segment A C)))\n(segment A C)\n(segment C M)\n(perpendicular (segment D E) (segment A C))\n(angle-measure D A E 90)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC. Đường thẳng DE cắt đường trung trực của đoạn thẳng AC tại điểm C, và góc ADE = 90°. Tính độ dài đoạn thẳng DE."
-  },
-  {
-    "image_dir": "images/img_12160.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P",
-    "answer": "(triangle (A B C) (right B))\n(define P point (inter-ll (line A B) (line B A)))\n(segment A B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90 độ, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt nhau tại điểm P. Tính độ dài đoạn thẳng AP."
-  },
-  {
-    "image_dir": "images/img_10418.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(on-circle A O)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Gọi O là tâm của đường tròn ngoại tiếp tam giác ABC. Tính độ dài cạnh BC nếu biết rằng AB = 2."
-  },
-  {
-    "image_dir": "images/img_10582.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(define P point (perp-bisector A B))\n(segment M P)\n(perpendicular (segment M P) (segment A B))\n(equal-distance P A P B)",
-    "problem": "Cho tam giác ABC, đường thẳng d là đường trung trực của đoạn thẳng AB, O là tâm của đường tròn ngoại tiếp tam giác ABC. Tính bán kính R của đường tròn ngoại tiếp O nếu biết rằng AB = 10 và AC = 12."
-  },
-  {
-    "image_dir": "images/img_113658.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A",
-    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(segment A D)",
-    "problem": "Cho tam giác ABC và một đường thẳng d đi qua điểm A. Tính độ dài đoạn thẳng từ A đến điểm cắt của đường thẳng d với cạnh BC."
-  },
-  {
-    "image_dir": "images/img_113221.png",
-    "instruction": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A",
-    "answer": "(define A point)\n(circle A)\n(define B point)\n(circle B)\n(tangent B (circle A) AB)",
-    "problem": "Cho đường tròn A và đường tròn B, biết rằng đường tròn B tiếp xúc với đường tròn A. Hãy khẳng định rằng tâm của đường tròn B nằm trên tiếp tuyến chung của hai đường tròn."
-  },
-  {
-    "image_dir": "images/img_119250.png",
-    "instruction": "Đường tròn O, đường thẳng đi qua điểm O, đường thẳng tiếp xúc với đường tròn O",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(distance O A 1.5)\n(segment O A)\n(define B point)\n(on-circle B O)\n(segment O B)\n(tangent B (circle O) AB)",
-    "problem": "Cho đường tròn O và đường thẳng d đi qua điểm O. Gọi t là đường thẳng tiếp xúc với đường tròn O tại điểm A. Tính độ dài đoạn thẳng từ O đến t."
-  },
-  {
-    "image_dir": "images/img_1143.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, góc ADE = 90, đường thẳng đi qua điểm B",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(segment A B)\n(segment A C)\n(define E point (midpoint A C))\n(segment A D)\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(angle-measure D A E 90)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, D là trung điểm của đoạn thẳng AB, E là trung điểm của đoạn thẳng AC. Đường thẳng DE cắt BC tại điểm F sao cho BC ∥ DE và góc ADE = 90°. Hãy khẳng định rằng tam giác ABE là tam giác vuông."
-  },
-  {
-    "image_dir": "images/img_113493.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(segment A C)\n(equal-distance A B A C)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC cân tại A với AB = AC, đường thẳng đi qua trung điểm của AB là đường trung trực của đoạn thẳng AB, và O là tâm của đường tròn ngoại tiếp tam giác ABC. Tính bán kính của đường tròn ngoại tiếp O."
-  },
-  {
-    "image_dir": "images/img_113234.png",
-    "instruction": "Tam giác ABC, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC, đường thẳng d là đường trung trực của đoạn thẳng AB, O là tâm của đường tròn nội tiếp tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_118727.png",
-    "instruction": "Tam giác ABC, AB = AC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD, đường thẳng đi qua điểm B",
-    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(define D point (segment A B))\n(angle-equal A C D D C B)\n(segment C D)\n(line B D)",
-    "problem": "Cho tam giác ABC với AB = AC, điểm D nằm trên đoạn thẳng AB sao cho góc ACD = góc DCB. Tìm hiểu xem đường thẳng CD có phải là đường phân giác của góc ACB hay không."
-  },
-  {
     "image_dir": "images/img_101323.png",
     "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB",
     "answer": "(triangle (A B C))\n(define D point (segment A B))\n(angle-equal A C D D C B)",
     "problem": "Cho tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB. Tính độ dài đoạn thẳng CD nếu biết rằng AB = 10cm và AC = 8cm."
   },
   {
-    "image_dir": "images/img_114657.png",
-    "instruction": "Đường tròn O, đường thẳng là đi qua điểm O",
-    "answer": "(define O point)\n(circle O)\n(define A point (segment O O))\n(segment O A)",
-    "problem": "Cho đường tròn O và đường thẳng d đi qua điểm O. Tính chu vi của đường tròn O."
-  },
-  {
-    "image_dir": "images/img_123742.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A C B 30)\n(segment B C)\n(define M point (midpoint B C))\n(define P point (perp-bisector B C))\n(segment M P)\n(perpendicular (segment M P) (segment B C))\n(equal-distance P B P C)\n(segment A P)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Đường thẳng đi qua điểm A là đường trung trực của đoạn thẳng BC. Tính độ dài của đoạn thẳng AB nếu biết rằng đoạn thẳng AC = 10."
-  },
-  {
-    "image_dir": "images/img_105998.png",
-    "instruction": "Tam giác ABC, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))",
-    "problem": "Cho tam giác ABC và đường tròn nội tiếp O của tam giác ABC. Có một đường thẳng đi qua điểm A. Tính bán kính của đường tròn nội tiếp O."
-  },
-  {
     "image_dir": "images/img_105893.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường tròn nội tiếp O của tam giác ABC, đường tròn ngoại tiếp P của tam giác ABC, đường kính AC",
     "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define P point (circumcenter A B C))\n(circle P (circumcircle A B C))\n(segment A C)\n(diameter A C P)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Gọi O là tâm đường tròn nội tiếp và P là tâm đường tròn ngoại tiếp của tam giác ABC. Đường kính AC. Tính bán kính của đường tròn ngoại tiếp P."
-  },
-  {
-    "image_dir": "images/img_100817.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, đường thẳng đi qua điểm E là đường trung trực của đoạn thẳng BC, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(segment A B)\n(define E point (midpoint A C))\n(segment A C)\n(segment D E)\n(segment B C)\n(segment E D)\n(perpendicular (segment E D) (segment B C))\n(angle-measure A D E 90)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE và đường thẳng đi qua điểm E là đường trung trực của đoạn thẳng BC, đồng thời góc ADE = 90°. Tính độ dài đoạn thẳng DE."
-  },
-  {
-    "image_dir": "images/img_110666.png",
-    "instruction": "Đường tròn O, đường thẳng tiếp xúc với đường tròn O",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(equal-distance A B 1.0)\n(segment A B)\n(tangent A (circle O) AB)\n(segment O A)",
-    "problem": "Cho đường tròn O và một đường thẳng tiếp xúc với đường tròn O tại điểm A. Khẳng định nào sau đây đúng?"
-  },
-  {
-    "image_dir": "images/img_111923.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment A B)\n(segment B C)\n(segment A C)\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A B))",
-    "problem": "Cho tam giác ABC cân tại A, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, O là tâm của đường tròn ngoại tiếp tam giác ABC. Tính bán kính của đường tròn ngoại tiếp O."
   },
   {
     "image_dir": "images/img_104364.png",
@@ -2796,18 +1560,6 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, D là trung điểm của AB, E là trung điểm của AC, F nằm trên BC, DE ∥ BC, góc BAF = góc CAF, và góc ADE = 90°. Tính độ dài đoạn thẳng DF."
   },
   {
-    "image_dir": "images/img_100850.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(segment B C)\n(define M point (midpoint B C))\n(segment A M)\n(perpendicular (segment A M) (segment B C))\n(equal-distance M B M C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60° và góc ACB = 30°. Gọi đường thẳng đi qua điểm A là đường trung trực của đoạn thẳng BC. Tính độ dài đoạn thẳng AB nếu biết BC = 2."
-  },
-  {
-    "image_dir": "images/img_11977.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường thẳng đi qua điểm B, góc ADE = 90",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define F point (segment B D))\n(define G point (projection D (segment A E)))\n(segment D G)\n(perpendicular (segment D G) (segment D E))\n(equal-distance D G D E)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC ∥ DE, và đường thẳng đi qua điểm B tạo với DE góc ADE = 90°. Tính độ dài đoạn DE nếu biết rằng AB = 2m."
-  },
-  {
     "image_dir": "images/img_103846.png",
     "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng CD, đường tròn ngoại tiếp O của tam giác ABC",
     "answer": "(triangle (A B C))\n(define D point (segment A B))\n(segment A C)\n(segment D C)\n(segment B C)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(angle-equal A C D D C B)",
@@ -2820,22 +1572,10 @@
     "problem": "Cho tam giác ABC cân tại A, điểm D ∈ AB, điểm E ∈ AC, BC ∥ DE, O là đường tròn ngoại tiếp tam giác ABC. Tính tỉ số diện tích của tam giác ADE với diện tích tam giác ABC."
   },
   {
-    "image_dir": "images/img_108625.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(segment B C)\n(define D point (segment C B))\n(perpendicular (segment C D) (segment B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°, đường thẳng đi qua điểm C và vuông góc với đoạn thẳng BC, O là tâm đường tròn ngoại tiếp tam giác ABC. Tính độ dài đoạn thẳng AO."
-  },
-  {
     "image_dir": "images/img_118174.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn O với đường kính AB, góc ADE = 90",
     "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(define D point (segment A B))\n(define E point (segment A C))\n(segment B C)\n(segment D E)\n(parallel (segment B C) (segment D E))\n(define O point)\n(circle O)\n(diameter A B O)\n(segment A B)\n(segment O A)\n(segment O B)\n(angle-measure A D E 90)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC sao cho BC ∥ DE. Đường tròn O có đường kính AB, và góc ADE = 90°. Tính độ dài đoạn DE nếu biết rằng AB = 2a."
-  },
-  {
-    "image_dir": "images/img_110653.png",
-    "instruction": "Đường tròn O, đường thẳng là đi qua điểm O",
-    "answer": "(define O point)\n(circle O)\n(define A point (segment O O))\n(segment O A)",
-    "problem": "Cho đường tròn O và đường thẳng d đi qua điểm O. Tính bán kính của đường tròn O nếu biết rằng đường thẳng d cắt đường tròn tại hai điểm A và B."
   },
   {
     "image_dir": "images/img_110184.png",
@@ -2856,58 +1596,16 @@
     "problem": "Cho tam giác ABC cân tại A với AB = AC, O là tâm đường tròn nội tiếp của tam giác ABC, N là điểm thuộc đoạn thẳng AB. Tính bán kính r của đường tròn nội tiếp O."
   },
   {
-    "image_dir": "images/img_117318.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đường thẳng đi qua điểm B",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A C B 45)\n(define D point (segment A B))\n(angle-equal A C D D C B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, điểm D nằm trên đoạn thẳng AB sao cho góc ACD = góc DCB. Tìm hiểu mối quan hệ giữa các đoạn thẳng AC và BD."
-  },
-  {
     "image_dir": "images/img_103420.png",
     "instruction": "Tam giác ABC, góc ABC = 90, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng BC, đường thẳng DE, AC song song với DE",
     "answer": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(define E point (midpoint B C))\n(segment A B)\n(segment B C)\n(segment D E)\n(parallel (segment A C) (segment D E))",
     "problem": "Cho tam giác ABC với góc ABC = 90°, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng BC, đường thẳng DE và AC song song với DE. Tính độ dài đoạn thẳng DE."
   },
   {
-    "image_dir": "images/img_111090.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC có góc ABC = 90°, góc BAC = 45°, góc ACB = 45°, đường thẳng là đường trung trực của đoạn thẳng AB, và O là tâm của đường tròn nội tiếp tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_123641.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment B C)\n(segment A C)\n(segment A B)\n(define H point (projection C (segment B C)))\n(segment C H)\n(perpendicular (segment C H) (segment B C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°, đường thẳng đi qua điểm C vuông góc với đoạn thẳng BC, và đường tròn nội tiếp O của tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_115976.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C) (right B))\n(segment B C)\n(define M point (midpoint B C))\n(define P point (segment A M))\n(segment A P)\n(perpendicular (segment A P) (segment B C))\n(equal-distance M B M C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB, và đường thẳng là đường trung trực của đoạn thẳng BC. Tính độ dài đoạn thẳng AC."
-  },
-  {
-    "image_dir": "images/img_113442.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, đường thẳng là đường trung trực của đoạn thẳng AB, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 90)\n(angle-measure A C B 30)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(define M point (midpoint A B))\n(segment M O)\n(perpendicular (segment M O) (segment A B))\n(equal-distance O A O B)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°, đường thẳng là đường trung trực của đoạn thẳng AB, và O là tâm của đường tròn nội tiếp tam giác ABC. Tính bán kính r của đường tròn nội tiếp O."
-  },
-  {
-    "image_dir": "images/img_108121.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt tại điểm P",
-    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define P point (inter-ll A B B A))",
-    "problem": "Cho tam giác ABC có AB = AC, đường thẳng đi qua điểm A và đường thẳng đi qua điểm B cắt nhau tại điểm P. Tính độ dài đoạn thẳng AP."
-  },
-  {
     "image_dir": "images/img_12046.png",
     "instruction": "Tam giác ABC, AB = AC, đường tròn nội tiếp O của tam giác ABC, điểm N nằm trên đường tròn O",
     "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(segment A C)\n(equal-distance A B A C)\n(define N point)\n(on-circle N O)",
     "problem": "Cho tam giác ABC cân tại A, O là tâm đường tròn nội tiếp của tam giác ABC, N ∈ O. Tính độ dài đoạn thẳng AN."
-  },
-  {
-    "image_dir": "images/img_120080.png",
-    "instruction": "Tam giác ABC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB",
-    "answer": "(triangle (A B C))\n(define D point (segment A B))\n(segment A B)\n(segment C D)\n(angle-equal A C D D C B)\n(define H point (projection C (segment A B)))\n(segment C H)\n(perpendicular (segment C H) (segment A B))",
-    "problem": "Cho tam giác ABC, điểm D nằm trên đoạn thẳng AB, đường thẳng CD, góc ACD = góc DCB, và đường thẳng đi qua điểm C vuông góc với đoạn thẳng AB. Tính giá trị của góc ACB."
   },
   {
     "image_dir": "images/img_119249.png",
@@ -2934,34 +1632,10 @@
     "problem": "Cho tam giác ABC với AB = AC, D là trung điểm của AB, E là trung điểm của AC, và BC ∥ DE. Tính tỉ lệ giữa độ dài đoạn thẳng DE và đoạn thẳng BC."
   },
   {
-    "image_dir": "images/img_119507.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm B và điểm C",
-    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(segment B C)",
-    "problem": "Cho tam giác ABC có AB = AC, và đường thẳng đi qua điểm B và điểm C. Khẳng định nào sau đây đúng?"
-  },
-  {
-    "image_dir": "images/img_103844.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng BC, đường thẳng đi qua điểm A",
-    "answer": "(triangle (A B C) (right B))\n(segment B C)\n(define M point (midpoint B C))\n(segment A M)\n(perpendicular (segment A M) (segment B C))\n(equal-distance M B M C)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng đi qua điểm A và là đường trung trực của đoạn thẳng BC. Hãy khẳng định rằng đường thẳng này chia đoạn thẳng BC thành hai đoạn bằng nhau."
-  },
-  {
-    "image_dir": "images/img_105111.png",
-    "instruction": "Hình thang ABCD, AB song song với CD, đường thẳng đi qua điểm vuông góc với đoạn thẳng AB",
-    "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))",
-    "problem": "Cho hình thang ABCD với AB ∥ CD, và đường thẳng đi qua điểm A vuông góc với đoạn thẳng AB. Tính độ dài đoạn thẳng AC nếu biết rằng chiều cao của hình thang là h."
-  },
-  {
     "image_dir": "images/img_108951.png",
     "instruction": "Tam giác ABC, đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB",
     "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define N point (segment A B))",
     "problem": "Cho tam giác ABC và đường tròn ngoại tiếp O của tam giác ABC, điểm N nằm trên đoạn thẳng AB. Tính bán kính R của đường tròn ngoại tiếp O nếu biết rằng độ dài các cạnh của tam giác ABC lần lượt là a, b, c."
-  },
-  {
-    "image_dir": "images/img_112790.png",
-    "instruction": "Đường tròn A, đường tròn B, đường tròn B tiếp xúc với đường tròn A, đường thẳng tiếp xúc với đường tròn A",
-    "answer": "(define A point)\n(circle A)\n(define B point)\n(circle B)\n(tangent B (circle A) AB)",
-    "problem": "Cho đường tròn A và đường tròn B, biết rằng đường tròn B tiếp xúc với đường tròn A. Hãy chứng minh rằng đường thẳng tiếp xúc với đường tròn A cũng tiếp xúc với đường tròn B."
   },
   {
     "image_dir": "images/img_11435.png",
@@ -2970,33 +1644,15 @@
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, và BC ∥ DE. Tính độ dài đoạn DE nếu biết rằng AB = 2a."
   },
   {
-    "image_dir": "images/img_119300.png",
-    "instruction": "Tam giác ABC, AB = AC, đường thẳng đi qua điểm A, đường tròn nội tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define O point (incenter A B C))\n(circle O (incircle A B C))",
-    "problem": "Cho tam giác ABC cân tại A với AB = AC, O là tâm đường tròn nội tiếp của tam giác ABC. Tìm một khẳng định đúng về vị trí của O liên quan đến đường thẳng đi qua điểm A."
-  },
-  {
     "image_dir": "images/img_102113.png",
     "instruction": "Tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC song song với DE, đường tròn nội tiếp O của tam giác ABC",
     "answer": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(on-circle A O)\n(on-circle B O)\n(on-circle C O)",
     "problem": "Cho tam giác ABC, điểm D là trung điểm của đoạn thẳng AB, điểm E là trung điểm của đoạn thẳng AC, đường thẳng DE, BC ∥ DE, và đường tròn nội tiếp O của tam giác ABC. Tính chu vi của tam giác ABC."
   },
   {
-    "image_dir": "images/img_115428.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, đường thẳng là đường trung trực của đoạn thẳng AB, đường thẳng là đường trung trực của đoạn thẳng AC",
-    "answer": "(triangle (A B C) (right B))\n(segment A B)\n(segment A C)\n(define M point (midpoint A B))\n(define N point (midpoint A C))\n(segment M N)\n(perpendicular (segment M N) (segment A B))\n(perpendicular (segment M N) (segment A C))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, đường thẳng d1 là đường trung trực của đoạn thẳng AB, đường thẳng d2 là đường trung trực của đoạn thẳng AC. Tính độ dài đoạn thẳng BC."
-  },
-  {
     "image_dir": "images/img_108110.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, điểm E nằm trên đoạn thẳng AC, BC song song với DE, đường tròn nội tiếp O của tam giác ABC, góc ADE = 90",
     "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A B C 30)\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(segment A B)\n(segment A C)\n(segment B C)\n(define D point (segment A B))\n(define E point (segment A C))\n(parallel (segment B C) (segment D E))\n(angle-measure A D E 90)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°, điểm D ∈ AB, điểm E ∈ AC, BC ∥ DE, O là tâm đường tròn nội tiếp của tam giác ABC, và góc ADE = 90°. Tính diện tích của tam giác ADE."
-  },
-  {
-    "image_dir": "images/img_100878.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm C",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(define D point (line C B))",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Có một đường thẳng d đi qua điểm C. Tính độ dài cạnh AB nếu biết rằng AC = 2."
   }
 ]

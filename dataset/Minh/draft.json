@@ -1,0 +1,8 @@
+[
+    {
+    "image_dir": "images/img_106215.png",
+    "instruction": "Đường tròn A, đường tròn B, đường tròn B cắt đường tròn A tại điểm C và điểm D, điểm P nằm trên đường tròn A",
+    "answer": "(define A point)\n(circle A)\n(define B point)\n(circle B)\n(define C point (inter-ll A B))\n(define D point (inter-ll A B))\n(define P point)\n(on-circle P A)\n(on-circle C A)\n(on-circle D A)\n(on-circle C B)\n(on-circle D B)",
+    "problem": "Cho đường tròn A và đường tròn B cắt nhau tại hai điểm C và D, điểm P nằm trên đường tròn A. Tính độ dài đoạn thẳng PD nếu biết rằng bán kính của đường tròn A là r."
+  }
+]
