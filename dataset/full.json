@@ -1058,7 +1058,7 @@
   {
     "image_dir": "images/img_108435.png",
     "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 60, góc ACB = 30, điểm D nằm trên đoạn thẳng AB, góc ACD = góc DCB, đoạn thẳng CD",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A C B 30)\n(define D point (segment A B))\n(segment CD )\n(angle-equal A C D D C B)",
+    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 60)\n(angle-measure A C B 30)\n(define D point (segment A B))\n(segment C D )\n(angle-equal A C D D C B)",
     "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 60°, góc ACB = 30°. Điểm D nằm trên đoạn thẳng AB sao cho góc ACD = góc DCB. Hãy xác định xem tam giác ACD và tam giác DCB có phải là hai tam giác giống nhau hay không."
   },
   {

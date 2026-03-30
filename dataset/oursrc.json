@@ -224,7 +224,7 @@
   {
     "image_dir": "",
     "instruction": "Tiếp tuyến AB, AC. CH ⊥ AB tại H, cắt (O) tại E và OA tại D. 1. CO = CD. 2. OBCD là hình thoi. 3. M trung điểm CE, I là trung điểm OH.",
-    "answer": "(define O point)\n(circle O)\n(define A point)\n(distance O A 1.5)\n(define B point)\n(on-circle B O)\n(segment A B)\n(tangent B (circle O) AB)\n(segment O B)\n(define C point)\n(on-circle C O)\n(segment A C)\n(tangent C (circle O) AC)\n(segment O C)\n(define H (segment A B))\n(segment C H)\n(perpendicular (segment A B) (segment C H))\n(define E point)\n(on-circle E O)\n(on-segment E C H)\n(define D point (segment O A))\n(on-segment D C H)\n(segment O B)\n(segment B C)\n(segment C D)\n(segment D O)\n(define M point (midpoint C E))\n(define I point (midpoint O H))",
+    "answer": "(define O point)\n(circle O)\n(define A point)\n(distance O A 1.5)\n(define B point)\n(on-circle B O)\n(segment A B)\n(tangent B (circle O) AB)\n(segment O B)\n(define C point)\n(on-circle C O)\n(segment A C)\n(tangent C (circle O) AC)\n(segment O C)\n(define H point (segment A B))\n(segment C H)\n(perpendicular (segment A B) (segment C H))\n(define E point)\n(on-circle E O)\n(on-segment E C H)\n(define D point (segment O A))\n(on-segment D C H)\n(segment B C)\n(segment C D)\n(segment D O)\n(define M point (midpoint C E))\n(define I point (midpoint O H))",
     "id": 77
   },
   {
@@ -274,7 +274,7 @@
     "instruction": "Cho hình bình hành ABCD có A=120°, phân giác góc D đi qua trung điểm I của cạnh AB, kẻ AH vuông DC.\na. CMR: AB=2AD.\nb. CMR: DI=2AH\nc. CMR: AC vuông AD ",
     "answer": "(parallelogram (A B C D))\n(angle-measure B A C 120)\n(define I point (midpoint A B))\n(define H point (segment D C))\n(segment A H)\n(perpendicular (segment A H) (segment D C))\n(segment D I)",
     "id": 99
-  },  
+  },
   {
     "image_dir": "",
     "instruction": "Cho hình thoi ABCD có góc B = 60°. Kẻ AE vuông góc với DC, AF vuông góc với BC. Chứng minh:\na) AE = AF;\nb) Tam giác AEF đều.",
@@ -326,19 +326,19 @@
   {
     "image_dir": "",
     "instruction": "Cho tam giác ABC, BD là phân giác",
-    "answer": "(triangle (A B C))\n(define D point (bisector A B C)\n(on-segment D A C)\n(segment BD)",
+    "answer": "(triangle (A B C))\n(define D point (bisector A B C))\n(on-segment D A C)\n(segment B D)",
     "id": 1007
   },
   {
     "image_dir": "",
     "instruction": "Cho tam giác ABC, AK là phân giác",
-    "answer": "(triangle (A B C))\n(define K point (bisector B A C)\n(on-segment K B C)\n(segment A K)",
+    "answer": "(triangle (A B C))\n(define K point (bisector B A C))\n(on-segment K B C)\n(segment A K)",
     "id": 1008
   },
   {
     "image_dir": "",
     "instruction": "Cho tam giác ABC, CG là phân giác",
-    "answer": "(triangle (A B C))\n(define G point (bisector A C B)\n(on-segment G A B)\n(segment C G)",
+    "answer": "(triangle (A B C))\n(define G point (bisector A C B))\n(on-segment G A B)\n(segment C G)",
     "id": 1009
   },
   {
@@ -386,7 +386,7 @@
   {
     "image_dir": "",
     "instruction": "Cho hình bình hành ABCD. Vẽ CE ⊥ AB và CF ⊥ AD, BH ⊥ AC.\na) Chứng minh ΔABH ∽ ΔACE.\nb) Chứng minh: AB.AE + AD.AF = AC^2",
-    "answer": "(parallelogram (A B C D))\n(define E point (segment A B))\n(segment C E)\n(perpendicular (segment C E) (segment A B))\n(define F point (segment A D))\n(segment C F)\n(perpendicular (segment C F) (segment A D))\n(define H point (segment A C))\n(segment B H)\n(perpendicular (segment B H) (segment A C))\n(define O point (inter-ll A B H C))\n(equal-distance A H H B)\n(equal-distance A E E C)\n(equal-distance A F F D)\n(equal-distance A C C E)\n(equal-distance A C C F)\n(equal-distance A B B H)\n(equal-distance A E E H)\n(equal-distance A F F H)\n(equal-distance A C C H)\n(equal-distance A E E F)\n(equal-distance A F F E)\n(equal-distance A H H C)\n(equal-distance A B B E)\n(equal-distance A D D E)\n(equal-distance A D D F)\n(equal-distance A C C E)\n(equal-distance A C C F)\n(equal-distance A H H E)\n(equal-distance A H H F)\n(equal-distance A C C H)\n(equal-distance A E E H)\n(equal-distance A F F H)\n(equal-distance A C C E)\n(equal-distance A C C F)\n(equal-distance A H H E)\n(equal-distance A H H F)\n(equal-distance A C C H)\n(equal-distance A E E H)\n(equal-distance A F F H)\n(equal-distance A C C E)\n(equal-distance A C C F)\n(equal-distance A H H E)\n(equal-distance A H H F)\n(equal-distance A C C H)\n(equal-distance A E E H)\n(equal-distance A F F H)\n(equal-distance A C C E)\n(equal-distance A C C F)\n(equal)",
+    "answer": "(parallelogram (A B C D))\n(segment A B)\n(segment A D)\n(segment A C)\n(define E point (projection C (segment A B)))\n(segment C E)\n(define F point (projection C (segment A D)))\n(segment C F)\n(define H point (projection B (segment A C)))\n(segment B H)",
     "id": 117
   },
   {
@@ -416,7 +416,7 @@
   {
     "image_dir": "",
     "instruction": "Cho tam giác ABC nhọn nội tiếp (O; R), ∠BAC = 60°. 1. Tính ∠BOC và BC. ",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C)\n(angle-measure B A C 60)",
+    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(angle-measure B A C 60)",
     "id": 132
   },
   {
@@ -536,7 +536,7 @@
   {
     "image_dir": "",
     "instruction": "Cho hình bình hành ABCD. Gọi O là giao điểm hai đường thẳng AC và BD. Qua điểm O vẽ đường thẳng song song với AB cắt hai cạnh AD, BC lần lượt tại M, N. Trên AB, CD lần lượt lấy các điểm P, Q sao cho AP = CQ. Gọi I là giao điểm của AC và PQ. Chứng minh:\na) Các tứ giác AMNB, APCQ là hình bình hành;\nb) Ba điểm M, N, I thẳng hàng;\nc) Ba đường thẳng AC, MN, PQ đồng quy.",
-    "answer": "(parallelogram (A B C D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(define M point (segment A D))\n(segment O M)\n(parallel (segment O M) (segment A B)\n(define N point (segment B C))\n(segment O N)\n(parallel (segment O N) (segment A B)\n(define P point (segment A B))\n(define Q point (segment C D))\n(equal-distance A P C Q)\n(segment P Q)\n(define I point (inter-ll A C P Q))\n(segment M N)\n(segment P Q)\n(segment A C)\n(segment M N)\n(segment P Q)",
+    "answer": "(parallelogram (A B C D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(define M point (segment A D))\n(segment O M)\n(parallel (segment O M) (segment A B))\n(define N point (segment B C))\n(segment O N)\n(parallel (segment O N) (segment A B))\n(define P point (segment A B))\n(define Q point (segment C D))\n(equal-distance A P C Q)\n(segment P Q)\n(define I point (inter-ll A C P Q))\n(segment M N)",
     "id": 170
   },
   {
@@ -638,7 +638,7 @@
   {
     "image_dir": "",
     "instruction": "Cho hình thang KLMN (KN // LM). gọi E là giao điểm của hai đường chéo. Qua E, vẽ một đường thẳng song song với LM, cắt MN tại F. Chứng minh: 1/EF = 1/KN + 1/LM",
-    "answer": "(trapezoid (K L M N))\n(parallel (segment K N) (segment L M)\n(segment K M)\n(segment L N)\n(define E point (inter-ll K M L N))\n(define F point (segment M N))\n(segment E F)\n(parallel (segment E F) (segment L M))",
+    "answer": "(trapezoid (K L M N))\n(parallel (segment K N) (segment L M))\n(segment K M)\n(segment L N)\n(define E point (inter-ll K M L N))\n(define F point (segment M N))\n(segment E F)\n(parallel (segment E F) (segment L M))",
     "id": 204
   },
   {
@@ -818,7 +818,7 @@
   {
     "image_dir": "",
     "instruction": "Cho hình thang cân ABCD có AB // CD (AB < CD). Kẻ các đường cao AH, BK. Chứng minh DH = CK.",
-    "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(define H point (projection A (segment C D)))\n(define K point (projection B (segment A B)))\n(segment A H)\n(segment B K)\n(equal-distance D H K C K)",
+    "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(define H point (projection A (segment C D)))\n(segment A H)\n(define K point (projection B (segment C D)))\n(segment B K)\n(segment D H)\n(segment C K)\n(equal-distance D H C K)",
     "id": 279
   },
   {
@@ -920,7 +920,7 @@
   {
     "image_dir": "",
     "instruction": "Cho hình thang vuông ABCD (A = D = 90°) có AC cắt BD tại O . a) Chứng minh ΔOAB ∽ ΔOCD, từ đó suy ra DO/DB = CO/CA b) Chứng minh AC^2 – BD^2 = DC^2 – AB^2.",
-    "answer": "(trapezoid (A B C D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(segment A O)\n(segment B O)\n(segment C O)\n(segment D O)\n(angle-measure A O B 90)\n(angle-measure D O C 90)\n(angle-equal O A B O C D)\n(equal-distance O A O B)\n(equal-distance O C O D)\n(equal-distance D O B C)\n(equal-distance A O C A D)\n(equal-distance D O B C A)\n(equal-distance O A O C)\n(equal-distance O B O D)\n(equal-distance O C O A)\n(equal-distance O D O B)\n(equal-distance O A O D)\n(equal-distance O B O C)\n(equal-distance O C O A)\n(equal-distance O D O C)\n(equal-distance O A O B)\n(equal-distance O B O D)\n(equal-distance O C O D)\n(equal-distance O D O A)\n(equal-distance O A O C)\n(equal-distance O B O A)\n(equal-distance O C O B)\n(equal-distance O D O A)\n(equal-distance O A O D)\n(equal-distance O B O C)\n(equal-distance O C O D)\n(equal-distance O D O B)\n(equal-distance O A O C)\n(equal-distance O B O D)\n(equal-distance O C O A)\n(equal-distance O D O C)\n(equal-distance O A O B)\n(equal-distance O B O D)\n(equal-distance O C O D)\n(equal-distance O D O A)\n(equal-distance O A O C)\n(equal-distance O B O A)\n(equal-distance O C O B)\n(equal-distance O D O A)\n(equal-distance O A O D)\n(equal-distance O B O C)\n(equal-distance O C O D)\n(equal-distance O D O B)\n(equal-distance O A O C)\n(equal-distance)",
+    "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(segment A O)\n(segment B O)\n(segment C O)\n(segment D O)\n(angle-equal O A B O C D)",
     "id": 325
   },
   {
@@ -956,7 +956,7 @@
   {
     "image_dir": "",
     "instruction": "Cho ΔABC có AB = 8 cm, AC = 15 cm, BC = 17 cm. a) Chứng minh: ΔABC vuông. b) Tính số đo góc B, góc C của ΔABC.",
-    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(segment B C)\n(equal-distance A B A C 8.0)\n(equal-distance A C A B 15.0)\n(equal-distance B C B A 17.0)\n(angle-measure A B C 90)\n(angle-measure B A C 53.13)\n(angle-measure C A B 36.87)",
+    "answer": "(triangle (A B C) (right A))\n(segment A B)\n(segment A C)\n(segment B C)\n(equal-distance A B 8.0)\n(equal-distance A C 15.0)\n(equal-distance B C 17.0)\n(angle-measure A B C 61.93)\n(angle-measure A C B 28.07)",
     "id": 348
   },
   {
