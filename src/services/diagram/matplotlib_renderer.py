@@ -243,6 +243,11 @@ class MatplotlibDiagramRenderer:
 
         fig, ax = plt.subplots(figsize=(20, 20))
 
+        # Vertices with explicit angle-measure labels should show a single angle arc.
+        measured_vertex_ids = set()
+        if hasattr(self.diagram, 'angle_measures') and self.diagram.angle_measures:
+            measured_vertex_ids = {id(angle_data['vertex']) for angle_data in self.diagram.angle_measures}
+
         # 1. Draw Triangles (Solid Lines)
         for tri in self.diagram.triangles:
             p1, p2, p3 = tri[0], tri[1], tri[2]
@@ -300,26 +305,20 @@ class MatplotlibDiagramRenderer:
             if equal_angles:
                 logger.info(f"Drawing equal angles arcs: {equal_angles}")
                 for idx1, idx2 in equal_angles:
-                    # Vẽ arc ở góc idx1 với dấu gạch
-                    self._draw_angle_arc(ax, pts[idx1],
-                                        pts[(idx1-1)%3],
-                                        pts[(idx1+1)%3],
-                                        num_arcs=1,
-                                        draw_tick=True)
+                    # Avoid duplicate markers where a numeric angle is already shown.
+                    if id(pts[idx1]) not in measured_vertex_ids:
+                        self._draw_angle_arc(ax, pts[idx1],
+                                            pts[(idx1-1)%3],
+                                            pts[(idx1+1)%3],
+                                            num_arcs=1,
+                                            draw_tick=True)
 
-                    # Vẽ arc ở góc idx2 (cùng số arc và dấu gạch)
-                    # Vẽ arc ở góc idx1
-                    self._draw_angle_arc(ax, pts[idx1],
-                                        pts[(idx1-1)%3],
-                                        pts[(idx1+1)%3],
-                                        num_arcs=1)
-
-                    # Vẽ arc ở góc idx2 (cùng số arc)
-                    self._draw_angle_arc(ax, pts[idx2],
-                                        pts[(idx2-1)%3],
-                                        pts[(idx2+1)%3],
-                                        num_arcs=1,
-                                        draw_tick=True)
+                    if id(pts[idx2]) not in measured_vertex_ids:
+                        self._draw_angle_arc(ax, pts[idx2],
+                                            pts[(idx2-1)%3],
+                                            pts[(idx2+1)%3],
+                                            num_arcs=1,
+                                            draw_tick=True)
 
         # Draw quadrilaterals
         for quad in self.diagram.quadrilaterals:
@@ -516,6 +515,8 @@ class MatplotlibDiagramRenderer:
                 # Vẽ ký hiệu 2 góc bằng nhau (tương tự equal_angles)
                 angle_points = bisector_data.get('angle_points', [])
                 if len(angle_points) >= 3:
+                    if id(vertex) in measured_vertex_ids:
+                        continue
                     # Lấy 2 điểm tạo góc: angle_points = [A, B, C] (A là đỉnh, góc BAC bị chia)
                     p1 = self.diagram.points.get(angle_points[1])  # B
                     p2 = self.diagram.points.get(angle_points[2])  # C

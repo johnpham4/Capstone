@@ -103,18 +103,38 @@ class Initializer:
 
     @staticmethod
     def init_square(side: float = 1.0) -> List[Tuple[float, float]]:
-        """Initialize coordinates for a square"""
-        return Initializer.init_rectangle(side, side)
+        """Initialize a canonical axis-aligned square A-B-C-D."""
+        return [
+            (0.0, 0.0),
+            (side, 0.0),
+            (side, side),
+            (0.0, side),
+        ]
+
+    @staticmethod
+    def init_trapezoid_general(scale: float = 1.0) -> List[Tuple[float, float]]:
+        """Initialize a canonical non-isosceles trapezoid A-B-C-D with AB || CD."""
+        return [
+            (-0.70 * scale, 0.40 * scale),   # A: top-left (shorter base)
+            (0.45 * scale, 0.40 * scale),    # B: top-right
+            (1.30 * scale, -0.40 * scale),   # C: bottom-right (longer base)
+            (-1.20 * scale, -0.40 * scale),  # D: bottom-left
+        ]
+
+    @staticmethod
+    def init_trapezoid_isosceles(scale: float = 1.0) -> List[Tuple[float, float]]:
+        """Initialize a canonical isosceles trapezoid A-B-C-D with AB || CD and AD = BC."""
+        return [
+            (-0.85 * scale, 0.40 * scale),   # A: top-left (upper base)
+            (0.85 * scale, 0.40 * scale),    # B: top-right
+            (1.45 * scale, -0.40 * scale),   # C: bottom-right (lower base)
+            (-1.45 * scale, -0.40 * scale),  # D: bottom-left
+        ]
 
     @staticmethod
     def init_trapezoid(scale: float = 1.0) -> List[Tuple[float, float]]:
-        """Initialize coordinates for a trapezoid (one pair of parallel sides)"""
-        return [
-            (-0.7 * scale, -0.4 * scale),    # Bottom left
-            (0.7 * scale, -0.4 * scale),     # Bottom right (longer base)
-            (0.4 * scale, 0.4 * scale),      # Top right
-            (-0.4 * scale, 0.4 * scale)      # Top left (shorter top)
-        ]
+        """Backward-compatible trapezoid initializer (defaults to isosceles style)."""
+        return Initializer.init_trapezoid_isosceles(scale)
 
     @staticmethod
     def init_parallelogram(scale: float = 1.0) -> List[Tuple[float, float]]:

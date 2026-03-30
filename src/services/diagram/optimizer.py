@@ -86,10 +86,10 @@ class Optimizer:
     def dist(self, p1: TorchPoint, p2: TorchPoint):
         dx = p1.x - p2.x
         dy = p1.y - p2.y
-        return torch.sqrt(dx**2 + dy**2)
+        return torch.sqrt(dx**2 + dy**2 + 1e-8)
 
     def norm(self, p: TorchPoint):
-        return torch.sqrt(p.x**2 + p.y**2)
+        return torch.sqrt(p.x**2 + p.y**2 + 1e-8)
 
     def _vector_from_points(self, pa: TorchPoint, pb: TorchPoint):
         """Calculate vector from pb to pa: (pa - pb)"""
@@ -109,7 +109,7 @@ class Optimizer:
         n_y = dx
 
         # Normalize
-        n_norm = torch.sqrt(n_x**2 + n_y**2)
+        n_norm = torch.sqrt(n_x**2 + n_y**2 + 1e-8)
         n_x = n_x / n_norm
         n_y = n_y / n_norm
 
@@ -333,15 +333,17 @@ class Optimizer:
     def sample_square(self, points: list):
         assert len(points) == 4
         pt_objs, names = self._sample_quadrilateral_with_init(
-            points, Initializer.init_square, 1.0, quad_type=QuadrilateralType.SQUARE
+            points, Initializer.init_square, 1.0, noise=0.0, quad_type=QuadrilateralType.SQUARE
         )
         p1, p2, p3, p4 = pt_objs
 
-        # All sides equal + right angle
-        self.register_loss(f"sq_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
-        self.register_loss(f"sq_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
-        self.register_loss(f"sq_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
-        self.register_loss(f"sq_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
+        # Strong square constraints: equal sides + multiple right angles.
+        self.register_loss(f"sq_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=12.0)
+        self.register_loss(f"sq_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=12.0)
+        self.register_loss(f"sq_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=12.0)
+        self.register_loss(f"sq_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=12.0)
+        self.register_loss(f"sq_right_C_{names[0]}", lambda: self._dot_product(p2, p3, p4), weight=12.0)
+        self.register_loss(f"sq_right_D_{names[0]}", lambda: self._dot_product(p3, p4, p1), weight=12.0)
         self.register_ndg(f"sq_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
         return pt_objs
 
@@ -383,8 +385,10 @@ class Optimizer:
 
     def sample_trapezoid(self, points: list):
         assert len(points) == 4
+        trapezoid_style = str(self.opts.get('trapezoid_style', 'isosceles')).lower()
+        init_fn = Initializer.init_trapezoid_isosceles if trapezoid_style == 'isosceles' else Initializer.init_trapezoid_general
         pt_objs, names = self._sample_quadrilateral_with_init(
-            points, Initializer.init_quadrilateral, 1.2, quad_type=QuadrilateralType.TRAPEZOID
+            points, init_fn, 1.2, noise=0.0, quad_type=QuadrilateralType.TRAPEZOID
         )
         p1, p2, p3, p4 = pt_objs
 
@@ -394,6 +398,17 @@ class Optimizer:
         self.register_ndg(f"trap_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
         self.register_ndg(f"trap_ndg_top_{names[0]}", lambda: self.dist(p3, p4), weight=10.0)
         self.register_ndg(f"trap_ndg_bottom_{names[0]}", lambda: self.dist(p1, p2), weight=10.0)
+        # Keep the trapezoid from collapsing into a near-collinear shape.
+        self.register_loss(
+            f"trap_min_height_c_{names[0]}",
+            lambda: torch.relu(0.55 * self.dist(p1, p2) - self.dist_to_line(p3, p1, p2)),
+            weight=4000.0,
+        )
+        self.register_loss(
+            f"trap_min_height_d_{names[0]}",
+            lambda: torch.relu(0.55 * self.dist(p1, p2) - self.dist_to_line(p4, p1, p2)),
+            weight=4000.0,
+        )
         return pt_objs
 
     def sample_rhombus(self, points: list):
@@ -438,7 +453,8 @@ class Optimizer:
             # Scalene triangle init
             init_coords = Initializer.init_scalene_triangle()
 
-        init_coords = Initializer.add_noise(init_coords)
+        tri_noise = 0.0 if tri_type in ('right', 'right_isosceles') else 0.05
+        init_coords = Initializer.add_noise(init_coords, noise_scale=tri_noise)
 
         # Create points
         p1 = self.sample_uniform(points[0], init_coords=init_coords[0])
@@ -521,14 +537,19 @@ class Optimizer:
         elif quad_type == 'parallelogram':
             init_coords = Initializer.init_parallelogram(1.0)
         elif quad_type == 'trapezoid':
-            init_coords = Initializer.init_trapezoid(1.0)
+            trapezoid_style = str(self.opts.get('trapezoid_style', 'isosceles')).lower()
+            if trapezoid_style == 'isosceles':
+                init_coords = Initializer.init_trapezoid_isosceles(1.0)
+            else:
+                init_coords = Initializer.init_trapezoid_general(1.0)
         elif quad_type == 'rhombus':
             init_coords = Initializer.init_rhombus(1.0)
         else:  # generic quadrilateral
             init_coords = Initializer.init_quadrilateral(1.0)
 
-        # Add noise to avoid perfect initialization
-        init_coords = Initializer.add_noise(init_coords, noise_scale=0.05)
+        # Keep trapezoid stable and axis-aligned at initialization.
+        quad_noise = 0.0 if quad_type == 'trapezoid' else 0.05
+        init_coords = Initializer.add_noise(init_coords, noise_scale=quad_noise)
 
         # Create points with initial coordinates
         pt_objs = [self.sample_uniform(p, init_coords=init_coords[i]) for i, p in enumerate(points)]
@@ -592,6 +613,17 @@ class Optimizer:
             # Ensure bases have reasonable lengths
             self.register_ndg(f"trap_ndg_base1_{names[0]}", lambda: self.dist(p1, p2), weight=10.0)
             self.register_ndg(f"trap_ndg_base2_{names[0]}", lambda: self.dist(p3, p4), weight=10.0)
+            # Keep both non-base vertices away from the AB line to avoid flattened shapes.
+            self.register_loss(
+                f"trap_min_height_c_{names[0]}",
+                lambda: torch.relu(0.55 * self.dist(p1, p2) - self.dist_to_line(p3, p1, p2)),
+                weight=4000.0,
+            )
+            self.register_loss(
+                f"trap_min_height_d_{names[0]}",
+                lambda: torch.relu(0.55 * self.dist(p1, p2) - self.dist_to_line(p4, p1, p2)),
+                weight=4000.0,
+            )
 
             self.quadrilaterals_metadata[key] = {'type': 'trapezoid', 'parallel_sides': [(0, 1), (3, 2)]}
 
@@ -2034,17 +2066,49 @@ class Optimizer:
             return 0.0
 
         optimizer = optim.Adam(self.trainable_vars, lr=lr)
+        grad_clip = self.opts.get('grad_clip_norm', 5.0)
+        param_abs_max = self.opts.get('param_abs_max', 1e3)
+        last_good_state = [p.detach().clone() for p in self.trainable_vars]
+        total_loss = torch.tensor(float('inf'), dtype=torch.float64, device=self.device)
+        non_finite_penalty = self.const(1e6)
         if self.verbosity:
             logger.info(f"Optimization ({epochs}) Epochs")
 
         for i in range(epochs):
             optimizer.zero_grad()
             # Compute losses fresh at each iteration
-            self.losses = {key: fn() for key, fn in self.loss_fns.items()}
+            raw_losses = {key: fn() for key, fn in self.loss_fns.items()}
+            had_non_finite = False
+            self.losses = {}
+            for key, value in raw_losses.items():
+                if not torch.isfinite(value):
+                    had_non_finite = True
+                self.losses[key] = torch.nan_to_num(
+                    value,
+                    nan=non_finite_penalty.item(),
+                    posinf=non_finite_penalty.item(),
+                    neginf=non_finite_penalty.item(),
+                )
+
             total_loss = sum(self.losses.values())
+            if had_non_finite and self.verbosity:
+                logger.warning(f"Non-finite term(s) detected at iteration {i}; replaced with finite penalties")
+
             total_loss.backward()
 
+            if grad_clip is not None and grad_clip > 0:
+                torch.nn.utils.clip_grad_norm_(self.trainable_vars, grad_clip)
+
             optimizer.step()
+
+            # Keep parameters in a numerically safe range.
+            if param_abs_max is not None and param_abs_max > 0:
+                for param in self.trainable_vars:
+                    param.data.clamp_(-param_abs_max, param_abs_max)
+
+            if torch.isfinite(total_loss):
+                last_good_state = [p.detach().clone() for p in self.trainable_vars]
+
             if self.verbosity and i % 100 == 0:
                 logger.info(f"Iteration {i:4d}: Loss = {total_loss.item():.6f}")
 

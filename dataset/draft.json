@@ -1,8 +1,8 @@
 [
   {
     "image_dir": "",
-    "instruction": "Cho tam giác ABC vuông tại A, AH là đường cao ( H thuộc BC). Kẻ HE, HF lần lượt vuông góc với AB và AC ( E thuộc AB, F thuộc AC). a) Chứng minh AH = EF. b) Gọi O là giao điểm của AH và EF, K là trung điểm của AC. Qua F kẻ đường thẳng vuông góc với EF cắt BC tại I . Chứng minh tứ giác AOIK là hình bình hành. c) EF cắt IK tại M. Chứng minh tam giác OMI cân.",
-    "answer": "(triangle (A B C) (right A))\n(define H point (projection A (segment B C)))\n(segment A H)\n(define E point (segment A B))\n(perpendicular (segment H E) (segment A B))\n(define F point (segment A C))\n(perpendicular (segment H F) (segment A C))\n(equal-distance A H H E)\n(equal-distance A H H F)\n(define O point (inter-ll A H E F))\n(define K point (midpoint A C))\n(segment A C)\n(segment B C)\n(segment E F)\n(segment A O)\n(segment O K)\n(segment I point (segment F B))\n(perpendicular (segment F I) (segment E F))\n(parallel (segment A O) (segment I K))\n(equal-distance O K O I)\n(equal-distance A O O K)\n(define M point (inter-ll E F I K))\n(equal-distance O M O I)\n(equal-distance O M O K)\n(equal-distance I M M K)\n()",
-    "id": 225
+    "instruction": "Cho tam giác ABC nội tiếp (O; R), phân giác ∠BAC cắt (O) tại M. Đường cao AH, bán kính OA. 1. AM là phân giác ∠OAH. 2. ∠OAH = ∠B - ∠C. 3. Tính ∠B, ∠C và diện tích hình viên phân.",
+    "answer": "(triangle (A B C))\n(segment A B)\n(segment A C)\n(segment B C)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(on-circle A O)\n(on-circle B O)\n(on-circle C O)\n(define M point (bisector B A C))\n(on-circle M O)\n(segment A M)\n(define H point (projection A (segment B C)))\n(segment A H)\n(segment O A)\n(angle-equal O A M M A H)",
+    "id": 429
   }
 ]

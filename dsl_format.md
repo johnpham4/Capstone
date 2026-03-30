@@ -1,7 +1,7 @@
 # DSL Input Format (Geometry S-expression)
 
 Tai lieu nay tong hop format dau vao DSL dang duoc su dung trong project.
-Nguon tong hop: `src/prompts/dsl.py`, `pipeline/domain/prompt_dsl.py`, `src/services/diagram/dsl_parser.py`.
+Nguon tong hop: `pipeline/domain/prompt_dsl.py`, `src/services/diagram/dsl_parser.py`, `src/services/diagram/diagram_builder.py`.
 
 ## 1. Nguyen tac tong quat
 
@@ -14,6 +14,8 @@ Nguon tong hop: `src/prompts/dsl.py`, `pipeline/domain/prompt_dsl.py`, `src/serv
   3. Segment/line
   4. Circle
   5. Constraint (`parallel`, `perpendicular`, `angle-*`, `equal-distance`, ...)
+
+Luu y: voi `midpoint` va `projection`, doan tham chieu nen duoc khai bao truoc.
 
 ## 2. Khuon mau tong quat
 
@@ -91,6 +93,8 @@ Vi du:
 Khuon tong quat:
 
 ```text
+(circle <center>)
+(circle <center> (radius 0.5))
 (circle <center> <circle-construction>)
 ```
 
@@ -99,8 +103,6 @@ Cac circle-construction:
 ```text
 (incircle A B C)
 (circumcircle A B C)
-(incircle A B C D)
-(circumcircle A B C D)
 ```
 
 Vi du:
@@ -108,6 +110,10 @@ Vi du:
 ```text
 (define O point (incenter A B C))
 (circle O (incircle A B C))
+
+Luu y quan trong:
+- `incircle/circumcircle` hien tai chi dung cho tam giac (3 diem).
+- Bai tu giac noi tiep duong tron tam X: dung `(circle X)` + cac dong `(on-circle ... X)`.
 ```
 
 ## 7. Constraint formats
@@ -138,6 +144,11 @@ Vi du:
 ```text
 (on-circle P O)
 (on-segment M A B)
+
+Khuyen nghi:
+- Khi can tao diem nam tren doan AB, dung:
+  `(define M point (segment A B))`
+- Tranh dung `(on-segment ...)` trong construction cua `define`.
 ```
 
 ### 7.5 Tiep tuyen / duong kinh
@@ -145,6 +156,9 @@ Vi du:
 ```text
 (tangent T (circle O) AB)
 (diameter A B O)
+
+Neu tiep diem la endpoint (vi du tiep tuyen tai A), co the viet:
+`(tangent A (circle O) AB)`
 ```
 
 ## 8. Mapping nhanh tieng Viet -> DSL token
@@ -171,6 +185,9 @@ Vi du:
 - `on-segment` dung dang 3 diem: `(on-segment M A B)`.
 - Khong dung ky hieu toan hoc truc tiep trong output (`⊥`, `∥`, `∠`, `=`), phai dung token DSL.
 - Moi menh de goc nen map ro theo thu tu ky tu: `ABC` -> `(angle-* A B C ...)`.
+- Cac doan duoc nhac truc tiep trong de (gia thiet/chung minh) nen co dong `(segment X Y)` tuong ung.
+- Sau `(diameter A B O)` nen co `(segment A B)` de hien thi day du.
+- Constraint tich, tong, bat dang thuc (`AB.EI = ...`, `AC+CD >= ...`, `AB < AC`) hien chua co toan tu DSL truc tiep; can encode qua quan he hinh hoc co san, tranh thay bang `equal-distance` sai nghia.
 
 ## 10. Bo mau hoan chinh
 

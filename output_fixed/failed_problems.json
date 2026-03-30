@@ -1,7 +1,12 @@
 [
   {
-    "index": 2,
-    "instruction": "Đường tròn O, hai đường thẳng đi qua điểm O",
-    "dsl": "(define O point)\n(circle O)\n(define A point (segment O O))\n(define B point (segment O O))\n(segment A B)"
+    "index": 1,
+    "instruction": "Cho hình vuông ABCD. Lấy điểm E thuộc đường chéo AC. Kẻ EF ⊥ AD, EG ⊥ CD. Chứng minh rằng: EB = FG và EB ⊥ FG.",
+    "dsl": "(square (A B C D))\n(segment A C)\n(segment A D)\n(segment C D)\n(define E point (segment A C))\n(define F point (projection E (segment A D)))\n(segment E F)\n(define G point (projection E (segment C D)))\n(segment E G)\n(segment E B)\n(segment F G)\n(equal-distance E B F G)\n(perpendicular (segment E B) (segment F G))"
+  },
+  {
+    "index": 4,
+    "instruction": "Cho hình vuông ABCD cạnh a. AE = DF = a/3. a. So sánh ∆ABE và ∆DAF. b. AF ⊥ BE. c. Tính tỉ số diện tích.",
+    "dsl": "(square (A B C D))\n(segment A B)\n(segment D C)\n(define E point (segment A B))\n(define F point (segment D C))\n(segment A E)\n(segment D F)\n(equal-distance A E D F)\n(segment A F)\n(segment B E)\n(perpendicular (segment A F) (segment B E))"
   }
 ]

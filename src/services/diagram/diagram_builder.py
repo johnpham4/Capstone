@@ -552,4 +552,5 @@ class DiagramBuilder:
             constraint_type='angle_measure',
             objects=points + [DegreeValue(degrees)]
         )
+        self.instructions.append(instr)
 
