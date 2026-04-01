@@ -1095,6 +1095,6 @@
     "image_dir": "",
     "instruction": "Cho hình chữ nhật ABCD. Gọi M, N, P, Q lần lượt là trung điểm của các cạnh AB, BC, CD, AD. Chứng minh tứ giác MNPQ là hình thoi.",
     "answer": "(rectangle (A B C D))\n(segment A B)\n(segment B C)\n(segment C D)\n(segment D A)\n(define M point (midpoint A B))\n(define N point (midpoint B C))\n(define P point (midpoint C D))\n(define Q point (midpoint D A))\n(segment M N)\n(segment N P)\n(segment P Q)\n(segment Q M)\n(equal-distance M N N P)\n(equal-distance N P P Q)\n(equal-distance P Q Q M)",
-    "id": 431
+    "id": 430
   }
 ]
