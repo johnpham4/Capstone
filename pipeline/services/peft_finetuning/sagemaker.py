@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import boto3
-from huggingface_hub import HfApi
 from loguru import logger
 from sagemaker.huggingface import HuggingFace
 from sagemaker.session import Session
@@ -19,6 +18,7 @@ def run_finetuning_on_sagemaker(
     learning_rate: float = 2e-4,
     dataset_huggingface_workspace: str = "quangne",
     dataset_huggingface_repo_name: str = "geometry",
+    model_output_huggingface_workspace: str = "quangne",
     model_name: str = "nvidia/AceMath-1.5B-Instruct",
     is_dummy: bool = False,
     instance_type: str = "ml.g5.xlarge",
@@ -41,10 +41,7 @@ def run_finetuning_on_sagemaker(
     )
     sagemaker_session = Session(boto_session=boto_session)
 
-    api = HfApi()
-    user_info = api.whoami(token=settings.HF_TOKEN)
-    huggingface_user = user_info["name"]
-    logger.info(f"Current Hugging Face user: {huggingface_user}")
+    logger.info(f"Model output Hugging Face workspace: {model_output_huggingface_workspace}")
 
     hyperparameters = {
         "num_train_epochs": num_train_epochs,
@@ -54,7 +51,7 @@ def run_finetuning_on_sagemaker(
         "dataset_huggingface_workspace": dataset_huggingface_workspace,
         "dataset_huggingface_repo_name": dataset_huggingface_repo_name,
         "model_name": model_name,
-        "model_output_huggingface_workspace": huggingface_user,
+        "model_output_huggingface_workspace": model_output_huggingface_workspace,
     }
     if is_dummy:
         hyperparameters["is_dummy"] = True

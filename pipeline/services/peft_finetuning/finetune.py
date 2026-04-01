@@ -104,6 +104,8 @@ def load_and_prepare_dataset(
     dataset_huggingface_workspace: str,
     dataset_huggingface_repo_name: str,
     is_dummy: bool,
+    dummy_train_samples: int,
+    dummy_eval_samples: int,
 ):
     dataset_dict = load_dataset(f"{dataset_huggingface_workspace}/{dataset_huggingface_repo_name}")
 
@@ -123,10 +125,10 @@ def load_and_prepare_dataset(
         eval_dataset = eval_dataset.remove_columns("image")
 
     if is_dummy:
-        train_upper_bound = min(400, len(train_dataset))
+        train_upper_bound = min(dummy_train_samples, len(train_dataset))
         train_dataset = train_dataset.select(range(train_upper_bound))
         if eval_dataset is not None:
-            eval_upper_bound = min(100, len(eval_dataset))
+            eval_upper_bound = min(dummy_eval_samples, len(eval_dataset))
             eval_dataset = eval_dataset.select(range(eval_upper_bound))
             print(
                 f"Dummy mode enabled. Training with {train_upper_bound} samples, eval with {eval_upper_bound} samples."
@@ -187,6 +189,8 @@ def finetune(
     early_stopping_patience: int = 2,
     early_stopping_threshold: float = 0.0,
     is_dummy: bool = False,
+    dummy_train_samples: int = 400,
+    dummy_eval_samples: int = 100,
 ) -> tuple:
     use_bf16 = _supports_bf16()
     compute_dtype = _preferred_torch_dtype()
@@ -205,6 +209,8 @@ def finetune(
         dataset_huggingface_workspace=dataset_huggingface_workspace,
         dataset_huggingface_repo_name=dataset_huggingface_repo_name,
         is_dummy=is_dummy,
+        dummy_train_samples=dummy_train_samples,
+        dummy_eval_samples=dummy_eval_samples,
     )
 
     print(f"Train samples: {len(train_dataset)}")
@@ -425,7 +431,7 @@ if __name__ == "__main__":
     parser.add_argument("--early_stopping_threshold", type=float, default=0.0)
     parser.add_argument("--dataset_huggingface_workspace", type=str, default="quangne")
     parser.add_argument("--dataset_huggingface_repo_name", type=str, default="geometry")
-    parser.add_argument("--model_output_huggingface_workspace", type=str, default="xunnhi")
+    parser.add_argument("--model_output_huggingface_workspace", type=str, default="quangne")
     parser.add_argument("--adapter_repo_id", type=str, default="")
     parser.add_argument("--merged_repo_id", type=str, default="")
     parser.add_argument("--verify_from_hub", type=_str2bool, default=True)
@@ -435,6 +441,8 @@ if __name__ == "__main__":
         default="Cho tam giác ABC, M là trung điểm của BC. Trên tia đối của BA lấy điểm N sao cho BN = AB. Gọi I là giao điểm MN và AC. Chứng minh AI = 2IC",
     )
     parser.add_argument("--is_dummy", type=_str2bool, default=False)
+    parser.add_argument("--dummy_train_samples", type=int, default=400)
+    parser.add_argument("--dummy_eval_samples", type=int, default=100)
 
     parser.add_argument("--output_data_dir", type=str, default=os.environ.get("SM_OUTPUT_DATA_DIR", "./outputs"))
     parser.add_argument("--model_dir", type=str, default=os.environ.get("SM_MODEL_DIR", "./model"))
@@ -459,6 +467,8 @@ if __name__ == "__main__":
     print(f"Adapter repo override: '{args.adapter_repo_id}'")
     print(f"Merged repo override: '{args.merged_repo_id}'")
     print(f"Verify from hub after push: {args.verify_from_hub}")
+    print(f"Dummy train samples: {args.dummy_train_samples}")
+    print(f"Dummy eval samples: {args.dummy_eval_samples}")
     print(f"Output data dir: '{args.output_data_dir}'")
     print(f"Model dir: '{args.model_dir}'")
     print(f"Number of GPUs: '{args.n_gpus}'")
@@ -482,6 +492,8 @@ if __name__ == "__main__":
         early_stopping_patience=args.early_stopping_patience,
         early_stopping_threshold=args.early_stopping_threshold,
         is_dummy=args.is_dummy,
+        dummy_train_samples=args.dummy_train_samples,
+        dummy_eval_samples=args.dummy_eval_samples,
     )
 
     inference(model=model, tokenizer=tokenizer)

@@ -69,13 +69,13 @@ from src.config.settings.base import settings
 @click.option(
     "--dataset-workspace",
     type=str,
-    default="xunnhi",
+    default="quangne",
     help="Hugging Face workspace containing the dataset"
 )
 @click.option(
     "--dataset-repo",
     type=str,
-    default="geometry-dataset",
+    default="geometry",
     help="Hugging Face dataset repository name"
 )
 def main(
@@ -89,8 +89,8 @@ def main(
     num_epochs: int = 1,
     batch_size: int = 2,
     learning_rate: float = 2e-4,
-    dataset_workspace: str = "xunnhi",
-    dataset_repo: str = "geometry-dataset",
+    dataset_workspace: str = "quangne",
+    dataset_repo: str = "geometry",
 ) -> None:
     assert (
         run_prepare_data
@@ -175,6 +175,7 @@ def main(
             learning_rate=learning_rate,
             dataset_huggingface_workspace=dataset_workspace,
             dataset_huggingface_repo_name=dataset_repo,
+            model_output_huggingface_workspace="quangne",
             model_name="nvidia/AceMath-1.5B-Instruct",
         )
 
