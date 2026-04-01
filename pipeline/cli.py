@@ -43,6 +43,12 @@ from src.config.settings.base import settings
     help="Run finetuning on AWS SageMaker"
 )
 @click.option(
+    "--run-finetune-peft-acemath",
+    is_flag=True,
+    default=False,
+    help="Run PEFT finetuning for AceMath-1.5B on AWS SageMaker"
+)
+@click.option(
     "--num-epochs",
     type=int,
     default=1,
@@ -63,8 +69,14 @@ from src.config.settings.base import settings
 @click.option(
     "--dataset-workspace",
     type=str,
-    default="minn4",
+    default="xunnhi",
     help="Hugging Face workspace containing the dataset"
+)
+@click.option(
+    "--dataset-repo",
+    type=str,
+    default="geometry-dataset",
+    help="Hugging Face dataset repository name"
 )
 def main(
     no_cache: bool = False,
@@ -73,10 +85,12 @@ def main(
     run_generate_gmbl: bool = False,
     run_generate_questions: bool = False,
     run_finetune: bool = False,
+    run_finetune_peft_acemath: bool = False,
     num_epochs: int = 1,
     batch_size: int = 2,
     learning_rate: float = 2e-4,
-    dataset_workspace: str = "minn4",
+    dataset_workspace: str = "xunnhi",
+    dataset_repo: str = "geometry-dataset",
 ) -> None:
     assert (
         run_prepare_data
@@ -84,6 +98,7 @@ def main(
         or run_generate_gmbl
         or run_generate_questions
         or run_finetune
+        or run_finetune_peft_acemath
     ), "Please use one of the options"
 
     pipeline_args = {"enable_cache": not no_cache}
@@ -142,6 +157,28 @@ def main(
         )
 
         logger.info("Finetuning job submitted to AWS SageMaker successfully!")
+        logger.info("Monitor progress in AWS SageMaker Console and Comet ML")
+
+    if run_finetune_peft_acemath:
+        assert settings.HF_TOKEN, "HF_TOKEN required. Set it in .env file"
+        assert settings.AWS_ARN_ROLE, "AWS_ARN_ROLE required. Set it in .env file"
+
+        logger.info(
+            f"PEFT AceMath configuration: epochs={num_epochs}, batch_size={batch_size}, lr={learning_rate}, dataset={dataset_workspace}/{dataset_repo}"
+        )
+
+        from pipeline.services.peft_finetuning.sagemaker import run_finetuning_on_sagemaker as run_peft_acemath
+
+        run_peft_acemath(
+            num_train_epochs=num_epochs,
+            per_device_train_batch_size=batch_size,
+            learning_rate=learning_rate,
+            dataset_huggingface_workspace=dataset_workspace,
+            dataset_huggingface_repo_name=dataset_repo,
+            model_name="nvidia/AceMath-1.5B-Instruct",
+        )
+
+        logger.info("PEFT AceMath finetuning job submitted to AWS SageMaker successfully!")
         logger.info("Monitor progress in AWS SageMaker Console and Comet ML")
 
 if __name__ == "__main__":

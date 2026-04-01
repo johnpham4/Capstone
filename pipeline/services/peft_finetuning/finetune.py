@@ -6,21 +6,46 @@ from typing import Any, List, Optional
 import torch
 from datasets import load_dataset
 from huggingface_hub import HfApi
-from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+from peft import LoraConfig, PeftModel, get_peft_model, prepare_model_for_kbit_training
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
     BitsAndBytesConfig,
     EarlyStoppingCallback,
-    TextStreamer,
 )
 from trl import SFTConfig, SFTTrainer
 
-from src.prompts import DSL_INFERENCE_INSTRUCTION
+try:
+    from src.prompts import DSL_INFERENCE_INSTRUCTION
+except ModuleNotFoundError:
+    DSL_INFERENCE_INSTRUCTION: str = (
+    "Chuyển bài toán hình học tiếng Việt sang Geometry DSL (S-expression).\n"
+    "Chỉ trả về DSL thuần văn bản hợp lệ từ đề bài, không markdown, không giải thích.\n"
+    "Bỏ qua phần yêu cầu chứng minh hoặc câu hỏi phụ, nhưng giữ mọi dữ kiện hình học và điều kiện ràng buộc trong đề.\n\n"
+    "Đề bài:\n{query}\n\n"
+    "DSL:"
+    )
 
 
 def _supports_bf16() -> bool:
     return torch.cuda.is_available() and torch.cuda.is_bf16_supported()
+
+
+def _preferred_torch_dtype() -> torch.dtype:
+    if _supports_bf16():
+        return torch.bfloat16
+    if torch.cuda.is_available():
+        return torch.float16
+    return torch.float32
+
+
+def _str2bool(value: str) -> bool:
+    value = str(value).strip().lower()
+    if value in {"1", "true", "t", "yes", "y"}:
+        return True
+    if value in {"0", "false", "f", "no", "n"}:
+        return False
+    raise argparse.ArgumentTypeError(f"Invalid boolean value: {value}")
 
 
 def load_model_and_tokenizer(
@@ -88,8 +113,8 @@ def load_and_prepare_dataset(
     train_dataset = dataset_dict["train"]
     eval_dataset = dataset_dict.get("validation", dataset_dict.get("val"))
 
-    if "instruction" not in train_dataset.column_names or "output" not in train_dataset.column_names:
-        raise ValueError("Dataset must contain 'instruction' and 'output' columns.")
+    if "problem" not in train_dataset.column_names or "answer" not in train_dataset.column_names:
+        raise ValueError("Dataset must contain 'problem' and 'answer' columns.")
 
     if "image" in train_dataset.column_names:
         train_dataset = train_dataset.remove_columns("image")
@@ -112,17 +137,17 @@ def load_and_prepare_dataset(
     def to_prompt_completion(batch: dict) -> dict:
         prompts = []
         completions = []
-        for instruction, output in zip(batch["instruction"], batch["output"], strict=False):
+        for problem, answer in zip(batch["problem"], batch["answer"], strict=False):
             if tokenizer.chat_template:
                 prompt = tokenizer.apply_chat_template(
-                    [{"role": "user", "content": DSL_INFERENCE_INSTRUCTION.format(query=instruction)}],
+                    [{"role": "user", "content": DSL_INFERENCE_INSTRUCTION.format(query=problem)}],
                     tokenize=False,
                     add_generation_prompt=True,
                 )
-                completion = f"{output}{tokenizer.eos_token or ''}"
+                completion = f"{answer}{tokenizer.eos_token or ''}"
             else:
-                prompt = f"User:\n{DSL_INFERENCE_INSTRUCTION.format(query=instruction)}\n\nAssistant:\n"
-                completion = f"{output}{tokenizer.eos_token or ''}"
+                prompt = f"User:\n{DSL_INFERENCE_INSTRUCTION.format(query=problem)}\n\nAssistant:\n"
+                completion = f"{answer}{tokenizer.eos_token or ''}"
 
             prompts.append(prompt)
             completions.append(completion)
@@ -132,8 +157,8 @@ def load_and_prepare_dataset(
     train_dataset = train_dataset.map(to_prompt_completion, batched=True, remove_columns=train_dataset.column_names)
 
     if eval_dataset is not None:
-        if "instruction" not in eval_dataset.column_names or "output" not in eval_dataset.column_names:
-            raise ValueError("Validation split must contain 'instruction' and 'output' columns.")
+        if "problem" not in eval_dataset.column_names or "answer" not in eval_dataset.column_names:
+            raise ValueError("Validation split must contain 'problem' and 'answer' columns.")
         eval_dataset = eval_dataset.map(to_prompt_completion, batched=True, remove_columns=eval_dataset.column_names)
 
     return train_dataset, eval_dataset
@@ -142,8 +167,8 @@ def load_and_prepare_dataset(
 def finetune(
     model_name: str = "nvidia/AceMath-1.5B-Instruct",
     output_dir: str = "/opt/ml/model",
-    dataset_huggingface_workspace: str = "minn4",
-    dataset_huggingface_repo_name: str = "text2dsl",
+    dataset_huggingface_workspace: str = "quangne",
+    dataset_huggingface_repo_name: str = "geometry",
     max_seq_length: int = 2048,
     load_in_4bit: bool = True,
     lora_rank: int = 32,
@@ -164,7 +189,7 @@ def finetune(
     is_dummy: bool = False,
 ) -> tuple:
     use_bf16 = _supports_bf16()
-    compute_dtype = torch.bfloat16 if use_bf16 else torch.float16
+    compute_dtype = _preferred_torch_dtype()
     model, tokenizer = load_model_and_tokenizer(
         model_name,
         load_in_4bit,
@@ -210,7 +235,7 @@ def finetune(
         warmup_ratio=warmup_ratio,
         logging_steps=10,
         save_strategy="epoch",
-        evaluation_strategy="epoch" if should_eval else "no",
+        eval_strategy="epoch" if should_eval else "no",
         per_device_eval_batch_size=per_device_eval_batch_size,
         load_best_model_at_end=should_eval,
         metric_for_best_model="eval_loss" if should_eval else None,
@@ -224,14 +249,14 @@ def finetune(
         remove_unused_columns=False,
         output_dir=output_dir,
         seed=seed,
-        max_seq_length=max_seq_length,
+        max_length=max_seq_length,
         packing=False,
         completion_only_loss=True,
     )
 
     trainer = SFTTrainer(
         model=model,
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
         args=sft_config,
@@ -247,23 +272,107 @@ def finetune(
 def inference(
     model: Any,
     tokenizer: Any,
-    input_text: str = "Tam giac ABC co AB = AC. Chung minh goc B bang goc C.",
+    input_text: str = "Cho tam giác ABC, M là trung điểm của BC. Trên tia đối của BA lấy điểm N sao cho BN = AB. Gọi I là giao điểm MN và AC. Chứng minh AI = 2IC",
     max_new_tokens: int = 256,
 ) -> None:
-    prompt = DSL_INFERENCE_INSTRUCTION.format(query=input_text)
+    prompt_body = DSL_INFERENCE_INSTRUCTION.format(query=input_text)
+    if tokenizer.chat_template:
+        prompt = tokenizer.apply_chat_template(
+            [{"role": "user", "content": prompt_body}],
+            tokenize=False,
+            add_generation_prompt=True,
+        )
+    else:
+        prompt = f"User:\n{prompt_body}\n\nAssistant:\n"
 
-    inputs = tokenizer([prompt], return_tensors="pt").to(model.device)
-    streamer = TextStreamer(tokenizer)
-    _ = model.generate(
-        **inputs,
-        max_new_tokens=max_new_tokens,
-        do_sample=True,
-        temperature=0.7,
-        top_p=0.9,
-        streamer=streamer,
-        eos_token_id=tokenizer.eos_token_id,
-        pad_token_id=tokenizer.pad_token_id,
+    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+    model.eval()
+    use_cuda = torch.cuda.is_available() and str(model.device).startswith("cuda")
+    if use_cuda:
+        compute_dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+    else:
+        compute_dtype = torch.float32
+
+    # Some PEFT/quantized runs keep lm_head in float32 while hidden states are bf16/fp16.
+    if hasattr(model, "lm_head") and hasattr(model.lm_head, "to"):
+        try:
+            model.lm_head = model.lm_head.to(dtype=compute_dtype)
+        except Exception:
+            pass
+
+    with torch.inference_mode():
+        if use_cuda:
+            with torch.autocast(device_type="cuda", dtype=compute_dtype):
+                outputs = model.generate(
+                    **inputs,
+                    max_new_tokens=max_new_tokens,
+                    do_sample=False,
+                    repetition_penalty=1.08,
+                    eos_token_id=tokenizer.eos_token_id,
+                    pad_token_id=tokenizer.pad_token_id,
+                )
+        else:
+            outputs = model.generate(
+                **inputs,
+                max_new_tokens=max_new_tokens,
+                do_sample=False,
+                repetition_penalty=1.08,
+                eos_token_id=tokenizer.eos_token_id,
+                pad_token_id=tokenizer.pad_token_id,
+            )
+
+    prompt_len = inputs["input_ids"].shape[-1]
+    generated = outputs[0][prompt_len:]
+    text = tokenizer.decode(generated, skip_special_tokens=True).strip()
+    print(text)
+
+
+def save_adapter_model(
+    model: Any,
+    tokenizer: Any,
+    output_dir: str,
+    push_to_hub: bool = False,
+    repo_id: Optional[str] = None,
+) -> None:
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+
+    model.save_pretrained(output_dir)
+    tokenizer.save_pretrained(output_dir)
+
+    if push_to_hub and repo_id:
+        print(f"Saving adapter model to '{repo_id}'")
+        model.push_to_hub(repo_id)
+        tokenizer.push_to_hub(repo_id)
+
+
+def merge_adapter_to_full_precision_base(
+    base_model_name: str,
+    adapter_path_or_repo: str,
+    device_map: str = "auto",
+) -> Any:
+    merge_dtype = _preferred_torch_dtype()
+    base_model = AutoModelForCausalLM.from_pretrained(
+        base_model_name,
+        trust_remote_code=True,
+        torch_dtype=merge_dtype,
+        device_map=device_map,
     )
+    peft_model = PeftModel.from_pretrained(base_model, adapter_path_or_repo)
+    return peft_model.merge_and_unload()
+
+
+def load_hf_model_for_inference(model_id: str) -> tuple:
+    infer_dtype = _preferred_torch_dtype()
+    loaded_model = AutoModelForCausalLM.from_pretrained(
+        model_id,
+        trust_remote_code=True,
+        torch_dtype=infer_dtype,
+        device_map="auto",
+    )
+    loaded_tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True, use_fast=True)
+    if loaded_tokenizer.pad_token is None:
+        loaded_tokenizer.pad_token = loaded_tokenizer.eos_token
+    return loaded_model, loaded_tokenizer
 
 
 def save_model(
@@ -314,9 +423,18 @@ if __name__ == "__main__":
     parser.add_argument("--enable_early_stopping", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--early_stopping_patience", type=int, default=2)
     parser.add_argument("--early_stopping_threshold", type=float, default=0.0)
-    parser.add_argument("--dataset_huggingface_workspace", type=str, default="minn4")
-    parser.add_argument("--dataset_huggingface_repo_name", type=str, default="text2dsl")
-    parser.add_argument("--model_output_huggingface_workspace", type=str, default="minn4")
+    parser.add_argument("--dataset_huggingface_workspace", type=str, default="quangne")
+    parser.add_argument("--dataset_huggingface_repo_name", type=str, default="geometry")
+    parser.add_argument("--model_output_huggingface_workspace", type=str, default="xunnhi")
+    parser.add_argument("--adapter_repo_id", type=str, default="")
+    parser.add_argument("--merged_repo_id", type=str, default="")
+    parser.add_argument("--verify_from_hub", type=_str2bool, default=True)
+    parser.add_argument(
+        "--verify_input_text",
+        type=str,
+        default="Cho tam giác ABC, M là trung điểm của BC. Trên tia đối của BA lấy điểm N sao cho BN = AB. Gọi I là giao điểm MN và AC. Chứng minh AI = 2IC",
+    )
+    parser.add_argument("--is_dummy", type=_str2bool, default=False)
 
     parser.add_argument("--output_data_dir", type=str, default=os.environ.get("SM_OUTPUT_DATA_DIR", "./outputs"))
     parser.add_argument("--model_dir", type=str, default=os.environ.get("SM_MODEL_DIR", "./model"))
@@ -338,6 +456,9 @@ if __name__ == "__main__":
     print(f"Dataset workspace: '{args.dataset_huggingface_workspace}'")
     print(f"Dataset repo: '{args.dataset_huggingface_repo_name}'")
     print(f"Model output workspace: '{args.model_output_huggingface_workspace}'")
+    print(f"Adapter repo override: '{args.adapter_repo_id}'")
+    print(f"Merged repo override: '{args.merged_repo_id}'")
+    print(f"Verify from hub after push: {args.verify_from_hub}")
     print(f"Output data dir: '{args.output_data_dir}'")
     print(f"Model dir: '{args.model_dir}'")
     print(f"Number of GPUs: '{args.n_gpus}'")
@@ -360,11 +481,43 @@ if __name__ == "__main__":
         enable_early_stopping=args.enable_early_stopping,
         early_stopping_patience=args.early_stopping_patience,
         early_stopping_threshold=args.early_stopping_threshold,
+        is_dummy=args.is_dummy,
     )
 
     inference(model=model, tokenizer=tokenizer)
 
     model_short_name = checked_model_name.split("/")[-1]
-    model_repo_id = f"{args.model_output_huggingface_workspace}/text2diagram-{model_short_name}-peft"
-    final_model_dir = str(Path(args.model_dir) / "model_sft")
-    save_model(model, tokenizer, final_model_dir, push_to_hub=True, repo_id=model_repo_id)
+    adapter_repo_id = (
+        args.adapter_repo_id
+        if args.adapter_repo_id
+        else f"{args.model_output_huggingface_workspace}/text2diagram-{model_short_name}-peft-adapter"
+    )
+    merged_repo_id = (
+        args.merged_repo_id
+        if args.merged_repo_id
+        else f"{args.model_output_huggingface_workspace}/text2diagram-{model_short_name}-merged"
+    )
+
+    adapter_output_dir = str(Path(args.model_dir) / "adapter_sft")
+    merged_output_dir = str(Path(args.model_dir) / "model_sft_merged")
+
+    save_adapter_model(model, tokenizer, adapter_output_dir, push_to_hub=True, repo_id=adapter_repo_id)
+
+    del model
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
+    merged_model = merge_adapter_to_full_precision_base(
+        base_model_name=checked_model_name,
+        adapter_path_or_repo=adapter_output_dir,
+    )
+    save_model(merged_model, tokenizer, merged_output_dir, push_to_hub=True, repo_id=merged_repo_id)
+
+    if args.verify_from_hub:
+        print(f"Loading merged model back from Hub for verification: '{merged_repo_id}'")
+        loaded_model, loaded_tokenizer = load_hf_model_for_inference(merged_repo_id)
+        inference(
+            model=loaded_model,
+            tokenizer=loaded_tokenizer,
+            input_text=args.verify_input_text,
+        )

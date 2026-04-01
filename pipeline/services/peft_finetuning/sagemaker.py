@@ -17,11 +17,11 @@ def run_finetuning_on_sagemaker(
     per_device_train_batch_size: int = 2,
     gradient_accumulation_steps: int = 4,
     learning_rate: float = 2e-4,
-    dataset_huggingface_workspace: str = "minn4",
-    dataset_huggingface_repo_name: str = "text2dsl",
+    dataset_huggingface_workspace: str = "quangne",
+    dataset_huggingface_repo_name: str = "geometry",
     model_name: str = "nvidia/AceMath-1.5B-Instruct",
     is_dummy: bool = False,
-    instance_type: str = "ml.g5.2xlarge",
+    instance_type: str = "ml.g5.xlarge",
 ) -> None:
     assert settings.HF_TOKEN, "Hugging Face access token is required. Set HF_TOKEN in .env"
     assert settings.AWS_ARN_ROLE, "AWS ARN role is required. Set AWS_ARN_ROLE in .env"

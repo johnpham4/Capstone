@@ -36,23 +36,29 @@ simple_finetune:
 option_finetune:
 	uv run python -m pipeline.cli --run-finetune --num-epochs 1 --batch-size 2 --learning-rate 2e-4
 
+simple_finetune_peft_acemath:
+	uv run python -m pipeline.cli --run-finetune-peft-acemath
+
+full_finetune_peft_acemath:
+	uv run python -m pipeline.cli --run-finetune-peft-acemath --num-epochs 6 --batch-size 2 --learning-rate 2e-4 --dataset-workspace xunnhi --dataset-repo geometry-dataset
+
 
 aws_sagemaker_roles:
-	uv run python src/infrastructures/aws/roles/create_sagemaker_role.py
+	uv run python -m src.infrastructures.aws.roles.create_sagemaker_role
 
 
 aws_excecution_roles:
-	uv run python src/infrastructures/aws/roles/create_execution_role.py
+	uv run python -m src.infrastructures.aws.roles.create_execution_role
 
 
 deploy_endpoint:
-	uv run python src/infrastructures/aws/deploy/huggingface/run.py
+	uv run python -m src.infrastructures.aws.deploy.huggingface.run
 
 del_endpoint:
-	uv run python src/infrastructures/aws/deploy/delete_sagemaker_endpoint.py
+	uv run python -m src.infrastructures.aws.deploy.delete_sagemaker_endpoint
 
 del_endpoint_config:
-	uv run python src/infrastructures/aws/deploy/delete_sagemaker_endpoint_config.py
+	uv run python -m src.infrastructures.aws.deploy.delete_sagemaker_endpoint_config
 
 endpoint:
 	uv run python -m src.main
