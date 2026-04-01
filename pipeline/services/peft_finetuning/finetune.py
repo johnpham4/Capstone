@@ -115,8 +115,8 @@ def load_and_prepare_dataset(
     train_dataset = dataset_dict["train"]
     eval_dataset = dataset_dict.get("validation", dataset_dict.get("val"))
 
-    if "problem" not in train_dataset.column_names or "answer" not in train_dataset.column_names:
-        raise ValueError("Dataset must contain 'problem' and 'answer' columns.")
+    if "instruction" not in train_dataset.column_names or "answer" not in train_dataset.column_names:
+        raise ValueError("Dataset must contain 'instruction' and 'answer' columns.")
 
     if "image" in train_dataset.column_names:
         train_dataset = train_dataset.remove_columns("image")
@@ -139,16 +139,16 @@ def load_and_prepare_dataset(
     def to_prompt_completion(batch: dict) -> dict:
         prompts = []
         completions = []
-        for problem, answer in zip(batch["problem"], batch["answer"], strict=False):
+        for instruction, answer in zip(batch["instruction"], batch["answer"], strict=False):
             if tokenizer.chat_template:
                 prompt = tokenizer.apply_chat_template(
-                    [{"role": "user", "content": DSL_INFERENCE_INSTRUCTION.format(query=problem)}],
+                    [{"role": "user", "content": DSL_INFERENCE_INSTRUCTION.format(query=instruction)}],
                     tokenize=False,
                     add_generation_prompt=True,
                 )
                 completion = f"{answer}{tokenizer.eos_token or ''}"
             else:
-                prompt = f"User:\n{DSL_INFERENCE_INSTRUCTION.format(query=problem)}\n\nAssistant:\n"
+                prompt = f"User:\n{DSL_INFERENCE_INSTRUCTION.format(query=instruction)}\n\nAssistant:\n"
                 completion = f"{answer}{tokenizer.eos_token or ''}"
 
             prompts.append(prompt)
@@ -159,8 +159,8 @@ def load_and_prepare_dataset(
     train_dataset = train_dataset.map(to_prompt_completion, batched=True, remove_columns=train_dataset.column_names)
 
     if eval_dataset is not None:
-        if "problem" not in eval_dataset.column_names or "answer" not in eval_dataset.column_names:
-            raise ValueError("Validation split must contain 'problem' and 'answer' columns.")
+        if "instruction" not in eval_dataset.column_names or "answer" not in eval_dataset.column_names:
+            raise ValueError("Validation split must contain 'instruction' and 'answer' columns.")
         eval_dataset = eval_dataset.map(to_prompt_completion, batched=True, remove_columns=eval_dataset.column_names)
 
     return train_dataset, eval_dataset
