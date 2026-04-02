@@ -1,0 +1,536 @@
+[
+    {
+        "image_dir": "",
+        "instruction": "Cho tứ giác ABCD có AB // CD, AD // BC và AB = CD = 6cm, AD = BC = 4cm. Chứng minh ABCD là hình chữ nhật và tính diện tích S_ABCD.",
+        "answer": "(quadrilateral (A B C D))\n(segment A B)\n(segment C D)\n(segment A D)\n(segment B C)\n(parallel (segment A B) (segment C D))\n(parallel (segment A D) (segment B C))\n(equal-distance A B C D)\n(equal-distance A D B C)",
+        "id": 129
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thang ABCD có AB // CD, AB = 8cm, CD = 4cm, chiều cao h = 3cm. Tính độ dài đường trung bình MN của hình thang ABCD.",
+        "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(define M point (midpoint A D))\n(define N point (midpoint B C))\n(segment M N)",
+        "id": 130
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho tứ giác ABCD biết ∠DAB = 90°, AB = 5cm, AD = 12cm và BD là đường chéo. Tính độ dài đường chéo BD và diện tích tứ giác ABCD.",
+        "answer": "(quadrilateral (A B C D))\n(angle-measure D A B 90)\n(segment A B)\n(segment A D)\n(segment B D)",
+        "id": 131
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho tam giác ABC vuông tại A với AB = 3cm, AC = 4cm. a) Chứng minh rằng A, B, C cùng nằm trên một đường tròn. b) Tính bán kính đường tròn ngoại tiếp tam giác ABC.",
+        "answer": "(triangle (A B C) (right A))\n(segment A B)\n(segment A C)\n(segment B C)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))",
+        "id": 133
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O) và dây AB. Đường thẳng qua O song song với AB cắt đường tròn tại C, D. Chứng minh rằng AC = BD.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(on-segment O C D)\n(parallel (segment C D) (segment A B))",
+        "id": 136
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho tứ giác ABCD có AB = CD = 8cm, AD = BC = 6cm, AC và BD cắt nhau tại O. Tính diện tích tứ giác ABCD biết diện tích tam giác AOB = 12cm².",
+        "answer": "(quadrilateral (A B C D))\n(segment A B)\n(segment C D)\n(segment A D)\n(segment B C)\n(equal-distance A B C D)\n(equal-distance A D B C)\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))",
+        "id": 137
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thang ABCD có AB // CD, AB = 10cm, CD = 6cm, hai góc ∠ADC = ∠BCD = 60°. Tính diện tích hình thang ABCD.",
+        "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(angle-measure A D C 60)\n(angle-measure B C D 60)",
+        "id": 139
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O) bán kính 10cm, hai dây AB và CD cùng độ dài 12cm. Nếu khoảng cách từ O đến AB là 4cm thì khoảng cách từ O đến CD là bao nhiêu cm?",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(equal-distance A B C D)",
+        "id": 140
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho tứ giác ABCD có ba góc ∠DAB = 70°, ∠ABC = 110°, ∠BCD = 80°. Tính số đo góc ∠CDA.",
+        "answer": "(quadrilateral (A B C D))\n(angle-measure D A B 70)\n(angle-measure A B C 110)\n(angle-measure B C D 80)",
+        "id": 141
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn ngoại tiếp tam giác ABC với đường kính BC. Chứng minh rằng góc ∠BAC nhỏ hơn 90°.",
+        "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(diameter B C O)",
+        "id": 142
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O) và dây AB. Đường thẳng qua O song song với AB cắt đường tròn tại C, D. Chứng minh rằng AC = BD.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(on-segment O C D)\n(parallel (segment C D) (segment A B))",
+        "id": 145
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), dây AB. M là trung điểm của AB. Đường thẳng qua M song song với dây CD cắt đường tròn tại P, Q. Chứng minh rằng AP = BQ.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define M point (midpoint A B))\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(define P point)\n(on-circle P O)\n(define Q point)\n(on-circle Q O)\n(segment P Q)\n(on-segment M P Q)\n(parallel (segment P Q) (segment C D))",
+        "id": 146
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), hai dây AB, CD cùng độ dài. M, N lần lượt là trung điểm của AB, CD. Chứng minh rằng đường thẳng MN đi qua tâm O.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(equal-distance A B C D)\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment M N)",
+        "id": 147
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), dây AB. Qua trung điểm M của AB kẻ đường thẳng song song với bán kính OA cắt đường tròn tại C. Chứng minh rằng MC = MB.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define M point (midpoint A B))\n(segment O A)\n(define C point)\n(on-circle C O)\n(segment M C)\n(parallel (segment M C) (segment O A))",
+        "id": 148
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho tứ giác ABCD có AC ⊥ BD giao nhau tại O, AO = 8cm, BO = 6cm. H1, H2 là hình chiếu O trên AC, BD. M trung điểm H1H2. Đường OM cắt AB tại N. Tính AN.",
+        "answer": "(quadrilateral (A B C D))\n(segment A C)\n(segment B D)\n(perpendicular (segment A C) (segment B D))\n(define O point (inter-ll A C B D))\n(define H1 point (projection O (segment A C)))\n(define H2 point (projection O (segment B D)))\n(segment O H1)\n(segment O H2)\n(define M point (midpoint H1 H2))\n(segment O M)\n(segment A B)\n(define N point (inter-ll O M A B))",
+        "id": 156
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), hai dây AB = CD = 16cm. M, N trung điểm AB, CD. OM = 8cm, ON = 10cm. H1, H2 hình chiếu O trên AB, CD. Tính khoảng cách H1H2.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(equal-distance A B C D)\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(define H1 point (projection O (segment A B)))\n(segment O H1)\n(define H2 point (projection O (segment C D)))\n(segment O H2)\n(segment H1 H2)",
+        "id": 157
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thang ABCD (AB // CD), đường cao từ B chân K trên AD, BK = 15cm. M trung điểm BK. Đường MN // AB (N trên BC) cắt AC tại P. Biết AB = 20cm. Tính AP.",
+        "answer": "(trapezoid (A B C D))\n(parallel (segment A B) (segment C D))\n(define K point (projection B (segment A D)))\n(segment B K)\n(define M point (midpoint B K))\n(define N point (segment B C))\n(segment M N)\n(parallel (segment M N) (segment A B))\n(segment A C)\n(define P point (inter-ll M N A C))",
+        "id": 158
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho tứ giác ABCD nội tiếp (O), đường chéo AC = 26cm. O giao AC và BD. H1, H2 hình chiếu O trên AC, BD. M trung điểm H1H2. Biết AO = 10cm. Tính diện tích ΔOMH1.",
+        "answer": "(quadrilateral (A B C D))\n(define O point (circumcenter A B C D))\n(circle O (circumcircle A B C D))\n(segment A C)\n(segment B D)\n(on-segment O A C)\n(on-segment O B D)\n(define H1 point (projection O (segment A C)))\n(define H2 point (projection O (segment B D)))\n(define M point (midpoint H1 H2))",
+        "id": 160
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), R = 15cm, dây AB = 18cm. M trung điểm AB. Đường qua O ⊥ AB cắt đường tròn C, D. H hình chiếu M trên CD. Đường CH cắt AB tại N. Tính AN.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define M point (midpoint A B))\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(on-segment O C D)\n(perpendicular (segment C D) (segment A B))\n(define H point (projection M (segment C D)))\n(segment C H)\n(define N point (inter-ll C H A B))",
+        "id": 161
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), hai đường kính AB, CD vuông góc tại O. H1 hình chiếu C trên AB, H2 hình chiếu D trên CD. M trung điểm H1H2. Biết R = 20cm. Tính OM.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(diameter A B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(diameter C D O)\n(segment C D)\n(perpendicular (segment A B) (segment C D))\n(define H1 point (projection C (segment A B)))\n(define H2 point (projection D (segment C D)))\n(define M point (midpoint H1 H2))\n(segment O M)",
+        "id": 163
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho tứ giác ABCD có AC = BD = 24cm cắt vuông góc tại O. H1, H2 hình chiếu O trên AC, BD. M trung điểm H1H2. AO = 9cm. Tính diện tích tứ giác.",
+        "answer": "(quadrilateral (A B C D))\n(segment A C)\n(segment B D)\n(equal-distance A C B D)\n(perpendicular (segment A C) (segment B D))\n(define O point (inter-ll A C B D))\n(define H1 point (projection O (segment A C)))\n(define H2 point (projection O (segment B D)))\n(define M point (midpoint H1 H2))",
+        "id": 164
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), R = 21cm. Dây AB = 28cm, M trung điểm AB, OM = 14cm. Đường vuông góc AB tại M cắt đường tròn C, D. H hình chiếu O trên CD. Tính OH.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define M point (midpoint A B))\n(segment O M)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(on-segment M C D)\n(perpendicular (segment C D) (segment A B))\n(define H point (projection O (segment C D)))\n(segment O H)",
+        "id": 165
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thang ABCD (AB // CD), AB = 28cm, CD = 16cm, đường cao = 12cm. M, N trung điểm AD, BC. K giao MN và AC. H chân từ D trên AB. Tính KH.",
+        "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(define M point (midpoint A D))\n(define N point (midpoint B C))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(define H point (projection D (segment A B)))\n(segment K H)",
+        "id": 166
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), đường kính AB = 34cm. C trên đường tròn, CH ⊥ AB (H hình chiếu). M trung điểm CH. Đường OM cắt AC tại N. Biết ∠AOC = 120°. Tính CN.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(diameter A B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(define H point (projection C (segment A B)))\n(segment C H)\n(define M point (midpoint C H))\n(segment O M)\n(segment A C)\n(define N point (inter-ll O M A C))\n(angle-measure A O C 120)\n(segment C N)",
+        "id": 167
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho tứ giác ABCD nội tiếp (O), R = 19cm. Đường chéo AC cắt BD tại O. H1, H2 hình chiếu B, D trên AC. M trung điểm H1H2. Tính BM.",
+        "answer": "(quadrilateral (A B C D))\n(define O point (circumcenter A B C D))\n(circle O (circumcircle A B C D))\n(segment A C)\n(segment B D)\n(on-segment O A C)\n(on-segment O B D)\n(define H1 point (projection B (segment A C)))\n(define H2 point (projection D (segment A C)))\n(define M point (midpoint H1 H2))\n(segment B M)",
+        "id": 168
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), hai dây AB = CD = 20cm. M, N trung điểm. OM = 12cm, ON = 9cm. H1, H2 hình chiếu O trên AB, CD. Tính H1H2.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(equal-distance A B C D)\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment O M)\n(segment O N)\n(define H1 point (projection O (segment A B)))\n(define H2 point (projection O (segment C D)))",
+        "id": 169
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), R = 23cm. Đường kính AB, C trên đường tròn ∠COB = 90°. H hình chiếu C trên AB. M trung điểm CH. Đường OM cắt BD tại N. Tính BN.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(diameter A B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(angle-measure C O B 90)\n(define H point (projection C (segment A B)))\n(segment C H)\n(define M point (midpoint C H))\n(segment O M)\n(segment B D)\n(define N point (inter-ll O M B D))\n(segment B N)",
+        "id": 171
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho tứ giác ABCD có AC ⊥ BD tại O, AO = 12cm, BO = 8cm. H1, H2 hình chiếu O trên AC, BD. M trung điểm H1H2. Đường OM cắt CD tại N. Tính CN.",
+        "answer": "(quadrilateral (A B C D))\n(segment A C)\n(segment B D)\n(perpendicular (segment A C) (segment B D))\n(define O point (inter-ll A C B D))\n(define H1 point (projection O (segment A C)))\n(define H2 point (projection O (segment B D)))\n(define M point (midpoint H1 H2))\n(segment O M)\n(segment C D)\n(define N point (inter-ll O M C D))\n(segment C N)",
+        "id": 172
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), dây AB = 30cm, M trung điểm, OM = 18cm. Đường qua O ⊥ AB cắt đường tròn C, D. H hình chiếu M trên CD. Đường CH cắt AB tại N. Tính AN.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define M point (midpoint A B))\n(segment O M)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(on-segment O C D)\n(perpendicular (segment C D) (segment A B))\n(define H point (projection M (segment C D)))\n(segment C H)\n(define N point (inter-ll C H A B))\n(segment A N)",
+        "id": 173
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thang ABCD (AB // CD). M, N trung điểm AD, BC. K giao MN-AC. H chân D trên AB. Tính KH.",
+        "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(equal-distance A D B C)\n(define M point (midpoint A D))\n(define N point (midpoint B C))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(define H point (projection D (segment A B)))\n(segment K H)",
+        "id": 174
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), R = 27cm. Đường kính AB, C trên đường tròn ∠AOC = 72°. H hình chiếu C trên AB. M trung điểm CH. Đường OM cắt AT tại N (T tiếp tuyến H). Tính MN.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(diameter A B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(angle-measure A O C 72)\n(define H point (projection C (segment A B)))\n(segment C H)\n(define M point (midpoint C H))\n(define T point)\n(on-circle T O)\n(tangent T (circle O) HT)\n(segment H T)\n(segment O M)\n(segment A T)\n(define N point (inter-ll O M A T))\n(segment M N)",
+        "id": 175
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho tứ giác ABCD nội tiếp (O), đường chéo AC = 28cm. O giao ACBD. H1, H2 hình chiếu O trên AB, CD. M trung điểm H1H2. Biết AO = 11cm. Tính diện tích ΔAOM.",
+        "answer": "(quadrilateral (A B C D))\n(define O point (circumcenter A B C D))\n(circle O (circumcircle A B C D))\n(segment A C)\n(segment B D)\n(on-segment O A C)\n(on-segment O B D)\n(define H1 point (projection O (segment A B)))\n(segment O H1)\n(define H2 point (projection O (segment C D)))\n(segment O H2)\n(define M point (midpoint H1 H2))\n(segment A O)\n(segment O M)",
+        "id": 176
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), hai dây AB = CD = 24cm. M, N trung điểm. OM = 15cm, ON = 10cm. H1, H2 hình chiếu O trên AB, CD. Tính khoảng cách H1H2.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(equal-distance A B C D)\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment O M)\n(segment O N)\n(define H1 point (projection O (segment A B)))\n(segment O H1)\n(define H2 point (projection O (segment C D)))\n(segment O H2)\n(segment H1 H2)",
+        "id": 177
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), R = 31cm. Đường kính AB, C trên đường tròn ∠BOC = 120°. H hình chiếu C trên AB. M trung điểm CH. Đường OM cắt DB tại N. Tính NB.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(diameter A B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(angle-measure B O C 120)\n(define H point (projection C (segment A B)))\n(segment C H)\n(define M point (midpoint C H))\n(segment O M)\n(segment D B)\n(define N point (inter-ll O M D B))\n(segment N B)",
+        "id": 179
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho tứ giác ABCD có AC = BD = 30cm cắt vuông góc O. H1, H2 hình chiếu O trên AC, BD. M trung điểm H1H2. AO = 12cm. Tính diện tích tứ giác ABCD.",
+        "answer": "(quadrilateral (A B C D))\n(segment A C)\n(segment B D)\n(equal-distance A C B D)\n(perpendicular (segment A C) (segment B D))\n(define O point (inter-ll A C B D))\n(define H1 point (projection O (segment A C)))\n(segment O H1)\n(define H2 point (projection O (segment B D)))\n(segment O H2)\n(segment H1 H2)\n(define M point (midpoint H1 H2))",
+        "id": 180
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình chữ nhật ABCD có AB = 18cm, AD = 12cm. M, N là trung điểm các cạnh AB, CD. Đường chéo AC cắt BD tại O. H là hình chiếu vuông góc của O lên AD. Tính độ dài MH.",
+        "answer": "(rectangle (A B C D))\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(define H point (projection O (segment A D)))\n(segment O H)\n(segment M H)",
+        "id": 181
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thoi ABCD có đường chéo AC = 20cm, BD = 16cm cắt nhau vuông góc tại O. Đường cao từ A chân H trên BD. M trung điểm OH. Tính diện tích tam giác AMH.",
+        "answer": "(rhombus (A B C D))\n(segment A C)\n(segment B D)\n(perpendicular (segment A C) (segment B D))\n(define O point (inter-ll A C B D))\n(define H point (projection A (segment B D)))\n(define M point (midpoint O H))\n(segment A M)\n(segment A H)\n(segment M H)",
+        "id": 182
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình bình hành ABCD có AB = 15cm, AD = 10cm, góc DAB = 60°. Đường chéo AC cắt BD tại O. H1, H2 là hình chiếu O lên AB, CD. M trung điểm H1H2. Tính OM.",
+        "answer": "(parallelogram (A B C D))\n(angle-measure D A B 60)\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(define H1 point (projection O (segment A B)))\n(segment O H1)\n(define H2 point (projection O (segment C D)))\n(segment O H2)\n(segment H1 H2)\n(define M point (midpoint H1 H2))\n(segment O M)",
+        "id": 184
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình vuông ABCD cạnh 14cm. M, N trung điểm AB, BC. Đường chéo AC cắt MN tại K. H chân đường cao từ D lên AC. Tính khoảng cách từ K đến H.",
+        "answer": "(square (A B C D))\n(define M point (midpoint A B))\n(define N point (midpoint B C))\n(segment A C)\n(segment M N)\n(define K point (inter-ll A C M N))\n(define H point (projection D (segment A C)))\n(segment D H)\n(segment K H)",
+        "id": 185
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thang ABCD (AB // CD) với AB = 30cm, CD = 18cm, đường cao = 8cm. M, N trung điểm hai chân AD, BC. K giao điểm MN và đường chéo AC. Tính AK.",
+        "answer": "(trapezoid (A B C D))\n(parallel (segment A B) (segment C D))\n(define M point (midpoint A D))\n(define N point (midpoint B C))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(segment A K)",
+        "id": 186
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình chữ nhật ABCD có AB = 20cm, BC = 8cm. Đường chéo AC = BD cắt tại O. H1, H2 hình chiếu O lên AB, AD. M trung điểm H1H2. Tính diện tích tứ giác OMH1H2.",
+        "answer": "(rectangle (A B C D))\n(segment A C)\n(segment B D)\n(equal-distance A C B D)\n(define O point (inter-ll A C B D))\n(define H1 point (projection O (segment A B)))\n(segment O H1)\n(define H2 point (projection O (segment A D)))\n(segment O H2)\n(segment H1 H2)\n(define M point (midpoint H1 H2))\n(segment O M)",
+        "id": 187
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thoi ABCD có tất cả các cạnh = 12cm, góc A = 40°. Đường chéo AC cắt BD vuông góc tại O. H chân đường cao từ B lên AC. M trung điểm OH. Tính BM.",
+        "answer": "(rhombus (A B C D))\n(angle-measure D A B 40)\n(segment A C)\n(segment B D)\n(perpendicular (segment A C) (segment B D))\n(define O point (inter-ll A C B D))\n(define H point (projection B (segment A C)))\n(segment B H)\n(define M point (midpoint O H))\n(segment B M)",
+        "id": 188
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình bình hành ABCD có AB = 16cm, AD = 12cm, đường cao tương ứng với đáy AB là 9cm. M, N trung điểm AD, BC. K giao MN và AC. H chân từ B lên AD. Tính KH.",
+        "answer": "(parallelogram (A B C D))\n(define M point (midpoint A D))\n(define N point (midpoint B C))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(define H point (projection B (segment A D)))\n(segment B H)\n(segment K H)",
+        "id": 190
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình vuông ABCD cạnh 16cm. Đường chéo AC cắt đường trung bình MN (M, N trung điểm AB, CD) tại K. H hình chiếu K lên BD. Tính khoảng cách từ H đến O (trung điểm AC).",
+        "answer": "(square (A B C D))\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment A C)\n(segment M N)\n(define K point (inter-ll A C M N))\n(segment B D)\n(define H point (projection K (segment B D)))\n(segment K H)\n(define O point (midpoint A C))\n(segment H O)",
+        "id": 191
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thang ABCD (AB // CD) với AB = 32cm, CD = 20cm, hai chân AD = BC = 15cm. H chân đường cao từ C lên AB. M trung điểm CH. Đường MB cắt CD tại N. Tính CN.",
+        "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(equal-distance A D B C)\n(define H point (projection C (segment A B)))\n(segment C H)\n(define M point (midpoint C H))\n(segment M B)\n(define N point (inter-ll M B C D))\n(segment C N)",
+        "id": 192
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình chữ nhật ABCD có AB = 24cm, AD = 10cm. M trung điểm AC, N trung điểm BD. Đường MN cắt AB tại P. H chân đường cao từ D lên MN. Tính PH.",
+        "answer": "(rectangle (A B C D))\n(segment A C)\n(segment B D)\n(define M point (midpoint A C))\n(define N point (midpoint B D))\n(segment M N)\n(segment A B)\n(define P point (inter-ll M N A B))\n(define H point (projection D (segment M N)))\n(segment D H)\n(segment P H)",
+        "id": 193
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thoi ABCD có đường chéo AC = 25cm, BD = 15cm. O giao ACBD vuông góc. H1, H2 hình chiếu A, C lên BD. M trung điểm H1H2. Tính diện tích tam giác OMB.",
+        "answer": "(rhombus (A B C D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(perpendicular (segment A C) (segment B D))\n(define H1 point (projection A (segment B D)))\n(segment A H1)\n(define H2 point (projection C (segment B D)))\n(segment C H2)\n(segment H1 H2)\n(define M point (midpoint H1 H2))\n(segment O M)\n(segment M B)",
+        "id": 194
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình bình hành ABCD có AB = 18cm, AD = 12cm, góc BAD = 30°. Đường chéo AC cắt BD tại O. H chân từ O lên AB. M trung điểm OH. Đường MC cắt AD tại N. Tính AN.",
+        "answer": "(parallelogram (A B C D))\n(angle-measure B A D 30)\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(define H point (projection O (segment A B)))\n(segment O H)\n(define M point (midpoint O H))\n(segment M C)\n(segment A D)\n(define N point (inter-ll M C A D))\n(segment A N)",
+        "id": 196
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình vuông ABCD cạnh 20cm. M, N trung điểm các cạnh liền kề AB, AD. Đường MN cắt đường chéo AC tại K. H hình chiếu K lên BD. Tính diện tích tam giác BKH.",
+        "answer": "(square (A B C D))\n(define M point (midpoint A B))\n(define N point (midpoint A D))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(segment B D)\n(define H point (projection K (segment B D)))\n(segment K H)",
+        "id": 197
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình chữ nhật ABCD có AB = 28cm, AD = 14cm. Đường chéo AC cắt đường trung bình MN (M, N trung điểm BC, DA) tại K. H hình chiếu vuông góc K lên AB. Tính KH.",
+        "answer": "(rectangle (A B C D))\n(define M point (midpoint B C))\n(define N point (midpoint D A))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(define H point (projection K (segment A B)))\n(segment K H)",
+        "id": 199
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thoi ABCD đều cạnh 15cm. Đường chéo AC = 24cm, BD = 9cm. O giao ACBD. H1, H2 hình chiếu B, D lên AC. M trung điểm H1H2. Đường OM cắt CD tại N. Tính CN.",
+        "answer": "(rhombus (A B C D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(define H1 point (projection B (segment A C)))\n(segment B H1)\n(define H2 point (projection D (segment A C)))\n(segment D H2)\n(segment H1 H2)\n(define M point (midpoint H1 H2))\n(segment O M)\n(segment C D)\n(define N point (inter-ll O M C D))\n(segment C N)",
+        "id": 200
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình chữ nhật ABCD có AB = 24cm, BC = 16cm. M và N là trung điểm hai cạnh AB và CD. Đường chéo AC cắt đường trung bình MN tại K. H là hình chiếu vuông góc của K xuống AD. Tính độ dài KH.",
+        "answer": "(rectangle (A B C D))\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(define H point (projection K (segment A D)))\n(segment K H)",
+        "id": 201
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thoi ABCD, đường chéo AC = 18cm. O là giao điểm AC và BD. H1 và H2 là hình chiếu vuông góc của O lên AB và CD. M là trung điểm H1H2. Tính diện tích tam giác AOM.",
+        "answer": "(rhombus (A B C D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(define H1 point (projection O (segment A B)))\n(segment O H1)\n(define H2 point (projection O (segment C D)))\n(segment O H2)\n(segment H1 H2)\n(define M point (midpoint H1 H2))\n(segment A O)\n(segment O M)",
+        "id": 202
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình bình hành ABCD có AB = 20cm, AD = 12cm, góc BAD = 60°. Đường chéo AC cắt BD tại O. H là hình chiếu của O xuống AB. M là trung điểm OH. Đường MA cắt CD tại N. Tính độ dài CN.",
+        "answer": "(parallelogram (A B C D))\n(angle-measure B A D 60)\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(define H point (projection O (segment A B)))\n(segment O H)\n(define M point (midpoint O H))\n(segment M A)\n(segment C D)\n(define N point (inter-ll M A C D))\n(segment C N)",
+        "id": 204
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình vuông ABCD cạnh a = 18cm. M và N là trung điểm AB và AD. Đường MN cắt đường chéo AC tại K. H là hình chiếu của K xuống BD. Tính diện tích tam giác BKH.",
+        "answer": "(square (A B C D))\n(define M point (midpoint A B))\n(define N point (midpoint A D))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(segment B D)\n(define H point (projection K (segment B D)))\n(segment K H)",
+        "id": 205
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thang ABCD (AB // CD) với AB = 28cm, CD = 16cm, đường cao h = 10cm. M và N là trung điểm hai chân AD và BC. K là giao điểm của MN và AC. H là chân đường cao từ C xuống AB. Tính khoảng cách KH.",
+        "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(define M point (midpoint A D))\n(define N point (midpoint B C))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(define H point (projection C (segment A B)))\n(segment C H)\n(segment K H)",
+        "id": 206
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình chữ nhật ABCD có AB = 30cm, AD = 18cm. Đường chéo AC cắt đường trung bình MN (M, N trung điểm BC, DA) tại K. H1 và H2 là hình chiếu của K lên AB và AD. Tính độ dài H1H2.",
+        "answer": "(rectangle (A B C D))\n(define M point (midpoint B C))\n(define N point (midpoint D A))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(define H1 point (projection K (segment A B)))\n(segment K H1)\n(define H2 point (projection K (segment A D)))\n(segment K H2)\n(segment H1 H2)",
+        "id": 207
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thoi ABCD có cạnh 14cm, góc A = 72°. Đường chéo AC cắt BD vuông góc tại O. H là chân đường cao từ B xuống AC. M là trung điểm OH. Đường MB cắt AD tại N. Tính độ dài AN.",
+        "answer": "(rhombus (A B C D))\n(angle-measure D A B 72)\n(segment A C)\n(segment B D)\n(perpendicular (segment A C) (segment B D))\n(define O point (inter-ll A C B D))\n(define H point (projection B (segment A C)))\n(segment B H)\n(segment O H)\n(define M point (midpoint O H))\n(segment M B)\n(segment A D)\n(define N point (inter-ll M B A D))\n(segment A N)",
+        "id": 208
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình bình hành ABCD có AB = 25cm, AD = 15cm, đường cao tương ứng đáy AB là 12cm. M và N là trung điểm AD và BC. K là giao điểm MN và AC. H là chân đường cao từ B xuống AD. Tính khoảng cách từ K đến H.",
+        "answer": "(parallelogram (A B C D))\n(define M point (midpoint A D))\n(define N point (midpoint B C))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(define H point (projection B (segment A D)))\n(segment B H)\n(segment K H)",
+        "id": 210
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thang ABCD (AB // CD) với AB = 40cm, CD = 24cm, hai chân AD = BC = 18cm. H là chân đường cao từ C xuống AB. M là trung điểm CH. Đường MB cắt CD tại N và AC tại P. Tính tỷ số CN:ND.",
+        "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(equal-distance A D B C)\n(define H point (projection C (segment A B)))\n(segment C H)\n(define M point (midpoint C H))\n(segment M B)\n(define N point (inter-ll M B C D))\n(segment A C)\n(define P point (inter-ll M B A C))\n(segment C N)\n(segment N D)",
+        "id": 212
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình chữ nhật ABCD. M là trung điểm AC, N là trung điểm BD. Đường MN cắt AB tại P. H là chân đường cao từ D xuống MN. Tính độ dài PH.",
+        "answer": "(rectangle (A B C D))\n(define M point (midpoint A C))\n(define N point (midpoint B D))\n(segment M N)\n(segment A B)\n(define P point (inter-ll M N A B))\n(define H point (projection D (segment M N)))\n(segment D H)\n(segment P H)",
+        "id": 213
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thoi ABCD có đường chéo AC = 30cm, BD = 16cm cắt vuông góc tại O. H1 và H2 là hình chiếu của A và C xuống BD. M là trung điểm H1H2. Đường OM cắt CD tại N. Tính độ dài CN.",
+        "answer": "(rhombus (A B C D))\n(segment A C)\n(segment B D)\n(perpendicular (segment A C) (segment B D))\n(define O point (inter-ll A C B D))\n(define H1 point (projection A (segment B D)))\n(segment A H1)\n(define H2 point (projection C (segment B D)))\n(segment C H2)\n(segment H1 H2)\n(define M point (midpoint H1 H2))\n(segment O M)\n(segment C D)\n(define N point (inter-ll O M C D))\n(segment C N)",
+        "id": 214
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình bình hành ABCD, góc BAD = 45°. Đường chéo AC cắt BD tại O. H là hình chiếu của O xuống AB. M là trung điểm OH. Đường MC cắt BC tại N. Tính độ dài BN.",
+        "answer": "(parallelogram (A B C D))\n(angle-measure B A D 45)\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(define H point (projection O (segment A B)))\n(segment O H)\n(define M point (midpoint O H))\n(segment M C)\n(segment B C)\n(define N point (inter-ll M C B C))\n(segment B N)",
+        "id": 216
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình vuông ABCD cạnh 24cm. M và N là trung điểm các cạnh liền kề AB và BC. Đường MN cắt đường chéo BD tại K. H là hình chiếu của K xuống AC. Tính diện tích tam giác AKH.",
+        "answer": "(square (A B C D))\n(define M point (midpoint A B))\n(define N point (midpoint B C))\n(segment M N)\n(segment B D)\n(define K point (inter-ll M N B D))\n(segment A C)\n(define H point (projection K (segment A C)))\n(segment K H)",
+        "id": 217
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình chữ nhật ABCD. Đường chéo AC cắt đường trung bình MN (M, N trung điểm AD, BC) tại K. H1 và H2 là hình chiếu của K lên AB và CD. Tính độ dài H1H2.",
+        "answer": "(rectangle (A B C D))\n(define M point (midpoint A D))\n(define N point (midpoint B C))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(define H1 point (projection K (segment A B)))\n(segment K H1)\n(define H2 point (projection K (segment C D)))\n(segment K H2)\n(segment H1 H2)",
+        "id": 219
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thoi ABCD đều cạnh 18cm với đường chéo AC = 28cm. O giao AC và BD vuông góc. H1 và H2 là hình chiếu của B và D lên AC. M là trung điểm H1H2. Đường OM cắt AB tại P. Tính AP.",
+        "answer": "(rhombus (A B C D))\n(segment A C)\n(segment B D)\n(perpendicular (segment A C) (segment B D))\n(define O point (inter-ll A C B D))\n(define H1 point (projection B (segment A C)))\n(segment B H1)\n(define H2 point (projection D (segment A C)))\n(segment D H2)\n(segment H1 H2)\n(define M point (midpoint H1 H2))\n(segment O M)\n(segment A B)\n(define P point (inter-ll O M A B))\n(segment A P)",
+        "id": 220
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình chữ nhật ABCD . Đường chéo AC cắt BD tại O. H1, H2 là hình chiếu vuông góc của O lên AB và CD. M là trung điểm H1H2. Tính OM.",
+        "answer": "(rectangle (A B C D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(define H1 point (projection O (segment A B)))\n(segment O H1)\n(define H2 point (projection O (segment C D)))\n(segment O H2)\n(segment H1 H2)\n(define M point (midpoint H1 H2))\n(segment O M)",
+        "id": 222
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), hai dây AB = CD = 18cm. M, N là trung điểm AB, CD. OM = 8cm, ON = 10cm. H1, H2 là hình chiếu của O lên AB, CD. Tính khoảng cách H1H2.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(equal-distance A B C D)\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment O M)\n(segment O N)\n(define H1 point (projection O (segment A B)))\n(segment O H1)\n(define H2 point (projection O (segment C D)))\n(segment O H2)\n(segment H1 H2)",
+        "id": 223
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình vuông ABCD cạnh 20cm. M, N là trung điểm AB, BC. Đường MN cắt đường chéo AC tại K. H là hình chiếu của K xuống BD. Tính diện tích tam giác BKH.",
+        "answer": "(square (A B C D))\n(define M point (midpoint A B))\n(define N point (midpoint B C))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(segment B D)\n(define H point (projection K (segment B D)))\n(segment K H)",
+        "id": 225
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thoi ABCD có đường chéo AC, BD cắt vuông góc tại O. H là chân đường cao từ B lên AC. M là trung điểm OH. Tính BM.",
+        "answer": "(rhombus (A B C D))\n(segment A C)\n(segment B D)\n(perpendicular (segment A C) (segment B D))\n(define O point (inter-ll A C B D))\n(define H point (projection B (segment A C)))\n(segment B H)\n(segment O H)\n(define M point (midpoint O H))\n(segment B M)",
+        "id": 227
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình bình hành ABCD có AB, AD, góc A = 60°. Đường chéo AC cắt BD tại O. H là hình chiếu của O lên AB. M là trung điểm OH. Tính AM.",
+        "answer": "(parallelogram (A B C D))\n(angle-measure D A B 60)\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(define H point (projection O (segment A B)))\n(segment O H)\n(define M point (midpoint O H))\n(segment A M)",
+        "id": 229
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), ba dây AB, CD, EF cùng độ dài 24cm. M, N, P là trung điểm. OM = 12cm, ON = 10cm. H là hình chiếu của O lên MN. Tính OH.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(define E point)\n(on-circle E O)\n(define F point)\n(on-circle F O)\n(segment E F)\n(equal-distance A B C D)\n(equal-distance A B E F)\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(define P point (midpoint E F))\n(segment O M)\n(segment O N)\n(segment M N)\n(define H point (projection O (segment M N)))\n(segment O H)",
+        "id": 230
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thang ABCD (AB // CD), AB = 36cm, CD = 24cm, đường cao = 12cm. M, N trung điểm AD, BC. K giao MN và AC. H chân từ C lên AB. Tính KH.",
+        "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(define M point (midpoint A D))\n(define N point (midpoint B C))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(define H point (projection C (segment A B)))\n(segment C H)\n(segment K H)",
+        "id": 231
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), dây AB = 30cm, M trung điểm AB, OM = 18cm. Đường vuông góc AB tại M cắt đường tròn C, D. H hình chiếu O lên CD. Tính diện tích hình quạt OCD.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define M point (midpoint A B))\n(segment O M)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(on-segment M C D)\n(perpendicular (segment C D) (segment A B))\n(define H point (projection O (segment C D)))\n(segment O H)",
+        "id": 233
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thoi ABCD nội tiếp đường tròn (O), cạnh 16cm. O giao ACBD. H chân B lên AC. M trung điểm OH.",
+        "answer": "(rhombus (A B C D))\n(define O1 point (circumcenter A B C D))\n(circle O1 (circumcircle A B C D))\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(define H point (projection B (segment A C)))\n(segment B H)\n(segment O H)\n(define M point (midpoint O H))\n(segment M B)",
+        "id": 234
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), R = 21cm. Đường kính AB, C trên đường tròn ∠COB = 120°. H hình chiếu C lên AB. M trung điểm CH. Đường OM cắt DB tại N. Tính NB.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(diameter A B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(angle-measure C O B 120)\n(define H point (projection C (segment A B)))\n(segment C H)\n(define M point (midpoint C H))\n(segment O M)\n(segment D B)\n(define N point (inter-ll O M D B))\n(segment N B)",
+        "id": 235
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình vuông ABCD cạnh 24cm. Đường chéo AC cắt đường trung bình MN (M, N trung điểm AB, CD) tại K. H hình chiếu K lên BD. Tính KH.",
+        "answer": "(square (A B C D))\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(segment B D)\n(define H point (projection K (segment B D)))\n(segment K H)",
+        "id": 236
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình bình hành ABCD có AB = 26cm, AD = 18cm, đường cao = 15cm. M, N trung điểm AD, BC. K giao MN-AC. H chân B lên AD. Tính KH.",
+        "answer": "(parallelogram (A B C D))\n(define M point (midpoint A D))\n(define N point (midpoint B C))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(define H point (projection B (segment A D)))\n(segment B H)\n(segment K H)",
+        "id": 237
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), R = 19cm, dây AB = 24cm. M trung điểm AB. Đường qua O ⊥ AB cắt đường tròn C, D. H hình chiếu M lên CD. Đường CH cắt AB tại N. Tính AN.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define M point (midpoint A B))\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(on-segment O C D)\n(perpendicular (segment C D) (segment A B))\n(define H point (projection M (segment C D)))\n(segment C H)\n(define N point (inter-ll C H A B))\n(segment A N)",
+        "id": 241
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thoi ABCD có cạnh 18cm, góc A = 60°. Đường chéo AC cắt BD tại O. H chân B lên AC. M trung điểm OH. Đường MB cắt AD tại N. Tính AN.",
+        "answer": "(rhombus (A B C D))\n(angle-measure D A B 60)\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(define H point (projection B (segment A C)))\n(segment O H)\n(define M point (midpoint O H))\n(segment M B)\n(segment A D)\n(define N point (inter-ll M B A D))\n(segment A N)",
+        "id": 242
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), đường kính AB = 34cm. C trên đường tròn, CH ⊥ AB (H hình chiếu). M trung điểm CH. Đường OM cắt AC tại N. ∠AOC = 90°. Tính CN.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(diameter A B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(define H point (projection C (segment A B)))\n(segment C H)\n(define M point (midpoint C H))\n(segment O M)\n(segment A C)\n(define N point (inter-ll O M A C))\n(angle-measure A O C 90)\n(segment C N)",
+        "id": 244
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình thang ABCD (AB // CD), AB = 44cm, CD = 28cm, đường cao = 16cm. M, N trung điểm AD, BC. K giao MN-AC. H chân D lên AB. Tính KH.",
+        "answer": "(trapezoid (A B C D))\n(segment A B)\n(segment C D)\n(parallel (segment A B) (segment C D))\n(define M point (midpoint A D))\n(define N point (midpoint B C))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(define H point (projection D (segment A B)))\n(segment D H)\n(segment K H)",
+        "id": 245
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình bình hành ABCD có AB = 30cm, AD = 20cm, góc A = 45°. Đường chéo AC cắt BD tại O. H hình chiếu O lên AB. M trung điểm OH. Tính AM.",
+        "answer": "(parallelogram (A B C D))\n(angle-measure D A B 45)\n(segment A C)\n(segment B D)\n(define O point (inter-ll A C B D))\n(define H point (projection O (segment A B)))\n(segment O H)\n(define M point (midpoint O H))\n(segment A M)",
+        "id": 246
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), R = 23cm. Hai dây AB = CD = 28cm. M, N trung điểm. OM = 14cm, ON = 12cm. H1, H2 hình chiếu O lên AB, CD. Tính H1H2.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(equal-distance A B C D)\n(define M point (midpoint A B))\n(define N point (midpoint C D))\n(segment O M)\n(segment O N)\n(define H1 point (projection O (segment A B)))\n(segment O H1)\n(define H2 point (projection O (segment C D)))\n(segment O H2)\n(segment H1 H2)",
+        "id": 247
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình chữ nhật ABCD có đường tròn ngoại tiếp qua 4 đỉnh, AB = 36cm. M trung điểm AC, N trung điểm BD. Đường MN cắt AB tại P. H hình chiếu P lên CD. Tính PH.",
+        "answer": "(rectangle (A B C D))\n(define O point (circumcenter A B C D))\n(circle O (circumcircle A B C D))\n(segment A C)\n(segment B D)\n(define M point (midpoint A C))\n(define N point (midpoint B D))\n(segment M N)\n(segment A B)\n(define P point (inter-ll M N A B))\n(define H point (projection P (segment C D)))\n(segment P H)",
+        "id": 248
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), R = 25cm. Đường kính AB, C trên đường tròn ∠AOC = 120°. H hình chiếu C lên AB. M trung điểm CH. Đường OM cắt DB tại N. Tính NB.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(diameter A B O)\n(segment A B)\n(define C point)\n(on-circle C O)\n(angle-measure A O C 120)\n(define H point (projection C (segment A B)))\n(segment C H)\n(define M point (midpoint C H))\n(segment O M)\n(segment D B)\n(define N point (inter-ll O M D B))\n(segment N B)",
+        "id": 250
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình vuông ABCD cạnh 32cm. Đường chéo AC cắt đường trung bình MN tại K. H hình chiếu K lên BD. O trung điểm AC. Tính khoảng cách KO.",
+        "answer": "(square (A B C D))\n(segment A C)\n(define M point (midpoint A D))\n(define N point (midpoint B C))\n(segment M N)\n(define K point (inter-ll A C M N))\n(segment B D)\n(define H point (projection K (segment B D)))\n(segment K H)\n(define O point (midpoint A C))\n(segment K O)",
+        "id": 251
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho đường tròn (O), dây AB = 36cm, M trung điểm, OM = 20cm. Đường vuông góc AB tại M cắt đường tròn C, D. H hình chiếu O lên CD. Tính diện tích quạt O-CD.",
+        "answer": "(define O point)\n(circle O)\n(define A point)\n(on-circle A O)\n(define B point)\n(on-circle B O)\n(segment A B)\n(define M point (midpoint A B))\n(segment O M)\n(define C point)\n(on-circle C O)\n(define D point)\n(on-circle D O)\n(segment C D)\n(on-segment M C D)\n(perpendicular (segment C D) (segment A B))\n(define H point (projection O (segment C D)))\n(segment O H)",
+        "id": 253
+    },
+    {
+        "image_dir": "",
+        "instruction": "Cho hình bình hành ABCD có AB = 34cm, AD = 24cm, đường cao = 18cm. M, N trung điểm AD, BC. K giao MN-AC. H chân B lên AD. Tính KH.",
+        "answer": "(parallelogram (A B C D))\n(define M point (midpoint A D))\n(define N point (midpoint B C))\n(segment M N)\n(segment A C)\n(define K point (inter-ll M N A C))\n(define H point (projection B (segment A D)))\n(segment B H)\n(segment K H)",
+        "id": 254
+    }
+]

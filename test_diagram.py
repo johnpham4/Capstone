@@ -65,7 +65,7 @@ def test_single_problem(instruction, dsl_answer, output_path):
         print(f"Instructions count: {len(builder.instructions)}")
         # print(f"Instructions: {builder.instructions}")
         opts = {
-            'epochs': 2000,
+            'epochs': 3000,
             'n_tries': 1,
             'eps': 1e-6,
             'seed': 42,
