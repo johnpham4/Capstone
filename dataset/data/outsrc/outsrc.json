@@ -9,19 +9,13 @@
         "image_dir":  "",
         "instruction":  "Cho tam giác ABC có góc A = 60 độ. Đường tròn (I) nội tiếp tam giác ABC tiếp xúc với các cạnh BC, CA, AB lần lượt tại D, E, F. ID cắt EF tại K. Đường thẳng qua K và song song với BC cắt AB, AC lần lượt tại M, N. a) Chứng minh tứ giác IMAN nội tiếp. b) Gọi J là trung điểm cạnh BC. Chứng minh ba điểm A, K, J thẳng hàng. c) Gọi r là bán kính của đường tròn (I), S là diện tích tứ giác IEAF. Tính S theo r. Chứng minh rằng S_IMN ≥ 4S [2, 3].",
         "answer":  "(triangle (A B C))\n(angle-measure B A C 60)\n(segment A B)\n(segment B C)\n(segment A C)\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(define D point (projection I (segment B C)))\n(segment I D)\n(define E point (projection I (segment A C)))\n(segment I E)\n(define F point (projection I (segment A B)))\n(segment I F)\n(segment E F)\n(define K point (inter-ll I D E F))\n(define X point)\n(segment K X)\n(parallel (segment K X) (segment B C))\n(define M point (inter-ll A B K X))\n(define N point (inter-ll A C K X))\n(segment A M)\n(segment A N)\n(segment I M)\n(segment I N)\n(define J point (midpoint B C))\n(segment A K)\n(segment K J)\n(segment A J)\n(on-segment K A J)",
-        "id":  4
+        "id": 4
     },
     {
-        "image_dir":  "",
-        "instruction":  "Cho điểm A nằm ngoài đường tròn (O;R). Vẽ hai tiếp tuyến AB, AC với đường tròn (O) (B, C là tiếp điểm). Vẽ cát tuyến ADE (D, E thuộc (O), D nằm giữa A và E). AO cắt BC tại H, cắt (O) tại I, L (I nằm giữa A và L). a) Chứng minh rằng D, H, O, E cùng thuộc một đường tròn. b) Vẽ dây DK song song với BC. Chứng minh rằng K, H, E thẳng hàng. c) Từ D vẽ đường thẳng song song với BE, cắt AB tại F và cắt BC tại G. Chứng minh rằng D là trung điểm của FG. d) Chứng minh rằng các đường thẳng BC, DL, EI đồng quy [4, 5].",
-        "answer":  "(define O point)\n(circle O)\n(define A point)\n(distance O A 1.5)\n(define B point)\n(on-circle B O)\n(segment A B)\n(tangent B (circle O) AB)\n(segment O B)\n(define C point)\n(on-circle C O)\n(segment A C)\n(tangent C (circle O) AC)\n(segment O C)\n(define D point)\n(on-circle D O)\n(define E point)\n(on-circle E O)\n(segment A D)\n(segment A E)\n(on-segment D A E)\n(segment A O)\n(segment B C)\n(define H point (inter-ll A O B C))\n(define I point (segment A O))\n(on-circle I O)\n(define L point (segment A O))\n(on-circle L O)\n(define K point)\n(on-circle K O)\n(segment D K)\n(parallel (segment D K) (segment B C))\n(segment K E)\n(segment K H)\n(on-segment H K E)\n(segment B E)\n(define X point)\n(segment D X)\n(parallel (segment D X) (segment B E))\n(define F point (inter-ll D X A B))\n(define G point (inter-ll D X B C))\n(segment F G)\n(equal-distance F D D G)\n(segment D L)\n(segment E I)",
-        "id":  6
-    },
-    {
-        "image_dir":  "",
-        "instruction":  "Cho BC là dây cung cố định của đường tròn (O;R), A di động trên cung nhỏ BC. a) Xác định vị trí A để diện tích tam giác ABC lớn nhất. b) Xác định vị trí A để chu vi tam giác ABC lớn nhất. c) Xác định vị trí A để AB² + AC² nhỏ nhất. d) Giả sử ∠BAC = ∠ACB + 90 độ. Chứng minh rằng AB² + BC² = 4R² [6].",
-        "answer":  "(define O point)\n(circle O)\n(define B point)\n(on-circle B O)\n(define C point)\n(on-circle C O)\n(segment B C)\n(define A point)\n(on-circle A O)\n(segment A B)\n(segment A C)\n(angle-equal B A C A C B)",
-        "id":  8
+        "image_dir": "",
+        "instruction": "Cho BC là dây cung cố định của đường tròn (O;R), A di động trên cung nhỏ BC. a) Xác định vị trí A để diện tích tam giác ABC lớn nhất. b) Xác định vị trí A để chu vi tam giác ABC lớn nhất. c) Xác định vị trí A để AB² + AC² nhỏ nhất. d) Giả sử ∠BAC = ∠ACB + 90 độ. Chứng minh rằng AB² + BC² = 4R² [6].",
+        "answer": "(define O point)\n(circle O)\n(define B point)\n(on-circle B O)\n(define C point)\n(on-circle C O)\n(segment B C)\n(define A point)\n(on-circle A O)\n(segment A B)\n(segment A C)",
+        "id": 8
     },
     {
         "image_dir":  "",
@@ -262,12 +256,6 @@
         "instruction":  "Cho tam giác ABC cố định. Các điểm E và F di động trên các đoạn CA, AB sao cho BF = CE. Giao điểm của BE và CF là D. Gọi H, K là trực tâm các tam giác DEF và DBC. Chứng minh rằng đường thẳng HK luôn đi qua điểm cố định khi E và F di động.",
         "answer":  "(triangle (A B C))\n(segment C A)\n(segment A B)\n(segment B C)\n(define E point (segment C A))\n(define F point (segment A B))\n(segment B F)\n(segment C E)\n(equal-distance B F C E)\n(segment B E)\n(segment C F)\n(define D point (inter-ll B E C F))\n(define H point (orthocenter D E F))\n(define K point (orthocenter D B C))\n(segment H K)",
         "id":  48
-    },
-    {
-        "image_dir":  "",
-        "instruction":  "Cho điểm A nằm ngoài đường tròn (O). Từ điểm A vẽ hai tiếp tuyến AB và AC (B, C là hai tiếp điểm) và cát tuyến ADE thay đổi với đường tròn (O) sao cho tia AD nằm giữa hai tia AO và AB. Đường thẳng qua D và song song với BE cắt BC, AB lần lượt tại P và Q. Gọi K đối xứng với B qua E. Chứng minh rằng đường thẳng PK luôn đi qua một điểm cố định.",
-        "answer":  "(triangle (A B C) (isosceles A))\n(define D point (segment A B))\n(define E point (segment A C))\n(equal-distance A D A E)",
-        "id":  49
     },
     {
         "image_dir":  "",
@@ -583,12 +571,6 @@
     },
     {
         "image_dir":  "",
-        "instruction":  "Cho đường tròn (O) và một điểm M nằm ngoài (O). Từ M kẻ 2 tiếp tuyến MA, MB đến (O) (A, B là tiếp điểm). Qua M kẻ cát tuyến MNP (MN \u003c MP) đến (O). Gọi K là trung điểm NP. Chứng minh các điểm M, A, K, O, B cùng thuộc một đường tròn.",
-        "answer":  "(triangle (A B C) (isosceles A))\n(define D point)\n(define E point)\n(segment A D)\n(segment A E)\n(equal-distance A D A E)\n(segment B D)\n(segment C E)\n(segment B C)\n(parallel (segment B D) (segment C E))\n(equal-distance B D C E)\n(angle-measure A B C 50)",
-        "id":  103
-    },
-    {
-        "image_dir":  "",
         "instruction":  "Cho nửa đường tròn đường kính AB. Gọi M là điểm chính giữa của cung AB. Trên cung AM lấy điểm N. Trên tia đối của tia MA lấy điểm D sao cho MD = MB, trên tia đối của tia NB lấy điểm E sao cho NA = NE, trên tia đối của tia MB lấy điểm C sao cho MC = MA. Chứng minh năm điểm A, B, C, D, E cùng thuộc một đường tròn.",
         "answer":  "(triangle (A B C))\n(define P point)\n(define M point (segment A B))\n(segment A B)\n(segment A C)\n(define N point (segment A C))\n(segment P M)\n(perpendicular (segment P M) (segment A B))\n(segment P N)\n(perpendicular (segment P N) (segment A C))\n(define K point)\n(define S point)\n(rhombus (K M S N))",
         "id":  104
@@ -703,12 +685,6 @@
     },
     {
         "image_dir":  "",
-        "instruction":  "Cho điểm A nằm ngoài đường tròn (O;R) [13]. Vẽ hai tiếp tuyến AB, AC với đường tròn (O) (B, C là tiếp điểm) [13]. Vẽ cát tuyến ADE sao cho D nằm giữa A và E [13]. AO cắt BC tại H [13]. Chứng minh rằng các điểm D, H, O, E cùng thuộc một đường tròn [13, 14].",
-        "answer":  "(define O point)\n(circle O)",
-        "id":  124
-    },
-    {
-        "image_dir":  "",
         "instruction":  "Tứ giác ABCD có tổng hai góc đối ABC + ADC = 180 độ [15]. Chứng minh rằng các đường trung trực của ba đoạn thẳng AC, BD và AB cùng đi qua một điểm duy nhất (tâm đường tròn ngoại tiếp tứ giác) [15].",
         "answer":  "(square (A B C D))\n(define E point (segment B C))\n(segment B E)\n(segment D C)\n(define H point (segment B E))\n(define K point (inter-ll (segment B H) (segment D C)))\n(define O point (circumcenter B H C D))\n(circle O (circumcircle B H C D))\n(on-circle B O)\n(on-circle H O)\n(on-circle C O)\n(on-circle D O)\n(segment K C)\n(segment K D)\n(segment K H)\n(equal-distance K C K D)\n(equal-distance K H K B)",
         "id":  125
@@ -718,12 +694,6 @@
         "instruction":  "Cho tam giác ABC vuông tại A [16]. Trên cạnh AC lấy điểm D, hình chiếu của D lên BC là E, điểm đối xứng của E qua BD là F [16]. Chứng minh 5 điểm A, B, E, D, F cùng nằm trên một đường tròn đường kính BD [16].",
         "answer":  "(triangle (A B C))\n(define G point (centroid A B C))\n(define M point (inter-ll G A B C))\n(define N point (inter-ll G B A C))\n(define P point (inter-ll G C A B))\n(segment B P)\n(segment P N)\n(segment N C)\n(segment C B)\n(equal-distance B P N C)\n(equal-distance A M B N)\n(equal-distance A M C P)\n(equal-distance B N B P)\n(equal-distance C P C N)\n(equal-distance A M A G)\n(equal-distance B N B G)\n(equal-distance C P C G)",
         "id":  126
-    },
-    {
-        "image_dir":  "",
-        "instruction":  "Từ điểm M nằm ngoài đường tròn (O), kẻ hai tiếp tuyến MQ, MP (P, Q là tiếp điểm) và một cát tuyến MAB (A nằm giữa M và B) [19]. Gọi I là trung điểm của AB [19]. Chứng minh rằng 5 điểm M, P, I, O, Q cùng nằm trên đường tròn đường kính OM [19].",
-        "answer":  "(triangle (A B C))\n(define S point)\n(segment S A)\n(segment S B)\n(segment S C)\n(define M point (midpoint A B))\n(define N point (midpoint B C))\n(define P point (midpoint S C))\n(define Q point (midpoint S A))\n(segment M N)\n(segment N P)\n(segment P Q)\n(segment Q M)\n(define H1 point (projection S (segment B C)))\n(segment S H1)\n(parallel (segment M Q) (segment S H1))\n(define H2 point (projection S (segment A B)))\n(segment S H2)\n(parallel (segment N P) (segment S H2))\n(equal-distance M N N P)\n(equal-distance N P P Q)\n(equal-distance P Q Q M)\n(equal-distance Q M M N)",
-        "id":  128
     },
     {
         "image_dir":  "",
