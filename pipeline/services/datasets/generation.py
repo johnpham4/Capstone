@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import json
 import re
 import time
 from langchain_openai import ChatOpenAI
@@ -143,6 +144,80 @@ Any violation is considered an error.
         return "\n".join(normalized_lines), True
 
     @classmethod
+    def _parse_model_output(cls, raw_output: object) -> list[dict]:
+        """Parse model output into a list of dict samples."""
+        if isinstance(raw_output, list):
+            # Handle content blocks from chat models, e.g. [{"type":"text","text":"..."}]
+            if raw_output and all(isinstance(item, dict) and "text" in item for item in raw_output):
+                joined_text = "\n".join(str(item.get("text", "")) for item in raw_output).strip()
+                if not joined_text:
+                    return []
+                raw_output = joined_text
+            else:
+                return [item for item in raw_output if isinstance(item, dict)]
+        if isinstance(raw_output, dict):
+            return [raw_output]
+
+        text = str(raw_output or "").strip()
+        if not text:
+            return []
+
+        cleaned = text
+        if cleaned.startswith("```"):
+            cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned, flags=re.IGNORECASE)
+            cleaned = re.sub(r"\s*```$", "", cleaned).strip()
+
+        for candidate in (cleaned, text):
+            try:
+                parsed = json.loads(candidate)
+                if isinstance(parsed, dict):
+                    return [parsed]
+                if isinstance(parsed, list):
+                    return [item for item in parsed if isinstance(item, dict)]
+            except Exception:
+                pass
+
+        for pattern in (r"(\[\s*\{.*\}\s*\])", r"(\{\s*\"instruction\".*\})"):
+            match = re.search(pattern, cleaned, flags=re.DOTALL)
+            if not match:
+                continue
+            try:
+                parsed = json.loads(match.group(1))
+                if isinstance(parsed, dict):
+                    return [parsed]
+                if isinstance(parsed, list):
+                    return [item for item in parsed if isinstance(item, dict)]
+            except Exception:
+                continue
+
+        return []
+
+    @classmethod
+    def _extract_answer_text(cls, raw_output: object) -> str:
+        """Best-effort extract raw text answer when JSON parsing fails."""
+        if isinstance(raw_output, list):
+            if raw_output and all(isinstance(item, dict) and "text" in item for item in raw_output):
+                raw_output = "\n".join(str(item.get("text", "")) for item in raw_output)
+            else:
+                raw_output = "\n".join(str(item) for item in raw_output)
+        elif isinstance(raw_output, dict):
+            # Common non-schema response shapes
+            if "answer" in raw_output:
+                raw_output = raw_output.get("answer", "")
+            elif "output" in raw_output:
+                raw_output = raw_output.get("output", "")
+
+        text = str(raw_output or "").strip()
+        if not text:
+            return ""
+
+        if text.startswith("```"):
+            text = re.sub(r"^```(?:json)?\s*", "", text, flags=re.IGNORECASE)
+            text = re.sub(r"\s*```$", "", text).strip()
+
+        return text
+
+    @classmethod
     def generate(
         cls,
         prompts: list[GenerateDatasetSamplesPrompt],
@@ -170,10 +245,6 @@ Any violation is considered an error.
             temperature=0.3,  # Lower for more deterministic output
         )
 
-        from langchain_core.output_parsers import JsonOutputParser
-        parser = JsonOutputParser()
-        chain = llm | parser
-
         total_batches = (len(prompts) + batch_size - 1) // batch_size if prompts else 0
 
         samples = []
@@ -193,11 +264,12 @@ Any violation is considered an error.
                 raw_outputs = None
                 for attempt in range(5):
                     try:
-                        raw_outputs = chain.batch(
+                        raw_messages = llm.batch(
                             batch,
                             stop=None,
                             config={"max_concurrency": max(max_concurrency, 1)},
                         )
+                        raw_outputs = [getattr(message, "content", message) for message in raw_messages]
                         break
                     except Exception as rate_err:
                         if "429" in str(rate_err) or "rate_limit" in str(rate_err).lower():
@@ -225,18 +297,23 @@ Any violation is considered an error.
                     )
 
                 for prompt, raw_output in zip(batch_prompts, raw_outputs):
-
-                    # raw_output is either a dict or list
-                    if isinstance(raw_output, list):
-                        sample_dicts = raw_output
-                    elif isinstance(raw_output, dict):
-                        sample_dicts = [raw_output]
-                    else:
-                        logger.warning(f"Unexpected output type: {type(raw_output)}")
-                        continue
+                    sample_dicts = cls._parse_model_output(raw_output)
+                    if not sample_dicts:
+                        fallback_answer = cls._extract_answer_text(raw_output)
+                        if not fallback_answer:
+                            logger.warning("Could not parse model output as JSON, skipping one prompt")
+                            continue
+                        logger.warning("Model output is non-JSON, using raw text fallback for one prompt")
+                        sample_dicts = [{
+                            "instruction": str(prompt.document.caption_vn),
+                            "answer": fallback_answer,
+                        }]
 
                     # Inject image_dir into each dict BEFORE Pydantic validation
                     for sample_dict in sample_dicts:
+                        if not isinstance(sample_dict, dict):
+                            continue
+
                         # Support question-generation prompt output format:
                         # {"caption_vn": "..."}
                         if (
@@ -246,6 +323,12 @@ Any violation is considered an error.
                         ):
                             sample_dict["instruction"] = str(prompt.document.caption_vn)
                             sample_dict["answer"] = str(sample_dict["caption_vn"])
+
+                        if "answer" not in sample_dict and "output" in sample_dict:
+                            sample_dict["answer"] = sample_dict.get("output")
+
+                        if "instruction" not in sample_dict or not sample_dict.get("instruction"):
+                            sample_dict["instruction"] = str(prompt.document.caption_vn)
 
                         sample_dict["image_dir"] = prompt.document.image_dir
 
@@ -258,12 +341,15 @@ Any violation is considered an error.
                             )
                             if not is_valid_dsl:
                                 logger.warning(
-                                    "Skipping sample due to invalid DSL syntax after normalization. "
+                                    "Keeping sample with unvalidated DSL syntax. "
                                     f"instruction={sample_dict.get('instruction', '')[:120]}"
                                 )
-                                logger.debug(f"Invalid DSL: {sample_dict.get('answer', '')}")
-                                continue
-                            sample_dict["answer"] = normalized_answer
+                                raw_answer = str(sample_dict.get("answer", "")).strip()
+                                if not raw_answer:
+                                    continue
+                                sample_dict["answer"] = raw_answer
+                            else:
+                                sample_dict["answer"] = normalized_answer
 
                         try:
                             sample = InstructDatasetSample(**sample_dict)

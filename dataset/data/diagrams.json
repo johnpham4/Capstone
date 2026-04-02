@@ -1,506 +1,1013 @@
 [
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình thoi ABCD có 𝐴̂ = 60. Gọi E, F, G, H lần lượt là trung điểm của các cạnh AB, BC, CD, DA. Chứng minh đa giác EBFGDH là lục giác đều."
+    "id": 1,
+    "problem": "Cho tam giác nhọn ABC (AB < AC) nội tiếp đường tròn (O;R). M là điểm di động trên cung nhỏ BC. Vẽ MH ⊥ BC tại H, MI ⊥ AB tại I, MK ⊥ AC tại K. a) Chứng minh rằng I, H, K thẳng hàng. b) Xác định vị trí điểm M để tổng (BC/MH) + (AC/MK) + (AB/MI) nhỏ nhất [1]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình chữ nhật ABCD. E là điểm bất kì nằm trên đường chéo AC. Đường thẳng qua E, song song với AD cắt AB, DC lần lượt tại F, G. Đường thẳng qua E, song song với AB cắt AD, BC lần lượt tại H, K. Chứng minh hai hình chữ nhật EFBK và EGDH có cùng diện tích."
+    "id": 2,
+    "problem": "Cho tam giác ABC nội tiếp đường tròn (O;R). AB = AC = R√2. M là điểm di động trên cung nhỏ AC. D là giao điểm của AM và BC. a) Chứng minh AM.AD không đổi. b) Chứng minh tâm I của đường tròn ngoại tiếp tam giác MCD nằm trên một đường cố định. c) Xác định vị trí điểm M để 2AM + AD nhỏ nhất [1, 2]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC. Gọi M, N lần lượt là trung điểm của các cạnh AB, AC. Vẽ BP ⊥ MN, CQ ⊥ MN (P, Q ∈ MN). Chứng minh tứ giác BPQC là hình chữ nhật."
+    "id": 3,
+    "problem": "Cho đường tròn (O;R), đường kính AB cố định, CD là một đường kính thay đổi không trùng với AB. Tiếp tuyến của (O) tại B cắt AC, AD lần lượt tại E, F. a) Tính BE.BF theo R. b) Chứng minh tứ giác CEFD nội tiếp. c) Chứng minh tâm I của đường tròn ngoại tiếp tam giác CDE di động trên một đường cố định [2]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình vuông ABCD. Gọi M, N lần lượt là trung điểm của AB, CD. Chứng minh các tứ giác ADCM và ABCN có diện tích bằng nhau."
+    "id": 4,
+    "problem": "Cho tam giác ABC có góc A = 60 độ. Đường tròn (I) nội tiếp tam giác ABC tiếp xúc với các cạnh BC, CA, AB lần lượt tại D, E, F. ID cắt EF tại K. Đường thẳng qua K và song song với BC cắt AB, AC lần lượt tại M, N. a) Chứng minh tứ giác IMAN nội tiếp. b) Gọi J là trung điểm cạnh BC. Chứng minh ba điểm A, K, J thẳng hàng. c) Gọi r là bán kính của đường tròn (I), S là diện tích tứ giác IEAF. Tính S theo r. Chứng minh rằng S_IMN ≥ 4S [2, 3]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình thang vuông ABCD (𝐴̂ = 𝐷̂ = 90), AB = 3cm, AD = 4cm và 𝐴𝐵𝐶 ̂ = 135. Tính diện tích của hình thang đó."
+    "id": 5,
+    "problem": "Cho BC là dây cung cố định của đường tròn (O;R) (BC ≠ 2R). A là điểm chuyển động trên cung lớn BC sao cho tam giác ABC nhọn. AD, BE, CF là các đường cao của tam giác ABC cắt nhau tại H. I là trung điểm của BC. a) Chứng minh rằng bốn điểm E, F, D, I thuộc cùng một đường tròn và BC.AC.AB = 4R.S_ABC. b) Xác định vị trí điểm A sao cho chu vi tam giác DEF lớn nhất. c) Gọi G là trọng tâm của tam giác ABC. Chứng minh rằng HG < 2/3 R. d) AO cắt BC tại T. Chứng minh (DB/DC) + (TB/TC) ≥ (AB/AC)² [3, 4]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Diện tích hình bình hành bằng 24cm². Khoảng cách từ giao điểm của hai đường chéo đến các đường thẳng chứa các cạnh hình bình hành bằng 2cm và 3cm. Tính chu vi của hình bình hành."
+    "id": 6,
+    "problem": "Cho điểm A nằm ngoài đường tròn (O;R). Vẽ hai tiếp tuyến AB, AC với đường tròn (O) (B, C là tiếp điểm). Vẽ cát tuyến ADE (D, E thuộc (O), D nằm giữa A và E). AO cắt BC tại H, cắt (O) tại I, L (I nằm giữa A và L). a) Chứng minh rằng D, H, O, E cùng thuộc một đường tròn. b) Vẽ dây DK song song với BC. Chứng minh rằng K, H, E thẳng hàng. c) Từ D vẽ đường thẳng song song với BE, cắt AB tại F và cắt BC tại G. Chứng minh rằng D là trung điểm của FG. d) Chứng minh rằng các đường thẳng BC, DL, EI đồng quy [4, 5]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC cân tại A, điểm M thuộc đáy BC. Gọi BD là đường cao của tam giác ABC; H và K chân đường vuông góc kẻ từ M đến AB và AC. Chứng minh: MH + MK = BD"
+    "id": 8,
+    "problem": "Cho BC là dây cung cố định của đường tròn (O;R), A di động trên cung nhỏ BC. a) Xác định vị trí A để diện tích tam giác ABC lớn nhất. b) Xác định vị trí A để chu vi tam giác ABC lớn nhất. c) Xác định vị trí A để AB² + AC² nhỏ nhất. d) Giả sử ∠BAC = ∠ACB + 90 độ. Chứng minh rằng AB² + BC² = 4R² [6]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình bình hành ABCD. Gọi K và L là hai điểm thuộc cạnh BC sao cho BK = KL = LC. Tính tỉ số diện tích của: a) Các tam giác DAC và DCK. b) Tam giác DAC và tứ giác ADLB. c) Các tứ giác ABKD và ABLD."
+    "id": 9,
+    "problem": "Cho BC là dây cung cố định của đường tròn (O;R) (BC ≠ 2R). A là điểm di động trên cung lớn BC. I là tâm đường tròn nội tiếp tam giác ABC. Tia AI cắt đường tròn (O) tại M, cắt BC tại D. a) Chứng minh MD.MA không đổi. b) Xác định vị trí A để bán kính đường tròn nội tiếp tam giác ABC lớn nhất. c) Gọi r1, r2 lần lượt là bán kính đường tròn nội tiếp các tam giác ABD, ACD. Xác định vị trí của A để r1 + r2 lớn nhất [6, 7]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác đều ABC, đường cao AH và điểm M thuộc miền trong của tam giác. Gọi P, Q, R lần lượt là chân đường vuông góc kẻ từ M đến BC, AC, AB. Chứng minh: MP + MQ + MR = AH"
+    "id": 10,
+    "problem": "Cho tam giác ABC. M là điểm di động trên cạnh BC. Đường tròn ngoại tiếp tam giác ACM cắt AB tại D, giao điểm của CD và BE là N. Đường tròn ngoại tiếp tam giác ABM cắt AC tại E. Hai đường tròn ngoại tiếp hai tam giác NBC, NDE cắt nhau tại N, K. Xác định vị trí của M để tổng KB + KC + KM đạt giá trị nhỏ nhất [7, 8]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC. Gọi M, N lần lượt là trung điểm của các cạnh AC, AB. Từ N kẻ đường thẳng song song với BM cắt đwòng thẳng BC tại D. Biết diện tích tam giác ABC bằng a(cm²). a) Tính diện tích hình thang CMND theo a. b) Cho a = 128cm² và BC = 32cm. Tính chiều cao của hình thang CMND."
+    "id": 11,
+    "problem": "Cho I, O lần lượt là tâm đường tròn nội tiếp, tâm đường tròn ngoại tiếp tam giác ABC với góc A = 60 độ. Gọi H là giao điểm của các đường cao BB' và CC'. Chứng minh các điểm B, C, O, H, I cùng thuộc một đường tròn [9]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tứ giác ABCD. Kéo dài AB một đoạn BM = AB, kéo dài BC một đoạn CN = BC, kéo dài CD một đoạn DP = CD và kéo dài DA một đoạn AQ = DA. Chứng minh S.MNPQ = 5S.ABCD"
+    "id": 12,
+    "problem": "Cho nửa đường tròn đường kính AB trên đó lấy hai điểm D và E (E nằm giữa A và D). AD cắt BE tại I, AE cắt BD tại F. a. Chứng minh IF ⊥ AB tại J. b. Gọi P, Q, R lần lượt là trung điểm của AB, AF, IF. Chứng minh 4 điểm J, P, Q, R cùng nằm trên một đường tròn [10]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tứ giác ABCD. Gọi M, P, N, Q lần lượt là trung điểm các cạnh AB, BC, CD, AD; O là giao điểm của MN và PQ. Chứng minh: a) S.AOQ + S.BOP = S.MPQ. b) S.AOD + S.BOC = 1/2 S.ABCD."
+    "id": 13,
+    "problem": "Cho tam giác ABC vuông tại A. Trên AC lấy điểm D. Hình chiếu của D lên BC là E, điểm đối xứng của E qua BD là F. Chứng minh 5 điểm A, B, E, D, F cùng nằm trên một đường tròn. Xác định tâm O của đường tròn đó [11]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tứ giác ABCD. Qua điểm B vẽ đường thẳng song song với đường chéo AC. Đường thẳng đó cắt cạnh DC ở E. Chứng minh: S.ADE = S.ABCD"
+    "id": 14,
+    "problem": "Cho hình vuông ABCD, hai đường chéo cắt nhau tại O. Qua O vẽ hai đường thẳng vuông góc với nhau cắt các cạnh AB, BC, CD, DA lần lượt tại M, N, P, Q. Chứng minh 4 điểm M, N, P, Q cùng thuộc một đường tròn [12]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tứ giác ABCD có AC = 10cm, BD = 12cm. Hai đường chéo AC và BD cắt nhau tại O. Biết 𝐴𝑂𝐵 ̂ = 30. Tính diện tích tứ giác ABCD."
+    "id": 15,
+    "problem": "Tính góc sút của quả phạt đền 11 mét khi biết chiều rộng cầu môn là 7,32m. Hãy chỉ ra hai vị trí khác trên sân có cùng 'góc sút' như quả phạt đền 11 mét [13]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình thang cân ABCD (AB // CD). Gọi I, J, K, L lần lượt là trung điểm của AB, BC, CD, DA. a) Tứ giác IJKL là hình gì? b) Cho biết diện tích hình thang ABCD bằng 20cm². Tính diện tích tứ giác IJKL."
+    "id": 16,
+    "problem": "Tứ giác ABCD có góc ABC + góc ADC = 180 độ. Chứng minh rằng các đường trung trực của AC, BD, AB cùng đi qua một điểm [14]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình bình hành ABCD. Vẽ phân giác AM của góc A (M ∈ CD), phân giác CN của góc C (N ∈ AB). Các phân giác AM, CN lần lượt cắt BD tại E và F. Chứng minh diện tích hai tứ giác AEFN và CFEM bằng nhau."
+    "id": 17,
+    "problem": "Cho tam giác đều ABC. Trên nửa mặt phẳng bờ BC không chứa đỉnh A, lấy điểm D sao cho DB = DC và góc DCB = 1/2 góc ACB. a) Chứng minh tứ giác ABDC là tứ giác nội tiếp. b) Xác định tâm của đường tròn đi qua bốn điểm A, B, D, C [15]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình chữ nhật ABCD có AB = 12 cm, AD = 6,8 cm. Gọi H, I, E, K là các trung điểm tương ứng của BC, HC, DC, EC. a) Tính diện tích tam giác DBE. b) Tính diện tích tứ giác EHIK."
+    "id": 18,
+    "problem": "Cho hình bình hành ABCD. Đường tròn đi qua ba đỉnh A, B, C cắt đường thẳng CD tại P khác C. Chứng minh AP = AD [16]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình vuông ABCD có tâm đối xứng O, cạnh a. Một góc vuông xOy có tia Ox cắt cạnh AB tại E, tia Oy cắt cạnh BC tại F. Tính diện tích tứ giác OEBF"
+    "id": 19,
+    "problem": "Cho đường tròn (O; R) và điểm A cố định ngoài đường tròn. Qua A kẻ hai tiếp tuyến AM, AN tới đường tròn. Một đường thẳng d đi qua A cắt đường tròn (O;R) tại B và C. Gọi I là trung điểm BC. Chứng minh năm điểm A, M, N, O, I thuộc một đường tròn [17]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Tính diện tích một hình thang vuông, biết hai đáy có độ dài 6 cm và 9 cm, góc tạo bởi cạnh bên và đáy lớn có số đo bằng 45 độ."
+    "id": 20,
+    "problem": "Cho tam giác ABC vuông tại A, đường cao AH. Từ M là điểm bất kì trên cạnh BC kẻ MD ⊥ AB, ME ⊥ AC. Chứng minh 5 điểm A, D, M, H, E cùng thuộc một đường tròn [17]."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình thang ABCD có độ dài hai đáy AB = 5cm, CD = 15cm, độ dài hai đường chéo AC = 16cm, BD = 12cm. Từ A vẽ đường thẳng song song với BD, cắt CD tại E. a) Chứng minh tam giác ACE là tam giác vuông. b) Tính diện tích hình thang ABCD."
+    "id": 21,
+    "problem": "Cho tứ giác ABCD và các điểm P, Q nằm trong tứ giác sao cho các tứ giác ABPQ và CDPQ nội tiếp đường tròn. Giả sử tồn tại điểm E thuộc đoạn PQ thỏa mãn ∠EAQ = ∠EBP và ∠EDQ = ∠ECP. Chứng minh rằng tứ giác ABCD nội tiếp đường tròn."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Gọi O là điểm nằm trong hình bình hành ABCD. Chứng minh:  S.ABO + S.CDO = S.BCO + S.DAO"
+    "id": 22,
+    "problem": "Cho tam giác ABC có góc ∠BAC < 90 độ. Giả sử P là một điểm thuộc miền trong của tam giác ABC sao cho ∠BAP = ∠ACP và ∠CAP = ∠ABP. Gọi M và N lần lượt là tâm đường tròn nội tiếp các tam giác ABP và ACP, R là độ dài đường tròn ngoại tiếp tam giác AMN. Chứng minh rằng 1/R = 1/AB + 1/AC + 1/AP."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình chữ nhật ABCD, O là điểm nằm trong hình chữ nhật, AB = a, AD = b. Tính tổng diện tích các tam giác OAB và OCD theo a và b."
+    "id": 23,
+    "problem": "Cho tứ giác ABCD nội tiếp đường tròn tâm O. Gọi I và J lần lượt là trung điểm của BD và AC. Chứng minh rằng BD là tia phân giác của góc ∠AIC khi và chỉ khi AC là tia phân giác của góc ∠BJD."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình chữ nhật ABCD. Gọi E, F là hai điểm lần lượt trên hai cạnh AB và DC sao cho AE = CF; I là điểm trên cạnh AD; IB và IC lần lượt cắt EF tại M và N. Chứng minh: S.IMN = S.MEB + S.NFC"
+    "id": 24,
+    "problem": "Cho tứ giác ABCD có diện tích S nội tiếp đường tròn bán kính R. Biết độ dài các cạnh của tứ giác là AB=a, BC=b, CD=c, DA=d và AC=e. Giả sử tồn tại một đường tròn tiếp xúc với các tia đối của BA, DA, CD, CB và 2p = a+b+c+d. Chứng minh rằng S.e / (p-e) = R^2 và 8SR^2 / e = (a+b+c+d)^2 + 2p(p-e)."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tứ giác ABCD. Chứng minh rằng ta luôn vẽ được một tam giác mà diện tích của nó bằng diện tích tứ giác ABCD. "
+    "id": 25,
+    "problem": "Cho tam giác ABC có E, F thuộc đoạn CA và BA sao cho EF song song với BC. Đường trung trực của đoạn thẳng BC cắt AC tại M, đường trung trực của đoạn EF cắt cắt AB tại N. Đường tròn ngoại tiếp tam giác BCM cắt CF tại P khác C, đường tròn ngoại tiếp tam giác EFN cắt CF tại Q khác F. Chứng minh rằng đường trung trực của PQ đi qua trung điểm của MN."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC có BC = a, đường cao AH = h. Từ điểm I trên đường cao AH, vẽ đường thẳng song song với BC, cắt hai cạnh AB, AC lần lượt tại M và N. Vẽ MQ, NP vuông góc với BC. Đặt AI = x. a) Tính diện tích tứ giác MNPQ theo a, h, x. b) Xác định vị trí điểm I trên AH để diện tích tứ giác MNPQ lớn nhất."
+    "id": 26,
+    "problem": "Cho tam giác ABC nhọn nội tiếp đường tròn (O) với đường cao AD. Tiếp tuyến tại B và C với đường tròn (O) cắt nhau tại T. Trên đoạn thẳng AD lấy K sao cho ∠BKC = 90 độ. Gọi G là trọng tâm tam giác ABC, KG cắt OT tại L. Lấy các điểm P và Q thuộc đoạn BC sao cho LP song song với OB và LQ song song với OC. Các điểm E và F lần lượt thuộc đoạn AC và AB sao cho QE và PF cùng vuông góc với BC. Gọi (T) là đường tròn tâm T đi qua B, C. Chứng minh rằng đường tròn ngoại tiếp tam giác AEF tiếp xúc với đường tròn (T)."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình thang ABCD (AB // CD). Gọi M, N lần lượt là trung điểm của AB, CD. Một đường thẳng song song với hai đáy cắt AD ở E, MN ở I, BC ở F. Chứng minh IE = IF."
+    "id": 27,
+    "problem": "Cho tam giác ABC và một điểm D trên cạnh BC (D khác B và C). Gọi E và F lần lượt là tâm đường tròn nội tiếp các tam giác ABD và ACD. Chứng minh rằng nếu bốn điểm B, C, E, F cùng nằm trên một đường tròn thì ta có (AD+DB)/AB = (AD+CD)/AC."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tứ giác ABCD. Qua trung điểm K của đường chéo BD, vẽ đường thẳng song song với đường chéo AC, cắt AD tại E. Chứng minh CE chia tứ giác thành hai phần có diện tích bằng nhau."
+    "id": 28,
+    "problem": "Cho tứ giác ABCD có AB > BC và ngoại tiếp đường tròn tâm O. Gọi E và F lần lượt là giao điểm của BD với đường tròn (O). Đường thẳng qua O vuông góc với AC tại H. Chứng minh ∠BHE = ∠DHF."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC. Trên cạnh AC lấy các điểm M, N sao cho AM = MN = NC. Đường thẳng qua M, song song với AB, cắt đường thẳng qua N song song với BC tại O. Chứng minh OA, OB, OC chia tam giác ABC thành ba phần có diện tích bằng nhau."
+    "id": 29,
+    "problem": "Cho tam giác ABC nội tiếp đường tròn (O). Đường tròn (O') tiếp xúc trong với đường tròn (O) và tiếp xúc với các cạnh AB, BC lần lượt tại R, P, Q. Gọi K là tâm đường tròn nội tiếp tam giác ABC. Chứng minh rằng ∠ARK = ∠CRK."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC, G là trọng tâm. Qua G vẽ đường thẳng song song với cạnh AC, cắt các cạnh AB, BC lần lượt ở D và E. Tính độ dài đoạn thẳng DE, biết DA+EC=16cm và chu vi tam giác ABC bằng 75cm."
+    "id": 30,
+    "problem": "Giả sử M và N là các điểm nằm trong tam giác ABC sao cho ∠MAB = ∠NAC và ∠MBA = ∠NBC. Chứng minh rằng AM.AN / (AB.AC) + BM.BN / (BA.BC) + CM.CN / (CA.CB) = 1."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình thang ABCD (AB // CD). Đường thẳng song song hai đáy cắt cạnh AD tại M, cắt cạnh BC tại N sao cho MD = 3MA. a) Tính tỉ số NB/NC. b) Cho AB = 8cm, CD = 20cm. Tính MN."
+    "id": 31,
+    "problem": "Cho tứ giác ABCD có ∠ABC = ∠CDA = 90 độ. Gọi H là hình chiếu của A trên BD. Gọi S và T lần lượt là điểm nằm trên AB, AD sao cho H nằm trong tam giác SCT và ∠CHS - ∠CSB = 90; ∠THC - ∠DTC = 90. Chứng minh rằng đường thẳng BD tiếp xúc với đường tròn ngoại tiếp tam giác TSH."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC. Gọi D là điểm chia cạnh AB thành hai đoạn thẳng có độ dài AD = 13,5cm, DB = 4,5cm. Tính tỉ số các khoảng cách từ các điểm D và B đến cạnh AC."
+    "id": 32,
+    "problem": "Cho tam giác ABC có trực tâm H. Đường phân giác ngoài của góc BHC cắt cạnh AB, AC lần lượt tại D và E. Đường phân giác trong của góc BAC cắt đường tròn ngoại tiếp tam giác ADE tại K. Chứng minh rằng KH đi qua trung điểm của đoạn BC."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tứ giác ABCD, O là giao điểm của hai đường chéo. Qua điểm I thuộc đoạn OB, vẽ đường thẳng song song với đường chéo AC, cắt các cạnh AB, BC và các tia DA, DC theo thứ tự tại các điểm M, N, P, Q. a) Chứng minh: IM/OA = IB/OB và IM/IP = IB/ID . OD/OB  b) IM/IP = IN/IQ"
+    "id": 33,
+    "problem": "Cho tam giác ABC có AB + AC = 3BC. Đường tròn (I) nội tiếp tam giác ABC tiếp xúc với BC tại D. Gọi T là một điểm đối xứng với D qua I. Các đường thẳng BT và CT cắt cạnh AC, AB lần lượt tại M, N. Chứng minh rằng tâm đường tròn ngoại tiếp tam giác TMN nằm trên AI."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình bình hành ABCD. Gọi E là trung điểm của cạnh AB, F là trung điểm của cạnh CD. Chứng minh rằng hai đoạn thẳng DE và BF chia đường chéo AC thành ba đoạn bằng nhau."
+    "id": 34,
+    "problem": "Cho tam giác ABC nội tiếp đường tròn (O) có AB + AC = 2BC. Đường tròn (I) nội tiếp tam giác ABC tiếp xúc với các cạnh BC, CA, AB lần lượt tại D, E, F. Gọi Mb, Mc lần lượt là trung điểm của CA và AB. Giao điểm của MbMc và EF là L. Chứng minh rằng đường tròn (L; LI) tiếp xúc với các đường tròn (I) và đường tròn đường kính AO."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tứ giác ABCD có các góc B và D là góc vuông. Từ một điểm M trên đường chéo AC, vẽ MN ⊥ BC, MP ⊥ AD. Chứng minh: MN/AB + MP/CD = 1."
+    "id": 35,
+    "problem": "Cho tam giác nhọn ABC không cân nội tiếp đường tròn (O) có các đường cao AD, BE, CF cắt nhau tại H. Đường thẳng EF cắt BC tại P. Qua D vẽ đường thẳng song song với EF cắt AC tại Q và cắt AB tại M. Chứng minh rằng đường tròn ngoại tiếp tam giác PQM đi qua trung điểm của BC."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình bình hành ABCD. Một cát tuyến qua D, cắt đường chéo AC ở I và cắt cạnh BC ở N, cắt đường thẳng AB ở M. a) Chứng minh rằng tích AM.CN không phụ thuộc vào vị trí của cát tuyến qua D. b) Chứng minh hệ thức: ID² = IM.IN."
+    "id": 36,
+    "problem": "Cho tam giác ABC vuông tại A có đường cao AH. Gọi Q, I, J lần lượt là tâm đường tròn nội tiếp các tam giác ABC, ABH, ACH. Gọi R là bán kính đường tròn nội tiếp tam giác ABC. Chứng minh rằng hai đường thẳng AQ và IJ vuông góc với nhau tại K và (KI.KJ) / (R.AH) = 2/BC."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình chữ nhật ABCD. Trên các cạnh AB, BC, CD, DA lần lượt lấy các điểm E, F, G, H sao cho AE/AB = AH/AD = CF/CB = CG/CD. a) Chứng minh tứ giác EFGH là hình bình hành. b) Chứng minh hình bình hành EFGH có chu vi không đổi."
+    "id": 37,
+    "problem": "Cho hai đường tròn tâm O và O’ cắt nhau tại A và B sao cho OA vuông góc với O’A. OO’ cắt hai đường tròn tại C, E, D, F sao cho các điểm C, O, E, D, O’, F nằm trên đường thẳng theo thứ tự đó. BE cắt đường tròn (O) tại điểm thứ hai là K và cắt CA tại M. BD cắt đường tròn (O’) tại điểm thứ hai là L và cắt AF tại N. Chứng minh rằng: (KE/KM) . (LN/LD) = O'E/OD."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": " Cho hình thang ABCD (AB // CD), M là trung điểm của CD. Gọi I là giao điểm của AM và BD, K là giao điểm của BM và AC. a) Chứng minh IK // AB. b) Đường thẳng IK cắt AD, BC lần lượt ở E và F. Chứng minh EI = IK = KF."
+    "id": 38,
+    "problem": "Cho tam giác ABC nhọn có các đường cao AA’, BB’, CC’. Gọi D, E, F lần lượt là tâm đường tròn bàng tiếp trong các góc B'AC', C'A'B, B'A'C của các tam giác AB’C’, BC’A’, CA’B’ tương ứng. Đường tròn bàng tiếp trong góc BAC của tam giác ABC tiếp xúc với BC, CA, AB lần lượt tại M, N, P. Chứng minh rằng tâm đường tròn ngoại tiếp tam giác DEF là trực tâm tam giác MNP."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình thang ABCD có đáy nhỏ CD. Từ D, vẽ đường thẳng song song với cạnh BC, cắt AC tại M và AB tại K. Từ C, vẽ đường thẳng song song với cạnh bên AD, cắt cạnh đáy AB tại F. Qua F, vẽ đường thẳng song song với đường chéo AC, cắt cạnh bên BC tại P. Chứng minh rằng: a) MP song song với AB. b) Ba đường thẳng MP, CF, DB đồng quy."
+    "id": 39,
+    "problem": "Cho tam giác ABC vuông tại A. Gọi I là giao điểm ba đường phân giác của tam giác. Gọi D, E, F lần lượt là hình chiếu của I trên các cạnh BC, AC, AB. Gọi M là trung điểm cạnh AC. Đường thẳng MI cắt AB tại N, đường thẳng DF cắt đường cao AH tại P. Chứng minh tam giác ANP là tam giác cân."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tứ giác ABCD, O là giao điểm của hai đường chéo AC và BD. Đường thẳng song song với BC qua O, cắt AB ở E và đường thẳng song song với CD qua O, cắt AD ở F. a) Chứng minh đường thẳng EF song song với đường chéo BD. b) Từ O vẽ các đường thẳng song song với AB và AD, cắt BC và DC lần lượt tại G và H. Chứng minh hệ thức: CG.DH = BG.CH."
+    "id": 40,
+    "problem": "Cho tam giác nhọn ABC, lấy điểm X nằm trong tam giác và điểm Y, Z nằm ngoài tam giác sao cho các tam giác XBC, YCA, ZBA đồng dạng với nhau. Đường thẳng YZ cắt AB, AC lần lượt tại M và N. Gọi P là trung điểm của BC. Chứng minh rằng YN = ZM khi và chỉ khi ∠PAB = ∠XAC."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC có độ dài các cạnh AB = m, AC = n; AD là đường phân giác trong của góc A. Tính tỉ số diện tích của tam giác ABD và tam giác ACD."
+    "id": 41,
+    "problem": "Cho tam giác ABC không vuông có các đường cao BE và CF cắt nhau tại H. Gọi M, N, P, Q, S theo thứ tự là trung điểm của BF, CE, BE, CF, EF. Đường thẳng qua M vuông góc với BS và đường thẳng qua N vuông góc với CS cắt nhau tại K. Đường thẳng qua P vuông góc với BS và đường thẳng qua Q vuông góc với CS cắt nhau tại L. Chứng minh rằng 2KL = AH."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC cân ở A, phân giác trong BD, BC = 10cm, AB = 15cm. a) Tính AD, DC. b) Đường phân giác ngoài của góc B của tam giác ABC cắt đường thẳng AC tại D'. Tính D'C."
+    "id": 42,
+    "problem": "Cho tam giác ABC có D là chân đường cao hạ từ đỉnh C. Trên cạnh AB lấy điểm các E, F sao cho ∠ACE = ∠BCF = 90 độ. Lấy điểm X trên đoạn CD và điểm K trên đoạn FX sao cho BK = BC. Lấy điểm L trên đoạn EX sao cho AL = AC. Gọi giao điểm của AL và BK là M. Chứng minh rằng ML = MK."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC, trung tuyến AM và đường phân giác trong AD. a) Tính diện tích tam giác ADM, biết AB = m, AC = n (n > m) và diện tích ΔABC bằng S. b) Cho n = 7cm, m = 3cm. Diện tích tam giác ADM chiếm bao nhiêu phần trăm diện tích tam giác ABC?"
+    "id": 43,
+    "problem": "Cho tam giác ABC có M là trung điểm của AC và D là điểm trên cạnh BC sao cho DB = DM. Biết rằng 2BC^2 - AC^2 = AB.AC. Chứng minh (2AC.AB) / (BD.CD) = (AB+AC)^2."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC có AB = 5cm, AC = 6cm, BC = 7cm. Gọi G là trọng tâm tam giác ABC, O là giao điểm của hai đường phân giác BD, AE. a) Tính độ dài đoạn thẳng AD. b) Chứng minh OG // AC."
+    "id": 44,
+    "problem": "Cho tam giác ABC và các điểm D, E, F lần lượt là các tiếp điểm của đường tròn bàng tiếp góc A, B, C với các cạnh BC, CA, AB của tam giác ABC. Chứng minh rằng nếu tâm đường tròn ngoại tiếp tam giác DEF nằm trên đường tròn ngoại tiếp tam giác ABC thì tam giác ABC vuông."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC, trung tuyến AM, đường phân giác của góc 𝐴𝑀𝐵 ̂ cắt AB ở D, đường phân giác của góc 𝐴𝑀𝐶 ̂ cắt cạnh AC ở E. Chứng minh DE // BC."
+    "id": 45,
+    "problem": "Cho đường tròn nội tiếp tam giác ABC tiếp xúc với các cạnh AB và AC lần lượt tại P và Q. Gọi giao điểm của BI và CI với PQ lần lượt là K và L. Chứng minh rằng đường tròn ngoại tiếp tam giác ILK tiếp xúc với đường tròn (I) khi và chỉ khi AB + AC = 3BC."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC (AB < AC), AD là phân giác trong của góc A. Qua trung điểm E của cạnh BC, vẽ đường thẳng song song với AD, cắt cạnh AC tại F, cắt đường thẳng AB tại G. Chứng minh CF = BG."
+    "id": 46,
+    "problem": "Cho đường tròn (O; R) có đường kính AB và một điểm M bất kì nằm trong (O) nhưng không nằm trên đường kính AB. Gọi N là giao điểm của đường phân giác trong của góc ∠AMB với đường tròn (O). Đường phân giác ngoài của góc ∠AMB cắt đường thẳng NA, NB lần lượt tại P và Q. Đường thẳng MA cắt đường tròn đường kính NQ tại R, đường thẳng MB cắt đường tròn đường kính NP tại S (R, S khác M). Chứng minh rằng đường trung tuyến ứng với đỉnh N của tam giác NRS luôn đi qua một điểm cố định khi M di động phía trong đường tròn."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình thang cân ABCD, đáy lớn DC, góc 𝐷̂ = 60. Đường phân giác của góc D cắt đường chéo AC tại I, chia AC thành hai đoạn theo tỉ số 4/11 và cắt đáy AB tại M. Tính các cạnh đáy AB, DC, biết MA – MB = 6cm."
+    "id": 47,
+    "problem": "Cho tam giác nhọn ABC cố định và không cân nội tiếp đường tròn (O), đường phân giác AD. Lấy điểm P di động trên đoạn thẳng AD và điểm Q trên đoạn thẳng AD sao cho ∠PBC = ∠QBA. Gọi R là hình chiếu của Q trên BC. Đường thẳng d đi qua R và vuông góc với OP. Chứng minh rằng đường thẳng d luôn đi qua điểm cố định khi P di chuyển."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình bình hành ABCD. Một đường thẳng cắt AB ở E, AD ở F và cắt đường chéo AC ở G. Chứng minh hệ thức: AB/AE + AD/AF = AC/AG."
+    "id": 48,
+    "problem": "Cho tam giác ABC cố định. Các điểm E và F di động trên các đoạn CA, AB sao cho BF = CE. Giao điểm của BE và CF là D. Gọi H, K là trực tâm các tam giác DEF và DBC. Chứng minh rằng đường thẳng HK luôn đi qua điểm cố định khi E và F di động."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình bình hành ABCD. Trên cạnh AB lấy một điểm M và trên cạnh CD lấy một điểm N sao cho DN = BM. Chứng minh rằng ba đường thẳng MN, DB, AC đồng quy."
+    "id": 49,
+    "problem": "Cho điểm A nằm ngoài đường tròn (O). Từ điểm A vẽ hai tiếp tuyến AB và AC (B, C là hai tiếp điểm) và cát tuyến ADE thay đổi với đường tròn (O) sao cho tia AD nằm giữa hai tia AO và AB. Đường thẳng qua D và song song với BE cắt BC, AB lần lượt tại P và Q. Gọi K đối xứng với B qua E. Chứng minh rằng đường thẳng PK luôn đi qua một điểm cố định."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác A'B'C' đòng dạng với tam giác ABC theo tỉ số k. Tính tỉ số chu vi của hai tam giác."
+    "id": 50,
+    "problem": "Cho đường tròn (O; R) đường kính AB cố định. Lấy C là một điểm di động trên đường tròn (O) sao cho BC > AC. Vẽ CH vuông góc với AB tại H, HM vuông góc với AC tại M. Đường thẳng qua O song song với BC cắt tia tiếp tuyến tại A với đường tròn (O) ở E. Đường thẳng qua O vuông góc với AB cắt BC tại D. Gọi I là giao điểm của BE với AC. Các tiếp tuyến tại O và D của đường tròn ngoại tiếp tam giác OBD cắt nhau tại G. Đường thẳng qua B vuông góc với IH cắt CH tại N. Đường tròn ngoại tiếp tam giác AMN cắt CH tại điểm K khác N. Chứng minh rằng đường thẳng GK luôn đi qua một điểm cố định."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình vuông ABCD. Trên hai cạnh AB, BC lấy hai điểm P và Q sao cho BP = BQ. Gọi H là hình chiếu của B trên đường thẳng CP. a) Chứng minh ΔBHP ∽ ΔCHB. b) Chứng minh ΔCHD ∽ ΔBHQ. Từ đó suy ra 𝐷𝐻𝑄 ̂ = 90."
+    "id": 51,
+    "problem": "Cho tam giác ABC nội tiếp đường tròn (O) có H là trực tâm. Đường trung tuyến AM cắt đường tròn (O) tại N khác A. Đường thẳng AH cắt đường tròn (O) tại điểm K khác A. Các đường thẳng KN, BC và đường thẳng qua H vuông góc với AN cắt nhau theo từng đôi một tạo thành tam giác XYZ. Chứng minh rằng đường tròn ngoại tiếp tam giác XYZ tiếp xúc với đường tròn (O)."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Hai tam giác ABC và DEF có 𝐴̂ = 𝐷̂; 𝐵̂ = 𝐸̂, AB = 8cm, BC = 10cm, DE = 6cm. a) Tính độ dài các cạnh AC, DF, EF, biết rằng cạnh AC dài hơn cạnh DF là 3cm. b) Cho diện tích tam giác ABC bằng 39,69cm². Tính diện tích tam giác DEF."
+    "id": 52,
+    "problem": "Cho tam giác đều ABC nội tiếp đường tròn (O; R). Quay tam giác ABC một góc 90 độ quanh O ta thu được tam giác A1B1C1. Tính diện tích phần chung của hai tam giác ABC và A1B1C1."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC vuông tại A, đường cao AH, BH = 4cm, CH = 9cm. Gọi I, K lần lượt là hình chiếu của H lên AB, AC. a) Chứng minh ΔAKI ∽ ΔABC. b) Tính diện tích tam giác ABC. c) Tính diện tích của tứ giác AKHI."
+    "id": 53,
+    "problem": "Cho tứ giác lồi nội tiếp ABCD có đường tròn nội tiếp tâm I. Gọi O là giao điểm của AC và BD. Chứng minh rằng (AO/CO) = (AI/CI)^2."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC, hai trung tuyến BM và CN cắt nhau tại G. Tính diện tích tam giác GMN, biết diện tích tam giác ABC bằng S."
+    "id": 54,
+    "problem": "Cho tam giác ABC có góc A < 90 độ và AC = 2AB. Đường phân giác AD cắt đường cao BH tại K (D thuộc BC, H thuộc AC). Đường thẳng CK cắt AB tại E. Chứng minh rằng tam giác ABC vuông tại B khi và chỉ khi diện tích của hai tam giác BDE và HDE bằng nhau."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình vuông ABCD, cạnh a. Gọi E là điểm đối xứng với C qua D, EB cắt AD tại I. Trên EB lấy điểm M sao cho DM = DA. a) Chứng minh ΔEMC ∽ ΔECB. b) Chứng minh EB.MC = 2a². c) Tính diện tích tam giác EMC theo a."
+    "id": 55,
+    "problem": "Cho tam giác nhọn ABC có ba đường cao AA’, BB’, CC’. Gọi D, E và F lần lượt là tâm đường tròn nội tiếp các tam giác AB’C’, BC’A’ và CA’B’. Tính bán kính đường tròn ngoại tiếp tam giác DEF theo độ dài các cạnh của tam giác ABC."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC vuông tại A. Trên cạnh AB, lấy điểm M sao cho 2AM = 3MB. Một đường thẳng qua M, song song với BC, cắt AC tại N. Một đường thẳng qua N, song song với AB, cắt BC tại D. a) Chứng minh ΔAMN ∽ ΔNDC. b) Cho AN = 8cm, BM = 4cm. Tính diện tích các tam giác AMN, ABC và NDC."
+    "id": 56,
+    "problem": "Cho tam giác ABC nội tiếp đường tròn (O; R) có các đường cao AD, BE, CF. Tìm công thức liên hệ giữa diện tích tam giác ABC với chu vi tam giác DEF."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC, G là trọng tâm của tam giác. Gọi E, F, H lần lượt là trung điểm của AG, BG, CG. Chứng minh các tam giác EFH và ABC đồng dạng với nhau và G là trọng tâm của tam giác EFH."
+    "id": 57,
+    "problem": "Cho tam giác ABC có diện tích S ngoại tiếp đường tròn (O; r). Kẻ ba tiếp tuyến của đường tròn (O; r) song song với các cạnh BC, CA, AB. Các tiếp tuyến này tạo thành các tam giác nhỏ có diện tích S1, S2, S3. Chứng minh rằng (S1+S2+S3)/S >= 2/3."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC. Trên các cạnh BC, CA, AB lấy lần lượt các điểm M, N, P sao cho AM, BN, CP đồng quy tại O. Qua A và C vẽ các đường thẳng song song với BO cắt CO, OA lần lượt ở E và F. Chứng minh: ΔFCM ∽ ΔOMB và ΔPAE ∽ ΔPBO."
+    "id": 58,
+    "problem": "Cho tam giác ABC nội tiếp đường tròn (O; R) và ba đường trung tuyến ma, mb, mc. Chứng minh rằng 1/ma + 1/mb + 1/mc >= 2/R."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC có AB = 15cm, AC = 20cm. Trên hai cạnh AB, AC lần lượt lấy 2 điểm D, E sao cho AD = 8cm, AE = 6cm. a) Chứng minh AED ∽ ABC. b) Tính chu vi của tam giác ADE, khi biết BC = 25cm. c) Tính góc ADE, biết 𝐶̂ = 20."
+    "id": 59,
+    "problem": "Cho tam giác nhọn ABC có diện tích S và BC = a. Trên cạnh BC lấy điểm D sao cho DB/DC = k. Tính diện tích tam giác có đỉnh là tâm các đường tròn ngoại tiếp các tam giác ABC, ABD, ACD theo a, k, S."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho góc xOy . Trên cạnh Ox, lấy 2 điểm A, B sao cho OA = 5cm, OB = 16cm. Trên cạnh Oy, lấy 2 điểm C, D sao cho OC = 8cm, OD = 10cm. a) Chứng minh: ΔOCB ∽ ΔOAD. b) Gọi I là giao điểm của AD và BC. Chứng minh 𝐵𝐴𝐼 ̂ = 𝐷𝐶𝐼 ̂ ."
+    "id": 60,
+    "problem": "Cho tam giác ABC có ra, rb, rc lần lượt là bán kính đường tròn bàng tiếp các góc A, B, C. Gọi R, r lần lượt là bán kính đường tròn ngoại tiếp và nội tiếp tam giác. Chứng minh rằng ra + rb + rc = 4R + r."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình bình hành ABCD. Vẽ CE ⊥ AB và CF ⊥ AD, BH ⊥ AC. a) Chứng minh ΔABH ∽ ΔACE. b) Chứng minh: AB.AE + AD.AF = AC^2"
+    "id": 61,
+    "problem": "Cho tam giác đều ABC nội tiếp đường tròn tâm O. Chứng minh rằng tổng các bình phương của khoảng cách từ một điểm bất kì trên đường tròn đến các cạnh của tam giác đều ABC bằng bình phương đường cao của tam giác đó."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình thang ABCD (AB // CD). Gọi O là giao điểm của hai đường chéo AC và BD. a) Chứng minh OA.OD = OB.OC. b) Đường thẳng qua O, vuông góc với AB, CD theo thứ tự tại H, K. Chứng minh OH/OK = AB/CD."
+    "id": 62,
+    "problem": "Cho tam giác ABC có ma, lb, lc và p theo thứ tự là độ dài đường trung tuyến hạ từ đỉnh A, độ dài đường phân giác trong hạ từ đỉnh B, C và nửa chu vi của tam giác. Chứng minh rằng ma + lb + lc <= p*sqrt(3)."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC có ba góc nhọn. Gọi O là giao điểm của ba đường cao AH, BK, CI. a) Chứng minh OK.OB = OI.OC b) Chứng minh ΔOKI ∽ ΔOCB c) Chứng minh ΔBOH ∽ ΔBCK d) Chứng minh BO.BK + CO.CI = BC^2"
+    "id": 63,
+    "problem": "Cho tam giác nhọn ABC có ha, hb, hc và la, lb, lc tương ứng là các đường cao và đường phân giác hạ từ đỉnh A, B, C. Gọi r và R lần lượt là bán kính đường tròn nội tiếp và đường tròn ngoại tiếp tam giác ABC. Chứng minh rằng (ha/la - 1)(hb/lb - 1)(hc/lc - 1) <= r/4R * sin(A/2)sin(B/2)sin(C/2)."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC vuông ở A, AB = 5,4cm, AC = 7,2cm. a) Tính BC. b) Từ trung điểm M của BC, vẽ đường thẳng vuông góc với BC, cắt đường thẳng AC tại H và cắt đường thẳng AB tại E. Chứng minh ΔEMB ∽ ΔCAB. c) Tính EB và EM. d) Chứng minh BH vuông góc với EC. e) Chứng minh HA.HC = HM.HE."
+    "id": 64,
+    "problem": "Cho hình vuông ABCD có cạnh a và hai điểm M, N thay đổi lần lượt trên BC, CD sao cho góc MAN = 45 độ. Tìm giá trị lớn nhất và nhỏ nhất của diện tích tam giác AMN."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC vuông ở A, đường cao AH. a) Hãy nêu từng cặp các tam giác đồng dạng. b) Cho AB = 12,45cm, AC = 20,50cm. Tính độ dài các đoạn thẳng BC, AH, BH, CH"
+    "id": 65,
+    "problem": "Cho hình chữ nhật ABCD có AB < BC. Vẽ nửa đường tròn đường kính AB trên nửa mặt phẳng chứa CD. Gọi M là điểm bất kì trên nửa đường tròn. MA, MB cắt CD tại P, Q; MC, MD cắt AB tại E, F. Xác định vị trí của M để PQ + EF có giá trị nhỏ nhất."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tứ giác ABCD, có 𝐷𝐵𝐶 ̂ = 90, AD = √20cm, AB = 4cm, DB = 6cm, DC = 9cm. a) Tính góc 𝐵𝐴𝐷 ̂ b) Chứng minh ΔBAD ∽ ΔDBC c) Chứng minh DC // AB."
+    "id": 66,
+    "problem": "Trong các tam giác nội tiếp đường tròn (O; R) cho trước, tìm tam giác có chu vi lớn nhất."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác cân ABC, AB = AC = b, BC = a. Vẽ các đường cao BH, CK. a) Chứng minh BK = CH b) Chứng minh KH // BC c) Tính độ dài HC và HK."
+    "id": 67,
+    "problem": "Cho tứ giác ABCD nội tiếp đường tròn. Chứng minh rằng: |AB - CD| >= |AC - BD|."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC. Gọi M, N theo thứ tự là trung điểm của BC, AC. O là giao điểm các đường trung trực, H là trực tâm, G là trọng tâm của tam giác ABC. a) Chứng minh ΔOMN ∽ ΔHAB. b) So sánh độ dài AH và OM. c) Chứng minh ΔHAG ∽ ΔOMG. d) Chứng minh ba điểm H, G, O thẳng hàng và GH = 2GO."
+    "id": 68,
+    "problem": "Cho tam giác ABC và đường tròn (I) nội tiếp tam giác tiếp xúc với các cạnh AB, BC, CA lần lượt tại F, D, E. Gọi M là giao điểm của BC với đường phân giác trong của góc BIC và N là giao điểm của EF với đường phân giác trong của góc EDF. Chứng minh rằng ba điểm A, M, N thẳng hàng."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC, các đường cao AK và BD cắt nhau tại G. Vẽ các đường trung trực HE, HF của AC và BC. Chứng minh: a) BG = 2HE b) AG = 2HF."
+    "id": 69,
+    "problem": "Gọi O là tâm đường tròn nội tiếp tam giác nhọn ABC. Đường tròn (O) tiếp xúc với các cạnh AB, BC, CA theo thứ tự tại F, E, D. Đường phân giác trong của góc BOC cắt BC tại I và AI cắt EF tại K. Chứng minh rằng 1/KD >= 1/2 * (4/DE + 4/DF - 1/EF)."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình thang vuông ABCD (AB // DC, 𝐴̂ = 𝐷̂ = 90 ). Đường chéo BD vuông góc với cạnh bên BC. Chứng minh: BD² = AB.DC"
+    "id": 70,
+    "problem": "Cho tam giác ABC với các cạnh a, b, c ngoại tiếp đường tròn tâm I bán kính r. Các tia AI, BI, CI cắt đường tròn (I) tại A', B', C'. Gọi a1, b1, c1 là độ dài các đoạn B'C', C'A', A'B'. Chứng minh rằng a1*b1*c1 / (abc) >= 216r^3 / (a+b+c)^3."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình thang KLMN (KN // LM). gọi E là giao điểm của hai đường chéo. Qua E, vẽ một đường thẳng song song với LM, cắt MN tại F. Chứng minh: 1/EF = 1/KN + 1/LM"
+    "id": 71,
+    "problem": "Cho đường tròn tâm O nội tiếp tam giác ABC. Các tiếp tuyến với (O) song song với các cạnh của tam giác ABC tạo thành các tam giác nhỏ có đường phân giác l1, l2, l3. Chứng minh rằng 1/l1^2 + 1/l2^2 + 1/l3^2 >= 81/p^2."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": " Cho hình bình hành MNPQ có E là trung điểm PQ, G là trọng tâm ∆MPQ, F thuộc cạnh MQ sao cho FG//NM. a. Tính tỉ số QE/FG b. Chứng minh ΔQGE ∽ ΔNGM và tìm tỉ số đồng dạng"
+    "id": 72,
+    "problem": "Cho tam giác ABC có các cạnh a, b, c. Gọi O và R lần lượt là tâm và bán kính đường tròn ngoại tiếp, Ia, Ib, Ic là tâm các đường tròn bàng tiếp. Chứng minh rằng 1/(2R) <= OIa / ((a+b)(a+c)) + OIb / ((b+c)(b+a)) + OIc / ((c+a)(c+b)) <= 1/(4r)."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình bình hành ABCD, F thuộc BC Tia AF cắt BD và DC ở E và G. CMR: a. ∆BEF ∽ ∆DEA và ∆DGE ∽ ∆BAE. b. AE^2=EF.EG. c. BF.DG không thay đổi. "
+    "id": 73,
+    "problem": "Cho đường tròn tâm O bán kính R và dây cung BC < R. Điểm A di động trên cung lớn BC và D di động trên cung nhỏ BC. Xác định vị trí của A và D để 1/DA + 1/DB + 1/DC đạt giá trị nhỏ nhất."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho ∆ABC vuông tại A, đường cao AH, AB=5cm, AC=12cm, Gọi D, E là hình chiếu của H trên AB,AC. a. Tính BC,DE. b. Chứng minh ∆ACB ∽ ∆ADE. c. Đường vuông góc với DE tại D và E cắt BC tại M và N, Chứng minh M là trung điểm BH, N là trung điểm CH."
+    "id": 74,
+    "problem": "Cho đường tròn (O; R) và một điểm I nằm bên trong đường tròn. Gọi AC và BD là hai dây cung bất kì đi qua I. Xác định vị trí của AC và BD để (AB.AD + BC.CD) / (AB.BC + DA.CD) đạt giá trị lớn nhất và giá trị nhỏ nhất."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình chữ nhật ABCD kẻ AH vuông BD. a. Chứng minh ∆AHD ∽ ∆BDC và BC^2=DH.DB. b. Gọi S là trung điểm BH, R là trung điểm AH. Chứng minh: SH.BD=SR.DC c. Gọi T là trung điểm DC. chứng minh DRST là hình bình hành. d. Tính 𝐴𝑆𝑇 ̂ ."
+    "id": 75,
+    "problem": "Cho đường tròn (O) và điểm P cố định nằm trong đường tròn. Hai dây cung AC và BD thay đổi vuông góc với nhau tại P. Tìm vị trí của các dây cung AC và BD sao cho diện tích tứ giác ABCD có giá trị lớn nhất, nhỏ nhất."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": " Cho hình vuông ABCD và một điểm E bất kì trên BC. Kẻ Ax vuông AE cắt CD tại F. Trung tuyến AI của tam giác AEF cắt CD tại K. Qua E kẻ đường thẳng song song AB cắt AI tại G. a. Chứng minh AE=AF. b. Tứ giác EGFK là hình thoi. c. ∆FIK đồng dạng ∆FCE. d. 𝐸𝐾 = 𝐵𝐸 + 𝐷𝐾 và chu vi tam giác ECK không đổi khi E duy chuyển trên BC."
+    "id": 76,
+    "problem": "Cho đường tròn (O) và điểm P cố định nằm trong đường tròn. Hai dây cung AC và BD thay đổi vuông góc với nhau tại P. Tìm vị trí của các dây cung AC và BD sao cho chu vi tứ giác ABCD có giá trị lớn nhất, nhỏ nhất."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình bình hành ABCD có góc A nhọn, kẻ BH, CM, CN, DI lần lượt vuông góc   với AC, AB, AD, và AC. a. Chứng minh AH=CI b. Chứng minh : AB.CM=CN.AD c. Tứ giác BIDH là hình gì? d. AD.AN+AB.AM=ACAC^"
+    "id": 77,
+    "problem": "Cho tam giác ABC có cạnh a, b, c. Gọi r và ra, rb, rc lần lượt là bán kính đường tròn nội tiếp và bàng tiếp. Chứng minh rằng abc / (ra*rb*rc) >= (p-a)(p-b)(p-c) / r^3."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho tam giác ABC và điểm S không thuộc mp(ABC). Nối S với A, B, C. Gọi M, N, P, Q lần lượt là trung điểm của AB, BC, SC, SA. a) Chứng minh MQ // mp(SBC) và NP // mp(SAB). b) Chứng minh tứ giác MNPQ là hình bình hành."
+    "id": 78,
+    "problem": "Cho tam giác ABC nội tiếp đường tròn (O) và ngoại tiếp đường tròn (I) bán kính r. Gọi R1, R2, R3 lần lượt là bán kính đường tròn tiếp xúc ngoài với (O) và tiếp xúc hai cạnh của tam giác. Chứng minh R1 + R2 + R3 >= 12r."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho hình thang ABCD có AB//CD, góc A và D vuông, AB=2cm, AD=CD=8cm, a. Tính BC. b. Gọi O là trung điểm AD, chứng minh ∆BOC vuông. c. Chứng minh ∆AOB ∽ ∆DOC; ∆ABO ∽ ∆OBC"
+    "id": 79,
+    "problem": "Cho tam giác ABC không cân có AD và BE là đường phân giác. Chứng minh rằng góc nhọn tạo bởi hai đường thẳng AB và DE không vượt quá |A - B|/3."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho ∆ABC vuông tại C( AC<CB) . Lấy I bất kì trên AB, trên nửa mp bờ AB chứa C kẻ tia Ax và By cùng vuông góc AB, đường vuông góc với IC qua C cắt Ax , By ở M và N. a. Chứng minh ∆CAI ∽ ∆CBN b. Chứng minh: AB.NC=IN.CB"
+    "id": 80,
+    "problem": "Cho tam giác ABC và đường tròn (O) nội tiếp tiếp xúc AB, BC, CA tại E, D, F. Đường tròn bàng tiếp tâm Q tiếp xúc BC, AB, AC tại K, H, P. EF cắt BO, CO tại M, N; HP cắt BQ, CQ tại R, S. Chứng minh rằng tam giác DMN bằng tam giác KRS."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho ∆ABC đều, gọi O là trung điểm BC. Tại O dựng góc xOy=60 độ , Ox cắt AB tại M, Oy cắt AC tại N. a. ∆BOM ∽ ∆CNO. b. BC^2=4BM.CN. c. ∆BOM ∽ ∆ONM và OM là phân giác góc BMN. d. Chứng minh ON^2=CN.MN"
+    "id": 81,
+    "problem": "Cho đường tròn (O; R) nội tiếp hình thang ABCD (AB//CD). E, F, G, H là tiếp điểm với AB, BC, CD, DA. Trên CD lấy M sao cho chân đường vuông góc từ M đến DO là K nằm ngoài (O). HK cắt (O) tại T. Chứng minh MT = MG."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": " Cho ∆ABC vuông tại A, đường cao AH, gọi E, F là hình chiếu của H lên AB và AC. a. Chứng minh AEFH là hình chữ nhật. b. Chứng minh AE.AB=AF.AC. c. Đường thẳng qua A và vuông góc với EF cắt BC tại I, Chứng minh I là trung điểm BC."
+    "id": 82,
+    "problem": "Cho tam giác ABC nhọn, B, C cố định, A thay đổi. D là trung điểm BC, E, F là hình chiếu của D trên AC, AB. Đường thẳng EF cắt AO và BC tại M và N. Chứng minh đường tròn ngoại tiếp tam giác AMN luôn đi qua một điểm cố định."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho ∆ABC vuông tại A, đường cao AH chia cạnh huyền thành hai đoạn có độ dài là 4 và 9, gọi D và E là hình chiếu của H lên AB, AC. a. Tính AB, AC, DE. b. Các đường vuông góc với DE tại D và E cắt BC tại M và N, Chứng minh M là trung điểm BH, N là trung điểm CH. c. Tính diện tích DEMN."
+    "id": 83,
+    "problem": "Cho tam giác ABC nhọn có đường cao AD. P trên AD. K, L trên BC sao cho AK vuông góc AC, AL vuông góc AB. Trên PB, PC lấy N, M sao cho KM=KA, LN=LA. Chứng minh tâm đường tròn ngoại tiếp tam giác MND thuộc một đường thẳng cố định."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho ∆ABC có AC>AB, phân giác trong AD, Qua C kẻ Cx sao cho tia CB nằm giữa hai tia CA và Cx và 𝐵𝐶𝑥 ̂ = 𝐵𝐴𝐷 ̂, AD giao Cx tại E. a. ∆DCE ∽ ∆DAB. b. ∆EBC cân. c. ∆ABD ∽ ∆AEC từ đó suy ra: AB.AC=AD^2 + BD.DC"
+    "id": 84,
+    "problem": "Cho đường tròn (O) đường kính AB. C di động trên (O). CH vuông góc AB. E, F là hình chiếu của H trên CB, CA. U, L, Q là tâm đường tròn bàng tiếp đỉnh H của các tam giác AHE, BHF, HEF. Chứng minh C là tâm đường tròn nội tiếp tam giác QUL."
   },
   {
-    "image_dir": "",
-    "instruction": "",
-    "answer": "",
-    "problem": "Cho ∆ABC vuông tại A, AB=8cm, AC=6cm, phân giác AD, a. Tính CD và BD. b. Từ D kẻ DE và DF lần lượt vuông góc với AB và AC. Tính chu vi và diện tích của AEDF."
-  }
+    "id": 85,
+    "problem": "Cho tứ giác ABCD nội tiếp (O). AC cắt BD tại H. AB cắt CD tại E, AD cắt BC tại F. Chứng minh H và hai trực tâm của hai tam giác FAB, FCD cùng nằm trên một đường thẳng."
+  },
+  {
+    "id": 86,
+    "problem": "Cho tứ giác ABCD nội tiếp (O). AC cắt BD tại H. AB cắt CD tại E, AD cắt BC tại F. Chứng minh F và hai trực tâm của hai tam giác HAB, HCD cùng nằm trên một đường thẳng."
+  },
+  {
+    "id": 87,
+    "problem": "Cho đường tròn (O), dây BC. I là trung điểm BC, A di động trên cung lớn BC. (I1) qua I tiếp xúc AB tại B, (I2) qua I tiếp xúc AC tại C. (I1) cắt (I2) tại D khác I. Chứng minh đường tròn (ADI) đi qua điểm cố định khác I."
+  },
+  {
+    "id": 88,
+    "problem": "Cho hai đường tròn (O1) và (O2) tiếp xúc ngoài tại T. Một đường thẳng cắt (O1) tại A, B và tiếp xúc (O2) tại X. XT cắt (O1) tại S. C trên cung TS. CY là tiếp tuyến với (O2). Gọi I là giao điểm của XY và SC. Chứng minh SA = SI."
+  },
+  {
+    "id": 89,
+    "problem": "Cho tam giác ABC nhọn nội tiếp (O), nội tiếp (I). P là điểm chính giữa cung BC. J đối xứng I qua O. Tiếp tuyến tại I của đường tròn (BIC) cắt BC tại M. H là hình chiếu M trên OI, D là trung điểm BC, K là giao điểm của ID với đường tròn (ODH). Chứng minh A, H, K thẳng hàng."
+  },
+  {
+    "id": 90,
+    "problem": "Cho tứ giác lồi ABCD nội tiếp (O). M, N là giao điểm các cặp cạnh đối. P, Q, S, T là giao điểm các đường phân giác trong của các cặp góc tại đỉnh. Chứng minh giao điểm các đường chéo E, O và tâm đường tròn (PQS) thẳng hàng."
+  },
+  {
+    "id": 91,
+    "problem": "Cho tam giác ABC nội tiếp (O), AB < AC, I là tâm nội tiếp. D, E là giao của AI với BC và (O). Đường thẳng qua I vuông góc AI cắt BC tại K; KA, KE cắt (O) tại M, N. Tia ND, NI cắt (O) tại Q, P. Chứng minh PM = PQ."
+  },
+  {
+    "id": 92,
+    "problem": "Cho tam giác ABC nhọn có phân giác AD, BE, CF cắt nhau tại O. Chứng minh nếu bán kính đường tròn nội tiếp các tam giác AOF, BOD, COE bằng nhau thì tam giác ABC đều."
+  },
+  {
+    "id": 93,
+    "problem": "Cho tam giác ABC có cạnh a, b, c. Chứng minh tam giác ABC vuông tại B hoặc C khi và chỉ khi tan(A/2) = a / (b+c) hoặc tan(A/2) = |b-c| / (b+c)."
+  },
+  {
+    "id": 94,
+    "problem": "Cho tam giác ABC có G là trọng tâm và I là giao điểm ba đường phân giác. Chứng minh GI song song với BC khi và chỉ khi tan(B/2).tan(C/2) = 1/3."
+  },
+  {
+    "id": 95,
+    "problem": "Cho tam giác nhọn ABC. Dựng ngoài tam giác các tam giác cân DAC, EAB, FBC sao cho góc ở đỉnh bằng 2 lần góc tương ứng của tam giác ABC. Chứng minh BD/MD + CE/NE + AF/PF = 4."
+  },
+  {
+    "id": 96,
+    "problem": "Cho tam giác ABC nhọn, AB < AC, AH vuông góc BC. D, E là hình chiếu của H trên AB, AC. DE cắt BC tại S, SA cắt đường tròn đường kính AH tại M. BM cắt AC tại F. Chứng minh SF^2 = SB.SC + FA.FC."
+  },
+  {
+    "id": 98,
+    "problem": "Cho tam giác ABC không cân, D di động trên BC. Đường thẳng d vuông góc BC tại D cắt AB, AC tại E, F. M, N, P là tâm nội tiếp các tam giác AEF, BDE, CDF. Chứng minh A, M, N, P cùng thuộc một đường tròn khi d qua tâm nội tiếp ABC."
+  },
+  {
+    "id": 99,
+    "problem": "Cho tam giác ABC trực tâm H nội tiếp (O). Tiếp tuyến thay đổi của (O) cắt HB, HC tại E, F. K đối xứng H qua EF. Chứng minh đường tròn (KEF) luôn tiếp xúc với một đường tròn cố định."
+  },
+  {
+    "id": 100,
+    "problem": "Cho tứ giác ABCD nội tiếp (O), AC cắt BD tại E. Đường tròn qua B, C cắt CD, AB tại M, N. H là giao điểm BM, CN. Đường thẳng qua H cắt AC, BD tại K, L. Q, R trên BC sao cho KR//BM, LQ//CN. Chứng minh đường tròn (PQR) tiếp xúc đường tròn (EBC)."
+  },
+  {
+    "id": 101,
+    "problem": "Cho đường tròn (O; R) và điểm A cố định ngoài đường tròn. Qua A kẻ hai tiếp tuyến AM, AN tới đường tròn (M, N là hai tiếp điểm). Một đường thẳng d đi qua A cắt đường tròn (O;R) tại B và C (AB < AC). Gọi I là trung điểm BC. Chứng minh năm điểm A, M, N, O, I thuộc một đường tròn."
+  },
+  {
+    "id": 102,
+    "problem": "Cho tam giác ABC vuông tại A, đường cao AH. Từ M là điểm bất kì trên cạnh BC kẻ MD ⊥ AB, ME ⊥ AC. Chứng minh 5 điểm A, D, M, H, E cùng thuộc một đường tròn."
+  },
+  {
+    "id": 103,
+    "problem": "Cho đường tròn (O) và một điểm M nằm ngoài (O). Từ M kẻ 2 tiếp tuyến MA, MB đến (O) (A, B là tiếp điểm). Qua M kẻ cát tuyến MNP (MN < MP) đến (O). Gọi K là trung điểm NP. Chứng minh các điểm M, A, K, O, B cùng thuộc một đường tròn."
+  },
+  {
+    "id": 104,
+    "problem": "Cho nửa đường tròn đường kính AB. Gọi M là điểm chính giữa của cung AB. Trên cung AM lấy điểm N. Trên tia đối của tia MA lấy điểm D sao cho MD = MB, trên tia đối của tia NB lấy điểm E sao cho NA = NE, trên tia đối của tia MB lấy điểm C sao cho MC = MA. Chứng minh năm điểm A, B, C, D, E cùng thuộc một đường tròn."
+  },
+  {
+    "id": 105,
+    "problem": "Cho tam giác ABC vuông tại A, phân giác BF. Từ điểm I nằm giữa B và F vẽ đường thẳng song song với AC cắt AB, BC lần lượt tại M và N. Vẽ đường tròn ngoại tiếp tam giác BIN cắt AI tại D. Hai đường thẳng DN và BF cắt nhau tại E. Chứng minh: a) Bốn điểm A, B, D, E cùng thuộc một đường tròn. b) Năm điểm A, B, C, D, E cùng thuộc một đường tròn. Từ đó suy ra BE ⊥ CE."
+  },
+  {
+    "id": 106,
+    "problem": "Tứ giác ABCD có góc ABC + góc ADC = 180 độ. Chứng minh rằng các đường trung trực của AC, BD, AB cùng đi qua một điểm."
+  },
+  {
+    "id": 107,
+    "problem": "Cho tam giác đều ABC. Trên nửa mặt phẳng bờ BC không chứa đỉnh A, lấy điểm D sao cho DB = DC và góc DCB = 1/2 góc ACB. a) Chứng minh tứ giác ABDC là tứ giác nội tiếp. b) Xác định tâm của đường tròn đi qua bốn điểm A, B, D, C."
+  },
+  {
+    "id": 108,
+    "problem": "Cho hình bình hành ABCD. Đường tròn đi qua ba đỉnh A, B, C cắt đường thẳng CD tại P khác C. Chứng minh AP = AD."
+  },
+  {
+    "id": 109,
+    "problem": "Cho đường tròn tâm O ngoại tiếp tam giác đều ABC và điểm M thuộc cung nhỏ BC (M khác B và C). Tính số đo góc BMC."
+  },
+  {
+    "id": 110,
+    "problem": "Cho tam giác ABC vuông tại A. Kẻ đường cao AH và phân giác trong AD của góc HAC. Phân giác trong góc ABC cắt AH, AD lần lượt tại M, N. Chứng minh rằng góc BND = 90 độ."
+  },
+  {
+    "id": 111,
+    "problem": "Một logo có dạng hình tròn, trong đó có một hình chữ nhật nội tiếp đường tròn với chiều dài 8 cm và chiều rộng 6 cm. Tính diện tích phần hình tròn nằm ngoài hình chữ nhật đó."
+  },
+  {
+    "id": 112,
+    "problem": "Cho tam giác ABC nội tiếp đường tròn (O) thỏa mãn góc ABC = 60 độ, góc ACB = 70 độ. Giả sử D là điểm thuộc cung BC không chứa A (D khác B và C). Tính số đo góc BDC."
+  },
+  {
+    "id": 113,
+    "problem": "Cho hình thang ABCD (AB // CD) nội tiếp đường tròn. Chứng minh rằng hình thang ABCD là hình thang cân."
+  },
+  {
+    "id": 114,
+    "problem": "Cho tứ giác nội tiếp ABCD có hai đường chéo AC và BD cắt nhau tại I. Chứng minh rằng góc ABD = góc ACD và tích IA.IC = IB.ID."
+  },
+  {
+    "id": 115,
+    "problem": "Cho tứ giác nội tiếp ABCD có tam giác ABC là tam giác nhọn, hai đường cao AM và CN cắt nhau tại H. Chứng minh: a) góc MHN + góc ABC = 180 độ; b) góc AHC = góc ADC; c) góc ADC = góc BAM + 90 độ."
+  },
+  {
+
+    "id": 116,
+    "problem": "Cho đường tròn (O;R), đường kính AB cố định, CD là một đường kính thay đổi không trùng với AB [1]. Tiếp tuyến của (O) tại B cắt AC, AD lần lượt tại E, F [1]. a) Tính BE.BF theo R. b) Chứng minh tứ giác CEFD nội tiếp [1, 2]. c) Chứng minh tâm I của đường tròn ngoại tiếp tam giác CDE di động trên một đường cố định [1, 3]."
+  },
+  {
+    "id": 117,
+    "problem": "Cho đường tròn (O; R) và điểm A cố định ngoài đường tròn [4]. Qua A kẻ hai tiếp tuyến AM, AN tới đường tròn (M, N là hai tiếp điểm) [4]. Một đường thẳng d đi qua A cắt đường tròn (O;R) tại B và C (AB < AC) [4]. Gọi I là trung điểm BC [4]. Chứng minh năm điểm A, M, N, O, I cùng thuộc một đường tròn [4]."
+  },
+  {
+    "id": 118,
+    "problem": "Cho hình vuông ABCD, hai đường chéo cắt nhau tại O [5]. Qua O vẽ hai đường thẳng vuông góc với nhau cắt các cạnh AB, BC, CD, DA lần lượt tại M, N, P, Q [5]. Chứng minh 4 điểm M, N, P, Q cùng thuộc một đường tròn đường kính QN [5, 6]."
+  },
+  {
+    "id": 119,
+    "problem": "Người ta làm một logo có dạng hình tròn, trong đó có một hình chữ nhật nội tiếp đường tròn với chiều dài 8 cm và chiều rộng 6 cm [7]. Tính diện tích phần hình tròn nằm ngoài hình chữ nhật đó (lấy π ≈ 3,14) [7, 8]."
+  },
+  {
+    "id": 120,
+    "problem": "Cho hình bình hành ABCD [9]. Đường tròn đi qua ba đỉnh A, B, C cắt đường thẳng CD tại điểm P khác C [9]. Chứng minh rằng độ dài đoạn thẳng AP bằng AD [9]."
+  },
+  {
+    "id": 121,
+    "problem": "Cho tam giác nhọn ABC nội tiếp đường tròn (O;R) [10]. M là điểm di động trên cung nhỏ BC [10]. Vẽ MH vuông góc với BC tại H, MI vuông góc với AB tại I, MK vuông góc với AC tại K [10]. a) Chứng minh rằng ba điểm I, H, K thẳng hàng [10, 11]. b) Xác định vị trí điểm M để tổng BC/MH + AC/MK + AB/MI đạt giá trị nhỏ nhất [10, 11]."
+  },
+  {
+    "id": 122,
+    "problem": "Cho tam giác ABC vuông tại A, đường cao AH [4]. Từ một điểm M bất kì trên cạnh BC kẻ MD vuông góc với AB và ME vuông góc với AC [4]. Chứng minh 5 điểm A, D, M, H, E cùng thuộc một đường tròn [4]."
+  },
+  {
+    "id": 123,
+    "problem": "Cho nửa đường tròn đường kính AB [12]. Gọi M là điểm chính giữa của cung AB [12]. Trên cung AM lấy điểm N [12]. Trên tia đối của tia MA lấy điểm D sao cho MD = MB, trên tia đối của tia NB lấy điểm E sao cho NA = NE, trên tia đối của tia MB lấy điểm C sao cho MC = MA [12]. Chứng minh năm điểm A, B, C, D, E cùng thuộc một đường tròn [12]."
+  },
+  {
+    "id": 124,
+    "problem": "Cho điểm A nằm ngoài đường tròn (O;R) [13]. Vẽ hai tiếp tuyến AB, AC với đường tròn (O) (B, C là tiếp điểm) [13]. Vẽ cát tuyến ADE sao cho D nằm giữa A và E [13]. AO cắt BC tại H [13]. Chứng minh rằng các điểm D, H, O, E cùng thuộc một đường tròn [13, 14]."
+  },
+  {
+    "id": 125,
+    "problem": "Tứ giác ABCD có tổng hai góc đối ABC + ADC = 180 độ [15]. Chứng minh rằng các đường trung trực của ba đoạn thẳng AC, BD và AB cùng đi qua một điểm duy nhất (tâm đường tròn ngoại tiếp tứ giác) [15]."
+  },
+  {
+    "id": 126,
+    "problem": "Cho tam giác ABC vuông tại A [16]. Trên cạnh AC lấy điểm D, hình chiếu của D lên BC là E, điểm đối xứng của E qua BD là F [16]. Chứng minh 5 điểm A, B, E, D, F cùng nằm trên một đường tròn đường kính BD [16]."
+  },
+  {
+    "id": 128,
+    "problem": "Từ điểm M nằm ngoài đường tròn (O), kẻ hai tiếp tuyến MQ, MP (P, Q là tiếp điểm) và một cát tuyến MAB (A nằm giữa M và B) [19]. Gọi I là trung điểm của AB [19]. Chứng minh rằng 5 điểm M, P, I, O, Q cùng nằm trên đường tròn đường kính OM [19]."
+  },
+  {
+    "id": 129,
+    "problem": "Cho tứ giác ABCD có AB // CD, AD // BC và AB = CD = 6cm, AD = BC = 4cm. Chứng minh ABCD là hình chữ nhật và tính diện tích S_ABCD."
+  },
+  {
+    "id": 130,
+    "problem": "Cho hình thang ABCD có AB // CD, AB = 8cm, CD = 4cm, chiều cao h = 3cm. Tính độ dài đường trung bình MN của hình thang ABCD."
+  },
+  {
+    "id": 131,
+    "problem": "Cho tứ giác ABCD biết ∠DAB = 90°, AB = 5cm, AD = 12cm và BD là đường chéo. Tính độ dài đường chéo BD và diện tích tứ giác ABCD."
+  },
+  {
+    "id": 132,
+    "problem": "Cho đường tròn tâm O bán kính R = 5cm. Đường thẳng (d) cách tâm O một khoảng d = 3cm cắt đường tròn tại A và B. Tính độ dài dây AB."
+  },
+  {
+    "id": 133,
+    "problem": "Cho tam giác ABC vuông tại A với AB = 3cm, AC = 4cm. a) Chứng minh rằng A, B, C cùng nằm trên một đường tròn. b) Tính bán kính đường tròn ngoại tiếp tam giác ABC."
+  },
+  {
+    "id": 134,
+    "problem": "Cho đường tròn (O) và hai điểm A, B nằm ngoài đường tròn. Từ A kẻ hai tiếp tuyến chạm đường tròn tại P, Q; từ B kẻ hai tiếp tuyến chạm tại M, N. Chứng minh rằng PQ // MN."
+  },
+  {
+    "id": 135,
+    "problem": "Cho đường tròn (O) đi qua ba đỉnh A, B, C của hình thang ABCD (AB // CD). Chứng minh rằng D cũng nằm trên đường tròn (O), tức ABCD là tứ giác nội tiếp."
+  },
+  {
+    "id": 136,
+    "problem": "Cho đường tròn (O) và dây AB. Đường thẳng qua O song song với AB cắt đường tròn tại C, D. Chứng minh rằng AC = BD."
+  },
+  {
+    "id": 137,
+    "problem": "Cho tứ giác ABCD có AB = CD = 8cm, AD = BC = 6cm, AC và BD cắt nhau tại O. Tính diện tích tứ giác ABCD biết diện tích tam giác AOB = 12cm²."
+  },
+  {
+    "id": 138,
+    "problem": "Cho đường tròn (O), dây AB = 8cm, khoảng cách từ O đến AB là 3cm. Tính diện tích hình quạt tâm O chắn bởi cung AB."
+  },
+  {
+    "id": 139,
+    "problem": "Cho hình thang ABCD có AB // CD, AB = 10cm, CD = 6cm, hai góc ∠ADC = ∠BCD = 60°. Tính diện tích hình thang ABCD."
+  },
+  {
+    "id": 140,
+    "problem": "Cho đường tròn (O) bán kính 10cm, hai dây AB và CD cùng độ dài 12cm. Nếu khoảng cách từ O đến AB là 4cm thì khoảng cách từ O đến CD là bao nhiêu cm?"
+  },
+  {
+    "id": 141,
+    "problem": "Cho tứ giác ABCD có ba góc ∠DAB = 70°, ∠ABC = 110°, ∠BCD = 80°. Tính số đo góc ∠CDA."
+  },
+  {
+    "id": 142,
+    "problem": "Cho đường tròn ngoại tiếp tam giác ABC với đường kính BC. Chứng minh rằng góc ∠BAC nhỏ hơn 90°."
+  },
+  {
+    "id": 143,
+    "problem": "Cho đường tròn (O) và hai điểm A, B nằm ngoài đường tròn. Từ A kẻ hai tiếp tuyến chạm đường tròn tại P, Q; từ B kẻ hai tiếp tuyến chạm tại M, N. Chứng minh rằng PQ // MN."
+  },
+  {
+    "id": 144,
+    "problem": "Cho đường tròn (O) đi qua ba đỉnh A, B, C của hình thang ABCD (AB // CD). Chứng minh rằng D cũng nằm trên đường tròn (O), tức ABCD là tứ giác nội tiếp."
+  },
+  {
+    "id": 145,
+    "problem": "Cho đường tròn (O) và dây AB. Đường thẳng qua O song song với AB cắt đường tròn tại C, D. Chứng minh rằng AC = BD."
+  },
+  {
+    "id": 146,
+    "problem": "Cho đường tròn (O), dây AB. M là trung điểm của AB. Đường thẳng qua M song song với dây CD cắt đường tròn tại P, Q. Chứng minh rằng AP = BQ."
+  },
+  {
+    "id": 147,
+    "problem": "Cho đường tròn (O), hai dây AB, CD cùng độ dài. M, N lần lượt là trung điểm của AB, CD. Chứng minh rằng đường thẳng MN đi qua tâm O."
+  },
+  {
+    "id": 148,
+    "problem": "Cho đường tròn (O), dây AB. Qua trung điểm M của AB kẻ đường thẳng song song với bán kính OA cắt đường tròn tại C. Chứng minh rằng MC = MB."
+  },
+  {
+    "id": 149,
+    "problem": "Cho đường tròn (O), dây AB. Đường thẳng qua O vuông góc với AB cắt đường tròn tại C, D. M là trung điểm của AB. Chứng minh rằng MC // BD."
+  },
+  {
+    "id": 150,
+    "problem": "Cho đường tròn (O), hai dây AB và CD cùng độ dài. Qua trung điểm M của AB và N của CD kẻ hai đường thẳng song song. Chứng minh hai đường thẳng này cùng đi qua tâm O."
+  },
+  {
+    "id": 151,
+    "problem": "Cho đường tròn (O), dây AB. M là trung điểm AB. Đường tròn đi qua A, B và có tâm nằm trên đường thẳng OM. Chứng minh tâm đường tròn này nằm trên đường thẳng vuông góc với AB qua M."
+  },
+  {
+    "id": 152,
+    "problem": "Cho đường tròn (O), đường kính AB = 10cm. C trên đường tròn, CH ⊥ AB tại H (H hình chiếu C). Đường tiếp tuyến từ H chạm đường tròn tại T. M là trung điểm CT. Biết ∠AOC = 60°. Tính độ dài MN với N giao điểm OM và AT."
+  },
+  {
+    "id": 153,
+    "problem": "Cho tứ giác ABCD nội tiếp đường tròn (O), R = 13cm. Đường chéo AC = 20cm cắt BD tại O. H1, H2 là hình chiếu vuông góc của O trên AB, CD. M là trung điểm H1H2. Tính diện tích tứ giác OMH1H2."
+  },
+  {
+    "id": 154,
+    "problem": "Cho hình thang cân ABCD (AB // CD) nội tiếp đường tròn (O). Đường cao DH = 12cm (H trên AB). M là trung điểm DH. Đường chéo AC cắt BD tại K. Biết AB = 24cm. Tính CK."
+  },
+  {
+    "id": 155,
+    "problem": "Cho đường tròn (O), R = 17cm, dây AB = 24cm. M trung điểm AB, OM = 12cm. Đường vuông góc với AB tại M cắt đường tròn tại C, D. H là hình chiếu O trên CD. Tính CH."
+  },
+  {
+    "id": 156,
+    "problem": "Cho tứ giác ABCD có AC ⊥ BD giao nhau tại O, AO = 8cm, BO = 6cm. H1, H2 là hình chiếu O trên AC, BD. M trung điểm H1H2. Đường OM cắt AB tại N. Tính AN."
+  },
+  {
+    "id": 157,
+    "problem": "Cho đường tròn (O), hai dây AB = CD = 16cm. M, N trung điểm AB, CD. OM = 8cm, ON = 10cm. H1, H2 hình chiếu O trên AB, CD. Tính khoảng cách H1H2."
+  },
+  {
+    "id": 158,
+    "problem": "Cho hình thang ABCD (AB // CD), đường cao từ B chân K trên AD, BK = 15cm. M trung điểm BK. Đường MN // AB (N trên BC) cắt AC tại P. Biết AB = 20cm. Tính AP."
+  },
+  {
+    "id": 159,
+    "problem": "Cho đường tròn (O), R = 25cm. Đường kính AB, C trên đường tròn với ∠AOC = 90°. H hình chiếu C trên AB. M trung điểm CH. Đường OM cắt AT tại N (T tiếp tuyến từ H). Tính MN."
+  },
+  {
+    "id": 160,
+    "problem": "Cho tứ giác ABCD nội tiếp (O), đường chéo AC = 26cm. O giao AC và BD. H1, H2 hình chiếu O trên AC, BD. M trung điểm H1H2. Biết AO = 10cm. Tính diện tích ΔOMH1."
+  },
+  {
+    "id": 161,
+    "problem": "Cho đường tròn (O), R = 15cm, dây AB = 18cm. M trung điểm AB. Đường qua O ⊥ AB cắt đường tròn C, D. H hình chiếu M trên CD. Đường CH cắt AB tại N. Tính AN."
+  },
+  {
+    "id": 162,
+    "problem": "Cho hình thang cân ABCD (AB // CD), AB = 30cm, đường cao = 16cm. H chân đường cao từ D trên AB. M trung điểm DH. Đường chéo AC cắt BD tại O. Tính OM."
+  },
+  {
+    "id": 163,
+    "problem": "Cho đường tròn (O), hai đường kính AB, CD vuông góc tại O. H1 hình chiếu C trên AB, H2 hình chiếu D trên CD. M trung điểm H1H2. Biết R = 20cm. Tính OM."
+  },
+  {
+    "id": 164,
+    "problem": "Cho tứ giác ABCD có AC = BD = 24cm cắt vuông góc tại O. H1, H2 hình chiếu O trên AC, BD. M trung điểm H1H2. AO = 9cm. Tính diện tích tứ giác."
+  },
+  {
+    "id": 165,
+    "problem": "Cho đường tròn (O), R = 21cm. Dây AB = 28cm, M trung điểm AB, OM = 14cm. Đường vuông góc AB tại M cắt đường tròn C, D. H hình chiếu O trên CD. Tính OH."
+  },
+  {
+    "id": 166,
+    "problem": "Cho hình thang ABCD (AB // CD), AB = 28cm, CD = 16cm, đường cao = 12cm. M, N trung điểm AD, BC. K giao MN và AC. H chân từ D trên AB. Tính KH."
+  },
+  {
+    "id": 167,
+    "problem": "Cho đường tròn (O), đường kính AB = 34cm. C trên đường tròn, CH ⊥ AB (H hình chiếu). M trung điểm CH. Đường OM cắt AC tại N. Biết ∠AOC = 120°. Tính CN."
+  },
+  {
+    "id": 168,
+    "problem": "Cho tứ giác ABCD nội tiếp (O), R = 19cm. Đường chéo AC cắt BD tại O. H1, H2 hình chiếu B, D trên AC. M trung điểm H1H2. Tính BM."
+  },
+  {
+    "id": 169,
+    "problem": "Cho đường tròn (O), hai dây AB = CD = 20cm. M, N trung điểm. OM = 12cm, ON = 9cm. H1, H2 hình chiếu O trên AB, CD. Tính H1H2."
+  },
+  {
+    "id": 170,
+    "problem": "Cho hình thang cân ABCD nội tiếp (O), AB = 36cm, đường cao = 20cm. H chân từ D trên AB. M trung điểm DH. O giao ACBD. Tính AO."
+  },
+  {
+    "id": 171,
+    "problem": "Cho đường tròn (O), R = 23cm. Đường kính AB, C trên đường tròn ∠COB = 90°. H hình chiếu C trên AB. M trung điểm CH. Đường OM cắt BD tại N. Tính BN."
+  },
+  {
+    "id": 172,
+    "problem": "Cho tứ giác ABCD có AC ⊥ BD tại O, AO = 12cm, BO = 8cm. H1, H2 hình chiếu O trên AC, BD. M trung điểm H1H2. Đường OM cắt CD tại N. Tính CN."
+  },
+  {
+    "id": 173,
+    "problem": "Cho đường tròn (O), dây AB = 30cm, M trung điểm, OM = 18cm. Đường qua O ⊥ AB cắt đường tròn C, D. H hình chiếu M trên CD. Đường CH cắt AB tại N. Tính AN."
+  },
+  {
+    "id": 174,
+    "problem": "Cho hình thang ABCD (AB // CD), AB = 32cm, CD = 20cm, hai chân = 17cm. M, N trung điểm AD, BC. K giao MN-AC. H chân D trên AB. Tính KH."
+  },
+  {
+    "id": 175,
+    "problem": "Cho đường tròn (O), R = 27cm. Đường kính AB, C trên đường tròn ∠AOC = 72°. H hình chiếu C trên AB. M trung điểm CH. Đường OM cắt AT tại N (T tiếp tuyến H). Tính MN."
+  },
+  {
+    "id": 176,
+    "problem": "Cho tứ giác ABCD nội tiếp (O), đường chéo AC = 28cm. O giao ACBD. H1, H2 hình chiếu O trên AB, CD. M trung điểm H1H2. Biết AO = 11cm. Tính diện tích ΔAOM."
+  },
+  {
+    "id": 177,
+    "problem": "Cho đường tròn (O), hai dây AB = CD = 24cm. M, N trung điểm. OM = 15cm, ON = 10cm. H1, H2 hình chiếu O trên AB, CD. Tính khoảng cách H1H2."
+  },
+  {
+    "id": 178,
+    "problem": "Cho hình thang cân ABCD (AB // CD), AB = 40cm, đường cao = 24cm. H chân D trên AB. M trung điểm DH. Đường chéo AC cắt BD tại O. Tính CO."
+  },
+  {
+    "id": 179,
+    "problem": "Cho đường tròn (O), R = 31cm. Đường kính AB, C trên đường tròn ∠BOC = 120°. H hình chiếu C trên AB. M trung điểm CH. Đường OM cắt DB tại N. Tính NB."
+  },
+  {
+    "id": 180,
+    "problem": "Cho tứ giác ABCD có AC = BD = 30cm cắt vuông góc O. H1, H2 hình chiếu O trên AC, BD. M trung điểm H1H2. AO = 12cm. Tính diện tích tứ giác ABCD."
+  },
+  {
+    "id": 181,
+    "problem": "Cho hình chữ nhật ABCD có AB = 18cm, AD = 12cm. M, N là trung điểm các cạnh AB, CD. Đường chéo AC cắt BD tại O. H là hình chiếu vuông góc của O lên AD. Tính độ dài MH."
+  },
+  {
+    "id": 182,
+    "problem": "Cho hình thoi ABCD có đường chéo AC = 20cm, BD = 16cm cắt nhau vuông góc tại O. Đường cao từ A chân H trên BD. M trung điểm OH. Tính diện tích tam giác AMH."
+  },
+  {
+    "id": 183,
+    "problem": "Cho hình thang cân ABCD (AB // CD) với AB = 24cm, CD = 12cm, hai chân AD = BC = 13cm. H chân đường cao từ D trên AB. M trung điểm DH. Đường MN // AB (N trên BC). Tính MN."
+  },
+  {
+    "id": 184,
+    "problem": "Cho hình bình hành ABCD có AB = 15cm, AD = 10cm, góc DAB = 60°. Đường chéo AC cắt BD tại O. H1, H2 là hình chiếu O lên AB, CD. M trung điểm H1H2. Tính OM."
+  },
+  {
+    "id": 185,
+    "problem": "Cho hình vuông ABCD cạnh 14cm. M, N trung điểm AB, BC. Đường chéo AC cắt MN tại K. H chân đường cao từ D lên AC. Tính khoảng cách từ K đến H."
+  },
+  {
+    "id": 186,
+    "problem": "Cho hình thang ABCD (AB // CD) với AB = 30cm, CD = 18cm, đường cao = 8cm. M, N trung điểm hai chân AD, BC. K giao điểm MN và đường chéo AC. Tính AK."
+  },
+  {
+    "id": 187,
+    "problem": "Cho hình chữ nhật ABCD có AB = 20cm, BC = 8cm. Đường chéo AC = BD cắt tại O. H1, H2 hình chiếu O lên AB, AD. M trung điểm H1H2. Tính diện tích tứ giác OMH1H2."
+  },
+  {
+    "id": 188,
+    "problem": "Cho hình thoi ABCD có tất cả các cạnh = 12cm, góc A = 40°. Đường chéo AC cắt BD vuông góc tại O. H chân đường cao từ B lên AC. M trung điểm OH. Tính BM."
+  },
+  {
+    "id": 189,
+    "problem": "Cho hình thang cân ABCD nội tiếp đường tròn (O) với AB = 28cm, CD = 16cm, đường cao = 12cm. H chân từ D lên AB. M trung điểm DH. O giao ACBD. Tính AO."
+  },
+  {
+    "id": 190,
+    "problem": "Cho hình bình hành ABCD có AB = 16cm, AD = 12cm, đường cao tương ứng với đáy AB là 9cm. M, N trung điểm AD, BC. K giao MN và AC. H chân từ B lên AD. Tính KH."
+  },
+  {
+    "id": 191,
+    "problem": "Cho hình vuông ABCD cạnh 16cm. Đường chéo AC cắt đường trung bình MN (M, N trung điểm AB, CD) tại K. H hình chiếu K lên BD. Tính khoảng cách từ H đến O (trung điểm AC)."
+  },
+  {
+    "id": 192,
+    "problem": "Cho hình thang ABCD (AB // CD) với AB = 32cm, CD = 20cm, hai chân AD = BC = 15cm. H chân đường cao từ C lên AB. M trung điểm CH. Đường MB cắt CD tại N. Tính CN."
+  },
+  {
+    "id": 193,
+    "problem": "Cho hình chữ nhật ABCD có AB = 24cm, AD = 10cm. M trung điểm AC, N trung điểm BD. Đường MN cắt AB tại P. H chân đường cao từ D lên MN. Tính PH."
+  },
+  {
+    "id": 194,
+    "problem": "Cho hình thoi ABCD có đường chéo AC = 25cm, BD = 15cm. O giao ACBD vuông góc. H1, H2 hình chiếu A, C lên BD. M trung điểm H1H2. Tính diện tích tam giác OMB."
+  },
+  {
+    "id": 195,
+    "problem": "Cho hình thang cân ABCD (AB // CD) với AB = 36cm, CD = 20cm, hai chân = 17cm. Đường cao DH = 15cm (H trên AB). M trung điểm DH. Đường MA cắt BC tại N. Tính BN."
+  },
+  {
+    "id": 196,
+    "problem": "Cho hình bình hành ABCD có AB = 18cm, AD = 12cm, góc BAD = 30°. Đường chéo AC cắt BD tại O. H chân từ O lên AB. M trung điểm OH. Đường MC cắt AD tại N. Tính AN."
+  },
+  {
+    "id": 197,
+    "problem": "Cho hình vuông ABCD cạnh 20cm. M, N trung điểm các cạnh liền kề AB, AD. Đường MN cắt đường chéo AC tại K. H hình chiếu K lên BD. Tính diện tích tam giác BKH."
+  },
+  {
+    "id": 198,
+    "problem": "Cho hình thang ABCD nội tiếp đường tròn (O) với AB = 40cm (đáy lớn), CD = 24cm, đường cao = 16cm. O giao ACBD. H chân từ O lên AB. M trung điểm OH. Tính AM."
+  },
+  {
+    "id": 199,
+    "problem": "Cho hình chữ nhật ABCD có AB = 28cm, AD = 14cm. Đường chéo AC cắt đường trung bình MN (M, N trung điểm BC, DA) tại K. H hình chiếu vuông góc K lên AB. Tính KH."
+  },
+  {
+    "id": 200,
+    "problem": "Cho hình thoi ABCD đều cạnh 15cm. Đường chéo AC = 24cm, BD = 9cm. O giao ACBD. H1, H2 hình chiếu B, D lên AC. M trung điểm H1H2. Đường OM cắt CD tại N. Tính CN."
+  },
+{
+      "id": 201,
+      "problem": "Cho hình chữ nhật ABCD có AB = 24cm, BC = 16cm. M và N là trung điểm hai cạnh AB và CD. Đường chéo AC cắt đường trung bình MN tại K. H là hình chiếu vuông góc của K xuống AD. Tính độ dài KH."
+  },
+  {
+      "id": 202,
+      "problem": "Cho hình thoi ABCD có tất cả các cạnh bằng 15cm, đường chéo AC = 18cm. O là giao điểm AC và BD. H1 và H2 là hình chiếu vuông góc của O lên AB và CD. M là trung điểm H1H2. Tính diện tích tam giác AOM."
+  },
+  {
+      "id": 203,
+      "problem": "Cho hình thang cân ABCD (AB // CD) nội tiếp đường tròn với AB = 32cm, CD = 20cm, hai chân AD = BC = 17cm. H là chân đường cao từ D xuống AB. M là trung điểm DH. Đường chéo AC cắt BD tại O. Tính độ dài OM."
+  },
+  {
+      "id": 204,
+      "problem": "Cho hình bình hành ABCD có AB = 20cm, AD = 12cm, góc BAD = 60°. Đường chéo AC cắt BD tại O. H là hình chiếu của O xuống AB. M là trung điểm OH. Đường MA cắt CD tại N. Tính độ dài CN."
+  },
+  {
+      "id": 205,
+      "problem": "Cho hình vuông ABCD cạnh a = 18cm. M và N là trung điểm AB và AD. Đường MN cắt đường chéo AC tại K. H là hình chiếu của K xuống BD. Tính diện tích tam giác BKH."
+  },
+  {
+      "id": 206,
+      "problem": "Cho hình thang ABCD (AB // CD) với AB = 28cm, CD = 16cm, đường cao h = 10cm. M và N là trung điểm hai chân AD và BC. K là giao điểm của MN và AC. H là chân đường cao từ C xuống AB. Tính khoảng cách KH."
+  },
+  {
+      "id": 207,
+      "problem": "Cho hình chữ nhật ABCD có AB = 30cm, AD = 18cm. Đường chéo AC cắt đường trung bình MN (M, N trung điểm BC, DA) tại K. H1 và H2 là hình chiếu của K lên AB và AD. Tính độ dài H1H2."
+  },
+  {
+      "id": 208,
+      "problem": "Cho hình thoi ABCD có cạnh 14cm, góc A = 72°. Đường chéo AC cắt BD vuông góc tại O. H là chân đường cao từ B xuống AC. M là trung điểm OH. Đường MB cắt AD tại N. Tính độ dài AN."
+  },
+  {
+      "id": 209,
+      "problem": "Cho hình thang cân ABCD nội tiếp đường tròn (O) với AB = 36cm (đáy lớn), CD = 24cm, đường cao = 15cm. O là giao điểm AC và BD. H là hình chiếu của O xuống AB. M là trung điểm OH. Tính AM."
+  },
+  {
+      "id": 210,
+      "problem": "Cho hình bình hành ABCD có AB = 25cm, AD = 15cm, đường cao tương ứng đáy AB là 12cm. M và N là trung điểm AD và BC. K là giao điểm MN và AC. H là chân đường cao từ B xuống AD. Tính khoảng cách từ K đến H."
+  },
+  {
+      "id": 211,
+      "problem": "Cho hình vuông ABCD cạnh 22cm. Đường chéo AC cắt đường nối trung điểm M, N của AB và CD tại K. H là hình chiếu vuông góc của K xuống BD. Tính diện tích tứ giác BHKO với O trung điểm AC."
+  },
+  {
+      "id": 212,
+      "problem": "Cho hình thang ABCD (AB // CD) với AB = 40cm, CD = 24cm, hai chân AD = BC = 18cm. H là chân đường cao từ C xuống AB. M là trung điểm CH. Đường MB cắt CD tại N và AC tại P. Tính tỷ số CN:ND."
+  },
+  {
+      "id": 213,
+      "problem": "Cho hình chữ nhật ABCD có AB = 28cm, BC = 20cm. M là trung điểm AC, N là trung điểm BD. Đường MN cắt AB tại P. H là chân đường cao từ D xuống MN. Tính độ dài PH."
+  },
+  {
+      "id": 214,
+      "problem": "Cho hình thoi ABCD có đường chéo AC = 30cm, BD = 16cm cắt vuông góc tại O. H1 và H2 là hình chiếu của A và C xuống BD. M là trung điểm H1H2. Đường OM cắt CD tại N. Tính độ dài CN."
+  },
+  {
+      "id": 215,
+      "problem": "Cho hình thang cân ABCD (AB // CD) với AB = 34cm, CD = 18cm, hai chân = 20cm. Đường cao DH = 16cm (H trên AB). M là trung điểm DH. Đường MA cắt BC tại N và BD tại Q. Tính BN."
+  },
+  {
+      "id": 216,
+      "problem": "Cho hình bình hành ABCD có AB = 22cm, AD = 14cm, góc BAD = 45°. Đường chéo AC cắt BD tại O. H là hình chiếu của O xuống AB. M là trung điểm OH. Đường MC cắt BC tại N. Tính độ dài BN."
+  },
+  {
+      "id": 217,
+      "problem": "Cho hình vuông ABCD cạnh 24cm. M và N là trung điểm các cạnh liền kề AB và BC. Đường MN cắt đường chéo BD tại K. H là hình chiếu của K xuống AC. Tính diện tích tam giác AKH."
+  },
+  {
+      "id": 218,
+      "problem": "Cho hình thang ABCD nội tiếp đường tròn (O) với AB = 42cm, CD = 30cm, đường cao = 18cm. O giao AC và BD. H là chân đường cao từ O xuống AB. M là trung điểm OH. Đường MA cắt CD tại N. Tính CN."
+  },
+  {
+      "id": 219,
+      "problem": "Cho hình chữ nhật ABCD có AB = 32cm, AD = 24cm. Đường chéo AC cắt đường trung bình MN (M, N trung điểm AD, BC) tại K. H1 và H2 là hình chiếu của K lên AB và CD. Tính độ dài H1H2."
+  },
+  {
+      "id": 220,
+      "problem": "Cho hình thoi ABCD đều cạnh 18cm với đường chéo AC = 28cm. O giao AC và BD vuông góc. H1 và H2 là hình chiếu của B và D lên AC. M là trung điểm H1H2. Đường OM cắt AB tại P. Tính AP."
+  },
+  {
+      "id":221,
+      "problem": "Cho đường tròn (O), R = 13cm. Từ điểm A ngoài đường tròn kẻ hai tiếp tuyến chạm tại P, Q với AP = 15cm. H là hình chiếu vuông góc của O lên AP. M là trung điểm AH. Tính độ dài OM."
+  },
+  {
+      "id": 222,
+      "problem": "Cho hình chữ nhật ABCD có AB = 24cm, BC = 16cm. Đường chéo AC cắt BD tại O. H1, H2 là hình chiếu vuông góc của O lên AB và CD. M là trung điểm H1H2. Tính OM."
+    },
+    {
+      "id": 223,
+      "problem": "Cho đường tròn (O), hai dây AB = CD = 18cm. M, N là trung điểm AB, CD. OM = 8cm, ON = 10cm. H1, H2 là hình chiếu của O lên AB, CD. Tính khoảng cách H1H2."
+    },
+    {
+      "id": 224,
+      "problem": "Cho hình thang cân ABCD (AB // CD), AB = 30cm, CD = 18cm, hai chân AD = BC = 15cm. H là chân đường cao từ D lên AB. M là trung điểm DH. Tính diện tích tam giác MHB."
+    },
+    {
+      "id": 225,
+      "problem": "Cho hình vuông ABCD cạnh 20cm. M, N là trung điểm AB, BC. Đường MN cắt đường chéo AC tại K. H là hình chiếu của K xuống BD. Tính diện tích tam giác BKH."
+    },
+    {
+      "id": 226,
+      "problem": "Cho đường tròn (O), đường kính AB = 26cm. C trên đường tròn với ∠AOC = 90°. H là hình chiếu của C lên AB. M là trung điểm CH. Đường OM cắt AC tại N. Tính CN."
+    },
+    {
+      "id": 227,
+      "problem": "Cho hình thoi ABCD có đường chéo AC = 28cm, BD = 16cm cắt vuông góc tại O. H là chân đường cao từ B lên AC. M là trung điểm OH. Tính BM."
+    },
+    {
+      "id": 228,
+      "problem": "Cho đường tròn (O), R = 17cm. Từ điểm A ngoài đường tròn kẻ hai tiếp tuyến chạm tại P, Q. Đường AP = 15cm. H là hình chiếu của O lên AP. Tính AH."
+    },
+    {
+      "id": 229,
+      "problem": "Cho hình bình hành ABCD có AB = 22cm, AD = 14cm, góc A = 60°. Đường chéo AC cắt BD tại O. H là hình chiếu của O lên AB. M là trung điểm OH. Tính AM."
+    },
+    {
+      "id": 230,
+      "problem": "Cho đường tròn (O), ba dây AB, CD, EF cùng độ dài 24cm. M, N, P là trung điểm. OM = 12cm, ON = 10cm. H là hình chiếu của O lên MN. Tính OH."
+    },
+    {
+      "id": 231,
+      "problem": "Cho hình thang ABCD (AB // CD), AB = 36cm, CD = 24cm, đường cao = 12cm. M, N trung điểm AD, BC. K giao MN và AC. H chân từ C lên AB. Tính KH."
+  },
+    {
+      "id": 232,
+      "problem": "Cho hình chữ nhật ABCD nội tiếp đường tròn (O), AB = 30cm. M trung điểm AC, N trung điểm BD. Đường MN cắt đường tròn tại P. H hình chiếu P lên AB. Tính PH."
+    },
+    {
+      "id": 233,
+      "problem": "Cho đường tròn (O), dây AB = 30cm, M trung điểm AB, OM = 18cm. Đường vuông góc AB tại M cắt đường tròn C, D. H hình chiếu O lên CD. Tính diện tích hình quạt OCD."
+    },
+    {
+      "id": 234,
+      "problem": "Cho hình thoi ABCD nội tiếp đường tròn (O), cạnh 16cm. O giao ACBD. H chân B lên AC. M trung điểm OH. Đường MB cắt đường tròn tại T. Tính BT."
+    },
+    {
+      "id": 235,
+      "problem": "Cho đường tròn (O), R = 21cm. Đường kính AB, C trên đường tròn ∠COB = 120°. H hình chiếu C lên AB. M trung điểm CH. Đường OM cắt DB tại N. Tính NB."
+    },
+    {
+      "id": 236,
+      "problem": "Cho hình vuông ABCD cạnh 24cm. Đường chéo AC cắt đường trung bình MN (M, N trung điểm AB, CD) tại K. H hình chiếu K lên BD. Tính KH."
+    },
+    {
+      "id": 237,
+      "problem": "Cho hình bình hành ABCD có AB = 26cm, AD = 18cm, đường cao = 15cm. M, N trung điểm AD, BC. K giao MN-AC. H chân B lên AD. Tính KH."
+    },
+    {
+      "id": 238,
+      "problem": "Cho đường tròn (O), hai tiếp tuyến từ A chạm P, Q với AP = 20cm, OA = 26cm. H hình chiếu O lên AP. M trung điểm AH. Đường OM cắt PQ tại N. Tính AN."
+    },
+    {
+      "id": 239,
+      "problem": "Cho hình thang cân ABCD (AB // CD), AB = 40cm, CD = 24cm, hai chân = 17cm. H chân D lên AB. M trung điểm DH. Đường MA cắt BC tại N. Tính BN."
+    },
+    {
+      "id": 240,
+      "problem": "Cho hình chữ nhật ABCD có đường tròn ngoại tiếp R = 15cm. Đường chéo AC cắt BD tại O. H1, H2 hình chiếu O lên AB, AD. M trung điểm H1H2. Tính OM."
+    },
+    {
+      "id": 241,
+      "problem": "Cho đường tròn (O), R = 19cm, dây AB = 24cm. M trung điểm AB. Đường qua O ⊥ AB cắt đường tròn C, D. H hình chiếu M lên CD. Đường CH cắt AB tại N. Tính AN."
+    },
+    {
+      "id": 242,
+      "problem": "Cho hình thoi ABCD có cạnh 18cm, góc A = 60°. Đường chéo AC cắt BD tại O. H chân B lên AC. M trung điểm OH. Đường MB cắt AD tại N. Tính AN."
+    },
+    {
+      "id": 243,
+      "problem": "Cho hình vuông ABCD nội tiếp đường tròn (O), cạnh 28cm. M, N trung điểm AB, BC. Đường MN cắt đường tròn tại P. H hình chiếu P lên AC. Tính PH."
+    },
+    {
+      "id": 244,
+      "problem": "Cho đường tròn (O), đường kính AB = 34cm. C trên đường tròn, CH ⊥ AB (H hình chiếu). M trung điểm CH. Đường OM cắt AC tại N. ∠AOC = 90°. Tính CN."
+    },
+    {
+      "id": 245,
+      "problem": "Cho hình thang ABCD (AB // CD), AB = 44cm, CD = 28cm, đường cao = 16cm. M, N trung điểm AD, BC. K giao MN-AC. H chân D lên AB. Tính KH."
+    },
+    {
+      "id": 246,
+      "problem": "Cho hình bình hành ABCD có AB = 30cm, AD = 20cm, góc A = 45°. Đường chéo AC cắt BD tại O. H hình chiếu O lên AB. M trung điểm OH. Tính AM."
+    },
+    {
+      "id": 247,
+      "problem": "Cho đường tròn (O), R = 23cm. Hai dây AB = CD = 28cm. M, N trung điểm. OM = 14cm, ON = 12cm. H1, H2 hình chiếu O lên AB, CD. Tính H1H2."
+    },
+    {
+      "id": 248,
+      "problem": "Cho hình chữ nhật ABCD có đường tròn ngoại tiếp qua 4 đỉnh, AB = 36cm. M trung điểm AC, N trung điểm BD. Đường MN cắt AB tại P. H hình chiếu P lên CD. Tính PH."
+    },
+    {
+      "id": 249,
+      "problem": "Cho hình thoi ABCD nội tiếp (O), cạnh 20cm. O giao ACBD. H chân A lên BD. M trung điểm OH. Đường MB cắt đường tròn tại T. Tính BT."
+    },
+    {
+      "id": 250,
+      "problem": "Cho đường tròn (O), R = 25cm. Đường kính AB, C trên đường tròn ∠AOC = 120°. H hình chiếu C lên AB. M trung điểm CH. Đường OM cắt DB tại N. Tính NB."
+    },
+    {
+      "id": 251,
+      "problem": "Cho hình vuông ABCD cạnh 32cm. Đường chéo AC cắt đường trung bình MN tại K. H hình chiếu K lên BD. O trung điểm AC. Tính khoảng cách KO."
+    },
+    {
+      "id": 252,
+      "problem": "Cho hình thang cân ABCD (AB // CD), AB = 48cm, CD = 32cm, hai chân = 20cm. H chân D lên AB. M trung điểm DH. Đường MA cắt BC tại N. Tính BN."
+    },
+    {
+      "id": 253,
+      "problem": "Cho đường tròn (O), dây AB = 36cm, M trung điểm, OM = 20cm. Đường vuông góc AB tại M cắt đường tròn C, D. H hình chiếu O lên CD. Tính diện tích quạt O-CD."
+    },
+    {
+      "id": 254,
+      "problem": "Cho hình bình hành ABCD có AB = 34cm, AD = 24cm, đường cao = 18cm. M, N trung điểm AD, BC. K giao MN-AC. H chân B lên AD. Tính KH."
+    },
+    {
+      "id": 255,
+      "problem": "Cho hình chữ nhật ABCD nội tiếp (O), AB = 40cm. M trung điểm AC, N trung điểm BD. Đường MN cắt đường tròn tại P. H hình chiếu P lên AB. Tính PH."
+    }
 ]
+
+

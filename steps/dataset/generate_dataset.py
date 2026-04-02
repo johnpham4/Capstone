@@ -32,18 +32,34 @@ def load_source_data(
     with open(source_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
+    if isinstance(data, dict):
+        # Support wrapped JSON payloads like {"data": [...]}.
+        data = data.get("data", [])
+
     documents = []
     for item in data:
-        if "caption_vn" in item:
-            raw_caption = item.get("caption", "")
-            caption = raw_caption[0] if isinstance(raw_caption, list) else raw_caption
+        if not isinstance(item, dict):
+            continue
 
-            doc = Document(
-                caption=caption,
-                image_dir=item.get("image", ""),
-                caption_vn=item["caption_vn"]
-            )
-            documents.append(doc)
+        # Backward compatible input text extraction.
+        caption_vn = item.get("caption_vn") or item.get("problem") or ""
+        if not caption_vn:
+            continue
+
+        raw_caption = item.get("caption")
+        if isinstance(raw_caption, list):
+            caption = raw_caption[0] if raw_caption else caption_vn
+        else:
+            caption = raw_caption or caption_vn
+
+        image_dir = item.get("image") or item.get("image_dir") or ""
+
+        doc = Document(
+            caption=caption,
+            image_dir=image_dir,
+            caption_vn=caption_vn,
+        )
+        documents.append(doc)
 
     logger.info(f"Loaded {len(documents)} documents from {source_json_path}")
     return documents

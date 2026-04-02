@@ -10,11 +10,20 @@ from pipeline.domain import Document
 from pipeline.domain import GenerateDatasetSamplesPrompt
 from pipeline.domain import InstructTrainTestSplit
 
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+
+
+def _resolve_path(path_like: str) -> Path:
+    path = Path(path_like)
+    if path.is_absolute():
+        return path
+    return (PROJECT_ROOT / path).resolve()
+
 @step
 def load_source_data(
     source_json_path: str,
 ) -> Annotated[list[dict], "documents"]:
-    source_path = Path(source_json_path)
+    source_path = _resolve_path(source_json_path)
 
     if not source_path.exists():
         raise FileNotFoundError(f"Source data not found: {source_json_path}")
@@ -22,15 +31,30 @@ def load_source_data(
     with open(source_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
+    if isinstance(data, dict):
+        data = data.get("data", [])
+
     documents: list[dict] = []
     for item in data:
-        if "caption_vn" in item:
-            doc = Document(
-                caption=item.get("caption", [""])[0],
-                image_dir=item.get("image", ""),
-                caption_vn=item["caption_vn"]
-            )
-            documents.append(doc.model_dump())
+        if not isinstance(item, dict):
+            continue
+
+        caption_vn = item.get("caption_vn") or item.get("problem") or ""
+        if not caption_vn:
+            continue
+
+        raw_caption = item.get("caption")
+        if isinstance(raw_caption, list):
+            caption = raw_caption[0] if raw_caption else caption_vn
+        else:
+            caption = raw_caption or caption_vn
+
+        doc = Document(
+            caption=caption,
+            image_dir=item.get("image") or item.get("image_dir") or "",
+            caption_vn=caption_vn,
+        )
+        documents.append(doc.model_dump())
 
     logger.info(f"Loaded {len(documents)} documents from {source_json_path}")
     return documents
@@ -91,7 +115,7 @@ def save_dataset_to_json(
 
     train_test_split_model = InstructTrainTestSplit.model_validate(train_test_split)
 
-    output_path = Path(output_dir)
+    output_path = _resolve_path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
     train_path = output_path / "train.json"
