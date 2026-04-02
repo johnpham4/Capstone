@@ -1,20 +1,8 @@
 [
-  {
-    "image_dir": "",
-    "instruction": "Cho tam giác nhọn ABC (AB < AC) nội tiếp đường tròn (O;R). M là điểm di động trên cung nhỏ BC. Vẽ MH ⊥ BC tại H, MI ⊥ AB tại I, MK ⊥ AC tại K. a) Chứng minh rằng I, H, K thẳng hàng. b) Xác định vị trí điểm M để tổng (BC/MH) + (AC/MK) + (AB/MI) nhỏ nhất [1].",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(on-circle A O)\n(on-circle B O)\n(on-circle C O)\n(define M point)\n(on-circle M O)\n(segment A B)\n(segment B C)\n(segment A C)\n(define H point (projection M (segment B C)))\n(segment M H)\n(define I point (projection M (segment A B)))\n(segment M I)\n(define K point (projection M (segment A C)))\n(segment M K)\n(segment I K)\n(on-segment H I K)",
-    "id": 1
-    },
-  {
-    "image_dir": "",
-    "instruction": "Cho tam giác ABC có góc A = 60 độ. Đường tròn (I) nội tiếp tam giác ABC tiếp xúc với các cạnh BC, CA, AB lần lượt tại D, E, F. ID cắt EF tại K. Đường thẳng qua K và song song với BC cắt AB, AC lần lượt tại M, N. a) Chứng minh tứ giác IMAN nội tiếp. b) Gọi J là trung điểm cạnh BC. Chứng minh ba điểm A, K, J thẳng hàng. c) Gọi r là bán kính của đường tròn (I), S là diện tích tứ giác IEAF. Tính S theo r. Chứng minh rằng S_IMN ≥ 4S [2, 3].",
-    "answer": "(triangle (A B C))\n(angle-measure B A C 60)\n(segment A B)\n(segment B C)\n(segment A C)\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(define D point (projection I (segment B C)))\n(segment I D)\n(define E point (projection I (segment A C)))\n(segment I E)\n(define F point (projection I (segment A B)))\n(segment I F)\n(segment E F)\n(define K point (inter-ll I D E F))\n(define X point)\n(segment K X)\n(parallel (segment K X) (segment B C))\n(define M point (inter-ll A B K X))\n(define N point (inter-ll A C K X))\n(segment A M)\n(segment A N)\n(segment I M)\n(segment I N)\n(segment M N)\n(define J point (midpoint B C))\n(segment A K)\n(segment K J)\n(segment A J)\n(on-segment K A J)",
-    "id": 4
-  },
-  {
-    "image_dir": "",
-    "instruction": "Cho BC là dây cung cố định của đường tròn (O;R) (BC ≠ 2R). A là điểm di động trên cung lớn BC. I là tâm đường tròn nội tiếp tam giác ABC. Tia AI cắt đường tròn (O) tại M, cắt BC tại D. a) Chứng minh MD.MA không đổi. b) Xác định vị trí A để bán kính đường tròn nội tiếp tam giác ABC lớn nhất. c) Gọi r1, r2 lần lượt là bán kính đường tròn nội tiếp các tam giác ABD, ACD. Xác định vị trí của A để r1 + r2 lớn nhất [6, 7].",
-    "answer": "(define O point)\n(circle O)\n(define B point)\n(on-circle B O)\n(define C point)\n(on-circle C O)\n(segment B C)\n(define A point)\n(on-circle A O)\n(segment A B)\n(segment A C)\n(define I point (incenter A B C))\n(circle I (incircle A B C))\n(segment A I)\n(define M point (line A I))\n(on-circle M O)\n(define D point (inter-ll A I B C))\n(segment M D)\n(segment M A)\n(define I1 point (incenter A B D))\n(circle I1 (incircle A B D))\n(define I2 point (incenter A C D))\n(circle I2 (incircle A C D))",
-    "id": 9
-  }
+    {
+        "image_dir":  "",
+        "instruction":  "Cho tam giác ABC vuông tại A, đường cao AH. Từ một điểm M bất kì trên cạnh BC kẻ MD vuông góc với AB và ME vuông góc với AC. Chứng minh 5 điểm A, D, M, H, E cùng thuộc một đường tròn.",
+        "answer":  "(triangle (A B C) (right A))\n(define H point (projection A (segment B C)))\n(define M point (midpoint B C))\n(define D point (projection M (segment A B)))\n(define E point (projection M (segment A C)))\n(define I point (midpoint A M))\n(segment A B)\n(segment A C)\n(segment B C)\n(segment A H)\n(segment A M)\n(segment M H)\n(segment M D)\n(segment M E)\n(circle I)\n(diameter A M I)\n(on-circle D I)\n(on-circle E I)\n(on-circle H I)",
+        "id":  122
+    }
 ]
