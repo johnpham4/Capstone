@@ -75,8 +75,28 @@ from src.config.settings.base import settings
 @click.option(
     "--dataset-repo",
     type=str,
-    default="geometry",
+    default="geometry1k",
     help="Hugging Face dataset repository name"
+)
+@click.option(
+    "--is-dummy",
+    is_flag=True,
+    default=False,
+    help="Use a small subset of dataset for smoke finetuning"
+)
+@click.option(
+    "--dummy-train-samples",
+    type=int,
+    default=400,
+    show_default=True,
+    help="Number of train samples when --is-dummy is enabled"
+)
+@click.option(
+    "--dummy-eval-samples",
+    type=int,
+    default=100,
+    show_default=True,
+    help="Number of eval samples when --is-dummy is enabled"
 )
 def main(
     no_cache: bool = False,
@@ -90,7 +110,10 @@ def main(
     batch_size: int = 2,
     learning_rate: float = 2e-4,
     dataset_workspace: str = "quangne",
-    dataset_repo: str = "geometry",
+    dataset_repo: str = "geometry1k",
+    is_dummy: bool = False,
+    dummy_train_samples: int = 400,
+    dummy_eval_samples: int = 100,
 ) -> None:
     assert (
         run_prepare_data
@@ -164,7 +187,7 @@ def main(
         assert settings.AWS_ARN_ROLE, "AWS_ARN_ROLE required. Set it in .env file"
 
         logger.info(
-            f"PEFT AceMath configuration: epochs={num_epochs}, batch_size={batch_size}, lr={learning_rate}, dataset={dataset_workspace}/{dataset_repo}"
+            f"PEFT AceMath configuration: epochs={num_epochs}, batch_size={batch_size}, lr={learning_rate}, dataset={dataset_workspace}/{dataset_repo}, is_dummy={is_dummy}, dummy_train={dummy_train_samples}, dummy_eval={dummy_eval_samples}"
         )
 
         from pipeline.services.peft_finetuning.sagemaker import run_finetuning_on_sagemaker as run_peft_acemath
@@ -177,6 +200,9 @@ def main(
             dataset_huggingface_repo_name=dataset_repo,
             model_output_huggingface_workspace="quangne",
             model_name="nvidia/AceMath-1.5B-Instruct",
+            is_dummy=is_dummy,
+            dummy_train_samples=dummy_train_samples,
+            dummy_eval_samples=dummy_eval_samples,
         )
 
         logger.info("PEFT AceMath finetuning job submitted to AWS SageMaker successfully!")

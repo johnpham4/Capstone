@@ -17,10 +17,12 @@ def run_finetuning_on_sagemaker(
     gradient_accumulation_steps: int = 4,
     learning_rate: float = 2e-4,
     dataset_huggingface_workspace: str = "quangne",
-    dataset_huggingface_repo_name: str = "geometry",
+    dataset_huggingface_repo_name: str = "geometry1k",
     model_output_huggingface_workspace: str = "quangne",
     model_name: str = "nvidia/AceMath-1.5B-Instruct",
     is_dummy: bool = False,
+    dummy_train_samples: int = 400,
+    dummy_eval_samples: int = 100,
     instance_type: str = "ml.g5.xlarge",
 ) -> None:
     assert settings.HF_TOKEN, "Hugging Face access token is required. Set HF_TOKEN in .env"
@@ -55,6 +57,12 @@ def run_finetuning_on_sagemaker(
     }
     if is_dummy:
         hyperparameters["is_dummy"] = True
+        hyperparameters["dummy_train_samples"] = dummy_train_samples
+        hyperparameters["dummy_eval_samples"] = dummy_eval_samples
+        logger.info(
+            "Dummy mode enabled for PEFT training: "
+            f"train_samples={dummy_train_samples}, eval_samples={dummy_eval_samples}"
+        )
 
     # Create the HuggingFace SageMaker estimator
     huggingface_estimator = HuggingFace(

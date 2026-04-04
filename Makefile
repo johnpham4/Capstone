@@ -39,8 +39,11 @@ option_finetune:
 simple_finetune_peft_acemath:
 	uv run python -m pipeline.cli --run-finetune-peft-acemath
 
+smoke_finetune_peft_acemath:
+	uv run python -m pipeline.cli --run-finetune-peft-acemath --num-epochs 1 --batch-size 1 --learning-rate 2e-4 --dataset-workspace quangne --dataset-repo geometry1k --is-dummy --dummy-train-samples 20 --dummy-eval-samples 5
+
 full_finetune_peft_acemath:
-	uv run python -m pipeline.cli --run-finetune-peft-acemath --num-epochs 6 --batch-size 2 --learning-rate 2e-4 --dataset-workspace quangne --dataset-repo geometry
+	uv run python -m pipeline.cli --run-finetune-peft-acemath --num-epochs 6 --batch-size 2 --learning-rate 2e-4 --dataset-workspace quangne --dataset-repo geometry1k
 
 
 aws_sagemaker_roles:

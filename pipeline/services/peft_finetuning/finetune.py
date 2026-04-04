@@ -1,6 +1,7 @@
 import argparse
 import os
 from pathlib import Path
+import time
 from typing import Any, List, Optional
 
 import torch
@@ -12,6 +13,7 @@ from transformers import (
     AutoTokenizer,
     BitsAndBytesConfig,
     EarlyStoppingCallback,
+    TrainerCallback,
 )
 from trl import SFTConfig, SFTTrainer
 
@@ -46,6 +48,61 @@ def _str2bool(value: str) -> bool:
     if value in {"0", "false", "f", "no", "n"}:
         return False
     raise argparse.ArgumentTypeError(f"Invalid boolean value: {value}")
+
+
+def _format_duration(seconds: float) -> str:
+    seconds = int(max(0, seconds))
+    hours, rem = divmod(seconds, 3600)
+    minutes, sec = divmod(rem, 60)
+    return f"{hours:02d}:{minutes:02d}:{sec:02d}"
+
+
+class TrainingProgressCallback(TrainerCallback):
+    """Logs training progress with elapsed time and ETA for terminal/CloudWatch visibility."""
+
+    def __init__(self) -> None:
+        self._start_time: Optional[float] = None
+
+    def on_train_begin(self, args, state, control, **kwargs):
+        self._start_time = time.time()
+        print("[train-progress] Training started")
+        return control
+
+    def on_log(self, args, state, control, logs=None, **kwargs):
+        if self._start_time is None:
+            return control
+
+        max_steps = int(state.max_steps or 0)
+        done_steps = int(state.global_step or 0)
+        if max_steps <= 0 or done_steps <= 0:
+            return control
+
+        remaining_steps = max(max_steps - done_steps, 0)
+        elapsed = time.time() - self._start_time
+        speed = done_steps / elapsed if elapsed > 0 else 0.0
+        eta = remaining_steps / speed if speed > 0 else 0.0
+        pct = (done_steps / max_steps) * 100.0
+        epoch = f"{state.epoch:.2f}" if state.epoch is not None else "n/a"
+
+        loss = logs.get("loss") if isinstance(logs, dict) else None
+        loss_text = f", loss={loss:.4f}" if isinstance(loss, (float, int)) else ""
+
+        print(
+            "[train-progress] "
+            f"epoch={epoch}, "
+            f"steps={done_steps}/{max_steps} ({pct:.1f}%), "
+            f"remaining={remaining_steps}, "
+            f"elapsed={_format_duration(elapsed)}, "
+            f"eta={_format_duration(eta)}"
+            f"{loss_text}"
+        )
+        return control
+
+    def on_train_end(self, args, state, control, **kwargs):
+        if self._start_time is not None:
+            total = time.time() - self._start_time
+            print(f"[train-progress] Training finished in {_format_duration(total)}")
+        return control
 
 
 def load_model_and_tokenizer(
@@ -170,7 +227,7 @@ def finetune(
     model_name: str = "nvidia/AceMath-1.5B-Instruct",
     output_dir: str = "/opt/ml/model",
     dataset_huggingface_workspace: str = "quangne",
-    dataset_huggingface_repo_name: str = "geometry",
+    dataset_huggingface_repo_name: str = "geometry1k",
     max_seq_length: int = 2048,
     load_in_4bit: bool = True,
     lora_rank: int = 32,
@@ -221,7 +278,7 @@ def finetune(
 
     # EarlyStoppingCallback requires evaluation + best-model tracking.
     should_eval = eval_dataset is not None
-    callbacks = []
+    callbacks = [TrainingProgressCallback()]
     if should_eval and enable_early_stopping:
         callbacks.append(
             EarlyStoppingCallback(
@@ -278,7 +335,7 @@ def finetune(
 def inference(
     model: Any,
     tokenizer: Any,
-    input_text: str = "Cho tam giác ABC, M là trung điểm của BC. Trên tia đối của BA lấy điểm N sao cho BN = AB. Gọi I là giao điểm MN và AC. Chứng minh AI = 2IC",
+    input_text: str = "Xét tam giác đều WXY có đường cao WD. I thuộc XY. IL, IM vuông góc WX, WY. 1. Chứng minh WLIM nội tiếp. 2. Chứng minh IL + IM = WD.",
     max_new_tokens: int = 256,
 ) -> None:
     prompt_body = DSL_INFERENCE_INSTRUCTION.format(query=input_text)
@@ -337,18 +394,11 @@ def save_adapter_model(
     model: Any,
     tokenizer: Any,
     output_dir: str,
-    push_to_hub: bool = False,
-    repo_id: Optional[str] = None,
 ) -> None:
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
     model.save_pretrained(output_dir)
     tokenizer.save_pretrained(output_dir)
-
-    if push_to_hub and repo_id:
-        print(f"Saving adapter model to '{repo_id}'")
-        model.push_to_hub(repo_id)
-        tokenizer.push_to_hub(repo_id)
 
 
 def merge_adapter_to_full_precision_base(
@@ -430,11 +480,10 @@ if __name__ == "__main__":
     parser.add_argument("--early_stopping_patience", type=int, default=2)
     parser.add_argument("--early_stopping_threshold", type=float, default=0.0)
     parser.add_argument("--dataset_huggingface_workspace", type=str, default="quangne")
-    parser.add_argument("--dataset_huggingface_repo_name", type=str, default="geometry")
+    parser.add_argument("--dataset_huggingface_repo_name", type=str, default="geometry1k")
     parser.add_argument("--model_output_huggingface_workspace", type=str, default="quangne")
-    parser.add_argument("--adapter_repo_id", type=str, default="")
     parser.add_argument("--merged_repo_id", type=str, default="")
-    parser.add_argument("--verify_from_hub", type=_str2bool, default=True)
+    parser.add_argument("--verify_from_hub", type=_str2bool, default=False)
     parser.add_argument(
         "--verify_input_text",
         type=str,
@@ -464,7 +513,6 @@ if __name__ == "__main__":
     print(f"Dataset workspace: '{args.dataset_huggingface_workspace}'")
     print(f"Dataset repo: '{args.dataset_huggingface_repo_name}'")
     print(f"Model output workspace: '{args.model_output_huggingface_workspace}'")
-    print(f"Adapter repo override: '{args.adapter_repo_id}'")
     print(f"Merged repo override: '{args.merged_repo_id}'")
     print(f"Verify from hub after push: {args.verify_from_hub}")
     print(f"Dummy train samples: {args.dummy_train_samples}")
@@ -499,21 +547,17 @@ if __name__ == "__main__":
     inference(model=model, tokenizer=tokenizer)
 
     model_short_name = checked_model_name.split("/")[-1]
-    adapter_repo_id = (
-        args.adapter_repo_id
-        if args.adapter_repo_id
-        else f"{args.model_output_huggingface_workspace}/text2diagram-{model_short_name}-peft-adapter"
-    )
     merged_repo_id = (
         args.merged_repo_id
         if args.merged_repo_id
-        else f"{args.model_output_huggingface_workspace}/text2diagram-{model_short_name}-merged"
+        else f"{args.model_output_huggingface_workspace}/text2diagram-{model_short_name}-merged-1k"
     )
 
     adapter_output_dir = str(Path(args.model_dir) / "adapter_sft")
     merged_output_dir = str(Path(args.model_dir) / "model_sft_merged")
 
-    save_adapter_model(model, tokenizer, adapter_output_dir, push_to_hub=True, repo_id=adapter_repo_id)
+    # Keep adapter local-only for merge; only merged model is pushed to Hub.
+    save_adapter_model(model, tokenizer, adapter_output_dir)
 
     del model
     if torch.cuda.is_available():
