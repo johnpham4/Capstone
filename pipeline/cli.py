@@ -75,7 +75,7 @@ from src.config.settings.base import settings
 @click.option(
     "--dataset-repo",
     type=str,
-    default="geometry1k",
+    default="geometry3k8-8-1-1",
     help="Hugging Face dataset repository name"
 )
 @click.option(
@@ -110,7 +110,7 @@ def main(
     batch_size: int = 2,
     learning_rate: float = 2e-4,
     dataset_workspace: str = "quangne",
-    dataset_repo: str = "geometry1k",
+    dataset_repo: str = "geometry3k8-8-1-1",
     is_dummy: bool = False,
     dummy_train_samples: int = 400,
     dummy_eval_samples: int = 100,

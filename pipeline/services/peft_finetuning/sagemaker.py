@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 import boto3
 from loguru import logger
@@ -11,13 +12,31 @@ finetuning_dir = Path(__file__).resolve().parent
 finetuning_requirements_path = finetuning_dir / "requirements.txt"
 
 
+def _build_comet_experiment_name(model_name: str, dataset_repo_name: str) -> str:
+    model_part = model_name.strip().split("/")[-1]
+    model_part = model_part.replace(" ", "").replace("_", "")
+    model_part = re.sub(r"(?i)(-?instruct)$", "", model_part)
+    model_part = re.sub(r"[^0-9A-Za-z.-]", "", model_part)
+
+    dataset_part = dataset_repo_name.strip().split("/")[-1]
+    dataset_part = dataset_part.replace(" ", "")
+    dataset_part = re.sub(r"[^0-9A-Za-z.-]", "", dataset_part)
+
+    if not model_part:
+        model_part = "unknown"
+    if not dataset_part:
+        dataset_part = "unknown"
+
+    return f"{model_part}_{dataset_part}"
+
+
 def run_finetuning_on_sagemaker(
     num_train_epochs: int = 1,
     per_device_train_batch_size: int = 2,
     gradient_accumulation_steps: int = 4,
     learning_rate: float = 2e-4,
     dataset_huggingface_workspace: str = "quangne",
-    dataset_huggingface_repo_name: str = "geometry1k",
+    dataset_huggingface_repo_name: str = "geometry3k8-8-1-1",
     model_output_huggingface_workspace: str = "quangne",
     model_name: str = "nvidia/AceMath-1.5B-Instruct",
     is_dummy: bool = False,
@@ -44,6 +63,11 @@ def run_finetuning_on_sagemaker(
     sagemaker_session = Session(boto_session=boto_session)
 
     logger.info(f"Model output Hugging Face workspace: {model_output_huggingface_workspace}")
+    comet_experiment_name = _build_comet_experiment_name(
+        model_name=model_name,
+        dataset_repo_name=dataset_huggingface_repo_name,
+    )
+    logger.info(f"Comet experiment name: {comet_experiment_name}")
 
     hyperparameters = {
         "num_train_epochs": num_train_epochs,
@@ -80,6 +104,7 @@ def run_finetuning_on_sagemaker(
             "HUGGING_FACE_HUB_TOKEN": settings.HF_TOKEN,
             "COMET_API_KEY": settings.COMET_API_KEY,
             "COMET_PROJECT_NAME": settings.COMET_PROJECT,
+            "COMET_EXPERIMENT_NAME": comet_experiment_name,
         },
     )
 
