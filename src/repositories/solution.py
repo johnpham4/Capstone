@@ -1,5 +1,3 @@
-"""Solution Repository — Data access cho bảng solutions."""
-
 from sqlalchemy import select
 
 from src.repositories.base import AbstractRepository

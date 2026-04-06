@@ -1,9 +1,8 @@
-import json
 import time
-from typing import Annotated, Optional
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query
-from fastapi.responses import StreamingResponse, Response
+from fastapi import HTTPException
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -11,7 +10,6 @@ from src.api.dependencies.auth import get_current_user
 from src.api.dependencies.rate_limiter import rate_limit_diagram
 from src.infrastructures.database.session import get_db
 from src.models.dto.user import User
-from src.prompts import DSL_INFERENCE_INSTRUCTION
 from src.services.diagram.generation import DiagramService
 from src.services.history import HistoryService
 
@@ -31,64 +29,43 @@ async def stream_pipeline(
     language: str = Query(default="vi"),
     llm_mock: bool = Query(default=False),
 ):
+    _ = (max_tokens, temperature, language, llm_mock)
     history = HistoryService(db)
     record = await history.create_request(
         user_id=current_user.id,
         input_text=user_input,
         mode="diagram",
     )
+    start = time.perf_counter()
 
-    async def event_generator():
-        start = time.perf_counter()
-        collected_dsl: Optional[str] = None
-        collected_image: Optional[str] = None
+    try:
+        result = diagram_service.generate_and_render(
+            task_id=f"diagram_{record.id}",
+            dsl=user_input,
+            epochs=500,
+            n_tries=1,
+            dpi=150,
+        )
 
-        try:
-            async for event in diagram_service.stream_pipeline_events(
-                user_input=user_input,
-                prompt_template=DSL_INFERENCE_INSTRUCTION,
-                max_tokens=max_tokens,
-                temperature=temperature,
-                epochs=500,
-                n_tries=1,
-                dpi=150,
-                llm_mock=llm_mock,
-            ):
-                logger.info(f"SSE event progress={event.get('progress')} status={event.get('status')}")
+        if result.get("status") == "failed":
+            raise RuntimeError(result.get("error", "Diagram generation failed"))
 
-                # Capture results as they stream
-                if event.get("dsl"):
-                    collected_dsl = event["dsl"]
-                if event.get("image_base64"):
-                    collected_image = event["image_base64"]
+        latency_ms = int((time.perf_counter() - start) * 1000)
+        await history.save_diagram(
+            request_id=record.id,
+            dsl=result.get("dsl", user_input),
+            image_base64=result.get("image_base64"),
+            generation_time_ms=latency_ms,
+        )
+        await history.complete_request(record.id, latency_ms=latency_ms)
 
-                yield f"data: {json.dumps(event)}\n\n"
-
-            latency_ms = int((time.perf_counter() - start) * 1000)
-            if collected_dsl:
-                await history.save_diagram(
-                    request_id=record.id,
-                    dsl=collected_dsl,
-                    image_base64=collected_image,
-                    generation_time_ms=latency_ms,
-                )
-            await history.complete_request(record.id, latency_ms=latency_ms)
-
-        except Exception as e:
-            latency_ms = int((time.perf_counter() - start) * 1000)
-            await history.fail_request(record.id, latency_ms=latency_ms)
-            logger.exception(f"SSE stream failed: {e}")
-            yield f"data: {json.dumps({'progress': 0, 'status': 'error', 'error': str(e)})}\n\n"
-
-    return StreamingResponse(
-        event_generator(),
-        media_type="text/event-stream",
-        headers={
-            "Cache-Control": "no-cache",
-            "Connection": "keep-alive",
-            "X-Accel-Buffering": "no",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type",
+        return {
+            "status": "success",
+            "request_id": record.id,
+            "result": result,
         }
-    )
+    except Exception as e:
+        latency_ms = int((time.perf_counter() - start) * 1000)
+        await history.fail_request(record.id, latency_ms=latency_ms)
+        logger.exception(f"Diagram generation failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

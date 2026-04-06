@@ -27,7 +27,6 @@ class SolverAgent:
             return {"error": str(e), "status": "failed"}
 
     def stream_solve(self, user_input: str) -> Generator[str, None, None]:
-        """Yield solution tokens one chunk at a time (OpenAI stream=True)."""
         prompt = SOLVER_SYSTEM_PROMPT.format(problem=user_input)
         try:
             stream = self.client.chat.completions.create(
@@ -44,16 +43,3 @@ class SolverAgent:
         except Exception as e:
             logger.error(f"SolverAgent stream error: {e}")
             yield f"\n[Error: {e}]"
-
-    def _solve_problem(self, problem: str) -> str:
-        prompt = SOLVER_SYSTEM_PROMPT.format(problem=problem)
-
-        response = self.client.chat.completions.create(
-            model=settings.OPENAI_MODEL_ID,
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=2048,
-            temperature=0.3
-        )
-
-        content = response.choices[0].message.content
-        return content
