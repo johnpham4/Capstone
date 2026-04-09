@@ -1,7 +1,5 @@
-"""Task queue DTOs."""
-
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Any, Literal, Optional
 
 
 class RenderTaskRequest(BaseModel):
@@ -14,12 +12,16 @@ class RenderTaskRequest(BaseModel):
 class TaskResponse(BaseModel):
     task_id: str
     celery_task_id: str
-    status: str
+    status: Literal["queued"]
+    queue: str
 
 
 class TaskStatusResponse(BaseModel):
     task_id: str
-    status: str  # PENDING, STARTED, SUCCESS, FAILURE
+    celery_task_id: str
+    status: Literal["queued", "running", "completed", "failed"]
+    raw_state: str
     progress: Optional[int] = None
-    result: Optional[dict] = None
+    result: Optional[dict[str, Any]] = None
+    error_code: Optional[str] = None
     error: Optional[str] = None

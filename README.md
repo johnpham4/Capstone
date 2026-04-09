@@ -5,6 +5,7 @@
 ## 📁 Diagram Folder Structure
 
 ```
+vllm 0.7.3
 llm_src/applications/diagram/
 ├── optimizer.py           # 875 lines - Core constraint solver
 ├── initializer.py         # 90 lines - Smart initialization strategies
@@ -516,3 +517,7 @@ Note: after download complete, you should restore back what you deleted
 3. lên aws vào iam tạo user với iamfullaccess (không nhớ tên hỏi chat)
 4. chạy 2 lệnh make role trong makefile dể tạo role và key và gắn vào .env
 5. chuẩn bị data đầy đủ và chạy make finetune, không hiểu thì hỏi copilot
+
+
+sudo apt update
+sudo apt install -y libpq-dev python3-dev build-essential pkg-config

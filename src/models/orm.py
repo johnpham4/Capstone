@@ -88,7 +88,7 @@ class DiagramModel(Base, TimestampMixin):
         nullable=False,
     )
     dsl: Mapped[str] = mapped_column(Text, nullable=False)
-    image_base64: Mapped[str | None] = mapped_column(Text, nullable=True)
+    image_url: Mapped[str | None] = mapped_column(Text, nullable=True)
     generation_time_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
     render_time_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
     request: Mapped["RequestModel"] = relationship(back_populates="diagram")

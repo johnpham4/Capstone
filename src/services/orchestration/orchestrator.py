@@ -4,19 +4,17 @@ from typing import Any, Literal
 from typing_extensions import TypedDict
 
 from langgraph.graph import StateGraph, END
-from loguru import logger
 
 from .agents import DiagramAgent, SolverAgent
 
 
-Mode = Literal["diagram", "both"]
+Mode = Literal["diagram", "solve", "both"]
 
 
 class OrchestratorState(TypedDict):
     user_input: str
     mode: Mode
     resolved_mode: Mode
-    parsed: dict
     problem_statement: str
     diagram: dict
     solution: dict
@@ -41,6 +39,7 @@ class Orchestrator:
             self._route_from_parse,
             {
                 "diagram": "diagram",
+                "solve": "solve",
                 "both": "diagram",
             },
         )
@@ -56,6 +55,8 @@ class Orchestrator:
         return workflow.compile()
 
     def _parse_node(self, state: OrchestratorState) -> OrchestratorState:
+        state["resolved_mode"] = state.get("mode", "diagram")
+        state["problem_statement"] = state.get("user_input", "")
         return state
 
     @staticmethod
@@ -64,7 +65,9 @@ class Orchestrator:
 
     def _diagram_node(self, state: OrchestratorState) -> OrchestratorState:
         state["diagram"] = self.diagram_agent.execute(
-            state["problem_statement"], self.diagram_prompt, llm_mock=state.get("llm_mock", False),
+            state["problem_statement"],
+            self.diagram_prompt,
+            llm_mock=state.get("llm_mock", False),
         )
         return state
 
@@ -84,9 +87,8 @@ class Orchestrator:
         initial_state: OrchestratorState = {
             "user_input": user_input,
             "mode": mode,
-            "resolved_mode": "diagram",
-            "parsed": {},
-            "problem_statement": "",
+            "resolved_mode": mode,
+            "problem_statement": user_input,
             "diagram": {},
             "solution": {},
             "llm_mock": llm_mock,
@@ -94,10 +96,7 @@ class Orchestrator:
 
         final_state = await asyncio.to_thread(self.workflow.invoke, initial_state)
 
-        result: dict = {
-            "parsed": final_state.get("parsed", {}),
-            "mode": final_state.get("resolved_mode", mode),
-        }
+        result: dict = {"mode": final_state.get("resolved_mode", mode)}
         if final_state.get("diagram"):
             result["diagram"] = final_state["diagram"]
         if final_state.get("solution"):

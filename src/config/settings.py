@@ -22,7 +22,10 @@ class Settings(BaseSettings):
     AWS_ACCESS_KEY_ID: str | None = None
     AWS_SECRET_ACCESS_KEY: str | None = None
     AWS_REGION: str = "us-east-1"
+    REGION_NAME: str | None = None
     AWS_ARN_ROLE: str | None = None
+    S3_BUCKET_NAME: str | None = None
+    S3_DIAGRAM_PREFIX: str = "diagrams"
 
     # SageMaker Endpoint Config
     SAGEMAKER_ENDPOINT_INFERENCE: str = "text2diagram-llm-endpoint"
@@ -75,6 +78,9 @@ class Settings(BaseSettings):
     OUTPUT_DIR: str = "./output/diagrams"
     DIAGRAM_OPTIMIZER_EPOCHS: int = 1000
     DIAGRAM_OPTIMIZER_LR: float = 0.01
+    DIAGRAM_QUEUE_NAME: str = "diagram.render"
+    DIAGRAM_QUEUE_EXCHANGE: str = "diagram"
+    DIAGRAM_QUEUE_ROUTING_KEY: str = "diagram.render"
 
     @property
     def OPENAI_MAX_TOKEN_WINDOW(self) -> int:

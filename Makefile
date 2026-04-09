@@ -77,8 +77,10 @@ docker_infra:
 	docker compose up -d postgres rabbitmq redis
 
 migrate:
-	uv run alembic revision --autogenerate -m "upgrade tables" && \
 	uv run alembic upgrade head
+
+revision:
+	uv run alembic revision --autogenerate -m "upgrade tables"
 
 
 mock:

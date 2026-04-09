@@ -1,13 +1,25 @@
+import json
 from uuid import uuid4
 
 from celery import current_app
 from celery.result import AsyncResult
 
+from src.config.settings.settings import settings
 from src.infrastructures.celery.tasks import render_diagram_task
+from src.services.tasks.ports import TaskQueuePort
 
 
-class TaskQueueService:
-    def queue_diagram_render(self, dsl: str, epochs: int, n_tries: int, dpi: int) -> dict:
+class CeleryTaskQueueService(TaskQueuePort):
+    STATUS_BY_STATE = {
+        "PENDING": "queued",
+        "STARTED": "running",
+        "SUCCESS": "completed",
+        "FAILURE": "failed",
+        "RETRY": "running",
+        "REVOKED": "failed",
+    }
+
+    def _enqueue_diagram_render(self, dsl: str, epochs: int, n_tries: int, dpi: int) -> dict:
         task_id = str(uuid4())
         celery_task = render_diagram_task.apply_async(
             kwargs={
@@ -16,21 +28,35 @@ class TaskQueueService:
                 "epochs": epochs,
                 "n_tries": n_tries,
                 "dpi": dpi,
-            }
+            },
+            queue=settings.DIAGRAM_QUEUE_NAME,
         )
         return {
             "task_id": task_id,
             "celery_task_id": celery_task.id,
             "status": "queued",
+            "queue": settings.DIAGRAM_QUEUE_NAME,
         }
+
+    def queue_diagram_render(self, dsl: str, epochs: int, n_tries: int, dpi: int) -> dict:
+        return self._enqueue_diagram_render(
+            dsl=dsl,
+            epochs=epochs,
+            n_tries=n_tries,
+            dpi=dpi,
+        )
 
     def get_task_status(self, celery_task_id: str) -> dict:
         result = AsyncResult(celery_task_id)
+        normalized_status = self.STATUS_BY_STATE.get(result.state, "running")
         payload = {
             "task_id": celery_task_id,
-            "status": result.state,
+            "celery_task_id": celery_task_id,
+            "status": normalized_status,
+            "raw_state": result.state,
             "progress": None,
             "result": None,
+            "error_code": None,
             "error": None,
         }
 
@@ -40,9 +66,18 @@ class TaskQueueService:
             payload["progress"] = 50
         elif result.state == "SUCCESS":
             payload["progress"] = 100
-            payload["result"] = result.result
+            task_payload = result.result if isinstance(result.result, dict) else {"value": result.result}
+            payload["task_id"] = task_payload.get("task_id", payload["task_id"])
+            payload["result"] = task_payload.get("result", task_payload)
         elif result.state == "FAILURE":
             payload["error"] = str(result.info)
+            try:
+                parsed_error = json.loads(str(result.info))
+                if isinstance(parsed_error, dict):
+                    payload["error_code"] = parsed_error.get("error_code")
+                    payload["error"] = parsed_error.get("message", payload["error"])
+            except Exception:
+                payload["error_code"] = "DIAGRAM_TASK_ERROR"
 
         return payload
 
@@ -80,3 +115,7 @@ class TaskQueueService:
                 )
 
         return {"active_tasks": tasks, "count": len(tasks)}
+
+
+
+TaskQueueService = CeleryTaskQueueService

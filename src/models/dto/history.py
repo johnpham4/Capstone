@@ -21,7 +21,7 @@ class HistoryItem(BaseModel):
 class HistoryDetail(HistoryItem):
     updated_at: datetime
     dsl: str | None = None
-    image_base64: str | None = None
+    image_url: str | None = None
     solution: str | None = None
 
 

@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from src.config.settings.base import settings
+from src.config.settings.settings import settings
 from src.infrastructures.database.base import Base
 from src.models.orm import (
     UserModel,

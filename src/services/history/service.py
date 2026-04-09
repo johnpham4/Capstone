@@ -1,10 +1,12 @@
 from typing import Optional
 
+import boto3
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.repositories import RequestRepository, DiagramRepository, SolutionRepository
 from src.models.orm import RequestModel, DiagramModel, SolutionModel
 from src.models.dto.history import HistoryItem, HistoryDetail, PaginatedHistory
+from src.config.settings.settings import settings
 
 
 class HistoryService:
@@ -12,6 +14,12 @@ class HistoryService:
         self._request_repo = RequestRepository(db)
         self._diagram_repo = DiagramRepository(db)
         self._solution_repo = SolutionRepository(db)
+        self._s3_client = boto3.client(
+            "s3",
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            region_name=settings.AWS_REGION or settings.REGION_NAME or "us-east-1",
+        )
 
 
     async def create_request(
@@ -31,14 +39,14 @@ class HistoryService:
         self,
         request_id: str,
         dsl: str,
-        image_base64: Optional[str] = None,
+        image_url: Optional[str] = None,
         generation_time_ms: Optional[int] = None,
         render_time_ms: Optional[int] = None,
     ) -> DiagramModel:
         return await self._diagram_repo.create({
             "request_id": request_id,
             "dsl": dsl,
-            "image_base64": image_base64,
+            "image_url": image_url,
             "generation_time_ms": generation_time_ms,
             "render_time_ms": render_time_ms,
         })
@@ -72,6 +80,13 @@ class HistoryService:
         if latency_ms is not None:
             data["latency_ms"] = latency_ms
         return await self._request_repo.update(request_id, data)
+
+    async def update_request_mode(
+        self,
+        request_id: str,
+        mode: str,
+    ) -> Optional[RequestModel]:
+        return await self._request_repo.update(request_id, {"mode": mode})
 
 
     async def list_history(
@@ -112,6 +127,10 @@ class HistoryService:
         if req is None:
             return None
 
+        image_url = None
+        if req.diagram and req.diagram.image_url:
+            image_url = self._resolve_diagram_image_url(req.diagram.image_url)
+
         return HistoryDetail(
             id=req.id,
             input_text=req.input_text,
@@ -121,8 +140,23 @@ class HistoryService:
             created_at=req.created_at,
             updated_at=req.updated_at,
             dsl=req.diagram.dsl if req.diagram else None,
-            image_base64=req.diagram.image_base64 if req.diagram else None,
+            image_url=image_url,
             solution=req.solution.content if req.solution else None,
+        )
+
+    def _resolve_diagram_image_url(self, value: str) -> str:
+        if not value.startswith("s3://"):
+            return value
+
+        path = value.removeprefix("s3://")
+        if "/" not in path:
+            return value
+
+        bucket, key = path.split("/", 1)
+        return self._s3_client.generate_presigned_url(
+            "get_object",
+            Params={"Bucket": bucket, "Key": key},
+            ExpiresIn=3600,
         )
 
     async def delete_request(self, request_id: str, user_id: str) -> bool:

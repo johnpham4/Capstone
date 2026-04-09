@@ -1,14 +1,13 @@
-import base64
-import os
 import time
 from pathlib import Path
 from typing import Any, Optional
 from uuid import uuid4
 
 import boto3
+from botocore.exceptions import BotoCoreError, ClientError
 from loguru import logger
 
-from src.config.settings.base import settings
+from src.config.settings.settings import settings
 from src.services.diagram.diagram_builder import DiagramBuilder
 from src.services.diagram.matplotlib_renderer import MatplotlibDiagramRenderer
 from src.services.diagram.optimizer import Optimizer
@@ -16,14 +15,15 @@ from src.services.diagram.optimizer import Optimizer
 
 class DiagramService:
     def __init__(self):
-        self.s3_bucket = os.getenv("AWS_S3_BUCKET") or os.getenv("S3_BUCKET_NAME")
-        self.s3_prefix = os.getenv("S3_DIAGRAM_PREFIX", "diagrams")
+        self.s3_bucket = settings.S3_BUCKET_NAME
+        self.s3_prefix = settings.S3_DIAGRAM_PREFIX
+        self.aws_region = settings.AWS_REGION or settings.REGION_NAME or "us-east-1"
 
         self.s3_client = boto3.client(
             "s3",
             aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-            region_name=settings.AWS_REGION,
+            region_name=self.aws_region,
         )
 
     def generate_and_render(
@@ -49,17 +49,16 @@ class DiagramService:
                 n_tries=n_tries,
                 dpi=dpi,
             )
-            image_base64 = base64.b64encode(image_bytes).decode("utf-8")
             render_ms = int((time.perf_counter() - render_start) * 1000)
 
             image_name = f"{task_id}_{uuid4().hex}.png"
             s3_url = self._store_image_on_s3(image_bytes=image_bytes, image_name=image_name)
+            image_url = self._build_image_access_url(s3_url)
 
             return {
                 "status": "success",
                 "dsl": dsl,
-                "image_base64": image_base64,
-                "image": image_base64,
+                "image_url": image_url,
                 "s3_url": s3_url,
                 "generation_time_ms": dsl_ms,
                 "render_time_ms": render_ms,
@@ -68,8 +67,24 @@ class DiagramService:
             logger.exception(f"Diagram generation failed: {e}")
             return {
                 "status": "failed",
+                "error_code": self._classify_error_code(e),
                 "error": str(e),
             }
+
+    @staticmethod
+    def _classify_error_code(error: Exception) -> str:
+        message = str(error).lower()
+
+        if isinstance(error, (ClientError, BotoCoreError)) or "s3" in message or "bucket" in message:
+            return "STORAGE_ERROR"
+
+        if "dsl" in message or "s-expression" in message or "parse" in message:
+            return "DSL_PARSE_ERROR"
+
+        if "render" in message or "image" in message or "matplotlib" in message:
+            return "RENDER_ERROR"
+
+        return "DIAGRAM_GENERATION_ERROR"
 
     def _render_dsl_to_image(
         self,
@@ -120,8 +135,7 @@ class DiagramService:
 
     def _store_image_on_s3(self, image_bytes: bytes, image_name: str) -> Optional[str]:
         if not self.s3_bucket:
-            logger.warning("S3 bucket is not configured (set AWS_S3_BUCKET or S3_BUCKET_NAME)")
-            return None
+            raise RuntimeError("S3 bucket is not configured (set AWS_S3_BUCKET or S3_BUCKET_NAME)")
 
         s3_key = f"{self.s3_prefix.rstrip('/')}/{image_name}"
         self.s3_client.put_object(
@@ -131,7 +145,27 @@ class DiagramService:
             ContentType="image/png",
         )
 
-        return f"s3://{self.s3_bucket}/{s3_key}"
+        s3_uri = f"s3://{self.s3_bucket}/{s3_key}"
+        logger.info(f"Uploaded diagram image to {s3_uri}")
+
+        return s3_uri
+
+    def _build_image_access_url(self, s3_uri: Optional[str]) -> Optional[str]:
+        if not s3_uri or not s3_uri.startswith("s3://"):
+            return s3_uri
+
+        path = s3_uri.removeprefix("s3://")
+        if "/" not in path:
+            return None
+
+        bucket, key = path.split("/", 1)
+
+        # Private buckets need a signed URL for browser rendering.
+        return self.s3_client.generate_presigned_url(
+            "get_object",
+            Params={"Bucket": bucket, "Key": key},
+            ExpiresIn=3600,
+        )
 
     def generation(
         self,

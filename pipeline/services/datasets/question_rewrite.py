@@ -7,7 +7,7 @@ from langchain_openai import ChatOpenAI
 from loguru import logger
 
 from pipeline.domain.prompt_question import prompt as QUESTION_GENERATION_PROMPT
-from src.config.settings.base import settings
+from src.config.settings.settings import settings
 
 
 class QuestionRewriteService:

@@ -2,7 +2,7 @@ from typing import Generator
 
 from transformers import AutoTokenizer
 
-from src.config.settings.base import settings
+from src.config.settings.settings import settings
 
 
 def flatten(nested_list: list) -> list:

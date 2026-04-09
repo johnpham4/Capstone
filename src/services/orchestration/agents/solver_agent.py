@@ -3,7 +3,7 @@ from collections.abc import Generator
 from openai import OpenAI
 from loguru import logger
 
-from src.config.settings.base import settings
+from src.config.settings.settings import settings
 from src.prompts import SOLVER_SYSTEM_PROMPT
 
 
@@ -43,3 +43,14 @@ class SolverAgent:
         except Exception as e:
             logger.error(f"SolverAgent stream error: {e}")
             yield f"\n[Error: {e}]"
+
+    def _solve_problem(self, user_input: str) -> str:
+        prompt = SOLVER_SYSTEM_PROMPT.format(problem=user_input)
+        response = self.client.chat.completions.create(
+            model=settings.OPENAI_MODEL_ID,
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=2048,
+            temperature=0.3,
+            stream=False,
+        )
+        return (response.choices[0].message.content or "").strip()
