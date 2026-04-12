@@ -6,7 +6,7 @@ from loguru import logger
 
 from src.api.endpoints import register_routes
 from src.api.error_handler import register_error_handlers
-from src.config.settings.settings import settings
+from src.config.settings import settings
 from src.infrastructures.database.session import init_db
 from src.infrastructures.redis.connection import RedisConnector
 

@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.config.settings.settings import settings
+from src.config.settings import settings
 from src.core.security import verify_password, get_password_hash, create_access_token
 from src.infrastructures.redis.cache import token_blacklist
 from src.models.dto.auth import Token

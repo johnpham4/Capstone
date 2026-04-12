@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.repositories import RequestRepository, DiagramRepository, SolutionRepository
 from src.models.orm import RequestModel, DiagramModel, SolutionModel
 from src.models.dto.history import HistoryItem, HistoryDetail, PaginatedHistory
-from src.config.settings.settings import settings
+from src.config.settings import settings
 
 
 class HistoryService:

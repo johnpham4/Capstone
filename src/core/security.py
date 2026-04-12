@@ -3,7 +3,7 @@ from uuid import uuid4
 import jwt
 from pwdlib import PasswordHash
 
-from src.config.settings.settings import settings
+from src.config.settings import settings
 
 password_hash = PasswordHash.recommended()
 

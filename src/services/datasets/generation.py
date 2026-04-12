@@ -7,7 +7,7 @@ from langchain_core.exceptions import OutputParserException
 
 
 from src.services.utils import misc
-from src.config.settings.settings import settings
+from src.config.settings import settings
 from src.models.domain.training import Document
 from src.models.domain.training import GenerateDatasetSamplesPrompt, Prompt
 from src.models.domain.training import InstructDataset, InstructDatasetSample, InstructTrainTestSplit

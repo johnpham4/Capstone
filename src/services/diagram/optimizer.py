@@ -345,10 +345,10 @@ class Optimizer:
         p1, p2, p3, p4 = pt_objs
 
         # All sides equal + right angle
-        self.register_loss(f"sq_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
-        self.register_loss(f"sq_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
-        self.register_loss(f"sq_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
-        self.register_loss(f"sq_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
+        self.register_loss(f"sq_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=50.0)
+        self.register_loss(f"sq_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=50.0)
+        self.register_loss(f"sq_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=50.0)
+        self.register_loss(f"sq_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=50.0)
         self.register_ndg(f"sq_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
         return pt_objs
 
@@ -360,10 +360,13 @@ class Optimizer:
         )
         p1, p2, p3, p4 = pt_objs
 
-        # Three right angles
-        self.register_loss(f"rect_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
-        self.register_loss(f"rect_right_C_{names[0]}", lambda: self._dot_product(p2, p3, p4), weight=10.0)
-        self.register_loss(f"rect_right_D_{names[0]}", lambda: self._dot_product(p3, p4, p1), weight=10.0)
+        # Right angles (high weight to keep shape rigid)
+        self.register_loss(f"rect_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=50.0)
+        self.register_loss(f"rect_right_C_{names[0]}", lambda: self._dot_product(p2, p3, p4), weight=50.0)
+        self.register_loss(f"rect_right_D_{names[0]}", lambda: self._dot_product(p3, p4, p1), weight=50.0)
+        # Opposite sides equal
+        self.register_loss(f"rect_eq_AB_CD_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p3, p4), weight=50.0)
+        self.register_loss(f"rect_eq_BC_DA_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p4, p1), weight=50.0)
         # Encourage a non-square rectangle by keeping the aspect ratio close to the initializer.
         target_ratio = rect_w / rect_h
         self.register_loss(
@@ -877,12 +880,27 @@ class Optimizer:
         p2 = self.lookup_pt(line1_points[1])
         p3 = self.lookup_pt(line2_points[0])
         p4 = self.lookup_pt(line2_points[1])
-        intersection = self.sample_uniform(point_name)
+
+        # Compute analytic intersection for good initialization
+        x1, y1 = p1.x.item(), p1.y.item()
+        x2, y2 = p2.x.item(), p2.y.item()
+        x3, y3 = p3.x.item(), p3.y.item()
+        x4, y4 = p4.x.item(), p4.y.item()
+        denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+        if abs(denom) > 1e-8:
+            t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom
+            init_x = x1 + t * (x2 - x1)
+            init_y = y1 + t * (y2 - y1)
+        else:
+            init_x = (x1 + x2 + x3 + x4) / 4
+            init_y = (y1 + y2 + y3 + y4) / 4
+
+        intersection = self.sample_uniform(point_name, init_coords=(init_x, init_y))
 
         self.register_loss(f"on_line1_{point_name.val}",
-                          lambda: self.collinear(intersection, p1, p2), weight=10.0)
+                          lambda: self.collinear(intersection, p1, p2), weight=50.0)
         self.register_loss(f"on_line2_{point_name.val}",
-                          lambda: self.collinear(intersection, p3, p4), weight=10.0)
+                          lambda: self.collinear(intersection, p3, p4), weight=50.0)
         return intersection
 
     def _define_angle_bisector(self, point_name, angle_points):

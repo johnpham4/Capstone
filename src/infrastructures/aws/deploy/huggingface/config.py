@@ -7,7 +7,7 @@ try:
 except ModuleNotFoundError:
     logger.warning("Couldn't load SageMaker imports. Run 'poetry install --with aws' to support AWS.")
 
-from src.config.settings.settings import settings
+from src.config.settings import settings
 
 
 hugging_face_deploy_config = {

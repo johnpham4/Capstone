@@ -2,7 +2,7 @@ from sagemaker.model import Model
 from sagemaker.session import Session
 from loguru import logger
 
-from src.config.settings.settings import settings
+from src.config.settings import settings
 
 def create_endpoint():
     session = Session()

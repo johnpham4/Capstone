@@ -1,6 +1,6 @@
 from celery import Celery
 from kombu import Exchange, Queue
-from src.config.settings.settings import settings
+from src.config.settings import settings
 
 celery_app = Celery(
     "geouni",

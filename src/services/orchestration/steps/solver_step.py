@@ -3,7 +3,7 @@ from collections.abc import Generator
 from openai import OpenAI
 from loguru import logger
 
-from src.config.settings.settings import settings
+from src.config.settings import settings
 from src.prompts import SOLVER_SYSTEM_PROMPT
 
 

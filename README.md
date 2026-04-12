@@ -521,3 +521,14 @@ Note: after download complete, you should restore back what you deleted
 
 sudo apt update
 sudo apt install -y libpq-dev python3-dev build-essential pkg-config
+
+
+Cho hình chữ nhật ABCD (AB > AD). Trên cạnh AD, BC lầ lượt lấy các điểm M và N sao cho AM = CN.
+
+a) Chứng minh rằng: BM // DN.
+
+b) Gọi O là trung điểm của BD. Chứng minh AC, BD, MN đồng quy tai O.
+
+c) Qua O vẽ đường thẳng d vuông góc với BD, d cắt AB tại P, cắt cạnh CD tại Q. chứng minh rằng PBQD là hình thoi.
+
+d) Đường thẳng qua B song song với PQ và đường thẳng qua Q song song với BD cắt nhau tại K. Chứng minh rằng: AC ⊥ CK.

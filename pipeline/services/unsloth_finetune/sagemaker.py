@@ -6,7 +6,7 @@ from loguru import logger
 from sagemaker.huggingface import HuggingFace
 from sagemaker.session import Session
 
-from src.config.settings.settings import settings
+from src.config.settings import settings
 
 finetuning_dir = Path(__file__).resolve().parent
 

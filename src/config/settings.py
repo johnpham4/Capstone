@@ -76,7 +76,7 @@ class Settings(BaseSettings):
 
     # Diagram Generation
     OUTPUT_DIR: str = "./output/diagrams"
-    DIAGRAM_OPTIMIZER_EPOCHS: int = 1000
+    DIAGRAM_OPTIMIZER_EPOCHS: int = 3000
     DIAGRAM_OPTIMIZER_LR: float = 0.01
     DIAGRAM_QUEUE_NAME: str = "diagram.render"
     DIAGRAM_QUEUE_EXCHANGE: str = "diagram"

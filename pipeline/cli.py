@@ -2,7 +2,7 @@ import click
 from pathlib import Path
 from loguru import logger
 from datetime import datetime as dt
-from src.config.settings.settings import settings
+from src.config.settings import settings
 
 
 @click.command()

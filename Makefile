@@ -86,8 +86,6 @@ revision:
 mock:
 	curl -X POST https://victoria-communicable-sometimes.ngrok-free.dev/generate \
 	-H "Content-Type: application/json" \
-	-d '{"prompt":"Cho tam giác ABC vuông tại A, có góc B bằng 30 độ"}'
+	-d '{"prompt":"Chuyển bài toán hình học tiếng Việt sang Geometry DSL (S-expression).\nChỉ trả về DSL thuần văn bản hợp lệ từ đề bài, không markdown, không giải thích.\nBỏ qua phần yêu cầu chứng minh hoặc câu hỏi phụ, nhưng giữ mọi dữ kiện hình học và điều kiện ràng buộc trong đề.\n\nĐề bài:\nCho tam giác ABC vuông tại A, có góc B bằng 30 độ\n\nDSL:"}'
 
 
-ui:
-	uv run python -m ui.py

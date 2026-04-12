@@ -7,8 +7,9 @@ import boto3
 from botocore.exceptions import BotoCoreError, ClientError
 from loguru import logger
 
-from src.config.settings.settings import settings
+from src.config.settings import settings
 from src.services.diagram.diagram_builder import DiagramBuilder
+from src.services.diagram.dsl_validator import validate_and_fix_dsl
 from src.services.diagram.matplotlib_renderer import MatplotlibDiagramRenderer
 from src.services.diagram.optimizer import Optimizer
 
@@ -30,8 +31,7 @@ class DiagramService:
         self,
         task_id: str,
         dsl: str,
-        epochs: int = 500,
-        n_tries: int = 1,
+        epochs: int = 3000,
         dpi: int = 150,
         timeout: int = 60,
     ) -> dict[str, Any]:
@@ -46,7 +46,6 @@ class DiagramService:
                 dsl=dsl,
                 task_id=task_id,
                 epochs=epochs,
-                n_tries=n_tries,
                 dpi=dpi,
             )
             render_ms = int((time.perf_counter() - render_start) * 1000)
@@ -91,11 +90,11 @@ class DiagramService:
         dsl: str,
         task_id: str,
         epochs: int,
-        n_tries: int,
         dpi: int,
     ) -> bytes:
+        dsl = validate_and_fix_dsl(dsl)
         lines = self._normalize_dsl_lines(dsl)
-        diagram = self._build_diagram(lines=lines, epochs=epochs, n_tries=n_tries)
+        diagram = self._build_diagram(lines=lines, epochs=epochs)
         image_path = self._render_diagram_file(diagram=diagram, task_id=task_id, dpi=dpi)
 
         image_bytes = image_path.read_bytes()
@@ -112,16 +111,16 @@ class DiagramService:
         return lines
 
     @staticmethod
-    def _build_diagram(lines: list[str], epochs: int, n_tries: int):
+    def _build_diagram(lines: list[str], epochs: int):
         builder = DiagramBuilder(lines)
         optimizer_opts = {
             "epochs": epochs,
-            "n_tries": n_tries,
+            "n_tries": 1,
             "learning_rate": settings.DIAGRAM_OPTIMIZER_LR,
             "seed": 42,
         }
         optimizer = Optimizer(builder.instructions, optimizer_opts, verbosity=False)
-        return optimizer.solve(n_tries=n_tries)
+        return optimizer.solve()
 
     @staticmethod
     def _render_diagram_file(diagram, task_id: str, dpi: int) -> Path:

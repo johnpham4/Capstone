@@ -4,7 +4,7 @@ import httpx
 from loguru import logger
 
 from src.infrastructures.celery.tasks import render_diagram_task
-from src.config.settings.settings import settings
+from src.config.settings import settings
 from src.services.mock_responses import MOCK_DSL
 
 
@@ -32,14 +32,15 @@ class DiagramStep:
         if not dsl.strip():
             return {"status": "failed", "error": "DSL input is empty"}
 
+        logger.info(f"DSL resolved ({len(dsl)} chars):\n{dsl}")
+
         # ── 2. Render diagram via Celery ────────────────────
         try:
             celery_task = render_diagram_task.apply_async(
                 kwargs={
                     "task_id": f"orchestrator_{id(self)}",
                     "dsl": dsl,
-                    "epochs": 500,
-                    "n_tries": 1,
+                    "epochs": settings.DIAGRAM_OPTIMIZER_EPOCHS,
                     "dpi": 150,
                 },
                 queue=settings.DIAGRAM_QUEUE_NAME,
