@@ -40,6 +40,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.get("/health", tags=["infra"])
+async def health_check():
+    return {"status": "ok"}
+
+
 # Register all API routes
 register_routes(app)
 register_error_handlers(app)

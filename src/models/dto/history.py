@@ -13,6 +13,8 @@ class HistoryItem(BaseModel):
     latency_ms: int | None = None
     has_diagram: bool = False
     has_solution: bool = False
+    has_source_image: bool = False
+    has_ocr: bool = False
     created_at: datetime
 
     model_config = {"from_attributes": True}
@@ -20,6 +22,8 @@ class HistoryItem(BaseModel):
 
 class HistoryDetail(HistoryItem):
     updated_at: datetime
+    source_image_url: str | None = None
+    ocr_text: str | None = None
     dsl: str | None = None
     image_url: str | None = None
     solution: str | None = None

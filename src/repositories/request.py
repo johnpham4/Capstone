@@ -1,6 +1,7 @@
-from typing import Sequence
+from datetime import datetime
+from typing import Optional, Sequence
 
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
@@ -11,12 +12,46 @@ from src.models.orm import RequestModel
 class RequestRepository(AbstractRepository[RequestModel]):
     model = RequestModel
 
+    def _apply_filters(
+        self,
+        stmt,
+        user_id: str,
+        *,
+        q: Optional[str] = None,
+        status: Optional[str] = None,
+        mode: Optional[str] = None,
+        from_date: Optional[datetime] = None,
+        to_date: Optional[datetime] = None,
+    ):
+        stmt = stmt.where(RequestModel.user_id == user_id)
+        if q:
+            stmt = stmt.where(
+                or_(
+                    RequestModel.input_text.ilike(f"%{q}%"),
+                    RequestModel.ocr_text.ilike(f"%{q}%"),
+                )
+            )
+        if status:
+            stmt = stmt.where(RequestModel.status == status)
+        if mode:
+            stmt = stmt.where(RequestModel.mode == mode)
+        if from_date:
+            stmt = stmt.where(RequestModel.created_at >= from_date)
+        if to_date:
+            stmt = stmt.where(RequestModel.created_at <= to_date)
+        return stmt
+
     async def get_by_user_id(
         self,
         user_id: str,
         *,
         skip: int = 0,
         limit: int = 20,
+        q: Optional[str] = None,
+        status: Optional[str] = None,
+        mode: Optional[str] = None,
+        from_date: Optional[datetime] = None,
+        to_date: Optional[datetime] = None,
     ) -> Sequence[RequestModel]:
         """Lấy danh sách requests của 1 user, mới nhất trước (eager-load relations)."""
         stmt = (
@@ -25,11 +60,12 @@ class RequestRepository(AbstractRepository[RequestModel]):
                 joinedload(RequestModel.diagram),
                 joinedload(RequestModel.solution),
             )
-            .where(RequestModel.user_id == user_id)
-            .order_by(RequestModel.created_at.desc())
-            .offset(skip)
-            .limit(limit)
         )
+        stmt = self._apply_filters(
+            stmt, user_id, q=q, status=status, mode=mode,
+            from_date=from_date, to_date=to_date,
+        )
+        stmt = stmt.order_by(RequestModel.created_at.desc()).offset(skip).limit(limit)
         result = await self._session.execute(stmt)
         return result.unique().scalars().all()
 
@@ -54,14 +90,23 @@ class RequestRepository(AbstractRepository[RequestModel]):
             data["latency_ms"] = latency_ms
         return await self.update(request_id, data)
 
-    async def count_by_user(self, user_id: str) -> int:
-        """Đếm tổng requests của 1 user."""
+    async def count_by_user(
+        self,
+        user_id: str,
+        *,
+        q: Optional[str] = None,
+        status: Optional[str] = None,
+        mode: Optional[str] = None,
+        from_date: Optional[datetime] = None,
+        to_date: Optional[datetime] = None,
+    ) -> int:
+        """Đếm tổng requests của 1 user (có filter)."""
         from sqlalchemy import func
 
-        stmt = (
-            select(func.count())
-            .select_from(RequestModel)
-            .where(RequestModel.user_id == user_id)
+        stmt = select(func.count()).select_from(RequestModel)
+        stmt = self._apply_filters(
+            stmt, user_id, q=q, status=status, mode=mode,
+            from_date=from_date, to_date=to_date,
         )
         result = await self._session.execute(stmt)
         return result.scalar_one()

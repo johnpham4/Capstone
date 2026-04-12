@@ -1,8 +1,6 @@
-from .orchestrator import Orchestrator
-from .executor import OrchestrationExecutor, OrchestrationError
+from .service import OrchestrationService, OrchestrationError
 
 __all__ = [
-    "Orchestrator",
-    "OrchestrationExecutor",
+    "OrchestrationService",
     "OrchestrationError",
 ]

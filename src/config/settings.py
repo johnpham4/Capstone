@@ -82,6 +82,10 @@ class Settings(BaseSettings):
     DIAGRAM_QUEUE_EXCHANGE: str = "diagram"
     DIAGRAM_QUEUE_ROUTING_KEY: str = "diagram.render"
 
+    # LLM Endpoint for DSL generation (ngrok / SageMaker / local)
+    LLM_ENDPOINT_URL: str | None = None
+    LLM_ENDPOINT_TIMEOUT: int = 60
+
     @property
     def OPENAI_MAX_TOKEN_WINDOW(self) -> int:
         official_max_token_window = {

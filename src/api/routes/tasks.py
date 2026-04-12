@@ -1,14 +1,21 @@
 import asyncio
 import json
+from typing import Annotated
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 from loguru import logger
 
+from src.api.dependencies.auth import get_current_user
+from src.models.dto.user import User
 from src.models.dto.task import RenderTaskRequest, TaskResponse, TaskStatusResponse
 from src.services.tasks.queue import TaskQueueService
 
-router = APIRouter(prefix="/api/v1/tasks", tags=["tasks"])
+router = APIRouter(
+    prefix="/api/v1/tasks",
+    tags=["tasks"],
+    dependencies=[Depends(get_current_user)],
+)
 task_queue_service = TaskQueueService()
 
 

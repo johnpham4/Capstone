@@ -23,14 +23,9 @@ def render_diagram_task(self, task_id: str, dsl: str, epochs: int = 500, n_tries
         )
 
         if result.get("status") != "success":
-            raise RuntimeError(
-                json.dumps(
-                    {
-                        "error_code": result.get("error_code", "DIAGRAM_GENERATION_ERROR"),
-                        "message": result.get("error", "Diagram generation failed"),
-                    }
-                )
-            )
+            error_code = result.get("error_code", "DIAGRAM_GENERATION_ERROR")
+            message = result.get("error", "Diagram generation failed")
+            raise RuntimeError(json.dumps({"error_code": error_code, "message": message}))
 
         logger.info(f"[Worker {task_id}] Completed")
 
@@ -41,20 +36,12 @@ def render_diagram_task(self, task_id: str, dsl: str, epochs: int = 500, n_tries
             "result": result,
         }
 
+    except RuntimeError:
+        raise
     except Exception as e:
         logger.error(f"[Worker {task_id}] Failed: {e}")
-        error_payload = {
+        raise RuntimeError(json.dumps({
             "error_code": "DIAGRAM_TASK_ERROR",
             "message": str(e),
-        }
-
-        try:
-            parsed = json.loads(str(e))
-            if isinstance(parsed, dict):
-                error_payload["error_code"] = str(parsed.get("error_code", error_payload["error_code"]))
-                error_payload["message"] = str(parsed.get("message", error_payload["message"]))
-        except Exception:
-            pass
-
-        raise RuntimeError(json.dumps(error_payload))
+        }))
 
