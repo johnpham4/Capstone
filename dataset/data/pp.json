@@ -1,0 +1,6 @@
+[
+{
+        "instruction": "Cho tam giác ABC cân tại A. Đường tròn O ngoại tiếp tam giác ABC. M,N,P là trung điểm AB,AC,BC. CMR:\na. Tứ giác MNCB là hình gì?\nb. MP đi qua trung điểm E của BN, NP đi qua trung điểm K của MC.\nc. AMPN là hinh thoi\nd. Tìm điều kiện tam giác ABC để AMPN là hình vuông.",
+        "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define M point (midpoint A B))\n(define N point (midpoint A C))\n(define P point (midpoint B C))\n(segment M N)\n(segment M P)\n(segment P N)\n(segment B N)\n(define E point (midpoint B N))\n(segment M C)\n(define K point (midpoint M C))"
+}
+]
