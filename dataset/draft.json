@@ -1,8 +1,8 @@
 [
     {
         "image_dir":  "",
-        "instruction":  "Cho tam giác ABC vuông tại A, đường cao AH. Từ một điểm M bất kì trên cạnh BC kẻ MD vuông góc với AB và ME vuông góc với AC. Chứng minh 5 điểm A, D, M, H, E cùng thuộc một đường tròn.",
-        "answer":  "(triangle (A B C) (right A))\n(define H point (projection A (segment B C)))\n(define M point (midpoint B C))\n(define D point (projection M (segment A B)))\n(define E point (projection M (segment A C)))\n(define I point (midpoint A M))\n(segment A B)\n(segment A C)\n(segment B C)\n(segment A H)\n(segment A M)\n(segment M H)\n(segment M D)\n(segment M E)\n(circle I)\n(diameter A M I)\n(on-circle D I)\n(on-circle E I)\n(on-circle H I)",
-        "id":  122
+        "instruction":  "Cho tam giác ABC (AB < AC < BC), đường cao AH. Gọi D, E, F lần lượt là trung điểm của các cạnh AB, BC và AC. Gọi I là giao điểm của DF và AE. a) Chứng minh tứ giác EFDH là hình thang cân. b) Chứng minh I là trung điểm của DF.",
+        "answer":  "(triangle (A B C))\n(define H point (projection A (segment B C)))\n(segment A H)\n(define D point (midpoint A B))\n(define E point (midpoint B C))\n(define F point (midpoint A C))\n(segment D F)\n(segment A E)\n(define I point (inter-ll D F A E))\n(segment E F)\n(segment F H)\n(segment H D)\n(segment D I)\n(segment I E)\n(equal-distance H D H F)\n(equal-distance D I I E)",
+        "id":  123
     }
 ]
