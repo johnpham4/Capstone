@@ -2199,17 +2199,18 @@ class Optimizer:
 
         loss = float('inf')
         if self.has_loss:
-            loss = self.train(epochs=self.opts.get('epochs', 1000),
-                      lr=self.opts.get('learning_rate', 0.01))
+            loss = self.train(epochs=3000,
+                      lr=0.01)
 
         return self.get_diagram(), loss
 
     def solve(self, n_tries=None):
-        """Solve with multiple initialization attempts"""
-        if n_tries is None:
-            n_tries = self.opts.get('n_tries', 1)
+        n_tries = 3
+        # if n_tries is None:
+        #     n_tries = self.opts.get('n_tries', 1)
 
-        eps = self.opts.get('eps', 1e-6)
+        # eps = self.opts.get('eps', 1e-6)
+        eps = 1e-6
         best_loss = float('inf')
         best_diagram = None
 
@@ -2218,8 +2219,8 @@ class Optimizer:
                 # Reset state for new attempt
                 self._init_state()
                 # Set different random seed for varied initialization
-                random.seed(self.opts.get('seed', 42) + attempt)
-                torch.manual_seed(self.opts.get('seed', 42) + attempt)
+                random.seed(42 + attempt)
+                torch.manual_seed(42 + attempt)
 
             if self.verbosity and n_tries > 1:
                 logger.info(f"\nAttempt {attempt + 1}/{n_tries}")
