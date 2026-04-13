@@ -5615,9 +5615,9 @@
     "problem": "Cho đường tròn O, đường thẳng d cắt đường tròn O tại hai điểm A và B, và đường thẳng e tiếp xúc với đường tròn O tại điểm C. Tính độ dài đoạn thẳng AC."
   },
   {
-    "image_dir": "images/img_100463.png",
-    "instruction": "Tam giác ABC, góc ABC = 90, góc BAC = 45, góc ACB = 45, đường thẳng đi qua điểm A, đường tròn ngoại tiếp O của tam giác ABC",
-    "answer": "(triangle (A B C) (right B))\n(angle-measure B A C 45)\n(angle-measure A B C 90)\n(angle-measure A C B 45)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(on-circle A O)",
-    "problem": "Cho tam giác ABC với góc ABC = 90°, góc BAC = 45°, góc ACB = 45°. Gọi O là tâm đường tròn ngoại tiếp tam giác ABC. Tính bán kính R của đường tròn ngoại tiếp O."
+    "image_dir": "",
+    "instruction": "Cho hình chữ nhật ABCD, cho I là giao điểm của 2 đường chéo BD và AC, cho M là trung điểm AB, K là trung điểm BC. Chứng minh: MIKB là hình chữ nhật",
+    "answer": "(rectangle (A B C D))\n(segment B D)\n(segment A C)\n(define I point (inter-ll B D A C))\n(define M point (midpoint A B))\n(define K point (midpoint B C))\n(segment M I)\n(segment I K)\n(segment K B)\n(parallel (segment M I) (segment K B))\n((parallel (segment I K) (segment B C)))",
+    "problem": "Cho hình chữ nhật ABCD, cho I là giao điểm của 2 đường chéo BD và AC, cho M là trung điểm AB, K là trung điểm BC. Chứng minh: MIKB là hình chữ nhật"
   }
 ]     

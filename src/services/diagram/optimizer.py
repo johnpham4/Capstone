@@ -6,6 +6,7 @@ import torch.optim as optim
 import random
 from loguru import logger
 from collections import namedtuple
+from functools import partial
 import math
 import traceback
 
@@ -768,23 +769,65 @@ class Optimizer:
                   weight=3000.0)
         return incenter
 
-    def _define_circumcenter(self, point_name, triangle_points):
-        """Define circumcenter - equal distance to all vertices"""
-        assert len(triangle_points) == 3
-        self.defined_circumcenters[point_name.val] = [p.val for p in triangle_points]
+    def _equal_radius_center_loss(self, center_point, point_list):
+        """All points have equal radius from one center."""
+        base_radius = self.dist(center_point, point_list[0])
+        total = self.const(0.0)
+        for pt in point_list[1:]:
+            total = total + (base_radius - self.dist(center_point, pt))**2
+        return total
 
-        p1 = self.lookup_pt(triangle_points[0])
-        p2 = self.lookup_pt(triangle_points[1])
-        p3 = self.lookup_pt(triangle_points[2])
+    def _register_equal_radius_center_loss(self, center_point, point_list, loss_key: str, weight: float = 3000.0):
+        """Register equal-radius constraint without nested function definitions."""
+        if len(point_list) < 3:
+            return
+        if loss_key in self.loss_fns:
+            return
+
+        self.register_loss(
+            loss_key,
+            partial(self._equal_radius_center_loss, center_point, point_list),
+            weight=weight,
+        )
+
+    def _get_circumcircle_point_names(self, circle_info: dict) -> list[str]:
+        """Backward-compatible accessor for circumcircle reference points."""
+        points = circle_info.get('points')
+        if isinstance(points, list) and len(points) > 0:
+            return points
+
+        triangle = circle_info.get('triangle')
+        if isinstance(triangle, list) and len(triangle) > 0:
+            return triangle
+
+        return []
+
+    def _define_circumcenter(self, point_name, polygon_points):
+        """Define circumcenter for 3+ points; triangle behavior remains unchanged."""
+        assert len(polygon_points) >= 3
+        self.defined_circumcenters[point_name.val] = [p.val for p in polygon_points]
+
+        p1 = self.lookup_pt(polygon_points[0])
+        p2 = self.lookup_pt(polygon_points[1])
+        p3 = self.lookup_pt(polygon_points[2])
 
         init_coords = Initializer.init_triangle_circumcircle(radius=1.0)
         init_coords = Initializer.add_noise(init_coords, noise_scale=0.02)
         circumcenter = self.sample_uniform(point_name, init_coords=init_coords[3])
 
-        self.register_loss(f"circumcenter_{point_name.val}",
-                          lambda: (self.dist(circumcenter, p1) - self.dist(circumcenter, p2))**2 +
-                                  (self.dist(circumcenter, p2) - self.dist(circumcenter, p3))**2,
-                  weight=3000.0)
+        if len(polygon_points) == 3:
+            self.register_loss(f"circumcenter_{point_name.val}",
+                              lambda: (self.dist(circumcenter, p1) - self.dist(circumcenter, p2))**2 +
+                                      (self.dist(circumcenter, p2) - self.dist(circumcenter, p3))**2,
+                      weight=3000.0)
+        else:
+            point_list = [self.lookup_pt(p) for p in polygon_points]
+            self._register_equal_radius_center_loss(
+                circumcenter,
+                point_list,
+                loss_key=f"circumcenter_{point_name.val}",
+                weight=3000.0,
+            )
         return circumcenter
 
     def _define_orthocenter(self, point_name, triangle_points):
@@ -1105,14 +1148,40 @@ class Optimizer:
             # Incircle defined by triangle points
             self.circles.append((center_name, {'type': 'incircle', 'triangle': [p.val for p in args]}))
         elif param_type_str == "circumcircle":
-            # Circumcircle defined by triangle points
-            self.circles.append((center_name, {'type': 'circumcircle', 'triangle': [p.val for p in args]}))
+            point_names = [p.val for p in args]
+            if len(point_names) == 3:
+                # Keep legacy format for triangle circumcircle.
+                self.circles.append((center_name, {'type': 'circumcircle', 'triangle': point_names}))
+            else:
+                # Use explicit multi-point format for quadrilateral and higher.
+                self.circles.append((center_name, {'type': 'circumcircle', 'points': point_names}))
+
+            if len(point_names) >= 3:
+                center_point = self._ensure_named_point(center_name)
+                point_list = [self._ensure_named_point(name) for name in point_names]
+                joined_names = "_".join(point_names)
+                self._register_equal_radius_center_loss(
+                    center_point,
+                    point_list,
+                    loss_key=f"circumcircle_{center_name}_{joined_names}",
+                    weight=2500.0,
+                )
+
+                if center_name not in self.defined_circumcenters:
+                    self.defined_circumcenters[center_name] = point_names
         elif param_type_str == "auto":
             if center_name in self.defined_circumcenters:
-                self.circles.append((center_name, {
-                    'type': 'circumcircle',
-                    'triangle': self.defined_circumcenters[center_name]
-                }))
+                circum_points = self.defined_circumcenters[center_name]
+                if len(circum_points) == 3:
+                    self.circles.append((center_name, {
+                        'type': 'circumcircle',
+                        'triangle': circum_points
+                    }))
+                else:
+                    self.circles.append((center_name, {
+                        'type': 'circumcircle',
+                        'points': circum_points
+                    }))
             elif center_name in self.defined_incenters:
                 self.circles.append((center_name, {
                     'type': 'incircle',
@@ -1262,10 +1331,10 @@ class Optimizer:
                             return self.dist_to_line(center, p1, p2)
 
                 if circle_type == 'circumcircle':
-                    tri = circle_info.get('triangle', [])
-                    if len(tri) >= 1 and all(name in self.name2pt for name in [center_name, tri[0]]):
+                    circum_points = self._get_circumcircle_point_names(circle_info)
+                    if len(circum_points) >= 1 and all(name in self.name2pt for name in [center_name, circum_points[0]]):
                         center = self.lookup_pt_by_name(center_name)
-                        p1 = self.lookup_pt_by_name(tri[0])
+                        p1 = self.lookup_pt_by_name(circum_points[0])
                         if center is not None and p1 is not None:
                             return self.dist(center, p1)
 
@@ -2290,13 +2359,15 @@ class Optimizer:
                     info = {**info, 'radius': radius}
 
                 elif info['type'] == 'circumcircle':
-                    # Radius = distance from center to any triangle vertex
-                    triangle_points = info['triangle']
-                    p1 = diagram.points.get(triangle_points[0])
+                    # Radius = distance from center to any circumcircle reference point
+                    circum_points = self._get_circumcircle_point_names(info)
+                    if len(circum_points) < 1:
+                        continue
+                    p1 = diagram.points.get(circum_points[0])
                     if p1 is not None:
                         radius = math.hypot(center.x - p1.x, center.y - p1.y)
                     else:
-                        p1_t = self.name2pt[triangle_points[0]]
+                        p1_t = self.name2pt[circum_points[0]]
                         radius = self.dist(center_pt, p1_t).detach().cpu().item()
                     info = {**info, 'radius': radius}
                 elif info['type'] == 'diameter':
@@ -2407,11 +2478,11 @@ class Optimizer:
                 return float(self.dist_to_line(center_pt, p1, p2).detach().cpu().item())
 
             if circle_type == 'circumcircle':
-                triangle_points = info.get('triangle', [])
-                if len(triangle_points) < 1:
+                circum_points = self._get_circumcircle_point_names(info)
+                if len(circum_points) < 1:
                     return None
                 center_pt = self.lookup_pt_by_name(center_name)
-                p1 = self.lookup_pt_by_name(triangle_points[0])
+                p1 = self.lookup_pt_by_name(circum_points[0])
                 if center_pt is None or p1 is None:
                     return None
                 return float(self.dist(center_pt, p1).detach().cpu().item())
