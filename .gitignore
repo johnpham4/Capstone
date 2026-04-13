@@ -66,3 +66,4 @@ htmlcov/
 *~
 
 .venv-win
+docs/
