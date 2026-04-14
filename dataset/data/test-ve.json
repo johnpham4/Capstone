@@ -1,3 +1,80 @@
 [
-    
+  {
+    "image_dir": "t",
+    "instruction": "tam giác abc có đường tròn ngoại và nội tiếp",
+    "answer": "(triangle (A B C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define K point (circumcenter A B C))\n(circle K (circumcircle A B C))",
+    "id": 5
+  },
+  {
+    "image_dir": "",
+    "instruction": "tam giác abc vuông tại a có đường tròn ngoại và nội tiếp",
+    "answer": "(triangle (A B C) (right A))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define K point (circumcenter A B C))\n(circle K (circumcircle A B C))",
+    "id": 5
+  },
+  {
+    "image_dir": "",
+    "instruction": "tam giác abc cân tại b có đường tròn ngoại và nội tiếp",
+    "answer": "(triangle (A B C) (isosceles B))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define K point (circumcenter A B C))\n(circle K (circumcircle A B C))",
+    "id": 5
+  },
+  {
+    "image_dir": "",
+    "instruction": "tam giác abc vuông cân tại c có đường tròn ngoại và nội tiếp",
+    "answer": "(triangle (A B C) (right_isosceles C))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define K point (circumcenter A B C))\n(circle K (circumcircle A B C))",
+    "id": 5
+  },
+  {
+    "image_dir": "",
+    "instruction": "tam giác abc đều có đường tròn ngoại và nội tiếp",
+    "answer": "(triangle (A B C) (equilateral))\n(define O point (incenter A B C))\n(circle O (incircle A B C))\n(define K point (circumcenter A B C))\n(circle K (circumcircle A B C))",
+    "id": 5
+  },
+  {
+    "image_dir": "",
+    "instruction": "tứ giác abcd",
+    "answer": "(quadrilateral (A B C D))",
+    "id": 5
+  },
+  {
+    "image_dir": "",
+    "instruction": "hình vuông abcd có đường tròn ngoại và nội tiếp",
+    "answer": "(square (A B C D))\n(define O point (incenter A B C D))\n(circle O (incircle A B C D))\n(define K point (circumcenter A B C D))\n(circle K (circumcircle A B C D))",
+    "id": 5
+  },
+  {
+    "image_dir": "",
+    "instruction": "hình chữ nhật abcd có đường tròn ngoại tiếp",
+    "answer": "(rectangle (A B C D))\n(define K point (circumcenter A B C D))\n(circle K (circumcircle A B C D))",
+    "id": 5
+  },
+  {
+    "image_dir": "",
+    "instruction": "hình thang abcd",
+    "answer": "(trapezoid (A B C D))",
+    "id": 5
+  },
+  {
+    "image_dir": "t",
+    "instruction": "hình bình hành abcd",
+    "answer": "(parallelogram (A B C D))\n(define O point (inter-ll A C B D))\n(segment A C)\n(segment B D)\n(define E point (segment A B))\n(define F point (segment C D))\n(equal-distance A E C F)",
+    "id": 5
+  },
+  {
+    "image_dir": "",
+    "instruction": "hình thoi abcd có đường tròn nội tiếp",
+    "answer": "(rhombus (A B C D))\n(define O point (incenter A B C D))\n(circle O (incircle A B C D))",
+    "id": 5
+  },
+  {
+    "image_dir": "t",
+    "instruction": "",
+    "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define M point (midpoint A B))\n(define N point (midpoint A C))\n(define P point (midpoint B C))\n(segment M N)\n(segment M P)\n(segment P N)\n(segment B N)\n(define E point (midpoint B N))\n(segment M C)\n(define K point (midpoint M C))",
+    "id": 5
+  },
+  {
+    "image_dir": "",
+    "instruction": "",
+    "answer": "(rectangle (A B C D))\n(segment B D)\n(segment A C)\n(define I point (inter-ll B D A C))\n(define M point (midpoint A B))\n(define K point (midpoint B C))\n(segment M I)\n(segment I K)\n(segment K B)",
+    "id": 5
+  }
 ]

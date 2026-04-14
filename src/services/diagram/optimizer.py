@@ -589,13 +589,17 @@ class Optimizer:
             # Opposite sides parallel via vector equality.
             self.register_loss(f"para_vec_x_{names[0]}", lambda: (p2.x - p1.x) - (p3.x - p4.x), weight=10.0)
             self.register_loss(f"para_vec_y_{names[0]}", lambda: (p2.y - p1.y) - (p3.y - p4.y), weight=10.0)
-            # Keep adjacent sides noticeably non-perpendicular so it does not look like a rectangle.
-            target_cos = 0.55
+            # Keep adjacent sides non-perpendicular, but not overly slanted.
+            target_cos = float(self.opts.get('parallelogram_target_cosine', 0.30))
+            shear_weight = float(self.opts.get('parallelogram_shear_weight', 8.0))
             self.register_loss(
                 f"para_shear_{names[0]}",
                 lambda: self.angle_cosine(p2, p1, p4) - target_cos,
-                weight=8.0,
+                weight=shear_weight,
             )
+            # Break global rotation symmetry so the shape does not look randomly tilted.
+            axis_weight = float(self.opts.get('parallelogram_axis_horizontal_weight', 900.0))
+            self.register_loss(f"para_axis_horizontal_{names[0]}", lambda: p2.y - p1.y, weight=axis_weight)
             self.register_ndg(f"para_area_{names[0]}", lambda: self._cross_product_area(p2, p1, p3), weight=20.0)
 
             self.quadrilaterals_metadata[key] = {
@@ -657,7 +661,20 @@ class Optimizer:
 
         else:
             # Only non-degeneracy constraint
-            self.register_ndg(f"quad_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            self.register_ndg(f"quad_edge_12_{names[0]}", lambda: self.dist(p1, p2), weight=8.0)
+            self.register_ndg(f"quad_edge_23_{names[0]}", lambda: self.dist(p2, p3), weight=8.0)
+            self.register_ndg(f"quad_edge_34_{names[0]}", lambda: self.dist(p3, p4), weight=8.0)
+            self.register_ndg(f"quad_edge_41_{names[0]}", lambda: self.dist(p4, p1), weight=8.0)
+            self.register_ndg(f"quad_area_123_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            self.register_ndg(f"quad_area_134_{names[0]}", lambda: self._cross_product_area(p1, p3, p4), weight=20.0)
+            self.register_ndg(f"quad_area_124_{names[0]}", lambda: self._cross_product_area(p1, p2, p4), weight=14.0)
+            self.register_loss(
+                f"quad_convex_turn_{names[0]}",
+                lambda: torch.relu(-self._cross_product_area(p1, p2, p3) * self._cross_product_area(p2, p3, p4))
+                + torch.relu(-self._cross_product_area(p2, p3, p4) * self._cross_product_area(p3, p4, p1))
+                + torch.relu(-self._cross_product_area(p3, p4, p1) * self._cross_product_area(p4, p1, p2)),
+                weight=200.0,
+            )
             self.quadrilaterals_metadata[key] = {'type': QuadrilateralType.GENERAL}
 
         return pt_objs
@@ -724,9 +741,12 @@ class Optimizer:
         return centroid
 
     def _define_circle_with_points(self, center_name, points_info, radius_value):
-        center_coords = Initializer.init_circle_with_positioned_points(radius_value, len(points_info))
+        center_coords = Initializer.init_circle_with_positioned_points(
+            center=(0.0, 0.0),
+            radius=radius_value,
+        )
         center_coords = Initializer.add_noise(center_coords)
-        center = self.sample_uniform(center_name, init_coords=center_coords)
+        center = self.sample_uniform(center_name, init_coords=center_coords[0])
 
         for point_name, distance, constraint_type in points_info:
             point = self.sample_uniform(point_name)
@@ -1591,12 +1611,13 @@ class Optimizer:
             logger.warning(f"Equal-distance constraint needs 4 points (p1, p2, p3, p4), got {len(points)}")
             return
 
+        point_names = [pt.val for pt in points]
         p1 = self.lookup_pt(points[0])
         p2 = self.lookup_pt(points[1])
         p3 = self.lookup_pt(points[2])
         p4 = self.lookup_pt(points[3])
 
-        eq_key = f"equal_distance_{points[0].val}{points[1].val}_{points[2].val}{points[3].val}"
+        eq_key = f"equal_distance_{point_names[0]}{point_names[1]}_{point_names[2]}{point_names[3]}"
         if eq_key not in self.loss_fns:
             self.register_loss(
                 eq_key,
@@ -1608,7 +1629,7 @@ class Optimizer:
         # This prevents solutions where p1=p2 or p3=p4
         min_segment_length = 0.15  # Minimum segment length
 
-        ndg_key_1 = f"ndg_segment_{points[0].val}{points[1].val}"
+        ndg_key_1 = f"ndg_segment_{point_names[0]}{point_names[1]}"
         if ndg_key_1 not in self.ndgs:
             self.register_ndg(
                 ndg_key_1,
@@ -1616,7 +1637,7 @@ class Optimizer:
                 weight=10.0
             )
 
-        ndg_key_2 = f"ndg_segment_{points[2].val}{points[3].val}"
+        ndg_key_2 = f"ndg_segment_{point_names[2]}{point_names[3]}"
         if ndg_key_2 not in self.ndgs:
             self.register_ndg(
                 ndg_key_2,
@@ -1624,8 +1645,57 @@ class Optimizer:
                 weight=10.0
             )
 
+        # If equal-distance describes two sides that share one triangle vertex (e.g. AB = AC),
+        # keep the opposite side from collapsing to a tiny segment.
+        shared_vertex = None
+        side_end_1 = None
+        side_end_2 = None
+        shared_patterns = (
+            (0, 2, 1, 3),
+            (0, 3, 1, 2),
+            (1, 2, 0, 3),
+            (1, 3, 0, 2),
+        )
+
+        for shared_idx_1, shared_idx_2, end_idx_1, end_idx_2 in shared_patterns:
+            if (
+                point_names[shared_idx_1] == point_names[shared_idx_2]
+                and point_names[end_idx_1] != point_names[end_idx_2]
+            ):
+                candidate_set = {point_names[shared_idx_1], point_names[end_idx_1], point_names[end_idx_2]}
+                is_triangle_side_pair = any(
+                    len(tri_key) == 3 and set(tri_key) == candidate_set
+                    for tri_key in self.triangles_metadata.keys()
+                )
+                if is_triangle_side_pair:
+                    shared_vertex = point_names[shared_idx_1]
+                    side_end_1 = point_names[end_idx_1]
+                    side_end_2 = point_names[end_idx_2]
+                break
+
+        if shared_vertex is not None and side_end_1 is not None and side_end_2 is not None:
+            shared_pt = self.lookup_pt_by_name(shared_vertex)
+            end_pt_1 = self.lookup_pt_by_name(side_end_1)
+            end_pt_2 = self.lookup_pt_by_name(side_end_2)
+
+            spread_key = f"equal_distance_triangle_spread_{shared_vertex}_{side_end_1}_{side_end_2}"
+            if spread_key not in self.loss_fns:
+                min_base_ratio = float(self.opts.get('equal_distance_triangle_min_base_ratio', 0.38))
+                spread_weight = float(self.opts.get('equal_distance_triangle_spread_weight', 2200.0))
+
+                self.register_loss(
+                    spread_key,
+                    lambda s=shared_pt, e1=end_pt_1, e2=end_pt_2, r=min_base_ratio: torch.relu(
+                        r * ((self.dist(s, e1) + self.dist(s, e2)) / 2.0) - self.dist(e1, e2)
+                    ),
+                    weight=spread_weight,
+                )
+
         if self.verbosity:
-            logger.info(f"Added equal-distance constraint: {points[0].val}{points[1].val} = {points[2].val}{points[3].val} with NDG")
+            logger.info(
+                f"Added equal-distance constraint: {point_names[0]}{point_names[1]} = "
+                f"{point_names[2]}{point_names[3]} with NDG"
+            )
 
     def _add_fixed_distance_constraint(self, points: list, distance):
         """Add constraint that distance(p1, p2) = fixed_value"""

@@ -1,6 +1,7 @@
 
 import math
 from typing import List, Tuple
+import random
 
 from networkx import center
 
@@ -318,7 +319,6 @@ class Initializer:
 
     @staticmethod
     def add_noise(coords: List[Tuple[float, float]], noise_scale: float = 0.05) -> List[Tuple[float, float]]:
-        import random
         return [
             (x + random.uniform(-noise_scale, noise_scale),
              y + random.uniform(-noise_scale, noise_scale))
