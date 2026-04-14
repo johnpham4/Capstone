@@ -11,7 +11,7 @@ from src.config.settings import settings
 from src.services.diagram.diagram_builder import DiagramBuilder
 from src.services.diagram.dsl_validator import validate_and_fix_dsl
 from src.services.diagram.matplotlib_renderer import MatplotlibDiagramRenderer
-from src.services.diagram.optimizer import Optimizer
+from src.services.diagram.optimizer_old import Optimizer
 
 
 class DiagramService:

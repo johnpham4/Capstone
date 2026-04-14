@@ -1,4 +1,3 @@
-
 from networkx import center
 import torch
 import torch.nn as nn
@@ -54,19 +53,21 @@ class Optimizer:
         self.unnamed_point_counter = 0
         self.has_loss = False
         self.trainable_vars = []
+        self.best_loss = None
+        self.count = 0
 
     def get_point(self, x, y):
         if not isinstance(x, torch.Tensor):
-            x = torch.tensor(x, dtype=torch.float64, device=self.device)
+            x = torch.tensor(x, dtype=torch.float32, device=self.device)
         if not isinstance(y, torch.Tensor):
-            y = torch.tensor(y, dtype=torch.float64, device=self.device)
+            y = torch.tensor(y, dtype=torch.float32, device=self.device)
         return TorchPoint(x, y)
 
     def mkvar(self, name, lo=-1.0, hi=1.0, init_value=None):
         if init_value is not None:
-            val = torch.tensor([init_value], dtype=torch.float64, device=self.device)
+            val = torch.tensor([init_value], dtype=torch.float32, device=self.device)
         else:
-            val = torch.empty(1, dtype=torch.float64, device=self.device).uniform_(lo, hi)
+            val = torch.empty(1, dtype=torch.float32, device=self.device).uniform_(lo, hi)
         param = nn.Parameter(val)
         self.trainable_vars.append(param)
         return param.squeeze()
@@ -81,7 +82,7 @@ class Optimizer:
         return name
 
     def const(self, x):
-        return torch.tensor(x, dtype=torch.float64, device=self.device)
+        return torch.tensor(x, dtype=torch.float32, device=self.device)
 
     def dist(self, p1: TorchPoint, p2: TorchPoint):
         dx = p1.x - p2.x
@@ -108,13 +109,13 @@ class Optimizer:
         n_x = -dy
         n_y = dx
 
-        # Normalize
-        n_norm = torch.sqrt(n_x**2 + n_y**2)
+        # Normalize with epsilon to avoid division by zero on degenerate lines.
+        n_norm = torch.sqrt(n_x**2 + n_y**2 + 1e-12)
         n_x = n_x / n_norm
         n_y = n_y / n_norm
 
         # Make sure normal points to upper half-plane
-        if n_y < 0:
+        if n_y.detach().item() < 0:
             n_x = -n_x
             n_y = -n_y
 
@@ -130,22 +131,24 @@ class Optimizer:
 
     def _point_on_segment_loss(self, point: TorchPoint, p1: TorchPoint, p2: TorchPoint):
         """Loss for point lying on segment p1-p2 (between p1 and p2)"""
-        line = self.pp2lnf(p1, p2)
-        on_line_loss = self.on_line(point, line)**2
-
-        # Point between p1 and p2: point = p1 + t*(p2-p1) with 0 <= t <= 1
+        # Return a residual (not an already-squared loss) to keep gradients stable.
         vec_x = p2.x - p1.x
         vec_y = p2.y - p1.y
         point_x = point.x - p1.x
         point_y = point.y - p1.y
 
         vec_len_sq = vec_x**2 + vec_y**2 + 1e-8
+        vec_len = torch.sqrt(vec_len_sq)
+        cross = point_x * vec_y - point_y * vec_x
+        on_line_residual = cross / (vec_len + 1e-8)
+
+        # Point between p1 and p2: point = p1 + t*(p2-p1) with 0 <= t <= 1
         t = (point_x * vec_x + point_y * vec_y) / vec_len_sq
 
         # Strong penalty if t < 0 or t > 1 to keep point strictly between endpoints
         between_penalty = torch.relu(-t) + torch.relu(t - 1)
 
-        return 100.0 * on_line_loss + 50.0 * between_penalty
+        return on_line_residual + 2.0 * between_penalty
 
     def _angle_bisector_equal_loss(self, p_vertex: TorchPoint, p1: TorchPoint, p2: TorchPoint, p_bisector: TorchPoint):
         """Loss for angle bisector: angle(p1, vertex, bisector) = angle(p2, vertex, bisector)"""
@@ -183,8 +186,13 @@ class Optimizer:
 
     def dist_to_line(self, point: TorchPoint, p1: TorchPoint, p2: TorchPoint):
         """Distance from point to line defined by p1, p2"""
-        line = self.pp2lnf(p1, p2)
-        return torch.abs(self.on_line(point, line))
+        vx = p2.x - p1.x
+        vy = p2.y - p1.y
+        wx = point.x - p1.x
+        wy = point.y - p1.y
+        denom = torch.sqrt(vx**2 + vy**2 + 1e-12)
+        cross = wx * vy - wy * vx
+        return torch.abs(cross) / denom
 
     def centroid_loss(self, centroid: TorchPoint, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
         expected_x = (p1.x + p2.x + p3.x) / 3
@@ -244,8 +252,7 @@ class Optimizer:
 
     def _calculate_distance_to_line(self, point, line_p1, line_p2):
         """Calculate distance from point to line (for incircle radius)"""
-        line = self.pp2lnf(line_p1, line_p2)
-        return torch.abs(self.on_line(point, line))
+        return self.dist_to_line(point, line_p1, line_p2)
 
     def _dot_product(self, pa: TorchPoint, pb: TorchPoint, pc: TorchPoint):
         """Calculate dot product of vectors (pa-pb) and (pc-pb)"""
@@ -338,10 +345,10 @@ class Optimizer:
         p1, p2, p3, p4 = pt_objs
 
         # All sides equal + right angle
-        self.register_loss(f"sq_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
-        self.register_loss(f"sq_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
-        self.register_loss(f"sq_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
-        self.register_loss(f"sq_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
+        self.register_loss(f"sq_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=50.0)
+        self.register_loss(f"sq_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=50.0)
+        self.register_loss(f"sq_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=50.0)
+        self.register_loss(f"sq_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=50.0)
         self.register_ndg(f"sq_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
         return pt_objs
 
@@ -353,10 +360,13 @@ class Optimizer:
         )
         p1, p2, p3, p4 = pt_objs
 
-        # Three right angles
-        self.register_loss(f"rect_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
-        self.register_loss(f"rect_right_C_{names[0]}", lambda: self._dot_product(p2, p3, p4), weight=10.0)
-        self.register_loss(f"rect_right_D_{names[0]}", lambda: self._dot_product(p3, p4, p1), weight=10.0)
+        # Right angles (high weight to keep shape rigid)
+        self.register_loss(f"rect_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=50.0)
+        self.register_loss(f"rect_right_C_{names[0]}", lambda: self._dot_product(p2, p3, p4), weight=50.0)
+        self.register_loss(f"rect_right_D_{names[0]}", lambda: self._dot_product(p3, p4, p1), weight=50.0)
+        # Opposite sides equal
+        self.register_loss(f"rect_eq_AB_CD_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p3, p4), weight=50.0)
+        self.register_loss(f"rect_eq_BC_DA_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p4, p1), weight=50.0)
         # Encourage a non-square rectangle by keeping the aspect ratio close to the initializer.
         target_ratio = rect_w / rect_h
         self.register_loss(
@@ -384,13 +394,27 @@ class Optimizer:
     def sample_trapezoid(self, points: list):
         assert len(points) == 4
         pt_objs, names = self._sample_quadrilateral_with_init(
-            points, Initializer.init_quadrilateral, 1.2, quad_type=QuadrilateralType.TRAPEZOID
+            points, Initializer.init_trapezoid, 1.0, noise=0.02, quad_type=QuadrilateralType.TRAPEZOID
         )
         p1, p2, p3, p4 = pt_objs
 
         # One pair parallel
         self.register_loss(f"trap_para_{names[0]}",
-                          lambda: (p2.x - p1.x) * (p3.y - p4.y) - (p2.y - p1.y) * (p3.x - p4.x), weight=10.0)
+                          lambda: (p2.x - p1.x) * (p3.y - p4.y) - (p2.y - p1.y) * (p3.x - p4.x), weight=4000.0)
+        # Trapezoid should not collapse into a parallelogram (legs AD and BC not parallel).
+        self.register_ndg(f"trap_legs_not_parallel_{names[0]}",
+                          lambda: self.parallel(p1, p4, p2, p3), weight=15.0)
+        min_base = 0.45
+        self.register_loss(
+            f"trap_base_min_bottom_{names[0]}",
+            lambda: torch.relu(min_base - self.dist(p1, p2)),
+            weight=600.0,
+        )
+        self.register_loss(
+            f"trap_base_min_top_{names[0]}",
+            lambda: torch.relu(min_base - self.dist(p3, p4)),
+            weight=600.0,
+        )
         self.register_ndg(f"trap_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
         self.register_ndg(f"trap_ndg_top_{names[0]}", lambda: self.dist(p3, p4), weight=10.0)
         self.register_ndg(f"trap_ndg_bottom_{names[0]}", lambda: self.dist(p1, p2), weight=10.0)
@@ -587,7 +611,20 @@ class Optimizer:
         elif quad_type == 'trapezoid':
             # One pair parallel: AB || CD
             self.register_loss(f"trap_parallel_12_43_{names[0]}",
-                              lambda: self.parallel(p1, p2, p4, p3), weight=10.0)
+                              lambda: self.parallel(p1, p2, p4, p3), weight=4000.0)
+            self.register_ndg(f"trap_legs_not_parallel_{names[0]}",
+                              lambda: self.parallel(p1, p4, p2, p3), weight=15.0)
+            min_base = 0.45
+            self.register_loss(
+                f"trap_base_min_bottom_{names[0]}",
+                lambda: torch.relu(min_base - self.dist(p1, p2)),
+                weight=600.0,
+            )
+            self.register_loss(
+                f"trap_base_min_top_{names[0]}",
+                lambda: torch.relu(min_base - self.dist(p3, p4)),
+                weight=600.0,
+            )
             self.register_ndg(f"trap_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
             # Ensure bases have reasonable lengths
             self.register_ndg(f"trap_ndg_base1_{names[0]}", lambda: self.dist(p1, p2), weight=10.0)
@@ -843,12 +880,27 @@ class Optimizer:
         p2 = self.lookup_pt(line1_points[1])
         p3 = self.lookup_pt(line2_points[0])
         p4 = self.lookup_pt(line2_points[1])
-        intersection = self.sample_uniform(point_name)
+
+        # Compute analytic intersection for good initialization
+        x1, y1 = p1.x.item(), p1.y.item()
+        x2, y2 = p2.x.item(), p2.y.item()
+        x3, y3 = p3.x.item(), p3.y.item()
+        x4, y4 = p4.x.item(), p4.y.item()
+        denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+        if abs(denom) > 1e-8:
+            t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom
+            init_x = x1 + t * (x2 - x1)
+            init_y = y1 + t * (y2 - y1)
+        else:
+            init_x = (x1 + x2 + x3 + x4) / 4
+            init_y = (y1 + y2 + y3 + y4) / 4
+
+        intersection = self.sample_uniform(point_name, init_coords=(init_x, init_y))
 
         self.register_loss(f"on_line1_{point_name.val}",
-                          lambda: self.collinear(intersection, p1, p2), weight=10.0)
+                          lambda: self.collinear(intersection, p1, p2), weight=50.0)
         self.register_loss(f"on_line2_{point_name.val}",
-                          lambda: self.collinear(intersection, p3, p4), weight=10.0)
+                          lambda: self.collinear(intersection, p3, p4), weight=50.0)
         return intersection
 
     def _define_angle_bisector(self, point_name, angle_points):
@@ -2029,32 +2081,75 @@ class Optimizer:
                 logger.info(f" {instr}")
             self.process_instruction(instr)
 
+    def early_stop(self, loss: float, mode: str = "min", patience: int = 5, epsilon: float = 1e-6) -> bool:
+        if self.best_loss is None:
+            self.best_loss = loss
+            self.counter = 0
+            return False
+
+        if mode == "min":
+            improved = loss < self.best_loss - epsilon
+        elif mode == "max":
+            improved = loss > self.best_loss + epsilon
+        else:
+            raise ValueError("mode must be 'min' or 'max'")
+
+        if improved:
+            self.best_loss = loss
+            self.counter = 0
+        else:
+            self.counter += 1
+
+        return self.counter > patience
+
     def train(self, epochs: int = 1000, lr: float = 0.01):
         if not self.has_loss:
             return 0.0
 
         optimizer = optim.Adam(self.trainable_vars, lr=lr)
+        last_finite_params = [param.detach().clone() for param in self.trainable_vars]
         if self.verbosity:
             logger.info(f"Optimization ({epochs}) Epochs")
 
         for i in range(epochs):
-            optimizer.zero_grad()
+            optimizer.zero_grad(set_to_none=True)
             # Compute losses fresh at each iteration
             self.losses = {key: fn() for key, fn in self.loss_fns.items()}
             total_loss = sum(self.losses.values())
+
+            if not torch.isfinite(total_loss):
+                if self.verbosity:
+                    logger.warning(f"Non-finite total loss at iteration {i}; stopping optimization early.")
+                break
+
+            # Keep a rollback snapshot before each update.
+            last_finite_params = [param.detach().clone() for param in self.trainable_vars]
+
             total_loss.backward()
 
+            max_grad_norm = float(self.opts.get('max_grad_norm', 10.0))
+            torch.nn.utils.clip_grad_norm_(self.trainable_vars, max_grad_norm)
+
             optimizer.step()
+
+            params_finite = all(torch.isfinite(param).all() for param in self.trainable_vars)
+            if not params_finite:
+                for param, snapshot in zip(self.trainable_vars, last_finite_params):
+                    param.data.copy_(snapshot)
+                if self.verbosity:
+                    logger.warning(f"Non-finite parameter detected at iteration {i}; stopping optimization early.")
+                break
+
             if self.verbosity and i % 100 == 0:
                 logger.info(f"Iteration {i:4d}: Loss = {total_loss.item():.6f}")
 
             # Early stopping
-            if total_loss.item() < 1e-6:
-                if self.verbosity >= 0:
-                    logger.info(f"Converged at iteration {i} with loss {total_loss.item():.6f}")
+            if self.early_stop(total_loss.item(), mode="min", patience=10):
+                if self.verbosity:
+                    logger.info(f"Early stopped at iteration {i}")
                 break
 
-        final_loss = total_loss.item()
+        final_loss = total_loss.item() if torch.isfinite(total_loss) else float('inf')
         if self.verbosity:
             logger.info(f"Final loss {final_loss:.6f}")
             self.log_losses()
@@ -2104,17 +2199,18 @@ class Optimizer:
 
         loss = float('inf')
         if self.has_loss:
-            loss = self.train(epochs=self.opts.get('epochs', 1000),
-                      lr=self.opts.get('learning_rate', 0.01))
+            loss = self.train(epochs=3000,
+                      lr=0.01)
 
         return self.get_diagram(), loss
 
     def solve(self, n_tries=None):
-        """Solve with multiple initialization attempts"""
-        if n_tries is None:
-            n_tries = self.opts.get('n_tries', 1)
+        n_tries = 3
+        # if n_tries is None:
+        #     n_tries = self.opts.get('n_tries', 1)
 
-        eps = self.opts.get('eps', 1e-6)
+        # eps = self.opts.get('eps', 1e-6)
+        eps = 1e-6
         best_loss = float('inf')
         best_diagram = None
 
@@ -2123,8 +2219,8 @@ class Optimizer:
                 # Reset state for new attempt
                 self._init_state()
                 # Set different random seed for varied initialization
-                random.seed(self.opts.get('seed', 42) + attempt)
-                torch.manual_seed(self.opts.get('seed', 42) + attempt)
+                random.seed(42 + attempt)
+                torch.manual_seed(42 + attempt)
 
             if self.verbosity and n_tries > 1:
                 logger.info(f"\nAttempt {attempt + 1}/{n_tries}")
@@ -2509,4 +2605,4 @@ class Optimizer:
                 tx, ty = self._project_point_to_line(center, s1, s2)
                 touch = diagram.points[point_name]
                 touch.x = tx
-
+                touch.y = ty
