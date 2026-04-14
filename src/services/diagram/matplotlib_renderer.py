@@ -243,6 +243,11 @@ class MatplotlibDiagramRenderer:
 
         fig, ax = plt.subplots(figsize=(20, 20))
 
+        # Vertices with explicit angle-measure labels should show a single angle arc.
+        measured_vertex_ids = set()
+        if hasattr(self.diagram, 'angle_measures') and self.diagram.angle_measures:
+            measured_vertex_ids = {id(angle_data['vertex']) for angle_data in self.diagram.angle_measures}
+
         # 1. Draw Triangles (Solid Lines)
         for tri in self.diagram.triangles:
             p1, p2, p3 = tri[0], tri[1], tri[2]
@@ -300,26 +305,20 @@ class MatplotlibDiagramRenderer:
             if equal_angles:
                 logger.info(f"Drawing equal angles arcs: {equal_angles}")
                 for idx1, idx2 in equal_angles:
-                    # Vẽ arc ở góc idx1 với dấu gạch
-                    self._draw_angle_arc(ax, pts[idx1],
-                                        pts[(idx1-1)%3],
-                                        pts[(idx1+1)%3],
-                                        num_arcs=1,
-                                        draw_tick=True)
+                    # Avoid duplicate markers where a numeric angle is already shown.
+                    if id(pts[idx1]) not in measured_vertex_ids:
+                        self._draw_angle_arc(ax, pts[idx1],
+                                            pts[(idx1-1)%3],
+                                            pts[(idx1+1)%3],
+                                            num_arcs=1,
+                                            draw_tick=True)
 
-                    # Vẽ arc ở góc idx2 (cùng số arc và dấu gạch)
-                    # Vẽ arc ở góc idx1
-                    self._draw_angle_arc(ax, pts[idx1],
-                                        pts[(idx1-1)%3],
-                                        pts[(idx1+1)%3],
-                                        num_arcs=1)
-
-                    # Vẽ arc ở góc idx2 (cùng số arc)
-                    self._draw_angle_arc(ax, pts[idx2],
-                                        pts[(idx2-1)%3],
-                                        pts[(idx2+1)%3],
-                                        num_arcs=1,
-                                        draw_tick=True)
+                    if id(pts[idx2]) not in measured_vertex_ids:
+                        self._draw_angle_arc(ax, pts[idx2],
+                                            pts[(idx2-1)%3],
+                                            pts[(idx2+1)%3],
+                                            num_arcs=1,
+                                            draw_tick=True)
 
         # Draw quadrilaterals
         for quad in self.diagram.quadrilaterals:
@@ -440,41 +439,49 @@ class MatplotlibDiagramRenderer:
                             # Sử dụng 2 điểm trên mỗi đoạn thẳng để xác định hướng
                             self._draw_right_angle_symbol(ax, intersection_pt, p1, p3)
 
+
         # 5. Draw Lines
         for line_name, line_data in self.diagram.lines.items():
             p1, p2 = line_data
             dx = p2.x - p1.x
             dy = p2.y - p1.y
             length = np.sqrt(dx**2 + dy**2)
-
+            print(f"Drawing line '{line_name}': ({p1.x:.4f}, {p1.y:.4f}) to ({p2.x:.4f}, {p2.y:.4f})")
+            
             if length > 0:
-            # Normalize direction
                 dx /= length
                 dy /= length
-                extend_factor = 2.0  # Extend line in both directions
+                extend_factor = 5.0  
 
                 start_x = p1.x - dx * extend_factor
                 start_y = p1.y - dy * extend_factor
                 end_x = p2.x + dx * extend_factor
                 end_y = p2.y + dy * extend_factor
 
-
                 ax.plot([start_x, end_x], [start_y, end_y],
-                       color='blue', linewidth=1.0, linestyle='-', alpha=0.6)
+                        color='blue', linewidth=1.0, linestyle='-', alpha=0.6)
 
                 arrow_size = 0.15
                 ax.annotate('', xy=(end_x, end_y), xytext=(end_x - dx * arrow_size, end_y - dy * arrow_size),
-                           arrowprops=dict(arrowstyle='->', color='blue', lw=1.0, alpha=0.6))
+                            arrowprops=dict(arrowstyle='->', color='blue', lw=1.0, alpha=0.6))
                 ax.annotate('', xy=(start_x, start_y), xytext=(start_x + dx * arrow_size, start_y + dy * arrow_size),
-                           arrowprops=dict(arrowstyle='->', color='blue', lw=1.0, alpha=0.6))
+                            arrowprops=dict(arrowstyle='->', color='blue', lw=1.0, alpha=0.6))
+
+        # 5.5 Draw right angle for all perpendicular constraints (lines and segments)
+        if hasattr(self.diagram, 'perpendicular_lines') and self.diagram.perpendicular_lines:
+            for perp in self.diagram.perpendicular_lines:
+                # perp = (intersection_pt, dir1_pt, dir2_pt)
+                vertex, p1, p2 = perp
+                self._draw_right_angle_symbol(ax, vertex, p1, p2)
 
         # 6. Draw Points and Labels
         if self.diagram.points:
-            # Đồng bộ với optimizer: sử dụng (0, 0) làm tâm
             cx = 0.0
             cy = 0.0
 
             for name, p in self.diagram.points.items():
+                if name.endswith('_aux'):   
+                    continue
                 ax.plot(p.x, p.y, 'ko', markersize=4)
 
                 dx, dy = p.x - cx, p.y - cy
@@ -508,6 +515,8 @@ class MatplotlibDiagramRenderer:
                 # Vẽ ký hiệu 2 góc bằng nhau (tương tự equal_angles)
                 angle_points = bisector_data.get('angle_points', [])
                 if len(angle_points) >= 3:
+                    if id(vertex) in measured_vertex_ids:
+                        continue
                     # Lấy 2 điểm tạo góc: angle_points = [A, B, C] (A là đỉnh, góc BAC bị chia)
                     p1 = self.diagram.points.get(angle_points[1])  # B
                     p2 = self.diagram.points.get(angle_points[2])  # C
