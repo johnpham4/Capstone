@@ -54,5 +54,4 @@ class RateLimiter:
 
 
 rate_limit_orchestration = RateLimiter(max_requests=10, window_seconds=60)
-rate_limit_diagram = RateLimiter(max_requests=20, window_seconds=60)
 rate_limit_default = RateLimiter(max_requests=60, window_seconds=60)

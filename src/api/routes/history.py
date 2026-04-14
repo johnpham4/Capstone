@@ -1,4 +1,5 @@
-from typing import Annotated
+from datetime import datetime
+from typing import Annotated, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -18,13 +19,27 @@ async def list_history(
     db: AsyncSession = Depends(get_db),
     page: int = Query(default=1, ge=1, description="Page number"),
     page_size: int = Query(default=20, ge=1, le=100, description="Items per page"),
+    q: Optional[str] = Query(default=None, max_length=200, description="Search in input text"),
+    filter_status: Optional[str] = Query(
+        default=None, alias="status", description="Filter by status (pending/processing/completed/failed)",
+    ),
+    mode: Optional[str] = Query(
+        default=None, description="Filter by mode (auto/diagram/solve/both)",
+    ),
+    from_date: Optional[datetime] = Query(default=None, description="Filter from date (ISO 8601)"),
+    to_date: Optional[datetime] = Query(default=None, description="Filter to date (ISO 8601)"),
 ):
-    """Return paginated history of the authenticated user's requests."""
+    """Return paginated history with optional search & filters."""
     service = HistoryService(db)
     return await service.list_history(
         user_id=current_user.id,
         page=page,
         page_size=page_size,
+        q=q,
+        status=filter_status,
+        mode=mode,
+        from_date=from_date,
+        to_date=to_date,
     )
 
 
@@ -36,7 +51,7 @@ async def get_history_detail(
 ):
     """Return full detail for a single request including diagram & solution."""
     service = HistoryService(db)
-    detail = await service.get_detail(request_id)
+    detail = await service.get_detail(request_id, user_id=current_user.id)
     if detail is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

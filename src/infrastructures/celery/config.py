@@ -1,5 +1,6 @@
 from celery import Celery
-from src.config.settings.base import settings
+from kombu import Exchange, Queue
+from src.config.settings.settings import settings
 
 celery_app = Celery(
     "geouni",
@@ -23,4 +24,22 @@ celery_app.conf.update(
     worker_pool="prefork",
     worker_redirect_stdouts_level="WARNING",
     result_extended=False,
+
+    task_default_queue=settings.DIAGRAM_QUEUE_NAME,
+    task_default_exchange=settings.DIAGRAM_QUEUE_EXCHANGE,
+    task_default_exchange_type="direct",
+    task_default_routing_key=settings.DIAGRAM_QUEUE_ROUTING_KEY,
+    task_queues=(
+        Queue(
+            settings.DIAGRAM_QUEUE_NAME,
+            Exchange(settings.DIAGRAM_QUEUE_EXCHANGE, type="direct"),
+            routing_key=settings.DIAGRAM_QUEUE_ROUTING_KEY,
+        ),
+    ),
+    task_routes={
+        "render_diagram": {
+            "queue": settings.DIAGRAM_QUEUE_NAME,
+            "routing_key": settings.DIAGRAM_QUEUE_ROUTING_KEY,
+        },
+    },
 )

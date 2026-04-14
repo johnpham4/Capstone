@@ -1,7 +1,7 @@
 import redis.asyncio as aioredis
 from loguru import logger
 
-from src.config.settings.base import settings
+from src.config.settings.settings import settings
 
 
 class RedisConnector:

@@ -61,6 +61,8 @@ class RequestModel(Base, TimestampMixin):
         String(36), ForeignKey("users.id", ondelete="SET NULL"), nullable=True
     )
     input_text: Mapped[str] = mapped_column(Text, nullable=False)
+    source_image_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+    ocr_text: Mapped[str | None] = mapped_column(Text, nullable=True)
     mode: Mapped[str] = mapped_column(String(20), nullable=False, default="auto")  # auto / diagram / solve / both
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="pending")  # pending / processing / completed / failed
     latency_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
@@ -88,7 +90,7 @@ class DiagramModel(Base, TimestampMixin):
         nullable=False,
     )
     dsl: Mapped[str] = mapped_column(Text, nullable=False)
-    image_base64: Mapped[str | None] = mapped_column(Text, nullable=True)
+    image_url: Mapped[str | None] = mapped_column(Text, nullable=True)
     generation_time_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
     render_time_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
     request: Mapped["RequestModel"] = relationship(back_populates="diagram")
@@ -108,15 +110,3 @@ class SolutionModel(Base, TimestampMixin):
     )
     content: Mapped[str] = mapped_column(Text, nullable=False)
     request: Mapped["RequestModel"] = relationship(back_populates="solution")
-
-
-class RegistryModel(Base, TimestampMixin):
-    __tablename__ = "registry"
-
-    id: Mapped[str] = mapped_column(
-        String(36), primary_key=True, default=_generate_uuid
-    )
-    name_hf: Mapped[str] = mapped_column()
-    version: Mapped[int] = mapped_column()
-    alias: Mapped[str] = mapped_column()
-    prompt: Mapped[str] = mapped_column()

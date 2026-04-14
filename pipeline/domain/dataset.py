@@ -11,6 +11,7 @@ class InstructDatasetSample(BaseModel):
     image_dir: str
     instruction: str
     answer: str
+    llm_mock: bool = False
 
 class InstructDataset(BaseModel):
     samples: list[InstructDatasetSample]

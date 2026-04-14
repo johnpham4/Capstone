@@ -1,9 +1,5 @@
 from typing import Generator
 
-from transformers import AutoTokenizer
-
-from src.config.settings.base import settings
-
 
 def flatten(nested_list: list) -> list:
     """Flatten a list of lists into a single list."""
