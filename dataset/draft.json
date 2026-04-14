@@ -1,8 +1,8 @@
 [
   {
-    "image_dir": "",
-    "instruction": "Cho tam giác ABC cân tại A. Đường tròn O ngoại tiếp tam giác ABC. M,N,P là trung điểm AB,AC,BC. Chứng minh rằng: a. Tứ giác MNCB là hình gì? b. MP đi qua trung điểm E của BN, NP đi qua trung điểm K của MC. c. AMPN là hình thoi",
-    "answer": "(triangle (A B C) (isosceles A))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define M point (midpoint A B))\n(define N point (midpoint A C))\n(define P point (midpoint B C))\n(segment A B)\n(segment A C)\n(segment B C)\n(segment M N)\n(segment N C)\n(segment C B)\n(segment M P)\n(segment N P)\n(define E point (midpoint B N))\n(define K point (midpoint M C))\n(segment B N)\n(segment M P)\n(segment N P)\n(segment A E)\n(segment A K)\n(equal-distance A E E K)\n(equal-distance A E A K)\n(equal-distance M P P N)\n(equal-distance N C C B)",
-    "problem": "Cho tam giác ABC cân tại A. Đường tròn O ngoại tiếp tam giác ABC. M,N,P là trung điểm AB,AC,BC. Chứng minh rằng: a. Tứ giác MNCB là hình gì? b. MP đi qua trung điểm E của BN, NP đi qua trung điểm K của MC. c. AMPN là hình thoi"
+    "image_dir": "images/img_105527.png",
+    "instruction": "Hình vuông ABCD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng BC, đường thẳng PQ",
+    "answer": "(square (A B C D))\n(define P point (segment A B))\n(define Q point (segment B C))\n(segment P Q)",
+    "problem": "Cho hình vuông ABCD, điểm P ∈ AB, điểm Q ∈ BC, và đường thẳng PQ. Tính độ dài đoạn thẳng PQ nếu biết rằng AB = 4."
   }
 ]

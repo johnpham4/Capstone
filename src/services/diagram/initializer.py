@@ -1,9 +1,7 @@
 
 import math
 from typing import List, Tuple
-
-from networkx import center
-
+import random
 
 class Initializer:
 
@@ -56,11 +54,10 @@ class Initializer:
     @staticmethod
 
     def init_scalene_triangle(scale: float = 1.35) -> List[Tuple[float, float]]:
-        """Scalene triangle with all sides different"""
         return [
-            (-0.7 * scale, -0.4 * scale),   # A
-            (0.8 * scale, -0.2 * scale),    # B
-            (-0.1 * scale, 0.9 * scale)     # C: right (không đối xứng)
+            (-0.15 * scale, 0.78 * scale),   # A: upper-left
+            (-0.82 * scale, -0.62 * scale),  # B: lower-left
+            (0.90 * scale, -0.66 * scale)    # C: lower-right
         ]
 
     @staticmethod
@@ -196,7 +193,7 @@ class Initializer:
         return [
             (radius * math.cos(a), radius * math.sin(a))
             for a in angles
-        ] + [(0.0, 0.0)]  # Circumcenter at origin
+        ] + [(0.0, 0.0)]  
 
     @staticmethod
     def init_triangle_with_centroid(scale: float = 1.0) -> List[Tuple[float, float]]:
@@ -316,7 +313,6 @@ class Initializer:
 
     @staticmethod
     def add_noise(coords: List[Tuple[float, float]], noise_scale: float = 0.05) -> List[Tuple[float, float]]:
-        import random
         return [
             (x + random.uniform(-noise_scale, noise_scale),
              y + random.uniform(-noise_scale, noise_scale))

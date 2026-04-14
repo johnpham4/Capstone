@@ -190,7 +190,6 @@ class DiagramBuilder:
         if len(cmd) < 2:
             raise RuntimeError(f"Invalid quadrilateral command: {cmd}")
 
-        # Determine quadrilateral type from command name
         quad_type_str = cmd[0].upper()
 
         # Generic quadrilateral has no specific type

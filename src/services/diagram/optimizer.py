@@ -1,5 +1,3 @@
-
-from networkx import center
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -644,8 +642,20 @@ class Optimizer:
             self.quadrilaterals_metadata[key] = {'type': 'rhombus', 'equal_sides': [(0, 1), (1, 2), (2, 3), (3, 0)]}
 
         else:  # generic quadrilateral
-            # Only non-degeneracy constraint
-            self.register_ndg(f"quad_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            self.register_ndg(f"quad_edge_12_{names[0]}", lambda: self.dist(p1, p2), weight=8.0)
+            self.register_ndg(f"quad_edge_23_{names[0]}", lambda: self.dist(p2, p3), weight=8.0)
+            self.register_ndg(f"quad_edge_34_{names[0]}", lambda: self.dist(p3, p4), weight=8.0)
+            self.register_ndg(f"quad_edge_41_{names[0]}", lambda: self.dist(p4, p1), weight=8.0)
+            self.register_ndg(f"quad_area_123_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            self.register_ndg(f"quad_area_134_{names[0]}", lambda: self._cross_product_area(p1, p3, p4), weight=20.0)
+            self.register_ndg(f"quad_area_124_{names[0]}", lambda: self._cross_product_area(p1, p2, p4), weight=14.0)
+            self.register_loss(
+                f"quad_convex_turn_{names[0]}",
+                lambda: torch.relu(-self._cross_product_area(p1, p2, p3) * self._cross_product_area(p2, p3, p4))
+                + torch.relu(-self._cross_product_area(p2, p3, p4) * self._cross_product_area(p3, p4, p1))
+                + torch.relu(-self._cross_product_area(p3, p4, p1) * self._cross_product_area(p4, p1, p2)),
+                weight=200.0,
+            )
             self.quadrilaterals_metadata[key] = {'type': 'quadrilateral'}
 
         return pt_objs
@@ -712,9 +722,12 @@ class Optimizer:
         return centroid
 
     def _define_circle_with_points(self, center_name, points_info, radius_value):
-        center_coords = Initializer.init_circle_with_positioned_points(radius_value, len(points_info))
+        center_coords = Initializer.init_circle_with_positioned_points(
+            center=(0.0, 0.0),
+            radius=radius_value,
+        )
         center_coords = Initializer.add_noise(center_coords)
-        center = self.sample_uniform(center_name, init_coords=center_coords)
+        center = self.sample_uniform(center_name, init_coords=center_coords[0])
 
         for point_name, distance, constraint_type in points_info:
             point = self.sample_uniform(point_name)
