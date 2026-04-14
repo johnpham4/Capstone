@@ -9,9 +9,8 @@ from loguru import logger
 
 from src.config.settings import settings
 from src.services.diagram.diagram_builder import DiagramBuilder
-from src.services.diagram.dsl_validator import validate_and_fix_dsl
 from src.services.diagram.matplotlib_renderer import MatplotlibDiagramRenderer
-from src.services.diagram.optimizer_old import Optimizer
+from src.services.diagram.optimizer import Optimizer
 
 
 class DiagramService:
@@ -92,7 +91,6 @@ class DiagramService:
         epochs: int,
         dpi: int,
     ) -> bytes:
-        dsl = validate_and_fix_dsl(dsl)
         lines = self._normalize_dsl_lines(dsl)
         diagram = self._build_diagram(lines=lines, epochs=epochs)
         image_path = self._render_diagram_file(diagram=diagram, task_id=task_id, dpi=dpi)
