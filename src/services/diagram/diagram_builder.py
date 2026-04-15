@@ -1,3 +1,4 @@
+
 from typing import List, Tuple, Any
 from loguru import logger
 
@@ -552,3 +553,4 @@ class DiagramBuilder:
             objects=points + [DegreeValue(degrees)]
         )
         self.instructions.append(instr)
+
