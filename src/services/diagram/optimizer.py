@@ -1,3 +1,4 @@
+
 from networkx import center
 import torch
 import torch.nn as nn
@@ -5,6 +6,7 @@ import torch.optim as optim
 import random
 from loguru import logger
 from collections import namedtuple
+from functools import partial
 import math
 import traceback
 
@@ -53,21 +55,19 @@ class Optimizer:
         self.unnamed_point_counter = 0
         self.has_loss = False
         self.trainable_vars = []
-        self.best_loss = None
-        self.count = 0
 
     def get_point(self, x, y):
         if not isinstance(x, torch.Tensor):
-            x = torch.tensor(x, dtype=torch.float32, device=self.device)
+            x = torch.tensor(x, dtype=torch.float64, device=self.device)
         if not isinstance(y, torch.Tensor):
-            y = torch.tensor(y, dtype=torch.float32, device=self.device)
+            y = torch.tensor(y, dtype=torch.float64, device=self.device)
         return TorchPoint(x, y)
 
     def mkvar(self, name, lo=-1.0, hi=1.0, init_value=None):
         if init_value is not None:
-            val = torch.tensor([init_value], dtype=torch.float32, device=self.device)
+            val = torch.tensor([init_value], dtype=torch.float64, device=self.device)
         else:
-            val = torch.empty(1, dtype=torch.float32, device=self.device).uniform_(lo, hi)
+            val = torch.empty(1, dtype=torch.float64, device=self.device).uniform_(lo, hi)
         param = nn.Parameter(val)
         self.trainable_vars.append(param)
         return param.squeeze()
@@ -82,15 +82,15 @@ class Optimizer:
         return name
 
     def const(self, x):
-        return torch.tensor(x, dtype=torch.float32, device=self.device)
+        return torch.tensor(x, dtype=torch.float64, device=self.device)
 
     def dist(self, p1: TorchPoint, p2: TorchPoint):
         dx = p1.x - p2.x
         dy = p1.y - p2.y
-        return torch.sqrt(dx**2 + dy**2)
+        return torch.sqrt(dx**2 + dy**2 + 1e-8)
 
     def norm(self, p: TorchPoint):
-        return torch.sqrt(p.x**2 + p.y**2)
+        return torch.sqrt(p.x**2 + p.y**2 + 1e-8)
 
     def _vector_from_points(self, pa: TorchPoint, pb: TorchPoint):
         """Calculate vector from pb to pa: (pa - pb)"""
@@ -109,13 +109,13 @@ class Optimizer:
         n_x = -dy
         n_y = dx
 
-        # Normalize with epsilon to avoid division by zero on degenerate lines.
-        n_norm = torch.sqrt(n_x**2 + n_y**2 + 1e-12)
+        # Normalize
+        n_norm = torch.sqrt(n_x**2 + n_y**2 + 1e-8)
         n_x = n_x / n_norm
         n_y = n_y / n_norm
 
         # Make sure normal points to upper half-plane
-        if n_y.detach().item() < 0:
+        if n_y < 0:
             n_x = -n_x
             n_y = -n_y
 
@@ -131,24 +131,22 @@ class Optimizer:
 
     def _point_on_segment_loss(self, point: TorchPoint, p1: TorchPoint, p2: TorchPoint):
         """Loss for point lying on segment p1-p2 (between p1 and p2)"""
-        # Return a residual (not an already-squared loss) to keep gradients stable.
+        line = self.pp2lnf(p1, p2)
+        on_line_loss = self.on_line(point, line)**2
+
+        # Point between p1 and p2: point = p1 + t*(p2-p1) with 0 <= t <= 1
         vec_x = p2.x - p1.x
         vec_y = p2.y - p1.y
         point_x = point.x - p1.x
         point_y = point.y - p1.y
 
         vec_len_sq = vec_x**2 + vec_y**2 + 1e-8
-        vec_len = torch.sqrt(vec_len_sq)
-        cross = point_x * vec_y - point_y * vec_x
-        on_line_residual = cross / (vec_len + 1e-8)
-
-        # Point between p1 and p2: point = p1 + t*(p2-p1) with 0 <= t <= 1
         t = (point_x * vec_x + point_y * vec_y) / vec_len_sq
 
         # Strong penalty if t < 0 or t > 1 to keep point strictly between endpoints
         between_penalty = torch.relu(-t) + torch.relu(t - 1)
 
-        return on_line_residual + 2.0 * between_penalty
+        return 100.0 * on_line_loss + 50.0 * between_penalty
 
     def _angle_bisector_equal_loss(self, p_vertex: TorchPoint, p1: TorchPoint, p2: TorchPoint, p_bisector: TorchPoint):
         """Loss for angle bisector: angle(p1, vertex, bisector) = angle(p2, vertex, bisector)"""
@@ -186,13 +184,8 @@ class Optimizer:
 
     def dist_to_line(self, point: TorchPoint, p1: TorchPoint, p2: TorchPoint):
         """Distance from point to line defined by p1, p2"""
-        vx = p2.x - p1.x
-        vy = p2.y - p1.y
-        wx = point.x - p1.x
-        wy = point.y - p1.y
-        denom = torch.sqrt(vx**2 + vy**2 + 1e-12)
-        cross = wx * vy - wy * vx
-        return torch.abs(cross) / denom
+        line = self.pp2lnf(p1, p2)
+        return torch.abs(self.on_line(point, line))
 
     def centroid_loss(self, centroid: TorchPoint, p1: TorchPoint, p2: TorchPoint, p3: TorchPoint):
         expected_x = (p1.x + p2.x + p3.x) / 3
@@ -252,7 +245,8 @@ class Optimizer:
 
     def _calculate_distance_to_line(self, point, line_p1, line_p2):
         """Calculate distance from point to line (for incircle radius)"""
-        return self.dist_to_line(point, line_p1, line_p2)
+        line = self.pp2lnf(line_p1, line_p2)
+        return torch.abs(self.on_line(point, line))
 
     def _dot_product(self, pa: TorchPoint, pb: TorchPoint, pc: TorchPoint):
         """Calculate dot product of vectors (pa-pb) and (pc-pb)"""
@@ -337,104 +331,6 @@ class Optimizer:
             self.quadrilaterals_metadata[key] = metadata if metadata is not None else {'type': quad_type}
         return pt_objs, names
 
-    def sample_square(self, points: list):
-        assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(
-            points, Initializer.init_square, 1.0, quad_type=QuadrilateralType.SQUARE
-        )
-        p1, p2, p3, p4 = pt_objs
-
-        # All sides equal + right angle
-        self.register_loss(f"sq_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
-        self.register_loss(f"sq_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
-        self.register_loss(f"sq_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
-        self.register_loss(f"sq_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
-        self.register_ndg(f"sq_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
-        return pt_objs
-
-    def sample_rectangle(self, points: list):
-        assert len(points) == 4
-        rect_w, rect_h = 1.6, 1.0
-        pt_objs, names = self._sample_quadrilateral_with_init(
-            points, Initializer.init_rectangle, rect_w, rect_h, quad_type=QuadrilateralType.RECTANGLE
-        )
-        p1, p2, p3, p4 = pt_objs
-
-        # Three right angles
-        self.register_loss(f"rect_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
-        self.register_loss(f"rect_right_C_{names[0]}", lambda: self._dot_product(p2, p3, p4), weight=10.0)
-        self.register_loss(f"rect_right_D_{names[0]}", lambda: self._dot_product(p3, p4, p1), weight=10.0)
-        # Encourage a non-square rectangle by keeping the aspect ratio close to the initializer.
-        target_ratio = rect_w / rect_h
-        self.register_loss(
-            f"rect_aspect_{names[0]}",
-            lambda: self.dist(p1, p2) / (self.dist(p2, p3) + 1e-8) - target_ratio,
-            weight=5.0,
-        )
-        self.register_ndg(f"rect_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
-        return pt_objs
-
-    def sample_parallelogram(self, points: list):
-        assert len(points) == 4
-        # Use dedicated parallelogram init for a cleaner, more stable layout.
-        pt_objs, names = self._sample_quadrilateral_with_init(
-            points, Initializer.init_parallelogram, 1.3, noise=0.0, quad_type=QuadrilateralType.PARALLELOGRAM
-        )
-        p1, p2, p3, p4 = pt_objs
-
-        # Opposite sides parallel
-        self.register_loss(f"para_vec_x_{names[0]}", lambda: (p2.x - p1.x) - (p3.x - p4.x), weight=10.0)
-        self.register_loss(f"para_vec_y_{names[0]}", lambda: (p2.y - p1.y) - (p3.y - p4.y), weight=10.0)
-        self.register_ndg(f"para_area_{names[0]}", lambda: self._cross_product_area(p2, p1, p3), weight=20.0)
-        return pt_objs
-
-    def sample_trapezoid(self, points: list):
-        assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(
-            points, Initializer.init_trapezoid, 1.0, noise=0.02, quad_type=QuadrilateralType.TRAPEZOID
-        )
-        p1, p2, p3, p4 = pt_objs
-
-        # One pair parallel
-        self.register_loss(f"trap_para_{names[0]}",
-                          lambda: (p2.x - p1.x) * (p3.y - p4.y) - (p2.y - p1.y) * (p3.x - p4.x), weight=4000.0)
-        # Trapezoid should not collapse into a parallelogram (legs AD and BC not parallel).
-        self.register_ndg(f"trap_legs_not_parallel_{names[0]}",
-                          lambda: self.parallel(p1, p4, p2, p3), weight=15.0)
-        min_base = 0.45
-        self.register_loss(
-            f"trap_base_min_bottom_{names[0]}",
-            lambda: torch.relu(min_base - self.dist(p1, p2)),
-            weight=600.0,
-        )
-        self.register_loss(
-            f"trap_base_min_top_{names[0]}",
-            lambda: torch.relu(min_base - self.dist(p3, p4)),
-            weight=600.0,
-        )
-        self.register_ndg(f"trap_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
-        self.register_ndg(f"trap_ndg_top_{names[0]}", lambda: self.dist(p3, p4), weight=10.0)
-        self.register_ndg(f"trap_ndg_bottom_{names[0]}", lambda: self.dist(p1, p2), weight=10.0)
-        return pt_objs
-
-    def sample_rhombus(self, points: list):
-        assert len(points) == 4
-        pt_objs, names = self._sample_quadrilateral_with_init(
-            points, Initializer.init_rhombus, 1.0, quad_type=QuadrilateralType.RHOMBUS
-        )
-        p1, p2, p3, p4 = pt_objs
-
-        # All sides equal + diagonals perpendicular
-        self.register_loss(f"rhombus_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
-        self.register_loss(f"rhombus_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
-        self.register_loss(f"rhombus_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
-        self.register_loss(f"rhombus_diag_perp_{names[0]}",
-                          lambda: (p3.x - p1.x) * (p4.x - p2.x) + (p3.y - p1.y) * (p4.y - p2.y), weight=10.0)
-        self.register_ndg(f"rhombus_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
-        self.register_ndg(f"rhombus_diag_ac_{names[0]}", lambda: self.dist(p1, p3), weight=10.0)
-        return pt_objs
-
-
     def sample_triangle(self, points: list, constraints: dict = None):
         assert len(points) == 3
 
@@ -459,7 +355,8 @@ class Optimizer:
             # Scalene triangle init
             init_coords = Initializer.init_scalene_triangle()
 
-        init_coords = Initializer.add_noise(init_coords)
+        tri_noise = 0.0 if tri_type in ('right', 'right_isosceles', 'scalene') else 0.05
+        init_coords = Initializer.add_noise(init_coords, noise_scale=tri_noise)
 
         # Create points
         p1 = self.sample_uniform(points[0], init_coords=init_coords[0])
@@ -485,6 +382,22 @@ class Optimizer:
                 ),
                 weight=1200.0,
             )
+
+            if tri_type == 'isosceles':
+                # Keep the standard isosceles layout stable (base horizontal, apex above base).
+                self.register_loss(
+                    f"iso_base_horizontal_{points[0].val}_{points[1].val}_{points[2].val}",
+                    lambda o0=other_pts[0], o1=other_pts[1]: o0.y - o1.y,
+                    weight=2500.0,
+                )
+                self.register_loss(
+                    f"iso_apex_above_{points[0].val}_{points[1].val}_{points[2].val}",
+                    lambda ap=apex_pt, o0=other_pts[0], o1=other_pts[1]: torch.relu(
+                        ((o0.y + o1.y) / 2 + 0.2 * self.dist(o0, o1)) - ap.y
+                    ),
+                    weight=3500.0,
+                )
+
             others = [i for i in range(3) if i != apex_idx]
             metadata['equal_sides'] = [(apex_idx, others[0]), (apex_idx, others[1])]
 
@@ -493,6 +406,17 @@ class Optimizer:
             other_pts = [pts[i] for i in range(3) if i != right_idx]
             self.register_loss(f"right_{points[0].val}_{points[1].val}_{points[2].val}",
                               lambda: self._dot_product(other_pts[0], right_pt, other_pts[1]), weight=10.0)
+            # Keep right triangles axis-aligned for stable, straight rendering.
+            self.register_loss(
+                f"right_axis_horizontal_{points[0].val}_{points[1].val}_{points[2].val}",
+                lambda: other_pts[0].y - right_pt.y,
+                weight=2500.0,
+            )
+            self.register_loss(
+                f"right_axis_vertical_{points[0].val}_{points[1].val}_{points[2].val}",
+                lambda: other_pts[1].x - right_pt.x,
+                weight=2500.0,
+            )
             metadata['right_angle_at'] = right_idx
 
         if tri_type == 'equilateral':
@@ -501,6 +425,44 @@ class Optimizer:
             self.register_loss(f"equi_23_31_{points[0].val}",
                               lambda: self.dist(p2, p3) - self.dist(p3, p1), weight=10.0)
             metadata['equal_sides'] = [(0, 1), (1, 2), (2, 0)]
+
+        if tri_type == 'scalene':
+            init_ax, _ = init_coords[0]
+            init_bx, _ = init_coords[1]
+            init_cx, _ = init_coords[2]
+            init_mid_x = (init_bx + init_cx) / 2.0
+            init_base_dx = init_cx - init_bx
+            # Keep the same left/right apex bias as the initializer template.
+            target_apex_offset_ratio = (init_ax - init_mid_x) / (init_base_dx + 1e-8)
+
+            # Keep default scalene layout readable: A above, BC horizontal.
+            self.register_loss(
+                f"scalene_base_horizontal_{points[0].val}_{points[1].val}_{points[2].val}",
+                lambda: p2.y - p3.y,
+                weight=3000.0,
+            )
+            self.register_loss(
+                f"scalene_apex_offset_{points[0].val}_{points[1].val}_{points[2].val}",
+                lambda tor=target_apex_offset_ratio: (
+                    (p1.x - (p2.x + p3.x) / 2.0) / (p3.x - p2.x + 1e-8) - tor
+                ),
+                weight=2500.0,
+            )
+            self.register_loss(
+                f"scalene_apex_above_{points[0].val}_{points[1].val}_{points[2].val}",
+                lambda: torch.relu(((p2.y + p3.y) / 2 + 0.2 * self.dist(p2, p3)) - p1.y),
+                weight=4000.0,
+            )
+            # Acute triangle guard: each vertex should have positive dot product.
+            self.register_loss(
+                f"scalene_acute_{points[0].val}_{points[1].val}_{points[2].val}",
+                lambda: (
+                    torch.relu(-self._dot_product(p2, p1, p3))
+                    + torch.relu(-self._dot_product(p1, p2, p3))
+                    + torch.relu(-self._dot_product(p1, p3, p2))
+                ),
+                weight=1200.0,
+            )
 
         # Handle equal_angles constraint
         if equal_angles:
@@ -532,53 +494,84 @@ class Optimizer:
         """
         assert len(points) == 4, "Quadrilateral must have exactly 4 points"
 
-        quad_type = quad_type.lower()
+        if isinstance(quad_type, QuadrilateralType):
+            quad_type_str = str(quad_type).split('.')[-1].lower()
+        else:
+            quad_type_str = str(quad_type).split('.')[-1].lower() if quad_type else 'quadrilateral'
 
-        # Initialize coordinates based on quad type
-        if quad_type == 'square':
-            init_coords = Initializer.init_square(1.0)
-        elif quad_type == 'rectangle':
-            init_coords = Initializer.init_rectangle(1.6, 1.0)
-        elif quad_type == 'parallelogram':
-            init_coords = Initializer.init_parallelogram(1.0)
-        elif quad_type == 'trapezoid':
-            init_coords = Initializer.init_trapezoid(1.0)
-        elif quad_type == 'rhombus':
-            init_coords = Initializer.init_rhombus(1.0)
-        else:  # generic quadrilateral
-            init_coords = Initializer.init_quadrilateral(1.0)
+        if quad_type_str == 'general':
+            quad_type_str = 'quadrilateral'
 
-        # Add noise to avoid perfect initialization
-        init_coords = Initializer.add_noise(init_coords, noise_scale=0.05)
+        init_method = Initializer.init_quadrilateral
+        init_args = (1.0,)
+        init_noise = 0.05
+        metadata_type = QuadrilateralType.GENERAL
 
-        # Create points with initial coordinates
-        pt_objs = [self.sample_uniform(p, init_coords=init_coords[i]) for i, p in enumerate(points)]
-        names = [p.val for p in points]
-        self.quadrilaterals.append(tuple(names))
+        if quad_type_str == 'square':
+            init_method = Initializer.init_square
+            init_args = (1.0,)
+            init_noise = 0.0
+            metadata_type = QuadrilateralType.SQUARE
+        elif quad_type_str == 'rectangle':
+            init_method = Initializer.init_rectangle
+            init_args = (1.6, 1.0)
+            init_noise = 0.0
+            metadata_type = QuadrilateralType.RECTANGLE
+        elif quad_type_str == 'parallelogram':
+            init_method = Initializer.init_parallelogram
+            init_args = (1.3,)
+            init_noise = 0.0
+            metadata_type = QuadrilateralType.PARALLELOGRAM
+        elif quad_type_str == 'trapezoid':
+            trapezoid_style = str(self.opts.get('trapezoid_style', 'isosceles')).lower()
+            init_method = Initializer.init_trapezoid_isosceles if trapezoid_style == 'isosceles' else Initializer.init_trapezoid_general
+            init_args = (1.2,)
+            init_noise = 0.0
+            metadata_type = QuadrilateralType.TRAPEZOID
+        elif quad_type_str == 'rhombus':
+            init_method = Initializer.init_rhombus
+            init_args = (1.0,)
+            init_noise = 0.0
+            metadata_type = QuadrilateralType.RHOMBUS
+
+        pt_objs, names = self._sample_quadrilateral_with_init(
+            points,
+            init_method,
+            *init_args,
+            noise=init_noise,
+            quad_type=metadata_type,
+        )
 
         p1, p2, p3, p4 = pt_objs
         key = tuple(names)
 
         # Apply constraints based on quad type
-        if quad_type == 'square':
-            # All sides equal + right angle
-            self.register_loss(f"sq_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
-            self.register_loss(f"sq_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
-            self.register_loss(f"sq_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
-            self.register_loss(f"sq_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
+        if quad_type_str == 'square':
+            # Strong square constraints: equal sides + multiple right angles.
+            self.register_loss(f"sq_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=12.0)
+            self.register_loss(f"sq_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=12.0)
+            self.register_loss(f"sq_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=12.0)
+            self.register_loss(f"sq_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=12.0)
+            self.register_loss(f"sq_right_C_{names[0]}", lambda: self._dot_product(p2, p3, p4), weight=12.0)
+            self.register_loss(f"sq_right_D_{names[0]}", lambda: self._dot_product(p3, p4, p1), weight=12.0)
+            self.register_loss(f"sq_axis_horizontal_{names[0]}", lambda: p2.y - p1.y, weight=2500.0)
+            self.register_loss(f"sq_axis_vertical_{names[0]}", lambda: p4.x - p1.x, weight=2500.0)
             self.register_ndg(f"sq_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
 
             self.quadrilaterals_metadata[key] = {
                 'type': QuadrilateralType.SQUARE,
-                'equal_sides': [(0, 1), (1, 2), (2, 3), (3, 0)]
+                'equal_sides': [(0, 1), (1, 2), (2, 3), (3, 0)],
             }
 
-        elif quad_type == 'rectangle':
+        elif quad_type_str == 'rectangle':
             # Three right angles
             self.register_loss(f"rect_right_B_{names[0]}", lambda: self._dot_product(p1, p2, p3), weight=10.0)
             self.register_loss(f"rect_right_C_{names[0]}", lambda: self._dot_product(p2, p3, p4), weight=10.0)
             self.register_loss(f"rect_right_D_{names[0]}", lambda: self._dot_product(p3, p4, p1), weight=10.0)
-            # Keep a stable aspect ratio (default initializer: 1.6 x 1.0) so it doesn't converge to a square.
+            # Keep rectangle visually straight (axis-aligned).
+            self.register_loss(f"rect_axis_horizontal_{names[0]}", lambda: p2.y - p1.y, weight=2500.0)
+            self.register_loss(f"rect_axis_vertical_{names[0]}", lambda: p4.x - p1.x, weight=2500.0)
+            # Encourage a non-square rectangle by keeping the aspect ratio close to the initializer.
             target_ratio = 1.6 / 1.0
             self.register_loss(
                 f"rect_aspect_{names[0]}",
@@ -589,65 +582,100 @@ class Optimizer:
 
             self.quadrilaterals_metadata[key] = {
                 'type': QuadrilateralType.RECTANGLE,
-                'equal_sides': [(0, 2), (1, 3)]  # Opposite sides equal
+                'equal_sides': [(0, 2), (1, 3)],
             }
 
-        elif quad_type == 'parallelogram':
-            # Opposite sides parallel
-            self.register_loss(f"para_parallel_12_34_{names[0]}",
-                              lambda: self.parallel(p1, p2, p4, p3), weight=10.0)
-            self.register_loss(f"para_parallel_23_41_{names[0]}",
-                              lambda: self.parallel(p2, p3, p1, p4), weight=10.0)
-            # Opposite sides equal (helps convergence)
-            self.register_loss(f"para_eq_12_34_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p4, p3), weight=5.0)
-            self.register_loss(f"para_eq_23_41_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p1, p4), weight=5.0)
-            self.register_ndg(f"para_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
-
-            self.quadrilaterals_metadata[key] = {'type': 'parallelogram', 'opposite_parallel': True}
-
-        elif quad_type == 'trapezoid':
-            # One pair parallel: AB || CD
-            self.register_loss(f"trap_parallel_12_43_{names[0]}",
-                              lambda: self.parallel(p1, p2, p4, p3), weight=4000.0)
-            self.register_ndg(f"trap_legs_not_parallel_{names[0]}",
-                              lambda: self.parallel(p1, p4, p2, p3), weight=15.0)
-            min_base = 0.45
+        elif quad_type_str == 'parallelogram':
+            # Opposite sides parallel via vector equality.
+            self.register_loss(f"para_vec_x_{names[0]}", lambda: (p2.x - p1.x) - (p3.x - p4.x), weight=10.0)
+            self.register_loss(f"para_vec_y_{names[0]}", lambda: (p2.y - p1.y) - (p3.y - p4.y), weight=10.0)
+            # Keep adjacent sides non-perpendicular, but not overly slanted.
+            target_cos = float(self.opts.get('parallelogram_target_cosine', 0.30))
+            shear_weight = float(self.opts.get('parallelogram_shear_weight', 8.0))
             self.register_loss(
-                f"trap_base_min_bottom_{names[0]}",
-                lambda: torch.relu(min_base - self.dist(p1, p2)),
-                weight=600.0,
+                f"para_shear_{names[0]}",
+                lambda: self.angle_cosine(p2, p1, p4) - target_cos,
+                weight=shear_weight,
             )
+            # Break global rotation symmetry so the shape does not look randomly tilted.
+            axis_weight = float(self.opts.get('parallelogram_axis_horizontal_weight', 900.0))
+            self.register_loss(f"para_axis_horizontal_{names[0]}", lambda: p2.y - p1.y, weight=axis_weight)
+            self.register_ndg(f"para_area_{names[0]}", lambda: self._cross_product_area(p2, p1, p3), weight=20.0)
+
+            self.quadrilaterals_metadata[key] = {
+                'type': QuadrilateralType.PARALLELOGRAM,
+                'opposite_parallel': True,
+            }
+
+        elif quad_type_str == 'trapezoid':
+            # One pair parallel
             self.register_loss(
-                f"trap_base_min_top_{names[0]}",
-                lambda: torch.relu(min_base - self.dist(p3, p4)),
-                weight=600.0,
+                f"trap_para_{names[0]}",
+                lambda: (p2.x - p1.x) * (p3.y - p4.y) - (p2.y - p1.y) * (p3.x - p4.x),
+                weight=10.0,
             )
             self.register_ndg(f"trap_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
-            # Ensure bases have reasonable lengths
-            self.register_ndg(f"trap_ndg_base1_{names[0]}", lambda: self.dist(p1, p2), weight=10.0)
-            self.register_ndg(f"trap_ndg_base2_{names[0]}", lambda: self.dist(p3, p4), weight=10.0)
+            self.register_ndg(f"trap_ndg_top_{names[0]}", lambda: self.dist(p3, p4), weight=10.0)
+            self.register_ndg(f"trap_ndg_bottom_{names[0]}", lambda: self.dist(p1, p2), weight=10.0)
+            # Keep the trapezoid from collapsing into a near-collinear shape.
+            self.register_loss(
+                f"trap_min_height_c_{names[0]}",
+                lambda: torch.relu(0.55 * self.dist(p1, p2) - self.dist_to_line(p3, p1, p2)),
+                weight=4000.0,
+            )
+            self.register_loss(
+                f"trap_min_height_d_{names[0]}",
+                lambda: torch.relu(0.55 * self.dist(p1, p2) - self.dist_to_line(p4, p1, p2)),
+                weight=4000.0,
+            )
 
-            self.quadrilaterals_metadata[key] = {'type': 'trapezoid', 'parallel_sides': [(0, 1), (3, 2)]}
+            self.quadrilaterals_metadata[key] = {
+                'type': QuadrilateralType.TRAPEZOID,
+                'parallel_sides': [(0, 1), (3, 2)],
+            }
 
-        elif quad_type == 'rhombus':
-            # All sides equal
+        elif quad_type_str == 'rhombus':
+            # All sides equal + diagonals perpendicular
             self.register_loss(f"rhombus_eq_12_23_{names[0]}", lambda: self.dist(p1, p2) - self.dist(p2, p3), weight=10.0)
             self.register_loss(f"rhombus_eq_23_34_{names[0]}", lambda: self.dist(p2, p3) - self.dist(p3, p4), weight=10.0)
             self.register_loss(f"rhombus_eq_34_41_{names[0]}", lambda: self.dist(p3, p4) - self.dist(p4, p1), weight=10.0)
-            # Diagonals perpendicular: AC ⊥ BD
-            self.register_loss(f"rhombus_diag_perp_{names[0]}",
-                              lambda: self.perpendicular(p1, p3, p2, p4), weight=10.0)
+            self.register_loss(
+                f"rhombus_diag_perp_{names[0]}",
+                lambda: (p3.x - p1.x) * (p4.x - p2.x) + (p3.y - p1.y) * (p4.y - p2.y),
+                weight=10.0,
+            )
+            # Keep rhombus visually distinct from square by favoring uneven diagonal lengths.
+            target_diag_ratio = 2.6
+            self.register_loss(
+                f"rhombus_diag_ratio_{names[0]}",
+                lambda: self.dist(p1, p3) / (self.dist(p2, p4) + 1e-8) - target_diag_ratio,
+                weight=8.0,
+            )
             self.register_ndg(f"rhombus_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
-            # Ensure diagonals have reasonable lengths
             self.register_ndg(f"rhombus_diag_ac_{names[0]}", lambda: self.dist(p1, p3), weight=10.0)
-            self.register_ndg(f"rhombus_diag_bd_{names[0]}", lambda: self.dist(p2, p4), weight=10.0)
 
-            self.quadrilaterals_metadata[key] = {'type': 'rhombus', 'equal_sides': [(0, 1), (1, 2), (2, 3), (3, 0)]}
+            self.quadrilaterals_metadata[key] = {
+                'type': QuadrilateralType.RHOMBUS,
+                'equal_sides': [(0, 1), (1, 2), (2, 3), (3, 0)],
+            }
 
-        else:  # generic quadrilateral
+        else:
             # Only non-degeneracy constraint
-            self.register_ndg(f"quad_area_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
-            self.quadrilaterals_metadata[key] = {'type': 'quadrilateral'}
+            self.register_ndg(f"quad_edge_12_{names[0]}", lambda: self.dist(p1, p2), weight=8.0)
+            self.register_ndg(f"quad_edge_23_{names[0]}", lambda: self.dist(p2, p3), weight=8.0)
+            self.register_ndg(f"quad_edge_34_{names[0]}", lambda: self.dist(p3, p4), weight=8.0)
+            self.register_ndg(f"quad_edge_41_{names[0]}", lambda: self.dist(p4, p1), weight=8.0)
+            self.register_ndg(f"quad_area_123_{names[0]}", lambda: self._cross_product_area(p1, p2, p3), weight=20.0)
+            self.register_ndg(f"quad_area_134_{names[0]}", lambda: self._cross_product_area(p1, p3, p4), weight=20.0)
+            self.register_ndg(f"quad_area_124_{names[0]}", lambda: self._cross_product_area(p1, p2, p4), weight=14.0)
+            self.register_loss(
+                f"quad_convex_turn_{names[0]}",
+                lambda: torch.relu(-self._cross_product_area(p1, p2, p3) * self._cross_product_area(p2, p3, p4))
+                + torch.relu(-self._cross_product_area(p2, p3, p4) * self._cross_product_area(p3, p4, p1))
+                + torch.relu(-self._cross_product_area(p3, p4, p1) * self._cross_product_area(p4, p1, p2)),
+                weight=200.0,
+            )
+            self.quadrilaterals_metadata[key] = {'type': QuadrilateralType.GENERAL}
 
         return pt_objs
 
@@ -713,9 +741,12 @@ class Optimizer:
         return centroid
 
     def _define_circle_with_points(self, center_name, points_info, radius_value):
-        center_coords = Initializer.init_circle_with_positioned_points(radius_value, len(points_info))
+        center_coords = Initializer.init_circle_with_positioned_points(
+            center=(0.0, 0.0),
+            radius=radius_value,
+        )
         center_coords = Initializer.add_noise(center_coords)
-        center = self.sample_uniform(center_name, init_coords=center_coords)
+        center = self.sample_uniform(center_name, init_coords=center_coords[0])
 
         for point_name, distance, constraint_type in points_info:
             point = self.sample_uniform(point_name)
@@ -752,41 +783,176 @@ class Optimizer:
 
         return center
 
-    def _define_incenter(self, point_name, triangle_points):
-        """Define incenter - equal distance to all sides"""
-        assert len(triangle_points) == 3
-        self.defined_incenters[point_name.val] = [p.val for p in triangle_points]
+    def _define_incenter(self, point_name, polygon_points):
+        """Define incenter for triangles and special quadrilaterals (square/rhombus)."""
+        assert len(polygon_points) >= 3
 
-        p1 = self.lookup_pt(triangle_points[0])
-        p2 = self.lookup_pt(triangle_points[1])
-        p3 = self.lookup_pt(triangle_points[2])
+        if not self._is_incircle_supported_polygon(polygon_points):
+            if self.verbosity:
+                point_names = [p.val for p in polygon_points]
+                logger.warning(
+                    f"Unsupported incenter polygon {point_names}. Only triangle, square, rhombus are supported"
+                )
+            return self.sample_uniform(point_name)
+
+        self.defined_incenters[point_name.val] = [p.val for p in polygon_points]
 
         init_coords = Initializer.init_triangle_incircle()
         init_coords = Initializer.add_noise(init_coords)
         incenter = self.sample_uniform(point_name, init_coords=init_coords[3])
-        self.register_loss(f"incenter_{point_name.val}",
-                          lambda: (self.dist_to_line(incenter, p1, p2) - self.dist_to_line(incenter, p2, p3))**2 +
-                                  (self.dist_to_line(incenter, p2, p3) - self.dist_to_line(incenter, p3, p1))**2,
-                  weight=3000.0)
+
+        if len(polygon_points) == 3:
+            p1 = self.lookup_pt(polygon_points[0])
+            p2 = self.lookup_pt(polygon_points[1])
+            p3 = self.lookup_pt(polygon_points[2])
+            self.register_loss(
+                f"incenter_{point_name.val}",
+                lambda: (self.dist_to_line(incenter, p1, p2) - self.dist_to_line(incenter, p2, p3))**2 +
+                        (self.dist_to_line(incenter, p2, p3) - self.dist_to_line(incenter, p3, p1))**2,
+                weight=3000.0,
+            )
+        else:
+            point_list = [self.lookup_pt(p) for p in polygon_points]
+            self._register_equal_distance_to_polygon_sides_loss(
+                incenter,
+                point_list,
+                loss_key=f"incenter_{point_name.val}",
+                weight=3000.0,
+            )
+
         return incenter
 
-    def _define_circumcenter(self, point_name, triangle_points):
-        """Define circumcenter - equal distance to all vertices"""
-        assert len(triangle_points) == 3
-        self.defined_circumcenters[point_name.val] = [p.val for p in triangle_points]
+    def _equal_radius_center_loss(self, center_point, point_list):
+        """All points have equal radius from one center."""
+        base_radius = self.dist(center_point, point_list[0])
+        total = self.const(0.0)
+        for pt in point_list[1:]:
+            total = total + (base_radius - self.dist(center_point, pt))**2
+        return total
 
-        p1 = self.lookup_pt(triangle_points[0])
-        p2 = self.lookup_pt(triangle_points[1])
-        p3 = self.lookup_pt(triangle_points[2])
+    def _register_equal_radius_center_loss(self, center_point, point_list, loss_key: str, weight: float = 3000.0):
+        """Register equal-radius constraint without nested function definitions."""
+        if len(point_list) < 3:
+            return
+        if loss_key in self.loss_fns:
+            return
+
+        self.register_loss(
+            loss_key,
+            partial(self._equal_radius_center_loss, center_point, point_list),
+            weight=weight,
+        )
+
+    def _equal_distance_to_polygon_sides_loss(self, center_point, polygon_point_list):
+        """All polygon sides have equal distance from one center point."""
+        if len(polygon_point_list) < 3:
+            return self.const(0.0)
+
+        base_dist = self.dist_to_line(center_point, polygon_point_list[0], polygon_point_list[1])
+        total = self.const(0.0)
+        side_count = len(polygon_point_list)
+
+        for idx in range(1, side_count):
+            p1 = polygon_point_list[idx]
+            p2 = polygon_point_list[(idx + 1) % side_count]
+            side_dist = self.dist_to_line(center_point, p1, p2)
+            total = total + (base_dist - side_dist) ** 2
+
+        return total
+
+    def _register_equal_distance_to_polygon_sides_loss(
+        self,
+        center_point,
+        polygon_point_list,
+        loss_key: str,
+        weight: float = 3000.0,
+    ):
+        """Register equal-distance-to-sides constraint for polygon incircle center."""
+        if len(polygon_point_list) < 3:
+            return
+        if loss_key in self.loss_fns:
+            return
+
+        self.register_loss(
+            loss_key,
+            partial(self._equal_distance_to_polygon_sides_loss, center_point, polygon_point_list),
+            weight=weight,
+        )
+
+    def _get_quadrilateral_metadata_by_points(self, point_names: list[str]):
+        """Find quadrilateral metadata by vertex set (order-insensitive)."""
+        target = set(point_names)
+        for key, metadata in self.quadrilaterals_metadata.items():
+            if len(key) == 4 and set(key) == target:
+                return metadata
+        return None
+
+    def _is_incircle_supported_polygon(self, polygon_points):
+        """Incircle is supported for triangles and special quadrilaterals (square/rhombus)."""
+        if len(polygon_points) == 3:
+            return True
+        if len(polygon_points) != 4:
+            return False
+
+        point_names = [p.val if hasattr(p, 'val') else str(p) for p in polygon_points]
+        metadata = self._get_quadrilateral_metadata_by_points(point_names)
+        if not metadata:
+            return False
+
+        quad_type = metadata.get('type', '')
+        quad_type_str = str(quad_type).split('.')[-1].lower()
+        return quad_type_str in {'square', 'rhombus'}
+
+    def _get_incircle_point_names(self, circle_info: dict) -> list[str]:
+        """Backward-compatible accessor for incircle boundary points."""
+        points = circle_info.get('points')
+        if isinstance(points, list) and len(points) > 0:
+            return points
+
+        triangle = circle_info.get('triangle')
+        if isinstance(triangle, list) and len(triangle) > 0:
+            return triangle
+
+        return []
+
+    def _get_circumcircle_point_names(self, circle_info: dict) -> list[str]:
+        """Backward-compatible accessor for circumcircle reference points."""
+        points = circle_info.get('points')
+        if isinstance(points, list) and len(points) > 0:
+            return points
+
+        triangle = circle_info.get('triangle')
+        if isinstance(triangle, list) and len(triangle) > 0:
+            return triangle
+
+        return []
+
+    def _define_circumcenter(self, point_name, polygon_points):
+        """Define circumcenter for 3+ points; triangle behavior remains unchanged."""
+        assert len(polygon_points) >= 3
+        self.defined_circumcenters[point_name.val] = [p.val for p in polygon_points]
+
+        p1 = self.lookup_pt(polygon_points[0])
+        p2 = self.lookup_pt(polygon_points[1])
+        p3 = self.lookup_pt(polygon_points[2])
 
         init_coords = Initializer.init_triangle_circumcircle(radius=1.0)
         init_coords = Initializer.add_noise(init_coords, noise_scale=0.02)
         circumcenter = self.sample_uniform(point_name, init_coords=init_coords[3])
 
-        self.register_loss(f"circumcenter_{point_name.val}",
-                          lambda: (self.dist(circumcenter, p1) - self.dist(circumcenter, p2))**2 +
-                                  (self.dist(circumcenter, p2) - self.dist(circumcenter, p3))**2,
-                  weight=3000.0)
+        if len(polygon_points) == 3:
+            self.register_loss(f"circumcenter_{point_name.val}",
+                              lambda: (self.dist(circumcenter, p1) - self.dist(circumcenter, p2))**2 +
+                                      (self.dist(circumcenter, p2) - self.dist(circumcenter, p3))**2,
+                      weight=3000.0)
+        else:
+            point_list = [self.lookup_pt(p) for p in polygon_points]
+            self._register_equal_radius_center_loss(
+                circumcenter,
+                point_list,
+                loss_key=f"circumcenter_{point_name.val}",
+                weight=3000.0,
+            )
         return circumcenter
 
     def _define_orthocenter(self, point_name, triangle_points):
@@ -1031,26 +1197,25 @@ class Optimizer:
         if param_type:
             param_type_str = str(param_type).split('.')[-1].lower()
         else:
-            param_type_str = "general"
+            param_type_str = "quadrilateral"
 
-        quad_samplers = {
-            "square": self.sample_square,
-            "rectangle": self.sample_rectangle,
-            "parallelogram": self.sample_parallelogram,
-            "trapezoid": self.sample_trapezoid,
-            "rhombus": self.sample_rhombus,
+        if param_type_str == "general":
+            param_type_str = "quadrilateral"
+
+        valid_quad_types = {
+            "square",
+            "rectangle",
+            "parallelogram",
+            "trapezoid",
+            "rhombus",
+            "quadrilateral",
         }
+        if param_type_str not in valid_quad_types:
+            if self.verbosity:
+                logger.warning(f"Unknown quadrilateral type '{param_type_str}', fallback to generic quadrilateral")
+            param_type_str = "quadrilateral"
 
-        sampler = quad_samplers.get(param_type_str)
-        if sampler:
-            sampler(objects)
-        else:
-            try:
-                quadri_type = QuadrilateralType[param_type_str.upper()]
-            except (KeyError, AttributeError):
-                quadri_type = QuadrilateralType.GENERAL
-            # sample_quadrilateral expects a string type (e.g., 'rectangle', 'square', 'general')
-            self.sample_quadrilateral(objects, quad_type=str(quadri_type))
+        self.sample_quadrilateral(objects, quad_type=param_type_str)
 
         logger.info(f"Processed quadrilateral type: {param_type_str}")
 
@@ -1104,22 +1269,85 @@ class Optimizer:
         logger.info(f"Processing circle: center={center_name}, param_type={param_type_str}, args={args}")
 
         if param_type_str == "incircle":
-            # Incircle defined by triangle points
-            self.circles.append((center_name, {'type': 'incircle', 'triangle': [p.val for p in args]}))
+            point_names = [p.val for p in args]
+
+            if not self._is_incircle_supported_polygon(args):
+                if self.verbosity:
+                    logger.warning(
+                        f"Skipping incircle {center_name}: only triangle, square, rhombus are supported, got {point_names}"
+                    )
+                return
+
+            if len(point_names) == 3:
+                self.circles.append((center_name, {'type': 'incircle', 'triangle': point_names}))
+            else:
+                self.circles.append((center_name, {'type': 'incircle', 'points': point_names}))
+
+            if len(point_names) == 4:
+                center_point = self._ensure_named_point(center_name)
+                point_list = [self._ensure_named_point(name) for name in point_names]
+                joined_names = "_".join(point_names)
+                self._register_equal_distance_to_polygon_sides_loss(
+                    center_point,
+                    point_list,
+                    loss_key=f"incircle_{center_name}_{joined_names}",
+                    weight=2500.0,
+                )
+
+            if center_name not in self.defined_incenters:
+                self.defined_incenters[center_name] = point_names
         elif param_type_str == "circumcircle":
-            # Circumcircle defined by triangle points
-            self.circles.append((center_name, {'type': 'circumcircle', 'triangle': [p.val for p in args]}))
+            point_names = [p.val for p in args]
+            if len(point_names) == 3:
+                # Keep legacy format for triangle circumcircle.
+                self.circles.append((center_name, {'type': 'circumcircle', 'triangle': point_names}))
+            else:
+                # Use explicit multi-point format for quadrilateral and higher.
+                self.circles.append((center_name, {'type': 'circumcircle', 'points': point_names}))
+
+            if len(point_names) >= 3:
+                center_point = self._ensure_named_point(center_name)
+                point_list = [self._ensure_named_point(name) for name in point_names]
+                joined_names = "_".join(point_names)
+                self._register_equal_radius_center_loss(
+                    center_point,
+                    point_list,
+                    loss_key=f"circumcircle_{center_name}_{joined_names}",
+                    weight=2500.0,
+                )
+
+                if center_name not in self.defined_circumcenters:
+                    self.defined_circumcenters[center_name] = point_names
         elif param_type_str == "auto":
             if center_name in self.defined_circumcenters:
-                self.circles.append((center_name, {
-                    'type': 'circumcircle',
-                    'triangle': self.defined_circumcenters[center_name]
-                }))
+                circum_points = self.defined_circumcenters[center_name]
+                if len(circum_points) == 3:
+                    self.circles.append((center_name, {
+                        'type': 'circumcircle',
+                        'triangle': circum_points
+                    }))
+                else:
+                    self.circles.append((center_name, {
+                        'type': 'circumcircle',
+                        'points': circum_points
+                    }))
             elif center_name in self.defined_incenters:
-                self.circles.append((center_name, {
-                    'type': 'incircle',
-                    'triangle': self.defined_incenters[center_name]
-                }))
+                incircle_points = self.defined_incenters[center_name]
+                if len(incircle_points) == 3:
+                    self.circles.append((center_name, {
+                        'type': 'incircle',
+                        'triangle': incircle_points
+                    }))
+                elif len(incircle_points) == 4:
+                    self.circles.append((center_name, {
+                        'type': 'incircle',
+                        'points': incircle_points
+                    }))
+                else:
+                    if self.verbosity:
+                        logger.warning(
+                            f"Skipping auto-incircle for {center_name}: unsupported boundary points {incircle_points}"
+                        )
             else:
                 # Fallback to default positioned circle when no center metadata exists.
                 self.circles.append((center_name, {
@@ -1255,19 +1483,19 @@ class Optimizer:
                 circle_type = circle_info.get('type')
 
                 if circle_type == 'incircle':
-                    tri = circle_info.get('triangle', [])
-                    if len(tri) >= 2 and all(name in self.name2pt for name in [center_name, tri[0], tri[1]]):
+                    boundary = self._get_incircle_point_names(circle_info)
+                    if len(boundary) >= 2 and all(name in self.name2pt for name in [center_name, boundary[0], boundary[1]]):
                         center = self.lookup_pt_by_name(center_name)
-                        p1 = self.lookup_pt_by_name(tri[0])
-                        p2 = self.lookup_pt_by_name(tri[1])
+                        p1 = self.lookup_pt_by_name(boundary[0])
+                        p2 = self.lookup_pt_by_name(boundary[1])
                         if center is not None and p1 is not None and p2 is not None:
                             return self.dist_to_line(center, p1, p2)
 
                 if circle_type == 'circumcircle':
-                    tri = circle_info.get('triangle', [])
-                    if len(tri) >= 1 and all(name in self.name2pt for name in [center_name, tri[0]]):
+                    circum_points = self._get_circumcircle_point_names(circle_info)
+                    if len(circum_points) >= 1 and all(name in self.name2pt for name in [center_name, circum_points[0]]):
                         center = self.lookup_pt_by_name(center_name)
-                        p1 = self.lookup_pt_by_name(tri[0])
+                        p1 = self.lookup_pt_by_name(circum_points[0])
                         if center is not None and p1 is not None:
                             return self.dist(center, p1)
 
@@ -1383,12 +1611,13 @@ class Optimizer:
             logger.warning(f"Equal-distance constraint needs 4 points (p1, p2, p3, p4), got {len(points)}")
             return
 
+        point_names = [pt.val for pt in points]
         p1 = self.lookup_pt(points[0])
         p2 = self.lookup_pt(points[1])
         p3 = self.lookup_pt(points[2])
         p4 = self.lookup_pt(points[3])
 
-        eq_key = f"equal_distance_{points[0].val}{points[1].val}_{points[2].val}{points[3].val}"
+        eq_key = f"equal_distance_{point_names[0]}{point_names[1]}_{point_names[2]}{point_names[3]}"
         if eq_key not in self.loss_fns:
             self.register_loss(
                 eq_key,
@@ -1400,7 +1629,7 @@ class Optimizer:
         # This prevents solutions where p1=p2 or p3=p4
         min_segment_length = 0.15  # Minimum segment length
 
-        ndg_key_1 = f"ndg_segment_{points[0].val}{points[1].val}"
+        ndg_key_1 = f"ndg_segment_{point_names[0]}{point_names[1]}"
         if ndg_key_1 not in self.ndgs:
             self.register_ndg(
                 ndg_key_1,
@@ -1408,7 +1637,7 @@ class Optimizer:
                 weight=10.0
             )
 
-        ndg_key_2 = f"ndg_segment_{points[2].val}{points[3].val}"
+        ndg_key_2 = f"ndg_segment_{point_names[2]}{point_names[3]}"
         if ndg_key_2 not in self.ndgs:
             self.register_ndg(
                 ndg_key_2,
@@ -1416,8 +1645,57 @@ class Optimizer:
                 weight=10.0
             )
 
+        # If equal-distance describes two sides that share one triangle vertex (e.g. AB = AC),
+        # keep the opposite side from collapsing to a tiny segment.
+        shared_vertex = None
+        side_end_1 = None
+        side_end_2 = None
+        shared_patterns = (
+            (0, 2, 1, 3),
+            (0, 3, 1, 2),
+            (1, 2, 0, 3),
+            (1, 3, 0, 2),
+        )
+
+        for shared_idx_1, shared_idx_2, end_idx_1, end_idx_2 in shared_patterns:
+            if (
+                point_names[shared_idx_1] == point_names[shared_idx_2]
+                and point_names[end_idx_1] != point_names[end_idx_2]
+            ):
+                candidate_set = {point_names[shared_idx_1], point_names[end_idx_1], point_names[end_idx_2]}
+                is_triangle_side_pair = any(
+                    len(tri_key) == 3 and set(tri_key) == candidate_set
+                    for tri_key in self.triangles_metadata.keys()
+                )
+                if is_triangle_side_pair:
+                    shared_vertex = point_names[shared_idx_1]
+                    side_end_1 = point_names[end_idx_1]
+                    side_end_2 = point_names[end_idx_2]
+                break
+
+        if shared_vertex is not None and side_end_1 is not None and side_end_2 is not None:
+            shared_pt = self.lookup_pt_by_name(shared_vertex)
+            end_pt_1 = self.lookup_pt_by_name(side_end_1)
+            end_pt_2 = self.lookup_pt_by_name(side_end_2)
+
+            spread_key = f"equal_distance_triangle_spread_{shared_vertex}_{side_end_1}_{side_end_2}"
+            if spread_key not in self.loss_fns:
+                min_base_ratio = float(self.opts.get('equal_distance_triangle_min_base_ratio', 0.38))
+                spread_weight = float(self.opts.get('equal_distance_triangle_spread_weight', 2200.0))
+
+                self.register_loss(
+                    spread_key,
+                    lambda s=shared_pt, e1=end_pt_1, e2=end_pt_2, r=min_base_ratio: torch.relu(
+                        r * ((self.dist(s, e1) + self.dist(s, e2)) / 2.0) - self.dist(e1, e2)
+                    ),
+                    weight=spread_weight,
+                )
+
         if self.verbosity:
-            logger.info(f"Added equal-distance constraint: {points[0].val}{points[1].val} = {points[2].val}{points[3].val} with NDG")
+            logger.info(
+                f"Added equal-distance constraint: {point_names[0]}{point_names[1]} = "
+                f"{point_names[2]}{point_names[3]} with NDG"
+            )
 
     def _add_fixed_distance_constraint(self, points: list, distance):
         """Add constraint that distance(p1, p2) = fixed_value"""
@@ -1493,14 +1771,13 @@ class Optimizer:
         ):
             seg_a_name, seg_b_name = self.point_on_segment_defs[point_name]
 
-            tri = circle_info.get('triangle', [])
+            tri = self._get_incircle_point_names(circle_info)
             valid_sides = set()
             if len(tri) >= 3:
-                valid_sides = {
-                    frozenset((tri[0], tri[1])),
-                    frozenset((tri[1], tri[2])),
-                    frozenset((tri[2], tri[0])),
-                }
+                for idx in range(len(tri)):
+                    s1 = tri[idx]
+                    s2 = tri[(idx + 1) % len(tri)]
+                    valid_sides.add(frozenset((s1, s2)))
 
             if not valid_sides or frozenset((seg_a_name, seg_b_name)) in valid_sides:
                 seg_a = self.lookup_pt_by_name(seg_a_name)
@@ -2063,75 +2340,64 @@ class Optimizer:
                 logger.info(f" {instr}")
             self.process_instruction(instr)
 
-    def early_stop(self, loss: float, mode: str = "min", patience: int = 5, epsilon: float = 1e-6) -> bool:
-        if self.best_loss is None:
-            self.best_loss = loss
-            self.counter = 0
-            return False
-
-        if mode == "min":
-            improved = loss < self.best_loss - epsilon
-        elif mode == "max":
-            improved = loss > self.best_loss + epsilon
-        else:
-            raise ValueError("mode must be 'min' or 'max'")
-
-        if improved:
-            self.best_loss = loss
-            self.counter = 0
-        else:
-            self.counter += 1
-
-        return self.counter > patience
-
     def train(self, epochs: int = 1000, lr: float = 0.01):
         if not self.has_loss:
             return 0.0
 
         optimizer = optim.Adam(self.trainable_vars, lr=lr)
-        last_finite_params = [param.detach().clone() for param in self.trainable_vars]
+        grad_clip = self.opts.get('grad_clip_norm', 5.0)
+        param_abs_max = self.opts.get('param_abs_max', 1e3)
+        last_good_state = [p.detach().clone() for p in self.trainable_vars]
+        total_loss = torch.tensor(float('inf'), dtype=torch.float64, device=self.device)
+        non_finite_penalty = self.const(1e6)
         if self.verbosity:
             logger.info(f"Optimization ({epochs}) Epochs")
 
         for i in range(epochs):
-            optimizer.zero_grad(set_to_none=True)
+            optimizer.zero_grad()
             # Compute losses fresh at each iteration
-            self.losses = {key: fn() for key, fn in self.loss_fns.items()}
+            raw_losses = {key: fn() for key, fn in self.loss_fns.items()}
+            had_non_finite = False
+            self.losses = {}
+            for key, value in raw_losses.items():
+                if not torch.isfinite(value):
+                    had_non_finite = True
+                self.losses[key] = torch.nan_to_num(
+                    value,
+                    nan=non_finite_penalty.item(),
+                    posinf=non_finite_penalty.item(),
+                    neginf=non_finite_penalty.item(),
+                )
+
             total_loss = sum(self.losses.values())
-
-            if not torch.isfinite(total_loss):
-                if self.verbosity:
-                    logger.warning(f"Non-finite total loss at iteration {i}; stopping optimization early.")
-                break
-
-            # Keep a rollback snapshot before each update.
-            last_finite_params = [param.detach().clone() for param in self.trainable_vars]
+            if had_non_finite and self.verbosity:
+                logger.warning(f"Non-finite term(s) detected at iteration {i}; replaced with finite penalties")
 
             total_loss.backward()
 
-            max_grad_norm = float(self.opts.get('max_grad_norm', 10.0))
-            torch.nn.utils.clip_grad_norm_(self.trainable_vars, max_grad_norm)
+            if grad_clip is not None and grad_clip > 0:
+                torch.nn.utils.clip_grad_norm_(self.trainable_vars, grad_clip)
 
             optimizer.step()
 
-            params_finite = all(torch.isfinite(param).all() for param in self.trainable_vars)
-            if not params_finite:
-                for param, snapshot in zip(self.trainable_vars, last_finite_params):
-                    param.data.copy_(snapshot)
-                if self.verbosity:
-                    logger.warning(f"Non-finite parameter detected at iteration {i}; stopping optimization early.")
-                break
+            # Keep parameters in a numerically safe range.
+            if param_abs_max is not None and param_abs_max > 0:
+                for param in self.trainable_vars:
+                    param.data.clamp_(-param_abs_max, param_abs_max)
+
+            if torch.isfinite(total_loss):
+                last_good_state = [p.detach().clone() for p in self.trainable_vars]
 
             if self.verbosity and i % 100 == 0:
                 logger.info(f"Iteration {i:4d}: Loss = {total_loss.item():.6f}")
 
             # Early stopping
-            if self.early_stop(total_loss.item(), mode="min", patience=10):
-                if self.verbosity:
-                    logger.info(f"Early stopped at iteration {i}")
+            if total_loss.item() < 1e-6:
+                if self.verbosity >= 0:
+                    logger.info(f"Converged at iteration {i} with loss {total_loss.item():.6f}")
                 break
 
-        final_loss = total_loss.item() if torch.isfinite(total_loss) else float('inf')
+        final_loss = total_loss.item()
         if self.verbosity:
             logger.info(f"Final loss {final_loss:.6f}")
             self.log_losses()
@@ -2290,26 +2556,30 @@ class Optimizer:
 
                 # Calculate radius based on circle type
                 if info['type'] == 'incircle':
-                    # Radius = distance from center to any triangle side
-                    triangle_points = info['triangle']
-                    p1 = diagram.points.get(triangle_points[0])
-                    p2 = diagram.points.get(triangle_points[1])
+                    # Radius = distance from center to any boundary side
+                    boundary_points = self._get_incircle_point_names(info)
+                    if len(boundary_points) < 2:
+                        continue
+                    p1 = diagram.points.get(boundary_points[0])
+                    p2 = diagram.points.get(boundary_points[1])
                     if p1 is not None and p2 is not None:
                         radius = self._distance_point_to_line(center, p1, p2)
                     else:
-                        p1_t = self.name2pt[triangle_points[0]]
-                        p2_t = self.name2pt[triangle_points[1]]
+                        p1_t = self.name2pt[boundary_points[0]]
+                        p2_t = self.name2pt[boundary_points[1]]
                         radius = self.dist_to_line(center_pt, p1_t, p2_t).detach().cpu().item()
                     info = {**info, 'radius': radius}
 
                 elif info['type'] == 'circumcircle':
-                    # Radius = distance from center to any triangle vertex
-                    triangle_points = info['triangle']
-                    p1 = diagram.points.get(triangle_points[0])
+                    # Radius = distance from center to any circumcircle reference point
+                    circum_points = self._get_circumcircle_point_names(info)
+                    if len(circum_points) < 1:
+                        continue
+                    p1 = diagram.points.get(circum_points[0])
                     if p1 is not None:
                         radius = math.hypot(center.x - p1.x, center.y - p1.y)
                     else:
-                        p1_t = self.name2pt[triangle_points[0]]
+                        p1_t = self.name2pt[circum_points[0]]
                         radius = self.dist(center_pt, p1_t).detach().cpu().item()
                     info = {**info, 'radius': radius}
                 elif info['type'] == 'diameter':
@@ -2409,22 +2679,22 @@ class Optimizer:
                 return float(radius) if radius is not None else None
 
             if circle_type == 'incircle':
-                triangle_points = info.get('triangle', [])
-                if len(triangle_points) < 2:
+                boundary_points = self._get_incircle_point_names(info)
+                if len(boundary_points) < 2:
                     return None
                 center_pt = self.lookup_pt_by_name(center_name)
-                p1 = self.lookup_pt_by_name(triangle_points[0])
-                p2 = self.lookup_pt_by_name(triangle_points[1])
+                p1 = self.lookup_pt_by_name(boundary_points[0])
+                p2 = self.lookup_pt_by_name(boundary_points[1])
                 if center_pt is None or p1 is None or p2 is None:
                     return None
                 return float(self.dist_to_line(center_pt, p1, p2).detach().cpu().item())
 
             if circle_type == 'circumcircle':
-                triangle_points = info.get('triangle', [])
-                if len(triangle_points) < 1:
+                circum_points = self._get_circumcircle_point_names(info)
+                if len(circum_points) < 1:
                     return None
                 center_pt = self.lookup_pt_by_name(center_name)
-                p1 = self.lookup_pt_by_name(triangle_points[0])
+                p1 = self.lookup_pt_by_name(circum_points[0])
                 if center_pt is None or p1 is None:
                     return None
                 return float(self.dist(center_pt, p1).detach().cpu().item())
@@ -2546,24 +2816,27 @@ class Optimizer:
         for center_name, info in self.circles:
             if info.get('type') != 'incircle':
                 continue
-            tri = info.get('triangle', [])
-            if len(tri) < 3:
+            boundary_points = self._get_incircle_point_names(info)
+            if len(boundary_points) < 3:
                 continue
             if center_name not in diagram.points:
                 continue
-            if not all(name in diagram.points for name in tri[:3]):
+            if not all(name in diagram.points for name in boundary_points):
                 continue
 
-            a = diagram.points[tri[0]]
-            b = diagram.points[tri[1]]
-            c = diagram.points[tri[2]]
             center = diagram.points[center_name]
 
-            incenter_xy = self._compute_incenter_coords(a, b, c)
-            if incenter_xy is None:
-                continue
+            # Keep exact analytical center only for triangle incircle.
+            if len(boundary_points) == 3:
+                a = diagram.points[boundary_points[0]]
+                b = diagram.points[boundary_points[1]]
+                c = diagram.points[boundary_points[2]]
 
-            center.x, center.y = incenter_xy
+                incenter_xy = self._compute_incenter_coords(a, b, c)
+                if incenter_xy is None:
+                    continue
+
+                center.x, center.y = incenter_xy
 
             side_to_touch = {}
             for point_name, seg in self.point_on_segment_defs.items():
@@ -2571,13 +2844,11 @@ class Optimizer:
                     continue
                 side_to_touch[frozenset(seg)] = point_name
 
-            tri_sides = [
-                (tri[0], tri[1]),
-                (tri[1], tri[2]),
-                (tri[2], tri[0]),
-            ]
+            polygon_sides = []
+            for idx in range(len(boundary_points)):
+                polygon_sides.append((boundary_points[idx], boundary_points[(idx + 1) % len(boundary_points)]))
 
-            for s1_name, s2_name in tri_sides:
+            for s1_name, s2_name in polygon_sides:
                 point_name = side_to_touch.get(frozenset((s1_name, s2_name)))
                 if not point_name or point_name not in diagram.points:
                     continue
@@ -2587,3 +2858,4 @@ class Optimizer:
                 touch = diagram.points[point_name]
                 touch.x = tx
                 touch.y = ty
+

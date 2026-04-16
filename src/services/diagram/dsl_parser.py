@@ -49,3 +49,4 @@ class DSLParser:
             raise SyntaxError('unexpected )')
         else:
             return token
+

@@ -1,4 +1,4 @@
-﻿import time
+import time
 from pathlib import Path
 from typing import Any, Optional
 from uuid import uuid4
@@ -30,8 +30,8 @@ class DiagramService:
         self,
         task_id: str,
         dsl: str,
-        epochs: int = 500,
-        n_tries: int = 1,
+        epochs: int = 3000,
+        n_tries: int = 3,
         dpi: int = 150,
         timeout: int = 60,
     ) -> dict[str, Any]:
@@ -171,8 +171,8 @@ class DiagramService:
         self,
         dsl: str,
         task_id: Optional[str] = None,
-        epochs: int = 500,
-        n_tries: int = 1,
+        epochs: int = 3000,
+        n_tries: int = 3,
         dpi: int = 150,
     ) -> dict[str, Any]:
         return self.generate_and_render(

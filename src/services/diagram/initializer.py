@@ -1,5 +1,7 @@
+
 import math
 from typing import List, Tuple
+import random
 
 from networkx import center
 
@@ -10,7 +12,7 @@ class Initializer:
     def init_isoceles_triangle(apex_idx: int = 0, scale: float = 1.35) -> List[Tuple[float, float]]:
         # Base configuration: apex at top, base at bottom
         base_coords = [
-            (0.0, 0.8 * scale),      # Apex
+            (0.0, 1.0 * scale),      # Apex
             (-0.6 * scale, -0.4 * scale),  # Base left
             (0.6 * scale, -0.4 * scale)    # Base right
         ]
@@ -57,9 +59,9 @@ class Initializer:
     def init_scalene_triangle(scale: float = 1.35) -> List[Tuple[float, float]]:
         """Scalene triangle with all sides different"""
         return [
-            (-0.7 * scale, -0.4 * scale),   # A
-            (0.8 * scale, -0.2 * scale),    # B
-            (-0.1 * scale, 0.9 * scale)     # C: right (không đối xứng)
+            (-0.70 * scale, 1.0 * scale),    # A: top, shifted a bit toward B
+            (-1.0 * scale, -0.35 * scale),  # B: bottom left
+            (0.80 * scale, -0.35 * scale)    # C: bottom right (same row as B)
         ]
 
     @staticmethod
@@ -102,37 +104,59 @@ class Initializer:
 
     @staticmethod
     def init_square(side: float = 1.0) -> List[Tuple[float, float]]:
-        """Initialize coordinates for a square"""
-        return Initializer.init_rectangle(side, side)
-
-    @staticmethod
-    def init_trapezoid(scale: float = 1.0) -> List[Tuple[float, float]]:
-        """Initialize coordinates for a trapezoid (one pair of parallel sides)"""
+        """Initialize a canonical axis-aligned square A-B-C-D."""
         return [
-            (-0.7 * scale, -0.4 * scale),    # Bottom left
-            (0.7 * scale, -0.4 * scale),     # Bottom right (longer base)
-            (0.4 * scale, 0.4 * scale),      # Top right
-            (-0.4 * scale, 0.4 * scale)      # Top left (shorter top)
+            (0.0, 0.0),
+            (side, 0.0),
+            (side, side),
+            (0.0, side),
         ]
 
     @staticmethod
-    def init_parallelogram(scale: float = 1.0) -> List[Tuple[float, float]]:
-        """Initialize a visually stable parallelogram for cleaner renders."""
+    def init_trapezoid_general(scale: float = 1.0) -> List[Tuple[float, float]]:
+        """Initialize a canonical non-isosceles trapezoid A-B-C-D with AB || CD."""
         return [
-            (-0.75 * scale, -0.45 * scale),  # Bottom left
-            (0.75 * scale, -0.25 * scale),   # Bottom right
-            (1.05 * scale, 0.55 * scale),    # Top right
-            (-0.45 * scale, 0.35 * scale)    # Top left
+            (-0.70 * scale, 0.40 * scale),   # A: top-left (shorter base)
+            (0.45 * scale, 0.40 * scale),    # B: top-right
+            (1.30 * scale, -0.40 * scale),   # C: bottom-right (longer base)
+            (-1.20 * scale, -0.40 * scale),  # D: bottom-left
+        ]
+
+    @staticmethod
+    def init_trapezoid_isosceles(scale: float = 1.0) -> List[Tuple[float, float]]:
+        """Initialize a canonical isosceles trapezoid A-B-C-D with AB || CD and AD = BC."""
+        return [
+            (-0.85 * scale, 0.40 * scale),   # A: top-left (upper base)
+            (0.85 * scale, 0.40 * scale),    # B: top-right
+            (1.45 * scale, -0.40 * scale),   # C: bottom-right (lower base)
+            (-1.45 * scale, -0.40 * scale),  # D: bottom-left
+        ]
+
+    @staticmethod
+    def init_trapezoid(scale: float = 1.0) -> List[Tuple[float, float]]:
+        """Backward-compatible trapezoid initializer (defaults to isosceles style)."""
+        return Initializer.init_trapezoid_isosceles(scale)
+
+    @staticmethod
+    def init_parallelogram(scale: float = 1.0) -> List[Tuple[float, float]]:
+        """Initialize a visibly skewed parallelogram (not near-rectangle)."""
+        return [
+            (-0.90 * scale, -0.45 * scale),  # Bottom left
+            (0.70 * scale, -0.45 * scale),   # Bottom right
+            (1.25 * scale, 0.45 * scale),    # Top right (shifted right for clear shear)
+            (-0.35 * scale, 0.45 * scale)    # Top left
         ]
 
     @staticmethod
     def init_rhombus(scale: float = 1.0) -> List[Tuple[float, float]]:
-        """Initialize rhombus (diamond shape with all sides equal)"""
+        """Initialize a clearly non-square rhombus (elongated diamond)."""
+        long_half = 1.0 * scale
+        short_half = 0.35 * scale
         return [
-            (0.0, -0.8 * scale),  # Bottom
-            (0.5 * scale, 0.0),   # Right
-            (0.0, 0.8 * scale),   # Top
-            (-0.5 * scale, 0.0)   # Left
+            (0.0, -long_half),    # Bottom
+            (short_half, 0.0),    # Right
+            (0.0, long_half),     # Top
+            (-short_half, 0.0)    # Left
         ]
         
     @staticmethod
@@ -295,9 +319,9 @@ class Initializer:
 
     @staticmethod
     def add_noise(coords: List[Tuple[float, float]], noise_scale: float = 0.05) -> List[Tuple[float, float]]:
-        import random
         return [
             (x + random.uniform(-noise_scale, noise_scale),
              y + random.uniform(-noise_scale, noise_scale))
             for x, y in coords
         ]
+
