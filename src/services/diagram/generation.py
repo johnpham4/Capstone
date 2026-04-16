@@ -1,4 +1,4 @@
-import time
+﻿import time
 from pathlib import Path
 from typing import Any, Optional
 from uuid import uuid4
@@ -7,7 +7,7 @@ import boto3
 from botocore.exceptions import BotoCoreError, ClientError
 from loguru import logger
 
-from src.config.settings.settings import settings
+from src.config.settings import settings
 from src.services.diagram.diagram_builder import DiagramBuilder
 from src.services.diagram.matplotlib_renderer import MatplotlibDiagramRenderer
 from src.services.diagram.optimizer import Optimizer

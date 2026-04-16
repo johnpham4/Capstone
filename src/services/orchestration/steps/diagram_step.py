@@ -1,10 +1,10 @@
-import json
+﻿import json
 
 import httpx
 from loguru import logger
 
 from src.infrastructures.celery.tasks import render_diagram_task
-from src.config.settings.settings import settings
+from src.config.settings import settings
 from src.services.mock_responses import MOCK_DSL
 
 
@@ -18,7 +18,7 @@ class DiagramStep:
         dsl_prompt: str,
         llm_mock: bool = False,
     ) -> dict:
-        # ── 1. Resolve DSL ──────────────────────────────────
+        # â”€â”€ 1. Resolve DSL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if llm_mock:
             dsl = MOCK_DSL
         elif settings.LLM_ENDPOINT_URL:
@@ -32,7 +32,7 @@ class DiagramStep:
         if not dsl.strip():
             return {"status": "failed", "error": "DSL input is empty"}
 
-        # ── 2. Render diagram via Celery ────────────────────
+        # â”€â”€ 2. Render diagram via Celery â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         try:
             celery_task = render_diagram_task.apply_async(
                 kwargs={
@@ -74,10 +74,10 @@ class DiagramStep:
             logger.error(f"DiagramStep error: {e}")
             return {"status": "failed", "error": str(e)}
 
-    # ── LLM endpoint call ───────────────────────────────────
+    # â”€â”€ LLM endpoint call â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     def _generate_dsl(self, user_input: str, dsl_prompt: str) -> str | None:
-        """Call the LLM endpoint (ngrok/SageMaker) to convert problem text → DSL."""
+        """Call the LLM endpoint (ngrok/SageMaker) to convert problem text â†’ DSL."""
         prompt = dsl_prompt.format(query=user_input)
         try:
             response = httpx.post(
@@ -94,3 +94,4 @@ class DiagramStep:
         except Exception as e:
             logger.error(f"LLM endpoint call failed: {e}")
             return None
+

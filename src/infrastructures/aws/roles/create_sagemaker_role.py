@@ -1,4 +1,4 @@
-import json
+﻿import json
 from pathlib import Path
 
 from loguru import logger
@@ -8,7 +8,7 @@ try:
 except ModuleNotFoundError:
     logger.warning("Couldn't load AWS or SageMaker imports. Run 'poetry install --with aws' to support AWS.")
 
-from src.config.settings.settings import settings
+from src.config.settings import settings
 
 
 def create_sagemaker_user(username: str):
@@ -56,3 +56,4 @@ if __name__ == "__main__":
         json.dump(new_user, f)
 
 logger.info("Credentials saved to 'sagemaker_user_credentials.json'")
+

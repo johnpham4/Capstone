@@ -1,10 +1,10 @@
-import json
+﻿import json
 from uuid import uuid4
 
 from celery import current_app
 from celery.result import AsyncResult
 
-from src.config.settings.settings import settings
+from src.config.settings import settings
 from src.infrastructures.celery.tasks import render_diagram_task
 from src.services.tasks.ports import TaskQueuePort
 
@@ -111,3 +111,4 @@ class CeleryTaskQueueService(TaskQueuePort):
 
 
 TaskQueueService = CeleryTaskQueueService
+

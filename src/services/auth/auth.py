@@ -1,9 +1,9 @@
-from datetime import datetime, timedelta, timezone
+﻿from datetime import datetime, timedelta, timezone
 
 import jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.config.settings.settings import settings
+from src.config.settings import settings
 from src.core.security import verify_password, get_password_hash, create_access_token
 from src.infrastructures.redis.cache import token_blacklist
 from src.models.dto.auth import Token
@@ -59,7 +59,7 @@ class AuthService:
                 ttl = int(exp - datetime.now(timezone.utc).timestamp())
                 await token_blacklist.revoke(jti, ttl)
         except jwt.PyJWTError:
-            # Token đã invalid/hết hạn → không cần blacklist
+            # Token Ä‘Ã£ invalid/háº¿t háº¡n â†’ khÃ´ng cáº§n blacklist
             pass
 
     async def authenticate(self, username: str, password: str) -> UserInDB | None:
@@ -75,3 +75,4 @@ class AuthService:
         if user_model is None:
             return None
         return self._repo.to_schema(user_model)
+

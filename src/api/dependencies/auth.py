@@ -1,11 +1,11 @@
-from typing import Annotated
+﻿from typing import Annotated
 
 import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.config.settings.settings import settings
+from src.config.settings import settings
 from src.infrastructures.database.session import get_db
 from src.infrastructures.redis.cache import token_blacklist
 from src.models.dto.user import User
@@ -39,7 +39,7 @@ async def get_current_user(
     except Exception as e:
         raise credentials_exception
 
-    # ── Bước 2: Check blacklist (đã logout chưa) ─────────────────────
+    # â”€â”€ BÆ°á»›c 2: Check blacklist (Ä‘Ã£ logout chÆ°a) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     if token_data.jti and await token_blacklist.is_revoked(token_data.jti):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -47,7 +47,7 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    # ── Bước 3: Tìm user trong DB ───────────────────────────────────
+    # â”€â”€ BÆ°á»›c 3: TÃ¬m user trong DB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     service = AuthService(db)
     user = await service.get_user_by_username(token_data.username)
     if user is None:
@@ -58,7 +58,8 @@ async def get_current_user(
 async def get_current_active_user(
     current_user: Annotated[User, Depends(get_current_user)],
 ) -> User:
-    """Check user không bị disabled. Dùng làm dependency cho protected routes."""
+    """Check user khÃ´ng bá»‹ disabled. DÃ¹ng lÃ m dependency cho protected routes."""
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
+

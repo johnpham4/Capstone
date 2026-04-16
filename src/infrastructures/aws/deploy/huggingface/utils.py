@@ -1,4 +1,4 @@
-from loguru import logger
+﻿from loguru import logger
 
 try:
     import boto3
@@ -6,7 +6,7 @@ try:
 except ModuleNotFoundError:
     logger.warning("Couldn't load AWS or SageMaker imports. Run 'poetry install --with aws' to support AWS.")
 
-from src.config.settings.settings import settings
+from src.config.settings import settings
 
 
 class ResourceManager:
@@ -37,3 +37,4 @@ class ResourceManager:
         except self.sagemaker_client.exceptions.ResourceNotFoundException:
             logger.info(f"Endpoint '{endpoint_name}' does not exist.")
             return False
+

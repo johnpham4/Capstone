@@ -1,6 +1,11 @@
+﻿import os
+
 from celery import Celery
 from kombu import Exchange, Queue
-from src.config.settings.settings import settings
+from src.config.settings import settings
+
+
+default_worker_pool = "solo" if os.name == "nt" else "prefork"
 
 celery_app = Celery(
     "geouni",
@@ -21,7 +26,7 @@ celery_app.conf.update(
     worker_max_tasks_per_child=1000,
     result_expires=3600,
     task_acks_late=True,
-    worker_pool="prefork",
+    worker_pool=default_worker_pool,
     worker_redirect_stdouts_level="WARNING",
     result_extended=False,
 
@@ -43,3 +48,4 @@ celery_app.conf.update(
         },
     },
 )
+
