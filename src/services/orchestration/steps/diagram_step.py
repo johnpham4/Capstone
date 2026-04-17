@@ -5,6 +5,7 @@ from loguru import logger
 
 from src.infrastructures.celery.tasks import render_diagram_task
 from src.config.settings import settings
+from src.services.nlp import prepare_problem_for_dsl
 from src.services.mock_responses import MOCK_DSL
 
 
@@ -78,7 +79,9 @@ class DiagramStep:
 
     def _generate_dsl(self, user_input: str, dsl_prompt: str) -> str | None:
         """Call the LLM endpoint (ngrok/SageMaker) to convert problem text â†’ DSL."""
-        prompt = dsl_prompt.format(query=user_input)
+        raw_input = str(user_input or "").strip()
+        query_text = prepare_problem_for_dsl(raw_input) or raw_input
+        prompt = dsl_prompt.format(query=query_text)
         try:
             response = httpx.post(
                 f"{settings.LLM_ENDPOINT_URL}/generate",
