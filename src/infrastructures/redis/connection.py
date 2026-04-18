@@ -1,4 +1,4 @@
-import redis.asyncio as aioredis
+﻿import redis.asyncio as aioredis
 from loguru import logger
 
 from src.config.settings import settings

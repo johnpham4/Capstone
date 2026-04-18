@@ -1,8 +1,9 @@
-from datetime import datetime, timedelta, timezone
+﻿from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 import jwt
 from pwdlib import PasswordHash
 
+from src.config.settings import settings
 from src.config.settings import settings
 
 password_hash = PasswordHash.recommended()

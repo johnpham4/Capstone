@@ -1,4 +1,4 @@
-import json
+﻿import json
 
 from loguru import logger
 
@@ -48,3 +48,4 @@ model_resource_config = ResourceRequirements(
         "memory": 5 * 1024,  # Minimum memory required in Mb (required)
     },
 )
+

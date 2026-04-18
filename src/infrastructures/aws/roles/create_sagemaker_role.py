@@ -1,4 +1,4 @@
-import json
+﻿import json
 from pathlib import Path
 
 from loguru import logger
@@ -56,3 +56,4 @@ if __name__ == "__main__":
         json.dump(new_user, f)
 
 logger.info("Credentials saved to 'sagemaker_user_credentials.json'")
+

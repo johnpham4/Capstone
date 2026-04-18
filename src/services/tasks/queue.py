@@ -1,4 +1,4 @@
-import json
+﻿import json
 from uuid import uuid4
 
 from celery import current_app
@@ -110,3 +110,4 @@ class CeleryTaskQueueService(TaskQueuePort):
 
 
 TaskQueueService = CeleryTaskQueueService
+

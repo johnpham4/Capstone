@@ -43,6 +43,12 @@ from src.config.settings import settings
     help="Run finetuning on AWS SageMaker"
 )
 @click.option(
+    "--run-finetune-peft-acemath",
+    is_flag=True,
+    default=False,
+    help="Run PEFT finetuning for AceMath-1.5B on AWS SageMaker"
+)
+@click.option(
     "--num-epochs",
     type=int,
     default=1,
@@ -63,8 +69,34 @@ from src.config.settings import settings
 @click.option(
     "--dataset-workspace",
     type=str,
-    default="minn4",
+    default="quangne",
     help="Hugging Face workspace containing the dataset"
+)
+@click.option(
+    "--dataset-repo",
+    type=str,
+    default="geometry3k8-8-1-1",
+    help="Hugging Face dataset repository name"
+)
+@click.option(
+    "--is-dummy",
+    is_flag=True,
+    default=False,
+    help="Use a small subset of dataset for smoke finetuning"
+)
+@click.option(
+    "--dummy-train-samples",
+    type=int,
+    default=400,
+    show_default=True,
+    help="Number of train samples when --is-dummy is enabled"
+)
+@click.option(
+    "--dummy-eval-samples",
+    type=int,
+    default=100,
+    show_default=True,
+    help="Number of eval samples when --is-dummy is enabled"
 )
 def main(
     no_cache: bool = False,
@@ -73,10 +105,15 @@ def main(
     run_generate_gmbl: bool = False,
     run_generate_questions: bool = False,
     run_finetune: bool = False,
+    run_finetune_peft_acemath: bool = False,
     num_epochs: int = 1,
     batch_size: int = 2,
     learning_rate: float = 2e-4,
-    dataset_workspace: str = "minn4",
+    dataset_workspace: str = "quangne",
+    dataset_repo: str = "geometry3k8-8-1-1",
+    is_dummy: bool = False,
+    dummy_train_samples: int = 400,
+    dummy_eval_samples: int = 100,
 ) -> None:
     assert (
         run_prepare_data
@@ -84,6 +121,7 @@ def main(
         or run_generate_gmbl
         or run_generate_questions
         or run_finetune
+        or run_finetune_peft_acemath
     ), "Please use one of the options"
 
     pipeline_args = {"enable_cache": not no_cache}
@@ -142,6 +180,32 @@ def main(
         )
 
         logger.info("Finetuning job submitted to AWS SageMaker successfully!")
+        logger.info("Monitor progress in AWS SageMaker Console and Comet ML")
+
+    if run_finetune_peft_acemath:
+        assert settings.HF_TOKEN, "HF_TOKEN required. Set it in .env file"
+        assert settings.AWS_ARN_ROLE, "AWS_ARN_ROLE required. Set it in .env file"
+
+        logger.info(
+            f"PEFT AceMath configuration: epochs={num_epochs}, batch_size={batch_size}, lr={learning_rate}, dataset={dataset_workspace}/{dataset_repo}, is_dummy={is_dummy}, dummy_train={dummy_train_samples}, dummy_eval={dummy_eval_samples}"
+        )
+
+        from pipeline.services.peft_finetuning.sagemaker import run_finetuning_on_sagemaker as run_peft_acemath
+
+        run_peft_acemath(
+            num_train_epochs=num_epochs,
+            per_device_train_batch_size=batch_size,
+            learning_rate=learning_rate,
+            dataset_huggingface_workspace=dataset_workspace,
+            dataset_huggingface_repo_name=dataset_repo,
+            model_output_huggingface_workspace="quangne",
+            model_name="nvidia/AceMath-1.5B-Instruct",
+            is_dummy=is_dummy,
+            dummy_train_samples=dummy_train_samples,
+            dummy_eval_samples=dummy_eval_samples,
+        )
+
+        logger.info("PEFT AceMath finetuning job submitted to AWS SageMaker successfully!")
         logger.info("Monitor progress in AWS SageMaker Console and Comet ML")
 
 if __name__ == "__main__":

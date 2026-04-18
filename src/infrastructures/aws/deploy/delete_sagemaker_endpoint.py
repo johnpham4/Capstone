@@ -1,4 +1,4 @@
-from loguru import logger
+﻿from loguru import logger
 
 try:
     import boto3
@@ -72,3 +72,4 @@ if __name__ == "__main__":
     endpoint_name = settings.SAGEMAKER_ENDPOINT_INFERENCE
     logger.info(f"Attempting to delete endpoint: {endpoint_name}")
     delete_endpoint_and_config(endpoint_name=endpoint_name)
+

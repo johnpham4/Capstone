@@ -1,4 +1,4 @@
-import json
+﻿import json
 from pathlib import Path
 
 from loguru import logger
@@ -72,3 +72,4 @@ if __name__ == "__main__":
         json.dump({"RoleArn": role_arn}, f)
 
     logger.info("Role ARN saved to 'sagemaker_execution_role.json'")
+

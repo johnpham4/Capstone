@@ -34,9 +34,9 @@ class _WorkflowState(TypedDict):
 class OrchestrationService:
     def __init__(self, diagram_prompt: str):
         self.diagram_prompt = diagram_prompt
-        self._ocr_step = OcrStep()
+        self._ocr_step: OcrStep | None = None
         self._diagram_step = DiagramStep()
-        self._solver_step = SolverStep()
+        self._solver_step: SolverStep | None = None
         self._workflow = self._build_workflow()
 
     # ── LangGraph workflow ────────────────────────────────────
@@ -69,7 +69,13 @@ class OrchestrationService:
             return state
 
         hint = state.get("user_input", "")
-        result = self._ocr_step.execute(image, hint=hint)
+        try:
+            if self._ocr_step is None:
+                self._ocr_step = OcrStep()
+            result = self._ocr_step.execute(image, hint=hint)
+        except Exception as exc:
+            logger.warning(f"OCR unavailable: {exc}")
+            return state
 
         if result["status"] == "success" and result["extracted_text"]:
             extracted = result["extracted_text"]
@@ -103,7 +109,16 @@ class OrchestrationService:
         solve_input = state["problem_statement"]
         if state.get("diagram") and state["diagram"].get("dsl"):
             solve_input += f"\n\n[Diagram DSL: {state['diagram']['dsl']}]"
-        state["solution"] = self._solver_step.execute(solve_input)
+        try:
+            if self._solver_step is None:
+                self._solver_step = SolverStep()
+            state["solution"] = self._solver_step.execute(solve_input)
+        except Exception as exc:
+            logger.warning(f"Solver unavailable: {exc}")
+            state["solution"] = {
+                "status": "failed",
+                "error": str(exc),
+            }
         return state
 
     # ── Public API ────────────────────────────────────────────

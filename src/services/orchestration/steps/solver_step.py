@@ -1,4 +1,4 @@
-from collections.abc import Generator
+﻿from collections.abc import Generator
 
 from openai import OpenAI
 from loguru import logger

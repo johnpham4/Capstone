@@ -1,4 +1,4 @@
-import base64
+﻿import base64
 import uuid
 from datetime import datetime
 from typing import Optional
@@ -210,3 +210,4 @@ class HistoryService:
         if req is None or req.user_id != user_id:
             return False
         return await self._request_repo.delete(request_id)
+

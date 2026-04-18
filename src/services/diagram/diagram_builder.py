@@ -25,6 +25,69 @@ class DiagramBuilder:
                 self.warnings.append(warning_msg)
                 logger.warning(f"SKIPPED {warning_msg}")
 
+        # Normalize noisy LLM DSL:
+        # (triangle (A B C)) + (equal-distance A B A C) => explicit isosceles at A.
+        self._promote_plain_triangles_from_equal_distance()
+
+    def _extract_shared_triangle_pattern(self, point_names: List[str]):
+        """Return (shared_vertex, side_end_1, side_end_2) for AB=AC-like patterns."""
+        if len(point_names) != 4:
+            return None
+
+        p1, p2, p3, p4 = point_names
+        patterns = (
+            (p1 == p3 and p2 != p4, p1, p2, p4),
+            (p1 == p4 and p2 != p3, p1, p2, p3),
+            (p2 == p3 and p1 != p4, p2, p1, p4),
+            (p2 == p4 and p1 != p3, p2, p1, p3),
+        )
+
+        for matched, shared, end_1, end_2 in patterns:
+            if matched and len({shared, end_1, end_2}) == 3:
+                return shared, end_1, end_2
+
+        return None
+
+    def _promote_plain_triangles_from_equal_distance(self):
+        """Promote plain `(triangle ...)` to explicit isosceles when equal-distance defines two equal sides."""
+        plain_triangle_by_vertices = {}
+
+        for instr in self.instructions:
+            if (
+                isinstance(instr, Parameter)
+                and instr.diagram_type == DiagramType.TRIANGLE
+                and len(instr.objects) == 3
+                and instr.param_type is None
+            ):
+                key = frozenset(obj.val for obj in instr.objects)
+                plain_triangle_by_vertices.setdefault(key, []).append(instr)
+
+        for instr in self.instructions:
+            if (
+                not isinstance(instr, Assertion)
+                or instr.constraint_type != 'equal_distance'
+                or len(instr.objects) != 4
+            ):
+                continue
+
+            point_names = [obj.val for obj in instr.objects if hasattr(obj, 'val')]
+            if len(point_names) != 4:
+                continue
+
+            pattern = self._extract_shared_triangle_pattern(point_names)
+            if pattern is None:
+                continue
+
+            shared_vertex, side_end_1, side_end_2 = pattern
+            candidate_key = frozenset((shared_vertex, side_end_1, side_end_2))
+            candidates = plain_triangle_by_vertices.get(candidate_key, [])
+
+            for tri_instr in candidates:
+                if tri_instr.param_type is None:
+                    tri_instr.param_type = TriangleType.ISOSCELES
+                    tri_instr.args = (Point(shared_vertex),)
+                    break
+
     def process_command(self, cmd: Tuple):
         if not isinstance(cmd[0], str):
             raise RuntimeError("Command must start with a string")

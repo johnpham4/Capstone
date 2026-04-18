@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+﻿from abc import ABC, abstractmethod
 from langchain_openai import ChatOpenAI
 from loguru import logger
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage

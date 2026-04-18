@@ -1,4 +1,4 @@
-from sagemaker.model import Model
+﻿from sagemaker.model import Model
 from sagemaker.session import Session
 from loguru import logger
 
@@ -31,3 +31,4 @@ def create_endpoint():
 
 if __name__ == "__main__":
     create_endpoint()
+

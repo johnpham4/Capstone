@@ -1,4 +1,4 @@
-import boto3
+﻿import boto3
 from loguru import logger
 from src.config.settings import settings
 
@@ -21,7 +21,7 @@ def delete_endpoint_config():
         logger.success(f"Deleted endpoint config: {config_name}")
 
     except client.exceptions.ResourceNotFound:
-        logger.warning(f"Endpoint config '{config_name}' không tồn tại")
+        logger.warning(f"Endpoint config '{config_name}' khÃ´ng tá»“n táº¡i")
     except Exception as e:
         logger.warning(f"Error: {e}")
 

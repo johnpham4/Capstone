@@ -160,7 +160,6 @@ DSL_INFERENCE_INSTRUCTION: str = (
       "DSL:"
 )
 
-
 DATASET_GENERATION_PROMPT: str = (
     DSL_SPEC
     + """

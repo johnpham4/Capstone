@@ -307,8 +307,12 @@ class AuthService:
             if jti and exp:
                 await token_blacklist.revoke(jti, self._ttl_from_exp(exp))
         except jwt.PyJWTError:
-            # Token đã invalid/hết hạn → không cần blacklist
+            # Token Ä‘Ã£ invalid/háº¿t háº¡n â†’ khÃ´ng cáº§n blacklist
             pass
+
+    @staticmethod
+    def _ttl_from_exp(exp: int) -> int:
+        return int(exp - datetime.now(timezone.utc).timestamp())
 
     @staticmethod
     def _ttl_from_exp(exp: int) -> int:

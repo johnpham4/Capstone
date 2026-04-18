@@ -1,4 +1,4 @@
-from loguru import logger
+﻿from loguru import logger
 
 try:
     import boto3
@@ -37,3 +37,4 @@ class ResourceManager:
         except self.sagemaker_client.exceptions.ResourceNotFoundException:
             logger.info(f"Endpoint '{endpoint_name}' does not exist.")
             return False
+
