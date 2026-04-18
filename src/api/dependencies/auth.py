@@ -13,6 +13,7 @@ from src.models.dto.auth import TokenData
 from src.services.auth import AuthService
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token")
+oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token", auto_error=False)
 
 
 async def get_current_user(
@@ -31,9 +32,10 @@ async def get_current_user(
             settings.JWT_SECRET_KEY,
             algorithms=[settings.JWT_ALGORITHM],
         )
+        token_type: str | None = payload.get("typ")
         username: str | None = payload.get("sub")
         jti: str | None = payload.get("jti")
-        if username is None:
+        if username is None or token_type not in {None, "access"}:
             raise credentials_exception
         token_data = TokenData(username=username, jti=jti)
     except Exception as e:

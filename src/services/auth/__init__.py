@@ -1,3 +1,3 @@
-from .auth import AuthService
+from .auth import AuthRateLimitError, AuthService
 
-__all__ = ["AuthService"]
+__all__ = ["AuthService", "AuthRateLimitError"]

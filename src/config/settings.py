@@ -62,6 +62,26 @@ class Settings(BaseSettings):
     JWT_SECRET_KEY: str = "change-me-in-env"
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = 14
+    JWT_REFRESH_COOKIE_NAME: str = "refresh_token"
+    JWT_COOKIE_SECURE: bool = False
+    JWT_COOKIE_SAMESITE: str = "lax"
+    GOOGLE_CLIENT_ID: str | None = None
+
+    OTP_TTL_SECONDS: int = 300
+    OTP_MAX_ATTEMPTS: int = 5
+    OTP_RESEND_COOLDOWN_SECONDS: int = 60
+    OTP_MAX_REQUESTS_PER_WINDOW: int = 3
+    OTP_REQUEST_WINDOW_SECONDS: int = 900
+    OTP_HASH_SECRET: str = "change-me-otp-secret"
+
+    SMTP_HOST: str | None = None
+    SMTP_PORT: int = 587
+    SMTP_USERNAME: str | None = None
+    SMTP_PASSWORD: str | None = None
+    SMTP_FROM_EMAIL: str | None = None
+    SMTP_USE_STARTTLS: bool = True
+    SMTP_USE_SSL: bool = False
 
     CORS_ALLOW_ORIGINS: str = "*"
     CORS_ALLOW_CREDENTIALS: bool = False
