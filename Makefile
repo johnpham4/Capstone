@@ -63,6 +63,15 @@ del_endpoint_config:
 endpoint:
 	uv run python -m src.main
 
+llm_local:
+	uv run python scripts/run_vllm_local.py
+
+llm_local_bg:
+	uv run python scripts/run_vllm_local.py --detach
+
+llm_local_health:
+	curl http://localhost:8001/v1/models
+
 worker:
 	uv run python -m celery -A src.infrastructures.celery.config worker --loglevel=info --concurrency=4
 

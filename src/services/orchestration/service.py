@@ -4,11 +4,12 @@ from typing import Any, Literal
 
 from langgraph.graph import StateGraph, END
 from loguru import logger
-from typing_extensions import TypedDict
 
 from src.models.dto.orchestration import Mode
 from src.services.history import HistoryService
-from src.services.orchestration.steps import DiagramStep, OcrStep, SolverStep
+from src.services.orchestration.nodes import WorkflowNodes
+from src.services.orchestration.progress import ProgressCallback, WorkflowProgressReporter
+from src.services.orchestration.workflow_state import WorkflowState
 
 
 class OrchestrationError(Exception):
@@ -18,108 +19,69 @@ class OrchestrationError(Exception):
         self.message = message
         self.request_id = request_id
 
-
-class _WorkflowState(TypedDict):
-    user_input: str
-    image_base64: str | None
-    ocr_text: str
-    mode: Mode
-    resolved_mode: Mode
-    problem_statement: str
-    diagram: dict
-    solution: dict
-    llm_mock: bool
-
-
 class OrchestrationService:
     def __init__(self, diagram_prompt: str):
         self.diagram_prompt = diagram_prompt
-        self._ocr_step: OcrStep | None = None
-        self._diagram_step = DiagramStep()
-        self._solver_step: SolverStep | None = None
+        self._nodes = WorkflowNodes(diagram_prompt=diagram_prompt)
         self._workflow = self._build_workflow()
 
-    # ── LangGraph workflow ────────────────────────────────────
-
     def _build_workflow(self):
-        g = StateGraph(_WorkflowState)
-        g.add_node("ocr", self._ocr_node)
-        g.add_node("parse", self._parse_node)
-        g.add_node("diagram", self._diagram_node)
-        g.add_node("solve", self._solve_node)
+        g = StateGraph(WorkflowState)
+        g.add_node("ocr", self._nodes.ocr_node)
+        g.add_node("parse", self._nodes.parse_node)
+        g.add_node("diagram", self._nodes.diagram_node)
+        g.add_node("diagram_retry", self._nodes.diagram_retry_node)
+        g.add_node("solve", self._nodes.solve_node)
 
         g.set_entry_point("ocr")
         g.add_edge("ocr", "parse")
         g.add_conditional_edges(
             "parse",
-            lambda s: s["resolved_mode"],
+            self._route_after_parse,
             {"diagram": "diagram", "solve": "solve", "both": "diagram"},
         )
         g.add_conditional_edges(
             "diagram",
-            lambda s: "solve" if s["resolved_mode"] == "both" else END,
-            {"solve": "solve", END: END},
+            self._route_after_diagram,
+            {"retry": "diagram_retry", "solve": "solve", "end": END},
+        )
+        g.add_conditional_edges(
+            "diagram_retry",
+            self._route_after_diagram_retry,
+            {"solve": "solve", "end": END},
         )
         g.add_edge("solve", END)
         return g.compile()
 
-    def _ocr_node(self, state: _WorkflowState) -> _WorkflowState:
-        image = state.get("image_base64")
-        if not image:
-            return state
-
-        hint = state.get("user_input", "")
-        try:
-            if self._ocr_step is None:
-                self._ocr_step = OcrStep()
-            result = self._ocr_step.execute(image, hint=hint)
-        except Exception as exc:
-            logger.warning(f"OCR unavailable: {exc}")
-            return state
-
-        if result["status"] == "success" and result["extracted_text"]:
-            extracted = result["extracted_text"]
-            state["ocr_text"] = extracted
-            existing = state.get("user_input", "").strip()
-            if existing:
-                state["user_input"] = f"{existing}\n\n[OCR từ ảnh]:\n{extracted}"
-            else:
-                state["user_input"] = extracted
-            logger.info(f"OCR extracted text merged into user_input")
-        else:
-            logger.warning(f"OCR failed or empty: {result.get('error', 'unknown')}")
-
-        return state
+    @staticmethod
+    def _route_after_parse(state: WorkflowState) -> Mode:
+        return state["resolved_mode"]
 
     @staticmethod
-    def _parse_node(state: _WorkflowState) -> _WorkflowState:
-        state["resolved_mode"] = state.get("mode", "diagram")
-        state["problem_statement"] = state.get("user_input", "")
-        return state
+    def _should_retry_diagram(state: WorkflowState) -> bool:
+        diagram = state.get("diagram") or {}
+        if diagram.get("status") == "success":
+            return False
 
-    def _diagram_node(self, state: _WorkflowState) -> _WorkflowState:
-        state["diagram"] = self._diagram_step.execute(
-            state["problem_statement"],
-            self.diagram_prompt,
-            llm_mock=state.get("llm_mock", False),
-        )
-        return state
+        # A single retry is enough for transient DSL generation failures.
+        if state.get("diagram_retry_count", 0) >= 1:
+            return False
 
-    def _solve_node(self, state: _WorkflowState) -> _WorkflowState:
-        solve_input = state["problem_statement"]
-        if state.get("diagram") and state["diagram"].get("dsl"):
-            solve_input += f"\n\n[Diagram DSL: {state['diagram']['dsl']}]"
-        try:
-            if self._solver_step is None:
-                self._solver_step = SolverStep()
-            state["solution"] = self._solver_step.execute(solve_input)
-        except Exception as exc:
-            logger.warning(f"Solver unavailable: {exc}")
-            state["solution"] = {
-                "status": "failed",
-                "error": str(exc),
-            }
-        return state
+        if state.get("llm_mock", False):
+            return False
+
+        retryable_codes = {"DSL_GENERATION_ERROR", "DSL_INPUT_REQUIRED", "DSL_EMPTY"}
+        error_code = diagram.get("error_code")
+        return error_code in retryable_codes or error_code is None
+
+    def _route_after_diagram(self, state: WorkflowState) -> Literal["retry", "solve", "end"]:
+        if self._should_retry_diagram(state):
+            return "retry"
+        return "solve" if state["resolved_mode"] == "both" else "end"
+
+    @staticmethod
+    def _route_after_diagram_retry(state: WorkflowState) -> Literal["solve", "end"]:
+        return "solve" if state["resolved_mode"] == "both" else "end"
 
     # ── Public API ────────────────────────────────────────────
 
@@ -131,6 +93,7 @@ class OrchestrationService:
         history: HistoryService,
         llm_mock: bool = False,
         image_base64: str | None = None,
+        progress_callback: ProgressCallback | None = None,
     ) -> dict[str, Any]:
         # Upload source image to S3 if provided
         source_image_url = None
@@ -145,9 +108,19 @@ class OrchestrationService:
         )
         request_id = request.id
         start = time.perf_counter()
+        reporter = WorkflowProgressReporter(callback=progress_callback, request_id=request_id)
+
+        reporter.emit("orchestration.started", mode=mode)
 
         try:
-            result = await self._run_workflow(user_input, mode, llm_mock, image_base64)
+            result = await self._run_workflow(
+                user_input,
+                mode,
+                llm_mock,
+                image_base64,
+                request_id=request_id,
+                progress_callback=progress_callback,
+            )
             resolved_mode = result.get("mode", mode)
 
             error = self._validate_outputs(resolved_mode, result)
@@ -165,6 +138,8 @@ class OrchestrationService:
             latency_ms = int((time.perf_counter() - start) * 1000)
             await history.complete_request(request_id, latency_ms=latency_ms)
 
+            reporter.emit("orchestration.completed", mode=resolved_mode, latency_ms=latency_ms)
+
             return {
                 "status": "success",
                 "request_id": request_id,
@@ -174,11 +149,13 @@ class OrchestrationService:
                 "solution": result.get("solution"),
             }
 
-        except OrchestrationError:
+        except OrchestrationError as exc:
             await self._mark_failed(history, request_id, time.perf_counter() - start)
+            reporter.emit("orchestration.failed", error_code=exc.code, message=exc.message)
             raise
         except Exception as exc:
             await self._mark_failed(history, request_id, time.perf_counter() - start)
+            reporter.emit("orchestration.failed", error_code="ORCHESTRATION_EXECUTION_ERROR", message=str(exc))
             raise OrchestrationError(
                 code="ORCHESTRATION_EXECUTION_ERROR",
                 message=str(exc),
@@ -187,8 +164,28 @@ class OrchestrationService:
 
     # ── Internal helpers ──────────────────────────────────────
 
-    async def _run_workflow(self, user_input: str, mode: Mode, llm_mock: bool, image_base64: str | None = None) -> dict:
-        initial: _WorkflowState = {
+    async def _run_workflow(
+        self,
+        user_input: str,
+        mode: Mode,
+        llm_mock: bool,
+        image_base64: str | None = None,
+        request_id: str | None = None,
+        progress_callback: ProgressCallback | None = None,
+    ) -> dict:
+        initial = self._build_initial_state(user_input, image_base64, mode, llm_mock)
+        workflow_config = self._build_workflow_config(request_id, progress_callback)
+        final = await asyncio.to_thread(self._workflow.invoke, initial, workflow_config)
+        return self._collect_workflow_result(final, mode)
+
+    @staticmethod
+    def _build_initial_state(
+        user_input: str,
+        image_base64: str | None,
+        mode: Mode,
+        llm_mock: bool,
+    ) -> WorkflowState:
+        return {
             "user_input": user_input,
             "image_base64": image_base64,
             "ocr_text": "",
@@ -198,16 +195,31 @@ class OrchestrationService:
             "diagram": {},
             "solution": {},
             "llm_mock": llm_mock,
+            "diagram_retry_count": 0,
         }
-        final = await asyncio.to_thread(self._workflow.invoke, initial)
 
-        result: dict = {"mode": final.get("resolved_mode", mode)}
-        if final.get("ocr_text"):
-            result["ocr_text"] = final["ocr_text"]
-        if final.get("diagram"):
-            result["diagram"] = final["diagram"]
-        if final.get("solution"):
-            result["solution"] = final["solution"]
+    @staticmethod
+    def _build_workflow_config(
+        request_id: str | None,
+        progress_callback: ProgressCallback | None,
+    ) -> dict[str, Any] | None:
+        if progress_callback is None:
+            return None
+
+        return {
+            "configurable": {
+                "request_id": request_id,
+                "progress_callback": progress_callback,
+            }
+        }
+
+    @staticmethod
+    def _collect_workflow_result(final: dict[str, Any], mode: Mode) -> dict[str, Any]:
+        result: dict[str, Any] = {"mode": final.get("resolved_mode", mode)}
+        for key in ("ocr_text", "diagram", "solution"):
+            value = final.get(key)
+            if value:
+                result[key] = value
         return result
 
     @staticmethod

@@ -41,7 +41,6 @@ async def get_current_user(
     except Exception as e:
         raise credentials_exception
 
-    # â”€â”€ BÆ°á»›c 2: Check blacklist (Ä‘Ã£ logout chÆ°a) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     if token_data.jti and await token_blacklist.is_revoked(token_data.jti):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -49,7 +48,6 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    # â”€â”€ BÆ°á»›c 3: TÃ¬m user trong DB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     service = AuthService(db)
     user = await service.get_user_by_username(token_data.username)
     if user is None:

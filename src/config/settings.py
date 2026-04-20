@@ -102,9 +102,9 @@ class Settings(BaseSettings):
     DIAGRAM_QUEUE_EXCHANGE: str = "diagram"
     DIAGRAM_QUEUE_ROUTING_KEY: str = "diagram.render"
 
-    # LLM Endpoint for DSL generation (ngrok / SageMaker / local)
-    LLM_ENDPOINT_URL: str | None = None
-    LLM_ENDPOINT_TIMEOUT: int = 60
+    # Local vLLM OpenAI-compatible endpoint
+    VLLM_BASE_URL: str = "http://localhost:8001/v1"
+    VLLM_MODEL_ID: str = "Qwen/Qwen2.5-7B-Instruct"
 
     @property
     def OPENAI_MAX_TOKEN_WINDOW(self) -> int:
