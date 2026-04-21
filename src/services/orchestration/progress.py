@@ -4,6 +4,7 @@ from collections.abc import Callable
 from datetime import datetime, timezone
 from typing import Any
 
+from langchain_core.runnables import RunnableConfig
 from loguru import logger
 
 
@@ -20,7 +21,7 @@ class WorkflowProgressReporter:
         return datetime.now(timezone.utc).isoformat()
 
     @classmethod
-    def from_config(cls, config: dict[str, Any] | None) -> WorkflowProgressReporter:
+    def from_config(cls, config: RunnableConfig | None) -> WorkflowProgressReporter:
         if not isinstance(config, dict):
             return cls()
 

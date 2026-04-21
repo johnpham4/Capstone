@@ -1,6 +1,7 @@
 ﻿import base64
 import uuid
 from datetime import datetime
+from pathlib import Path
 from typing import Optional
 
 import boto3
@@ -18,21 +19,44 @@ class HistoryService:
         self._request_repo = RequestRepository(db)
         self._diagram_repo = DiagramRepository(db)
         self._solution_repo = SolutionRepository(db)
-        self._s3_client = boto3.client(
-            "s3",
-            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-            region_name=settings.AWS_REGION or settings.REGION_NAME or "us-east-1",
-        )
-
+        self._storage_backend = settings.IMAGE_STORAGE_BACKEND
+        self._s3_client = None
+        if self._storage_backend == "s3":
+            self._s3_client = boto3.client(
+                "s3",
+                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                region_name=settings.AWS_REGION or settings.REGION_NAME or "us-east-1",
+            )
 
     def upload_source_image(self, image_base64: str) -> str | None:
-        """Upload user's source image to S3, return s3:// URI or None."""
-        if not settings.S3_BUCKET_NAME:
-            logger.warning("S3_BUCKET_NAME not configured, skipping source image upload")
+        """Upload source image based on configured storage backend."""
+        image_bytes = self._decode_base64_image(image_base64)
+        if image_bytes is None:
             return None
+
+        if self._storage_backend == "s3":
+            return self._upload_source_image_to_s3(image_bytes)
+        return self._save_source_image_local(image_bytes)
+
+    @staticmethod
+    def _decode_base64_image(image_base64: str) -> bytes | None:
         try:
-            image_bytes = base64.b64decode(image_base64)
+            raw = image_base64.split(",", 1)[-1].strip()
+            return base64.b64decode(raw)
+        except Exception:
+            logger.exception("Failed to decode source image payload")
+            return None
+
+    def _upload_source_image_to_s3(self, image_bytes: bytes) -> str | None:
+        if not settings.S3_BUCKET_NAME:
+            logger.warning("IMAGE_STORAGE_BACKEND=s3 but S3_BUCKET_NAME is not configured")
+            return None
+        if self._s3_client is None:
+            logger.warning("IMAGE_STORAGE_BACKEND=s3 but S3 client is not initialized")
+            return None
+
+        try:
             key = f"source-images/{uuid.uuid4().hex}.png"
             self._s3_client.put_object(
                 Bucket=settings.S3_BUCKET_NAME,
@@ -43,6 +67,21 @@ class HistoryService:
             return f"s3://{settings.S3_BUCKET_NAME}/{key}"
         except Exception:
             logger.exception("Failed to upload source image to S3")
+            return None
+
+    def _save_source_image_local(self, image_bytes: bytes) -> str | None:
+        try:
+            output_dir = Path(settings.SOURCE_IMAGE_OUTPUT_DIR)
+            output_dir.mkdir(parents=True, exist_ok=True)
+
+            filename = f"{uuid.uuid4().hex}.png"
+            image_path = output_dir / filename
+            image_path.write_bytes(image_bytes)
+
+            base_url = settings.LOCAL_MEDIA_BASE_URL.rstrip("/")
+            return f"{base_url}/source-images/{filename}"
+        except Exception:
+            logger.exception("Failed to save source image locally")
             return None
 
     async def create_request(
@@ -192,6 +231,10 @@ class HistoryService:
 
     def _resolve_diagram_image_url(self, value: str) -> str:
         if not value.startswith("s3://"):
+            return value
+
+        if self._s3_client is None:
+            logger.warning("Cannot resolve s3:// URL because S3 client is not initialized")
             return value
 
         path = value.removeprefix("s3://")

@@ -15,16 +15,18 @@ from src.services.diagram.optimizer import Optimizer
 
 class DiagramService:
     def __init__(self):
+        self.storage_backend = settings.IMAGE_STORAGE_BACKEND
         self.s3_bucket = settings.S3_BUCKET_NAME
         self.s3_prefix = settings.S3_DIAGRAM_PREFIX
         self.aws_region = settings.AWS_REGION or settings.REGION_NAME or "us-east-1"
-
-        self.s3_client = boto3.client(
-            "s3",
-            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-            region_name=self.aws_region,
-        )
+        self.s3_client = None
+        if self.storage_backend == "s3":
+            self.s3_client = boto3.client(
+                "s3",
+                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                region_name=self.aws_region,
+            )
 
     def generate_and_render(
         self,
@@ -42,7 +44,7 @@ class DiagramService:
             dsl_ms = int((time.perf_counter() - start) * 1000)
 
             render_start = time.perf_counter()
-            image_bytes = self._render_dsl_to_image(
+            image_path = self._render_dsl_to_image(
                 dsl=dsl,
                 task_id=task_id,
                 epochs=epochs,
@@ -50,9 +52,7 @@ class DiagramService:
             )
             render_ms = int((time.perf_counter() - render_start) * 1000)
 
-            image_name = f"{task_id}_{uuid4().hex}.png"
-            s3_url = self._store_image_on_s3(image_bytes=image_bytes, image_name=image_name)
-            image_url = self._build_image_access_url(s3_url)
+            image_url, s3_url = self._store_rendered_image(image_path)
 
             return {
                 "status": "success",
@@ -91,16 +91,14 @@ class DiagramService:
         task_id: str,
         epochs: int,
         dpi: int,
-    ) -> bytes:
+    ) -> Path:
         lines = self._normalize_dsl_lines(dsl)
         diagram = self._build_diagram(lines=lines, epochs=epochs)
         image_path = self._render_diagram_file(diagram=diagram, task_id=task_id, dpi=dpi)
 
-        image_bytes = image_path.read_bytes()
-        if not image_bytes:
+        if image_path.stat().st_size <= 0:
             raise RuntimeError("Rendered image is empty")
-
-        return image_bytes
+        return image_path
 
     @staticmethod
     def _normalize_dsl_lines(dsl: str) -> list[str]:
@@ -131,9 +129,27 @@ class DiagramService:
         renderer.render(diagram=diagram, show=False, save=True, filename=str(image_path))
         return image_path
 
+    def _store_rendered_image(self, image_path: Path) -> tuple[str | None, str | None]:
+        if self.storage_backend == "local":
+            base_url = settings.LOCAL_MEDIA_BASE_URL.rstrip("/")
+            return f"{base_url}/diagrams/{image_path.name}", None
+
+        image_bytes = image_path.read_bytes()
+        s3_url = self._store_image_on_s3(image_bytes=image_bytes, image_name=image_path.name)
+
+        # In S3 mode, keep storage exclusive by removing the local artifact after upload.
+        try:
+            image_path.unlink(missing_ok=True)
+        except Exception:
+            logger.warning(f"Could not remove local diagram artifact: {image_path}")
+
+        return self._build_image_access_url(s3_url), s3_url
+
     def _store_image_on_s3(self, image_bytes: bytes, image_name: str) -> Optional[str]:
         if not self.s3_bucket:
             raise RuntimeError("S3 bucket is not configured (set AWS_S3_BUCKET or S3_BUCKET_NAME)")
+        if self.s3_client is None:
+            raise RuntimeError("IMAGE_STORAGE_BACKEND=s3 but S3 client is not initialized")
 
         s3_key = f"{self.s3_prefix.rstrip('/')}/{image_name}"
         self.s3_client.put_object(
@@ -150,6 +166,8 @@ class DiagramService:
 
     def _build_image_access_url(self, s3_uri: Optional[str]) -> Optional[str]:
         if not s3_uri or not s3_uri.startswith("s3://"):
+            return s3_uri
+        if self.s3_client is None:
             return s3_uri
 
         path = s3_uri.removeprefix("s3://")

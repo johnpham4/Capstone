@@ -2,6 +2,7 @@ import asyncio
 import time
 from typing import Any, Literal
 
+from langchain_core.runnables import RunnableConfig
 from langgraph.graph import StateGraph, END
 from loguru import logger
 
@@ -95,7 +96,7 @@ class OrchestrationService:
         image_base64: str | None = None,
         progress_callback: ProgressCallback | None = None,
     ) -> dict[str, Any]:
-        # Upload source image to S3 if provided
+        # Upload source image to configured storage backend if provided.
         source_image_url = None
         if image_base64:
             source_image_url = history.upload_source_image(image_base64)
@@ -202,7 +203,7 @@ class OrchestrationService:
     def _build_workflow_config(
         request_id: str | None,
         progress_callback: ProgressCallback | None,
-    ) -> dict[str, Any] | None:
+    ) -> RunnableConfig | None:
         if progress_callback is None:
             return None
 

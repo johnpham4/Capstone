@@ -1,7 +1,9 @@
 ﻿from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from loguru import logger
 
 from src.api.endpoints import register_routes
@@ -38,6 +40,14 @@ app.add_middleware(
     allow_credentials=settings.CORS_ALLOW_CREDENTIALS,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+local_media_root = Path(settings.LOCAL_MEDIA_ROOT_DIR)
+local_media_root.mkdir(parents=True, exist_ok=True)
+app.mount(
+    settings.LOCAL_MEDIA_BASE_URL,
+    StaticFiles(directory=str(local_media_root)),
+    name="local-media",
 )
 
 

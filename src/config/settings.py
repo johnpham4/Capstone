@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
@@ -94,17 +96,22 @@ class Settings(BaseSettings):
     # Redis Configuration
     REDIS_URL: str = "redis://localhost:6379/0"
 
+    # Image Storage
+    IMAGE_STORAGE_BACKEND: Literal["local", "s3"] = "s3"
+    LOCAL_MEDIA_ROOT_DIR: str = "./output"
+    LOCAL_MEDIA_BASE_URL: str = "/output"
+    SOURCE_IMAGE_OUTPUT_DIR: str = "./output/source-images"
+
     # Diagram Generation
     OUTPUT_DIR: str = "./output/diagrams"
     DIAGRAM_OPTIMIZER_EPOCHS: int = 3000
     DIAGRAM_OPTIMIZER_LR: float = 0.01
+    DIAGRAM_TASK_TIMEOUT_SECONDS: int = 300
     DIAGRAM_QUEUE_NAME: str = "diagram.render"
     DIAGRAM_QUEUE_EXCHANGE: str = "diagram"
     DIAGRAM_QUEUE_ROUTING_KEY: str = "diagram.render"
 
-    # Local vLLM OpenAI-compatible endpoint
-    VLLM_BASE_URL: str = "http://localhost:8001/v1"
-    VLLM_MODEL_ID: str = "Qwen/Qwen2.5-7B-Instruct"
+    LLM_ENDPOINT_URL: str = "http://localhost:8001/v1"
 
     @property
     def OPENAI_MAX_TOKEN_WINDOW(self) -> int:

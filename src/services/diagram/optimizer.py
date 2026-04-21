@@ -1434,13 +1434,15 @@ class Optimizer:
         center_obj = objects[2]
 
         try:
-            p1 = self.lookup_pt(p1_obj)
-            p2 = self.lookup_pt(p2_obj)
-            center = self.lookup_pt(center_obj)
-
             p1_name = p1_obj.val
             p2_name = p2_obj.val
             center_name = center_obj.val
+
+            # Some DSLs reference the second endpoint before defining it.
+            # Create free points so diameter constraints can still be optimized.
+            p1 = self._ensure_named_point(p1_name)
+            p2 = self._ensure_named_point(p2_name)
+            center = self._ensure_named_point(center_name)
 
             # Diameter implies a circle centered at center_name even if DSL omitted `(circle center)`.
             if not any(circle_name == center_name for circle_name, _ in self.circles):

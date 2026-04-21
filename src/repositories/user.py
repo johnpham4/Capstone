@@ -1,4 +1,5 @@
-from sqlalchemy import select
+from loguru import logger
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.repositories.base import AbstractRepository
@@ -16,9 +17,20 @@ class UserRepository(AbstractRepository[UserModel]):
         return result.scalar_one_or_none()
 
     async def get_by_email(self, email: str) -> UserModel | None:
-        stmt = select(UserModel).where(UserModel.email == email)
+        normalized = email.strip().lower()
+        stmt = (
+            select(UserModel)
+            .where(func.lower(UserModel.email) == normalized)
+            .order_by(UserModel.created_at.asc(), UserModel.id.asc())
+            .limit(2)
+        )
         result = await self._session.execute(stmt)
-        return result.scalar_one_or_none()
+        users = result.scalars().all()
+
+        if len(users) > 1:
+            logger.warning(f"Duplicate users found for email={normalized}. Using the oldest account.")
+
+        return users[0] if users else None
 
     @staticmethod
     def to_schema(user: UserModel) -> UserInDB:

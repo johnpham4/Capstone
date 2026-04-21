@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from langchain_core.runnables import RunnableConfig
 from loguru import logger
 
 from src.services.orchestration.progress import WorkflowProgressReporter
@@ -44,7 +45,7 @@ class WorkflowNodes:
             return f"{existing}\n\n[OCR từ ảnh]:\n{ocr_text}"
         return ocr_text
 
-    def ocr_node(self, state: WorkflowState, config: dict[str, Any] | None = None) -> WorkflowState:
+    def ocr_node(self, state: WorkflowState, config: RunnableConfig | None = None) -> WorkflowState:
         reporter = WorkflowProgressReporter.from_config(config)
         reporter.emit_step("ocr", "started")
         reporter.emit_stage("extracting_text", "started")
@@ -91,7 +92,7 @@ class WorkflowNodes:
         return state
 
     @staticmethod
-    def parse_node(state: WorkflowState, config: dict[str, Any] | None = None) -> WorkflowState:
+    def parse_node(state: WorkflowState, config: RunnableConfig | None = None) -> WorkflowState:
         reporter = WorkflowProgressReporter.from_config(config)
         reporter.emit_step("parse", "started")
         reporter.emit_stage("analyzing_problem", "started")
@@ -101,7 +102,7 @@ class WorkflowNodes:
         reporter.emit_stage("analyzing_problem", "completed", mode=state["resolved_mode"])
         return state
 
-    def diagram_node(self, state: WorkflowState, config: dict[str, Any] | None = None) -> WorkflowState:
+    def diagram_node(self, state: WorkflowState, config: RunnableConfig | None = None) -> WorkflowState:
         reporter = WorkflowProgressReporter.from_config(config)
         reporter.emit_step("diagram", "started")
         reporter.emit_stage("generating_diagram", "started", attempt=1)
@@ -125,7 +126,7 @@ class WorkflowNodes:
             )
         return state
 
-    def diagram_retry_node(self, state: WorkflowState, config: dict[str, Any] | None = None) -> WorkflowState:
+    def diagram_retry_node(self, state: WorkflowState, config: RunnableConfig | None = None) -> WorkflowState:
         reporter = WorkflowProgressReporter.from_config(config)
         logger.info("Retrying diagram generation with raw problem text")
         state["diagram_retry_count"] = state.get("diagram_retry_count", 0) + 1
@@ -171,7 +172,7 @@ class WorkflowNodes:
             )
         return state
 
-    def solve_node(self, state: WorkflowState, config: dict[str, Any] | None = None) -> WorkflowState:
+    def solve_node(self, state: WorkflowState, config: RunnableConfig | None = None) -> WorkflowState:
         reporter = WorkflowProgressReporter.from_config(config)
         reporter.emit_step("solve", "started")
         reporter.emit_stage("solving_problem", "started")

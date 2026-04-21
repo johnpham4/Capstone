@@ -4,6 +4,9 @@ from celery import Celery
 from kombu import Exchange, Queue
 from src.config.settings import settings
 
+
+default_worker_pool = "solo" if os.name == "nt" else "prefork"
+
 celery_app = Celery(
     "geouni",
     broker=settings.RABBITMQ_URL,

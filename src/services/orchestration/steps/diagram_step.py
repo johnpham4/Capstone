@@ -38,7 +38,10 @@ class DiagramStep:
                 queue=settings.DIAGRAM_QUEUE_NAME,
             )
 
-            task_result = celery_task.get(timeout=120, propagate=False)
+            task_result = celery_task.get(
+                timeout=settings.DIAGRAM_TASK_TIMEOUT_SECONDS,
+                propagate=False,
+            )
 
             if isinstance(celery_task.result, Exception):
                 error_msg = str(celery_task.result)
