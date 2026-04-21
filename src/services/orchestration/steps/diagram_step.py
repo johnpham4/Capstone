@@ -1,52 +1,44 @@
-﻿import json
-
-import httpx
+import json
 from loguru import logger
-
 from src.infrastructures.celery.tasks import render_diagram_task
 from src.config.settings import settings
-from src.services.nlp import prepare_problem_for_dsl
 from src.services.mock_responses import MOCK_DSL
+from src.services.generators import VLLMOpenAIGenerator
 
 
 class DiagramStep:
-
-    TIMEOUT = 120  # seconds to wait for worker result
 
     def execute(
         self,
         user_input: str,
         dsl_prompt: str,
         llm_mock: bool = False,
+        clean_problem: bool = True,
     ) -> dict:
-        # â”€â”€ 1. Resolve DSL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if llm_mock:
             dsl = MOCK_DSL
-        elif settings.LLM_ENDPOINT_URL:
-            dsl = self._generate_dsl(user_input, dsl_prompt)
-            if dsl is None:
-                return {"status": "failed", "error": "LLM endpoint failed to generate DSL"}
         else:
-            # Fallback: treat user_input as raw DSL
-            dsl = user_input or ""
+            generator = VLLMOpenAIGenerator()
+            dsl = generator.generate_dsl(user_input, dsl_prompt, clean_problem=clean_problem)
+            if not dsl or not dsl.strip():
+                return {
+                    "status": "failed",
+                    "error_code": "DSL_GENERATION_ERROR",
+                    "error": "DSL generator failed to generate DSL",
+                }
 
-        if not dsl.strip():
-            return {"status": "failed", "error": "DSL input is empty"}
-
-        # â”€â”€ 2. Render diagram via Celery â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         try:
             celery_task = render_diagram_task.apply_async(
                 kwargs={
                     "task_id": f"orchestrator_{id(self)}",
                     "dsl": dsl,
-                    "epochs": 500,
-                    "n_tries": 1,
+                    "epochs": settings.DIAGRAM_OPTIMIZER_EPOCHS,
                     "dpi": 150,
                 },
                 queue=settings.DIAGRAM_QUEUE_NAME,
             )
 
-            task_result = celery_task.get(timeout=self.TIMEOUT, propagate=False)
+            task_result = celery_task.get(timeout=120, propagate=False)
 
             if isinstance(celery_task.result, Exception):
                 error_msg = str(celery_task.result)
@@ -69,32 +61,13 @@ class DiagramStep:
                 task_result["dsl"] = dsl
                 return task_result
 
-            return {"status": "failed", "error": f"Unexpected worker result: {task_result}"}
+            return {
+                "status": "failed",
+                "error_code": "DIAGRAM_TASK_ERROR",
+                "error": f"Unexpected worker result: {task_result}",
+            }
 
         except Exception as e:
             logger.error(f"DiagramStep error: {e}")
-            return {"status": "failed", "error": str(e)}
-
-    # â”€â”€ LLM endpoint call â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-
-    def _generate_dsl(self, user_input: str, dsl_prompt: str) -> str | None:
-        """Call the LLM endpoint (ngrok/SageMaker) to convert problem text â†’ DSL."""
-        raw_input = str(user_input or "").strip()
-        query_text = prepare_problem_for_dsl(raw_input) or raw_input
-        prompt = dsl_prompt.format(query=query_text)
-        try:
-            response = httpx.post(
-                f"{settings.LLM_ENDPOINT_URL}/generate",
-                json={"prompt": prompt},
-                timeout=settings.LLM_ENDPOINT_TIMEOUT,
-            )
-            response.raise_for_status()
-            data = response.json()
-            dsl = data.get("response", "").strip()
-            if dsl:
-                logger.info(f"LLM generated DSL ({len(dsl)} chars)")
-            return dsl or None
-        except Exception as e:
-            logger.error(f"LLM endpoint call failed: {e}")
-            return None
+            return {"status": "failed", "error_code": "DIAGRAM_TASK_ERROR", "error": str(e)}
 

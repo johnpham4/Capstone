@@ -447,11 +447,11 @@ class MatplotlibDiagramRenderer:
             dy = p2.y - p1.y
             length = np.sqrt(dx**2 + dy**2)
             print(f"Drawing line '{line_name}': ({p1.x:.4f}, {p1.y:.4f}) to ({p2.x:.4f}, {p2.y:.4f})")
-            
+
             if length > 0:
                 dx /= length
                 dy /= length
-                extend_factor = 5.0  
+                extend_factor = 5.0
 
                 start_x = p1.x - dx * extend_factor
                 start_y = p1.y - dy * extend_factor
@@ -480,7 +480,7 @@ class MatplotlibDiagramRenderer:
             cy = 0.0
 
             for name, p in self.diagram.points.items():
-                if name.endswith('_aux'):   
+                if name.endswith('_aux'):
                     continue
                 ax.plot(p.x, p.y, 'ko', markersize=4)
 
@@ -631,11 +631,12 @@ class MatplotlibDiagramRenderer:
             actual_center_x = (min_x + max_x) / 2
             actual_center_y = (min_y + max_y) / 2
 
-            # Calculate zoom factor with tighter padding to avoid tiny rendered shapes
+            # Calculate zoom factor with padding
             x_range = max_x - min_x
             y_range = max_y - min_y
             max_range = max(x_range, y_range) / 2
-            zoom_factor = max(0.55, max_range * 1.15)
+            padding = max(0.15, max_range * 0.25)
+            zoom_factor = max(0.55, max_range + padding)
 
             # Center the view on the actual center of all elements
             ax.set_xlim(actual_center_x - zoom_factor, actual_center_x + zoom_factor)
@@ -651,7 +652,8 @@ class MatplotlibDiagramRenderer:
         if save:
             output_path = Path(filename)
             output_path.parent.mkdir(parents=True, exist_ok=True)
-            plt.savefig(str(output_path), bbox_inches='tight', dpi=150)
+            plt.savefig(str(output_path), dpi=150, bbox_inches='tight',
+                        pad_inches=0.3, facecolor='white', edgecolor='none')
             logger.info(f"Diagram saved to: {output_path}")
 
 

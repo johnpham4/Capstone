@@ -21,7 +21,6 @@ def register_error_handlers(app: FastAPI) -> None:
             }
         }
 
-        # Attach request_id for server errors to aid debugging
         if exc.status_code >= 500:
             request_id = str(uuid.uuid4())
             body["error"]["request_id"] = request_id

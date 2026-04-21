@@ -4,7 +4,7 @@ from typing import Any
 
 class TaskQueuePort(ABC):
     @abstractmethod
-    def queue_diagram_render(self, dsl: str, epochs: int, n_tries: int, dpi: int) -> dict[str, Any]:
+    def queue_diagram_render(self, dsl: str, epochs: int, dpi: int) -> dict[str, Any]:
         raise NotImplementedError
 
     @abstractmethod

@@ -22,9 +22,6 @@ generation:
 generate_question:
 	uv run python -m pipeline.cli --run-generate-questions --no-cache
 
-render_diagram:
-	PYTHONPATH=. uv run python tools/run.py --run-render-diagram --no-cache
-
 upload:
 	uv run python -m pipeline.cli --run-upload-dataset
 
@@ -64,6 +61,15 @@ del_endpoint_config:
 endpoint:
 	uv run python -m src.main
 
+llm_local:
+	uv run python scripts/run_vllm_local.py
+
+llm_local_bg:
+	uv run python scripts/run_vllm_local.py --detach
+
+llm_local_health:
+	curl http://localhost:8001/v1/models
+
 worker:
 	uv run python -m celery -A src.infrastructures.celery.config worker --loglevel=info --concurrency=1
 
@@ -89,8 +95,6 @@ revision:
 mock:
 	curl -X POST https://victoria-communicable-sometimes.ngrok-free.dev/generate \
 	-H "Content-Type: application/json" \
-	-d '{"prompt":"Cho tam giác ABC vuông tại A, có góc B bằng 30 độ"}'
+	-d '{"prompt":"Chuyển bài toán hình học tiếng Việt sang Geometry DSL (S-expression).\nChỉ trả về DSL thuần văn bản hợp lệ từ đề bài, không markdown, không giải thích.\nBỏ qua phần yêu cầu chứng minh hoặc câu hỏi phụ, nhưng giữ mọi dữ kiện hình học và điều kiện ràng buộc trong đề.\n\nĐề bài:\nCho tam giác ABC vuông tại A, có góc B bằng 30 độ\n\nDSL:"}'
 
 
-ui:
-	uv run python -m ui.py

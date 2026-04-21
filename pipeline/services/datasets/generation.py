@@ -6,7 +6,7 @@ from loguru import logger
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langchain_core.exceptions import OutputParserException
 
-from src.config.settings.settings import settings
+from src.config.settings import settings
 from src.services.diagram.dsl_parser import DSLParser
 from pipeline.domain import Document
 from pipeline.domain import GenerateDatasetSamplesPrompt, Prompt

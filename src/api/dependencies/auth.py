@@ -13,6 +13,7 @@ from src.models.dto.auth import TokenData
 from src.services.auth import AuthService
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token")
+oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token", auto_error=False)
 
 
 async def get_current_user(
@@ -31,15 +32,15 @@ async def get_current_user(
             settings.JWT_SECRET_KEY,
             algorithms=[settings.JWT_ALGORITHM],
         )
+        token_type: str | None = payload.get("typ")
         username: str | None = payload.get("sub")
         jti: str | None = payload.get("jti")
-        if username is None:
+        if username is None or token_type not in {None, "access"}:
             raise credentials_exception
         token_data = TokenData(username=username, jti=jti)
     except Exception as e:
         raise credentials_exception
 
-    # â”€â”€ BÆ°á»›c 2: Check blacklist (Ä‘Ã£ logout chÆ°a) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     if token_data.jti and await token_blacklist.is_revoked(token_data.jti):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -47,7 +48,6 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    # â”€â”€ BÆ°á»›c 3: TÃ¬m user trong DB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     service = AuthService(db)
     user = await service.get_user_by_username(token_data.username)
     if user is None:

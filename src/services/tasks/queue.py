@@ -19,14 +19,13 @@ class CeleryTaskQueueService(TaskQueuePort):
         "REVOKED": "failed",
     }
 
-    def queue_diagram_render(self, dsl: str, epochs: int, n_tries: int, dpi: int) -> dict:
+    def queue_diagram_render(self, dsl: str, epochs: int, dpi: int) -> dict:
         task_id = str(uuid4())
         celery_task = render_diagram_task.apply_async(
             kwargs={
                 "task_id": task_id,
                 "dsl": dsl,
                 "epochs": epochs,
-                "n_tries": n_tries,
                 "dpi": dpi,
             },
             queue=settings.DIAGRAM_QUEUE_NAME,

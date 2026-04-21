@@ -9,16 +9,16 @@ diagram_service = DiagramService()
 
 
 @celery_app.task(bind=True, name="render_diagram", store_errors_even_if_ignored=True)
-def render_diagram_task(self, task_id: str, dsl: str, epochs: int = 500, n_tries: int = 1, dpi: int = 150):
+def render_diagram_task(self, task_id: str, dsl: str, epochs: int = 2000, dpi: int = 150):
     """Worker task: Render diagram from DSL (CPU-intensive)"""
     logger.info(f"[Worker] Rendering diagram for task {task_id}")
+    logger.info(f"[Worker] DSL input:\n{dsl}")
 
     try:
         result = diagram_service.generate_and_render(
             task_id=task_id,
             dsl=dsl,
             epochs=epochs,
-            n_tries=n_tries,
             dpi=dpi,
         )
 

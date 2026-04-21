@@ -154,10 +154,10 @@ TRƯỜNG HỢP KHÁC:
 
 DSL_INFERENCE_INSTRUCTION: str = (
    "Chuyển bài toán hình học tiếng Việt sang Geometry DSL (S-expression).\n"
-   "Chỉ trả về DSL thuần văn bản hợp lệ từ đề bài, không markdown, không giải thích.\n"
-   "Bỏ qua phần yêu cầu chứng minh hoặc câu hỏi phụ, nhưng giữ mọi dữ kiện hình học và điều kiện ràng buộc trong đề.\n\n"
-   "Đề bài:\n{query}\n\n"
-   "DSL:"
+      "Chỉ trả về DSL thuần văn bản hợp lệ từ đề bài, không markdown, không giải thích.\n"
+      "Bỏ qua phần yêu cầu chứng minh hoặc câu hỏi phụ, nhưng giữ mọi dữ kiện hình học và điều kiện ràng buộc trong đề.\n\n"
+      "Đề bài:\n{query}\n\n"
+      "DSL:"
 )
 
 DATASET_GENERATION_PROMPT: str = (
