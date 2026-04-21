@@ -29,7 +29,6 @@ async def list_history(
     from_date: Optional[datetime] = Query(default=None, description="Filter from date (ISO 8601)"),
     to_date: Optional[datetime] = Query(default=None, description="Filter to date (ISO 8601)"),
 ):
-    """Return paginated history with optional search & filters."""
     service = HistoryService(db)
     return await service.list_history(
         user_id=current_user.id,
@@ -66,7 +65,6 @@ async def delete_history_item(
     current_user: Annotated[User, Depends(get_current_user)],
     db: AsyncSession = Depends(get_db),
 ):
-    """Delete a request and cascaded diagram/solution if owned by user."""
     service = HistoryService(db)
     deleted = await service.delete_request(request_id, user_id=current_user.id)
     if not deleted:

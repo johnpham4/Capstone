@@ -12,8 +12,6 @@ install-pipeline:
 zenml:
 	uv run zenml connect --url http://localhost:8080 --username admin --password Admin@123
 
-zenml_status:
-	uv run zenml status
 
 data:
 	uv run python -m pipeline.cli --run-prepare-data --no-cache
@@ -67,7 +65,7 @@ endpoint:
 	uv run python -m src.main
 
 worker:
-	uv run python -m celery -A src.infrastructures.celery.config worker --loglevel=info --concurrency=4
+	uv run python -m celery -A src.infrastructures.celery.config worker --loglevel=info --concurrency=1
 
 flower:
 	uv run python -m celery -A src.infrastructures.celery.config flower --port=5555
@@ -75,9 +73,6 @@ flower:
 rabbitmq_status:
 	docker exec rabbitmq rabbitmqctl list_queues
 
-test_load:
-	wrk -t3 -c3 -d60s --timeout 180s -s post.lua \
-		http://localhost:8000/api/v1/diagrams/render
 
 docker_up:
 	docker compose up -d
@@ -90,7 +85,6 @@ migrate:
 
 revision:
 	uv run alembic revision --autogenerate -m "upgrade tables"
-
 
 mock:
 	curl -X POST https://victoria-communicable-sometimes.ngrok-free.dev/generate \
