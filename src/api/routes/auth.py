@@ -9,7 +9,7 @@ from src.config.settings import settings
 from src.infrastructures.database.session import get_db
 from src.models.dto.auth import GoogleLoginRequest, LoginRequest, OtpRequest, OtpVerifyRequest, Token
 from src.models.dto.user import User, UserCreate
-from src.services.auth import AuthRateLimitError, AuthService
+from src.services.auth import AuthDeliveryError, AuthRateLimitError, AuthService
 
 router = APIRouter()
 
@@ -102,6 +102,11 @@ async def request_email_otp(
         service = AuthService(db)
         await service.request_email_otp(body.email)
         return {"message": "If the email can receive messages, an OTP has been sent."}
+    except AuthDeliveryError:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="OTP service is temporarily unavailable",
+        )
     except AuthRateLimitError as e:
         headers = {}
         if e.retry_after_seconds is not None:

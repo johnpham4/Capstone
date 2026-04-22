@@ -26,6 +26,10 @@ class AuthRateLimitError(ValueError):
         self.retry_after_seconds = retry_after_seconds
 
 
+class AuthDeliveryError(RuntimeError):
+    pass
+
+
 class AuthService:
 
     def __init__(self, db: AsyncSession) -> None:
@@ -35,6 +39,9 @@ class AuthService:
         user = await self.authenticate(username, password)
         if not user:
             raise ValueError("Incorrect username or password")
+
+        if not bool(user.email_verified):
+            raise ValueError("Email is not verified. Please verify OTP before signing in.")
 
         return self._issue_tokens(user.username)
 
@@ -66,12 +73,17 @@ class AuthService:
             otp_hash=otp_hash,
             ttl_seconds=settings.OTP_TTL_SECONDS,
         )
+
+        try:
+            await asyncio.to_thread(self._send_otp_email, email_normalized, code)
+        except Exception as exc:
+            await email_otp_store.delete_otp(email_normalized)
+            raise AuthDeliveryError("OTP delivery failed. Please try again later.") from exc
+
         await email_otp_store.set_cooldown(
             email=email_normalized,
             ttl_seconds=settings.OTP_RESEND_COOLDOWN_SECONDS,
         )
-
-        await asyncio.to_thread(self._send_otp_email, email_normalized, code)
 
     async def verify_email_otp(self, email: str, code: str) -> tuple[Token, str]:
         email_normalized = self._normalize_email(email)
@@ -115,12 +127,20 @@ class AuthService:
         user_model = await self._repo.get_by_email(email)
         if user_model is None:
             user_model = await self._create_user_from_google_payload(payload, email)
+        elif not user_model.email_verified:
+            updated = await self._repo.update(user_model.id, {"email_verified": True})
+            if updated is not None:
+                user_model = updated
 
         return self._issue_tokens(user_model.username)
 
     async def _get_or_create_user_by_email(self, email: str):
         user_model = await self._repo.get_by_email(email)
         if user_model is not None:
+            if not user_model.email_verified:
+                updated = await self._repo.update(user_model.id, {"email_verified": True})
+                if updated is not None:
+                    user_model = updated
             return user_model
 
         preferred_username = email.split("@")[0]
@@ -131,6 +151,7 @@ class AuthService:
                 "email": email,
                 "hashed_password": get_password_hash(secrets.token_urlsafe(32)),
                 "disabled": False,
+                "email_verified": True,
             }
         )
 
@@ -144,6 +165,7 @@ class AuthService:
                 "email": email,
                 "hashed_password": get_password_hash(secrets.token_urlsafe(32)),
                 "disabled": False,
+                "email_verified": True,
             }
         )
 
@@ -193,6 +215,9 @@ class AuthService:
     def _send_otp_email(recipient_email: str, code: str) -> None:
         if not settings.SMTP_HOST or not settings.SMTP_FROM_EMAIL:
             raise ValueError("SMTP settings are not configured")
+
+        if settings.SMTP_PORT == 465 and not settings.SMTP_USE_SSL:
+            raise ValueError("SMTP_PORT=465 requires SMTP_USE_SSL=true (implicit TLS)")
 
         msg = EmailMessage()
         msg["Subject"] = "Your GeoUni verification code"
@@ -275,6 +300,7 @@ class AuthService:
                 "email": normalized_email,
                 "hashed_password": get_password_hash(data.password),
                 "disabled": False,
+                "email_verified": False,
             }
         )
 
@@ -283,6 +309,7 @@ class AuthService:
             username=user_model.username,
             email=user_model.email,
             disabled=user_model.disabled,
+            email_verified=user_model.email_verified,
         )
 
     async def logout(self, token: str | None = None, refresh_token: str | None = None) -> None:

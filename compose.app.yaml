@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: api
-    container_name: geouni-api
+    container_name: diagsys-api
     ports:
       - "8000:8000"
     env_file: .env
@@ -21,14 +21,14 @@ services:
         condition: service_healthy
     restart: unless-stopped
     networks:
-      - geo
+      - diagsys
 
   worker:
     build:
       context: .
       dockerfile: Dockerfile
       target: worker
-    container_name: geouni-worker
+    container_name: diagsys-worker
     env_file: .env
     environment:
       POSTGRES_HOST: postgres
@@ -41,14 +41,14 @@ services:
         condition: service_healthy
     restart: unless-stopped
     networks:
-      - geo
+      - diagsys
 
   flower:
     build:
       context: .
       dockerfile: Dockerfile
       target: flower
-    container_name: geouni-flower
+    container_name: diagsys-flower
     ports:
       - "5555:5555"
     environment:
@@ -61,8 +61,8 @@ services:
         condition: service_healthy
     restart: unless-stopped
     networks:
-      - geo
+      - diagsys
 
 networks:
-  geo:
+  diagsys:
     driver: bridge

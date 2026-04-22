@@ -45,6 +45,7 @@ class UserModel(Base, TimestampMixin):
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
     hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
     disabled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    email_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     requests: Mapped[list["RequestModel"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"

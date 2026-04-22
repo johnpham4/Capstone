@@ -40,4 +40,5 @@ class UserRepository(AbstractRepository[UserModel]):
             email=user.email,
             hashed_password=user.hashed_password,
             disabled=user.disabled,
+            email_verified=user.email_verified,
         )

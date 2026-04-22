@@ -5,6 +5,7 @@ class User(BaseModel):
     username: str
     email: str | None = None
     disabled: bool | None = None
+    email_verified: bool | None = None
 
 class UserInDB(User):
     hashed_password: str
