@@ -29,6 +29,10 @@ class DiagramBuilder:
         # (triangle (A B C)) + (equal-distance A B A C) => explicit isosceles at A.
         self._promote_plain_triangles_from_equal_distance()
 
+        # Transform diameter + existing circle => diameter-point construction
+        # (diameter A K O) + (circle O ...) => (define K point (diameter-point A O))
+        self._transform_diameter_with_existing_circle()
+
     def _extract_shared_triangle_pattern(self, point_names: List[str]):
         """Return (shared_vertex, side_end_1, side_end_2) for AB=AC-like patterns."""
         if len(point_names) != 4:
@@ -87,6 +91,138 @@ class DiagramBuilder:
                     tri_instr.param_type = TriangleType.ISOSCELES
                     tri_instr.args = (Point(shared_vertex),)
                     break
+
+    def _transform_diameter_with_existing_circle(self):
+        """Transform diameter assertions when the center already has a defined circle.
+
+        When (diameter P1 P2 Center) is used and (circle Center ...) exists:
+        - If an endpoint is NOT yet defined: create a 'diameter-point' Parameter
+          (K = 2*Center - KnownEndpoint, i.e. reflection through center)
+        - Remove the original diameter assertion (the construction handles everything)
+
+        When center does NOT have an existing circle, keep the diameter assertion as-is
+        (it will create a new circle in the optimizer).
+        """
+        # 1. Collect circle centers from circle Parameters
+        circle_centers = set()
+        for instr in self.instructions:
+            if (
+                isinstance(instr, Parameter)
+                and instr.diagram_type == DiagramType.CIRCLE
+            ):
+                center_name = instr.objects[0].val
+                circle_centers.add(center_name)
+
+        if not circle_centers:
+            return
+
+        # 2. Collect registered point names
+        registered_point_names = {p.val for p in self.points}
+
+        # 3. Find diameter assertions to transform
+        to_remove = []
+        to_add = []
+
+        for instr in self.instructions:
+            if not isinstance(instr, Assertion) or instr.constraint_type != 'diameter':
+                continue
+
+            p1_name = instr.objects[0].val  # endpoint 1
+            p2_name = instr.objects[1].val  # endpoint 2
+            center_name = instr.objects[2].val  # center
+
+            # Only transform if center matches an existing circle
+            if center_name not in circle_centers:
+                continue
+
+            p1_defined = p1_name in registered_point_names
+            p2_defined = p2_name in registered_point_names
+
+            if not p1_defined and not p2_defined:
+                # Both undefined — can't determine which is the reference point,
+                # fall back to the original diameter assertion behavior
+                continue
+
+            # Mark original diameter assertion for removal
+            to_remove.append(instr)
+
+            if not p2_defined:
+                # P2 is undefined — define as diameter-point (reflection of P1 through Center)
+                # K = 2*Center - P1
+                new_point = Point(p2_name)
+                self.register_pt(new_point)
+                to_add.append(Parameter(
+                    diagram_type=DiagramType.POINT,
+                    objects=[new_point],
+                    param_type="diameter-point",
+                    args=(Point(p1_name), Point(center_name))
+                ))
+                logger.info(
+                    f"DSL transform: (diameter {p1_name} {p2_name} {center_name}) "
+                    f"-> (define {p2_name} point (diameter-point {p1_name} {center_name}))"
+                )
+            elif not p1_defined:
+                # P1 is undefined — define as diameter-point (reflection of P2 through Center)
+                new_point = Point(p1_name)
+                self.register_pt(new_point)
+                to_add.append(Parameter(
+                    diagram_type=DiagramType.POINT,
+                    objects=[new_point],
+                    param_type="diameter-point",
+                    args=(Point(p2_name), Point(center_name))
+                ))
+                logger.info(
+                    f"DSL transform: (diameter {p1_name} {p2_name} {center_name}) "
+                    f"-> (define {p1_name} point (diameter-point {p2_name} {center_name}))"
+                )
+            else:
+                # Both endpoints are already defined.
+                # If they are vertices of a triangle with circumcenter = center,
+                # promote the triangle to RIGHT at the third vertex (Thales' theorem:
+                # if AB is a diameter of the circumcircle, then angle C = 90°).
+                promoted = False
+                for tri_instr in self.instructions:
+                    if (
+                        isinstance(tri_instr, Parameter)
+                        and tri_instr.diagram_type == DiagramType.TRIANGLE
+                        and len(tri_instr.objects) == 3
+                    ):
+                        vertex_names = [obj.val for obj in tri_instr.objects]
+                        if p1_name in vertex_names and p2_name in vertex_names:
+                            # Found triangle containing both endpoints
+                            # Find the third vertex (the one NOT on the diameter)
+                            third_vertex = None
+                            for obj in tri_instr.objects:
+                                if obj.val != p1_name and obj.val != p2_name:
+                                    third_vertex = obj.val
+                                    break
+
+                            if third_vertex:
+                                # Promote to right triangle at third vertex
+                                tri_instr.param_type = TriangleType.RIGHT
+                                tri_instr.args = (Point(third_vertex),)
+                                promoted = True
+                                logger.info(
+                                    f"DSL transform: (diameter {p1_name} {p2_name} {center_name}) "
+                                    f"-> triangle promoted to RIGHT at {third_vertex}"
+                                )
+                                break
+
+                if not promoted:
+                    # Fallback: add lightweight collinear constraint
+                    to_add.append(Assertion(
+                        constraint_type='diameter_collinear',
+                        objects=[Point(center_name), Point(p1_name), Point(p2_name)]
+                    ))
+                    logger.info(
+                        f"DSL transform: (diameter {p1_name} {p2_name} {center_name}) "
+                        f"-> (diameter_collinear {center_name} {p1_name} {p2_name})"
+                    )
+
+        # 4. Apply transformations
+        for instr in to_remove:
+            self.instructions.remove(instr)
+        self.instructions.extend(to_add)
 
     def process_command(self, cmd: Tuple):
         if not isinstance(cmd[0], str):
