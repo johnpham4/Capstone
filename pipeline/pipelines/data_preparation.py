@@ -17,7 +17,7 @@ def data_preparation_pipeline(
 ):
     local_dir = "./dataset/data"
     output_dir = "./dataset/data"
-    output_filename = "diagrams.json"
+    output_filename = "diagrams_filter.json"
     logger.info("Starting data preparation pipeline")
 
     diagram_texts = download_synthgeo_dataset(

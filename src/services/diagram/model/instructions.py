@@ -29,8 +29,9 @@ class Assertion:
     constraint_type: str = None
     objects: Tuple[Any, ...] = ()
     value: float = None
+    value: float = None
     constraint: Any = None
-    distance: Any = None  
+    distance: Any = None
 
     def __str__(self) -> str:
         if self.constraint_type:
@@ -54,6 +55,15 @@ class Definition:
 class DistanceValue:
     """Wrapper for distance value in constraints"""
     val: float
-    
+
+    def __str__(self) -> str:
+        return str(self.val)
+
+
+@dataclass
+class DistanceValue:
+    """Wrapper for distance value in constraints"""
+    val: float
+
     def __str__(self) -> str:
         return str(self.val)

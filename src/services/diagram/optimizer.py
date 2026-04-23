@@ -1003,6 +1003,52 @@ class Optimizer:
 
         return midpoint
 
+    def _define_diameter_point(self, point_name, args):
+        """Define a point as the diametrically opposite point on a circle.
+
+        Given (diameter-point known_endpoint center):
+        K = 2*Center - known_endpoint  (reflection through center)
+
+        K is a trainable parameter initialized at the exact position.
+        Constraints use .detach() on center and known_pt so gradients only
+        flow to K — no interference with circumcircle/incircle constraints.
+        K's target position updates each iteration as O and A converge.
+        """
+        assert len(args) == 2, f"diameter-point requires 2 args (known_endpoint, center), got {len(args)}"
+
+        known_endpoint = args[0]  # e.g., A
+        center_point = args[1]    # e.g., O
+
+        known_pt = self.lookup_pt(known_endpoint)
+        center = self.lookup_pt(center_point)
+
+        known_name = known_endpoint.val
+        center_name = center_point.val
+
+        # Initialize at the exact diametrically opposite position: K = 2*O - A
+        init_x = 2 * center.x.detach().cpu().item() - known_pt.x.detach().cpu().item()
+        init_y = 2 * center.y.detach().cpu().item() - known_pt.y.detach().cpu().item()
+
+        diameter_pt = self.sample_uniform(point_name, init_coords=(init_x, init_y))
+
+        # Constraint: K = 2*O - A
+        # Use .detach() on center and known_pt so gradients ONLY flow to K,
+        # preventing interference with circumcircle constraints on O and A.
+        # The detached values still update each iteration (current position of O and A).
+        self.register_loss(f"diameter_point_reflection_{point_name.val}",
+            lambda dp=diameter_pt, c=center, kp=known_pt:
+                (dp.x - (2 * c.x.detach() - kp.x.detach()))**2 +
+                (dp.y - (2 * c.y.detach() - kp.y.detach()))**2,
+            weight=10000000.0)
+
+        # Add segment for rendering the diameter line
+        self.segments.append((known_name, point_name.val))
+
+        logger.info(f"Defined diameter-point: {point_name.val} = 2*{center_name} - {known_name} "
+                     f"at ({init_x:.4f}, {init_y:.4f})")
+
+        return diameter_pt
+
     def parameter_on_seg(self, p, segment_points: list):
         assert len(segment_points) == 2
         p1 = self.lookup_pt(segment_points[0])
@@ -1255,6 +1301,10 @@ class Optimizer:
             self._define_perpendicular_bisector_point(objects[0], args)
         elif param_type_str == "bisector":
             self._define_angle_bisector(objects[0], args)
+        elif param_type_str == "diameter-point":
+            # args = (known_endpoint, center)
+            # Define point as reflection of known_endpoint through center: K = 2*Center - A
+            self._define_diameter_point(objects[0], args)
         elif param_type_str == "coords" or param_type_str == "":
             self.sample_uniform(objects[0])
         else:
@@ -1422,12 +1472,88 @@ class Optimizer:
                 # Sau khi thêm on-circle constraint, enforce góc tối thiểu
                 self._enforce_minimum_angle_between_circle_points()
             elif assertion.constraint_type == 'diameter':
-                self._add_diameter_constraint(assertion.objects)
+                # Check if center already has a circle defined
+                center_obj = assertion.objects[2]
+                center_name = center_obj.val
+                has_existing_circle = any(cn == center_name for cn, _ in self.circles)
+                if has_existing_circle:
+                    self._add_diameter_on_existing_circle(assertion.objects)
+                else:
+                    self._add_diameter_constraint(assertion.objects)
             elif assertion.constraint_type == 'tangent':
                 self._add_tangent_constraint(assertion.objects)
+            elif assertion.constraint_type == 'diameter_collinear':
+                self._add_diameter_collinear_constraint(assertion.objects)
 
     def _add_diameter_constraint(self, objects: list):
-        assert len(objects) == 3, "Diameter constraint requires 3 points: center, endpoint1, endpoint2"
+        """Standalone diameter: creates a new circle and positions center at midpoint.
+
+        Uses MODERATE weights (5000) so constraints cooperate with (not overpower)
+        parallelogram/triangle/other shape constraints.
+        Full gradient flow to all points — needed for standalone free-point diameter.
+        """
+        assert len(objects) == 3, "Diameter constraint requires 3 points: endpoint1, endpoint2, center"
+
+        p1_obj = objects[0]
+        p2_obj = objects[1]
+        center_obj = objects[2]
+
+        try:
+            p1 = self.lookup_pt(p1_obj)
+            p2 = self.lookup_pt(p2_obj)
+            center = self.lookup_pt(center_obj)
+
+            p1_name = p1_obj.val
+            p2_name = p2_obj.val
+            center_name = center_obj.val
+
+            # Diameter implies a circle centered at center_name even if DSL omitted `(circle center)`.
+            if not any(circle_name == center_name for circle_name, _ in self.circles):
+                self.circles.append((center_name, {
+                    'type': 'diameter',
+                    'endpoints': [p1_name, p2_name]
+                }))
+
+            # 1. Both points on circle
+            self.register_loss(f"diameter_on_circle_{p1_name}_{center_name}",
+                lambda pt=p1, c=center, cn=center_name:
+                    (self.dist(pt, c) - self._get_circle_radius(cn))**2,
+                weight=5000.0)
+
+            self.register_loss(f"diameter_on_circle_{p2_name}_{center_name}",
+                lambda pt=p2, c=center, cn=center_name:
+                    (self.dist(pt, c) - self._get_circle_radius(cn))**2,
+                weight=5000.0)
+
+            # 2. Center is midpoint
+            self.register_loss(f"diameter_midpoint_{center_name}_{p1_name}_{p2_name}",
+                lambda c=center, pt1=p1, pt2=p2:
+                    (c.x - (pt1.x + pt2.x)/2)**2 + (c.y - (pt1.y + pt2.y)/2)**2,
+                weight=5000.0)
+
+            # 3. Collinear
+            self.register_loss(f"diameter_collinear_{center_name}_{p1_name}_{p2_name}",
+                lambda c=center, pt1=p1, pt2=p2:
+                    self.collinear(c, pt1, pt2),
+                weight=5000.0)
+
+            # Add segment for rendering the diameter line
+            seg = (p1_name, p2_name)
+            rev_seg = (p2_name, p1_name)
+            if seg not in self.segments and rev_seg not in self.segments:
+                self.segments.append(seg)
+
+            logger.info(f"Added diameter constraint: {p1_name}{p2_name} diameter of circle {center_name}")
+        except Exception as e:
+            logger.warning(f"Failed to add diameter constraint: {e}")
+
+    def _add_diameter_on_existing_circle(self, objects: list):
+        """Add diameter constraint when the center already has a circle defined.
+        This does NOT create a new circle entry — it reuses the existing one
+        and only adds geometric constraints (on-circle, midpoint, collinear).
+        Endpoints are auto-defined if they haven't been created yet,
+        initialized at the diametrically opposite position for fast convergence."""
+        assert len(objects) == 3, "Diameter constraint requires 3 points: endpoint1, endpoint2, center"
 
         p1_obj = objects[0]
         p2_obj = objects[1]
@@ -1438,45 +1564,95 @@ class Optimizer:
             p2_name = p2_obj.val
             center_name = center_obj.val
 
-            # Some DSLs reference the second endpoint before defining it.
-            # Create free points so diameter constraints can still be optimized.
-            p1 = self._ensure_named_point(p1_name)
-            p2 = self._ensure_named_point(p2_name)
-            center = self._ensure_named_point(center_name)
+            center = self.lookup_pt(center_obj)
 
-            # Diameter implies a circle centered at center_name even if DSL omitted `(circle center)`.
-            if not any(circle_name == center_name for circle_name, _ in self.circles):
-                self.circles.append((center_name, {
-                    'type': 'diameter',
-                    'endpoints': [p1_name, p2_name]
-                }))
+            # Auto-define endpoints if they haven't been defined yet
+            # When one endpoint exists, place the other at the diametrically opposite position
+            p1 = self.lookup_pt_by_name(p1_name)
+            p2 = self.lookup_pt_by_name(p2_name)
 
-            # 1. Both points on circle - EXTREMELY HIGH PRIORITY
-            self.register_loss(f"diameter_on_circle_{p1_name}_{center_name}",
-                lambda pt=p1, c=center, cn=center_name:
-                    (self.dist(pt, c) - self._get_circle_radius(cn))**2,
-                weight=10000000.0)
+            if p1 is None and p2 is not None:
+                # p2 exists, place p1 at diametrically opposite position: p1 = 2*center - p2
+                init_x = 2 * center.x.item() - p2.x.item()
+                init_y = 2 * center.y.item() - p2.y.item()
+                logger.info(f"Diameter (existing circle): auto-defining {p1_name} opposite to {p2_name} at ({init_x:.4f}, {init_y:.4f})")
+                p1 = self.sample_uniform(Point(p1_name), init_coords=(init_x, init_y))
+            elif p1 is None:
+                logger.info(f"Diameter (existing circle): auto-defining endpoint {p1_name}")
+                p1 = self._ensure_named_point(p1_name)
 
-            self.register_loss(f"diameter_on_circle_{p2_name}_{center_name}",
-                lambda pt=p2, c=center, cn=center_name:
-                    (self.dist(pt, c) - self._get_circle_radius(cn))**2,
-                weight=10000000.0)
+            if p2 is None and p1 is not None:
+                # p1 exists, place p2 at diametrically opposite position: p2 = 2*center - p1
+                init_x = 2 * center.x.item() - p1.x.item()
+                init_y = 2 * center.y.item() - p1.y.item()
+                logger.info(f"Diameter (existing circle): auto-defining {p2_name} opposite to {p1_name} at ({init_x:.4f}, {init_y:.4f})")
+                p2 = self.sample_uniform(Point(p2_name), init_coords=(init_x, init_y))
+            elif p2 is None:
+                logger.info(f"Diameter (existing circle): auto-defining endpoint {p2_name}")
+                p2 = self._ensure_named_point(p2_name)
 
-            # 2. Center is midpoint - EXTREMELY HIGH PRIORITY
+            # Center is midpoint of the two endpoints.
+            # .detach() on endpoints to prevent gradient interference with shape constraints.
             self.register_loss(f"diameter_midpoint_{center_name}_{p1_name}_{p2_name}",
                 lambda c=center, pt1=p1, pt2=p2:
-                    (c.x - (pt1.x + pt2.x)/2)**2 + (c.y - (pt1.y + pt2.y)/2)**2,
+                    (c.x - (pt1.x.detach() + pt2.x.detach())/2)**2 +
+                    (c.y - (pt1.y.detach() + pt2.y.detach())/2)**2,
                 weight=10000000.0)
 
-            # 3. Collinear - EXTREMELY HIGH PRIORITY
+            # Three points are collinear.
+            # .detach() on endpoints to prevent gradient interference.
             self.register_loss(f"diameter_collinear_{center_name}_{p1_name}_{p2_name}",
                 lambda c=center, pt1=p1, pt2=p2:
-                    self.collinear(c, pt1, pt2),
+                    ((pt2.y.detach() - pt1.y.detach()) * (c.x - pt1.x.detach()) -
+                     (c.y - pt1.y.detach()) * (pt2.x.detach() - pt1.x.detach())),
                 weight=10000000.0)
 
-            logger.info(f"Added diameter constraint: {p1_name}{p2_name} diameter of circle {center_name}")
+            # Add segment for rendering the diameter line
+            self.segments.append((p1_name, p2_name))
+
+            logger.info(f"Added diameter-on-existing-circle: {p1_name}{p2_name} diameter of existing circle {center_name}")
         except Exception as e:
-            logger.warning(f"Failed to add diameter constraint: {e}")
+            logger.warning(f"Failed to add diameter on existing circle: {e}")
+
+    def _add_diameter_collinear_constraint(self, objects: list):
+        """Lightweight diameter constraint for when both endpoints are already defined.
+
+        Only adds collinearity (Center, P1, P2 on same line) with moderate weight.
+        Combined with circumcircle (OA=OB=OC), collinearity alone guarantees
+        O is the midpoint of P1P2, making P1P2 a diameter.
+
+        This avoids the weight conflicts that heavy midpoint/on-circle constraints cause.
+        """
+        assert len(objects) == 3, "diameter_collinear requires 3 points: center, p1, p2"
+
+        center_obj = objects[0]
+        p1_obj = objects[1]
+        p2_obj = objects[2]
+
+        try:
+            center = self.lookup_pt(center_obj)
+            p1 = self.lookup_pt(p1_obj)
+            p2 = self.lookup_pt(p2_obj)
+
+            center_name = center_obj.val
+            p1_name = p1_obj.val
+            p2_name = p2_obj.val
+
+            # Collinear constraint with weight comparable to circumcircle (2500)
+            # so they cooperate rather than compete
+            self.register_loss(f"diameter_collinear_{center_name}_{p1_name}_{p2_name}",
+                lambda c=center, pt1=p1, pt2=p2: self.collinear(c, pt1, pt2),
+                weight=2500.0)
+
+            # Add segment for rendering the diameter line
+            seg = (p1_name, p2_name)
+            rev_seg = (p2_name, p1_name)
+            if seg not in self.segments and rev_seg not in self.segments:
+                self.segments.append(seg)
+
+            logger.info(f"Added diameter_collinear: {center_name} collinear with {p1_name}{p2_name} (weight=2500)")
+        except Exception as e:
+            logger.warning(f"Failed to add diameter_collinear constraint: {e}")
 
     def _get_circle_radius(self, center_name):
         """Get radius expression of a circle by center name (supports positioned/incircle/circumcircle)."""
@@ -2860,4 +3036,3 @@ class Optimizer:
                 touch = diagram.points[point_name]
                 touch.x = tx
                 touch.y = ty
-
