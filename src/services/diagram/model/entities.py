@@ -54,7 +54,11 @@ class Diagram:
         self.points[name] = point
 
     def add_triangle(self, p1: GeometricPoint, p2: GeometricPoint, p3: GeometricPoint,
+<<<<<<< HEAD
                     equal_sides: Optional[List[tuple]] = None, 
+=======
+                    equal_sides: Optional[List[tuple]] = None,
+>>>>>>> 395dcb2bd490b8ac838938290167325f24b77357
                     right_angle_at: Optional[int] = None,
                     equal_angles: Optional[List[tuple]] = None) -> None:
         """
@@ -74,7 +78,11 @@ class Diagram:
         if not hasattr(self, 'quadrilaterals'):
             self.quadrilaterals = []
         self.quadrilaterals.append(quadrilateral)
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 395dcb2bd490b8ac838938290167325f24b77357
 
     def add_circle(self, center: GeometricPoint, info: Any) -> None:
         """Add a circle to the diagram"""
@@ -89,6 +97,18 @@ class Diagram:
             'degrees': degrees
         })
 
+<<<<<<< HEAD
+=======
+    def add_angle_measure(self, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, degrees: float) -> None:
+        """Add an angle measure to be displayed (e.g., angle ABC = 120°)"""
+        self.angle_measures.append({
+            'vertex': vertex,
+            'p1': p1,
+            'p2': p2,
+            'degrees': degrees
+        })
+
+>>>>>>> 395dcb2bd490b8ac838938290167325f24b77357
     def add_segment(self, p1: GeometricPoint, p2: GeometricPoint, color: str = "black") -> None:
         """Add a line segment between two points"""
         self.segments.append((p1, p2, color))

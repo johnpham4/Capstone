@@ -19,7 +19,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 FROM base AS dependencies
 
 COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-dev --no-install-project
+RUN uv sync --frozen --no-dev --no-install-project --group monitoring
 
 # ─── Runtime stage ────────────────────────────────────────────
 FROM base AS runtime
@@ -45,7 +45,7 @@ CMD ["celery", "-A", "src.infrastructures.celery.config", "worker", \
 
 # ─── Flower monitoring target ────────────────────────────────
 FROM runtime AS flower
-RUN uv sync --frozen --no-dev --no-install-project --extra monitoring
+
 EXPOSE 5555
-CMD ["celery", "-A", "src.infrastructures.celery.config", "flower", \
-     "--port=5555"]
+
+CMD ["celery", "-A", "src.infrastructures.celery.config", "flower"]

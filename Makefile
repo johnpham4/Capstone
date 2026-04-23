@@ -74,7 +74,8 @@ worker:
 	uv run python -m celery -A src.infrastructures.celery.config worker --loglevel=info --concurrency=1
 
 flower:
-	uv run python -m celery -A src.infrastructures.celery.config flower --port=5555
+	uv sync --group monitoring
+	uv run python -m flower --app=src.infrastructures.celery.config --port=5555
 
 rabbitmq_status:
 	docker exec rabbitmq rabbitmqctl list_queues
@@ -93,10 +94,12 @@ revision:
 	uv run alembic revision --autogenerate -m "upgrade tables"
 
 mock:
-	curl -X POST https://victoria-communicable-sometimes.ngrok-free.dev/generate \
+	curl -X POST http://vllm:8000/v1/completions \
 	-H "Content-Type: application/json" \
 	-d '{"prompt":"Chuyển bài toán hình học tiếng Việt sang Geometry DSL (S-expression).\nChỉ trả về DSL thuần văn bản hợp lệ từ đề bài, không markdown, không giải thích.\nBỏ qua phần yêu cầu chứng minh hoặc câu hỏi phụ, nhưng giữ mọi dữ kiện hình học và điều kiện ràng buộc trong đề.\n\nĐề bài:\nCho tam giác ABC vuông tại A, có góc B bằng 30 độ\n\nDSL:"}'
 
+compose_vllm:
+	docker compose -f compose.vllm.yaml up -d
 
 compose_infra:
 	docker compose -f compose.yaml up -d

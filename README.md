@@ -441,7 +441,7 @@ opts = {
 }
 
 # Step 3: Optimize
-optimizer = Optimizer(dsl_lines, opts, verbosity=True)
+optimizer = Optimizer(dsl_lines, opts, verbosity=False)
 diagram = optimizer.solve(n_tries=opts['n_tries'])
 
 # Step 4: Render
