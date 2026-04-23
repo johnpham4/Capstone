@@ -94,7 +94,6 @@ class MatplotlibDiagramRenderer:
         return None
 
     def _draw_angle_arc(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, num_arcs: int = 1, radius: float = 0.12, draw_tick: bool = False):
-    def _draw_angle_arc(self, ax, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, num_arcs: int = 1, radius: float = 0.12, draw_tick: bool = False):
         """
         vertex: GeometricPoint - đỉnh góc
         p1, p2: GeometricPoint - 2 điểm tạo thành góc
