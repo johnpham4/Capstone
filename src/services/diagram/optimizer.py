@@ -232,7 +232,8 @@ class Optimizer:
 
 
     def sample_uniform(self, p, lo=-1.0, hi=1.0, save_name=True, init_coords=None):
-        if init_coords is not None:
+        use_smart_init = self.opts.get('use_smart_init', False)
+        if init_coords is not None and use_smart_init:
             x = self.mkvar(f"{p.val}_x", lo, hi, init_value=init_coords[0])
             y = self.mkvar(f"{p.val}_y", lo, hi, init_value=init_coords[1])
         else:

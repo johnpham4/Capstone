@@ -1,8 +1,8 @@
 [
   {
-    "image_dir": "images/img_105527.png",
-    "instruction": "Hình vuông ABCD, điểm P nằm trên đoạn thẳng AB, điểm Q nằm trên đoạn thẳng BC, đường thẳng PQ",
-    "answer": "(square (A B C D))\n(define P point (segment A B))\n(define Q point (segment B C))\n(segment P Q)",
-    "problem": "Cho hình vuông ABCD, điểm P ∈ AB, điểm Q ∈ BC, và đường thẳng PQ. Tính độ dài đoạn thẳng PQ nếu biết rằng AB = 4."
+    "image_dir": "images/img_105529.png",
+    "instruction": "Cho tam giác ABC cân tại A. Đường tròn O ngoại tiếp tam giác ABC. M, N, P là trung điểm AB, AC, BC. Tam giác MNP",
+    "answer": "(triangle (A B C))\n(equal-distance A B A C)\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define M point (midpoint A B))\n(define N point (midpoint A C))\n(define P point (midpoint B C))\n(segment M N)\n(segment N P)\n(segment P M)",
+    "problem": "Cho tam giác ABC cân tại A, đường tròn ngoại tiếp tâm O. Gọi M, N, P lần lượt là trung điểm của AB, AC, BC."
   }
 ]
