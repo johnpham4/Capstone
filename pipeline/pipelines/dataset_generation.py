@@ -10,7 +10,7 @@ from pipeline.steps.dataset import (
 
 @pipeline
 def dataset_generation_pipeline(
-    source_json_path: str = "./dataset/data/triangle_diagrams.json",
+    source_json_path: str = "./dataset/data/diagrams_filter.json",
     test_size: float = 0.2,
     batch_size: int = 4,
     sleep_seconds: float = 2.0,
