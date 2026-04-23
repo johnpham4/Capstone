@@ -8,6 +8,7 @@ from loguru import logger
 from src.services.orchestration.progress import WorkflowProgressReporter
 from src.services.orchestration.steps import DiagramStep, OcrStep, SolverStep
 from src.services.orchestration.workflow_state import WorkflowState
+from src.services.utils.question_cleaning import prepare_problem_for_dsl
 
 
 class WorkflowNodes:
@@ -96,8 +97,36 @@ class WorkflowNodes:
         reporter = WorkflowProgressReporter.from_config(config)
         reporter.emit_step("parse", "started")
         reporter.emit_stage("analyzing_problem", "started")
+        # Log raw user input prior to any NLP/filtering so we can compare before/after
+        try:
+            raw_input = state.get("user_input", "")
+            logger.info(f"[orchestration][parse] request={reporter._request_id} user_input_before_parse={raw_input!r}")
+        except Exception:
+            logger.exception("Failed to log parse input")
+
         state["resolved_mode"] = state.get("mode", "diagram")
-        state["problem_statement"] = state.get("user_input", "")
+
+        # Preserve the original problem statement for the solver, and produce
+        # a cleaned version for DSL generation (remove question clauses, enumerations, etc.).
+        try:
+            raw = state.get("user_input", "")
+            cleaned = prepare_problem_for_dsl(raw)
+            # original stays in problem_statement for solver
+            state["problem_statement"] = raw
+            # cleaned copy used for DSL generation
+            state["dsl_problem"] = cleaned or raw
+        except Exception:
+            logger.exception("Problem cleaning failed; falling back to raw input")
+            state["problem_statement"] = state.get("user_input", "")
+            state["dsl_problem"] = state.get("user_input", "")
+
+        # Log the cleaned problem statement (used for DSL generation) after parsing
+        try:
+            parsed = state.get("dsl_problem", "")
+            logger.info(f"[orchestration][parse] request={reporter._request_id} problem_statement_after_parse={parsed!r}")
+        except Exception:
+            logger.exception("Failed to log parse output")
+
         reporter.emit_step("parse", "succeeded", mode=state["resolved_mode"])
         reporter.emit_stage("analyzing_problem", "completed", mode=state["resolved_mode"])
         return state
@@ -106,11 +135,15 @@ class WorkflowNodes:
         reporter = WorkflowProgressReporter.from_config(config)
         reporter.emit_step("diagram", "started")
         reporter.emit_stage("generating_diagram", "started", attempt=1)
+        # Use the cleaned DSL problem for generation; the DiagramStep expects
+        # the input text in its first arg. We pass clean_problem=False because
+        # we've already cleaned the problem at parse time.
+        dsl_input = state.get("dsl_problem") or state.get("problem_statement")
         state["diagram"] = self._diagram_step.execute(
-            state["problem_statement"],
+            dsl_input,
             self.diagram_prompt,
             llm_mock=state.get("llm_mock", False),
-            clean_problem=True,
+            clean_problem=False,
         )
         diagram = state.get("diagram") or {}
         success = self._emit_step_result(reporter, step="diagram", result=diagram)

@@ -108,6 +108,12 @@ class OrchestrationService:
             source_image_url=source_image_url,
         )
         request_id = request.id
+        # Log incoming orchestration request for debugging/tracing
+        try:
+            logger.info(f"Orchestration request {request_id} received: mode={mode}, user_input={user_input}")
+        except Exception:
+            # Ensure logging errors don't break orchestration
+            logger.exception("Failed to log incoming orchestration request")
         start = time.perf_counter()
         reporter = WorkflowProgressReporter(callback=progress_callback, request_id=request_id)
 
@@ -177,6 +183,19 @@ class OrchestrationService:
         initial = self._build_initial_state(user_input, image_base64, mode, llm_mock)
         workflow_config = self._build_workflow_config(request_id, progress_callback)
         final = await asyncio.to_thread(self._workflow.invoke, initial, workflow_config)
+
+        # Log the raw input preserved for the solver and the cleaned DSL problem
+        # produced by the parse node so they appear in the backend terminal for
+        # easier debugging and tracing.
+        try:
+            user_before = final.get("problem_statement") or initial.get("problem_statement")
+            dsl_problem = final.get("dsl_problem") or ""
+            logger.info(
+                f"Orchestration parse result request={request_id} user_input_before_parse={user_before!r} dsl_problem={dsl_problem!r}"
+            )
+        except Exception:
+            logger.exception("Failed to log orchestration final parse values")
+
         return self._collect_workflow_result(final, mode)
 
     @staticmethod
@@ -204,9 +223,8 @@ class OrchestrationService:
         request_id: str | None,
         progress_callback: ProgressCallback | None,
     ) -> RunnableConfig | None:
-        if progress_callback is None:
-            return None
-
+        # Always supply a runnable config so nodes can access request_id for logging.
+        # The WorkflowProgressReporter will ignore a non-callable progress_callback.
         return {
             "configurable": {
                 "request_id": request_id,
