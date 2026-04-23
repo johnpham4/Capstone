@@ -97,12 +97,7 @@ class WorkflowNodes:
         reporter = WorkflowProgressReporter.from_config(config)
         reporter.emit_step("parse", "started")
         reporter.emit_stage("analyzing_problem", "started")
-        # Log raw user input prior to any NLP/filtering so we can compare before/after
-        try:
-            raw_input = state.get("user_input", "")
-            logger.info(f"[orchestration][parse] request={reporter._request_id} user_input_before_parse={raw_input!r}")
-        except Exception:
-            logger.exception("Failed to log parse input")
+        # Raw user input preserved in state; skipping per-request parse logs to reduce noise.
 
         state["resolved_mode"] = state.get("mode", "diagram")
 
@@ -120,12 +115,7 @@ class WorkflowNodes:
             state["problem_statement"] = state.get("user_input", "")
             state["dsl_problem"] = state.get("user_input", "")
 
-        # Log the cleaned problem statement (used for DSL generation) after parsing
-        try:
-            parsed = state.get("dsl_problem", "")
-            logger.info(f"[orchestration][parse] request={reporter._request_id} problem_statement_after_parse={parsed!r}")
-        except Exception:
-            logger.exception("Failed to log parse output")
+        # Do not emit additional parse-stage logs to reduce console noise.
 
         reporter.emit_step("parse", "succeeded", mode=state["resolved_mode"])
         reporter.emit_stage("analyzing_problem", "completed", mode=state["resolved_mode"])
@@ -138,7 +128,23 @@ class WorkflowNodes:
         # Use the cleaned DSL problem for generation; the DiagramStep expects
         # the input text in its first arg. We pass clean_problem=False because
         # we've already cleaned the problem at parse time.
-        dsl_input = state.get("dsl_problem") or state.get("problem_statement")
+        # Prefer the cleaned DSL problem produced at parse time. If it's
+        # missing for any reason, rebuild a cleaned input from the preserved
+        # `problem_statement` so we always send a concise prompt to the LLM.
+        dsl_problem_val = state.get("dsl_problem")
+        problem_stmt = state.get("problem_statement") or state.get("user_input") or ""
+
+        if dsl_problem_val:
+            dsl_input = dsl_problem_val
+        else:
+            try:
+                cleaned = prepare_problem_for_dsl(problem_stmt)
+                dsl_input = cleaned or problem_stmt
+            except Exception:
+                dsl_input = problem_stmt
+
+        # Skipping per-request diagram debug logs to reduce noise.
+
         state["diagram"] = self._diagram_step.execute(
             dsl_input,
             self.diagram_prompt,

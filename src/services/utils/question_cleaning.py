@@ -26,13 +26,19 @@ QUESTION_MARKERS = [
 _WS_RE = re.compile(r"\s+")
 _DE_BAI_RE = re.compile(r"\bde\s*bai\s*:\s*")
 _DSL_RE = re.compile(r"\bdsl\s*:\s*")
+_ENUM_RE = re.compile(
+    r"(?:^|[^a-z0-9])(?P<label>[a-z]|\d{1,2})\s*[\.\):]\s*",
+    flags=re.IGNORECASE,
+)
+_TRAILING_ENUM_RE = re.compile(
+    r"(?:[;,:-]?\s*(?:[a-z]|\d{1,2})\s*[\.\):]\s*)+$",
+    flags=re.IGNORECASE,
+)
 
 
 def _strip_accents(text: str) -> str:
-    # Preserve a 1:1 character mapping so indices in normalized text align with the
-    # original string. For each original character, return a single base character
-    # (e.g., 'á' -> 'a', 'đ' -> 'd') so slicing using indices found on the
-    # normalized string can be applied to the original string.
+    # Keep a 1:1 mapping between normalized and original text so cut indices are
+    # still valid on the source string.
     s = str(text)
     out_chars: list[str] = []
     for ch in s:
@@ -52,10 +58,7 @@ def _strip_accents(text: str) -> str:
 
 
 def _normalize_for_index(text: str) -> str:
-    # Keep index alignment stable for cut operations on the original string.
-    # Map each original character to a single base character so indices remain
-    # aligned between the normalized and original strings.
-    return "".join(_strip_accents(ch).lower() for ch in str(text))
+    return _strip_accents(str(text)).lower()
 
 
 def _normalize_tail(text: str) -> str:
@@ -65,7 +68,8 @@ def _normalize_tail(text: str) -> str:
 def _find_first_marker_idx(norm_text: str) -> int | None:
     best_idx: int | None = None
     for marker in QUESTION_MARKERS:
-        match = re.search(rf"(?<!\\w){re.escape(marker)}\\b", norm_text)
+        marker_norm = _normalize_for_index(marker)
+        match = re.search(rf"(?<!\w){re.escape(marker_norm)}\b", norm_text)
         if match:
             if best_idx is None or match.start() < best_idx:
                 best_idx = match.start()
@@ -73,27 +77,27 @@ def _find_first_marker_idx(norm_text: str) -> int | None:
 
 
 def _find_enumerated_clause_idx(norm_text: str) -> int | None:
-    # Detect enumerated sub-questions such as "a) ... b) ..." or "1) ... 2) ...".
-    # Use patterns that match a standalone letter/number followed by ., ) or :.
-    # Match enumerators that are preceded by start-of-string or a non-alphanumeric
-    # character. This avoids reliance on lookbehind and is robust after we
-    # collapsed whitespace into single spaces.
-    alpha_matches = list(
-        re.finditer(r"(?:^|[^A-Za-z0-9])([a-z])\s*[\.\):]\s*", norm_text, flags=re.IGNORECASE | re.MULTILINE)
-    )
-    if len(alpha_matches) >= 2 and alpha_matches[0].group(1).lower() == "a":
-        return alpha_matches[0].start(1)
+    # Detect "a) ... b) ..." and "1) ... 2) ..." style sub-question blocks.
+    matches = list(_ENUM_RE.finditer(norm_text))
+    if not matches:
+        return None
 
-    num_matches = list(
-        re.finditer(r"(?:^|[^A-Za-z0-9])(\d{1,2})\s*[\.\):]\s*", norm_text, flags=re.MULTILINE)
-    )
-    if len(num_matches) >= 2 and num_matches[0].group(1) == "1":
-        return num_matches[0].start(1)
+    alpha = [(m.group("label").lower(), m.start("label")) for m in matches if m.group("label").isalpha()]
+    if alpha:
+        first_a = next((idx for label, idx in alpha if label == "a"), None)
+        if first_a is not None and any(label == "b" and idx > first_a for label, idx in alpha):
+            return first_a
+
+    numeric = [(m.group("label"), m.start("label")) for m in matches if m.group("label").isdigit()]
+    if numeric:
+        first_1 = next((idx for label, idx in numeric if label == "1"), None)
+        if first_1 is not None and any(label == "2" and idx > first_1 for label, idx in numeric):
+            return first_1
 
     return None
 
 
-def _remove_backward_to_dot(text: str, q_idx: int) -> str:
+def _remove_backward_to_dot_once(text: str, q_idx: int) -> str:
     left_dot = text.rfind(".", 0, q_idx)
     cut_start = left_dot + 1 if left_dot >= 0 else 0
 
@@ -101,6 +105,16 @@ def _remove_backward_to_dot(text: str, q_idx: int) -> str:
     kept_right = text[q_idx + 1 :].lstrip()
     merged = f"{kept_left} {kept_right}".strip()
     return _WS_RE.sub(" ", merged).strip()
+
+
+def _remove_question_mark_segments(text: str) -> str:
+    result = str(text)
+    while True:
+        q_idx = result.find("?")
+        if q_idx < 0:
+            break
+        result = _remove_backward_to_dot_once(result, q_idx)
+    return _normalize_tail(result)
 
 
 def remove_question_part(problem: str) -> str:
@@ -112,26 +126,25 @@ def remove_question_part(problem: str) -> str:
     if not one_line:
         return ""
 
+    if "?" in one_line:
+        one_line = _remove_question_mark_segments(one_line)
+        if not one_line:
+            return ""
+
     norm = _normalize_for_index(one_line)
     marker_idx = _find_first_marker_idx(norm)
     enum_idx = _find_enumerated_clause_idx(norm)
-    if enum_idx is not None and (marker_idx is None or enum_idx < marker_idx):
-        marker_idx = enum_idx
 
-    q_idx = norm.find("?")
-    if q_idx >= 0 and (marker_idx is None or q_idx < marker_idx):
-        one_line = _remove_backward_to_dot(one_line, q_idx)
-        norm = _normalize_for_index(one_line)
-        marker_idx = _find_first_marker_idx(norm)
-        enum_idx = _find_enumerated_clause_idx(norm)
-        if enum_idx is not None and (marker_idx is None or enum_idx < marker_idx):
-            marker_idx = enum_idx
-
-    if marker_idx is None or marker_idx <= 0:
+    cut_candidates = [idx for idx in (marker_idx, enum_idx) if idx is not None]
+    if not cut_candidates:
         return _normalize_tail(one_line)
 
-    kept = one_line[:marker_idx].rstrip(" \t:;,-.")
-    kept = re.sub(r"([.;:-]\s*[a-z0-9]{1,3}\))\s*$", "", kept, flags=re.IGNORECASE).strip()
+    cut_idx = min(cut_candidates)
+    if cut_idx <= 0:
+        return ""
+
+    kept = one_line[:cut_idx].rstrip(" \t:;,-.")
+    kept = _TRAILING_ENUM_RE.sub("", kept).strip()
     return _normalize_tail(kept)
 
 
@@ -140,8 +153,7 @@ def prepare_problem_for_dsl(problem: str) -> str:
     if not raw:
         return ""
 
-    cleaned = remove_question_part(raw)
-    return cleaned if cleaned else raw
+    return remove_question_part(raw)
 
 
 def clean_problem_section(prompt_text: str) -> tuple[str, str]:

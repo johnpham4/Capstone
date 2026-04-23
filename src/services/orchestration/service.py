@@ -184,17 +184,7 @@ class OrchestrationService:
         workflow_config = self._build_workflow_config(request_id, progress_callback)
         final = await asyncio.to_thread(self._workflow.invoke, initial, workflow_config)
 
-        # Log the raw input preserved for the solver and the cleaned DSL problem
-        # produced by the parse node so they appear in the backend terminal for
-        # easier debugging and tracing.
-        try:
-            user_before = final.get("problem_statement") or initial.get("problem_statement")
-            dsl_problem = final.get("dsl_problem") or ""
-            logger.info(
-                f"Orchestration parse result request={request_id} user_input_before_parse={user_before!r} dsl_problem={dsl_problem!r}"
-            )
-        except Exception:
-            logger.exception("Failed to log orchestration final parse values")
+        # Avoid emitting per-request parse-stage logs here to reduce console noise.
 
         return self._collect_workflow_result(final, mode)
 

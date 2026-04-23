@@ -23,7 +23,15 @@ class VLLMOpenAIGenerator(DSLGenerator):
     DEFAULT_MODEL = "text2diagram"
 
     def generate_dsl(self, user_input: str, dsl_prompt: str, clean_problem: bool = True) -> str | None:
-        prompt = self._build_prompt(user_input, dsl_prompt, clean_problem)
+        # Determine the exact query text used for the prompt (cleaned or raw)
+        raw_input = str(user_input or "").strip()
+        query_text = raw_input
+        if clean_problem:
+            cleaned, _ = clean_problem_section(raw_input)
+            query_text = cleaned or raw_input
+
+        prompt = dsl_prompt.format(query=query_text)
+        logger.debug(f"vLLM prompt built (clean_problem={clean_problem}): {query_text!r}")
 
         dsl, status = self._try_openai_chat(prompt)
         if dsl:
