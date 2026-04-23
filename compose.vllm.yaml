@@ -1,0 +1,26 @@
+services:
+  vllm:
+    image: vllm/vllm-openai-cpu:v0.19.1
+    ports:
+      - "8000:8000"
+
+    environment:
+      HUGGING_FACE_HUB_TOKEN: ${HF_TOKEN}
+
+      # NUMA FIX (root cause)
+      VLLM_CPU_NUMA_POLICY: "disabled"
+      VLLM_CPU_BIND_THREADS: "0"
+      VLLM_CPU_SIMULATE_SINGLE_NUMA: "1"
+
+      # thread control
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+
+      # optional stability
+      VLLM_CPU_KVCACHE_SPACE: "2"
+
+    command: >
+      serve ${HF_MODEL_ID}
+      --host 0.0.0.0
+      --port 8000
