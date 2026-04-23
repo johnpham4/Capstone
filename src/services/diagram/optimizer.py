@@ -56,6 +56,18 @@ class Optimizer:
         self.has_loss = False
         self.trainable_vars = []
 
+    def _is_polygon_vertex(self, point_name):
+        """Check if a point is a vertex of any registered polygon (triangle/quadrilateral)."""
+        # Check triangles (keys are tuples like ('A', 'B', 'C'))
+        for tri_key in self.triangles_metadata:
+            if point_name in tri_key:
+                return True
+        # Check quadrilaterals (stored as list of vertex-name tuples/lists)
+        for quad in self.quadrilaterals:
+            if point_name in quad:
+                return True
+        return False
+
     def get_point(self, x, y):
         if not isinstance(x, torch.Tensor):
             x = torch.tensor(x, dtype=torch.float64, device=self.device)
@@ -1488,9 +1500,9 @@ class Optimizer:
     def _add_diameter_constraint(self, objects: list):
         """Standalone diameter: creates a new circle and positions center at midpoint.
 
-        Uses MODERATE weights (5000) so constraints cooperate with (not overpower)
-        parallelogram/triangle/other shape constraints.
-        Full gradient flow to all points — needed for standalone free-point diameter.
+        Weight is dynamically adjusted:
+        - Free points: high weight (10M) for proper circle/diameter formation
+        - Shape vertices (triangle/parallelogram): moderate weight (5000) to cooperate
         """
         assert len(objects) == 3, "Diameter constraint requires 3 points: endpoint1, endpoint2, center"
 
@@ -1507,6 +1519,13 @@ class Optimizer:
             p2_name = p2_obj.val
             center_name = center_obj.val
 
+            # Determine if endpoints are constrained by other shapes
+            endpoints_in_shape = self._is_polygon_vertex(p1_name) or self._is_polygon_vertex(p2_name)
+            weight = 5000.0 if endpoints_in_shape else 10000000.0
+
+            if self.verbosity:
+                logger.info(f"Diameter weight={'5K (shape vertex)' if endpoints_in_shape else '10M (free point)'}")
+
             # Diameter implies a circle centered at center_name even if DSL omitted `(circle center)`.
             if not any(circle_name == center_name for circle_name, _ in self.circles):
                 self.circles.append((center_name, {
@@ -1518,24 +1537,33 @@ class Optimizer:
             self.register_loss(f"diameter_on_circle_{p1_name}_{center_name}",
                 lambda pt=p1, c=center, cn=center_name:
                     (self.dist(pt, c) - self._get_circle_radius(cn))**2,
-                weight=5000.0)
+                weight=weight)
 
             self.register_loss(f"diameter_on_circle_{p2_name}_{center_name}",
                 lambda pt=p2, c=center, cn=center_name:
                     (self.dist(pt, c) - self._get_circle_radius(cn))**2,
-                weight=5000.0)
+                weight=weight)
 
             # 2. Center is midpoint
             self.register_loss(f"diameter_midpoint_{center_name}_{p1_name}_{p2_name}",
                 lambda c=center, pt1=p1, pt2=p2:
                     (c.x - (pt1.x + pt2.x)/2)**2 + (c.y - (pt1.y + pt2.y)/2)**2,
-                weight=5000.0)
+                weight=weight)
 
             # 3. Collinear
             self.register_loss(f"diameter_collinear_{center_name}_{p1_name}_{p2_name}",
                 lambda c=center, pt1=p1, pt2=p2:
                     self.collinear(c, pt1, pt2),
-                weight=5000.0)
+                weight=weight)
+
+            # 4. Minimum radius regularizer — prevents degenerate tiny circles
+            # Only for free points (not shape vertices which are already constrained)
+            if not endpoints_in_shape:
+                min_radius = 0.3  # minimum radius in the [-1, 1] coordinate space
+                self.register_loss(f"diameter_min_radius_{center_name}_{p1_name}_{p2_name}",
+                    lambda c=center, pt1=p1, pt2=p2, mr=min_radius:
+                        torch.relu(mr - self.dist(c, pt1)),
+                    weight=5000.0)
 
             # Add segment for rendering the diameter line
             seg = (p1_name, p2_name)
