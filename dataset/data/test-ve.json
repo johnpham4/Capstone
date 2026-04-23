@@ -2,7 +2,7 @@
   {
     "image_dir": "t",
     "instruction": "tam giác abc có đường tròn ngoại và nội tiếp",
-    "answer": "(triangle (A B C))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))\n(define D point (projection A (segment B C)))\n(segment A D)\n(define E point (projection B (segment A C)))\n(segment B E)\n(define F point (projection C (segment A B)))\n(segment C F)\n(diameter A K O)",
+    "answer": "(parallelogram (A B C D))\n(define O point)\n(diameter A B O)\n(on-circle D O)\n(segment C B)\n(segment D B)\n(segment A C)\n(define N point (segment A C))\n(segment B N)\n(perpendicular (segment B N) (segment A C))\n(define M point (segment A C))\n(segment B N)\n(segment D M)\n(perpendicular (segment D M) (segment A C))\n(segment B M)",
     "id": 5
   }
 ]
