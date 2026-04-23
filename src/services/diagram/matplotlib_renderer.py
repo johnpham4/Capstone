@@ -99,7 +99,6 @@ class MatplotlibDiagramRenderer:
         p1, p2: GeometricPoint - 2 điểm tạo thành góc
         num_arcs: số arc (1 arc, 2 arcs, 3 arcs để phân biệt)
         draw_tick: có vẽ dấu gạch nhỏ trên arc không (để chỉ góc bằng nhau)
-        draw_tick: có vẽ dấu gạch nhỏ trên arc không (để chỉ góc bằng nhau)
         """
         # Vector từ vertex đến 2 điểm
         v1x = p1.x - vertex.x
@@ -340,9 +339,6 @@ class MatplotlibDiagramRenderer:
             # SQUARE: All right angles + all sides equal (1 tick each)
             if quad_type_str == 'square':
                 # Draw right angle markers at all 4 corners
-            # SQUARE: All right angles + all sides equal (1 tick each)
-            if quad_type_str == 'square':
-                # Draw right angle markers at all 4 corners
                 for i in range(4):
                     vertex = points[i]
                     p1 = points[(i - 1) % 4]
@@ -387,7 +383,6 @@ class MatplotlibDiagramRenderer:
 
         # Draw circles (radius calculated in optimizer)
         for center, info in self.diagram.circles:
-            logger.info(f"Drawing circle at {center.name} ({center.x:.4f}, {center.y:.4f}), info: {info}")
             logger.info(f"Drawing circle at {center.name} ({center.x:.4f}, {center.y:.4f}), info: {info}")
             if isinstance(info, dict):
                 radius = info.get('radius', 0.5)  # Use calculated radius from optimizer
@@ -501,7 +496,6 @@ class MatplotlibDiagramRenderer:
                     name, (p.x, p.y),
                     xytext=(ox, oy),
                     textcoords='offset points',
-                    fontsize=24,
                     fontsize=24,
                     fontweight='bold'
                 )

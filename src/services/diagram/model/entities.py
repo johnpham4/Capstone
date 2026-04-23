@@ -54,7 +54,7 @@ class Diagram:
         self.points[name] = point
 
     def add_triangle(self, p1: GeometricPoint, p2: GeometricPoint, p3: GeometricPoint,
-                    equal_sides: Optional[List[tuple]] = None,
+                    equal_sides: Optional[List[tuple]] = None, 
                     right_angle_at: Optional[int] = None,
                     equal_angles: Optional[List[tuple]] = None) -> None:
         """
@@ -74,20 +74,11 @@ class Diagram:
         if not hasattr(self, 'quadrilaterals'):
             self.quadrilaterals = []
         self.quadrilaterals.append(quadrilateral)
-
+        
 
     def add_circle(self, center: GeometricPoint, info: Any) -> None:
         """Add a circle to the diagram"""
         self.circles.append((center, info))
-
-    def add_angle_measure(self, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, degrees: float) -> None:
-        """Add an angle measure to be displayed (e.g., angle ABC = 120°)"""
-        self.angle_measures.append({
-            'vertex': vertex,
-            'p1': p1,
-            'p2': p2,
-            'degrees': degrees
-        })
 
     def add_angle_measure(self, vertex: GeometricPoint, p1: GeometricPoint, p2: GeometricPoint, degrees: float) -> None:
         """Add an angle measure to be displayed (e.g., angle ABC = 120°)"""

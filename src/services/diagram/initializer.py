@@ -93,16 +93,6 @@ class Initializer:
         ]
 
     @staticmethod
-    def init_quadrilateral(scale: float = 1.0) -> List[Tuple[float, float]]:
-        """Generic quadrilateral with no special properties"""
-        return [
-            (-0.6 * scale, -0.3 * scale),    # Bottom left
-            (0.5 * scale, -0.2 * scale),     # Bottom right
-            (0.4 * scale, 0.7 * scale),      # Top right
-            (-0.4 * scale, 0.6 * scale)      # Top left
-        ]
-
-    @staticmethod
     def init_rectangle(width: float = 1.0, height: float = 0.7) -> List[Tuple[float, float]]:
         """Initialize coordinates for a rectangle"""
         return [
@@ -168,7 +158,7 @@ class Initializer:
             (0.0, long_half),     # Top
             (-short_half, 0.0)    # Left
         ]
-
+        
     @staticmethod
     def init_circle_with_positioned_points(center: Tuple[float, float] = (0.0, 0.0),
                                             radius: float = 0.4,
@@ -176,7 +166,7 @@ class Initializer:
                                         ) -> List[Tuple[float, float]]:
         if points_distances is None:
             points_distances = []
-
+        
         result = [center]
         for distance, angle_deg in points_distances:
             angle_rad = math.radians(angle_deg)
@@ -185,10 +175,10 @@ class Initializer:
                 center[1] + distance * math.sin(angle_rad)
                 )
             result.append(point)
-
+        
         return result
-
-
+        
+    
 
     @staticmethod
     def init_triangle_incircle(scale: float = 1.0) -> List[Tuple[float, float]]:
@@ -257,7 +247,7 @@ class Initializer:
             return [bisector_coords[1], bisector_coords[0], bisector_coords[2], bisector_coords[3]]
         else:
             return [bisector_coords[2], bisector_coords[0], bisector_coords[1], bisector_coords[3]]
-
+        
     @staticmethod
     def init_line_circle_intersection(center: Tuple[float, float],
                                       radius: float,
@@ -270,28 +260,28 @@ class Initializer:
         cx, cy = center
         x1, y1 = line_point1
         x2, y2 = line_point2
-
+        
         # Direction vector của đường thẳng
         dx = x2 - x1
         dy = y2 - y1
-
+        
         # Tránh division by zero
         if abs(dx) < 1e-10 and abs(dy) < 1e-10:
             return []  # Line points trùng nhau
-
+        
         # Vector từ line_point1 đến center
         fx = x1 - cx
         fy = y1 - cy
-
+        
         # Giải phương trình bậc 2: a*t^2 + b*t + c = 0
         # Điểm trên line: (x1 + t*dx, y1 + t*dy)
         # Khoảng cách đến center = radius
         a = dx*dx + dy*dy
         b = 2*(fx*dx + fy*dy)
         c = fx*fx + fy*fy - radius*radius
-
+        
         discriminant = b*b - 4*a*c
-
+        
         if discriminant < 0:
             # Không có giao điểm, trả về 2 điểm gần nhất trên line
             # Điểm gần nhất là khi đạo hàm = 0
@@ -304,15 +294,15 @@ class Initializer:
                 (closest_x - offset*dx, closest_y - offset*dy),
                 (closest_x + offset*dx, closest_y + offset*dy)
             ]
-
+        
         # Có giao điểm
         sqrt_d = math.sqrt(discriminant)
         t1 = (-b - sqrt_d) / (2*a)
         t2 = (-b + sqrt_d) / (2*a)
-
+        
         p1 = (x1 + t1*dx, y1 + t1*dy)
         p2 = (x1 + t2*dx, y1 + t2*dy)
-
+        
         return [p1, p2]
 
     @staticmethod
