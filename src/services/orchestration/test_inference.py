@@ -12,7 +12,7 @@ def main():
 
     generator = DSLGeneratorFactory.create()
 
-    user_input = "Cho tam giác ABC vuông tại A, AB = 3, AC = 4. Tính BC."
+    user_input = "Cho tam giác ABC vuông tại A, AB = AC"
 
 
     try:
