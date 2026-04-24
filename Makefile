@@ -109,3 +109,6 @@ compose_infra_vol_down:
 
 compose_app:
 	docker compose -f compose.yaml -f compose.app.yaml up -d
+
+test:
+	uv run python -m src.services.orchestration.test_inference

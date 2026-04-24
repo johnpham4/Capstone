@@ -10,8 +10,9 @@ def create_endpoint():
     logger.info(f"Creating vLLM endpoint: {settings.SAGEMAKER_ENDPOINT_INFERENCE}")
     logger.info(f"Model: {settings.HF_MODEL_ID}")
 
+    # with account id when push image to ecr
     model = Model(
-        image_uri="637931482580.dkr.ecr.us-east-1.amazonaws.com/vllm:0.11.1",
+        image_uri="726101441039.dkr.ecr.us-east-1.amazonaws.com/vllm:0.11.1",
         role=settings.AWS_ARN_ROLE,
         sagemaker_session=session,
         env={
