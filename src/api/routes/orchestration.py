@@ -28,12 +28,10 @@ def _utcnow_iso() -> str:
 
 
 @router.post("/api/v1/orchestration", response_model=OrchestrationResponse)
-async def execute_orchestration(
-    request: OrchestrationRequest,
-    current_user: Annotated[User, Depends(get_current_user)],
-    db: AsyncSession = Depends(get_db),
-    _rate: None = Depends(rate_limit_orchestration),
-):
+async def execute_orchestration(request: OrchestrationRequest,
+                                current_user: Annotated[User, Depends(get_current_user)],
+                                db: AsyncSession = Depends(get_db),
+                                _rate: None = Depends(rate_limit_orchestration),):
     try:
         history = HistoryService(db)
         return await _orchestration_service.execute(
