@@ -37,8 +37,6 @@ _TRAILING_ENUM_RE = re.compile(
 
 
 def _strip_accents(text: str) -> str:
-    # Keep a 1:1 mapping between normalized and original text so cut indices are
-    # still valid on the source string.
     s = str(text)
     out_chars: list[str] = []
     for ch in s:
@@ -77,7 +75,6 @@ def _find_first_marker_idx(norm_text: str) -> int | None:
 
 
 def _find_enumerated_clause_idx(norm_text: str) -> int | None:
-    # Detect "a) ... b) ..." and "1) ... 2) ..." style sub-question blocks.
     matches = list(_ENUM_RE.finditer(norm_text))
     if not matches:
         return None
@@ -143,8 +140,12 @@ def remove_question_part(problem: str) -> str:
     if cut_idx <= 0:
         return ""
 
-    kept = one_line[:cut_idx].rstrip(" \t:;,-.")
-    kept = _TRAILING_ENUM_RE.sub("", kept).strip()
+    last_dot = one_line.rfind(".", 0, cut_idx)
+    if last_dot > 0:
+        kept = one_line[:last_dot]
+    else:
+        kept = one_line[:cut_idx].rstrip(" \t:;,-.")
+        kept = _TRAILING_ENUM_RE.sub("", kept).strip()
     return _normalize_tail(kept)
 
 
