@@ -1,3 +1,3 @@
-from .dsl import VLLMOpenAIGenerator
+from .dsl import VLLMOpenAIGenerator, DSLGeneratorFactory
 
-__all__ = ["VLLMOpenAIGenerator"]
+__all__ = ["VLLMOpenAIGenerator", "DSLGeneratorFactory"]

@@ -4,7 +4,7 @@ from loguru import logger
 from src.infrastructures.celery.tasks import render_diagram_task
 from src.config.settings import settings
 from src.services.mock_responses import MOCK_DSL
-from src.services.generators import VLLMOpenAIGenerator
+from src.services.generators import DSLGeneratorFactory
 
 
 class DiagramStep:
@@ -19,7 +19,7 @@ class DiagramStep:
         if llm_mock:
             dsl = MOCK_DSL
         else:
-            generator = VLLMOpenAIGenerator()
+            generator = DSLGeneratorFactory.create()
             dsl = generator.generate_dsl(user_input, dsl_prompt, clean_problem=clean_problem)
             if not dsl or not dsl.strip():
                 return {

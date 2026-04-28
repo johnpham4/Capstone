@@ -87,11 +87,14 @@ docker_up:
 docker_infra:
 	docker compose up -d postgres rabbitmq redis
 
+init_alembic:
+	uv run alembic init alembic
+
 migrate:
 	uv run alembic upgrade head
 
 revision:
-	uv run alembic revision --autogenerate -m "upgrade tables"
+	uv run alembic revision --autogenerate -m "init"
 
 mock:
 	curl -X POST http://vllm:8000/v1/completions \
@@ -109,3 +112,6 @@ compose_infra_vol_down:
 
 compose_app:
 	docker compose -f compose.yaml -f compose.app.yaml up -d
+
+test:
+	uv run python -m src.services.orchestration.test_inference

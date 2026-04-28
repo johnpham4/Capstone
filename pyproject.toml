@@ -29,6 +29,7 @@ dependencies = [
     "numpy>=1.26.0,<2.0",
     "matplotlib>=3.7.0",
     "pillow==10.3.0",
+    "sagemaker>=2.0,<3.0",
 ]
 
 [build-system]
@@ -49,7 +50,6 @@ pipeline = [
     "langchain-openai>=1.1.6",
     "tiktoken>=0.12.0",
     "scikit-learn>=1.7.2",
-    "sagemaker>=2.0,<3.0",
     "zenml[server]>=0.93.2",
 ]
 ml = [
@@ -62,3 +62,7 @@ ml = [
 monitoring = [
     "flower>=2.0.1",
 ]
+deploy = [
+    "sagemaker>=2.0,<3.0",
+]
+
