@@ -47,6 +47,9 @@ class BaseVLLMGenerator(DSLGenerator):
         if clean_problem:
             cleaned, _ = clean_problem_section(raw_input)
             query_text = cleaned or raw_input
+            logger.info("LLM input | raw: {!r} → cleaned: {!r}", raw_input, query_text)
+        else:
+            logger.info("LLM input (no cleaning): {!r}", query_text)
         return dsl_prompt.format(query=query_text)
 
     def _try_openai_chat(self, prompt: str) -> Tuple[str | None, int | None]:

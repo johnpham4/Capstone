@@ -143,8 +143,16 @@ def remove_question_part(problem: str) -> str:
     if cut_idx <= 0:
         return ""
 
-    kept = one_line[:cut_idx].rstrip(" \t:;,-.")
-    kept = _TRAILING_ENUM_RE.sub("", kept).strip()
+    # Prefer cutting at the end of the last complete sentence before the
+    # question block.  A naive rstrip + _TRAILING_ENUM_RE pass can
+    # accidentally strip a trailing single-letter point name like "O" in
+    # "MN cắt AD tại O. a) Chứng minh…".
+    last_dot = one_line.rfind(".", 0, cut_idx)
+    if last_dot > 0:
+        kept = one_line[:last_dot]
+    else:
+        kept = one_line[:cut_idx].rstrip(" \t:;,-.")
+        kept = _TRAILING_ENUM_RE.sub("", kept).strip()
     return _normalize_tail(kept)
 
 
