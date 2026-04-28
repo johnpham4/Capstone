@@ -153,7 +153,8 @@ def prepare_problem_for_dsl(problem: str) -> str:
     if not raw:
         return ""
 
-    return remove_question_part(raw)
+    cleaned = remove_question_part(raw)
+    return cleaned if cleaned else raw
 
 
 def clean_problem_section(prompt_text: str) -> tuple[str, str]:

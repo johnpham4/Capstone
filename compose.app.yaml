@@ -12,6 +12,13 @@ services:
       POSTGRES_HOST: postgres
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
       REDIS_URL: redis://redis:6379/0
+      IMAGE_STORAGE_BACKEND: local
+      LOCAL_MEDIA_ROOT_DIR: /app/output
+      LOCAL_MEDIA_BASE_URL: /output
+      LOCAL_MEDIA_PUBLIC_BASE_URL: http://localhost:8000
+      SOURCE_IMAGE_OUTPUT_DIR: /app/output/source-images
+    volumes:
+      - ./output:/app/output
     depends_on:
       postgres:
         condition: service_healthy
@@ -34,6 +41,13 @@ services:
       POSTGRES_HOST: postgres
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
       REDIS_URL: redis://redis:6379/0
+      IMAGE_STORAGE_BACKEND: local
+      LOCAL_MEDIA_ROOT_DIR: /app/output
+      LOCAL_MEDIA_BASE_URL: /output
+      LOCAL_MEDIA_PUBLIC_BASE_URL: http://localhost:8000
+      SOURCE_IMAGE_OUTPUT_DIR: /app/output/source-images
+    volumes:
+      - ./output:/app/output
     depends_on:
       rabbitmq:
         condition: service_healthy

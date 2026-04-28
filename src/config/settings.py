@@ -97,9 +97,10 @@ class Settings(BaseSettings):
     REDIS_URL: str = "redis://localhost:6379/0"
 
     # Image Storage
-    IMAGE_STORAGE_BACKEND: Literal["local", "s3"] = "s3"
+    IMAGE_STORAGE_BACKEND: Literal["local", "s3"] = "local"
     LOCAL_MEDIA_ROOT_DIR: str = "./output"
     LOCAL_MEDIA_BASE_URL: str = "/output"
+    LOCAL_MEDIA_PUBLIC_BASE_URL: str = "http://localhost:8000"
     SOURCE_IMAGE_OUTPUT_DIR: str = "./output/source-images"
 
     # Diagram Generation
@@ -132,5 +133,18 @@ class Settings(BaseSettings):
         if not raw or raw == "*":
             return ["*"]
         return [origin.strip() for origin in raw.split(",") if origin.strip()]
+
+    @property
+    def local_media_url_prefix(self) -> str:
+        host = self.LOCAL_MEDIA_PUBLIC_BASE_URL.strip().rstrip("/")
+        media_path = self.LOCAL_MEDIA_BASE_URL.strip()
+
+        if not media_path:
+            return host
+
+        if not media_path.startswith("/"):
+            media_path = f"/{media_path}"
+
+        return f"{host}{media_path}"
 
 settings = Settings()

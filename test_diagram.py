@@ -156,7 +156,7 @@ def main():
         failed_path = output_dir / "failed_problems.json"
         with open(failed_path, 'w', encoding='utf-8') as f:
             json.dump(failed_problems, f, ensure_ascii=False, indent=2)
-        print(f"\n⚠️  {len(failed_problems)} failed problems saved to: {failed_path}")
+        print(f"\n  {len(failed_problems)} failed problems saved to: {failed_path}")
         print("Failed indices:", [p['index'] for p in failed_problems])
 
 if __name__ == "__main__":

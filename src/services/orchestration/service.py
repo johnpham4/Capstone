@@ -256,6 +256,7 @@ class OrchestrationService:
                 request_id=request_id,
                 dsl=d.get("dsl", ""),
                 image_url=d.get("s3_url") or d.get("image_url"),
+                image_base64=d.get("image_base64"),
                 generation_time_ms=d.get("generation_time_ms"),
                 render_time_ms=d.get("render_time_ms"),
             )

@@ -1,3 +1,4 @@
+import base64
 import time
 from pathlib import Path
 from typing import Any, Optional
@@ -52,13 +53,38 @@ class DiagramService:
             )
             render_ms = int((time.perf_counter() - render_start) * 1000)
 
+            image_base64 = self._encode_image_base64(image_path)
             image_url, s3_url = self._store_rendered_image(image_path)
+
+            # For local storage, use data URI so demo works without a static file server
+            if self.storage_backend == "local" and image_base64:
+                image_url = f"data:image/png;base64,{image_base64}"
+
+            url_type = "none"
+            if image_url:
+                if image_url.startswith("data:"):
+                    url_type = "data"
+                elif image_url.startswith("http://") or image_url.startswith("https://"):
+                    url_type = "http"
+                elif image_url.startswith("s3://"):
+                    url_type = "s3"
+                else:
+                    url_type = "path"
+
+            logger.info(
+                "Diagram image payload: storage={}, url_type={}, url_present={}, base64_len={}",
+                self.storage_backend,
+                url_type,
+                bool(image_url),
+                len(image_base64),
+            )
 
             return {
                 "status": "success",
                 "dsl": dsl,
                 "image_url": image_url,
                 "s3_url": s3_url,
+                "image_base64": image_base64,
                 "generation_time_ms": dsl_ms,
                 "render_time_ms": render_ms,
             }
@@ -129,9 +155,14 @@ class DiagramService:
         renderer.render(diagram=diagram, show=False, save=True, filename=str(image_path))
         return image_path
 
+    @staticmethod
+    def _encode_image_base64(image_path: Path) -> str:
+        image_bytes = image_path.read_bytes()
+        return base64.b64encode(image_bytes).decode("ascii")
+
     def _store_rendered_image(self, image_path: Path) -> tuple[str | None, str | None]:
         if self.storage_backend == "local":
-            base_url = settings.LOCAL_MEDIA_BASE_URL.rstrip("/")
+            base_url = settings.local_media_url_prefix.rstrip("/")
             return f"{base_url}/diagrams/{image_path.name}", None
 
         image_bytes = image_path.read_bytes()
