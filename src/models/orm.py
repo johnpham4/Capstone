@@ -67,6 +67,8 @@ class RequestModel(Base, TimestampMixin):
     mode: Mapped[str] = mapped_column(String(20), nullable=False, default="auto")  # auto / diagram / solve / both
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="pending")  # pending / processing / completed / failed
     latency_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    is_deleted: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     # Relationships
     user: Mapped["UserModel | None"] = relationship(back_populates="requests")

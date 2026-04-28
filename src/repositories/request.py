@@ -24,6 +24,7 @@ class RequestRepository(AbstractRepository[RequestModel]):
         to_date: Optional[datetime] = None,
     ):
         stmt = stmt.where(RequestModel.user_id == user_id)
+        stmt = stmt.where(RequestModel.is_deleted == False)
         if q:
             stmt = stmt.where(
                 or_(

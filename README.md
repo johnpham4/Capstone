@@ -94,6 +94,8 @@ src\infrastructures\aws\deploy\huggingface\run.p
 make deploy_endpoint
 
 make del_endpoint
+
+
 ```
 ---
 

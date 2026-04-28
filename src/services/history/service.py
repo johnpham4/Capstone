@@ -203,7 +203,7 @@ class HistoryService:
 
     async def get_detail(self, request_id: str, user_id: str) -> Optional[HistoryDetail]:
         req = await self._request_repo.get_with_relations(request_id)
-        if req is None or req.user_id != user_id:
+        if req is None or req.user_id != user_id or req.is_deleted:
             return None
 
         image_url = None
@@ -250,7 +250,11 @@ class HistoryService:
 
     async def delete_request(self, request_id: str, user_id: str) -> bool:
         req = await self._request_repo.get_by_id(request_id)
-        if req is None or req.user_id != user_id:
+        if req is None or req.user_id != user_id or req.is_deleted:
             return False
-        return await self._request_repo.delete(request_id)
+        updated = await self._request_repo.update(
+            request_id,
+            {"is_deleted": True, "deleted_at": datetime.utcnow()},
+        )
+        return updated is not None
 

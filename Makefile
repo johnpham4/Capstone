@@ -58,6 +58,12 @@ del_endpoint:
 del_endpoint_config:
 	uv run python -m src.infrastructures.aws.deploy.delete_sagemaker_endpoint_config
 
+del_ecr:
+	aws ecr delete-repository \
+  --repository-name vllm \
+  --region us-east-1 \
+  --force
+
 endpoint:
 	uv run python -m src.main
 
