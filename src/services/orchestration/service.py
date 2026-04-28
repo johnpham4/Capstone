@@ -108,6 +108,12 @@ class OrchestrationService:
             source_image_url=source_image_url,
         )
         request_id = request.id
+        # Log incoming orchestration request for debugging/tracing
+        try:
+            logger.info(f"Orchestration request {request_id} received: mode={mode}, user_input={user_input}")
+        except Exception:
+            # Ensure logging errors don't break orchestration
+            logger.exception("Failed to log incoming orchestration request")
         start = time.perf_counter()
         reporter = WorkflowProgressReporter(callback=progress_callback, request_id=request_id)
 
@@ -177,6 +183,9 @@ class OrchestrationService:
         initial = self._build_initial_state(user_input, image_base64, mode, llm_mock)
         workflow_config = self._build_workflow_config(request_id, progress_callback)
         final = await asyncio.to_thread(self._workflow.invoke, initial, workflow_config)
+
+        # Avoid emitting per-request parse-stage logs here to reduce console noise.
+
         return self._collect_workflow_result(final, mode)
 
     @staticmethod
@@ -204,9 +213,8 @@ class OrchestrationService:
         request_id: str | None,
         progress_callback: ProgressCallback | None,
     ) -> RunnableConfig | None:
-        if progress_callback is None:
-            return None
-
+        # Always supply a runnable config so nodes can access request_id for logging.
+        # The WorkflowProgressReporter will ignore a non-callable progress_callback.
         return {
             "configurable": {
                 "request_id": request_id,
@@ -248,6 +256,7 @@ class OrchestrationService:
                 request_id=request_id,
                 dsl=d.get("dsl", ""),
                 image_url=d.get("s3_url") or d.get("image_url"),
+                image_base64=d.get("image_base64"),
                 generation_time_ms=d.get("generation_time_ms"),
                 render_time_ms=d.get("render_time_ms"),
             )

@@ -1,3 +1,4 @@
+import base64
 import time
 from pathlib import Path
 from typing import Any, Optional
@@ -131,8 +132,8 @@ class DiagramService:
 
     def _store_rendered_image(self, image_path: Path) -> tuple[str | None, str | None]:
         if self.storage_backend == "local":
-            base_url = settings.LOCAL_MEDIA_BASE_URL.rstrip("/")
-            return f"{base_url}/diagrams/{image_path.name}", None
+            image_b64 = base64.b64encode(image_path.read_bytes()).decode("ascii")
+            return f"data:image/png;base64,{image_b64}", None
 
         image_bytes = image_path.read_bytes()
         s3_url = self._store_image_on_s3(image_bytes=image_bytes, image_name=image_path.name)

@@ -78,7 +78,7 @@ class HistoryService:
             image_path = output_dir / filename
             image_path.write_bytes(image_bytes)
 
-            base_url = settings.LOCAL_MEDIA_BASE_URL.rstrip("/")
+            base_url = settings.local_media_url_prefix.rstrip("/")
             return f"{base_url}/source-images/{filename}"
         except Exception:
             logger.exception("Failed to save source image locally")
@@ -104,6 +104,7 @@ class HistoryService:
         request_id: str,
         dsl: str,
         image_url: Optional[str] = None,
+        image_base64: Optional[str] = None,
         generation_time_ms: Optional[int] = None,
         render_time_ms: Optional[int] = None,
     ) -> DiagramModel:
@@ -111,6 +112,7 @@ class HistoryService:
             "request_id": request_id,
             "dsl": dsl,
             "image_url": image_url,
+            "image_base64": image_base64,
             "generation_time_ms": generation_time_ms,
             "render_time_ms": render_time_ms,
         })
@@ -207,8 +209,11 @@ class HistoryService:
             return None
 
         image_url = None
+        image_base64 = None
         if req.diagram and req.diagram.image_url:
             image_url = self._resolve_diagram_image_url(req.diagram.image_url)
+        if req.diagram and req.diagram.image_base64:
+            image_base64 = req.diagram.image_base64
 
         source_image_url = None
         if req.source_image_url:
@@ -226,12 +231,18 @@ class HistoryService:
             ocr_text=req.ocr_text,
             dsl=req.diagram.dsl if req.diagram else None,
             image_url=image_url,
+            image_base64=image_base64,
             solution=req.solution.content if req.solution else None,
         )
 
     def _resolve_diagram_image_url(self, value: str) -> str:
-        if not value.startswith("s3://"):
+        if value.startswith("data:"):
             return value
+        if value.startswith("http://") or value.startswith("https://"):
+            return value
+
+        if not value.startswith("s3://"):
+            return self._to_public_media_url(value)
 
         if self._s3_client is None:
             logger.warning("Cannot resolve s3:// URL because S3 client is not initialized")
@@ -247,6 +258,12 @@ class HistoryService:
             Params={"Bucket": bucket, "Key": key},
             ExpiresIn=3600,
         )
+
+    @staticmethod
+    def _to_public_media_url(value: str) -> str:
+        if value.startswith("/"):
+            return f"{settings.LOCAL_MEDIA_PUBLIC_BASE_URL.rstrip('/')}{value}"
+        return value
 
     async def delete_request(self, request_id: str, user_id: str) -> bool:
         req = await self._request_repo.get_by_id(request_id)

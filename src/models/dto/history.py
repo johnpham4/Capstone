@@ -26,6 +26,7 @@ class HistoryDetail(HistoryItem):
     ocr_text: str | None = None
     dsl: str | None = None
     image_url: str | None = None
+    image_base64: str | None = None
     solution: str | None = None
 
 

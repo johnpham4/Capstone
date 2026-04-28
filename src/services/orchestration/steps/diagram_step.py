@@ -1,4 +1,5 @@
 import json
+from uuid import uuid4
 from loguru import logger
 from src.infrastructures.celery.tasks import render_diagram_task
 from src.config.settings import settings
@@ -28,9 +29,11 @@ class DiagramStep:
                 }
 
         try:
+            task_id = f"orchestrator_{uuid4().hex}"
+
             celery_task = render_diagram_task.apply_async(
                 kwargs={
-                    "task_id": f"orchestrator_{id(self)}",
+                    "task_id": task_id,
                     "dsl": dsl,
                     "epochs": settings.DIAGRAM_OPTIMIZER_EPOCHS,
                     "dpi": 150,
@@ -73,4 +76,3 @@ class DiagramStep:
         except Exception as e:
             logger.error(f"DiagramStep error: {e}")
             return {"status": "failed", "error_code": "DIAGRAM_TASK_ERROR", "error": str(e)}
-
