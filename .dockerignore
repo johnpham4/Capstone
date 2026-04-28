@@ -5,6 +5,10 @@ venv/
 .git
 .gitignore
 __pycache__
+.cache/
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
 *.pyc
 *.pyo
 *.egg-info
@@ -22,6 +26,7 @@ htmlcov/
 *.safetensors
 dataset/data/images/
 images/
+output/
 docs/
 doc/
 *.log

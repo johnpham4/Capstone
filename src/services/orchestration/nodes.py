@@ -223,6 +223,7 @@ class WorkflowNodes:
         try:
             if self._solver_step is None:
                 self._solver_step = SolverStep()
+
             state["solution"] = self._solver_step.execute(solve_input)
         except Exception as exc:
             logger.warning(f"Solver unavailable: {exc}")

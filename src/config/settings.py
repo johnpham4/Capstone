@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     AWS_ARN_ROLE: str | None = None
     S3_BUCKET_NAME: str | None = None
     S3_DIAGRAM_PREFIX: str = "diagrams"
-    LLM_PROVIDER: Literal["sagemaker", "local"] = "sagemaker"
+    LLM_PROVIDER: Literal["sagemaker", "local"] = "local"
     SAGEMAKER_ENDPOINT_NAME: str | None = None
 
     # SageMaker Endpoint Config

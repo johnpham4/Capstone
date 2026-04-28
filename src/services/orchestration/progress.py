@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from datetime import datetime, timezone
 from typing import Any
 
@@ -22,11 +22,15 @@ class WorkflowProgressReporter:
 
     @classmethod
     def from_config(cls, config: RunnableConfig | None) -> WorkflowProgressReporter:
-        if not isinstance(config, dict):
-            return cls()
+        configurable = None
+        if isinstance(config, Mapping):
+            configurable = config.get("configurable")
+        elif config is not None and hasattr(config, "configurable"):
+            configurable = getattr(config, "configurable")
+        elif config is not None and hasattr(config, "get"):
+            configurable = config.get("configurable")  # type: ignore[call-arg]
 
-        configurable = config.get("configurable")
-        if not isinstance(configurable, dict):
+        if not isinstance(configurable, Mapping):
             return cls()
 
         callback = configurable.get("progress_callback")

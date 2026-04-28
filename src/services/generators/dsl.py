@@ -71,7 +71,11 @@ class BaseVLLMGenerator(DSLGenerator):
 
         except Exception as exc:
             status = getattr(exc, "response", None)
-            status_code = status.status_code if status else None
+            status_code = None
+            if status is not None:
+                status_code = getattr(status, "status_code", None)
+                if status_code is None and isinstance(status, dict):
+                    status_code = status.get("status_code")
             logger.error(f"OpenAI schema failed ({status_code}): {exc}")
             return None, status_code
 
