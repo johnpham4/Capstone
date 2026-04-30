@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextvars
 from collections.abc import Callable, Mapping
 from datetime import datetime, timezone
 from typing import Any
@@ -22,6 +23,10 @@ class WorkflowProgressReporter:
 
     @classmethod
     def from_config(cls, config: RunnableConfig | None) -> WorkflowProgressReporter:
+        ctx_reporter = _current_reporter.get()
+        if ctx_reporter is not None:
+            return ctx_reporter
+
         configurable = None
         if isinstance(config, Mapping):
             configurable = config.get("configurable")
@@ -64,3 +69,8 @@ class WorkflowProgressReporter:
 
     def emit_stage(self, stage: str, status: str, **extra: Any) -> None:
         self.emit("orchestration.stage", stage=stage, status=status, **extra)
+
+
+_current_reporter: contextvars.ContextVar[WorkflowProgressReporter | None] = contextvars.ContextVar(
+    "workflow_progress_reporter", default=None
+)
