@@ -133,6 +133,7 @@ async def execute_orchestration_stream(
                 event_name = str(event_payload.get("event", "message"))
                 encoded = json.dumps(event_payload, ensure_ascii=True)
                 yield f"event: {event_name}\ndata: {encoded}\n\n"
+                await asyncio.sleep(0)
 
                 if event_name == "stream.end":
                     break

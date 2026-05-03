@@ -9,7 +9,7 @@ from loguru import logger
 from src.models.dto.orchestration import Mode
 from src.services.history import HistoryService
 from src.services.orchestration.nodes import WorkflowNodes
-from src.services.orchestration.progress import ProgressCallback, WorkflowProgressReporter
+from src.services.orchestration.progress import ProgressCallback, WorkflowProgressReporter, _current_reporter
 from src.services.orchestration.workflow_state import WorkflowState
 
 
@@ -182,9 +182,12 @@ class OrchestrationService:
     ) -> dict:
         initial = self._build_initial_state(user_input, image_base64, mode, llm_mock)
         workflow_config = self._build_workflow_config(request_id, progress_callback)
-        final = await asyncio.to_thread(self._workflow.invoke, initial, workflow_config)
-
-        # Avoid emitting per-request parse-stage logs here to reduce console noise.
+        reporter = WorkflowProgressReporter(callback=progress_callback, request_id=request_id)
+        token = _current_reporter.set(reporter)
+        try:
+            final = await asyncio.to_thread(self._workflow.invoke, initial, workflow_config)
+        finally:
+            _current_reporter.reset(token)
 
         return self._collect_workflow_result(final, mode)
 
