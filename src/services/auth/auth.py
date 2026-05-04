@@ -300,7 +300,7 @@ class AuthService:
                 "email": normalized_email,
                 "hashed_password": get_password_hash(data.password),
                 "disabled": False,
-                "email_verified": False,
+                "email_verified": True,
             }
         )
 

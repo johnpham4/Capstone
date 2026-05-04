@@ -22,14 +22,12 @@ def create_endpoint():
     )
 
     model.deploy(
-        instance_type=settings.GPU_INSTANCE_TYPE,  # ml.g5.2xlarge
+        instance_type=settings.GPU_INSTANCE_TYPE,
         initial_instance_count=1,
         endpoint_name=settings.SAGEMAKER_ENDPOINT_INFERENCE,
         inference_ami_version="al2-ami-sagemaker-inference-gpu-3-1",
         wait=True,
-
     )
 
 if __name__ == "__main__":
     create_endpoint()
-

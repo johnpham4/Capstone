@@ -12,7 +12,7 @@ def main():
 
     generator = DSLGeneratorFactory.create()
 
-    user_input = "Cho tam giác ABC vuông tại A, AB = AC"
+    user_input = "Cho tam giác ABC với góc ABC = 90°, O là tâm đường tròn ngoại tiếp tam giác ABC, N là điểm thuộc đoạn thẳng AB, AC là đường kính của đường tròn ngoại tiếp. Tính độ dài đoạn thẳng ON."
 
 
     try:
