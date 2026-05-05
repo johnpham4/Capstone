@@ -4,7 +4,7 @@ GeoSystem Backend là hệ thống xử lý bài toán hình học tiếng Viet 
 
 ## 🏗️ System Architecture
 
-![System Architecture](images/architecture.png)
+![System Architecture](./images/architecture.png)
 
 ## 📁 Project Skeleton
 
