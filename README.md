@@ -6,30 +6,35 @@ GeoSystem Backend là hệ thống xử lý bài toán hình học tiếng Viet 
 
 ![System Architecture](./images/architecture.png)
 
+## 🧩 Offline vs Online
+
+- Offline: pipeline tao du lieu (normalize, translate, augment), sinh dataset/DSL, fine-tune LLM, va danh gia.
+- Online: serve LLM endpoint, xu ly async tasks, luu metadata/ket qua, va tra ve DSL/diagram.
+
 ## 📁 Project Skeleton
 
 ```
 backend/
-  alembic/
-  images/
-  notebooks/
-  pipeline/
-  scripts/
-  src/
-  Makefile
-  pyproject.toml
+  alembic/        # Database migrations
+  images/         # Architecture diagrams
+  notebooks/      # Experiments and research
+  pipeline/       # Offline pipelines (data prep, generation, training)
+  scripts/        # Utility scripts
+  src/            # API, services, infra, and core app
+  Makefile        # Task shortcuts
+  pyproject.toml  # Python deps and tooling
   README.md
 ```
 
 ## ⚙️ How to Run
 
-Install dependencies:
+Install dependencies (uv required):
 
 ```bash
 make install
 ```
 
-Start services with Docker:
+Start services with Docker (postgres, rabbitmq, redis):
 
 ```bash
 make docker_up
@@ -41,7 +46,7 @@ Run API endpoint:
 make endpoint
 ```
 
-LLM local dev:
+LLM local dev (vLLM):
 
 ```bash
 make llm_local
