@@ -1,136 +1,149 @@
-# 🚀 Push Docker Image to AWS ECR (Public & Private)
+```markdown
+# 🧠 GeoSystem Backend
 
-This guide explains how to authenticate AWS CLI, pull Docker images, and push them to AWS Elastic Container Registry (ECR).
+**GeoSystem Backend** là một hệ thống xử lý bài toán hình học tiếng Việt end-to-end, từ việc phân tích ngôn ngữ tự nhiên (NLP) đến sinh biểu diễn hình học có cấu trúc và trực quan hóa chính xác.
 
----
-
-## 📌 Prerequisites
-
-* AWS CLI installed and configured
-* Docker installed
-* AWS IAM permissions for ECR
-* AWS account ID
+Hệ thống kết hợp giữa **LLM (Large Language Models)**, **symbolic geometry** và **data pipelines**, cho phép chuyển đổi đề bài hình học thành dạng máy hiểu được và dựng lại diagram một cách tự động.
 
 ---
 
-# Requirement:
-52G in memory
+## 🚀 Key Idea
 
-## 1. Configure AWS CLI
+Bài toán hình học thường được viết dưới dạng ngôn ngữ tự nhiên (tiếng Việt), nhưng để máy hiểu và xử lý thì cần chuyển sang dạng cấu trúc.
+
+👉 GeoSystem giải quyết bài toán này theo pipeline:
+
+1. **Vietnamese NLP Parsing**
+   Phân tích đề bài để hiểu ngữ nghĩa và cấu trúc câu.
+
+2. **Entity & Relation Extraction**
+   Trích xuất các thành phần hình học:
+   - Điểm (A, B, C, …)
+   - Đường thẳng, đoạn thẳng
+   - Đường tròn
+   - Quan hệ (vuông góc, song song, tiếp xúc, …)
+
+3. **Geometry DSL Generation (S-expression)**
+   Chuyển đổi sang dạng biểu diễn hình học có cấu trúc để máy xử lý.
+
+4. **Symbolic Geometry Rendering**
+   Sinh diagram chính xác từ DSL.
+
+---
+
+## 🏗️ System Architecture
+
+Hệ thống gồm 2 phần chính:
+
+### 1. Offline Pipeline
+- Chuẩn bị và làm sạch dữ liệu
+- Sinh dữ liệu hình học (data generation)
+- Fine-tune LLM cho bài toán parsing
+
+### 2. Online Service
+- Serve LLM endpoints
+- Xử lý async tasks (queue-based workers)
+- Trả về kết quả DSL hoặc diagram
+
+---
+
+## 📁 Project Structure
+
+```
+
+backend/
+alembic/        # Database migrations
+images/         # Architecture diagrams & assets
+notebooks/      # Experiments & research
+pipeline/       # Data processing & generation pipelines
+scripts/        # Utility scripts
+src/            # Core application code
+Makefile
+pyproject.toml
+README.md
+
+````
+
+---
+
+## ⚙️ Getting Started
+
+### Install dependencies
+```bash
+make install
+````
+
+### Start services with Docker
 
 ```bash
-aws login
+make docker_up
+```
+
+### Run API endpoint
+
+```bash
+make endpoint
 ```
 
 ---
 
-## 2. Get AWS Account ID
+## 🤖 LLM Development
+
+Chạy LLM local để development:
 
 ```bash
-aws sts get-caller-identity
+make llm_local
 ```
 
 ---
 
-## 3. Login to Amazon ECR Public
+## 📊 Data Pipeline
+
+Ví dụ các pipeline:
 
 ```bash
-aws ecr-public get-login-password --region us-east-1 \
-| docker login --username AWS --password-stdin public.ecr.aws
+make data
+make generation
+make generate_question
 ```
 
 ---
 
-## 4. Pull Base Image (example)
+## ☁️ Deployment (AWS SageMaker)
 
-```bash
-docker pull public.ecr.aws/deep-learning-containers/vllm:0.11.1-gpu-py312-cu129-ubuntu22.04-sagemaker
+Chi tiết tại:
+
+```
+src/infrastructures/aws/deploy/deploy_llm.md
 ```
 
----
+Commands:
 
-## 5. Login to Amazon ECR Private
-
-Replace `<ACCOUNT_ID>` with your AWS account ID.
-
-```bash
-aws ecr get-login-password --region us-east-1 \
-| docker login --username AWS --password-stdin 726101441039.dkr.ecr.us-east-1.amazonaws.com
-```
-
----
-
-## 6. Create ECR Repository (one-time setup)
-
-```bash
-aws ecr create-repository \
-  --repository-name vllm \
-  --region us-east-1
-```
-
----
-
-## 7. Tag Docker Image
-
-```bash
-docker tag public.ecr.aws/deep-learning-containers/vllm:0.11.1-gpu-py312-cu129-ubuntu22.04-sagemaker \
-726101441039.dkr.ecr.us-east-1.amazonaws.com/vllm:0.11.1
-```
-
----
-
-## 8. Push Image to ECR
-
-```bash
-docker push 726101441039.dkr.ecr.us-east-1.amazonaws.com/vllm:0.11.1
-```
-
-## 9. Replace accountId
-replace in file run in folder aws in infrastructure layer
-src\infrastructures\aws\deploy\huggingface\run.p
-
-## 10. Deploy
 ```bash
 make deploy_endpoint
-
 make del_endpoint
-
-
 ```
----
-
-## ⚠️ Fix Docker Login Issue (if needed)
-
-If Docker login fails due to credential store:
-
-Open:
-
-```bash
-~/.docker/config.json
-```
-
-Replace:
-
-```json
-{
-  "credsStore": "desktop.exe"
-}
-```
-
-With:
-
-```json
-{
-  "auths": {}
-}
-```
-
-Then retry login.
 
 ---
 
-## 🔁 Restore (Optional)
+## ✨ Highlights
 
-After successful login, you can restore original Docker config if needed.
+* Xử lý **đề bài hình học tiếng Việt**
+* Chuyển đổi sang **Geometry DSL (S-expression)**
+* Kết hợp **LLM + symbolic reasoning**
+* Kiến trúc **modular: pipeline + serving**
+* Hỗ trợ **async processing + scalable deployment**
 
 ---
+
+## 📌 Future Work
+
+* Improve parsing accuracy với structured prompting / fine-tuning
+* Hỗ trợ nhiều dạng bài hình học hơn
+* Tích hợp solver để giải bài toán, không chỉ vẽ hình
+* Scaling hệ thống (distributed workers, caching, batching)
+
+---
+
+```
+```
