@@ -22,6 +22,8 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import base64
+import hashlib
 import json
 import math
 import os
@@ -144,7 +146,8 @@ def _worker_init() -> None:
     time.sleep(random.uniform(0.5, 4.0))
 
 
-def run_case(dsl: str, mode: str, seed: int, opts: dict[str, Any]) -> dict[str, Any]:
+def run_case(dsl_idx: int, dsl: str, mode: str, seed: int,
+             opts: dict[str, Any]) -> dict[str, Any]:
     """Solve one DSL under a given init mode and seed; record metrics."""
     random.seed(seed)
     try:
@@ -157,6 +160,7 @@ def run_case(dsl: str, mode: str, seed: int, opts: dict[str, Any]) -> dict[str, 
 
     lines = [ln.strip() for ln in dsl.splitlines() if ln.strip()]
     result: dict[str, Any] = {
+        "dsl_idx": dsl_idx,
         "dsl": dsl,
         "mode": mode,
         "seed": seed,
@@ -169,10 +173,12 @@ def run_case(dsl: str, mode: str, seed: int, opts: dict[str, Any]) -> dict[str, 
         "degenerate_reasons": [],
         "point_count": None,
         "elapsed_seconds": None,
+        "image_path": None,
         "error": None,
     }
 
     t0 = time.perf_counter()
+    diagram = None
     try:
         builder = DiagramBuilder(lines)
         optimizer_opts = {
@@ -202,6 +208,27 @@ def run_case(dsl: str, mode: str, seed: int, opts: dict[str, Any]) -> dict[str, 
     except Exception as exc:  # noqa: BLE001
         result["status"] = "failed"
         result["error"] = f"{type(exc).__name__}: {exc}"
+
+    # Render the final diagram (best-effort; never affects metrics).
+    render_dir = opts.get("render_dir")
+    if render_dir and diagram is not None:
+        try:
+            import matplotlib
+            matplotlib.use("Agg")
+            from src.services.diagram.matplotlib_renderer import MatplotlibDiagramRenderer
+
+            out_dir = Path(render_dir)
+            out_dir.mkdir(parents=True, exist_ok=True)
+            fname = f"{opts.get('tag', 'run')}_{dsl_idx:03d}_{mode}_seed{seed}.png"
+            fpath = out_dir / fname
+            MatplotlibDiagramRenderer(diagram).render(
+                show=False, save=True, filename=str(fpath)
+            )
+            import matplotlib.pyplot as plt
+            plt.close("all")
+            result["image_path"] = str(fpath)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning(f"Render failed for #{dsl_idx} [{mode}]: {exc}")
 
     result["elapsed_seconds"] = round(time.perf_counter() - t0, 4)
     return result
@@ -342,6 +369,107 @@ def latex_table(summaries: dict[str, dict[str, Any]], tau: float) -> str:
 
 
 # --------------------------------------------------------------------------- #
+# Per-diagram report (CSV + HTML gallery for manual inspection)
+# --------------------------------------------------------------------------- #
+def write_report(results: list[dict[str, Any]], out_dir: Path) -> None:
+    """Write report.csv and a side-by-side gallery.html for eyeballing."""
+    import csv
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    rows = sorted(results, key=lambda r: (r.get("dsl_idx", 0), r["mode"]))
+    csv_path = out_dir / "report.csv"
+    with open(csv_path, "w", newline="", encoding="utf-8-sig") as f:
+        w = csv.writer(f)
+        w.writerow(["dsl_idx", "mode", "status", "final_loss", "epochs_used",
+                    "epochs_to_tau", "solve_time_s", "degenerate_auto_flag",
+                    "auto_reasons", "point_count", "image_path", "error"])
+        for r in rows:
+            w.writerow([
+                r.get("dsl_idx"), r["mode"], r["status"],
+                r.get("final_loss"), r.get("epochs_used"), r.get("epochs_to_tau"),
+                r.get("elapsed_seconds"),
+                "" if r.get("degenerate") is None else ("YES" if r["degenerate"] else "no"),
+                "; ".join(r.get("degenerate_reasons") or [])[:200],
+                r.get("point_count"), r.get("image_path") or "",
+                (r.get("error") or "")[:200],
+            ])
+
+    # Group by DSL index for the side-by-side gallery.
+    by_dsl: dict[int, dict[str, dict[str, Any]]] = {}
+    for r in rows:
+        by_dsl.setdefault(r.get("dsl_idx", 0), {})[r["mode"]] = r
+
+    def _img_tag(path: str | None) -> str:
+        if not path or not Path(path).exists():
+            return "<div class='missing'>no image</div>"
+        b64 = base64.b64encode(Path(path).read_bytes()).decode("ascii")
+        return f"<img src='data:image/png;base64,{b64}' loading='lazy'>"
+
+    def _fmt(v: Any, nd: int = 3) -> str:
+        if v is None:
+            return "&mdash;"
+        if isinstance(v, float):
+            return f"{v:.{nd}f}"
+        return str(v)
+
+    parts = [
+        "<!DOCTYPE html><html><head><meta charset='utf-8'>",
+        "<title>Ablation Gallery</title><style>",
+        "body{font-family:Segoe UI,Arial,sans-serif;background:#111;color:#eee;margin:20px}",
+        ".card{background:#1c1c1c;border-radius:10px;padding:14px;margin-bottom:24px}",
+        "h2{color:#8ab4ff;font-size:18px;margin:0 0 8px}",
+        ".grid{display:flex;gap:12px;flex-wrap:wrap}",
+        ".pane{flex:1;min-width:340px;background:#242424;border-radius:8px;padding:10px}",
+        ".pane img{width:100%;border-radius:6px}",
+        ".flag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;margin-left:6px}",
+        ".bad{background:#5c1a1a;color:#ff9c9c}.good{background:#123f1e;color:#8ef0a8}",
+        ".missing{padding:40px;text-align:center;color:#777}",
+        "table{font-size:13px;border-collapse:collapse;width:100%}",
+        "td{padding:2px 6px}.k{color:#9aa}</style></head><body>",
+        "<h1>Random vs Smart &mdash; per-diagram report</h1>",
+    ]
+    for idx in sorted(by_dsl):
+        modes = by_dsl[idx]
+        any_r = next(iter(modes.values()))
+        dsl_text = any_r["dsl"].replace("<", "&lt;").replace(">", "&gt;")
+        parts.append(f"<div class='card'><h2>#{idx}")
+        for mode in ("random", "smart"):
+            r = modes.get(mode)
+            if not r:
+                continue
+            flag_cls = "bad" if r.get("degenerate") else "good"
+            label = "AUTO-FLAG: degenerate" if r.get("degenerate") else "auto-flag: ok"
+            parts.append(
+                f"<span class='flag {flag_cls}'>{mode}: {label}</span>")
+        parts.append(f"<pre style='color:#bbb;font-size:12px'>{dsl_text}</pre>")
+        parts.append("<div class='grid'>")
+        for mode in ("random", "smart"):
+            r = modes.get(mode)
+            parts.append(f"<div class='pane'><b>{mode}</b>")
+            if r is None:
+                parts.append("<div class='missing'>run missing</div></div>")
+                continue
+            if r["status"] != "ok":
+                parts.append(f"<div class='missing'>FAILED: {r.get('error')}</div></div>")
+                continue
+            parts.append(_img_tag(r.get("image_path")))
+            parts.append("<table>")
+            parts.append(f"<tr><td class='k'>final loss</td><td>{_fmt(r.get('final_loss'))}</td>"
+                         f"<td class='k'>time</td><td>{_fmt(r.get('elapsed_seconds'))} s</td></tr>")
+            parts.append(f"<tr><td class='k'>epochs used</td><td>{_fmt(r.get('epochs_used'), 0)}</td>"
+                         f"<td class='k'>epochs to &tau;</td><td>{_fmt(r.get('epochs_to_tau'), 0)}</td></tr>")
+            reasons = "; ".join(r.get("degenerate_reasons") or [])
+            parts.append(f"<tr><td class='k'>auto reasons</td><td colspan='3'>{reasons or '&mdash;'}</td></tr>")
+            parts.append("</table></div>")
+        parts.append("</div></div>")
+    parts.append("</body></html>")
+
+    html_path = out_dir / "gallery.html"
+    html_path.write_text("\n".join(parts), encoding="utf-8")
+    print(f"Report written:\n  {csv_path}\n  {html_path}")
+
+
+# --------------------------------------------------------------------------- #
 # Main
 # --------------------------------------------------------------------------- #
 def main() -> None:
@@ -364,6 +492,8 @@ def main() -> None:
                         help="Parallel worker processes (0 = auto, 1 = sequential)")
     parser.add_argument("--resume", action="store_true",
                         help="Skip runs already present in the raw output file")
+    parser.add_argument("--render-dir", type=str, default=None,
+                        help="Render each final diagram to PNG under this directory")
     parser.add_argument("--output", type=str, default=None, help="JSON output path")
     args = parser.parse_args()
 
@@ -403,12 +533,16 @@ def main() -> None:
     # Interleave modes/seeds within each DSL so any prefix of completed work
     # stays balanced between the two strategies.
     done_keys = {(r["dsl"], r["mode"], r["seed"]) for r in results}
-    tasks: list[tuple[str, str, int, dict[str, Any]]] = []
-    for dsl in dsls:
+    run_opts = vars(args)
+    if args.render_dir:
+        run_opts = {**run_opts, "render_dir": args.render_dir,
+                    "tag": Path(args.output).stem if args.output else "ablation"}
+    tasks: list[tuple[int, str, str, int, dict[str, Any]]] = []
+    for idx, dsl in enumerate(dsls):
         for s in range(args.seeds):
             for mode in modes:
-                t = (dsl, mode, args.seed_base + s, vars(args))
-                if (t[0], t[1], t[2]) in done_keys:
+                t = (idx, dsl, mode, args.seed_base + s, run_opts)
+                if (t[1], t[2], t[3]) in done_keys:
                     continue
                 tasks.append(t)
 
@@ -460,7 +594,7 @@ def main() -> None:
                 # regardless of how this attempt ended.
                 done_keys = {(r["dsl"], r["mode"], r["seed"]) for r in results}
                 remaining = [t for t in tasks
-                             if (t[0], t[1], t[2]) not in done_keys]
+                             if (t[1], t[2], t[3]) not in done_keys]
                 if remaining:
                     logger.warning(f"{len(remaining)} tasks still pending after "
                                    f"attempt {attempt}")
@@ -509,6 +643,9 @@ def main() -> None:
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(payload, f, ensure_ascii=False, indent=2)
         print(f"\nResults written to: {out_path}")
+
+        report_dir = Path(args.render_dir) if args.render_dir else out_path.parent / "report"
+        write_report(results, report_dir)
 
 
 if __name__ == "__main__":
