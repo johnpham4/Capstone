@@ -1,0 +1,198 @@
+{
+  "summary": {
+    "total_samples": 10,
+    "successful": 10,
+    "failed": 0,
+    "mean_final_loss": 0.036651,
+    "stage_stats": {
+      "parse_ms": {
+        "count": 10,
+        "min_ms": 0.01,
+        "max_ms": 0.05,
+        "mean_ms": 0.02,
+        "p50_ms": 0.02,
+        "p95_ms": 0.04,
+        "p99_ms": 0.04
+      },
+      "build_ms": {
+        "count": 10,
+        "min_ms": 0.03,
+        "max_ms": 0.1,
+        "mean_ms": 0.05,
+        "p50_ms": 0.05,
+        "p95_ms": 0.08,
+        "p99_ms": 0.09
+      },
+      "optimize_ms": {
+        "count": 10,
+        "min_ms": 9843.46,
+        "max_ms": 27502.64,
+        "mean_ms": 17870.84,
+        "p50_ms": 18490.35,
+        "p95_ms": 25020.39,
+        "p99_ms": 27006.19
+      },
+      "render_ms": {
+        "count": 10,
+        "min_ms": 387.51,
+        "max_ms": 710.49,
+        "mean_ms": 448.08,
+        "p50_ms": 419.79,
+        "p95_ms": 597.82,
+        "p99_ms": 687.96
+      }
+    }
+  },
+  "results": [
+    {
+      "dsl": "(triangle (A B C) (right B))",
+      "status": "success",
+      "sexpr_count": 1,
+      "instruction_count": 1,
+      "point_count": 3,
+      "timings_ms": {
+        "parse_ms": 0.030942999728722498,
+        "build_ms": 0.045802999011357315,
+        "optimize_ms": 27502.641764000145,
+        "render_ms": 710.4930539990164
+      },
+      "final_loss": 0.0254844018324817,
+      "warnings": []
+    },
+    {
+      "dsl": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(segment D E)",
+      "status": "success",
+      "sexpr_count": 3,
+      "instruction_count": 3,
+      "point_count": 5,
+      "timings_ms": {
+        "parse_ms": 0.0218659988604486,
+        "build_ms": 0.05450400021800306,
+        "optimize_ms": 13782.979378000164,
+        "render_ms": 392.53395500054467
+      },
+      "final_loss": 0.044328567633374026,
+      "warnings": []
+    },
+    {
+      "dsl": "(triangle (A B C) (isosceles A))",
+      "status": "success",
+      "sexpr_count": 1,
+      "instruction_count": 1,
+      "point_count": 3,
+      "timings_ms": {
+        "parse_ms": 0.018074000763590448,
+        "build_ms": 0.04945600085193291,
+        "optimize_ms": 12664.538867000374,
+        "render_ms": 387.510917000327
+      },
+      "final_loss": 0.05556225088826416,
+      "warnings": []
+    },
+    {
+      "dsl": "(triangle (A B C) (equilateral))",
+      "status": "success",
+      "sexpr_count": 1,
+      "instruction_count": 1,
+      "point_count": 3,
+      "timings_ms": {
+        "parse_ms": 0.01583800076332409,
+        "build_ms": 0.03239699981349986,
+        "optimize_ms": 9843.462254999395,
+        "render_ms": 421.770586999628
+      },
+      "final_loss": 0.014483553258345364,
+      "warnings": []
+    },
+    {
+      "dsl": "(square (A B C D))",
+      "status": "success",
+      "sexpr_count": 1,
+      "instruction_count": 1,
+      "point_count": 4,
+      "timings_ms": {
+        "parse_ms": 0.014829998690402135,
+        "build_ms": 0.037100999179529026,
+        "optimize_ms": 21986.523178000425,
+        "render_ms": 417.8010830000858
+      },
+      "final_loss": 0.03113423026781029,
+      "warnings": []
+    },
+    {
+      "dsl": "(rectangle (A B C D))",
+      "status": "success",
+      "sexpr_count": 1,
+      "instruction_count": 1,
+      "point_count": 4,
+      "timings_ms": {
+        "parse_ms": 0.045388000216917135,
+        "build_ms": 0.09860700083663687,
+        "optimize_ms": 19466.583481998896,
+        "render_ms": 408.8977530009288
+      },
+      "final_loss": 0.030773704034264708,
+      "warnings": []
+    },
+    {
+      "dsl": "(parallelogram (A B C D))",
+      "status": "success",
+      "sexpr_count": 1,
+      "instruction_count": 1,
+      "point_count": 4,
+      "timings_ms": {
+        "parse_ms": 0.014217999705579132,
+        "build_ms": 0.030868999601807445,
+        "optimize_ms": 17514.113315999566,
+        "render_ms": 427.971549999711
+      },
+      "final_loss": 0.019507906746291413,
+      "warnings": []
+    },
+    {
+      "dsl": "(rhombus (A B C D))",
+      "status": "success",
+      "sexpr_count": 1,
+      "instruction_count": 1,
+      "point_count": 4,
+      "timings_ms": {
+        "parse_ms": 0.021380999896791764,
+        "build_ms": 0.04201199953968171,
+        "optimize_ms": 20563.656841999546,
+        "render_ms": 448.6189880008169
+      },
+      "final_loss": 0.02272098771257401,
+      "warnings": []
+    },
+    {
+      "dsl": "(triangle (A B C) (right A))\n(define H point (projection A (segment B C)))\n(segment A H)",
+      "status": "success",
+      "sexpr_count": 3,
+      "instruction_count": 3,
+      "point_count": 4,
+      "timings_ms": {
+        "parse_ms": 0.021067000488983467,
+        "build_ms": 0.04692899892688729,
+        "optimize_ms": 14437.053740999545,
+        "render_ms": 405.0797910003894
+      },
+      "final_loss": 0.028733909297950687,
+      "warnings": []
+    },
+    {
+      "dsl": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)",
+      "status": "success",
+      "sexpr_count": 4,
+      "instruction_count": 4,
+      "point_count": 5,
+      "timings_ms": {
+        "parse_ms": 0.020731000404339284,
+        "build_ms": 0.05317499926604796,
+        "optimize_ms": 20946.844746998977,
+        "render_ms": 460.09851599956164
+      },
+      "final_loss": 0.09377562613953248,
+      "warnings": []
+    }
+  ]
+}

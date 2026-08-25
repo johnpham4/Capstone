@@ -1,4 +1,4 @@
-.PHONY:
+.PHONY: install install-all install-pipeline zenml data generation generate_question upload simple_finetune option_finetune simple_finetune_peft_acemath smoke_finetune_peft_acemath full_finetune_peft_acemath aws_sagemaker_roles aws_excecution_roles deploy_endpoint del_endpoint del_endpoint_config del_ecr endpoint worker flower rabbitmq_status init_alembic migrate stamp revision mock compose_infra_vol_down docker_up docker_infra test profile_baseline profile_optimized
 
 install:
 	uv sync
@@ -67,14 +67,6 @@ del_ecr:
 endpoint:
 	uv run python -m src.main
 
-llm_local:
-	uv run python scripts/run_vllm_local.py
-
-llm_local_bg:
-	uv run python scripts/run_vllm_local.py --detach
-
-llm_local_health:
-	curl http://localhost:8001/v1/models
 
 worker:
 	uv run python -m celery -A src.infrastructures.celery.config worker --loglevel=info --concurrency=1
@@ -115,3 +107,9 @@ docker_infra:
 
 test:
 	uv run python -m src.services.orchestration.test_inference
+
+profile_baseline:
+	uv run python profiling/profile_diagram.py --epochs 1000 --count 20 --label baseline --no-early-stop --output profiling/baseline.json
+
+profile_optimized:
+	uv run python profiling/profile_diagram.py --epochs 1000 --count 20 --label optimized --output profiling/optimized.json

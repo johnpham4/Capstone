@@ -1,0 +1,65 @@
+{
+  "summary": {
+    "total_samples": 5,
+    "successful": 0,
+    "failed": 5,
+    "stage_stats": {}
+  },
+  "results": [
+    {
+      "dsl": "(triangle (A B C) (right B))",
+      "status": "failed",
+      "error": "'DiagramService' object has no attribute 'OUTPUT_DIR'",
+      "timings_ms": {
+        "parse_ms": 0.019714999780262588,
+        "build_ms": 0.03680500003611087,
+        "optimize_ms": 48218.88030499985,
+        "render_ms": 0.008128999979817308
+      }
+    },
+    {
+      "dsl": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(segment D E)",
+      "status": "failed",
+      "error": "'DiagramService' object has no attribute 'OUTPUT_DIR'",
+      "timings_ms": {
+        "parse_ms": 0.02354399975956767,
+        "build_ms": 0.06057399968995014,
+        "optimize_ms": 48046.84327199993,
+        "render_ms": 0.027997999950457597
+      }
+    },
+    {
+      "dsl": "(triangle (A B C) (isosceles A))",
+      "status": "failed",
+      "error": "'DiagramService' object has no attribute 'OUTPUT_DIR'",
+      "timings_ms": {
+        "parse_ms": 0.07172699997681775,
+        "build_ms": 0.11492500016174745,
+        "optimize_ms": 42487.681883000274,
+        "render_ms": 0.0889450002432568
+      }
+    },
+    {
+      "dsl": "(triangle (A B C) (equilateral))",
+      "status": "failed",
+      "error": "'DiagramService' object has no attribute 'OUTPUT_DIR'",
+      "timings_ms": {
+        "parse_ms": 0.06689000019832747,
+        "build_ms": 0.5796800001007796,
+        "optimize_ms": 31366.65372000016,
+        "render_ms": 0.007109999842214165
+      }
+    },
+    {
+      "dsl": "(square (A B C D))",
+      "status": "failed",
+      "error": "'DiagramService' object has no attribute 'OUTPUT_DIR'",
+      "timings_ms": {
+        "parse_ms": 0.01464099977965816,
+        "build_ms": 0.53207700011626,
+        "optimize_ms": 62206.47794899969,
+        "render_ms": 0.012992999927519122
+      }
+    }
+  ]
+}

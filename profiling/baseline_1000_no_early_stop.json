@@ -1,0 +1,111 @@
+{
+  "summary": {
+    "total_samples": 10,
+    "successful": 0,
+    "failed": 10,
+    "mean_final_loss": null,
+    "stage_stats": {}
+  },
+  "results": [
+    {
+      "dsl": "(triangle (A B C) (right B))",
+      "status": "failed",
+      "error": "name 'args' is not defined",
+      "timings_ms": {
+        "parse_ms": 0.01739900017128093,
+        "build_ms": 0.03266299972892739,
+        "optimize_ms": 0.002795000000332948
+      }
+    },
+    {
+      "dsl": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(segment D E)",
+      "status": "failed",
+      "error": "name 'args' is not defined",
+      "timings_ms": {
+        "parse_ms": 0.009987000339606311,
+        "build_ms": 0.030238999897846952,
+        "optimize_ms": 0.0010819994713529013
+      }
+    },
+    {
+      "dsl": "(triangle (A B C) (isosceles A))",
+      "status": "failed",
+      "error": "name 'args' is not defined",
+      "timings_ms": {
+        "parse_ms": 0.004717999217973556,
+        "build_ms": 0.01459299983253004,
+        "optimize_ms": 0.0006809996193624102
+      }
+    },
+    {
+      "dsl": "(triangle (A B C) (equilateral))",
+      "status": "failed",
+      "error": "name 'args' is not defined",
+      "timings_ms": {
+        "parse_ms": 0.00415700014855247,
+        "build_ms": 0.009326000508735888,
+        "optimize_ms": 0.0005210004019318148
+      }
+    },
+    {
+      "dsl": "(square (A B C D))",
+      "status": "failed",
+      "error": "name 'args' is not defined",
+      "timings_ms": {
+        "parse_ms": 0.003545999788912013,
+        "build_ms": 0.010936999387922697,
+        "optimize_ms": 0.0005709998731617816
+      }
+    },
+    {
+      "dsl": "(rectangle (A B C D))",
+      "status": "failed",
+      "error": "name 'args' is not defined",
+      "timings_ms": {
+        "parse_ms": 0.0032449997888761573,
+        "build_ms": 0.011148000339744613,
+        "optimize_ms": 0.0005310002961778082
+      }
+    },
+    {
+      "dsl": "(parallelogram (A B C D))",
+      "status": "failed",
+      "error": "name 'args' is not defined",
+      "timings_ms": {
+        "parse_ms": 0.003324999852338806,
+        "build_ms": 0.00823399932414759,
+        "optimize_ms": 0.000490999809699133
+      }
+    },
+    {
+      "dsl": "(rhombus (A B C D))",
+      "status": "failed",
+      "error": "name 'args' is not defined",
+      "timings_ms": {
+        "parse_ms": 0.003516000106174033,
+        "build_ms": 0.007551999260613229,
+        "optimize_ms": 0.0006509999366244301
+      }
+    },
+    {
+      "dsl": "(triangle (A B C) (right A))\n(define H point (projection A (segment B C)))\n(segment A H)",
+      "status": "failed",
+      "error": "name 'args' is not defined",
+      "timings_ms": {
+        "parse_ms": 0.008724000508664176,
+        "build_ms": 0.018169000213674735,
+        "optimize_ms": 0.0005510000846697949
+      }
+    },
+    {
+      "dsl": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment D E)",
+      "status": "failed",
+      "error": "name 'args' is not defined",
+      "timings_ms": {
+        "parse_ms": 0.008994000381790102,
+        "build_ms": 0.023708999833615962,
+        "optimize_ms": 0.0006309992386377417
+      }
+    }
+  ]
+}

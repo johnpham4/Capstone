@@ -1,0 +1,138 @@
+======================================================================
+Diagram Pipeline Profiling Log — label=baseline_f64
+epochs=1000, dtype=float64, early_stop=False, count=10
+======================================================================
+
+Total samples : 10
+Successful    : 10
+Failed        : 0
+Mean final loss: 0.036651
+
+parse_ms:
+  count       : 10
+  min_ms      : 0.01
+  max_ms      : 0.05
+  mean_ms     : 0.02
+  p50_ms      : 0.02
+  p95_ms      : 0.04
+  p99_ms      : 0.04
+
+build_ms:
+  count       : 10
+  min_ms      : 0.03
+  max_ms      : 0.1
+  mean_ms     : 0.05
+  p50_ms      : 0.05
+  p95_ms      : 0.08
+  p99_ms      : 0.09
+
+optimize_ms:
+  count       : 10
+  min_ms      : 9843.46
+  max_ms      : 27502.64
+  mean_ms     : 17870.84
+  p50_ms      : 18490.35
+  p95_ms      : 25020.39
+  p99_ms      : 27006.19
+
+render_ms:
+  count       : 10
+  min_ms      : 387.51
+  max_ms      : 710.49
+  mean_ms     : 448.08
+  p50_ms      : 419.79
+  p95_ms      : 597.82
+  p99_ms      : 687.96
+
+
+Per-sample results:
+
+--- Sample 1 ---
+DSL: (triangle (A B C) (right B))
+Status: success
+Final loss: 0.025484
+  parse_ms: 0.03 ms
+  build_ms: 0.05 ms
+  optimize_ms: 27502.64 ms
+  render_ms: 710.49 ms
+
+--- Sample 2 ---
+DSL: (triangle (A B C) (right B)) (define D point (midpoint A B)) (segment D E)
+Status: success
+Final loss: 0.044329
+  parse_ms: 0.02 ms
+  build_ms: 0.05 ms
+  optimize_ms: 13782.98 ms
+  render_ms: 392.53 ms
+
+--- Sample 3 ---
+DSL: (triangle (A B C) (isosceles A))
+Status: success
+Final loss: 0.055562
+  parse_ms: 0.02 ms
+  build_ms: 0.05 ms
+  optimize_ms: 12664.54 ms
+  render_ms: 387.51 ms
+
+--- Sample 4 ---
+DSL: (triangle (A B C) (equilateral))
+Status: success
+Final loss: 0.014484
+  parse_ms: 0.02 ms
+  build_ms: 0.03 ms
+  optimize_ms: 9843.46 ms
+  render_ms: 421.77 ms
+
+--- Sample 5 ---
+DSL: (square (A B C D))
+Status: success
+Final loss: 0.031134
+  parse_ms: 0.01 ms
+  build_ms: 0.04 ms
+  optimize_ms: 21986.52 ms
+  render_ms: 417.80 ms
+
+--- Sample 6 ---
+DSL: (rectangle (A B C D))
+Status: success
+Final loss: 0.030774
+  parse_ms: 0.05 ms
+  build_ms: 0.10 ms
+  optimize_ms: 19466.58 ms
+  render_ms: 408.90 ms
+
+--- Sample 7 ---
+DSL: (parallelogram (A B C D))
+Status: success
+Final loss: 0.019508
+  parse_ms: 0.01 ms
+  build_ms: 0.03 ms
+  optimize_ms: 17514.11 ms
+  render_ms: 427.97 ms
+
+--- Sample 8 ---
+DSL: (rhombus (A B C D))
+Status: success
+Final loss: 0.022721
+  parse_ms: 0.02 ms
+  build_ms: 0.04 ms
+  optimize_ms: 20563.66 ms
+  render_ms: 448.62 ms
+
+--- Sample 9 ---
+DSL: (triangle (A B C) (right A)) (define H point (projection A (segment B C))) (segment A H)
+Status: success
+Final loss: 0.028734
+  parse_ms: 0.02 ms
+  build_ms: 0.05 ms
+  optimize_ms: 14437.05 ms
+  render_ms: 405.08 ms
+
+--- Sample 10 ---
+DSL: (triangle (A B C)) (define D point (midpoint A B)) (define E point (midpoint A C)) (segment D E)
+Status: success
+Final loss: 0.093776
+  parse_ms: 0.02 ms
+  build_ms: 0.05 ms
+  optimize_ms: 20946.84 ms
+  render_ms: 460.10 ms

@@ -1,0 +1,32 @@
+[
+  {
+    "dsl": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))",
+    "mode": "random",
+    "seed": 0,
+    "status": "ok",
+    "final_loss": 0.774771511554718,
+    "epochs_used": 563,
+    "epochs_to_tau": 349,
+    "converged": false,
+    "degenerate": false,
+    "degenerate_reasons": [],
+    "point_count": 6,
+    "elapsed_seconds": 5.1678,
+    "error": null
+  },
+  {
+    "dsl": "(triangle (A B C))\n(define D point (midpoint A B))\n(define E point (midpoint A C))\n(segment A B)\n(segment A C)\n(segment D E)\n(segment B C)\n(parallel (segment B C) (segment D E))\n(define O point (circumcenter A B C))\n(circle O (circumcircle A B C))",
+    "mode": "smart",
+    "seed": 0,
+    "status": "ok",
+    "final_loss": 0.129165381193161,
+    "epochs_used": 484,
+    "epochs_to_tau": 17,
+    "converged": false,
+    "degenerate": false,
+    "degenerate_reasons": [],
+    "point_count": 6,
+    "elapsed_seconds": 4.7165,
+    "error": null
+  }
+]

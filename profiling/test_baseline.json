@@ -1,0 +1,78 @@
+{
+  "summary": {
+    "total_samples": 2,
+    "successful": 2,
+    "failed": 0,
+    "mean_final_loss": 0.030064,
+    "stage_stats": {
+      "parse_ms": {
+        "count": 2,
+        "min_ms": 0.02,
+        "max_ms": 0.03,
+        "mean_ms": 0.03,
+        "p50_ms": 0.03,
+        "p95_ms": 0.03,
+        "p99_ms": 0.03
+      },
+      "build_ms": {
+        "count": 2,
+        "min_ms": 0.06,
+        "max_ms": 0.1,
+        "mean_ms": 0.08,
+        "p50_ms": 0.08,
+        "p95_ms": 0.1,
+        "p99_ms": 0.1
+      },
+      "optimize_ms": {
+        "count": 2,
+        "min_ms": 6820.06,
+        "max_ms": 24488.6,
+        "mean_ms": 15654.33,
+        "p50_ms": 15654.33,
+        "p95_ms": 23605.18,
+        "p99_ms": 24311.92
+      },
+      "render_ms": {
+        "count": 2,
+        "min_ms": 382.87,
+        "max_ms": 914.99,
+        "mean_ms": 648.93,
+        "p50_ms": 648.93,
+        "p95_ms": 888.38,
+        "p99_ms": 909.67
+      }
+    }
+  },
+  "results": [
+    {
+      "dsl": "(triangle (A B C) (right B))",
+      "status": "success",
+      "sexpr_count": 1,
+      "instruction_count": 1,
+      "point_count": 3,
+      "timings_ms": {
+        "parse_ms": 0.03304500023659784,
+        "build_ms": 0.10094899971591076,
+        "optimize_ms": 24488.603100000546,
+        "render_ms": 914.9901130003855
+      },
+      "final_loss": 0.024582984101562327,
+      "warnings": []
+    },
+    {
+      "dsl": "(triangle (A B C) (right B))\n(define D point (midpoint A B))\n(segment D E)",
+      "status": "success",
+      "sexpr_count": 3,
+      "instruction_count": 3,
+      "point_count": 5,
+      "timings_ms": {
+        "parse_ms": 0.02488000063749496,
+        "build_ms": 0.06315100017673103,
+        "optimize_ms": 6820.064913999886,
+        "render_ms": 382.8709050003454
+      },
+      "final_loss": 0.03554544160361875,
+      "warnings": []
+    }
+  ]
+}

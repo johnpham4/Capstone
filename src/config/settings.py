@@ -107,8 +107,12 @@ class Settings(BaseSettings):
 
     # Diagram Generation
     OUTPUT_DIR: str = "./output/diagrams"
-    DIAGRAM_OPTIMIZER_EPOCHS: int = 3000
+    DIAGRAM_OPTIMIZER_EPOCHS: int = 1000
     DIAGRAM_OPTIMIZER_LR: float = 0.01
+    DIAGRAM_OPTIMIZER_DTYPE: str = "float32"  # float32 | float64
+    DIAGRAM_OPTIMIZER_EARLY_STOP_PATIENCE: int = 150
+    DIAGRAM_OPTIMIZER_EARLY_STOP_MIN_DELTA: float = 1e-5
+    DIAGRAM_OPTIMIZER_EARLY_STOP_MIN_EPOCHS: int = 200
     DIAGRAM_TASK_TIMEOUT_SECONDS: int = 300
     DIAGRAM_QUEUE_NAME: str = "diagram.render"
     DIAGRAM_QUEUE_EXCHANGE: str = "diagram"

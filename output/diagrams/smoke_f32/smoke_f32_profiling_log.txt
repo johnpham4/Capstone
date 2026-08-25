@@ -1,0 +1,66 @@
+======================================================================
+Diagram Pipeline Profiling Log — label=smoke_f32
+epochs=200, dtype=float32, early_stop=False, count=2
+======================================================================
+
+Total samples : 2
+Successful    : 2
+Failed        : 0
+Mean final loss: 0.091739
+
+parse_ms:
+  count       : 2
+  min_ms      : 0.03
+  max_ms      : 0.03
+  mean_ms     : 0.03
+  p50_ms      : 0.03
+  p95_ms      : 0.03
+  p99_ms      : 0.03
+
+build_ms:
+  count       : 2
+  min_ms      : 0.05
+  max_ms      : 0.06
+  mean_ms     : 0.06
+  p50_ms      : 0.06
+  p95_ms      : 0.06
+  p99_ms      : 0.06
+
+optimize_ms:
+  count       : 2
+  min_ms      : 3061.22
+  max_ms      : 23392.79
+  mean_ms     : 13227.01
+  p50_ms      : 13227.01
+  p95_ms      : 22376.21
+  p99_ms      : 23189.47
+
+render_ms:
+  count       : 2
+  min_ms      : 396.34
+  max_ms      : 894.4
+  mean_ms     : 645.37
+  p50_ms      : 645.37
+  p95_ms      : 869.49
+  p99_ms      : 889.42
+
+
+Per-sample results:
+
+--- Sample 1 ---
+DSL: (triangle (A B C) (right B))
+Status: success
+Final loss: 0.025130
+  parse_ms: 0.03 ms
+  build_ms: 0.05 ms
+  optimize_ms: 23392.79 ms
+  render_ms: 894.40 ms
+
+--- Sample 2 ---
+DSL: (triangle (A B C) (right B)) (define D point (midpoint A B)) (segment D E)
+Status: success
+Final loss: 0.158348
+  parse_ms: 0.03 ms
+  build_ms: 0.06 ms
+  optimize_ms: 3061.22 ms
+  render_ms: 396.34 ms

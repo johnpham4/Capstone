@@ -27,6 +27,17 @@ class Optimizer:
         self.verbosity = verbosity
         self._init_state()  # Initialize all state variables
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        # Configurable precision: float32 is significantly faster on modern
+        # hardware (2x CPU throughput, lower memory bandwidth) while still
+        # sufficient for 2D geometry constraint satisfaction.
+        dtype_name = self.opts.get('dtype', 'float32')
+        self.dtype = getattr(torch, dtype_name, torch.float32)
+        if self.dtype not in (torch.float32, torch.float64):
+            self.dtype = torch.float32
+        # Initialization strategy:
+        #   'smart'  -> use canonical Geometric-Aware templates from Initializer
+        #   'random' -> every point is sampled from U(-1, 1) with no geometric prior
+        self.init_mode = self.opts.get('init_mode', 'smart')
 
     def _init_state(self):
         """Reset state for new optimization attempt"""
@@ -55,6 +66,10 @@ class Optimizer:
         self.unnamed_point_counter = 0
         self.has_loss = False
         self.trainable_vars = []
+        self.epochs_used = 0
+        self.converged = False
+        self.epochs_to_tau = None
+        self.success_tau = self.opts.get('success_tau', None)
 
     def _is_polygon_vertex(self, point_name):
         """Check if a point is a vertex of any registered polygon (triangle/quadrilateral)."""
@@ -70,16 +85,16 @@ class Optimizer:
 
     def get_point(self, x, y):
         if not isinstance(x, torch.Tensor):
-            x = torch.tensor(x, dtype=torch.float64, device=self.device)
+            x = torch.tensor(x, dtype=self.dtype, device=self.device)
         if not isinstance(y, torch.Tensor):
-            y = torch.tensor(y, dtype=torch.float64, device=self.device)
+            y = torch.tensor(y, dtype=self.dtype, device=self.device)
         return TorchPoint(x, y)
 
     def mkvar(self, name, lo=-1.0, hi=1.0, init_value=None):
         if init_value is not None:
-            val = torch.tensor([init_value], dtype=torch.float64, device=self.device)
+            val = torch.tensor([init_value], dtype=self.dtype, device=self.device)
         else:
-            val = torch.empty(1, dtype=torch.float64, device=self.device).uniform_(lo, hi)
+            val = torch.empty(1, dtype=self.dtype, device=self.device).uniform_(lo, hi)
         param = nn.Parameter(val)
         self.trainable_vars.append(param)
         return param.squeeze()
@@ -94,7 +109,7 @@ class Optimizer:
         return name
 
     def const(self, x):
-        return torch.tensor(x, dtype=torch.float64, device=self.device)
+        return torch.tensor(x, dtype=self.dtype, device=self.device)
 
     def dist(self, p1: TorchPoint, p2: TorchPoint):
         dx = p1.x - p2.x
@@ -246,6 +261,10 @@ class Optimizer:
 
 
     def sample_uniform(self, p, lo=-1.0, hi=1.0, save_name=True, init_coords=None):
+        # Random-initialization baseline: ignore all geometric priors so every
+        # point is sampled from U(lo, hi) independently of the DSL structure.
+        if self.init_mode == 'random':
+            init_coords = None
         if init_coords is not None:
             x = self.mkvar(f"{p.val}_x", lo, hi, init_value=init_coords[0])
             y = self.mkvar(f"{p.val}_y", lo, hi, init_value=init_coords[1])
@@ -982,8 +1001,8 @@ class Optimizer:
 
         # Two altitudes perpendicular to opposite sides: AH ⊥ BC, BH ⊥ AC
         self.register_loss(f"orthocenter_{point_name.val}",
-                          lambda: self._dot_product(p1, orthocenter, p2, p3)**2 +
-                                  self._dot_product(p2, orthocenter, p1, p3)**2,
+                          lambda: self.perpendicular(p1, orthocenter, p2, p3)**2 +
+                                  self.perpendicular(p2, orthocenter, p1, p3)**2,
                           weight=10.0)
         return orthocenter
 
@@ -2547,6 +2566,9 @@ class Optimizer:
             self.process_instruction(instr)
 
     def train(self, epochs: int = 1000, lr: float = 0.01):
+        self.epochs_used = 0
+        self.converged = False
+        self.epochs_to_tau = None
         if not self.has_loss:
             return 0.0
 
@@ -2554,8 +2576,18 @@ class Optimizer:
         grad_clip = self.opts.get('grad_clip_norm', 5.0)
         param_abs_max = self.opts.get('param_abs_max', 1e3)
         last_good_state = [p.detach().clone() for p in self.trainable_vars]
-        total_loss = torch.tensor(float('inf'), dtype=torch.float64, device=self.device)
+        total_loss = torch.tensor(float('inf'), dtype=self.dtype, device=self.device)
         non_finite_penalty = self.const(1e6)
+
+        # Adaptive early-stopping configuration. The hard convergence threshold
+        # is kept, and an additional loss-plateau detector stops optimization
+        # when no meaningful improvement is observed for a number of epochs.
+        early_stop_patience = int(self.opts.get('early_stop_patience', 150))
+        early_stop_min_delta = float(self.opts.get('early_stop_min_delta', 1e-5))
+        early_stop_min_epochs = int(self.opts.get('early_stop_min_epochs', 200))
+        best_loss = float('inf')
+        epochs_without_improvement = 0
+
         if self.verbosity:
             logger.info(f"Optimization ({epochs}) Epochs")
 
@@ -2594,14 +2626,41 @@ class Optimizer:
             if torch.isfinite(total_loss):
                 last_good_state = [p.detach().clone() for p in self.trainable_vars]
 
+            self.epochs_used = i + 1
+
             if self.verbosity and i % 100 == 0:
                 logger.info(f"Iteration {i:4d}: Loss = {total_loss.item():.6f}")
 
-            # Early stopping
-            if total_loss.item() < 1e-6:
+            current_loss = total_loss.item()
+
+            # First iteration where the loss drops below the success threshold
+            # (measures convergence speed independently of plateau early-stop).
+            if self.success_tau is not None and self.epochs_to_tau is None and current_loss < self.success_tau:
+                self.epochs_to_tau = i + 1
+
+            # Hard convergence early stopping
+            if current_loss < 1e-6:
+                self.converged = True
                 if self.verbosity >= 0:
-                    logger.info(f"Converged at iteration {i} with loss {total_loss.item():.6f}")
+                    logger.info(f"Converged at iteration {i} with loss {current_loss:.6f}")
                 break
+
+            # Loss-plateau early stopping: stop if the loss stops improving.
+            if i >= early_stop_min_epochs and early_stop_patience > 0:
+                if best_loss - current_loss > early_stop_min_delta:
+                    best_loss = current_loss
+                    epochs_without_improvement = 0
+                else:
+                    epochs_without_improvement += 1
+                    if epochs_without_improvement >= early_stop_patience:
+                        if self.verbosity >= 0:
+                            logger.info(
+                                f"Early stopping at iteration {i}: loss plateau "
+                                f"(best={best_loss:.6f}, current={current_loss:.6f})"
+                            )
+                        break
+            elif current_loss < best_loss:
+                best_loss = current_loss
 
         final_loss = total_loss.item()
         if self.verbosity:

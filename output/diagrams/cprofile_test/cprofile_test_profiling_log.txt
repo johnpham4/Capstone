@@ -1,0 +1,93 @@
+======================================================================
+Diagram Pipeline Profiling Log — label=cprofile_test
+epochs=500, early_stop=True, count=5
+======================================================================
+
+Total samples : 5
+Successful    : 5
+Failed        : 0
+Mean final loss: 0.057958
+
+parse_ms:
+  count       : 5
+  min_ms      : 0.01
+  max_ms      : 0.03
+  mean_ms     : 0.02
+  p50_ms      : 0.02
+  p95_ms      : 0.03
+  p99_ms      : 0.03
+
+build_ms:
+  count       : 5
+  min_ms      : 0.03
+  max_ms      : 0.05
+  mean_ms     : 0.04
+  p50_ms      : 0.03
+  p95_ms      : 0.05
+  p99_ms      : 0.05
+
+optimize_ms:
+  count       : 5
+  min_ms      : 3232.24
+  max_ms      : 10300.6
+  mean_ms     : 5537.42
+  p50_ms      : 4718.9
+  p95_ms      : 9397.57
+  p99_ms      : 10119.99
+
+render_ms:
+  count       : 5
+  min_ms      : 404.67
+  max_ms      : 427.47
+  mean_ms     : 411.98
+  p50_ms      : 405.62
+  p95_ms      : 425.37
+  p99_ms      : 427.05
+
+
+Per-sample results:
+
+--- Sample 1 ---
+DSL: (triangle (A B C) (right B))
+Status: success
+Final loss: 0.026113
+  parse_ms: 0.03 ms
+  build_ms: 0.05 ms
+  optimize_ms: 3649.91 ms
+  render_ms: 427.47 ms
+
+--- Sample 2 ---
+DSL: (triangle (A B C) (right B)) (define D point (midpoint A B)) (segment D E)
+Status: success
+Final loss: 0.028183
+  parse_ms: 0.02 ms
+  build_ms: 0.04 ms
+  optimize_ms: 5785.46 ms
+  render_ms: 405.62 ms
+
+--- Sample 3 ---
+DSL: (triangle (A B C) (isosceles A))
+Status: success
+Final loss: 0.072761
+  parse_ms: 0.01 ms
+  build_ms: 0.03 ms
+  optimize_ms: 4718.90 ms
+  render_ms: 405.16 ms
+
+--- Sample 4 ---
+DSL: (triangle (A B C) (equilateral))
+Status: success
+Final loss: 0.014486
+  parse_ms: 0.02 ms
+  build_ms: 0.03 ms
+  optimize_ms: 3232.24 ms
+  render_ms: 404.67 ms
+
+--- Sample 5 ---
+DSL: (square (A B C D))
+Status: success
+Final loss: 0.148246
+  parse_ms: 0.01 ms
+  build_ms: 0.03 ms
+  optimize_ms: 10300.60 ms
+  render_ms: 417.00 ms
